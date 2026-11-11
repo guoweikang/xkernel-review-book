@@ -1,0 +1,2182 @@
+diff --git a/core/kbpf/docs/bpf-uapi.md b/core/kbpf/docs/bpf-uapi.md
+new file mode 100644
+index 000000000..44d11aa62
+--- /dev/null
++++ b/core/kbpf/docs/bpf-uapi.md
+@@ -0,0 +1,110 @@
++# BPF uapi constants: single source and conformance check
++
++Every uapi value this kernel needs (`enum bpf_cmd`, `bpf_prog_type`,
++`bpf_attach_type`, `bpf_map_type`, `bpf_func_id`, the `BPF_DEVCG_*` and
++`BPF_F_*` enums, and the ISA bit definitions) lives in exactly one place:
++
++- `core/kbpf/src/uapi.rs` — generated, committed, no build-time dependency on
++  a Linux tree.
++
++Three crates consume it: `core/kbpf` (interpreter opcode bits),
++`fs/filesystems/bpffs` (device-controller encoding) and `posix/bpf`
++(syscall ABI). None of them re-types a uapi value.
++
++## Why
++
++The cgroup-v2 device controller was first transcribed by hand, and two
++values were wrong: `BPF_PROG_TYPE_CGROUP_DEVICE` was written as 6 (that is
++`XDP`) and the attach type as 28 (28 is the `BPF_LINK_CREATE` *command*
++number; the attach type is 6). Every `runc` attach therefore failed with
++`EINVAL`, and no test caught it because the test fixtures had been written
++with the same wrong constants. A second class of error — the
++`access_type` bit layout — was likewise invisible: the code and its tests
++shared one wrong assumption.
++
++Values that come from an enum *position* are exactly the kind that goes
++wrong silently. Generating them, and pinning the result with an independent
++test, is what makes the class of bug detectable.
++
++## What is emitted
++
++Everything, not a curated subset:
++
++- every enum in `bpf.h` (60 of them, named and anonymous; anonymous ones get a
++  deterministic name derived from their first member such as
++  `bpf_anon_bpf_f_recompute_csum`, with hand-chosen names for the enums this
++  kernel reads directly: `bpf_devcg_acc`, `bpf_devcg_dev`,
++  `bpf_map_update_flags`),
++- every integer `BPF_*` `#define` from `bpf.h` and `bpf_common.h`,
++- every helper id from `___BPF_FUNC_MAPPER`.
++
++Around 700 constants. Unused ones cost nothing at runtime and mean a new uapi
++value can be consumed without touching the generator.
++
++Declarations the generator cannot fold are **not** dropped silently: they are
++listed in `uapi::NOT_CONSTANTS` and asserted empty by the conformance test.
++The only remaining non-uapi value is `BPF_CGROUP_MAX_PROGS`, declared in the
++generator's `EXTRA_DEFINES` with its source.
++
++Constants are typed by value (`u32`, signed `i32` for negative enumerators,
++`u64` only where a mask needs it) so consumers can use them directly in
++`match` patterns without casting.
++
++## Regenerating
++
++```sh
++python3 xtask/bpf_uapi/gen.py --linux /path/to/linux-tree
++```
++
++The generator parses `include/uapi/linux/bpf.h` and
++`include/uapi/linux/bpf_common.h`, evaluates the `#define` expressions and
++enum bodies, and emits `core/kbpf/src/uapi.rs` with the source-header digest
++in the module doc. Re-run it when the uapi baseline moves and **review the
++diff**: every changed value is an ABI decision.
++
++`--check` fails if the committed file is stale relative to the given tree:
++
++```sh
++python3 xtask/bpf_uapi/gen.py --linux /path/to/linux-tree --check
++```
++
++Values that are not declared in the uapi headers are listed in the
++generator's `EXTRA_DEFINES` with their source named — currently only
++`BPF_CGROUP_MAX_PROGS`, which is a kernel-internal define in
++`kernel/bpf/cgroup.c`.
++
++## Verifying (the part that does not trust the generator)
++
++```sh
++cargo test -p kbpf --test uapi_conformance
++```
++
++`core/kbpf/tests/uapi_conformance.rs` transcribes the expected values **by
++hand** from the Linux headers — it never reads the generated table to derive
++an expectation. It covers:
++
++- the full `enum bpf_cmd` order (36 entries),
++- `bpf_prog_type` / `bpf_attach_type` positions, including the two values
++  that were once wrong,
++- map types and update flags,
++- the `BPF_DEVCG_*` bits and `BPF_CGROUP_MAX_PROGS`,
++- the ISA bit layout (classes, sizes, source bit, ALU operations, jump
++  conditions, endianness selectors),
++- opcode bytes composed from that layout (`0xb4`, `0xb7`, `0x15`, `0x45`,
++  `0x56`, `0xc6`, `0xd4`/`0xdc`/`0xd7`/`0xdf`, loads/stores),
++- the helper ids the interpreter dispatches on.
++
++A failure means either the table drifted from the uapi ABI or the generator
++mis-evaluated an expression. Both block the change.
++
++The test is the check to run after touching anything BPF-related; it needs no
++Linux tree and no guest VM.
++
++## Adding a new uapi value
++
++1. Regenerate from the baseline (usually all that is needed).
++2. If the value lives outside `bpf.h`, add it to `EXTRA_DEFINES` with the
++   source file named.
++3. Add or extend a hand-transcribed expectation in
++   `core/kbpf/tests/uapi_conformance.rs`.
++4. Consume it from `kbpf::uapi`; do not declare a local copy.
+diff --git a/core/kbpf/src/lib.rs b/core/kbpf/src/lib.rs
+index 7ac69e5f5..82d033427 100644
+--- a/core/kbpf/src/lib.rs
++++ b/core/kbpf/src/lib.rs
+@@ -23,6 +23,7 @@ extern crate alloc;
+ pub mod error;
+ pub mod helpers;
+ pub mod insn;
++pub mod uapi;
+ pub mod vm;
+ 
+ pub use error::{Error, Result};
+diff --git a/core/kbpf/src/uapi.rs b/core/kbpf/src/uapi.rs
+new file mode 100644
+index 000000000..cf091e1bb
+--- /dev/null
++++ b/core/kbpf/src/uapi.rs
+@@ -0,0 +1,1048 @@
++// SPDX-License-Identifier: Apache-2.0
++// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
++// See LICENSES for license details.
++
++//! BPF uapi constants, generated from Linux's `include/uapi/linux/bpf.h`.
++//!
++//! DO NOT EDIT BY HAND. Regenerate with
++//! `python3 xtask/bpf_uapi/gen.py --linux <linux-tree>` and review the diff:
++//! every changed value is an ABI decision. Source header digest: `6e224aea138a265c`.
++//!
++//! `bpf_uapi_constants_match_linux()` in the tested module pins the values
++//! this kernel depends on, independently of the generator.
++
++#![expect(
++    non_upper_case_globals,
++    reason = "generated uapi table keeps the C spellings so a grep for a uapi name"
++)]
++
++/// C enum `bpf_anon_bpf_reg_0` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_reg_0 {
++    pub const BPF_REG_0: u32 = 0;
++    pub const BPF_REG_1: u32 = 1;
++    pub const BPF_REG_2: u32 = 2;
++    pub const BPF_REG_3: u32 = 3;
++    pub const BPF_REG_4: u32 = 4;
++    pub const BPF_REG_5: u32 = 5;
++    pub const BPF_REG_6: u32 = 6;
++    pub const BPF_REG_7: u32 = 7;
++    pub const BPF_REG_8: u32 = 8;
++    pub const BPF_REG_9: u32 = 9;
++    pub const BPF_REG_10: u32 = 10;
++    pub const __MAX_BPF_REG: u32 = 11;
++}
++
++/// C enum `bpf_cgroup_iter_order` (`include/uapi/linux/bpf.h`).
++pub mod bpf_cgroup_iter_order {
++    pub const BPF_CGROUP_ITER_ORDER_UNSPEC: u32 = 0;
++    pub const BPF_CGROUP_ITER_SELF_ONLY: u32 = 1;
++    pub const BPF_CGROUP_ITER_DESCENDANTS_PRE: u32 = 2;
++    pub const BPF_CGROUP_ITER_DESCENDANTS_POST: u32 = 3;
++    pub const BPF_CGROUP_ITER_ANCESTORS_UP: u32 = 4;
++}
++
++/// C enum `bpf_cmd` (`include/uapi/linux/bpf.h`).
++pub mod bpf_cmd {
++    pub const BPF_MAP_CREATE: u32 = 0;
++    pub const BPF_MAP_LOOKUP_ELEM: u32 = 1;
++    pub const BPF_MAP_UPDATE_ELEM: u32 = 2;
++    pub const BPF_MAP_DELETE_ELEM: u32 = 3;
++    pub const BPF_MAP_GET_NEXT_KEY: u32 = 4;
++    pub const BPF_PROG_LOAD: u32 = 5;
++    pub const BPF_OBJ_PIN: u32 = 6;
++    pub const BPF_OBJ_GET: u32 = 7;
++    pub const BPF_PROG_ATTACH: u32 = 8;
++    pub const BPF_PROG_DETACH: u32 = 9;
++    pub const BPF_PROG_TEST_RUN: u32 = 10;
++    pub const BPF_PROG_GET_NEXT_ID: u32 = 11;
++    pub const BPF_MAP_GET_NEXT_ID: u32 = 12;
++    pub const BPF_PROG_GET_FD_BY_ID: u32 = 13;
++    pub const BPF_MAP_GET_FD_BY_ID: u32 = 14;
++    pub const BPF_OBJ_GET_INFO_BY_FD: u32 = 15;
++    pub const BPF_PROG_QUERY: u32 = 16;
++    pub const BPF_RAW_TRACEPOINT_OPEN: u32 = 17;
++    pub const BPF_BTF_LOAD: u32 = 18;
++    pub const BPF_BTF_GET_FD_BY_ID: u32 = 19;
++    pub const BPF_TASK_FD_QUERY: u32 = 20;
++    pub const BPF_MAP_LOOKUP_AND_DELETE_ELEM: u32 = 21;
++    pub const BPF_MAP_FREEZE: u32 = 22;
++    pub const BPF_BTF_GET_NEXT_ID: u32 = 23;
++    pub const BPF_MAP_LOOKUP_BATCH: u32 = 24;
++    pub const BPF_MAP_LOOKUP_AND_DELETE_BATCH: u32 = 25;
++    pub const BPF_MAP_UPDATE_BATCH: u32 = 26;
++    pub const BPF_MAP_DELETE_BATCH: u32 = 27;
++    pub const BPF_LINK_CREATE: u32 = 28;
++    pub const BPF_LINK_UPDATE: u32 = 29;
++    pub const BPF_LINK_GET_FD_BY_ID: u32 = 30;
++    pub const BPF_LINK_GET_NEXT_ID: u32 = 31;
++    pub const BPF_ENABLE_STATS: u32 = 32;
++    pub const BPF_ITER_CREATE: u32 = 33;
++    pub const BPF_LINK_DETACH: u32 = 34;
++    pub const BPF_PROG_BIND_MAP: u32 = 35;
++}
++
++/// C enum `bpf_map_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_map_type {
++    pub const BPF_MAP_TYPE_UNSPEC: u32 = 0;
++    pub const BPF_MAP_TYPE_HASH: u32 = 1;
++    pub const BPF_MAP_TYPE_ARRAY: u32 = 2;
++    pub const BPF_MAP_TYPE_PROG_ARRAY: u32 = 3;
++    pub const BPF_MAP_TYPE_PERF_EVENT_ARRAY: u32 = 4;
++    pub const BPF_MAP_TYPE_PERCPU_HASH: u32 = 5;
++    pub const BPF_MAP_TYPE_PERCPU_ARRAY: u32 = 6;
++    pub const BPF_MAP_TYPE_STACK_TRACE: u32 = 7;
++    pub const BPF_MAP_TYPE_CGROUP_ARRAY: u32 = 8;
++    pub const BPF_MAP_TYPE_LRU_HASH: u32 = 9;
++    pub const BPF_MAP_TYPE_LRU_PERCPU_HASH: u32 = 10;
++    pub const BPF_MAP_TYPE_LPM_TRIE: u32 = 11;
++    pub const BPF_MAP_TYPE_ARRAY_OF_MAPS: u32 = 12;
++    pub const BPF_MAP_TYPE_HASH_OF_MAPS: u32 = 13;
++    pub const BPF_MAP_TYPE_DEVMAP: u32 = 14;
++    pub const BPF_MAP_TYPE_SOCKMAP: u32 = 15;
++    pub const BPF_MAP_TYPE_CPUMAP: u32 = 16;
++    pub const BPF_MAP_TYPE_XSKMAP: u32 = 17;
++    pub const BPF_MAP_TYPE_SOCKHASH: u32 = 18;
++    pub const BPF_MAP_TYPE_CGROUP_STORAGE_DEPRECATED: u32 = 19;
++    pub const BPF_MAP_TYPE_REUSEPORT_SOCKARRAY: u32 = 20;
++    pub const BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE_DEPRECATED: u32 = 21;
++    pub const BPF_MAP_TYPE_QUEUE: u32 = 22;
++    pub const BPF_MAP_TYPE_STACK: u32 = 23;
++    pub const BPF_MAP_TYPE_SK_STORAGE: u32 = 24;
++    pub const BPF_MAP_TYPE_DEVMAP_HASH: u32 = 25;
++    pub const BPF_MAP_TYPE_STRUCT_OPS: u32 = 26;
++    pub const BPF_MAP_TYPE_RINGBUF: u32 = 27;
++    pub const BPF_MAP_TYPE_INODE_STORAGE: u32 = 28;
++    pub const BPF_MAP_TYPE_TASK_STORAGE: u32 = 29;
++    pub const BPF_MAP_TYPE_BLOOM_FILTER: u32 = 30;
++    pub const BPF_MAP_TYPE_USER_RINGBUF: u32 = 31;
++    pub const BPF_MAP_TYPE_CGRP_STORAGE: u32 = 32;
++}
++
++/// C enum `bpf_prog_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_prog_type {
++    pub const BPF_PROG_TYPE_UNSPEC: u32 = 0;
++    pub const BPF_PROG_TYPE_SOCKET_FILTER: u32 = 1;
++    pub const BPF_PROG_TYPE_KPROBE: u32 = 2;
++    pub const BPF_PROG_TYPE_SCHED_CLS: u32 = 3;
++    pub const BPF_PROG_TYPE_SCHED_ACT: u32 = 4;
++    pub const BPF_PROG_TYPE_TRACEPOINT: u32 = 5;
++    pub const BPF_PROG_TYPE_XDP: u32 = 6;
++    pub const BPF_PROG_TYPE_PERF_EVENT: u32 = 7;
++    pub const BPF_PROG_TYPE_CGROUP_SKB: u32 = 8;
++    pub const BPF_PROG_TYPE_CGROUP_SOCK: u32 = 9;
++    pub const BPF_PROG_TYPE_LWT_IN: u32 = 10;
++    pub const BPF_PROG_TYPE_LWT_OUT: u32 = 11;
++    pub const BPF_PROG_TYPE_LWT_XMIT: u32 = 12;
++    pub const BPF_PROG_TYPE_SOCK_OPS: u32 = 13;
++    pub const BPF_PROG_TYPE_SK_SKB: u32 = 14;
++    pub const BPF_PROG_TYPE_CGROUP_DEVICE: u32 = 15;
++    pub const BPF_PROG_TYPE_SK_MSG: u32 = 16;
++    pub const BPF_PROG_TYPE_RAW_TRACEPOINT: u32 = 17;
++    pub const BPF_PROG_TYPE_CGROUP_SOCK_ADDR: u32 = 18;
++    pub const BPF_PROG_TYPE_LWT_SEG6LOCAL: u32 = 19;
++    pub const BPF_PROG_TYPE_LIRC_MODE2: u32 = 20;
++    pub const BPF_PROG_TYPE_SK_REUSEPORT: u32 = 21;
++    pub const BPF_PROG_TYPE_FLOW_DISSECTOR: u32 = 22;
++    pub const BPF_PROG_TYPE_CGROUP_SYSCTL: u32 = 23;
++    pub const BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE: u32 = 24;
++    pub const BPF_PROG_TYPE_CGROUP_SOCKOPT: u32 = 25;
++    pub const BPF_PROG_TYPE_TRACING: u32 = 26;
++    pub const BPF_PROG_TYPE_STRUCT_OPS: u32 = 27;
++    pub const BPF_PROG_TYPE_EXT: u32 = 28;
++    pub const BPF_PROG_TYPE_LSM: u32 = 29;
++    pub const BPF_PROG_TYPE_SK_LOOKUP: u32 = 30;
++    pub const BPF_PROG_TYPE_SYSCALL: u32 = 31;
++    pub const BPF_PROG_TYPE_NETFILTER: u32 = 32;
++}
++
++/// C enum `bpf_attach_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_attach_type {
++    pub const BPF_CGROUP_INET_INGRESS: u32 = 0;
++    pub const BPF_CGROUP_INET_EGRESS: u32 = 1;
++    pub const BPF_CGROUP_INET_SOCK_CREATE: u32 = 2;
++    pub const BPF_CGROUP_SOCK_OPS: u32 = 3;
++    pub const BPF_SK_SKB_STREAM_PARSER: u32 = 4;
++    pub const BPF_SK_SKB_STREAM_VERDICT: u32 = 5;
++    pub const BPF_CGROUP_DEVICE: u32 = 6;
++    pub const BPF_SK_MSG_VERDICT: u32 = 7;
++    pub const BPF_CGROUP_INET4_BIND: u32 = 8;
++    pub const BPF_CGROUP_INET6_BIND: u32 = 9;
++    pub const BPF_CGROUP_INET4_CONNECT: u32 = 10;
++    pub const BPF_CGROUP_INET6_CONNECT: u32 = 11;
++    pub const BPF_CGROUP_INET4_POST_BIND: u32 = 12;
++    pub const BPF_CGROUP_INET6_POST_BIND: u32 = 13;
++    pub const BPF_CGROUP_UDP4_SENDMSG: u32 = 14;
++    pub const BPF_CGROUP_UDP6_SENDMSG: u32 = 15;
++    pub const BPF_LIRC_MODE2: u32 = 16;
++    pub const BPF_FLOW_DISSECTOR: u32 = 17;
++    pub const BPF_CGROUP_SYSCTL: u32 = 18;
++    pub const BPF_CGROUP_UDP4_RECVMSG: u32 = 19;
++    pub const BPF_CGROUP_UDP6_RECVMSG: u32 = 20;
++    pub const BPF_CGROUP_GETSOCKOPT: u32 = 21;
++    pub const BPF_CGROUP_SETSOCKOPT: u32 = 22;
++    pub const BPF_TRACE_RAW_TP: u32 = 23;
++    pub const BPF_TRACE_FENTRY: u32 = 24;
++    pub const BPF_TRACE_FEXIT: u32 = 25;
++    pub const BPF_MODIFY_RETURN: u32 = 26;
++    pub const BPF_LSM_MAC: u32 = 27;
++    pub const BPF_TRACE_ITER: u32 = 28;
++    pub const BPF_CGROUP_INET4_GETPEERNAME: u32 = 29;
++    pub const BPF_CGROUP_INET6_GETPEERNAME: u32 = 30;
++    pub const BPF_CGROUP_INET4_GETSOCKNAME: u32 = 31;
++    pub const BPF_CGROUP_INET6_GETSOCKNAME: u32 = 32;
++    pub const BPF_XDP_DEVMAP: u32 = 33;
++    pub const BPF_CGROUP_INET_SOCK_RELEASE: u32 = 34;
++    pub const BPF_XDP_CPUMAP: u32 = 35;
++    pub const BPF_SK_LOOKUP: u32 = 36;
++    pub const BPF_XDP: u32 = 37;
++    pub const BPF_SK_SKB_VERDICT: u32 = 38;
++    pub const BPF_SK_REUSEPORT_SELECT: u32 = 39;
++    pub const BPF_SK_REUSEPORT_SELECT_OR_MIGRATE: u32 = 40;
++    pub const BPF_PERF_EVENT: u32 = 41;
++    pub const BPF_TRACE_KPROBE_MULTI: u32 = 42;
++    pub const BPF_LSM_CGROUP: u32 = 43;
++    pub const BPF_STRUCT_OPS: u32 = 44;
++    pub const BPF_NETFILTER: u32 = 45;
++    pub const BPF_TCX_INGRESS: u32 = 46;
++    pub const BPF_TCX_EGRESS: u32 = 47;
++    pub const BPF_TRACE_UPROBE_MULTI: u32 = 48;
++    pub const BPF_CGROUP_UNIX_CONNECT: u32 = 49;
++    pub const BPF_CGROUP_UNIX_SENDMSG: u32 = 50;
++    pub const BPF_CGROUP_UNIX_RECVMSG: u32 = 51;
++    pub const BPF_CGROUP_UNIX_GETPEERNAME: u32 = 52;
++    pub const BPF_CGROUP_UNIX_GETSOCKNAME: u32 = 53;
++    pub const BPF_NETKIT_PRIMARY: u32 = 54;
++    pub const BPF_NETKIT_PEER: u32 = 55;
++    pub const __MAX_BPF_ATTACH_TYPE: u32 = 56;
++}
++
++/// C enum `bpf_link_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_link_type {
++    pub const BPF_LINK_TYPE_UNSPEC: u32 = 0;
++    pub const BPF_LINK_TYPE_RAW_TRACEPOINT: u32 = 1;
++    pub const BPF_LINK_TYPE_TRACING: u32 = 2;
++    pub const BPF_LINK_TYPE_CGROUP: u32 = 3;
++    pub const BPF_LINK_TYPE_ITER: u32 = 4;
++    pub const BPF_LINK_TYPE_NETNS: u32 = 5;
++    pub const BPF_LINK_TYPE_XDP: u32 = 6;
++    pub const BPF_LINK_TYPE_PERF_EVENT: u32 = 7;
++    pub const BPF_LINK_TYPE_KPROBE_MULTI: u32 = 8;
++    pub const BPF_LINK_TYPE_STRUCT_OPS: u32 = 9;
++    pub const BPF_LINK_TYPE_NETFILTER: u32 = 10;
++    pub const BPF_LINK_TYPE_TCX: u32 = 11;
++    pub const BPF_LINK_TYPE_UPROBE_MULTI: u32 = 12;
++    pub const BPF_LINK_TYPE_NETKIT: u32 = 13;
++    pub const __MAX_BPF_LINK_TYPE: u32 = 14;
++}
++
++/// C enum `bpf_perf_event_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_perf_event_type {
++    pub const BPF_PERF_EVENT_UNSPEC: u32 = 0;
++    pub const BPF_PERF_EVENT_UPROBE: u32 = 1;
++    pub const BPF_PERF_EVENT_URETPROBE: u32 = 2;
++    pub const BPF_PERF_EVENT_KPROBE: u32 = 3;
++    pub const BPF_PERF_EVENT_KRETPROBE: u32 = 4;
++    pub const BPF_PERF_EVENT_TRACEPOINT: u32 = 5;
++    pub const BPF_PERF_EVENT_EVENT: u32 = 6;
++}
++
++/// C enum `bpf_anon_bpf_f_kprobe_multi_return` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_kprobe_multi_return {
++    pub const BPF_F_KPROBE_MULTI_RETURN: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_f_uprobe_multi_return` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_uprobe_multi_return {
++    pub const BPF_F_UPROBE_MULTI_RETURN: u32 = 1;
++}
++
++/// C enum `bpf_map_update_flags` (`include/uapi/linux/bpf.h`).
++pub mod bpf_map_update_flags {
++    pub const BPF_ANY: u32 = 0;
++    pub const BPF_NOEXIST: u32 = 1;
++    pub const BPF_EXIST: u32 = 2;
++    pub const BPF_F_LOCK: u32 = 4;
++}
++
++/// C enum `bpf_anon_bpf_f_no_prealloc` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_no_prealloc {
++    pub const BPF_F_NO_PREALLOC: u32 = 1;
++    pub const BPF_F_NO_COMMON_LRU: u32 = 2;
++    pub const BPF_F_NUMA_NODE: u32 = 4;
++    pub const BPF_F_RDONLY: u32 = 8;
++    pub const BPF_F_WRONLY: u32 = 16;
++    pub const BPF_F_STACK_BUILD_ID: u32 = 32;
++    pub const BPF_F_ZERO_SEED: u32 = 64;
++    pub const BPF_F_RDONLY_PROG: u32 = 128;
++    pub const BPF_F_WRONLY_PROG: u32 = 256;
++    pub const BPF_F_CLONE: u32 = 512;
++    pub const BPF_F_MMAPABLE: u32 = 1024;
++    pub const BPF_F_PRESERVE_ELEMS: u32 = 2048;
++    pub const BPF_F_INNER_MAP: u32 = 4096;
++    pub const BPF_F_LINK: u32 = 8192;
++    pub const BPF_F_PATH_FD: u32 = 16384;
++}
++
++/// C enum `bpf_stats_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_stats_type {
++    pub const BPF_STATS_RUN_TIME: u32 = 0;
++}
++
++/// C enum `bpf_stack_build_id_status` (`include/uapi/linux/bpf.h`).
++pub mod bpf_stack_build_id_status {
++    pub const BPF_STACK_BUILD_ID_EMPTY: u32 = 0;
++    pub const BPF_STACK_BUILD_ID_VALID: u32 = 1;
++    pub const BPF_STACK_BUILD_ID_IP: u32 = 2;
++}
++
++/// C enum `bpf_anon_bpf_f_recompute_csum` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_recompute_csum {
++    pub const BPF_F_RECOMPUTE_CSUM: u32 = 1;
++    pub const BPF_F_INVALIDATE_HASH: u32 = 2;
++}
++
++/// C enum `bpf_anon_bpf_f_hdr_field_mask` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_hdr_field_mask {
++    pub const BPF_F_HDR_FIELD_MASK: u32 = 15;
++}
++
++/// C enum `bpf_anon_bpf_f_pseudo_hdr` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_pseudo_hdr {
++    pub const BPF_F_PSEUDO_HDR: u32 = 16;
++    pub const BPF_F_MARK_MANGLED_0: u32 = 32;
++    pub const BPF_F_MARK_ENFORCE: u32 = 64;
++}
++
++/// C enum `bpf_anon_bpf_f_ingress` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_ingress {
++    pub const BPF_F_INGRESS: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_f_tuninfo_ipv6` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_tuninfo_ipv6 {
++    pub const BPF_F_TUNINFO_IPV6: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_f_skip_field_mask` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_skip_field_mask {
++    pub const BPF_F_SKIP_FIELD_MASK: u32 = 255;
++    pub const BPF_F_USER_STACK: u32 = 256;
++    pub const BPF_F_FAST_STACK_CMP: u32 = 512;
++    pub const BPF_F_REUSE_STACKID: u32 = 1024;
++    pub const BPF_F_USER_BUILD_ID: u32 = 2048;
++}
++
++/// C enum `bpf_anon_bpf_f_zero_csum_tx` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_zero_csum_tx {
++    pub const BPF_F_ZERO_CSUM_TX: u32 = 2;
++    pub const BPF_F_DONT_FRAGMENT: u32 = 4;
++    pub const BPF_F_SEQ_NUMBER: u32 = 8;
++    pub const BPF_F_NO_TUNNEL_KEY: u32 = 16;
++}
++
++/// C enum `bpf_anon_bpf_f_tuninfo_flags` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_tuninfo_flags {
++    pub const BPF_F_TUNINFO_FLAGS: u32 = 16;
++}
++
++/// C enum `bpf_anon_bpf_f_index_mask` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_index_mask {
++    pub const BPF_F_INDEX_MASK: u32 = 4294967295;
++    pub const BPF_F_CURRENT_CPU: u32 = 4294967295;
++    pub const BPF_F_CTXLEN_MASK: u64 = 4503595332403200;
++}
++
++/// C enum `bpf_anon_bpf_csum_level_query` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_csum_level_query {
++    pub const BPF_CSUM_LEVEL_QUERY: u32 = 0;
++    pub const BPF_CSUM_LEVEL_INC: u32 = 1;
++    pub const BPF_CSUM_LEVEL_DEC: u32 = 2;
++    pub const BPF_CSUM_LEVEL_RESET: u32 = 3;
++}
++
++/// C enum `bpf_anon_bpf_f_adj_room_fixed_gso` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_adj_room_fixed_gso {
++    pub const BPF_F_ADJ_ROOM_FIXED_GSO: u32 = 1;
++    pub const BPF_F_ADJ_ROOM_ENCAP_L3_IPV4: u32 = 2;
++    pub const BPF_F_ADJ_ROOM_ENCAP_L3_IPV6: u32 = 4;
++    pub const BPF_F_ADJ_ROOM_ENCAP_L4_GRE: u32 = 8;
++    pub const BPF_F_ADJ_ROOM_ENCAP_L4_UDP: u32 = 16;
++    pub const BPF_F_ADJ_ROOM_NO_CSUM_RESET: u32 = 32;
++    pub const BPF_F_ADJ_ROOM_ENCAP_L2_ETH: u32 = 64;
++    pub const BPF_F_ADJ_ROOM_DECAP_L3_IPV4: u32 = 128;
++    pub const BPF_F_ADJ_ROOM_DECAP_L3_IPV6: u32 = 256;
++}
++
++/// C enum `bpf_anon_bpf_adj_room_encap_l2_mask` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_adj_room_encap_l2_mask {
++    pub const BPF_ADJ_ROOM_ENCAP_L2_MASK: u32 = 255;
++    pub const BPF_ADJ_ROOM_ENCAP_L2_SHIFT: u32 = 56;
++}
++
++/// C enum `bpf_anon_bpf_f_sysctl_base_name` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_sysctl_base_name {
++    pub const BPF_F_SYSCTL_BASE_NAME: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_local_storage_get_f_create` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_local_storage_get_f_create {
++    pub const BPF_LOCAL_STORAGE_GET_F_CREATE: u32 = 1;
++    pub const BPF_SK_STORAGE_GET_F_CREATE: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_f_get_branch_records_size` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_get_branch_records_size {
++    pub const BPF_F_GET_BRANCH_RECORDS_SIZE: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_rb_no_wakeup` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_rb_no_wakeup {
++    pub const BPF_RB_NO_WAKEUP: u32 = 1;
++    pub const BPF_RB_FORCE_WAKEUP: u32 = 2;
++}
++
++/// C enum `bpf_anon_bpf_rb_avail_data` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_rb_avail_data {
++    pub const BPF_RB_AVAIL_DATA: u32 = 0;
++    pub const BPF_RB_RING_SIZE: u32 = 1;
++    pub const BPF_RB_CONS_POS: u32 = 2;
++    pub const BPF_RB_PROD_POS: u32 = 3;
++}
++
++/// C enum `bpf_anon_bpf_ringbuf_busy_bit` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_ringbuf_busy_bit {
++    pub const BPF_RINGBUF_BUSY_BIT: u32 = 2147483648;
++    pub const BPF_RINGBUF_DISCARD_BIT: u32 = 1073741824;
++    pub const BPF_RINGBUF_HDR_SZ: u32 = 8;
++}
++
++/// C enum `bpf_anon_bpf_sk_lookup_f_replace` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_sk_lookup_f_replace {
++    pub const BPF_SK_LOOKUP_F_REPLACE: u32 = 1;
++    pub const BPF_SK_LOOKUP_F_NO_REUSEPORT: u32 = 2;
++}
++
++/// C enum `bpf_adj_room_mode` (`include/uapi/linux/bpf.h`).
++pub mod bpf_adj_room_mode {
++    pub const BPF_ADJ_ROOM_NET: u32 = 0;
++    pub const BPF_ADJ_ROOM_MAC: u32 = 1;
++}
++
++/// C enum `bpf_hdr_start_off` (`include/uapi/linux/bpf.h`).
++pub mod bpf_hdr_start_off {
++    pub const BPF_HDR_START_MAC: u32 = 0;
++    pub const BPF_HDR_START_NET: u32 = 1;
++}
++
++/// C enum `bpf_lwt_encap_mode` (`include/uapi/linux/bpf.h`).
++pub mod bpf_lwt_encap_mode {
++    pub const BPF_LWT_ENCAP_SEG6: u32 = 0;
++    pub const BPF_LWT_ENCAP_SEG6_INLINE: u32 = 1;
++    pub const BPF_LWT_ENCAP_IP: u32 = 2;
++}
++
++/// C enum `bpf_anon_bpf_f_bprm_secureexec` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_bprm_secureexec {
++    pub const BPF_F_BPRM_SECUREEXEC: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_f_broadcast` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_broadcast {
++    pub const BPF_F_BROADCAST: u32 = 8;
++    pub const BPF_F_EXCLUDE_INGRESS: u32 = 16;
++}
++
++/// C enum `bpf_anon_bpf_skb_tstamp_unspec` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_skb_tstamp_unspec {
++    pub const BPF_SKB_TSTAMP_UNSPEC: u32 = 0;
++    pub const BPF_SKB_TSTAMP_DELIVERY_MONO: u32 = 1;
++}
++
++/// C enum `bpf_ret_code` (`include/uapi/linux/bpf.h`).
++pub mod bpf_ret_code {
++    pub const BPF_OK: u32 = 0;
++    pub const BPF_DROP: u32 = 2;
++    pub const BPF_REDIRECT: u32 = 7;
++    pub const BPF_LWT_REROUTE: u32 = 128;
++    pub const BPF_FLOW_DISSECTOR_CONTINUE: u32 = 129;
++}
++
++/// C enum `tcx_action_base` (`include/uapi/linux/bpf.h`).
++pub mod tcx_action_base {
++    pub const TCX_NEXT: i32 = -1;
++    pub const TCX_PASS: u32 = 0;
++    pub const TCX_DROP: u32 = 2;
++    pub const TCX_REDIRECT: u32 = 7;
++}
++
++/// C enum `xdp_action` (`include/uapi/linux/bpf.h`).
++pub mod xdp_action {
++    pub const XDP_ABORTED: u32 = 0;
++    pub const XDP_DROP: u32 = 1;
++    pub const XDP_PASS: u32 = 2;
++    pub const XDP_TX: u32 = 3;
++    pub const XDP_REDIRECT: u32 = 4;
++}
++
++/// C enum `sk_action` (`include/uapi/linux/bpf.h`).
++pub mod sk_action {
++    pub const SK_DROP: u32 = 0;
++    pub const SK_PASS: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_sock_ops_rto_cb_flag` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_sock_ops_rto_cb_flag {
++    pub const BPF_SOCK_OPS_RTO_CB_FLAG: u32 = 1;
++    pub const BPF_SOCK_OPS_RETRANS_CB_FLAG: u32 = 2;
++    pub const BPF_SOCK_OPS_STATE_CB_FLAG: u32 = 4;
++    pub const BPF_SOCK_OPS_RTT_CB_FLAG: u32 = 8;
++    pub const BPF_SOCK_OPS_PARSE_ALL_HDR_OPT_CB_FLAG: u32 = 16;
++    pub const BPF_SOCK_OPS_PARSE_UNKNOWN_HDR_OPT_CB_FLAG: u32 = 32;
++    pub const BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG: u32 = 64;
++    pub const BPF_SOCK_OPS_ALL_CB_FLAGS: u32 = 127;
++}
++
++/// C enum `bpf_anon_bpf_sock_ops_void` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_sock_ops_void {
++    pub const BPF_SOCK_OPS_VOID: u32 = 0;
++    pub const BPF_SOCK_OPS_TIMEOUT_INIT: u32 = 1;
++    pub const BPF_SOCK_OPS_RWND_INIT: u32 = 2;
++    pub const BPF_SOCK_OPS_TCP_CONNECT_CB: u32 = 3;
++    pub const BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB: u32 = 4;
++    pub const BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB: u32 = 5;
++    pub const BPF_SOCK_OPS_NEEDS_ECN: u32 = 6;
++    pub const BPF_SOCK_OPS_BASE_RTT: u32 = 7;
++    pub const BPF_SOCK_OPS_RTO_CB: u32 = 8;
++    pub const BPF_SOCK_OPS_RETRANS_CB: u32 = 9;
++    pub const BPF_SOCK_OPS_STATE_CB: u32 = 10;
++    pub const BPF_SOCK_OPS_TCP_LISTEN_CB: u32 = 11;
++    pub const BPF_SOCK_OPS_RTT_CB: u32 = 12;
++    pub const BPF_SOCK_OPS_PARSE_HDR_OPT_CB: u32 = 13;
++    pub const BPF_SOCK_OPS_HDR_OPT_LEN_CB: u32 = 14;
++    pub const BPF_SOCK_OPS_WRITE_HDR_OPT_CB: u32 = 15;
++}
++
++/// C enum `bpf_anon_bpf_tcp_established` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_tcp_established {
++    pub const BPF_TCP_ESTABLISHED: u32 = 1;
++    pub const BPF_TCP_SYN_SENT: u32 = 2;
++    pub const BPF_TCP_SYN_RECV: u32 = 3;
++    pub const BPF_TCP_FIN_WAIT1: u32 = 4;
++    pub const BPF_TCP_FIN_WAIT2: u32 = 5;
++    pub const BPF_TCP_TIME_WAIT: u32 = 6;
++    pub const BPF_TCP_CLOSE: u32 = 7;
++    pub const BPF_TCP_CLOSE_WAIT: u32 = 8;
++    pub const BPF_TCP_LAST_ACK: u32 = 9;
++    pub const BPF_TCP_LISTEN: u32 = 10;
++    pub const BPF_TCP_CLOSING: u32 = 11;
++    pub const BPF_TCP_NEW_SYN_RECV: u32 = 12;
++    pub const BPF_TCP_BOUND_INACTIVE: u32 = 13;
++    pub const BPF_TCP_MAX_STATES: u32 = 14;
++}
++
++/// C enum `bpf_anon_tcp_bpf_iw` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_tcp_bpf_iw {
++    pub const TCP_BPF_IW: u32 = 1001;
++    pub const TCP_BPF_SNDCWND_CLAMP: u32 = 1002;
++    pub const TCP_BPF_DELACK_MAX: u32 = 1003;
++    pub const TCP_BPF_RTO_MIN: u32 = 1004;
++    pub const TCP_BPF_SYN: u32 = 1005;
++    pub const TCP_BPF_SYN_IP: u32 = 1006;
++    pub const TCP_BPF_SYN_MAC: u32 = 1007;
++}
++
++/// C enum `bpf_anon_bpf_load_hdr_opt_tcp_syn` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_load_hdr_opt_tcp_syn {
++    pub const BPF_LOAD_HDR_OPT_TCP_SYN: u32 = 1;
++}
++
++/// C enum `bpf_anon_bpf_write_hdr_tcp_current_mss` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_write_hdr_tcp_current_mss {
++    pub const BPF_WRITE_HDR_TCP_CURRENT_MSS: u32 = 1;
++    pub const BPF_WRITE_HDR_TCP_SYNACK_COOKIE: u32 = 2;
++}
++
++/// C enum `bpf_devcg_acc` (`include/uapi/linux/bpf.h`).
++pub mod bpf_devcg_acc {
++    pub const BPF_DEVCG_ACC_MKNOD: u32 = 1;
++    pub const BPF_DEVCG_ACC_READ: u32 = 2;
++    pub const BPF_DEVCG_ACC_WRITE: u32 = 4;
++}
++
++/// C enum `bpf_devcg_dev` (`include/uapi/linux/bpf.h`).
++pub mod bpf_devcg_dev {
++    pub const BPF_DEVCG_DEV_BLOCK: u32 = 1;
++    pub const BPF_DEVCG_DEV_CHAR: u32 = 2;
++}
++
++/// C enum `bpf_anon_bpf_fib_lookup_direct` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_fib_lookup_direct {
++    pub const BPF_FIB_LOOKUP_DIRECT: u32 = 1;
++    pub const BPF_FIB_LOOKUP_OUTPUT: u32 = 2;
++    pub const BPF_FIB_LOOKUP_SKIP_NEIGH: u32 = 4;
++    pub const BPF_FIB_LOOKUP_TBID: u32 = 8;
++    pub const BPF_FIB_LOOKUP_SRC: u32 = 16;
++}
++
++/// C enum `bpf_anon_bpf_fib_lkup_ret_success` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_fib_lkup_ret_success {
++    pub const BPF_FIB_LKUP_RET_SUCCESS: u32 = 0;
++    pub const BPF_FIB_LKUP_RET_BLACKHOLE: u32 = 1;
++    pub const BPF_FIB_LKUP_RET_UNREACHABLE: u32 = 2;
++    pub const BPF_FIB_LKUP_RET_PROHIBIT: u32 = 3;
++    pub const BPF_FIB_LKUP_RET_NOT_FWDED: u32 = 4;
++    pub const BPF_FIB_LKUP_RET_FWD_DISABLED: u32 = 5;
++    pub const BPF_FIB_LKUP_RET_UNSUPP_LWT: u32 = 6;
++    pub const BPF_FIB_LKUP_RET_NO_NEIGH: u32 = 7;
++    pub const BPF_FIB_LKUP_RET_FRAG_NEEDED: u32 = 8;
++    pub const BPF_FIB_LKUP_RET_NO_SRC_ADDR: u32 = 9;
++}
++
++/// C enum `bpf_check_mtu_flags` (`include/uapi/linux/bpf.h`).
++pub mod bpf_check_mtu_flags {
++    pub const BPF_MTU_CHK_SEGS: u32 = 1;
++}
++
++/// C enum `bpf_check_mtu_ret` (`include/uapi/linux/bpf.h`).
++pub mod bpf_check_mtu_ret {
++    pub const BPF_MTU_CHK_RET_SUCCESS: u32 = 0;
++    pub const BPF_MTU_CHK_RET_FRAG_NEEDED: u32 = 1;
++    pub const BPF_MTU_CHK_RET_SEGS_TOOBIG: u32 = 2;
++}
++
++/// C enum `bpf_task_fd_type` (`include/uapi/linux/bpf.h`).
++pub mod bpf_task_fd_type {
++    pub const BPF_FD_TYPE_RAW_TRACEPOINT: u32 = 0;
++    pub const BPF_FD_TYPE_TRACEPOINT: u32 = 1;
++    pub const BPF_FD_TYPE_KPROBE: u32 = 2;
++    pub const BPF_FD_TYPE_KRETPROBE: u32 = 3;
++    pub const BPF_FD_TYPE_UPROBE: u32 = 4;
++    pub const BPF_FD_TYPE_URETPROBE: u32 = 5;
++}
++
++/// C enum `bpf_anon_bpf_flow_dissector_f_parse_1st_frag` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_flow_dissector_f_parse_1st_frag {
++    pub const BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG: u32 = 1;
++    pub const BPF_FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL: u32 = 2;
++    pub const BPF_FLOW_DISSECTOR_F_STOP_AT_ENCAP: u32 = 4;
++}
++
++/// C enum `bpf_anon_btf_f_compact` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_btf_f_compact {
++    pub const BTF_F_COMPACT: u32 = 1;
++    pub const BTF_F_NONAME: u32 = 2;
++    pub const BTF_F_PTR_RAW: u32 = 4;
++    pub const BTF_F_ZERO: u32 = 8;
++}
++
++/// C enum `bpf_core_relo_kind` (`include/uapi/linux/bpf.h`).
++pub mod bpf_core_relo_kind {
++    pub const BPF_CORE_FIELD_BYTE_OFFSET: u32 = 0;
++    pub const BPF_CORE_FIELD_BYTE_SIZE: u32 = 1;
++    pub const BPF_CORE_FIELD_EXISTS: u32 = 2;
++    pub const BPF_CORE_FIELD_SIGNED: u32 = 3;
++    pub const BPF_CORE_FIELD_LSHIFT_U64: u32 = 4;
++    pub const BPF_CORE_FIELD_RSHIFT_U64: u32 = 5;
++    pub const BPF_CORE_TYPE_ID_LOCAL: u32 = 6;
++    pub const BPF_CORE_TYPE_ID_TARGET: u32 = 7;
++    pub const BPF_CORE_TYPE_EXISTS: u32 = 8;
++    pub const BPF_CORE_TYPE_SIZE: u32 = 9;
++    pub const BPF_CORE_ENUMVAL_EXISTS: u32 = 10;
++    pub const BPF_CORE_ENUMVAL_VALUE: u32 = 11;
++    pub const BPF_CORE_TYPE_MATCHES: u32 = 12;
++}
++
++/// C enum `bpf_anon_bpf_f_timer_abs` (`include/uapi/linux/bpf.h`).
++pub mod bpf_anon_bpf_f_timer_abs {
++    pub const BPF_F_TIMER_ABS: u32 = 1;
++    pub const BPF_F_TIMER_CPU_PIN: u32 = 2;
++}
++
++/// `#define` values declared in `include/uapi/linux/bpf.h`.
++pub mod defines {
++    pub const BPF_ABS: u32 = 32;
++    pub const BPF_ADD: u32 = 0;
++    pub const BPF_ALU: u32 = 4;
++    pub const BPF_ALU64: u32 = 7;
++    pub const BPF_AND: u32 = 80;
++    pub const BPF_ARSH: u32 = 192;
++    pub const BPF_ATOMIC: u32 = 192;
++    pub const BPF_B: u32 = 16;
++    pub const BPF_BUILD_ID_SIZE: u32 = 20;
++    pub const BPF_CALL: u32 = 128;
++    pub const BPF_CGROUP_MAX_PROGS: u32 = 64;
++    pub const BPF_CMPXCHG: u32 = 241;
++    pub const BPF_DIV: u32 = 48;
++    pub const BPF_DW: u32 = 24;
++    pub const BPF_END: u32 = 208;
++    pub const BPF_EXIT: u32 = 144;
++    pub const BPF_FETCH: u32 = 1;
++    pub const BPF_FROM_BE: u32 = 8;
++    pub const BPF_FROM_LE: u32 = 0;
++    pub const BPF_F_AFTER: u32 = 16;
++    pub const BPF_F_ALLOW_MULTI: u32 = 2;
++    pub const BPF_F_ALLOW_OVERRIDE: u32 = 1;
++    pub const BPF_F_ANY_ALIGNMENT: u32 = 2;
++    pub const BPF_F_BEFORE: u32 = 8;
++    pub const BPF_F_ID: u32 = 32;
++    pub const BPF_F_NETFILTER_IP_DEFRAG: u32 = 1;
++    pub const BPF_F_QUERY_EFFECTIVE: u32 = 1;
++    pub const BPF_F_REPLACE: u32 = 4;
++    pub const BPF_F_SLEEPABLE: u32 = 16;
++    pub const BPF_F_STRICT_ALIGNMENT: u32 = 1;
++    pub const BPF_F_TEST_REG_INVARIANTS: u32 = 128;
++    pub const BPF_F_TEST_RND_HI32: u32 = 4;
++    pub const BPF_F_TEST_RUN_ON_CPU: u32 = 1;
++    pub const BPF_F_TEST_STATE_FREQ: u32 = 8;
++    pub const BPF_F_TEST_XDP_LIVE_FRAMES: u32 = 2;
++    pub const BPF_F_XDP_DEV_BOUND_ONLY: u32 = 64;
++    pub const BPF_F_XDP_HAS_FRAGS: u32 = 32;
++    pub const BPF_H: u32 = 8;
++    pub const BPF_IMM: u32 = 0;
++    pub const BPF_IND: u32 = 64;
++    pub const BPF_JA: u32 = 0;
++    pub const BPF_JEQ: u32 = 16;
++    pub const BPF_JGE: u32 = 48;
++    pub const BPF_JGT: u32 = 32;
++    pub const BPF_JLE: u32 = 176;
++    pub const BPF_JLT: u32 = 160;
++    pub const BPF_JMP: u32 = 5;
++    pub const BPF_JMP32: u32 = 6;
++    pub const BPF_JNE: u32 = 80;
++    pub const BPF_JSET: u32 = 64;
++    pub const BPF_JSGE: u32 = 112;
++    pub const BPF_JSGT: u32 = 96;
++    pub const BPF_JSLE: u32 = 208;
++    pub const BPF_JSLT: u32 = 192;
++    pub const BPF_K: u32 = 0;
++    pub const BPF_LD: u32 = 0;
++    pub const BPF_LDX: u32 = 1;
++    pub const BPF_LEN: u32 = 128;
++    pub const BPF_LSH: u32 = 96;
++    pub const BPF_MAXINSNS: u32 = 4096;
++    pub const BPF_MEM: u32 = 96;
++    pub const BPF_MEMSX: u32 = 128;
++    pub const BPF_MISC: u32 = 7;
++    pub const BPF_MOD: u32 = 144;
++    pub const BPF_MOV: u32 = 176;
++    pub const BPF_MSH: u32 = 160;
++    pub const BPF_MUL: u32 = 32;
++    pub const BPF_NEG: u32 = 128;
++    pub const BPF_OBJ_NAME_LEN: u32 = 16;
++    pub const BPF_OR: u32 = 64;
++    pub const BPF_PSEUDO_BTF_ID: u32 = 3;
++    pub const BPF_PSEUDO_CALL: u32 = 1;
++    pub const BPF_PSEUDO_FUNC: u32 = 4;
++    pub const BPF_PSEUDO_KFUNC_CALL: u32 = 2;
++    pub const BPF_PSEUDO_MAP_FD: u32 = 1;
++    pub const BPF_PSEUDO_MAP_IDX: u32 = 5;
++    pub const BPF_PSEUDO_MAP_IDX_VALUE: u32 = 6;
++    pub const BPF_PSEUDO_MAP_VALUE: u32 = 2;
++    pub const BPF_RET: u32 = 6;
++    pub const BPF_RSH: u32 = 112;
++    pub const BPF_ST: u32 = 2;
++    pub const BPF_STX: u32 = 3;
++    pub const BPF_SUB: u32 = 16;
++    pub const BPF_TAG_SIZE: u32 = 8;
++    pub const BPF_TO_BE: u32 = 8;
++    pub const BPF_TO_LE: u32 = 0;
++    pub const BPF_W: u32 = 0;
++    pub const BPF_X: u32 = 8;
++    pub const BPF_XADD: u32 = 192;
++    pub const BPF_XCHG: u32 = 225;
++    pub const BPF_XOR: u32 = 160;
++}
++
++/// Values this table declares that are NOT from the uapi headers.
++///
++/// Each one is a deliberate exception and needs its source named in
++/// the generator; the conformance test pins this list so a second
++/// exception cannot slip in unnoticed.
++pub const NON_UAPI_VALUES: &[&str] = &["BPF_CGROUP_MAX_PROGS"];
++
++/// Names of the enum modules in this table.
++pub const ENUM_MODULES: &[&str] = &[
++    "bpf_anon_bpf_reg_0",
++    "bpf_cgroup_iter_order",
++    "bpf_cmd",
++    "bpf_map_type",
++    "bpf_prog_type",
++    "bpf_attach_type",
++    "bpf_link_type",
++    "bpf_perf_event_type",
++    "bpf_anon_bpf_f_kprobe_multi_return",
++    "bpf_anon_bpf_f_uprobe_multi_return",
++    "bpf_map_update_flags",
++    "bpf_anon_bpf_f_no_prealloc",
++    "bpf_stats_type",
++    "bpf_stack_build_id_status",
++    "bpf_anon_bpf_f_recompute_csum",
++    "bpf_anon_bpf_f_hdr_field_mask",
++    "bpf_anon_bpf_f_pseudo_hdr",
++    "bpf_anon_bpf_f_ingress",
++    "bpf_anon_bpf_f_tuninfo_ipv6",
++    "bpf_anon_bpf_f_skip_field_mask",
++    "bpf_anon_bpf_f_zero_csum_tx",
++    "bpf_anon_bpf_f_tuninfo_flags",
++    "bpf_anon_bpf_f_index_mask",
++    "bpf_anon_bpf_csum_level_query",
++    "bpf_anon_bpf_f_adj_room_fixed_gso",
++    "bpf_anon_bpf_adj_room_encap_l2_mask",
++    "bpf_anon_bpf_f_sysctl_base_name",
++    "bpf_anon_bpf_local_storage_get_f_create",
++    "bpf_anon_bpf_f_get_branch_records_size",
++    "bpf_anon_bpf_rb_no_wakeup",
++    "bpf_anon_bpf_rb_avail_data",
++    "bpf_anon_bpf_ringbuf_busy_bit",
++    "bpf_anon_bpf_sk_lookup_f_replace",
++    "bpf_adj_room_mode",
++    "bpf_hdr_start_off",
++    "bpf_lwt_encap_mode",
++    "bpf_anon_bpf_f_bprm_secureexec",
++    "bpf_anon_bpf_f_broadcast",
++    "bpf_anon_bpf_skb_tstamp_unspec",
++    "bpf_ret_code",
++    "tcx_action_base",
++    "xdp_action",
++    "sk_action",
++    "bpf_anon_bpf_sock_ops_rto_cb_flag",
++    "bpf_anon_bpf_sock_ops_void",
++    "bpf_anon_bpf_tcp_established",
++    "bpf_anon_tcp_bpf_iw",
++    "bpf_anon_bpf_load_hdr_opt_tcp_syn",
++    "bpf_anon_bpf_write_hdr_tcp_current_mss",
++    "bpf_devcg_acc",
++    "bpf_devcg_dev",
++    "bpf_anon_bpf_fib_lookup_direct",
++    "bpf_anon_bpf_fib_lkup_ret_success",
++    "bpf_check_mtu_flags",
++    "bpf_check_mtu_ret",
++    "bpf_task_fd_type",
++    "bpf_anon_bpf_flow_dissector_f_parse_1st_frag",
++    "bpf_anon_btf_f_compact",
++    "bpf_core_relo_kind",
++    "bpf_anon_bpf_f_timer_abs",
++];
++
++/// `#define`s in the uapi headers that are not integer constants.
++///
++/// Listed so a reader can tell "absent on purpose" from "the generator
++/// dropped it". Function-like accessor macros (`BPF_CLASS(code)`) and
++/// expressions the evaluator cannot fold are the only entries here.
++pub const NOT_CONSTANTS: &[&str] = &[];
++
++/// `enum bpf_func_id` helper ids (`___BPF_FUNC_MAPPER`).
++pub mod bpf_func_id {
++    pub const BPF_FUNC_unspec: u32 = 0;
++    pub const BPF_FUNC_map_lookup_elem: u32 = 1;
++    pub const BPF_FUNC_map_update_elem: u32 = 2;
++    pub const BPF_FUNC_map_delete_elem: u32 = 3;
++    pub const BPF_FUNC_probe_read: u32 = 4;
++    pub const BPF_FUNC_ktime_get_ns: u32 = 5;
++    pub const BPF_FUNC_trace_printk: u32 = 6;
++    pub const BPF_FUNC_get_prandom_u32: u32 = 7;
++    pub const BPF_FUNC_get_smp_processor_id: u32 = 8;
++    pub const BPF_FUNC_skb_store_bytes: u32 = 9;
++    pub const BPF_FUNC_l3_csum_replace: u32 = 10;
++    pub const BPF_FUNC_l4_csum_replace: u32 = 11;
++    pub const BPF_FUNC_tail_call: u32 = 12;
++    pub const BPF_FUNC_clone_redirect: u32 = 13;
++    pub const BPF_FUNC_get_current_pid_tgid: u32 = 14;
++    pub const BPF_FUNC_get_current_uid_gid: u32 = 15;
++    pub const BPF_FUNC_get_current_comm: u32 = 16;
++    pub const BPF_FUNC_get_cgroup_classid: u32 = 17;
++    pub const BPF_FUNC_skb_vlan_push: u32 = 18;
++    pub const BPF_FUNC_skb_vlan_pop: u32 = 19;
++    pub const BPF_FUNC_skb_get_tunnel_key: u32 = 20;
++    pub const BPF_FUNC_skb_set_tunnel_key: u32 = 21;
++    pub const BPF_FUNC_perf_event_read: u32 = 22;
++    pub const BPF_FUNC_redirect: u32 = 23;
++    pub const BPF_FUNC_get_route_realm: u32 = 24;
++    pub const BPF_FUNC_perf_event_output: u32 = 25;
++    pub const BPF_FUNC_skb_load_bytes: u32 = 26;
++    pub const BPF_FUNC_get_stackid: u32 = 27;
++    pub const BPF_FUNC_csum_diff: u32 = 28;
++    pub const BPF_FUNC_skb_get_tunnel_opt: u32 = 29;
++    pub const BPF_FUNC_skb_set_tunnel_opt: u32 = 30;
++    pub const BPF_FUNC_skb_change_proto: u32 = 31;
++    pub const BPF_FUNC_skb_change_type: u32 = 32;
++    pub const BPF_FUNC_skb_under_cgroup: u32 = 33;
++    pub const BPF_FUNC_get_hash_recalc: u32 = 34;
++    pub const BPF_FUNC_get_current_task: u32 = 35;
++    pub const BPF_FUNC_probe_write_user: u32 = 36;
++    pub const BPF_FUNC_current_task_under_cgroup: u32 = 37;
++    pub const BPF_FUNC_skb_change_tail: u32 = 38;
++    pub const BPF_FUNC_skb_pull_data: u32 = 39;
++    pub const BPF_FUNC_csum_update: u32 = 40;
++    pub const BPF_FUNC_set_hash_invalid: u32 = 41;
++    pub const BPF_FUNC_get_numa_node_id: u32 = 42;
++    pub const BPF_FUNC_skb_change_head: u32 = 43;
++    pub const BPF_FUNC_xdp_adjust_head: u32 = 44;
++    pub const BPF_FUNC_probe_read_str: u32 = 45;
++    pub const BPF_FUNC_get_socket_cookie: u32 = 46;
++    pub const BPF_FUNC_get_socket_uid: u32 = 47;
++    pub const BPF_FUNC_set_hash: u32 = 48;
++    pub const BPF_FUNC_setsockopt: u32 = 49;
++    pub const BPF_FUNC_skb_adjust_room: u32 = 50;
++    pub const BPF_FUNC_redirect_map: u32 = 51;
++    pub const BPF_FUNC_sk_redirect_map: u32 = 52;
++    pub const BPF_FUNC_sock_map_update: u32 = 53;
++    pub const BPF_FUNC_xdp_adjust_meta: u32 = 54;
++    pub const BPF_FUNC_perf_event_read_value: u32 = 55;
++    pub const BPF_FUNC_perf_prog_read_value: u32 = 56;
++    pub const BPF_FUNC_getsockopt: u32 = 57;
++    pub const BPF_FUNC_override_return: u32 = 58;
++    pub const BPF_FUNC_sock_ops_cb_flags_set: u32 = 59;
++    pub const BPF_FUNC_msg_redirect_map: u32 = 60;
++    pub const BPF_FUNC_msg_apply_bytes: u32 = 61;
++    pub const BPF_FUNC_msg_cork_bytes: u32 = 62;
++    pub const BPF_FUNC_msg_pull_data: u32 = 63;
++    pub const BPF_FUNC_bind: u32 = 64;
++    pub const BPF_FUNC_xdp_adjust_tail: u32 = 65;
++    pub const BPF_FUNC_skb_get_xfrm_state: u32 = 66;
++    pub const BPF_FUNC_get_stack: u32 = 67;
++    pub const BPF_FUNC_skb_load_bytes_relative: u32 = 68;
++    pub const BPF_FUNC_fib_lookup: u32 = 69;
++    pub const BPF_FUNC_sock_hash_update: u32 = 70;
++    pub const BPF_FUNC_msg_redirect_hash: u32 = 71;
++    pub const BPF_FUNC_sk_redirect_hash: u32 = 72;
++    pub const BPF_FUNC_lwt_push_encap: u32 = 73;
++    pub const BPF_FUNC_lwt_seg6_store_bytes: u32 = 74;
++    pub const BPF_FUNC_lwt_seg6_adjust_srh: u32 = 75;
++    pub const BPF_FUNC_lwt_seg6_action: u32 = 76;
++    pub const BPF_FUNC_rc_repeat: u32 = 77;
++    pub const BPF_FUNC_rc_keydown: u32 = 78;
++    pub const BPF_FUNC_skb_cgroup_id: u32 = 79;
++    pub const BPF_FUNC_get_current_cgroup_id: u32 = 80;
++    pub const BPF_FUNC_get_local_storage: u32 = 81;
++    pub const BPF_FUNC_sk_select_reuseport: u32 = 82;
++    pub const BPF_FUNC_skb_ancestor_cgroup_id: u32 = 83;
++    pub const BPF_FUNC_sk_lookup_tcp: u32 = 84;
++    pub const BPF_FUNC_sk_lookup_udp: u32 = 85;
++    pub const BPF_FUNC_sk_release: u32 = 86;
++    pub const BPF_FUNC_map_push_elem: u32 = 87;
++    pub const BPF_FUNC_map_pop_elem: u32 = 88;
++    pub const BPF_FUNC_map_peek_elem: u32 = 89;
++    pub const BPF_FUNC_msg_push_data: u32 = 90;
++    pub const BPF_FUNC_msg_pop_data: u32 = 91;
++    pub const BPF_FUNC_rc_pointer_rel: u32 = 92;
++    pub const BPF_FUNC_spin_lock: u32 = 93;
++    pub const BPF_FUNC_spin_unlock: u32 = 94;
++    pub const BPF_FUNC_sk_fullsock: u32 = 95;
++    pub const BPF_FUNC_tcp_sock: u32 = 96;
++    pub const BPF_FUNC_skb_ecn_set_ce: u32 = 97;
++    pub const BPF_FUNC_get_listener_sock: u32 = 98;
++    pub const BPF_FUNC_skc_lookup_tcp: u32 = 99;
++    pub const BPF_FUNC_tcp_check_syncookie: u32 = 100;
++    pub const BPF_FUNC_sysctl_get_name: u32 = 101;
++    pub const BPF_FUNC_sysctl_get_current_value: u32 = 102;
++    pub const BPF_FUNC_sysctl_get_new_value: u32 = 103;
++    pub const BPF_FUNC_sysctl_set_new_value: u32 = 104;
++    pub const BPF_FUNC_strtol: u32 = 105;
++    pub const BPF_FUNC_strtoul: u32 = 106;
++    pub const BPF_FUNC_sk_storage_get: u32 = 107;
++    pub const BPF_FUNC_sk_storage_delete: u32 = 108;
++    pub const BPF_FUNC_send_signal: u32 = 109;
++    pub const BPF_FUNC_tcp_gen_syncookie: u32 = 110;
++    pub const BPF_FUNC_skb_output: u32 = 111;
++    pub const BPF_FUNC_probe_read_user: u32 = 112;
++    pub const BPF_FUNC_probe_read_kernel: u32 = 113;
++    pub const BPF_FUNC_probe_read_user_str: u32 = 114;
++    pub const BPF_FUNC_probe_read_kernel_str: u32 = 115;
++    pub const BPF_FUNC_tcp_send_ack: u32 = 116;
++    pub const BPF_FUNC_send_signal_thread: u32 = 117;
++    pub const BPF_FUNC_jiffies64: u32 = 118;
++    pub const BPF_FUNC_read_branch_records: u32 = 119;
++    pub const BPF_FUNC_get_ns_current_pid_tgid: u32 = 120;
++    pub const BPF_FUNC_xdp_output: u32 = 121;
++    pub const BPF_FUNC_get_netns_cookie: u32 = 122;
++    pub const BPF_FUNC_get_current_ancestor_cgroup_id: u32 = 123;
++    pub const BPF_FUNC_sk_assign: u32 = 124;
++    pub const BPF_FUNC_ktime_get_boot_ns: u32 = 125;
++    pub const BPF_FUNC_seq_printf: u32 = 126;
++    pub const BPF_FUNC_seq_write: u32 = 127;
++    pub const BPF_FUNC_sk_cgroup_id: u32 = 128;
++    pub const BPF_FUNC_sk_ancestor_cgroup_id: u32 = 129;
++    pub const BPF_FUNC_ringbuf_output: u32 = 130;
++    pub const BPF_FUNC_ringbuf_reserve: u32 = 131;
++    pub const BPF_FUNC_ringbuf_submit: u32 = 132;
++    pub const BPF_FUNC_ringbuf_discard: u32 = 133;
++    pub const BPF_FUNC_ringbuf_query: u32 = 134;
++    pub const BPF_FUNC_csum_level: u32 = 135;
++    pub const BPF_FUNC_skc_to_tcp6_sock: u32 = 136;
++    pub const BPF_FUNC_skc_to_tcp_sock: u32 = 137;
++    pub const BPF_FUNC_skc_to_tcp_timewait_sock: u32 = 138;
++    pub const BPF_FUNC_skc_to_tcp_request_sock: u32 = 139;
++    pub const BPF_FUNC_skc_to_udp6_sock: u32 = 140;
++    pub const BPF_FUNC_get_task_stack: u32 = 141;
++    pub const BPF_FUNC_load_hdr_opt: u32 = 142;
++    pub const BPF_FUNC_store_hdr_opt: u32 = 143;
++    pub const BPF_FUNC_reserve_hdr_opt: u32 = 144;
++    pub const BPF_FUNC_inode_storage_get: u32 = 145;
++    pub const BPF_FUNC_inode_storage_delete: u32 = 146;
++    pub const BPF_FUNC_d_path: u32 = 147;
++    pub const BPF_FUNC_copy_from_user: u32 = 148;
++    pub const BPF_FUNC_snprintf_btf: u32 = 149;
++    pub const BPF_FUNC_seq_printf_btf: u32 = 150;
++    pub const BPF_FUNC_skb_cgroup_classid: u32 = 151;
++    pub const BPF_FUNC_redirect_neigh: u32 = 152;
++    pub const BPF_FUNC_per_cpu_ptr: u32 = 153;
++    pub const BPF_FUNC_this_cpu_ptr: u32 = 154;
++    pub const BPF_FUNC_redirect_peer: u32 = 155;
++    pub const BPF_FUNC_task_storage_get: u32 = 156;
++    pub const BPF_FUNC_task_storage_delete: u32 = 157;
++    pub const BPF_FUNC_get_current_task_btf: u32 = 158;
++    pub const BPF_FUNC_bprm_opts_set: u32 = 159;
++    pub const BPF_FUNC_ktime_get_coarse_ns: u32 = 160;
++    pub const BPF_FUNC_ima_inode_hash: u32 = 161;
++    pub const BPF_FUNC_sock_from_file: u32 = 162;
++    pub const BPF_FUNC_check_mtu: u32 = 163;
++    pub const BPF_FUNC_for_each_map_elem: u32 = 164;
++    pub const BPF_FUNC_snprintf: u32 = 165;
++    pub const BPF_FUNC_sys_bpf: u32 = 166;
++    pub const BPF_FUNC_btf_find_by_name_kind: u32 = 167;
++    pub const BPF_FUNC_sys_close: u32 = 168;
++    pub const BPF_FUNC_timer_init: u32 = 169;
++    pub const BPF_FUNC_timer_set_callback: u32 = 170;
++    pub const BPF_FUNC_timer_start: u32 = 171;
++    pub const BPF_FUNC_timer_cancel: u32 = 172;
++    pub const BPF_FUNC_get_func_ip: u32 = 173;
++    pub const BPF_FUNC_get_attach_cookie: u32 = 174;
++    pub const BPF_FUNC_task_pt_regs: u32 = 175;
++    pub const BPF_FUNC_get_branch_snapshot: u32 = 176;
++    pub const BPF_FUNC_trace_vprintk: u32 = 177;
++    pub const BPF_FUNC_skc_to_unix_sock: u32 = 178;
++    pub const BPF_FUNC_kallsyms_lookup_name: u32 = 179;
++    pub const BPF_FUNC_find_vma: u32 = 180;
++    pub const BPF_FUNC_loop: u32 = 181;
++    pub const BPF_FUNC_strncmp: u32 = 182;
++    pub const BPF_FUNC_get_func_arg: u32 = 183;
++    pub const BPF_FUNC_get_func_ret: u32 = 184;
++    pub const BPF_FUNC_get_func_arg_cnt: u32 = 185;
++    pub const BPF_FUNC_get_retval: u32 = 186;
++    pub const BPF_FUNC_set_retval: u32 = 187;
++    pub const BPF_FUNC_xdp_get_buff_len: u32 = 188;
++    pub const BPF_FUNC_xdp_load_bytes: u32 = 189;
++    pub const BPF_FUNC_xdp_store_bytes: u32 = 190;
++    pub const BPF_FUNC_copy_from_user_task: u32 = 191;
++    pub const BPF_FUNC_skb_set_tstamp: u32 = 192;
++    pub const BPF_FUNC_ima_file_hash: u32 = 193;
++    pub const BPF_FUNC_kptr_xchg: u32 = 194;
++    pub const BPF_FUNC_map_lookup_percpu_elem: u32 = 195;
++    pub const BPF_FUNC_skc_to_mptcp_sock: u32 = 196;
++    pub const BPF_FUNC_dynptr_from_mem: u32 = 197;
++    pub const BPF_FUNC_ringbuf_reserve_dynptr: u32 = 198;
++    pub const BPF_FUNC_ringbuf_submit_dynptr: u32 = 199;
++    pub const BPF_FUNC_ringbuf_discard_dynptr: u32 = 200;
++    pub const BPF_FUNC_dynptr_read: u32 = 201;
++    pub const BPF_FUNC_dynptr_write: u32 = 202;
++    pub const BPF_FUNC_dynptr_data: u32 = 203;
++    pub const BPF_FUNC_tcp_raw_gen_syncookie_ipv4: u32 = 204;
++    pub const BPF_FUNC_tcp_raw_gen_syncookie_ipv6: u32 = 205;
++    pub const BPF_FUNC_tcp_raw_check_syncookie_ipv4: u32 = 206;
++    pub const BPF_FUNC_tcp_raw_check_syncookie_ipv6: u32 = 207;
++    pub const BPF_FUNC_ktime_get_tai_ns: u32 = 208;
++    pub const BPF_FUNC_user_ringbuf_drain: u32 = 209;
++    pub const BPF_FUNC_cgrp_storage_get: u32 = 210;
++    pub const BPF_FUNC_cgrp_storage_delete: u32 = 211;
++}
+diff --git a/core/kbpf/src/vm.rs b/core/kbpf/src/vm.rs
+index 3789a5ca0..46e976ef7 100644
+--- a/core/kbpf/src/vm.rs
++++ b/core/kbpf/src/vm.rs
+@@ -45,57 +45,61 @@
+ 
+ use alloc::{sync::Arc, vec::Vec};
+ 
++// eBPF opcode fields: class (bits 0-2), source (bit 3), operation (bits 4-7).
++// The bit values come from `crate::uapi` (generated from
++// `include/uapi/linux/bpf_common.h` / `bpf.h`) rather than being re-typed
++// here, so a wrong nibble cannot hide in the interpreter.
++use crate::uapi::defines as bpf;
+ use crate::{
+     error::{Error, Result},
+     helpers::BPF_FUNC_TRACE_PRINTK,
+     insn::{Insn, SLOT_SIZE},
+ };
+ 
+-// BPF_LD
++const OP_CALL: u8 = (bpf::BPF_JMP | bpf::BPF_CALL) as u8;
++const OP_EXIT: u8 = (bpf::BPF_JMP | bpf::BPF_EXIT) as u8;
++const CLASS_ALU: u8 = bpf::BPF_ALU as u8;
++const CLASS_JMP: u8 = bpf::BPF_JMP as u8;
++const CLASS_JMP32: u8 = bpf::BPF_JMP32 as u8;
++const CLASS_ALU64: u8 = bpf::BPF_ALU64 as u8;
++/// `BPF_X` — the source-operand bit (bit 3). A set bit means "the operand is
++/// a register", clear means "the operand is the immediate".
++const SOURCE_REG: u8 = bpf::BPF_X as u8;
+ /// `lddw dst, imm64` (`BPF_LD | BPF_DW | BPF_IMM`).
+-const OP_LD_DW_IMM: u8 = 0x18;
++const OP_LD_DW_IMM: u8 = (bpf::BPF_LD | bpf::BPF_DW | bpf::BPF_IMM) as u8;
+ /// `lddw` source marker for map-value addresses.
+-const BPF_PSEUDO_MAP_VALUE: u8 = 2;
+-
+-// eBPF opcode fields: class (bits 0-2), source (bit 3), operation (bits 4-7).
+-const OP_CALL: u8 = 0x85;
+-const OP_EXIT: u8 = 0x95;
+-const CLASS_ALU: u8 = 0x04;
+-const CLASS_JMP: u8 = 0x05;
+-const CLASS_JMP32: u8 = 0x06;
+-const CLASS_ALU64: u8 = 0x07;
+-const SOURCE_REG: u8 = 0x08;
++const BPF_PSEUDO_MAP_VALUE: u8 = bpf::BPF_PSEUDO_MAP_VALUE as u8;
+ 
+ // ALU operations (bits 4-7).
+-const ALU_ADD: u8 = 0x00;
+-const ALU_SUB: u8 = 0x10;
+-const ALU_MUL: u8 = 0x20;
+-const ALU_DIV: u8 = 0x30;
+-const ALU_OR: u8 = 0x40;
+-const ALU_AND: u8 = 0x50;
+-const ALU_LSH: u8 = 0x60;
+-const ALU_RSH: u8 = 0x70;
+-const ALU_NEG: u8 = 0x80;
+-const ALU_MOD: u8 = 0x90;
+-const ALU_XOR: u8 = 0xa0;
+-const ALU_MOV: u8 = 0xb0;
+-const ALU_ARSH: u8 = 0xc0;
+-const ALU_END: u8 = 0xd0;
++const ALU_ADD: u8 = bpf::BPF_ADD as u8;
++const ALU_SUB: u8 = bpf::BPF_SUB as u8;
++const ALU_MUL: u8 = bpf::BPF_MUL as u8;
++const ALU_DIV: u8 = bpf::BPF_DIV as u8;
++const ALU_OR: u8 = bpf::BPF_OR as u8;
++const ALU_AND: u8 = bpf::BPF_AND as u8;
++const ALU_LSH: u8 = bpf::BPF_LSH as u8;
++const ALU_RSH: u8 = bpf::BPF_RSH as u8;
++const ALU_NEG: u8 = bpf::BPF_NEG as u8;
++const ALU_MOD: u8 = bpf::BPF_MOD as u8;
++const ALU_XOR: u8 = bpf::BPF_XOR as u8;
++const ALU_MOV: u8 = bpf::BPF_MOV as u8;
++const ALU_ARSH: u8 = bpf::BPF_ARSH as u8;
++const ALU_END: u8 = bpf::BPF_END as u8;
+ 
+ // Jump conditions (bits 4-7). The unsigned variants compare the operands as
+ // unsigned; the `S` variants compare them as signed.
+-const JMP_JA: u8 = 0x00;
+-const JMP_JEQ: u8 = 0x10;
+-const JMP_JGT: u8 = 0x20;
+-const JMP_JGE: u8 = 0x30;
+-const JMP_JSET: u8 = 0x40;
+-const JMP_JNE: u8 = 0x50;
+-const JMP_JSGT: u8 = 0x60;
+-const JMP_JSGE: u8 = 0x70;
+-const JMP_JLT: u8 = 0xa0;
+-const JMP_JLE: u8 = 0xb0;
+-const JMP_JSLT: u8 = 0xc0;
+-const JMP_JSLE: u8 = 0xd0;
++const JMP_JA: u8 = bpf::BPF_JA as u8;
++const JMP_JEQ: u8 = bpf::BPF_JEQ as u8;
++const JMP_JGT: u8 = bpf::BPF_JGT as u8;
++const JMP_JGE: u8 = bpf::BPF_JGE as u8;
++const JMP_JSET: u8 = bpf::BPF_JSET as u8;
++const JMP_JNE: u8 = bpf::BPF_JNE as u8;
++const JMP_JSGT: u8 = bpf::BPF_JSGT as u8;
++const JMP_JSGE: u8 = bpf::BPF_JSGE as u8;
++const JMP_JLT: u8 = bpf::BPF_JLT as u8;
++const JMP_JLE: u8 = bpf::BPF_JLE as u8;
++const JMP_JSLT: u8 = bpf::BPF_JSLT as u8;
++const JMP_JSLE: u8 = bpf::BPF_JSLE as u8;
+ 
+ // BPF_LDX | BPF_MEM
+ /// `ldxb dst, [src+off]`.
+@@ -127,10 +131,6 @@ const OP_STX_MEM_W: u8 = 0x63;
+ /// `stxdw [dst+off], src`.
+ const OP_STX_MEM_DW: u8 = 0x7b;
+ 
+-// BPF_ALU64
+-
+-// BPF_JMP
+-
+ /// Number of general-purpose eBPF registers (`r0..=r10`).
+ pub const NUM_REGS: usize = 11;
+ /// Linux eBPF stack size in bytes.
+diff --git a/core/kbpf/tests/uapi_conformance.rs b/core/kbpf/tests/uapi_conformance.rs
+new file mode 100644
+index 000000000..235b044c6
+--- /dev/null
++++ b/core/kbpf/tests/uapi_conformance.rs
+@@ -0,0 +1,362 @@
++// SPDX-License-Identifier: Apache-2.0
++// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
++// See LICENSES for license details.
++
++//! Independent conformance check for the generated uapi table.
++//!
++//! These expectations are transcribed by hand from the Linux uapi headers
++//! (`include/uapi/linux/bpf.h`, `include/uapi/linux/bpf_common.h`) and from
++//! `kernel/bpf/cgroup.c`. They deliberately do NOT come from
++//! `core/kbpf/src/uapi.rs`: the generator is code, and code can be wrong.
++//! A mismatch means either the table drifted from the uapi ABI or the
++//! generator mis-evaluated an expression — both are release blockers.
++//!
++//! Run with `cargo test -p kbpf --test uapi_conformance`.
++//!
++//! Re-check this list whenever the uapi baseline moves; a value that
++//! changes upstream (never for uapi, but a *renamed* enum can shift
++//! position) must be re-transcribed here, not regenerated.
++
++use kbpf::uapi::{
++    bpf_attach_type, bpf_cmd, bpf_devcg_acc, bpf_devcg_dev, bpf_func_id, bpf_map_type,
++    bpf_map_update_flags, bpf_prog_type, defines,
++};
++
++/// `enum bpf_cmd` — position in `include/uapi/linux/bpf.h`.
++#[test]
++fn bpf_cmd_matches_linux() {
++    let expected: &[(&str, u32)] = &[
++        ("BPF_MAP_CREATE", 0),
++        ("BPF_MAP_LOOKUP_ELEM", 1),
++        ("BPF_MAP_UPDATE_ELEM", 2),
++        ("BPF_MAP_DELETE_ELEM", 3),
++        ("BPF_MAP_GET_NEXT_KEY", 4),
++        ("BPF_PROG_LOAD", 5),
++        ("BPF_OBJ_PIN", 6),
++        ("BPF_OBJ_GET", 7),
++        ("BPF_PROG_ATTACH", 8),
++        ("BPF_PROG_DETACH", 9),
++        ("BPF_PROG_TEST_RUN", 10),
++        ("BPF_PROG_GET_NEXT_ID", 11),
++        ("BPF_MAP_GET_NEXT_ID", 12),
++        ("BPF_PROG_GET_FD_BY_ID", 13),
++        ("BPF_MAP_GET_FD_BY_ID", 14),
++        ("BPF_OBJ_GET_INFO_BY_FD", 15),
++        ("BPF_PROG_QUERY", 16),
++        ("BPF_RAW_TRACEPOINT_OPEN", 17),
++        ("BPF_BTF_LOAD", 18),
++        ("BPF_BTF_GET_FD_BY_ID", 19),
++        ("BPF_TASK_FD_QUERY", 20),
++        ("BPF_MAP_LOOKUP_AND_DELETE_ELEM", 21),
++        ("BPF_MAP_FREEZE", 22),
++        ("BPF_BTF_GET_NEXT_ID", 23),
++        ("BPF_MAP_LOOKUP_BATCH", 24),
++        ("BPF_MAP_LOOKUP_AND_DELETE_BATCH", 25),
++        ("BPF_MAP_UPDATE_BATCH", 26),
++        ("BPF_MAP_DELETE_BATCH", 27),
++        ("BPF_LINK_CREATE", 28),
++        ("BPF_LINK_UPDATE", 29),
++        ("BPF_LINK_GET_FD_BY_ID", 30),
++        ("BPF_LINK_GET_NEXT_ID", 31),
++        ("BPF_ENABLE_STATS", 32),
++        ("BPF_ITER_CREATE", 33),
++        ("BPF_LINK_DETACH", 34),
++        ("BPF_PROG_BIND_MAP", 35),
++    ];
++    let actual: &[(&str, u32)] = &[
++        ("BPF_MAP_CREATE", bpf_cmd::BPF_MAP_CREATE),
++        ("BPF_MAP_LOOKUP_ELEM", bpf_cmd::BPF_MAP_LOOKUP_ELEM),
++        ("BPF_MAP_UPDATE_ELEM", bpf_cmd::BPF_MAP_UPDATE_ELEM),
++        ("BPF_MAP_DELETE_ELEM", bpf_cmd::BPF_MAP_DELETE_ELEM),
++        ("BPF_MAP_GET_NEXT_KEY", bpf_cmd::BPF_MAP_GET_NEXT_KEY),
++        ("BPF_PROG_LOAD", bpf_cmd::BPF_PROG_LOAD),
++        ("BPF_OBJ_PIN", bpf_cmd::BPF_OBJ_PIN),
++        ("BPF_OBJ_GET", bpf_cmd::BPF_OBJ_GET),
++        ("BPF_PROG_ATTACH", bpf_cmd::BPF_PROG_ATTACH),
++        ("BPF_PROG_DETACH", bpf_cmd::BPF_PROG_DETACH),
++        ("BPF_PROG_TEST_RUN", bpf_cmd::BPF_PROG_TEST_RUN),
++        ("BPF_PROG_GET_NEXT_ID", bpf_cmd::BPF_PROG_GET_NEXT_ID),
++        ("BPF_MAP_GET_NEXT_ID", bpf_cmd::BPF_MAP_GET_NEXT_ID),
++        ("BPF_PROG_GET_FD_BY_ID", bpf_cmd::BPF_PROG_GET_FD_BY_ID),
++        ("BPF_MAP_GET_FD_BY_ID", bpf_cmd::BPF_MAP_GET_FD_BY_ID),
++        ("BPF_OBJ_GET_INFO_BY_FD", bpf_cmd::BPF_OBJ_GET_INFO_BY_FD),
++        ("BPF_PROG_QUERY", bpf_cmd::BPF_PROG_QUERY),
++        ("BPF_RAW_TRACEPOINT_OPEN", bpf_cmd::BPF_RAW_TRACEPOINT_OPEN),
++        ("BPF_BTF_LOAD", bpf_cmd::BPF_BTF_LOAD),
++        ("BPF_BTF_GET_FD_BY_ID", bpf_cmd::BPF_BTF_GET_FD_BY_ID),
++        ("BPF_TASK_FD_QUERY", bpf_cmd::BPF_TASK_FD_QUERY),
++        (
++            "BPF_MAP_LOOKUP_AND_DELETE_ELEM",
++            bpf_cmd::BPF_MAP_LOOKUP_AND_DELETE_ELEM,
++        ),
++        ("BPF_MAP_FREEZE", bpf_cmd::BPF_MAP_FREEZE),
++        ("BPF_BTF_GET_NEXT_ID", bpf_cmd::BPF_BTF_GET_NEXT_ID),
++        ("BPF_MAP_LOOKUP_BATCH", bpf_cmd::BPF_MAP_LOOKUP_BATCH),
++        (
++            "BPF_MAP_LOOKUP_AND_DELETE_BATCH",
++            bpf_cmd::BPF_MAP_LOOKUP_AND_DELETE_BATCH,
++        ),
++        ("BPF_MAP_UPDATE_BATCH", bpf_cmd::BPF_MAP_UPDATE_BATCH),
++        ("BPF_MAP_DELETE_BATCH", bpf_cmd::BPF_MAP_DELETE_BATCH),
++        ("BPF_LINK_CREATE", bpf_cmd::BPF_LINK_CREATE),
++        ("BPF_LINK_UPDATE", bpf_cmd::BPF_LINK_UPDATE),
++        ("BPF_LINK_GET_FD_BY_ID", bpf_cmd::BPF_LINK_GET_FD_BY_ID),
++        ("BPF_LINK_GET_NEXT_ID", bpf_cmd::BPF_LINK_GET_NEXT_ID),
++        ("BPF_ENABLE_STATS", bpf_cmd::BPF_ENABLE_STATS),
++        ("BPF_ITER_CREATE", bpf_cmd::BPF_ITER_CREATE),
++        ("BPF_LINK_DETACH", bpf_cmd::BPF_LINK_DETACH),
++        ("BPF_PROG_BIND_MAP", bpf_cmd::BPF_PROG_BIND_MAP),
++    ];
++    assert_eq!(actual, expected);
++}
++
++/// The program and attach types the cgroup-v2 device controller uses.
++///
++/// These two were transcribed wrong once (6 and 28 instead of 15 and 6),
++/// which made every `runc` attach fail with EINVAL — hence the explicit
++/// positional check against the enum order.
++#[test]
++fn device_controller_prog_and_attach_types() {
++    // `enum bpf_prog_type`: UNSPEC, SOCKET_FILTER, KPROBE, SCHED_CLS,
++    // SCHED_ACT, TRACEPOINT, XDP, PERF_EVENT, CGROUP_SKB, CGROUP_SOCK,
++    // LWT_IN, LWT_OUT, LWT_XMIT, SOCK_OPS, SK_SKB, CGROUP_DEVICE -> 15.
++    assert_eq!(bpf_prog_type::BPF_PROG_TYPE_UNSPEC, 0);
++    assert_eq!(bpf_prog_type::BPF_PROG_TYPE_SOCKET_FILTER, 1);
++    assert_eq!(bpf_prog_type::BPF_PROG_TYPE_XDP, 6);
++    assert_eq!(bpf_prog_type::BPF_PROG_TYPE_CGROUP_DEVICE, 15);
++
++    // `enum bpf_attach_type`: INET_INGRESS, INET_EGRESS, INET_SOCK_CREATE,
++    // SOCK_OPS, SK_SKB_STREAM_PARSER, SK_SKB_STREAM_VERDICT,
++    // CGROUP_DEVICE -> 6.
++    assert_eq!(bpf_attach_type::BPF_CGROUP_INET_INGRESS, 0);
++    assert_eq!(bpf_attach_type::BPF_CGROUP_DEVICE, 6);
++}
++
++/// Maps and the array-map type this kernel implements.
++#[test]
++fn map_types_and_update_flags() {
++    assert_eq!(bpf_map_type::BPF_MAP_TYPE_UNSPEC, 0);
++    assert_eq!(bpf_map_type::BPF_MAP_TYPE_HASH, 1);
++    assert_eq!(bpf_map_type::BPF_MAP_TYPE_ARRAY, 2);
++
++    assert_eq!(bpf_map_update_flags::BPF_ANY, 0);
++    assert_eq!(bpf_map_update_flags::BPF_NOEXIST, 1);
++    assert_eq!(bpf_map_update_flags::BPF_EXIST, 2);
++}
++
++/// `bpf_cgroup_dev_ctx::access_type = (BPF_DEVCG_ACC_* << 16) | BPF_DEVCG_DEV_*`
++/// (`kernel/bpf/cgroup.c` composes it that way; the uapi enums carry the
++/// un-shifted bits).
++#[test]
++fn devcg_encoding() {
++    assert_eq!(bpf_devcg_acc::BPF_DEVCG_ACC_MKNOD, 1 << 0);
++    assert_eq!(bpf_devcg_acc::BPF_DEVCG_ACC_READ, 1 << 1);
++    assert_eq!(bpf_devcg_acc::BPF_DEVCG_ACC_WRITE, 1 << 2);
++    assert_eq!(bpf_devcg_dev::BPF_DEVCG_DEV_BLOCK, 1 << 0);
++    assert_eq!(bpf_devcg_dev::BPF_DEVCG_DEV_CHAR, 1 << 1);
++}
++
++/// Attach flags and limits used by `BPF_PROG_ATTACH`/`BPF_PROG_QUERY` and by
++/// `kernel/bpf/cgroup.c` (`BPF_CGROUP_MAX_PROGS`).
++#[test]
++fn attach_flags_and_limits() {
++    assert_eq!(defines::BPF_F_ALLOW_OVERRIDE, 1 << 0);
++    assert_eq!(defines::BPF_F_ALLOW_MULTI, 1 << 1);
++    assert_eq!(defines::BPF_F_REPLACE, 1 << 2);
++    assert_eq!(defines::BPF_F_QUERY_EFFECTIVE, 1 << 0);
++    assert_eq!(defines::BPF_CGROUP_MAX_PROGS, 64);
++
++    // `lddw` source markers.
++    assert_eq!(defines::BPF_PSEUDO_MAP_FD, 1);
++    assert_eq!(defines::BPF_PSEUDO_MAP_VALUE, 2);
++    // `BPF_LD | BPF_DW | BPF_IMM` — the `lddw` slot prefix the loader scans.
++    assert_eq!(defines::BPF_LD | defines::BPF_DW | defines::BPF_IMM, 0x18);
++}
++
++/// ISA bit layout (`include/uapi/linux/bpf_common.h` + `bpf.h`), which the
++/// interpreter's class/operation dispatch derives every opcode from.
++#[test]
++fn isa_bit_layout() {
++    // Classes (low 3 bits).
++    assert_eq!(defines::BPF_LD, 0x00);
++    assert_eq!(defines::BPF_LDX, 0x01);
++    assert_eq!(defines::BPF_ST, 0x02);
++    assert_eq!(defines::BPF_STX, 0x03);
++    assert_eq!(defines::BPF_ALU, 0x04);
++    assert_eq!(defines::BPF_JMP, 0x05);
++    assert_eq!(defines::BPF_JMP32, 0x06);
++    assert_eq!(defines::BPF_ALU64, 0x07);
++
++    // Sizes (bits 3-4).
++    assert_eq!(defines::BPF_W, 0x00);
++    assert_eq!(defines::BPF_H, 0x08);
++    assert_eq!(defines::BPF_B, 0x10);
++    assert_eq!(defines::BPF_DW, 0x18);
++
++    // Source bit.
++    assert_eq!(defines::BPF_K, 0x00);
++    assert_eq!(defines::BPF_X, 0x08);
++
++    // ALU operations (bits 4-7).
++    assert_eq!(defines::BPF_ADD, 0x00);
++    assert_eq!(defines::BPF_SUB, 0x10);
++    assert_eq!(defines::BPF_MUL, 0x20);
++    assert_eq!(defines::BPF_DIV, 0x30);
++    assert_eq!(defines::BPF_OR, 0x40);
++    assert_eq!(defines::BPF_AND, 0x50);
++    assert_eq!(defines::BPF_LSH, 0x60);
++    assert_eq!(defines::BPF_RSH, 0x70);
++    assert_eq!(defines::BPF_NEG, 0x80);
++    assert_eq!(defines::BPF_MOD, 0x90);
++    assert_eq!(defines::BPF_XOR, 0xa0);
++    assert_eq!(defines::BPF_MOV, 0xb0);
++    assert_eq!(defines::BPF_ARSH, 0xc0);
++    assert_eq!(defines::BPF_END, 0xd0);
++
++    // Jump conditions.
++    assert_eq!(defines::BPF_JA, 0x00);
++    assert_eq!(defines::BPF_JEQ, 0x10);
++    assert_eq!(defines::BPF_JGT, 0x20);
++    assert_eq!(defines::BPF_JGE, 0x30);
++    assert_eq!(defines::BPF_JSET, 0x40);
++    assert_eq!(defines::BPF_JNE, 0x50);
++    assert_eq!(defines::BPF_JSGT, 0x60);
++    assert_eq!(defines::BPF_JSGE, 0x70);
++    assert_eq!(defines::BPF_CALL, 0x80);
++    assert_eq!(defines::BPF_EXIT, 0x90);
++    assert_eq!(defines::BPF_JLT, 0xa0);
++    assert_eq!(defines::BPF_JLE, 0xb0);
++    assert_eq!(defines::BPF_JSLT, 0xc0);
++    assert_eq!(defines::BPF_JSLE, 0xd0);
++
++    // Endianness selectors.
++    assert_eq!(defines::BPF_TO_LE, 0x00);
++    assert_eq!(defines::BPF_TO_BE, 0x08);
++}
++
++/// The opcode bytes the interpreter decodes, composed from the bit layout the
++/// way `kernel/bpf/core.c`'s jump table does. A wrong composition here is
++/// exactly the class of bug the table exists to prevent.
++#[test]
++fn composed_opcodes() {
++    let opcode = |class: u32, src: u32, op: u32| (class | src | op) as u8;
++
++    // ALU32 (class 0x04).
++    assert_eq!(
++        opcode(defines::BPF_ALU, defines::BPF_K, defines::BPF_MOV),
++        0xb4
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU, defines::BPF_X, defines::BPF_MOV),
++        0xbc
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU, defines::BPF_K, defines::BPF_AND),
++        0x54
++    );
++    // ALU64 (class 0x07).
++    assert_eq!(
++        opcode(defines::BPF_ALU64, defines::BPF_K, defines::BPF_MOV),
++        0xb7
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU64, defines::BPF_X, defines::BPF_MOV),
++        0xbf
++    );
++    // JMP (class 0x05).
++    assert_eq!(
++        opcode(defines::BPF_JMP, defines::BPF_K, defines::BPF_JA),
++        0x05
++    );
++    assert_eq!(
++        opcode(defines::BPF_JMP, defines::BPF_K, defines::BPF_JEQ),
++        0x15
++    );
++    assert_eq!(
++        opcode(defines::BPF_JMP, defines::BPF_K, defines::BPF_JSET),
++        0x45
++    );
++    assert_eq!(
++        opcode(defines::BPF_JMP, defines::BPF_K, defines::BPF_EXIT),
++        0x95
++    );
++    assert_eq!(
++        opcode(defines::BPF_JMP, defines::BPF_K, defines::BPF_CALL),
++        0x85
++    );
++    // JMP32 (class 0x06).
++    assert_eq!(
++        opcode(defines::BPF_JMP32, defines::BPF_K, defines::BPF_JNE),
++        0x56
++    );
++    assert_eq!(
++        opcode(defines::BPF_JMP32, defines::BPF_K, defines::BPF_JSLT),
++        0xc6
++    );
++    // END: source bit selects the byte order, so ALU|END|K/X are 0xd4/0xdc
++    // and ALU64|END|K/X are 0xd7/0xdf.
++    assert_eq!(
++        opcode(defines::BPF_ALU, defines::BPF_K, defines::BPF_END),
++        0xd4
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU, defines::BPF_X, defines::BPF_END),
++        0xdc
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU64, defines::BPF_K, defines::BPF_END),
++        0xd7
++    );
++    assert_eq!(
++        opcode(defines::BPF_ALU64, defines::BPF_X, defines::BPF_END),
++        0xdf
++    );
++    // Loads/stores.
++    assert_eq!(opcode(defines::BPF_LDX, defines::BPF_W, 0x60), 0x61);
++    assert_eq!(opcode(defines::BPF_LD, defines::BPF_DW, 0x00), 0x18);
++    assert_eq!(opcode(defines::BPF_STX, defines::BPF_DW, 0x60), 0x7b);
++}
++
++/// A few helper ids the interpreter dispatches on.
++#[test]
++fn helper_ids() {
++    assert_eq!(bpf_func_id::BPF_FUNC_unspec, 0);
++    assert_eq!(bpf_func_id::BPF_FUNC_map_lookup_elem, 1);
++    assert_eq!(bpf_func_id::BPF_FUNC_ktime_get_ns, 5);
++    assert_eq!(bpf_func_id::BPF_FUNC_trace_printk, 6);
++    assert_eq!(bpf_func_id::BPF_FUNC_get_prandom_u32, 7);
++}
++
++/// The table is meant to be complete, not a curated subset: every enum and
++/// every integer `#define` in the uapi headers must be present. These counts
++/// are the header totals at the recorded baseline; a change means the
++/// baseline moved (expected — re-check the diff) or the generator started
++/// dropping declarations (a bug).
++#[test]
++fn table_is_complete() {
++    // 61 enums in `bpf.h`; `bpf_func_id` is emitted from its macro mapper,
++    // so 60 enum modules plus the `defines` and `bpf_func_id` modules.
++    assert_eq!(kbpf::uapi::ENUM_MODULES.len(), 60);
++    // Nothing in either header is silently dropped: the generator reports
++    // anything it cannot fold here.
++    assert!(
++        kbpf::uapi::NOT_CONSTANTS.is_empty(),
++        "unfolded uapi declarations: {:?}",
++        kbpf::uapi::NOT_CONSTANTS
++    );
++}
++
++/// Values that live outside the uapi headers are few, named with their
++/// source, and pinned here: the expectation is written by hand, so adding
++/// another such value to the generator fails this test until someone decides
++/// it is acceptable and updates the list.
++#[test]
++fn non_uapi_values_are_declared_explicitly() {
++    // `BPF_CGROUP_MAX_PROGS` (`kernel/bpf/cgroup.c`) is the only one today.
++    assert_eq!(
++        kbpf::uapi::NON_UAPI_VALUES,
++        &["BPF_CGROUP_MAX_PROGS"],
++        "a value outside the uapi headers was added or removed"
++    );
++    assert_eq!(kbpf::uapi::defines::BPF_CGROUP_MAX_PROGS, 64);
++}
+diff --git a/fs/filesystems/bpffs/src/device.rs b/fs/filesystems/bpffs/src/device.rs
+index a35c31189..93d62cea4 100644
+--- a/fs/filesystems/bpffs/src/device.rs
++++ b/fs/filesystems/bpffs/src/device.rs
+@@ -23,7 +23,11 @@ use alloc::{
+     vec::Vec,
+ };
+ 
+-use kbpf::{ReadOnlyMemory, Vm, vm::InitialRegs};
++use kbpf::{
++    ReadOnlyMemory, Vm,
++    uapi::{bpf_devcg_acc, bpf_devcg_dev, defines},
++    vm::InitialRegs,
++};
+ use kcgroup::Cgroup;
+ use kerrno::{KError, KResult};
+ use ksync::{Mutex, static_lock};
+@@ -31,22 +35,27 @@ use kvfs::{DeviceAccess, DeviceAccessPolicy, VfsError, VfsFile, VfsInode, VfsRes
+ 
+ use crate::BpfProgram;
+ 
+-/// `BPF_DEVCG_DEV_BLOCK` (`include/uapi/linux/bpf.h`, `BPF_DEVCG_DEV_*`):
+-/// the device-type half of `bpf_cgroup_dev_ctx::access_type`.
+-pub const DEVICE_TYPE_BLOCK: u32 = 1;
++// Every uapi value below comes from `kbpf::uapi` — the single generated
++// table (`core/kbpf/src/uapi.rs`, generated from Linux's bpf.h and pinned by
++// `cargo test -p kbpf --test uapi_conformance`). The shifts that compose
++// `bpf_cgroup_dev_ctx::access_type` stay here because they are cgroup.c's
++// encoding rule, not a uapi constant.
++
++/// `BPF_DEVCG_DEV_BLOCK`: the device-type half of `access_type`.
++pub const DEVICE_TYPE_BLOCK: u32 = bpf_devcg_dev::BPF_DEVCG_DEV_BLOCK;
+ /// `BPF_DEVCG_DEV_CHAR`.
+-pub const DEVICE_TYPE_CHAR: u32 = 2;
+-/// `BPF_DEVCG_ACC_MKNOD` (`BPF_DEVCG_ACC_*`): the access half, which Linux
+-/// encodes in the bits above 16.
+-pub const DEVICE_ACC_MKNOD: u32 = 1 << 16;
+-/// `BPF_DEVCG_ACC_READ`.
+-pub const DEVICE_ACC_READ: u32 = 1 << 17;
+-/// `BPF_DEVCG_ACC_WRITE`.
+-pub const DEVICE_ACC_WRITE: u32 = 1 << 18;
++pub const DEVICE_TYPE_CHAR: u32 = bpf_devcg_dev::BPF_DEVCG_DEV_CHAR;
++/// `BPF_DEVCG_ACC_MKNOD`, shifted into the access half: `kernel/bpf/cgroup.c`
++/// encodes `access_type = (access << 16) | dev_type`.
++pub const DEVICE_ACC_MKNOD: u32 = bpf_devcg_acc::BPF_DEVCG_ACC_MKNOD << 16;
++/// `BPF_DEVCG_ACC_READ`, shifted into the access half.
++pub const DEVICE_ACC_READ: u32 = bpf_devcg_acc::BPF_DEVCG_ACC_READ << 16;
++/// `BPF_DEVCG_ACC_WRITE`, shifted into the access half.
++pub const DEVICE_ACC_WRITE: u32 = bpf_devcg_acc::BPF_DEVCG_ACC_WRITE << 16;
+ 
+ /// Linux `BPF_CGROUP_MAX_PROGS`: how many programs one cgroup may carry
+ /// (direct attachments and links together).
+-const MAX_CGROUP_PROGS: usize = 64;
++const MAX_CGROUP_PROGS: usize = defines::BPF_CGROUP_MAX_PROGS as usize;
+ 
+ /// The attachment modes of a cgroup's device programs — Linux
+ /// `cgrp->bpf.flags[atype]`: `0` (NONE, children may not attach),
+@@ -54,9 +63,9 @@ const MAX_CGROUP_PROGS: usize = 64;
+ /// `BPF_F_ALLOW_MULTI` (children attach in addition).
+ pub const ATTACH_NONE: u32 = 0;
+ /// `BPF_F_ALLOW_OVERRIDE`.
+-pub const ATTACH_ALLOW_OVERRIDE: u32 = 1 << 0;
++pub const ATTACH_ALLOW_OVERRIDE: u32 = defines::BPF_F_ALLOW_OVERRIDE;
+ /// `BPF_F_ALLOW_MULTI`.
+-pub const ATTACH_ALLOW_MULTI: u32 = 1 << 1;
++pub const ATTACH_ALLOW_MULTI: u32 = defines::BPF_F_ALLOW_MULTI;
+ 
+ /// Monotonically increasing identity for link attachments. Two links of the
+ /// same program onto the same cgroup are two independent attachments (Linux
+diff --git a/posix/bpf/src/bpf.rs b/posix/bpf/src/bpf.rs
+index 830a51eff..0be728365 100644
+--- a/posix/bpf/src/bpf.rs
++++ b/posix/bpf/src/bpf.rs
+@@ -11,56 +11,38 @@ use core::{
+ #[cfg(feature = "cgroup2")]
+ use bpffs::device;
+ use bpffs::{BpfMap, BpfProgram, BpfProgramMapValue};
++#[cfg(feature = "cgroup2")]
++use kbpf::uapi::bpf_attach_type::BPF_CGROUP_DEVICE as BPF_CGROUP_DEVICE_ATTACH_TYPE;
++// The uapi ABI values come from the single generated table
++// (`core/kbpf/src/uapi.rs`, produced from Linux's `include/uapi/linux/bpf.h`
++// and checked by `cargo test -p kbpf --test uapi_conformance`). They are used
++// directly — the generated constants carry `u32`, so they work as `match`
++// patterns without an alias layer.
++use kbpf::uapi::bpf_cmd::{
++    BPF_LINK_CREATE, BPF_MAP_CREATE, BPF_MAP_FREEZE, BPF_MAP_LOOKUP_ELEM, BPF_MAP_UPDATE_ELEM,
++    BPF_OBJ_GET, BPF_OBJ_GET_INFO_BY_FD, BPF_OBJ_PIN, BPF_PROG_GET_FD_BY_ID, BPF_PROG_GET_NEXT_ID,
++    BPF_PROG_LOAD, BPF_PROG_QUERY, BPF_PROG_TEST_RUN,
++};
++#[cfg(feature = "cgroup2")]
++use kbpf::uapi::bpf_cmd::{BPF_PROG_ATTACH, BPF_PROG_DETACH};
++#[cfg(feature = "cgroup2")]
++use kbpf::uapi::defines::{BPF_F_ALLOW_MULTI, BPF_F_ALLOW_OVERRIDE, BPF_F_QUERY_EFFECTIVE};
++use kbpf::uapi::{
++    bpf_map_type::BPF_MAP_TYPE_ARRAY,
++    bpf_map_update_flags::BPF_ANY as BPF_ANY_FLAG,
++    bpf_prog_type::BPF_PROG_TYPE_CGROUP_DEVICE,
++    defines::{BPF_DW, BPF_IMM, BPF_LD, BPF_PSEUDO_MAP_VALUE},
++};
+ use kerrno::{KError, KResult};
+ use klogger::debug;
+ use kuaccess::vm_load_string;
+ use kvfs::{Filename, LookupFlags, LookupIntent};
+ use posix_types::{UserConstPtr, UserPtr, UserRead};
+ 
+-/// `BPF_MAP_CREATE` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_MAP_CREATE: u32 = 0;
+-/// `BPF_MAP_LOOKUP_ELEM` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_MAP_LOOKUP_ELEM: u32 = 1;
+-/// `BPF_MAP_UPDATE_ELEM` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_MAP_UPDATE_ELEM: u32 = 2;
+-/// `BPF_PROG_LOAD` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_PROG_LOAD: u32 = 5;
+-/// `BPF_OBJ_PIN` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_OBJ_PIN: u32 = 6;
+-/// `BPF_OBJ_GET` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_OBJ_GET: u32 = 7;
+-/// `BPF_PROG_TEST_RUN` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_PROG_TEST_RUN: u32 = 10;
+-/// `BPF_OBJ_GET_INFO_BY_FD` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_OBJ_GET_INFO_BY_FD: u32 = 15;
+-/// `BPF_MAP_FREEZE` (`enum bpf_cmd` in Linux `uapi/linux/bpf.h`).
+-const BPF_MAP_FREEZE: u32 = 22;
+-const BPF_PROG_ATTACH: u32 = 8;
+-const BPF_PROG_DETACH: u32 = 9;
+-const BPF_PROG_GET_NEXT_ID: u32 = 11;
+-const BPF_PROG_GET_FD_BY_ID: u32 = 13;
+-const BPF_PROG_QUERY: u32 = 16;
+-const BPF_LINK_CREATE: u32 = 28;
+-
+-/// `BPF_PROG_TYPE_CGROUP_DEVICE` (`enum bpf_prog_type`, value 15).
+-const BPF_PROG_TYPE_CGROUP_DEVICE: u32 = 15;
+-#[cfg(feature = "cgroup2")]
+-const BPF_CGROUP_DEVICE_ATTACH_TYPE: u32 = 6;
+-#[cfg(feature = "cgroup2")]
+-const BPF_F_ALLOW_OVERRIDE: u32 = 1 << 0;
+-#[cfg(feature = "cgroup2")]
+-const BPF_F_ALLOW_MULTI: u32 = 1 << 1;
+-#[cfg(feature = "cgroup2")]
+-const BPF_F_QUERY_EFFECTIVE: u32 = 1 << 0;
+-
+-/// `BPF_MAP_TYPE_ARRAY` (`enum bpf_map_type` in Linux `uapi/linux/bpf.h`).
+-const BPF_MAP_TYPE_ARRAY: u32 = 2;
+-/// `BPF_ANY` update mode for `BPF_MAP_UPDATE_ELEM`.
+-const BPF_ANY: u64 = 0;
+ /// `lddw` opcode (`BPF_LD | BPF_DW | BPF_IMM`).
+-const BPF_LD_DW_IMM: u8 = 0x18;
++const BPF_LD_DW_IMM: u8 = (BPF_LD | BPF_DW | BPF_IMM) as u8;
+ /// `lddw` source marker for direct map-value addresses.
+-const BPF_PSEUDO_MAP_VALUE: u8 = 2;
++const BPF_PSEUDO_MAP_VALUE_BYTE: u8 = BPF_PSEUDO_MAP_VALUE as u8;
+ 
+ /// Minimum `size` for `BPF_MAP_CREATE` covering fields through `map_flags`
+ /// (Linux `union bpf_attr` map_create prefix).
+@@ -291,7 +273,7 @@ fn bpf_map_update_elem(attr_ptr: usize, size: u32) -> KResult<isize> {
+     }
+ 
+     let attr = UserConstPtr::<BpfMapElemAttrPrefix>::from(attr_ptr).read_vm()?;
+-    if attr.key == 0 || attr.value == 0 || attr.flags != BPF_ANY {
++    if attr.key == 0 || attr.value == 0 || attr.flags != u64::from(BPF_ANY_FLAG) {
+         return Err(KError::InvalidInput);
+     }
+ 
+@@ -496,7 +478,9 @@ fn bind_program_map_values(insns: &[u8]) -> KResult<Arc<[BpfProgramMapValue]>> {
+     let slots = insns.len() / kbpf::SLOT_SIZE;
+     for slot in 0..slots {
+         let off = slot * kbpf::SLOT_SIZE;
+-        if insns[off] != BPF_LD_DW_IMM || ((insns[off + 1] >> 4) & 0x0f) != BPF_PSEUDO_MAP_VALUE {
++        if insns[off] != BPF_LD_DW_IMM
++            || ((insns[off + 1] >> 4) & 0x0f) != BPF_PSEUDO_MAP_VALUE_BYTE
++        {
+             continue;
+         }
+         if slot + 1 >= slots {
+diff --git a/xtask/bpf_uapi/gen.py b/xtask/bpf_uapi/gen.py
+new file mode 100644
+index 000000000..8ed5df927
+--- /dev/null
++++ b/xtask/bpf_uapi/gen.py
+@@ -0,0 +1,337 @@
++#!/usr/bin/env python3
++"""Generate the single-source BPF uapi constant module from Linux's bpf.h.
++
++Usage:
++    python3 xtask/bpf_uapi/gen.py --linux /path/to/linux [-o core/kbpf/src/uapi.rs]
++
++The generated file is committed, so kernel builds never need a Linux tree.
++Re-run this script when the uapi baseline moves, then `git diff` the result:
++every changed value is a deliberate ABI decision that must be reviewed.
++
++Only declarations that exist in `include/uapi/linux/bpf.h` are emitted; a
++handful of values live elsewhere (`BPF_CGROUP_MAX_PROGS` is a kernel-internal
++define in `kernel/bpf/cgroup.c`) and are listed in EXTRA_DEFINES with their
++source named.
++"""
++
++from __future__ import annotations
++
++import argparse
++import re
++import sys
++from pathlib import Path
++
++HEADER = "include/uapi/linux/bpf.h"
++
++# Values that are not declared in bpf.h; each entry names where it lives.
++EXTRA_DEFINES = [
++    # (name, expression, source note)
++    ("BPF_CGROUP_MAX_PROGS", "64", "kernel/bpf/cgroup.c"),
++]
++
++# Enums to emit. Everything else in bpf.h (map flags, test-run flags, ...)
++# is emitted too when small; see ENUM_ALLOWLIST.
++ENUM_ALLOWLIST = [
++    "bpf_cmd",
++    "bpf_map_type",
++    "bpf_prog_type",
++    "bpf_attach_type",
++    "bpf_link_type",
++    "bpf_stats_type",
++    "bpf_task_fd_type",
++    "bpf_devcg_acc",
++    "bpf_devcg_dev",
++    "bpf_map_update_flags",
++]
++
++# Anonymous enums in bpf.h that carry ABI values worth emitting, keyed by a
++# marker identifier that must appear inside the enum body.
++ANON_ENUM_MARKERS = {
++    "BPF_DEVCG_ACC_MKNOD": "bpf_devcg_acc",
++    "BPF_DEVCG_DEV_BLOCK": "bpf_devcg_dev",
++    "BPF_ANY": "bpf_map_update_flags",
++}
++
++
++def strip_comments(text: str) -> str:
++    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
++    return re.sub(r"//[^\n]*", "", text)
++
++
++def eval_expr(expr: str, known: dict[str, int]) -> int:
++    """Evaluate a C integer constant expression against known symbols."""
++    expr = expr.strip().rstrip(",").strip()
++    # Casts: (1ULL << 0), ((__u32)~0U), (u64)x, (__force u16) ...
++    expr = re.sub(r"\(\s*(?:unsigned\s+long\s+long|unsigned\s+long|unsigned|signed|long|int|u64|u32|u16|u8|__u64|__u32|__u16|__u8|__force|__s32|__s16|__s8)\s*\)", "", expr)
++    expr = expr.replace("ULL", "").replace("LL", "").replace("UL", "").replace("U", "")
++    # `~0` and friends keep working with plain Python ints once unsigned-ness
++    # is dropped; callers that need masking apply it via MASKED entries.
++    for name in sorted(known, key=len, reverse=True):
++        expr = re.sub(rf"\b{re.escape(name)}\b", str(known[name]), expr)
++    expr = expr.replace("<<", "<<" ).replace("&&", " and ").replace("||", " or ")
++    try:
++        return int(eval(expr, {"__builtins__": {}}, {}))  # noqa: S307 - constant folding only
++    except Exception as exc:  # pragma: no cover - reported to the caller
++        raise ValueError(f"cannot evaluate {expr!r}: {exc}") from exc
++
++
++def parse_defines(
++    text: str,
++    known: dict[str, int],
++    drop_macros: bool = False,
++    skipped: list[str] | None = None,
++) -> list[tuple[str, int]]:
++    out = []
++    for match in re.finditer(r"^[ \t]*#define[ \t]+(BPF_[A-Za-z0-9_]+)[ \t]+(.+)$", text, re.M):
++        name, body = match.group(1), match.group(2).strip()
++        if drop_macros and "(" in body and "<<" not in body:
++            if skipped is not None:
++                skipped.append(f"{name} (accessor macro)")
++            continue  # BPF_CLASS(code) style accessor macros, not constants
++        if body.startswith("BPF_") and body in known:  # plain alias
++            known[name] = known[body]
++            out.append((name, known[name]))
++            continue
++        try:
++            known[name] = eval_expr(body, known)
++        except ValueError:
++            if skipped is not None:
++                skipped.append(f"{name} = {body}")
++            continue
++        out.append((name, known[name]))
++    return out
++
++
++def parse_enums(text: str, known: dict[str, int]) -> list[tuple[str, list[tuple[str, int]]]]:
++    """Parse named and anonymous enums, preserving declaration order."""
++    enums = []
++    for match in re.finditer(r"enum\s*([A-Za-z0-9_]*)\s*\{([^}]*)\}", text):
++        tag, body = match.group(1), match.group(2)
++        if "___BPF_FUNC_MAPPER" in body or "__BPF_FUNC_MAPPER" in body:
++            continue  # handled separately
++        items: list[tuple[str, int]] = []
++        next_value = 0
++        explicit = False
++        for raw in body.split(","):
++            decl = raw.strip()
++            if not decl or decl.startswith("#"):
++                continue
++            if "=" in decl:
++                name, expr = decl.split("=", 1)
++                name = name.strip()
++                try:
++                    value = eval_expr(expr, known)
++                except ValueError:
++                    continue
++                explicit = True
++            else:
++                name = decl
++                value = next_value
++            known[name] = value
++            items.append((name, value))
++            next_value = value + 1
++        if not items or not explicit and all(v == i for i, (_, v) in enumerate(items)):
++            # Anonymous bitmask enums have explicit values; a fully implicit
++            # one is still emitted (positional ABI is the point).
++            pass
++        if not items:
++            continue
++        if tag:
++            enums.append((tag, items))
++        else:
++            synthetic = None
++            for marker, name in ANON_ENUM_MARKERS.items():
++                if any(member == marker for member, _ in items):
++                    synthetic = name
++                    break
++            # Every remaining anonymous enum still gets a name: it is part of
++            # the uapi surface, and a missing constant is exactly the kind of
++            # gap this table exists to prevent. The name is derived from the
++            # first member, so it is stable across regenerations.
++            if synthetic is None:
++                synthetic = "bpf_anon_" + items[0][0].lower()
++            enums.append((synthetic, items))
++    return enums
++
++
++def parse_func_ids(text: str) -> list[tuple[str, int]]:
++    ids = []
++    for match in re.finditer(r"FN\(\s*([A-Za-z0-9_]+)\s*,\s*([0-9]+)", text):
++        ids.append((f"BPF_FUNC_{match.group(1)}", int(match.group(2))))
++    return ids
++
++
++def rust_ident(name: str) -> str:
++    # Keep the C spelling: these are uapi names and grep-ability matters.
++    return name
++
++
++def rust_type(value: int) -> str:
++    """Narrowest type that holds the value.
++
++    Widening only where needed is what lets consumers use the constants
++    directly in `match` patterns: a `u64` constant cannot pattern-match a
++    `u32` scrutinee, and `x as u32` is not a pattern expression.
++    """
++    # C enums are `int`/`unsigned int` and the syscall ABI passes them as
++    # `u32`; negative enumerators (e.g. `TCX_NEXT = -1`) are signed `int`,
++    # and only constants that genuinely need 64 bits are widened.
++    if value < 0:
++        return "i32"
++    if value <= 0xFFFF_FFFF:
++        return "u32"
++    return "u64"
++
++
++def emit_str_array(name: str, items: list[str]) -> list[str]:
++    """Emit a `&[&str]` const in the shape rustfmt leaves it in.
++
++    The generated file is committed and passes through `make fmt`, so the
++    output must already be rustfmt-stable — otherwise `--check` reports a
++    stale file that only differs in formatting.
++    """
++    if not items:
++        return [f'pub const {name}: &[&str] = &[];']
++    if len(items) == 1:
++        return [f'pub const {name}: &[&str] = &["{items[0]}"];']
++    lines = [f'pub const {name}: &[&str] = &[']
++    lines.extend(f'    "{item}",' for item in items)
++    lines.append('];')
++    return lines
++
++
++def emit(enums, defines, func_ids, header_hash: str, skipped: list[str]) -> str:
++    lines = [
++        "// SPDX-License-Identifier: Apache-2.0",
++        "// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>",
++        "// See LICENSES for license details.",
++        "",
++        "//! BPF uapi constants, generated from Linux's `include/uapi/linux/bpf.h`.",
++        "//!",
++        "//! DO NOT EDIT BY HAND. Regenerate with",
++        "//! `python3 xtask/bpf_uapi/gen.py --linux <linux-tree>` and review the diff:",
++        f"//! every changed value is an ABI decision. Source header digest: `{header_hash}`.",
++        "//!",
++        "//! `bpf_uapi_constants_match_linux()` in the tested module pins the values",
++        "//! this kernel depends on, independently of the generator.",
++        "",
++        "#![expect(",
++        "    non_upper_case_globals,",
++        "    reason = \"generated uapi table keeps the C spellings so a grep for a uapi name\"",
++        ")]",
++        "",
++    ]
++    for tag, items in enums:
++        lines.append(f"/// C enum `{tag}` (`include/uapi/linux/bpf.h`).")
++        lines.append("pub mod " + tag + " {")
++        for name, value in items:
++            lines.append(f"    pub const {rust_ident(name)}: {rust_type(value)} = {value};")
++        lines.append("}")
++        lines.append("")
++    if defines:
++        lines.append("/// `#define` values declared in `include/uapi/linux/bpf.h`.")
++        lines.append("pub mod defines {")
++        for name, value in defines:
++            lines.append(f"    pub const {rust_ident(name)}: {rust_type(value)} = {value};")
++        lines.append("}")
++        lines.append("")
++    else:
++        lines.append("/// `#define` values declared in `include/uapi/linux/bpf.h`.")
++        lines.append("pub mod defines {}")
++        lines.append("")
++    lines.append("/// Values this table declares that are NOT from the uapi headers.")
++    lines.append("///")
++    lines.append("/// Each one is a deliberate exception and needs its source named in")
++    lines.append("/// the generator; the conformance test pins this list so a second")
++    lines.append("/// exception cannot slip in unnoticed.")
++    lines.extend(
++        emit_str_array("NON_UAPI_VALUES", [name for name, _e, _s in EXTRA_DEFINES])
++    )
++    lines.append("")
++    lines.append("/// Names of the enum modules in this table.")
++    lines.append("pub const ENUM_MODULES: &[&str] = &[")
++    for tag, _ in enums:
++        lines.append(f'    "{tag}",')
++    lines.append("];")
++    lines.append("")
++    lines.append("/// `#define`s in the uapi headers that are not integer constants.")
++    lines.append("///")
++    lines.append("/// Listed so a reader can tell \"absent on purpose\" from \"the generator")
++    lines.append("/// dropped it\". Function-like accessor macros (`BPF_CLASS(code)`) and")
++    lines.append("/// expressions the evaluator cannot fold are the only entries here.")
++    lines.extend(
++        emit_str_array(
++            "NOT_CONSTANTS",
++            [entry.replace(chr(34), chr(92) + chr(34)) for entry in skipped],
++        )
++    )
++    lines.append("")
++    lines.append("/// `enum bpf_func_id` helper ids (`___BPF_FUNC_MAPPER`).")
++    lines.append("pub mod bpf_func_id {")
++    for name, value in func_ids:
++        lines.append(f"    pub const {rust_ident(name)}: {rust_type(value)} = {value};")
++    lines.append("}")
++    lines.append("")
++    return "\n".join(lines)
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--linux", required=True, type=Path)
++    parser.add_argument("--check", action="store_true", help="fail if the generated file differs")
++    parser.add_argument("-o", "--output", type=Path,
++                        default=Path(__file__).resolve().parents[2] / "core/kbpf/src/uapi.rs")
++    args = parser.parse_args()
++
++    header = args.linux / HEADER
++    common = args.linux / "include/uapi/linux/bpf_common.h"
++    text = strip_comments(header.read_text(encoding="utf-8"))
++    # `bpf_common.h` carries the classic ISA bits (classes, sizes, modes,
++    # ALU/JMP op nibbles) that `bpf.h` extends; parse it first so `bpf.h`
++    # aliases evaluate.
++    common_text = strip_comments(common.read_text(encoding="utf-8"))
++    digest = __import__("hashlib").sha256(
++        header.read_bytes() + common.read_bytes()
++    ).hexdigest()[:16]
++
++    known: dict[str, int] = {}
++    skipped: list[str] = []
++    defines = parse_defines(common_text, known, drop_macros=True, skipped=skipped)
++    defines += parse_defines(text, known, skipped=skipped)
++    enums = parse_enums(text, known)
++    func_ids = parse_func_ids(text)
++
++    # A `#define` the evaluator could not fold may still be defined properly
++    # by an enum elsewhere in the same header (`BPF_F_LINK` is a
++    # self-referential legacy macro; the enum at the attach-type block gives
++    # it its real value). Such names are not gaps, so drop them from the
++    # report.
++    skipped = [
++        entry
++        for entry in skipped
++        if entry.split(" ")[0] not in known
++    ]
++
++    for name, expr, source in EXTRA_DEFINES:
++        known[name] = eval_expr(expr, known)
++        defines.append((name, known[name]))
++
++
++    # Every `BPF_*` constant from both headers is emitted: the point of the
++    # single source is completeness, and unused constants cost nothing.
++
++    generated = emit(enums, sorted(set(defines)), func_ids, digest, skipped)
++    if args.check:
++        current = args.output.read_text(encoding="utf-8") if args.output.exists() else ""
++        if current != generated:
++            print(f"{args.output} is stale; regenerate from the uapi baseline", file=sys.stderr)
++            return 1
++        print(f"{args.output} is up to date")
++        return 0
++    args.output.write_text(generated, encoding="utf-8")
++    print(f"wrote {args.output} ({len(enums)} enums, {len(defines)} defines, {len(func_ids)} func ids)")
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())

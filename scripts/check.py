@@ -36,8 +36,17 @@ def main():
             candidate = DIST / path.lstrip("/") if path.startswith("/") else page.parent / path
             if not candidate.resolve().is_relative_to(DIST.resolve()) or not candidate.exists():
                 failures.append(f"Broken link: {page.relative_to(DIST)} -> {target}")
+    publication_pdfs = {
+        DIST / "research/publications/2026-11-11-pilot-draft" / name
+        for name in ("paper.pdf", "slides.pdf")
+    }
+    publication_pdfs.add(
+        DIST / "research/publications/2026-11-11-research-briefing/research-briefing.pdf"
+    )
     forbidden = [path for path in DIST.rglob("*") if path.is_file() and (
-        path.suffix in {".pdf", ".rs", ".py", ".toml"} or "originals" in path.parts or ".git" in path.parts
+        path.suffix in {".rs", ".py", ".toml"}
+        or (path.suffix == ".pdf" and path not in publication_pdfs)
+        or "originals" in path.parts or ".git" in path.parts
     )]
     failures.extend(f"Unexpected private/source artifact in site: {path}" for path in forbidden)
     manifest = json.loads((ROOT / "research/evidence/manifest.json").read_text())

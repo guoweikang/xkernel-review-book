@@ -1,0 +1,254 @@
+{
+  "input": "//! file scope\n// ordinary comment, not docs\n/// 中文 function\n#[doc = \"second line\"]\nfn outer() { fn nested() {} }\nmod child {\n    //! child scope\n    /// method purpose\n    pub fn member() {}\n}\n#[doc = include_str!(\"missing.md\")]\nfn included() {}\n#[cfg_attr(feature = \"extra\", doc = \"conditional\")]\nfn conditional() {}\ntrait Contract { /// declaration\n    fn required();\n}\nhidden! { /// generated\n    fn invisible() {}\n}\n",
+  "parsed": {
+    "diagnostics": [],
+    "file_attributes": [
+      {
+        "doc_text": " file scope",
+        "path": "doc",
+        "range": [
+          0,
+          14
+        ],
+        "style": "inner",
+        "source": "//! file scope"
+      }
+    ],
+    "schema": "syn-unit-probe/2",
+    "status": "parsed_by_syn",
+    "units": [
+      {
+        "ancestors": [],
+        "attributes": [
+          {
+            "doc_text": " 中文 function",
+            "path": "doc",
+            "range": [
+              45,
+              64
+            ],
+            "style": "outer",
+            "source": "/// 中文 function"
+          },
+          {
+            "doc_text": "second line",
+            "path": "doc",
+            "range": [
+              65,
+              87
+            ],
+            "style": "outer",
+            "source": "#[doc = \"second line\"]"
+          }
+        ],
+        "body_range": [
+          99,
+          117
+        ],
+        "kind": "fn",
+        "name": "outer",
+        "range": [
+          45,
+          117
+        ],
+        "signature_range": [
+          88,
+          98
+        ]
+      },
+      {
+        "ancestors": [
+          0
+        ],
+        "attributes": [],
+        "body_range": [
+          113,
+          115
+        ],
+        "kind": "fn",
+        "name": "nested",
+        "range": [
+          101,
+          115
+        ],
+        "signature_range": [
+          101,
+          112
+        ]
+      },
+      {
+        "ancestors": [],
+        "attributes": [
+          {
+            "doc_text": " child scope",
+            "path": "doc",
+            "range": [
+              134,
+              149
+            ],
+            "style": "inner",
+            "source": "//! child scope"
+          }
+        ],
+        "inline": true,
+        "kind": "mod",
+        "name": "child",
+        "path_overrides": [],
+        "range": [
+          118,
+          197
+        ]
+      },
+      {
+        "ancestors": [
+          2
+        ],
+        "attributes": [
+          {
+            "doc_text": " method purpose",
+            "path": "doc",
+            "range": [
+              154,
+              172
+            ],
+            "style": "outer",
+            "source": "/// method purpose"
+          }
+        ],
+        "body_range": [
+          193,
+          195
+        ],
+        "kind": "fn",
+        "name": "member",
+        "range": [
+          154,
+          195
+        ],
+        "signature_range": [
+          181,
+          192
+        ]
+      },
+      {
+        "ancestors": [],
+        "attributes": [
+          {
+            "doc_text": null,
+            "path": "doc",
+            "range": [
+              198,
+              233
+            ],
+            "style": "outer",
+            "source": "#[doc = include_str!(\"missing.md\")]"
+          }
+        ],
+        "body_range": [
+          248,
+          250
+        ],
+        "kind": "fn",
+        "name": "included",
+        "range": [
+          198,
+          250
+        ],
+        "signature_range": [
+          234,
+          247
+        ]
+      },
+      {
+        "ancestors": [
+          4
+        ],
+        "attributes": [],
+        "kind": "macro_tokens",
+        "name": null,
+        "range": [
+          206,
+          232
+        ]
+      },
+      {
+        "ancestors": [],
+        "attributes": [
+          {
+            "doc_text": null,
+            "path": "cfg_attr",
+            "range": [
+              251,
+              302
+            ],
+            "style": "outer",
+            "source": "#[cfg_attr(feature = \"extra\", doc = \"conditional\")]"
+          }
+        ],
+        "body_range": [
+          320,
+          322
+        ],
+        "kind": "fn",
+        "name": "conditional",
+        "range": [
+          251,
+          322
+        ],
+        "signature_range": [
+          303,
+          319
+        ]
+      },
+      {
+        "ancestors": [],
+        "attributes": [],
+        "kind": "trait",
+        "name": "Contract",
+        "range": [
+          323,
+          376
+        ]
+      },
+      {
+        "ancestors": [
+          7
+        ],
+        "attributes": [
+          {
+            "doc_text": " declaration",
+            "path": "doc",
+            "range": [
+              340,
+              355
+            ],
+            "style": "outer",
+            "source": "/// declaration"
+          }
+        ],
+        "body_range": null,
+        "kind": "trait_fn",
+        "name": "required",
+        "range": [
+          340,
+          374
+        ],
+        "signature_range": [
+          360,
+          373
+        ]
+      },
+      {
+        "ancestors": [],
+        "attributes": [],
+        "kind": "macro_tokens",
+        "name": null,
+        "range": [
+          377,
+          424
+        ]
+      }
+    ]
+  },
+  "invalid_input_rejected": true
+}

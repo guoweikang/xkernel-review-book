@@ -1,0 +1,33 @@
+{
+  "schema": "source-unit-protocol/1",
+  "id": "xkernel-source-units-v2",
+  "purpose": "Source extraction and conservative module file candidates; not semantic membership",
+  "commit": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "toolchain": "1.95.0",
+  "packages": ["fs/kvfs", "task/kspin", "util/klazy", "util/macros"],
+  "prior": "research/evidence/inventory/2026-11-05-rust-unit-probe.json",
+  "prior_sha256": "b4aa8a8f3715ad46d87ebd77d8ff07bcde7df1efb2cbc4d6c2207b696bed2571",
+  "gates": {
+    "max_failed_files": 0,
+    "expected_fixture_count": 15,
+    "expected_summary": {
+      "files": 88,
+      "functions_with_body": 2180,
+      "function_declarations_without_body": 45,
+      "external_module_declarations": 57
+    }
+  },
+  "module_mapping": {
+    "rules": "tracked-file-candidates/1",
+    "expected_statuses": {"matched_candidate": 50, "deferred": 7}
+  },
+  "known_limits": [
+    "Physical package ownership and file candidates do not establish logical module membership",
+    "Seven declarations are conservatively deferred due to cfg_attr context",
+    "Default file layout assumes ordinary loading; custom macro/include contexts are not resolved",
+    "Inline path overrides and non-module ancestors are deferred",
+    "No cfg evaluation, macro expansion, type checking or runtime evidence",
+    "Unsupported node kinds and non-top-level Verbatim are not fully inventoried",
+    "No duplicate candidates or refactoring recommendations are produced"
+  ]
+}

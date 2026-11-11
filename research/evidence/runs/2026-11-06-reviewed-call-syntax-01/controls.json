@@ -1,0 +1,140 @@
+{
+  "inputs": [
+    [
+      "syntax",
+      "fn demo() { let label = \"中文\"; library::call::<u8>(); object.read(); callback(); hidden!(secret()); }"
+    ],
+    [
+      "deferred",
+      "fn demo() { let task = || nested(); let future = async { later(); }; fn local() { inner(); } immediate(); }"
+    ],
+    [
+      "invalid",
+      "fn broken( {"
+    ]
+  ],
+  "results": {
+    "syntax": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "library::call",
+          "range": [
+            34,
+            53
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "library::call::<u8>"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "read",
+          "range": [
+            64,
+            68
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "read"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "callback",
+          "range": [
+            72,
+            80
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "callback"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "opaque_macro",
+          "name": "hidden",
+          "range": [
+            84,
+            101
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "hidden!(secret())"
+        }
+      ],
+      "status": "parsed"
+    },
+    "deferred": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 1,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "nested",
+          "range": [
+            26,
+            32
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "nested"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 1,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "later",
+          "range": [
+            57,
+            62
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "later"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 1,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "inner",
+          "range": [
+            82,
+            87
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "inner"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "immediate",
+          "range": [
+            93,
+            102
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "immediate"
+        }
+      ],
+      "status": "parsed"
+    },
+    "invalid": {
+      "error": "cannot parse string into token stream",
+      "schema": "rust-call-syntax/1",
+      "sites": [],
+      "status": "rejected"
+    }
+  }
+}

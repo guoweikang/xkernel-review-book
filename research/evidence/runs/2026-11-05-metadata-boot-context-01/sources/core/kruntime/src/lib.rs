@@ -1,0 +1,981 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Runtime orchestration for x-kernel: primary/secondary CPU bring-up, subsystem
+//! init ordering, and handoff to the system-init entry supplied by the `entry`
+//! crate. System power-management coordination belongs to the independent
+//! `kpm` crate.
+//!
+//! For architecture, boot flow, and security analysis, see `docs/design.md` and
+//! `docs/security.md` in the crate source directory.
+//!
+//! # Cargo Features
+//!
+//! - `smp`: SMP bring-up (`rust_main_secondary`, `mp`)
+//! - `ipi`: Inter-processor interrupts (`kipi`)
+//! - `fs` / `fs9p` / `net` / `vsock` / `display` / `input`: driver and subsystem init
+//! - `rtc`: Wall-clock banner at boot
+//! - `watchdog` / `watchdog_hardlockup`: Watchdog on primary/secondary CPUs
+//! - `pmu`: PMU overflow IRQ handler
+//! - `arm-timer-resume-fixup`: repair virtual timer regressions after idle/WFI
+//! - `rootfs-secondary-block`: mount the secondary block device as the root FS
+//! - `workqueue-bench`: opt-in release workqueue benchmarks before userspace
+//! - `rcu-torture`: opt-in release RCU ownership stress before userspace
+//! - `rcu-bench`: opt-in release RCU callback latency measurements before userspace
+//!
+//! All features are optional and disabled by default.
+
+#![cfg_attr(not(test), no_std)]
+
+extern crate alloc;
+
+mod rcu;
+
+#[cfg(all(feature = "rcu-torture", not(unittest)))]
+#[path = "../benches/rcu/torture.rs"]
+mod rcu_torture;
+
+#[cfg(all(feature = "rcu-bench", not(unittest)))]
+#[path = "../benches/rcu/latency.rs"]
+mod rcu_bench;
+
+/// Runs an explicitly configured release validation workload before userspace.
+///
+/// Call once in sleepable boot context after runtime initialization. With
+/// A boot benchmark or torture feature enabled outside unit tests, completion
+/// powers off the machine; otherwise this is a no-op.
+///
+/// # Panics
+/// The opt-in runner panics on invalid duration, submission/drain errors,
+/// content/ownership errors, callback count or placement mismatches, and failed
+/// task joins.
+pub fn run_boot_benchmarks() {
+    #[cfg(all(feature = "rcu-bench", not(unittest)))]
+    {
+        rcu_bench::run();
+        khal::power::power_off();
+    }
+    #[cfg(all(feature = "rcu-torture", not(unittest)))]
+    {
+        rcu_torture::run(kbuild_config::RCU_TORTURE_SECONDS);
+        khal::power::power_off();
+    }
+    #[cfg(all(feature = "workqueue-bench", not(unittest)))]
+    {
+        kworkng::benchmarks::run(kbuild_config::WORKQUEUE_SOAK_SECONDS);
+        khal::power::power_off();
+    }
+}
+
+unittest::path_mod_test!(tests_workqueue, "../ut-tests/tests_workqueue/mod.rs");
+unittest::path_mod_test!(tests_irq_startup, "../ut-tests/irq_startup.rs");
+unittest::path_mod_test!(page_metadata_tests, "../ut-tests/page_metadata.rs");
+unittest::path_mod_test!(log_filter_tests, "../ut-tests/log_filter.rs");
+unittest::path_mod_test!(
+    tests_irq_management_lifecycle,
+    "../ut-tests/irq_management_lifecycle.rs"
+);
+
+#[macro_use]
+extern crate klogger;
+
+#[cfg(all(target_os = "none", not(test)))]
+mod lang_items;
+
+#[cfg(feature = "smp")]
+mod mp;
+
+mod init_setup;
+
+use boot_info::BootConsoleTransport;
+use kcpu_id_map::KCpuMaskExt;
+use kernel_boot::PrimaryKernelEntry;
+#[cfg(not(feature = "smp"))]
+use kernel_boot::SecondaryKernelEntry;
+use khal::mem::MemFlags;
+use memaddr::{MemoryAddr, PAGE_SIZE_4K, PhysAddr, VirtAddr};
+
+#[cfg(feature = "smp")]
+pub use self::mp::rust_main_secondary;
+
+const LOGO: &str = r#"
+                 ++
+             *  ***
+           *******
+         *******++
+      ********+===
+    ******#*+======
+   *******#***++===
+   *********+**===
+  ##*********##==                  ====+
+%##****++==+****#                ***+=**
+#****++=====++****##            ********
+####*+=======+******===-     ***#*##****
+ #%#******+**+==++**=======+*+*#%
+ %#****+******=====+====+++==**
+  #*********##***###********##%
+   ***##%#%%%%*****#*###*****#%
+   *#%%%#%%%%%****   %%*******#%
+   #%%%%%%          %%%##***###%%
+    **#%           %%%%#% **#**##
+   ###%%         %%%%%   %%%***
+ %%%%%%        %%%%%%%  %%%%#*
+ %%%%%%                %%%%%%+=
+"#;
+
+#[kiface::provide]
+impl kiface_logging_api::LogSinkIf {
+    fn write_str(s: &str) {
+        khal::console::write_data(s.as_bytes());
+    }
+}
+
+#[kiface::provide]
+impl kiface_logging_api::LogContextIf {
+    fn now() -> ktime_types::TimeSpan {
+        khal::time::monotonic_time().span_since_origin()
+    }
+
+    fn cpu_id() -> Option<usize> {
+        #[cfg(feature = "smp")]
+        {
+            is_init_ok().then(|| khal::percpu::this_cpu_id().as_usize())
+        }
+
+        #[cfg(not(feature = "smp"))]
+        {
+            Some(0)
+        }
+    }
+
+    fn in_nmi() -> bool {
+        // `kirq` tracks effective NMI nesting per CPU for RCU watching, which is
+        // exactly the condition under which the logger must not take its locks.
+        kirq::context::is_in_nmi()
+    }
+
+    fn task_id() -> Option<u64> {
+        if is_init_ok() {
+            ktask::current_may_uninit().map(|curr| curr.owner_key())
+        } else {
+            None
+        }
+    }
+}
+
+use core::sync::atomic::{AtomicUsize, Ordering};
+
+// The primary publishes first to release AP service bring-up. Each AP adds its
+// completion after local services exist; the final acquire covers them all.
+static INITED_CPUS: AtomicUsize = AtomicUsize::new(0);
+
+/// High-level system-init handoff performed after runtime bring-up.
+///
+/// The provider owns policy-level startup such as runtime feature init and
+/// spawning the first user program (PID 1) as a fresh user task. The provider
+/// normally returns once init has been published and activated. A unittest
+/// provider instead runs kernel tests and may terminate the system.
+#[kiface::interface]
+pub trait SystemInitEntry {
+    /// Enter the selected system-startup policy (user init or kernel tests).
+    fn enter();
+}
+
+const MAX_REGION_LOG_SUMMARIES: usize = 64;
+const REGION_LOG_SUMMARY_THRESHOLD: usize = 8;
+
+const fn configured_log_level() -> &'static str {
+    if kbuild_config::LOG_LEVEL_ERROR {
+        "error"
+    } else if kbuild_config::LOG_LEVEL_WARN {
+        "warn"
+    } else if kbuild_config::LOG_LEVEL_INFO {
+        "info"
+    } else if kbuild_config::LOG_LEVEL_DEBUG {
+        "debug"
+    } else if kbuild_config::LOG_LEVEL_TRACE {
+        "trace"
+    } else {
+        // The Kconfig choice has no `off` option, so "no level selected" is a
+        // broken configuration rather than a request for silence. Report `error`
+        // so the console default, the logger floor and the boot banner all agree
+        // on the same conservative level instead of leaving the console mute.
+        "error"
+    }
+}
+
+/// Resolve the boot-time log filter from the live boot environment.
+fn resolve_boot_log_filter() -> &'static str {
+    resolve_log_filter(
+        khal::firmware::dt_log_level(),
+        khal::cmdline(),
+        kbuild_config::LOG_FILTER,
+    )
+}
+
+/// Resolve the boot-time log filter, first match wins:
+///
+/// 1. an explicit command-line request — `loglevel=` (a spec, which must stay
+///    inside one whitespace-free word) and the `quiet`/`debug` shorthands for
+///    `loglevel=2`/`loglevel=4`. An operator's boot arguments must be able to
+///    override what the board baked in;
+/// 2. `/chosen/x-kernel,log-level` in the device tree — the board's default,
+///    changeable without rebuilding the kernel or touching the boot loader;
+/// 3. `LOG_FILTER` from the build configuration;
+/// 4. the build level (`LOG_LEVEL_*`), applied by [`apply_build_log_level`] as
+///    both the console default and the logger's floor.
+///
+/// A rejected source is reported and the next one is tried; the reports use
+/// [`kprintln!`] rather than `warn!`, because the level this function is
+/// installing is exactly what would filter the warning. A command-line scan
+/// continues past a rejected `loglevel=`, so a later valid one still applies.
+fn resolve_log_filter(
+    dt_spec: Option<&'static str>,
+    cmdline: Option<&'static str>,
+    log_filter: &'static str,
+) -> &'static str {
+    if let Some(cmdline) = cmdline {
+        for token in cmdline.split_ascii_whitespace() {
+            if let Some(spec) = token.strip_prefix("loglevel=")
+                && !spec.is_empty()
+            {
+                if klogger::set_filter_spec(spec).is_ok() {
+                    return spec;
+                }
+                kprintln!("ignoring invalid loglevel={spec} on the kernel command line");
+                continue;
+            }
+        }
+        for token in cmdline.split_ascii_whitespace() {
+            let shorthand = match token {
+                "quiet" => Some("2"),
+                "debug" => Some("4"),
+                _ => None,
+            };
+            if let Some(level) = shorthand {
+                let _ = klogger::set_filter_spec(level);
+                return level;
+            }
+        }
+    }
+    if let Some(spec) = dt_spec {
+        if klogger::set_filter_spec(spec).is_ok() {
+            return spec;
+        }
+        kprintln!(
+            "ignoring invalid /chosen/x-kernel,log-level=\"{spec}\"; expected a level 0..=5 or \
+             off/error/warn/info/debug/trace, optionally with target=level overrides"
+        );
+    }
+    let configured = log_filter.trim();
+    if !configured.is_empty() {
+        if klogger::set_filter_spec(configured).is_ok() {
+            return configured;
+        }
+        // A compiled-in spec cannot be fixed at runtime, so its rejection must be
+        // reported like the other sources'.
+        kprintln!(
+            "ignoring invalid LOG_FILTER=\"{configured}\"; expected a level 0..=5 or \
+             off/error/warn/info/debug/trace, optionally with target=level overrides"
+        );
+    }
+    apply_build_log_level()
+}
+
+/// Applies the build's log level as the console default.
+///
+/// `klogger::init_klogger` already installed it as the console default and as the
+/// logger's floor; re-applying it here keeps the two in step when `LOG_LEVEL_*`
+/// resolves through the fallback in `configured_log_level()`. The choice only
+/// ever yields a valid level, but a rejected spec must not abort boot: the
+/// previous filter stays in place.
+fn apply_build_log_level() -> &'static str {
+    let level = configured_log_level();
+    let _ = klogger::set_filter_spec(level);
+    level
+}
+
+#[derive(Debug, Clone, Copy)]
+struct RegionLogSummary {
+    name: &'static str,
+    flags: MemFlags,
+    count: usize,
+    total_size: usize,
+    first_start: usize,
+    last_end: usize,
+}
+
+fn is_init_ok() -> bool {
+    // Wait for all *discovered* CPUs (enumerated from the DT/ACPI at boot),
+    // not the compile-time `NR_CPUS` cap. Using the cap would deadlock whenever
+    // the platform describes fewer CPUs than `NR_CPUS` (e.g. a smaller QEMU
+    // `-smp`), because those slots never increment the counter.
+    INITED_CPUS.load(Ordering::Acquire) == kcpu_id_map::nr_cpus()
+}
+
+/// Run late subsystem initialization on the PID-less late-init bootstrap thread.
+///
+/// The thread starts in kernel context, brings up secondary CPUs and late
+/// subsystems, then crosses [`SystemInitEntry`], which selects user init or kernel tests, before
+/// returning. Because the late-init thread holds an `Internal` identity and
+/// allocates no root PID itself, init receives the system's first root PID.
+fn late_init_main(cpu_id: kcpu_id_map::LogicalCpuId) {
+    #[cfg(feature = "smp")]
+    {
+        // Returns only after every present secondary CPU has registered its
+        // run queue, so cross-CPU spawn during the driver/subsystem init
+        // below cannot land on an unregistered CPU.
+        #[expect(
+            clippy::panic,
+            reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: the platform cannot start \
+                      a present secondary CPU (boot_ap error); CPU readiness and task placement \
+                      assume every present CPU runs, and late init has no error return or recovery"
+        )]
+        self::mp::start_secondary_cpus(cpu_id).unwrap_or_else(|err| {
+            panic!(
+                "failed to start secondary CPUs after boot CPU {} init: {err:?}",
+                cpu_id.as_usize()
+            )
+        });
+    }
+
+    #[cfg(all(unittest, feature = "smp"))]
+    self::mp::tests_startup_order::queue_early_tasks(cpu_id);
+
+    init_cpu_services();
+
+    #[cfg(all(unittest, feature = "smp"))]
+    self::mp::tests_startup_order::record_service_barrier(cpu_id);
+
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: the sole GP task must prepare \
+                  successfully before later RCU integration can use it"
+    )]
+    // SAFETY: the CPU-service rendezvous above covers every discovered CPU's
+    // scheduler, timer and fixed notifications. krcu owns its permanent nodes.
+    unsafe { krcu::init_service() }.expect("RCU GP task preparation failed");
+
+    // All target CPUs can now receive notifications and run worker tasks.
+    // Publish services before exposing any work-producing drivers.
+    #[expect(
+        clippy::unwrap_used,
+        reason = "CG-021-no-panic-on-reachable-failure: 64 is a nonzero fixed workqueue batch \
+                  limit"
+    )]
+    let batch_limit = core::num::NonZeroUsize::new(64).unwrap();
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: system worker services cannot \
+                  initialize; the runtime entry has no error return and cannot start drivers \
+                  without workers"
+    )]
+    kworkng::runtime::init(
+        #[expect(
+            clippy::expect_used,
+            reason = "CG-021-no-panic-on-reachable-failure: Kconfig constrains \
+                      WORKQUEUE_WORKERS_PER_POOL to a positive value"
+        )]
+        core::num::NonZeroUsize::new(kbuild_config::WORKQUEUE_WORKERS_PER_POOL)
+            .expect("positive configured worker limit"),
+        ktime_types::TimeSpan::from_secs(30),
+        batch_limit,
+    )
+    .expect("system workqueue services must be ready before driver initialization");
+
+    // Device discovery can construct N_TTY, whose input mode is chosen once.
+    khal::console::prepare_input();
+
+    #[cfg(feature = "fs")]
+    fs_boot::init_device_discovery();
+    kdriver::init_drivers();
+    #[cfg(feature = "char")]
+    if let Err(error) = ktty::tty::try_handoff_console() {
+        warn!("tty: native console preparation failed ({error:?}); retaining boot console");
+    }
+
+    // Probe CPU / SMCCC / VirtIO / jitter sources after drivers are visible.
+    // Must run before TEE register_init paths that call fill_random().
+    entropy::init();
+
+    // Filesystem implementations and other built-in subsystems own their
+    // registration callbacks, matching Linux initcall ownership.
+    init_setup::init_cb();
+
+    #[cfg(feature = "display")]
+    fbdevice::fb_init();
+    #[cfg(feature = "input")]
+    inputdev::init_input();
+
+    #[cfg(feature = "fs")]
+    {
+        fs_boot::prepare_namespace();
+        fs_boot::mount_virtual_filesystems();
+    }
+
+    #[cfg(all(feature = "fs9p", not(unittest)))]
+    fs_boot::mount_host_share("/mnt/hostshare");
+
+    #[cfg(feature = "net")]
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: configured network stack \
+                  preparation failed; late init has no recovery or error return"
+    )]
+    knet::init_network().expect("prepare configured network stack");
+    #[cfg(feature = "vsock")]
+    knet::init_vsock();
+
+    finish_allocator_init();
+    log_memory_regions();
+
+    info!("Primary CPU {} init OK.", cpu_id.as_usize());
+    // CPU services are ready before drivers; the network service itself must
+    // also exist before the bridge starts.
+    #[cfg(feature = "vsock_tipc_bridge")]
+    knet::start_vsock_bridge();
+
+    // Spawn PID 1 after all PID-less late initialization has completed.
+    // `enter()` returns after the init task has been published and activated.
+    SystemInitEntry::enter();
+
+    // The late-init thread has finished its job; `task_entry` will exit it.
+}
+
+/// Completes boot CPU services before drivers can publish cross-CPU work.
+fn init_cpu_services() {
+    #[cfg(feature = "ipi")]
+    kipi::init();
+
+    #[cfg(feature = "ipi")]
+    kipi::enable_fixed_notifications();
+
+    #[cfg(feature = "watchdog")]
+    watchdog::init_primary();
+
+    // Keep the PMU PPI masked until watchdog setup has selected NMI delivery.
+    #[cfg(feature = "pmu")]
+    khal::pmu::enable_irq();
+
+    // APs cannot complete while the primary is still zero. Release them before
+    // drivers, which may themselves wait for work on those CPUs.
+    INITED_CPUS.fetch_add(1, Ordering::Release);
+    while !is_init_ok() {
+        #[cfg(all(unittest, feature = "smp"))]
+        self::mp::tests_startup_order::record_service_wait();
+        core::hint::spin_loop();
+    }
+
+    #[cfg(feature = "smp")]
+    kipi::tlb::mark_all_cpus_started();
+}
+
+/// Prepare the PID-less late-init bootstrap thread on the boot CPU.
+///
+/// This task runs all late subsystem initialization, spawns PID 1 init, then
+/// exits. It carries an `Internal` identity, so it consumes no root PID number.
+/// Secondary run queues are not registered at activation time, so the thread
+/// is pinned to the boot CPU via a one-shot CPU mask.
+fn prepare_late_init_on_primary(cpu_id: kcpu_id_map::LogicalCpuId) -> ktask::KtaskRef {
+    let task = ktask::TaskInner::new_pidless_kthread(
+        move || late_init_main(cpu_id),
+        "late_init".into(),
+        kbuild_config::TASK_STACK_SIZE,
+    );
+    let task = ktask::prepare_task(task);
+    task.set_cpumask(ktask::KCpuMask::one_shot_logical(cpu_id));
+    task
+}
+
+fn register_boot_console_runtime_region(boot_info: &boot_info::BootInfo) {
+    if boot_info.boot_console_transport != BootConsoleTransport::Mmio {
+        return;
+    }
+    if boot_info.boot_console_addr == 0
+        || boot_info.boot_console_vaddr == 0
+        || boot_info.boot_console_size == 0
+    {
+        return;
+    }
+
+    let paddr = PhysAddr::from_usize(boot_info.boot_console_addr);
+    let vaddr = VirtAddr::from_usize(boot_info.boot_console_vaddr);
+    assert_eq!(
+        paddr.align_offset_4k(),
+        vaddr.align_offset_4k(),
+        "boot console MMIO VA/PA offset mismatch"
+    );
+
+    let start = paddr.align_down_4k();
+    let size = (paddr.align_offset_4k() + boot_info.boot_console_size).align_up(PAGE_SIZE_4K);
+    let mapped = vaddr.align_down_4k();
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: the boot UART runtime mapping \
+                  cannot be registered; runtime initialization has no error return or recovery"
+    )]
+    memspace::register_fixed_device_region(start, size, "boot-uart", mapped)
+        .expect("failed to register boot console runtime region");
+}
+
+/// The main entry point of the runtime.
+///
+/// It is called from the bootstrapping code in the specific platform crate (see
+/// `kplat::main`).
+///
+/// `arg` is the unified bootloader handoff payload (`BootInfo*`) for the
+/// primary CPU. Secondary cores call [`rust_main_secondary`].
+pub fn rust_main(arg: usize) -> ! {
+    let boot_info = khal::boot_info(arg);
+    let cpu_id = boot_info.cpu_id;
+
+    kernel_boot::bootln!(
+        "kruntime primary start cpu={} boot_info={arg:#x}",
+        cpu_id.as_usize()
+    );
+    khal::firmware::init(boot_info);
+    khal::percpu::init_primary(cpu_id);
+    kcpu::init_trap();
+    khal::mem::init(boot_info);
+    kernel_boot::bootln!("kruntime memory regions ready");
+    init_allocator();
+    kernel_boot::bootln!("kruntime allocator ready");
+    // SAFETY: primary per-CPU, trap and allocator setup is complete. No Task
+    // or AP preparation is exposed yet; this only publishes permanent carriers.
+    unsafe { kworkng::runtime::init_finalization_preparation() };
+    #[cfg(unittest)]
+    tests_workqueue::deferred::prepare_boot_probe();
+    register_boot_console_runtime_region(boot_info);
+    memspace::init_memory_management();
+    kernel_boot::bootln!("memory space map ready");
+    khal::early_driver_init();
+
+    kprintln!("{}", LOGO);
+    #[cfg(feature = "rtc")]
+    kprintln!(
+        "Boot at {}\n",
+        chrono::DateTime::from_timestamp_nanos(
+            i64::try_from(ktime::realtime().unix_nanos()).unwrap_or(i64::MAX)
+        ),
+    );
+
+    klogger::init_klogger(configured_log_level());
+    klogger::set_log_level(resolve_boot_log_filter());
+    info!("Logging is enabled.");
+    info!(
+        "Primary CPU {} started, boot_info = {arg:#x}.",
+        cpu_id.as_usize()
+    );
+    {
+        use core::ops::Range;
+
+        // SAFETY: The `_stext` and `_etext` symbols are guaranteed to be valid by the linker.
+        unsafe extern "C" {
+            safe static _stext: [u8; 0];
+            safe static _etext: [u8; 0];
+        }
+
+        let ip_range = Range {
+            start: _stext.as_ptr() as usize,
+            end: _etext.as_ptr() as usize,
+        };
+
+        // fp_range must cover both:
+        //   - KIMAGE_VADDR stacks (primary CPU task stacks, linked at KIMAGE_VADDR)
+        //   - Linear-map stacks (secondary CPU boot stacks, at PA + PAGE_OFFSET)
+        // So start from PAGE_OFFSET rather than _edata.
+        let fp_range = Range {
+            start: kaddr_layout::PAGE_OFFSET,
+            end: usize::MAX,
+        };
+
+        backtrace::init(ip_range, fp_range);
+    }
+
+    info!("Prepare platform interrupts...");
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: mandatory controller \
+                  preparation failed; runtime must not activate sources or enter scheduling"
+    )]
+    khal::prepare_interrupts(boot_info).expect("primary interrupt preparation failed");
+    #[cfg(unittest)]
+    tests_irq_startup::record_prepared();
+
+    ktask::init_scheduler();
+    // Prepare IRQ services and the late-init task before any newly activated
+    // task can preempt this bootstrap frame at a nested guard release.
+    let startup_guard = kspin::NoPreempt::new();
+    #[cfg(unittest)]
+    tests_workqueue::deferred::prepare_local_boot_probe();
+    info!("Initialize interrupt handlers...");
+    init_interrupt();
+
+    // PID 0 is the scheduler-internal boot task. Activate a single PID-less
+    // late-init bootstrap thread (Internal identity, no root PID) that brings
+    // up late subsystems and then spawns PID 1 init. Pinning it to the boot CPU
+    // keeps it independent of secondary run queues, which are not registered
+    // yet.
+    let late_init = prepare_late_init_on_primary(cpu_id);
+    ktask::activate_task(&late_init);
+    // The late-init thread is now owned by the run queue; drop our reference
+    // so its task can be reclaimed after exit instead of being pinned by this
+    // permanently parked frame.
+    drop(late_init);
+    info!("Started late-init bootstrap thread.");
+    // Late initialization itself may block on I/O, so it runs preemptibly.
+    drop(startup_guard);
+
+    // The boot task is PID 0 and remains outside the ordinary PID namespace.
+    // Once the late-init thread is runnable it has no further initialization
+    // role.
+    ktask::future::block_on(core::future::pending::<()>());
+    unreachable!("PID 0 boot task must remain parked");
+}
+
+#[kiface::provide]
+impl PrimaryKernelEntry {
+    fn enter(boot_info: usize) -> ! {
+        rust_main(boot_info)
+    }
+}
+
+#[cfg(not(feature = "smp"))]
+#[kiface::provide]
+impl SecondaryKernelEntry {
+    #[expect(
+        clippy::panic,
+        reason = "CG-021-no-panic-on-reachable-failure: A uniprocessor build never calls boot_ap, \
+                  so no secondary CPU is released into this entry; it has no per-CPU runtime to \
+                  join"
+    )]
+    fn enter(_logical_cpu_id: kcpu_id_map::LogicalCpuId) -> ! {
+        panic!("secondary CPU entered a uniprocessor kernel")
+    }
+}
+
+#[expect(
+    clippy::too_many_lines,
+    reason = "CG-028-focused-functions: TODO(cg): legacy memory-region logger; split summary \
+              collection and printing"
+)]
+fn log_memory_regions() {
+    use heapless::Vec;
+
+    fn log_region(region: &khal::mem::MemoryRegion) {
+        let reserved_source = if region.flags.contains(khal::mem::MemFlags::RSVD) {
+            khal::mem::reserved::describe_reserved_memory_region(region)
+                .map(|reserved| reserved.source)
+        } else {
+            None
+        };
+        if let Some(source) = reserved_source {
+            info!("  {} [source={}]", region, source);
+        } else {
+            info!("  {}", region);
+        }
+    }
+
+    fn log_device_region(region: &memspace::DeviceRegion) {
+        if let Some(vaddr) = region.vaddr {
+            info!(
+                "  [PA:{:#x}, PA:{:#x}) [VA:{:#x}, VA:{:#x}) {}",
+                region.paddr.as_usize(),
+                region.paddr.as_usize() + region.size,
+                vaddr.as_usize(),
+                vaddr.as_usize() + region.size,
+                region.name,
+            );
+        } else {
+            info!(
+                "  [PA:{:#x}, PA:{:#x}) {}",
+                region.paddr.as_usize(),
+                region.paddr.as_usize() + region.size,
+                region.name,
+            );
+        }
+    }
+
+    let mut summaries = Vec::<RegionLogSummary, MAX_REGION_LOG_SUMMARIES>::new();
+    for region in khal::mem::memory_regions() {
+        let start = region.paddr.as_usize();
+        let end = start + region.size;
+        if let Some(summary) = summaries.iter_mut().find(|summary| {
+            summary.name == region.name && summary.flags.bits() == region.flags.bits()
+        }) {
+            summary.count += 1;
+            summary.total_size += region.size;
+            summary.first_start = summary.first_start.min(start);
+            summary.last_end = summary.last_end.max(end);
+        } else {
+            #[expect(
+                clippy::expect_used,
+                reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: more than 64 distinct \
+                          memory-region groups exhaust early diagnostic storage; boot memory \
+                          reporting has no error return or recovery"
+            )]
+            summaries
+                .push(RegionLogSummary {
+                    name: region.name,
+                    flags: region.flags,
+                    count: 1,
+                    total_size: region.size,
+                    first_start: start,
+                    last_end: end,
+                })
+                .expect("too many region log summaries");
+        }
+    }
+
+    info!("Found physcial memory regions:");
+    for region in khal::mem::memory_regions() {
+        #[expect(
+            clippy::expect_used,
+            reason = "CG-021-no-panic-on-reachable-failure: The preceding pass inserted a summary \
+                      for every group in the unchanged memory-region list"
+        )]
+        let summary = summaries
+            .iter()
+            .find(|summary| {
+                summary.name == region.name && summary.flags.bits() == region.flags.bits()
+            })
+            .expect("missing memory region log summary");
+        if should_summarize_region(summary) {
+            continue;
+        }
+        log_region(&region);
+    }
+
+    for summary in summaries {
+        if !should_summarize_region(&summary) {
+            continue;
+        }
+        info!(
+            "  {}: {} regions, total {:#x}, span [PA:{:#x}, PA:{:#x}) ({:?})",
+            summary.name,
+            summary.count,
+            summary.total_size,
+            summary.first_start,
+            summary.last_end,
+            summary.flags
+        );
+    }
+
+    let device_regions = memspace::device_regions().collect::<Vec<_, MAX_REGION_LOG_SUMMARIES>>();
+    if !device_regions.is_empty() {
+        info!("Found runtime device/iomap regions:");
+        for region in device_regions {
+            log_device_region(&region);
+        }
+    }
+}
+
+fn should_summarize_region(summary: &RegionLogSummary) -> bool {
+    summary.count >= REGION_LOG_SUMMARY_THRESHOLD && summary.name.starts_with("uefi ")
+}
+
+#[expect(
+    clippy::expect_used,
+    reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: physical metadata and allocator \
+              initialization have no recovery path before runtime startup"
+)]
+fn init_allocator() {
+    use khal::mem::{MemFlags, memory_regions, p2v};
+
+    info!("Initialize global memory allocator...");
+    info!("  use {} allocator.", kalloc::global_allocator().name());
+    // This input bound matches the HAL boot table. Adjacent entries can merge
+    // before the metadata backend checks its own coverage capacity.
+    const MAX_BOOT_RAM_REGIONS: usize = 256;
+    let mut regions = heapless::Vec::<memaddr::PhysAddrRange, MAX_BOOT_RAM_REGIONS>::new();
+    for r in memory_regions().filter(|r| r.flags.contains(MemFlags::FREE)) {
+        let range = memaddr::PhysAddrRange::try_from_start_size(r.paddr, r.size)
+            .expect("boot RAM range overflows");
+        regions.push(range).expect("too many boot RAM regions");
+    }
+    // SAFETY: boot owns all FREE RAM exclusively, before other allocator users
+    // or APs run. p2v provides a permanent writable mapping for the complete
+    // metadata backing selected from this RAM; only remaining RAM is handed off.
+    let table = unsafe {
+        page_meta::init(&mut regions, |backing| {
+            core::ptr::NonNull::new(p2v(backing.start).as_mut_ptr())
+                .ok_or(page_meta::PageMetaError::InvalidRange)
+        })
+    }
+    .expect("failed to initialize physical page metadata");
+    // SAFETY: boot serializes the only publication and retains metadata RAM
+    // forever. Only the remaining nonempty ranges are handed to the allocator.
+    let table = unsafe { page_meta::publish(table) }.expect("page metadata already published");
+    let free_pages = regions
+        .iter()
+        .map(|r| r.size() / memaddr::PAGE_SIZE_4K)
+        .sum::<usize>();
+    let covered_pages = table.covered_pages();
+    let metadata_pages = covered_pages - free_pages;
+    let free = regions.as_slice();
+    // normalize preserves physical-address order. The buddy scans registered
+    // regions in order, so low RAM must precede high RAM for DMA32 allocations.
+    let first = free
+        .iter()
+        .position(|r| !r.is_empty())
+        .expect("page metadata consumed all free RAM");
+    let region = free[first];
+    kalloc::global_init(p2v(region.start).as_usize(), region.size());
+    for (index, region) in free.iter().enumerate() {
+        if index != first && !region.is_empty() {
+            kalloc::global_add_memory(p2v(region.start).as_usize(), region.size())
+                .expect("failed to add remaining free RAM to allocator");
+        }
+    }
+    kernel_boot::bootln!(
+        "[boot] page metadata: covered_pages={}, metadata_pages={}, free inventory pages={}",
+        covered_pages,
+        metadata_pages,
+        free_pages
+    );
+}
+
+fn finish_allocator_init() {
+    let allocator = kalloc::global_allocator();
+    info!(
+        "Allocator state: heap used={:#x}, heap avail={:#x}, pages used={}, pages avail={}, \
+         usages={:?}",
+        allocator.used_bytes(),
+        allocator.available_bytes(),
+        allocator.used_pages(),
+        allocator.available_pages(),
+        allocator.usages()
+    );
+}
+
+fn init_local_irq_work() {
+    if kirq::irq_work::init_current_cpu() {
+        return;
+    }
+    #[cfg(any(feature = "nmi", feature = "watchdog_hardlockup"))]
+    assert_eq!(
+        khal::nmi::mode(),
+        khal::nmi::NmiMode::None,
+        "CPU {}: NMI-capable runtime requires local irq_work before enabling NMI consumers",
+        khal::percpu::this_cpu_id().as_usize()
+    );
+    warn!(
+        "CPU {}: local irq_work unavailable; NMI reclamation is unsupported (see platform \
+         preparation diagnostics)",
+        khal::percpu::this_cpu_id().as_usize()
+    );
+}
+
+fn activate_local_interrupts() {
+    #[cfg(unittest)]
+    tests_irq_startup::record_activation_entry();
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: the registered local timer \
+                  must be enabled before publishing this CPU's IRQ readiness"
+    )]
+    kirq::try_enable(khal::time::interrupt_id(), true).expect("local timer IRQ activation failed");
+    #[expect(
+        clippy::expect_used,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: mandatory local sources \
+                  cannot be activated; runtime must not enable IRQs or publish readiness"
+    )]
+    khal::activate_local_interrupts().expect("local interrupt activation failed");
+    #[cfg(unittest)]
+    tests_irq_startup::record_activation_return();
+}
+
+fn init_interrupt() {
+    init_local_irq_work();
+    if !kirq::softirq::init() {
+        warn!("softirq hardirq-exit runner was already installed");
+    }
+
+    // Timer interrupt handler. All hardware-timer driving — periodic-tick
+    // bookkeeping, soft-timer wheel drain, and hardware re-arm — lives in
+    // `ktask::on_timer_fire`.
+    let timer_irq = khal::time::interrupt_id();
+    #[expect(
+        clippy::panic,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: mandatory fixed IRQ \
+                  descriptor preparation failed; handlers and sources cannot be activated"
+    )]
+    if let Err(error) = prepare_fixed_interrupts(timer_irq) {
+        panic!("mandatory fixed IRQ preparation failed: {error:?}");
+    }
+    #[cfg(unittest)]
+    tests_irq_startup::record_descriptors_ready(timer_irq);
+    let timer_registration = kirq::try_register_startup(
+        timer_irq,
+        alloc::sync::Arc::new(|_| {
+            #[cfg(feature = "arm-timer-resume-fixup")]
+            timer_driver::arm_generic::dispatch_resume_fixup();
+            ktask::on_timer_fire();
+            kirq::IrqEvent::HANDLED
+        }),
+        kirq::IrqRegisterOptions::disabled(),
+    );
+    #[expect(
+        clippy::panic,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: mandatory timer handler \
+                  registration failed; runtime cannot activate sources without its handler"
+    )]
+    if !matches!(timer_registration, Ok(true)) {
+        panic!("mandatory timer IRQ {timer_irq:?} registration failed: {timer_registration:?}");
+    }
+
+    #[cfg(feature = "ipi")]
+    let ipi_registration = kirq::try_register_startup(
+        kbuild_config::IPI_IRQ,
+        alloc::sync::Arc::new(|_| {
+            #[cfg(feature = "arm-timer-resume-fixup")]
+            timer_driver::arm_generic::handle_ipi_fixup();
+            #[cfg(feature = "ipi")]
+            kipi::ipi_handler();
+            kirq::IrqEvent::HANDLED
+        }),
+        kirq::IrqRegisterOptions::disabled(),
+    );
+    #[cfg(feature = "ipi")]
+    #[expect(
+        clippy::panic,
+        reason = "CG-021-no-panic-on-reachable-failure: Fatal boot: mandatory IPI handler \
+                  registration failed; runtime cannot activate sources without its handler"
+    )]
+    if !matches!(ipi_registration, Ok(true)) {
+        panic!(
+            "mandatory IPI IRQ {:?} registration failed: {ipi_registration:?}",
+            kbuild_config::IPI_IRQ
+        );
+    }
+    #[cfg(unittest)]
+    tests_irq_startup::record_handlers_ready();
+
+    // PMU overflow dispatch.  Perf counters report overflow on the PMU
+    // interrupt line; register the dispatch handler under the `pmu` feature
+    // so it exists independently of the watchdog/hardlockup NMI path.  The
+    // platform owns the IRQ wiring; kruntime only triggers it.
+    #[cfg(feature = "pmu")]
+    khal::pmu::register_overflow_dispatch();
+
+    // Activation must precede task placement, which can reprogram clockevents.
+    // Handler publication succeeded above; ordinary CPU delivery is still off.
+    activate_local_interrupts();
+    ktask::init_softirqd_current_cpu();
+    // Stop can preempt immediately and `task_entry` enables IRQs. The timer
+    // handler above must already be registered.
+    ktask::init_percpu_helpers();
+    // Enable IRQs before starting app
+    karch::enable_local_irq();
+}
+
+fn prepare_fixed_interrupts(timer_irq: usize) -> Result<(), kirq::IrqDescError> {
+    // These are platform-fixed identity numbers, not domain-local hardware IDs.
+    // Mapping owns descriptor lifetime separately from handler installation and
+    // does not configure or enable hardware. APs reuse the primary's descriptors.
+    kirq::try_map(kirq::IrqDesc::from_virq(timer_irq))?;
+    #[cfg(feature = "ipi")]
+    kirq::try_map(kirq::IrqDesc::from_virq(kbuild_config::IPI_IRQ))?;
+    Ok(())
+}

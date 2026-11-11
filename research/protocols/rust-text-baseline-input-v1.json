@@ -1,0 +1,44 @@
+{
+  "schema": "rust-text-baseline-input/1",
+  "status": "adapted_detector_run_and_pair_oracle_passed_semantic_review_pending",
+  "detector_evidence": "research/evidence/runs/2026-11-05-rust-scc-01/report.json",
+  "token_representation": "research/protocols/rust-token-representation-v1.json",
+  "token_evidence": "research/evidence/runs/2026-11-05-rust-token-bags-01/report.json",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "inventory_sha256": "43a6df7c84117979c0af773357cd754b879b32cdf2cec66c093fdf101e67a7e0",
+  "corpus": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01",
+  "packages": ["fs/kvfs", "task/kspin", "util/klazy", "util/macros"],
+  "representation": "function signature through body end; byte-preserving extraction",
+  "cfg": "not_evaluated",
+  "filter_tests": false,
+  "filter_small_units_before_tokenization": false,
+  "case_source_scope": [
+    {"id": "R001", "scope": "partial", "missing": "util/xcover"},
+    {"id": "R002", "scope": "source_files_present", "missing": null},
+    {"id": "R003", "scope": "source_files_present", "missing": null},
+    {"id": "R004", "scope": "source_files_present", "missing": null},
+    {"id": "X005", "scope": "absent", "missing": "ArceOS snapshot"},
+    {"id": "X006", "scope": "partial", "missing": "Starry snapshot"},
+    {"id": "X007", "scope": "partial", "missing": "Starry snapshot"},
+    {"id": "R008", "scope": "absent", "missing": "all three alignment consumers"},
+    {"id": "H001", "scope": "absent", "missing": "historical parent snapshot and BPF consumers"}
+  ],
+  "planned_detector": {
+    "name": "SourcererCC",
+    "revision": "88314f51fdf3cd89103eb2c19fb56464308846c8",
+    "minimum_tokens": 65,
+    "threshold_argument": 8,
+    "status": "156_pairs_match_exhaustive_bag_oracle",
+    "interpretation": "Rust frontend adaptation with predeclared smoke-baseline parameters, not original paper result reproduction"
+  },
+  "review_batch": "research/protocols/scc-development-review-batch-v1.json",
+  "review_results": "research/protocols/scc-development-review-results-v1.json",
+  "next_gate": "Twelve pairs statically reviewed, no truth labels; screen ownership and existing helpers for the directory-metadata test constructor lead before a patch experiment",
+  "candidate_output_requirements": [
+    "Map every raw pair back to fixed source IDs and original ranges",
+    "Keep below-threshold, too-small and tokenizer-failed units in separate ledgers",
+    "Flag ancestor-descendant overlapping units rather than call them independent duplicates",
+    "Report text similarity only, without claiming functional overlap or refactoring value",
+    "Do not tune on known cases or use absent cases as detector misses"
+  ]
+}

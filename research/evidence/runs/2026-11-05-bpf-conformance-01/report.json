@@ -1,0 +1,143 @@
+{
+  "revision": "658544d874297d246064a04910f893bafb320bb1",
+  "source_sha256": {
+    "core/kbpf/src/uapi.rs": "d0b000afa97caa02253c58c4500ba229e7a1943b62e7380694915b42acb83353",
+    "core/kbpf/tests/uapi_conformance.rs": "342d1532e6352a3fa0c16a84557e9e675d7047f1836f3198221f1b023cc47e85",
+    "xtask/bpf_uapi/gen.py": "7de335d1ddce69b9ed6eb9734daf603e634c5e066bd998246c57edf72deb1080"
+  },
+  "commands": [
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-name",
+      "kbpf",
+      "--crate-type",
+      "rlib",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/baseline/lib.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/baseline/libkbpf.rlib"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/baseline/test.rs",
+      "--extern",
+      "kbpf=/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/baseline/libkbpf.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/baseline/test"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/baseline-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/baseline/test",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-name",
+      "kbpf",
+      "--crate-type",
+      "rlib",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/covered_mutation/lib.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/covered_mutation/libkbpf.rlib"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/covered_mutation/test.rs",
+      "--extern",
+      "kbpf=/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/covered_mutation/libkbpf.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/covered_mutation/test"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/covered_mutation-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/covered_mutation/test",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-name",
+      "kbpf",
+      "--crate-type",
+      "rlib",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/uncovered_mutation/lib.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/uncovered_mutation/libkbpf.rlib"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/uncovered_mutation/test.rs",
+      "--extern",
+      "kbpf=/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/uncovered_mutation/libkbpf.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work/uncovered_mutation/test"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/uncovered_mutation-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/bpf-audit/2026-11-05-bpf-conformance-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/uncovered_mutation/test",
+      "--test-threads=1",
+      "--nocapture"
+    ]
+  ],
+  "results": {
+    "baseline": 0,
+    "covered_mutation": 101,
+    "uncovered_mutation": 0
+  },
+  "scope": "Original table and test file, minimal kbpf module facade; not full crate, generator or Linux ABI validation",
+  "passed": true
+}

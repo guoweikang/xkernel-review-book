@@ -1,0 +1,662 @@
+{
+  "method": "FSE95 section 3 explicit-entity projection reimplementation",
+  "original_tool_run": false,
+  "original_results_reproduced": false,
+  "semantic_accuracy_measured": false,
+  "passed": true,
+  "fixtures": [
+    {
+      "name": "basic",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        },
+        {
+          "source": "b",
+          "targets": [
+            "B"
+          ]
+        }
+      ],
+      "mode": "first",
+      "expected": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ]
+        ],
+        "absence": [
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "unmapped": []
+      },
+      "actual": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ]
+        ],
+        "absence": [
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "unmapped": [],
+        "evidence": [
+          {
+            "edge": [
+              "A",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "B",
+              "A"
+            ],
+            "sources": [
+              [
+                "b",
+                "a"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing_mapping",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        }
+      ],
+      "mode": "first",
+      "expected": {
+        "convergence": [],
+        "divergence": [],
+        "absence": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "unmapped": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ]
+      },
+      "actual": {
+        "convergence": [],
+        "divergence": [],
+        "absence": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "unmapped": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "evidence": []
+      }
+    },
+    {
+      "name": "first_match",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        },
+        {
+          "source": "a",
+          "targets": [
+            "C"
+          ]
+        },
+        {
+          "source": "b",
+          "targets": [
+            "B"
+          ]
+        }
+      ],
+      "mode": "first",
+      "expected": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ]
+        ],
+        "absence": [
+          [
+            "B",
+            "C"
+          ]
+        ]
+      },
+      "actual": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ]
+        ],
+        "absence": [
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "unmapped": [],
+        "evidence": [
+          {
+            "edge": [
+              "A",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "B",
+              "A"
+            ],
+            "sources": [
+              [
+                "b",
+                "a"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "all_matches",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        },
+        {
+          "source": "a",
+          "targets": [
+            "C"
+          ]
+        },
+        {
+          "source": "b",
+          "targets": [
+            "B"
+          ]
+        }
+      ],
+      "mode": "all",
+      "expected": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ],
+          [
+            "C",
+            "B"
+          ]
+        ],
+        "absence": []
+      },
+      "actual": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "divergence": [
+          [
+            "B",
+            "A"
+          ],
+          [
+            "C",
+            "B"
+          ]
+        ],
+        "absence": [],
+        "unmapped": [],
+        "evidence": [
+          {
+            "edge": [
+              "A",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "B",
+              "A"
+            ],
+            "sources": [
+              [
+                "b",
+                "a"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "B",
+              "C"
+            ],
+            "sources": [
+              [
+                "b",
+                "a"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "C",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "reordered_first",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "C"
+          ]
+        },
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        },
+        {
+          "source": "b",
+          "targets": [
+            "B"
+          ]
+        }
+      ],
+      "mode": "first",
+      "expected": {
+        "convergence": [
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "divergence": [
+          [
+            "C",
+            "B"
+          ]
+        ],
+        "absence": [
+          [
+            "A",
+            "B"
+          ]
+        ]
+      },
+      "actual": {
+        "convergence": [
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "divergence": [
+          [
+            "C",
+            "B"
+          ]
+        ],
+        "absence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "unmapped": [],
+        "evidence": [
+          {
+            "edge": [
+              "B",
+              "C"
+            ],
+            "sources": [
+              [
+                "b",
+                "a"
+              ]
+            ]
+          },
+          {
+            "edge": [
+              "C",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "contributors_and_duplicate",
+      "high_edges": [
+        [
+          "A",
+          "B"
+        ]
+      ],
+      "source_edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "b"
+        ]
+      ],
+      "rules": [
+        {
+          "source": "a",
+          "targets": [
+            "A"
+          ]
+        },
+        {
+          "source": "b",
+          "targets": [
+            "B"
+          ]
+        },
+        {
+          "source": "c",
+          "targets": [
+            "A"
+          ]
+        }
+      ],
+      "mode": "all",
+      "expected": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [],
+        "absence": [],
+        "evidence": [
+          {
+            "edge": [
+              "A",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "b"
+              ]
+            ]
+          }
+        ]
+      },
+      "actual": {
+        "convergence": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "divergence": [],
+        "absence": [],
+        "unmapped": [],
+        "evidence": [
+          {
+            "edge": [
+              "A",
+              "B"
+            ],
+            "sources": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "b"
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "invalid_mode_rejected": true,
+  "script_sha256": "ef6d1751543eaf361ba352bb26ffe21e8c5a280dfe738aee3de26498034a5b62"
+}

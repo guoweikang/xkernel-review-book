@@ -1,0 +1,362 @@
+commit 20c6ead060376cf628b9ba3fcbb60fd8ad64e44a
+Author:     WeiKang Guo <guoweikang@kylinos.cn>
+AuthorDate: Mon Nov 9 09:17:13 2026 +0000
+Commit:     WeiKang Guo <guoweikang@kylinos.cn>
+CommitDate: Tue Nov 10 05:15:34 2026 +0000
+
+    feat(fwnode): expose decoded hardware CPU identity
+    
+    Add a neutral `FwNode::hardware_cpu_id()` capability for architecture-defined
+    hardware CPU identity. The value is not a logical CPU index, firmware-node
+    identity or ACPI Processor UID: zero is valid, absence and malformed
+    declarations remain distinct, and backends without the capability return
+    `Unsupported` by default. The contract does not build a `RawCpuId` or establish
+    controller reachability.
+    
+    Implement the device-tree backend through the public `rs_fdtree::CpuNode`
+    view. It classifies `device_type = "cpu"` nodes and decodes their identity from
+    `reg` using the parent `#address-cells`, with one-cell compatibility when that
+    property is absent. Only one- and two-cell identities fit the result; truncated,
+    oversized or extra-cell payloads are rejected instead of being silently
+    truncated. The view performs no logical-CPU lookup, MMIO translation or
+    controller admission.
+    
+    The transitional `of` CPU helpers now delegate to the same view:
+    `is_cpu_node` uses `CpuNode::from_node`, and `cpu_node_reg` uses
+    `CpuNode::hardware_id`. This removes the second independent CPU `reg` decoder,
+    so CPU enumeration and firmware hardware-identity queries share one parsing
+    rule. `of` keeps only its enabled-status policy and maps malformed identities to
+    `None` for its legacy `Option` API.
+    
+    Add host fixtures for zero, one- and two-cell identities, non-CPU nodes,
+    missing identity declarations, missing address-cell defaults and malformed
+    declarations. Document the contract, DT boundary and OF delegation.
+
+diff --git a/drivers/firmware/of/docs/design.md b/drivers/firmware/of/docs/design.md
+index 5094be47b..c37c64e0a 100644
+--- a/drivers/firmware/of/docs/design.md
++++ b/drivers/firmware/of/docs/design.md
+@@ -60,7 +60,9 @@ controller kind, generic PCI host bridge facts, the PMU IRQ, and the
+   `SysconControl` physical address plus write value.
+ - Provide CPU node helpers: `is_cpu_node`, `is_enabled_cpu_node`,
+   `cpu_node_reg`, `enabled_cpu_nodes`, and `dice_region` /
+-  `interrupt_controller` passthroughs.
++  `interrupt_controller` passthroughs. Node classification and `reg` identity
++  decoding delegate to `rs_fdtree::CpuNode`; `of` does not maintain a second
++  CPU parsing rule. `is_enabled_cpu_node` remains the OF-level status policy.
+ 
+ ## Non-Responsibilities
+ 
+@@ -102,7 +104,7 @@ LazyInit<LinuxFdt<'static>>  (one global DTB, lifetime 'static)
+     chosen / model / compatible / syscon-poweroff -> plain data
+ ```
+ 
+-Re-exports `rs_fdtree::{Chosen, Dice, FdtError, FdtNode,
++Re-exports `rs_fdtree::{Chosen, CpuNode, Dice, FdtError, FdtNode,
+ InterruptController, LinuxFdt, MemoryRegion, NodeProperty, RegIter}` so
+ callers need only this crate.
+ 
+diff --git a/drivers/firmware/of/src/lib.rs b/drivers/firmware/of/src/lib.rs
+index 362474251..72fec7e45 100644
+--- a/drivers/firmware/of/src/lib.rs
++++ b/drivers/firmware/of/src/lib.rs
+@@ -13,8 +13,8 @@ use core::sync::atomic::{AtomicUsize, Ordering};
+ use lazyinit::LazyInit;
+ use memaddr::PhysAddr;
+ pub use rs_fdtree::{
+-    Chosen, Dice, FdtError, FdtNode, InterruptController, LinuxFdt, MemoryRegion, NodeProperty,
+-    PropertyError, RegIter,
++    Chosen, CpuNode, Dice, FdtError, FdtNode, InterruptController, LinuxFdt, MemoryRegion,
++    NodeProperty, PropertyError, RegIter,
+ };
+ 
+ /// Failure to initialize the global device-tree handle.
+@@ -131,7 +131,7 @@ pub fn property_u32(node: FdtNode<'static, 'static>, name: &str) -> Option<u32>
+ 
+ /// Returns whether the node declares `device_type = "cpu"`.
+ pub fn is_cpu_node(node: FdtNode<'_, '_>) -> bool {
+-    node.property_str("device_type") == Some("cpu")
++    CpuNode::from_node(node).is_some()
+ }
+ 
+ /// Returns whether the node is a CPU node whose `status` is not `disabled`.
+@@ -141,11 +141,11 @@ pub fn is_enabled_cpu_node(node: FdtNode<'_, '_>) -> bool {
+ 
+ /// Returns the first `reg` address of a CPU node, honoring the parent's
+ /// `#address-cells` width.
++///
++/// This is the same CPU identity parser used by the fwnode backend; `of` does
++/// not keep a second interpretation of CPU nodes.
+ pub fn cpu_node_reg(node: FdtNode<'_, '_>) -> Option<u64> {
+-    if !is_cpu_node(node) {
+-        return None;
+-    }
+-    node_reg(node)
++    CpuNode::from_node(node)?.hardware_id().ok().flatten()
+ }
+ 
+ /// The first `reg` address of a node, honoring the parent's
+diff --git a/drivers/firmware/rs-fdtree/docs/design.md b/drivers/firmware/rs-fdtree/docs/design.md
+index 6b1043f80..6842f684d 100644
+--- a/drivers/firmware/rs-fdtree/docs/design.md
++++ b/drivers/firmware/rs-fdtree/docs/design.md
+@@ -42,6 +42,21 @@ The fwnode adapter's `is_interrupt_controller` answers from the node's
+ `interrupt-controller` declaration, so controller drivers consume the semantic
+ without matching the property name themselves.
+ 
++## Hardware CPU identity
++
++The `CpuNode` view in `src/cpu.rs` is a DT interpretation, not a kernel CPU
++mapping. It accepts only nodes declaring `device_type = "cpu"`, then decodes
++`reg` using the parent's `#address-cells`. A missing `#address-cells` keeps the
++existing X-Kernel CPU-node convention of one address cell; a present but
++malformed property is an error. One- and two-cell identities fit the neutral
++result; other widths, truncated payloads and extra cells are `InvalidValue`.
++Zero is a valid hardware identity, and nodes without a processor declaration or
++`reg` are `Ok(None)`. The `fwnode` adapter exposes this view as the neutral
++`hardware_cpu_id` fact. The transitional `of` crate's `is_cpu_node` and
++`cpu_node_reg` helpers delegate to this same view instead of keeping a second
++CPU `reg` decoder. Neither layer performs a logical-CPU lookup, `RawCpuId`
++conversion, MMIO translation or controller admission.
++
+ ## DT address interpretation
+ 
+ FdtNode::is_available accepts absent/ok/okay status, rejects malformed properties,
+@@ -154,6 +169,7 @@ drivers/firmware/rs-fdtree/
+ │   ├── header.rs         # FdtHeader layout, magic and block ranges
+ │   ├── parsing.rs        # FdtData cursor, big-endian ints, CStr
+ │   ├── node.rs           # FdtNode, NodeProperty, RegIter, region iterators
++│   ├── cpu.rs            # Private CPU-node view and identity decoding
+ │   ├── property.rs       # Strict property encoding reads, borrowed Cells
+ │   ├── reference.rs      # Phandle lookup, references, interrupt specifiers
+ │   ├── index.rs          # Optional alloc-backed node/phandle index
+diff --git a/drivers/firmware/rs-fdtree/src/cpu.rs b/drivers/firmware/rs-fdtree/src/cpu.rs
+new file mode 100644
+index 000000000..6aed467cd
+--- /dev/null
++++ b/drivers/firmware/rs-fdtree/src/cpu.rs
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: Apache-2.0
++// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
++// See LICENSES for license details.
++
++//! Private device-tree view of a CPU node.
++//!
++//! This module owns the DT representation of a processor: the `device_type`
++//! classification and the `reg`/`#address-cells` identity decoding. It does not
++//! map the identity to a logical CPU, construct a `RawCpuId`, translate MMIO or
++//! decide controller reachability. Those are consumer or architecture policy.
++
++use crate::FdtNode;
++
++/// A malformed processor declaration in the validated device tree.
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum CpuNodeError {
++    /// The node is a processor, but its identity declaration is malformed.
++    InvalidValue,
++}
++
++impl core::fmt::Display for CpuNodeError {
++    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
++        formatter.write_str("malformed CPU identity declaration")
++    }
++}
++
++impl core::error::Error for CpuNodeError {}
++
++/// A validated view of one device-tree CPU node.
++///
++/// Construction only classifies the node as a processor. The identity is read
++/// on demand so a CPU node without `reg` remains distinct from a malformed
++/// identity declaration.
++#[derive(Clone, Copy)]
++pub struct CpuNode<'b, 'a> {
++    node: FdtNode<'b, 'a>,
++}
++
++impl<'b, 'a> CpuNode<'b, 'a> {
++    /// Returns `Some` only when `node` declares `device_type = "cpu"`.
++    pub fn from_node(node: FdtNode<'b, 'a>) -> Option<Self> {
++        (node.property_str("device_type") == Some("cpu")).then_some(Self { node })
++    }
++
++    /// Returns the firmware-declared hardware CPU identity.
++    ///
++    /// The value is read from `reg` using the parent's `#address-cells` width.
++    /// A missing `#address-cells` keeps the existing X-Kernel CPU-node
++    /// convention of one address cell. Only one- and two-cell identities fit
++    /// the `u64` result; other widths, truncated values and payloads with extra
++    /// cells are malformed. The identity uses exactly the declared address
++    /// cells; a size cell is not part of it.
++    ///
++    /// `Ok(None)` means the processor declares no identity. Zero is a valid
++    /// hardware identity.
++    pub fn hardware_id(&self) -> Result<Option<u64>, CpuNodeError> {
++        let Some(reg) = self.node.property("reg") else {
++            return Ok(None);
++        };
++        let address_cells = match self.node.parent_property("#address-cells") {
++            Some(property) => {
++                let bytes: [u8; 4] = property
++                    .value
++                    .try_into()
++                    .map_err(|_| CpuNodeError::InvalidValue)?;
++                usize::try_from(u32::from_be_bytes(bytes))
++                    .map_err(|_| CpuNodeError::InvalidValue)?
++            }
++            None => 1,
++        };
++        if !matches!(address_cells, 1 | 2) {
++            return Err(CpuNodeError::InvalidValue);
++        }
++        let address_bytes = address_cells * 4;
++        if reg.value.len() != address_bytes {
++            return Err(CpuNodeError::InvalidValue);
++        }
++        let mut identity = 0u64;
++        for cell in reg.value[..address_bytes].chunks_exact(4) {
++            let bytes: [u8; 4] = cell.try_into().map_err(|_| CpuNodeError::InvalidValue)?;
++            identity = (identity << 32) | u64::from(u32::from_be_bytes(bytes));
++        }
++        Ok(Some(identity))
++    }
++}
+diff --git a/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs b/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs
+index b74e5e549..deb527c0b 100644
+--- a/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs
++++ b/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs
+@@ -20,7 +20,7 @@ use lazyinit::LazyInit;
+ 
+ use crate::{
+     AddressError, AddressErrorReason, Cells, DeviceDmaError, DmaRangeError, DmaRanges, FdtNode,
+-    LinuxFdt, NodeIndex, PropertyError, ReferenceError,
++    LinuxFdt, NodeIndex, PropertyError, ReferenceError, cpu::CpuNode,
+ };
+ 
+ /// A borrowed device tree implementing [`FwNodeOps`].
+@@ -127,6 +127,14 @@ impl<'s, 'a: 's> FwNodeOps<'s> for DtBackend<'a> {
+         }))
+     }
+ 
++    fn hardware_cpu_id(&self, id: FwNodeId) -> Result<Option<u64>, FwError> {
++        let node = self.node(id).ok_or(FwError::InvalidNode)?;
++        let Some(cpu) = CpuNode::from_node(node) else {
++            return Ok(None);
++        };
++        cpu.hardware_id().map_err(|_| FwError::InvalidValue)
++    }
++
+     fn mmio_resource(
+         &self,
+         id: FwNodeId,
+diff --git a/drivers/firmware/rs-fdtree/tests/tests_fwnode.rs b/drivers/firmware/rs-fdtree/tests/tests_fwnode.rs
+index 6e6bbc135..4e47b980a 100644
+--- a/drivers/firmware/rs-fdtree/tests/tests_fwnode.rs
++++ b/drivers/firmware/rs-fdtree/tests/tests_fwnode.rs
+@@ -233,6 +233,106 @@ fn rejects_a_handle_from_another_backend() {
+     assert_eq!(node.name(), Some("/"));
+ }
+ 
++fn hardware_cpu_fixture(
++    address_cells: Option<&[u8]>,
++    device_type: Option<&[u8]>,
++    reg: Option<&[u8]>,
++) -> Vec<u8> {
++    let mut blob = Dtb::new();
++    blob.begin("");
++    blob.begin("cpus");
++    if let Some(value) = address_cells {
++        blob.property("#address-cells", value);
++    }
++    blob.property("#size-cells", &cells(&[0]));
++    blob.begin("cpu@0");
++    if let Some(value) = device_type {
++        blob.property("device_type", value);
++    }
++    if let Some(value) = reg {
++        blob.property("reg", value);
++    }
++    blob.end();
++    blob.end();
++    blob.end();
++    blob.finish()
++}
++
++fn cpu_hardware_id(
++    address_cells: Option<&[u8]>,
++    device_type: Option<&[u8]>,
++    reg: Option<&[u8]>,
++) -> Result<Option<u64>, FwError> {
++    let bytes = hardware_cpu_fixture(address_cells, device_type, reg);
++    let tree = LinuxFdt::new(&bytes).unwrap();
++    let backend = DtBackend::new(tree);
++    let root = backend.root().unwrap();
++    node(root, "cpu@0").hardware_cpu_id()
++}
++
++#[test]
++fn decodes_one_cell_hardware_cpu_identity_including_zero() {
++    for identity in [0u32, 5, u32::MAX] {
++        assert_eq!(
++            cpu_hardware_id(
++                Some(&cells(&[1])),
++                Some(b"cpu\0"),
++                Some(&cells(&[identity])),
++            ),
++            Ok(Some(u64::from(identity)))
++        );
++    }
++}
++
++#[test]
++fn decodes_two_cell_hardware_cpu_identity() {
++    assert_eq!(
++        cpu_hardware_id(
++            Some(&cells(&[2])),
++            Some(b"cpu\0"),
++            Some(&cells(&[1, 0x2345_6789])),
++        ),
++        Ok(Some(0x1_2345_6789))
++    );
++}
++
++#[test]
++fn hardware_cpu_identity_absence_is_none() {
++    assert_eq!(
++        cpu_hardware_id(Some(&cells(&[1])), Some(b"memory\0"), Some(&cells(&[0])),),
++        Ok(None)
++    );
++    assert_eq!(
++        cpu_hardware_id(Some(&cells(&[1])), Some(b"cpu\0"), None),
++        Ok(None)
++    );
++    // The X-Kernel CPU-node convention treats a missing #address-cells as one
++    // address cell, matching the existing `of` CPU identity helper.
++    assert_eq!(
++        cpu_hardware_id(None, Some(b"cpu\0"), Some(&cells(&[7]))),
++        Ok(Some(7))
++    );
++}
++
++#[test]
++fn rejects_malformed_hardware_cpu_identity() {
++    let cases = [
++        (cells(&[0]), cells(&[0])),
++        (cells(&[3]), cells(&[0, 0, 0])),
++        (cells(&[2]), cells(&[0])),
++        (cells(&[1]), Vec::from([0, 1])),
++        (cells(&[1]), cells(&[5, 0])),
++        (Vec::from([0, 1]), cells(&[0])),
++    ];
++    for (address_cells, reg) in cases {
++        assert_eq!(
++            cpu_hardware_id(Some(&address_cells), Some(b"cpu\0"), Some(&reg)),
++            Err(FwError::InvalidValue),
++            "#address-cells={address_cells:?} reg={reg:?}"
++        );
++    }
++}
++
+ fn dma_fixture() -> Vec<u8> {
+     let mut blob = Dtb::new();
+     blob.begin("");

@@ -1,0 +1,74 @@
+{
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "environment": {
+    "HOME": "/root",
+    "PATH": "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin:/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "LANG": "C.UTF-8",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.95.0",
+    "XKERNEL_ENABLE_COVERAGE": "0",
+    "GIT_CEILING_DIRECTORIES": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03"
+  },
+  "steps": [
+    {
+      "name": "format-disk",
+      "command": [
+        "mkfs.ext4",
+        "-q",
+        "-F",
+        "-b",
+        "4096",
+        "-O",
+        "^metadata_csum,^64bit",
+        "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/metadata-original-disk.img"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "original",
+      "command": [
+        "timeout",
+        "--kill-after=10",
+        "600",
+        "make",
+        "unittest",
+        "UNITTEST_CRATE=kvfs::mount::tests,kvfs::node::dentry::tests_dentry",
+        "ACCEL=n",
+        "NET=n",
+        "VSOCK=n",
+        "BLK=y",
+        "DISK_IMG=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/metadata-original-disk.img",
+        "TARGET_DIR=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target",
+        "XCONFIG_TARGET_DIR=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/target"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "candidate": "not_run",
+  "coverage": "disabled_explicitly",
+  "disk_policy": "new private 64MiB ext4, no user image, no host mount",
+  "initial_disk_sha256": "2cff7c832913d22a200ff51c4da4f49d7c45c2ce9155533563a91cf8ac4289fc",
+  "test_gate": {
+    "passed": true,
+    "exit_code": 0,
+    "expected": 94,
+    "observed": 94,
+    "missing": [],
+    "unexpected": [],
+    "duplicate_results": 0,
+    "non_ok": []
+  },
+  "status": "passed",
+  "final_disk_sha256": "6026f668b71b6d2064f23836817364ddefbf9b8093fea19b0af67bd133196a96",
+  "artifact_sha256": {
+    "format-disk.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original.log": "9b06a57f57a5227dab256d1fa9e9d5880d420224d5cf7c6c08ac96695a97ded2",
+    "source-comparison.json": "e9acdc841bfac07320bbc69a63a295ce7469b8df81c26067ec0551e9a93b8dcc",
+    ".config": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+    ".cargo__.xconfig.toml": "1dee95ffd539a3b84062337492aa56567bf8437ba7c3ea4814d9b4f24fcd8bf3",
+    "Cargo.lock": "d05e25e7c21dd69bfb53a514fa888433de9a16a5662a3e3fc2ee23b140c10d20",
+    "xtask__Cargo.lock": "d07f9f42f38f65ec4ea773d0bcd2468064042651292832165c80a67fdef877e3",
+    "runner.py": "098dac8b7e21418e3d7641f86bd5db61429a5158b4ac1ad75695e4c79d62b719"
+  }
+}

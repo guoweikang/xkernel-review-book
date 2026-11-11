@@ -1,0 +1,29 @@
+
+/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment-codegen/2026-11-05-alignment-codegen-03/riscv64gc-unknown-none-elf-boot_4096-candidate.o:	file format elf64-littleriscv
+
+Disassembly of section .text.evaluate:
+
+0000000000000000 <evaluate>:
+       0: 03459613     	slli	a2, a1, 0x34
+       4: ca19         	beqz	a2, 0x1a <evaluate+0x1a>
+       6: 767d         	lui	a2, 0xfffff
+       8: 8e6d         	and	a2, a2, a1
+       a: 6685         	lui	a3, 0x1
+       c: 9636         	add	a2, a2, a3
+       e: 00b66a63     	bltu	a2, a1, 0x22 <.Lpcrel_hi0>
+      12: 00053023     	sd	zero, 0x0(a0)
+      16: e510         	sd	a2, 0x8(a0)
+      18: 8082         	ret
+      1a: 00053023     	sd	zero, 0x0(a0)
+      1e: e50c         	sd	a1, 0x8(a0)
+      20: 8082         	ret
+
+0000000000000022 <.Lpcrel_hi0>:
+      22: 00000597     	auipc	a1, 0x0
+		0000000000000022:  R_RISCV_PCREL_HI20	.Lanon.94d2f2aabfda3169d54a9531cdb99890.0
+      26: 4661         	li	a2, 0x18
+      28: 00058593     	mv	a1, a1
+		0000000000000028:  R_RISCV_PCREL_LO12_I	.Lpcrel_hi0
+      2c: e10c         	sd	a1, 0x0(a0)
+      2e: e510         	sd	a2, 0x8(a0)
+      30: 8082         	ret

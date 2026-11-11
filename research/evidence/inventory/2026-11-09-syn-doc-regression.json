@@ -1,0 +1,5588 @@
+{
+  "schema": "syn-adapter-check/1",
+  "commit": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "binary_sha256": "e56b35c9a1694aca99a967919827773d2dbf79ac527868e2fb87fa1663b866a4",
+  "versions": {
+    "syn": "2.0.119",
+    "proc-macro2": "1.0.107"
+  },
+  "fixtures": {
+    "unicode_same_line": {
+      "source": "/// 中文\nfn first() { let text = r#\"} fn fake() {\"#; } fn second() {}",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": " 中文",
+              "path": "doc",
+              "range": [
+                0,
+                10
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            22,
+            56
+          ],
+          "kind": "fn",
+          "name": "first",
+          "range": [
+            0,
+            56
+          ],
+          "signature_range": [
+            11,
+            21
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "body_range": [
+            69,
+            71
+          ],
+          "kind": "fn",
+          "name": "second",
+          "range": [
+            57,
+            71
+          ],
+          "signature_range": [
+            57,
+            68
+          ]
+        }
+      ],
+      "source_sha256": "547de26a5a2dfb7ff5e865f9feda3f891a76408b99caaf5053568e8291c3f287"
+    },
+    "trait_generic": {
+      "source": "trait Sample<T> { fn required(&self); fn defaulted(&self) {} }\nimpl<T> Sample<T> for Vec<T> { fn required(&self) {} }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "trait",
+          "name": "Sample",
+          "range": [
+            0,
+            62
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "body_range": null,
+          "kind": "trait_fn",
+          "name": "required",
+          "range": [
+            18,
+            37
+          ],
+          "signature_range": [
+            18,
+            36
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "body_range": [
+            58,
+            60
+          ],
+          "kind": "trait_fn",
+          "name": "defaulted",
+          "range": [
+            38,
+            60
+          ],
+          "signature_range": [
+            38,
+            57
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            63,
+            117
+          ]
+        },
+        {
+          "ancestors": [
+            3
+          ],
+          "attributes": [],
+          "body_range": [
+            113,
+            115
+          ],
+          "kind": "impl_fn",
+          "name": "required",
+          "range": [
+            94,
+            115
+          ],
+          "signature_range": [
+            94,
+            112
+          ]
+        }
+      ],
+      "source_sha256": "868223c8e3b408e30314ad98bd03ede2d5c4ffd3ed88bd59dec661d92a7dfbb3"
+    },
+    "nested_closure": {
+      "source": "fn outer() { fn inner() {} let callback = || { inner(); }; }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "body_range": [
+            11,
+            60
+          ],
+          "kind": "fn",
+          "name": "outer",
+          "range": [
+            0,
+            60
+          ],
+          "signature_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "body_range": [
+            24,
+            26
+          ],
+          "kind": "fn",
+          "name": "inner",
+          "range": [
+            13,
+            26
+          ],
+          "signature_range": [
+            13,
+            23
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            42,
+            57
+          ]
+        }
+      ],
+      "source_sha256": "71e1a3d3921075c8833f315cf5ad986f6c765eda99fffc09e054823a58050a0b"
+    },
+    "cfg_and_modules": {
+      "source": "#[cfg(any())] fn disabled() {}\nmod external;\nmod inline { pub fn inside() {} }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "cfg",
+              "range": [
+                0,
+                13
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            28,
+            30
+          ],
+          "kind": "fn",
+          "name": "disabled",
+          "range": [
+            0,
+            30
+          ],
+          "signature_range": [
+            14,
+            27
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "external",
+          "path_overrides": [],
+          "range": [
+            31,
+            44
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": true,
+          "kind": "mod",
+          "name": "inline",
+          "path_overrides": [],
+          "range": [
+            45,
+            78
+          ]
+        },
+        {
+          "ancestors": [
+            2
+          ],
+          "attributes": [],
+          "body_range": [
+            74,
+            76
+          ],
+          "kind": "fn",
+          "name": "inside",
+          "range": [
+            58,
+            76
+          ],
+          "signature_range": [
+            62,
+            73
+          ]
+        }
+      ],
+      "source_sha256": "186afde4b3c8c573588146d22c9bb6966c2593bc89702e3bd2b429e59fa4a06f"
+    },
+    "macro_tokens": {
+      "source": "macro_rules! make { () => { fn generated() {} }; }\nmake!();",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            0,
+            50
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            51,
+            58
+          ]
+        }
+      ],
+      "source_sha256": "a84f050293e866d71d04769da9f2e74d224b5cc567fa72aacd563d3de943ffc2"
+    },
+    "missing_delimiters": {
+      "source": "fn broken( {",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "cannot parse string into token stream",
+          "range": [
+            11,
+            11
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "6953a814c1100d880f4628af012f0bd8157819431b204513f2cdfb68245bf7cc"
+    },
+    "invalid_expression": {
+      "source": "fn broken() { let value = ; }",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "expected an expression",
+          "range": [
+            26,
+            27
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "490e9c6c9b9273fd72171da4f256d46dc2400fc4420fe5e59ff4c5f0c6b74f9d"
+    },
+    "macro_inner_invalid": {
+      "source": "unknown_macro! { fn broken( }",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "cannot parse string into token stream",
+          "range": [
+            28,
+            28
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "19a1362bb7ebb8edc980c9e42be80aeb58430d5bbe52341eb1edd4d9b6a162da"
+    },
+    "macro_balanced_invalid_rust": {
+      "source": "unknown_macro! { fn broken() -> }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            0,
+            33
+          ]
+        }
+      ],
+      "source_sha256": "b5aaaf5b282c3117ff342da04e7f739881e6c47ecc7d3ebda5488294a28b68f6"
+    },
+    "unresolved_semantics": {
+      "source": "fn missing() -> Unknown { absent() }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "body_range": [
+            24,
+            36
+          ],
+          "kind": "fn",
+          "name": "missing",
+          "range": [
+            0,
+            36
+          ],
+          "signature_range": [
+            0,
+            23
+          ]
+        }
+      ],
+      "source_sha256": "c51f75175270c8b07f50b2d0a189053895dbcdf7ab035c102c953bb4c35369c4"
+    },
+    "bom_prefix": {
+      "source": "﻿fn example() {}",
+      "expected_rejected": false,
+      "expected_unsupported": true,
+      "diagnostics": [
+        {
+          "message": "BOM/shebang offset mapping not implemented"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "unsupported_prefix",
+      "units": [],
+      "source_sha256": "e795e6f049b682fd3dc0de0ab8e01aba3ece227f3d728f0b996612b7db84819c"
+    },
+    "shebang_prefix": {
+      "source": "#!/usr/bin/env rust-script\nfn example() {}",
+      "expected_rejected": false,
+      "expected_unsupported": true,
+      "diagnostics": [
+        {
+          "message": "BOM/shebang offset mapping not implemented"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "unsupported_prefix",
+      "units": [],
+      "source_sha256": "c335dc70f8d918025966f5b9ba9cf11d40ed85b6b4f7c0d4ec8c95aa93cab355"
+    },
+    "verbatim_item": {
+      "source": "fn declaration();",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "verbatim_item",
+          "name": null,
+          "range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "source_sha256": "39f6f1d58f0ceefbc37ed350450dda92d5f93636c7837f88331d4f28a3592ebf"
+    },
+    "metadata": {
+      "source": "#![cfg_attr(test, allow(dead_code))]\n#[cfg(any())] mod guarded { #[derive(Clone)] struct Value; impl Value { #[inline] fn work(&self) {} } }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            0,
+            36
+          ],
+          "style": "inner"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "cfg",
+              "range": [
+                37,
+                50
+              ],
+              "style": "outer"
+            }
+          ],
+          "inline": true,
+          "kind": "mod",
+          "name": "guarded",
+          "path_overrides": [],
+          "range": [
+            37,
+            140
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "derive",
+              "range": [
+                65,
+                81
+              ],
+              "style": "outer"
+            }
+          ],
+          "kind": "struct",
+          "name": "Value",
+          "range": [
+            65,
+            95
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            96,
+            138
+          ]
+        },
+        {
+          "ancestors": [
+            0,
+            2
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                109,
+                118
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            134,
+            136
+          ],
+          "kind": "impl_fn",
+          "name": "work",
+          "range": [
+            109,
+            136
+          ],
+          "signature_range": [
+            119,
+            133
+          ]
+        }
+      ],
+      "source_sha256": "79ad44b2d3296cb53697e4e6d860764a7450cc91520300277dd2028fb865bc4e"
+    },
+    "modifiers": {
+      "source": "pub const unsafe fn raw<T>(value: T) -> T { value }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "body_range": [
+            42,
+            51
+          ],
+          "kind": "fn",
+          "name": "raw",
+          "range": [
+            0,
+            51
+          ],
+          "signature_range": [
+            4,
+            41
+          ]
+        }
+      ],
+      "source_sha256": "ec1e9299d65fa6cca76dacf02a9a564384cc45a6fb407fd067d36e4214d26589"
+    }
+  },
+  "files": {
+    "util/klazy/src/lazy.rs": {
+      "diagnostics": [],
+      "file_attributes": [
+        {
+          "doc_text": " Synchronization primitives for lazy evaluation.",
+          "path": "doc",
+          "range": [
+            141,
+            192
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            193,
+            196
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Implementation adapted from the `SyncLazy` type of the standard library. See:",
+          "path": "doc",
+          "range": [
+            197,
+            278
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " <https://doc.rust-lang.org/std/lazy/struct.SyncLazy.html>",
+          "path": "doc",
+          "range": [
+            279,
+            340
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            341,
+            344
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " See [`Lazy`] for the main type.",
+          "path": "doc",
+          "range": [
+            345,
+            380
+          ],
+          "style": "inner"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": " A value which is initialized on the first access.",
+              "path": "doc",
+              "range": [
+                448,
+                501
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                502,
+                505
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This type is a thread-safe `Lazy`, and can be used in statics. It is",
+              "path": "doc",
+              "range": [
+                506,
+                578
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " `no_std`-compatible and uses spin-wait for coordination during initialization.",
+              "path": "doc",
+              "range": [
+                579,
+                661
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                662,
+                665
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Thread Safety",
+              "path": "doc",
+              "range": [
+                666,
+                685
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                686,
+                689
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " `Lazy<T, F>` implements `Sync` when `Once<T>: Sync`, which requires `T: Send + Sync`.",
+              "path": "doc",
+              "range": [
+                690,
+                779
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The factory function `F` does not need to be `Sync` — it is consumed via",
+              "path": "doc",
+              "range": [
+                780,
+                858
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " `Cell::take()` under the `Once` synchronization, so only one thread ever reads it.",
+              "path": "doc",
+              "range": [
+                859,
+                945
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                946,
+                949
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Poisoning",
+              "path": "doc",
+              "range": [
+                950,
+                965
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                966,
+                969
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " If the initialization closure panics, the `Lazy` is permanently poisoned.",
+              "path": "doc",
+              "range": [
+                970,
+                1047
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " All subsequent accesses via [`Deref`] will panic. This matches the behavior",
+              "path": "doc",
+              "range": [
+                1048,
+                1127
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " of `std::sync::SyncLazy`.",
+              "path": "doc",
+              "range": [
+                1128,
+                1157
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1158,
+                1161
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Examples",
+              "path": "doc",
+              "range": [
+                1162,
+                1176
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1177,
+                1180
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                1181,
+                1188
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use std::collections::HashMap;",
+              "path": "doc",
+              "range": [
+                1189,
+                1223
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1224,
+                1227
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use klazy::Lazy;",
+              "path": "doc",
+              "range": [
+                1228,
+                1248
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1249,
+                1252
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " static HASHMAP: Lazy<HashMap<i32, String>> = Lazy::new(|| {",
+              "path": "doc",
+              "range": [
+                1253,
+                1316
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     println!(\"initializing\");",
+              "path": "doc",
+              "range": [
+                1317,
+                1350
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     let mut m = HashMap::new();",
+              "path": "doc",
+              "range": [
+                1351,
+                1386
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     m.insert(13, \"Spica\".to_string());",
+              "path": "doc",
+              "range": [
+                1387,
+                1429
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     m.insert(74, \"Hoyten\".to_string());",
+              "path": "doc",
+              "range": [
+                1430,
+                1473
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     m",
+              "path": "doc",
+              "range": [
+                1474,
+                1483
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " });",
+              "path": "doc",
+              "range": [
+                1484,
+                1491
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1492,
+                1495
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fn main() {",
+              "path": "doc",
+              "range": [
+                1496,
+                1511
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     println!(\"ready\");",
+              "path": "doc",
+              "range": [
+                1512,
+                1538
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     std::thread::spawn(|| {",
+              "path": "doc",
+              "range": [
+                1539,
+                1570
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "         println!(\"{:?}\", HASHMAP.get(&13));",
+              "path": "doc",
+              "range": [
+                1571,
+                1618
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     })",
+              "path": "doc",
+              "range": [
+                1619,
+                1629
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     .join()",
+              "path": "doc",
+              "range": [
+                1630,
+                1645
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     .unwrap();",
+              "path": "doc",
+              "range": [
+                1646,
+                1664
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     println!(\"{:?}\", HASHMAP.get(&74));",
+              "path": "doc",
+              "range": [
+                1665,
+                1708
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1709,
+                1712
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     // Prints:",
+              "path": "doc",
+              "range": [
+                1713,
+                1731
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     //   ready",
+              "path": "doc",
+              "range": [
+                1732,
+                1750
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     //   initializing",
+              "path": "doc",
+              "range": [
+                1751,
+                1776
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     //   Some(\"Spica\")",
+              "path": "doc",
+              "range": [
+                1777,
+                1803
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     //   Some(\"Hoyten\")",
+              "path": "doc",
+              "range": [
+                1804,
+                1831
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " }",
+              "path": "doc",
+              "range": [
+                1832,
+                1837
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                1838,
+                1845
+              ],
+              "style": "outer"
+            }
+          ],
+          "kind": "struct",
+          "name": "Lazy",
+          "range": [
+            448,
+            2060
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2062,
+            2590
+          ]
+        },
+        {
+          "ancestors": [
+            1
+          ],
+          "attributes": [],
+          "body_range": [
+            2174,
+            2588
+          ],
+          "kind": "impl_fn",
+          "name": "fmt",
+          "range": [
+            2117,
+            2588
+          ],
+          "signature_range": [
+            2117,
+            2173
+          ]
+        },
+        {
+          "ancestors": [
+            1,
+            2
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2513,
+            2537
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3035,
+            3101
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3138,
+            3879
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [
+            {
+              "doc_text": " Creates a new lazy value with the given initializing function.",
+              "path": "doc",
+              "range": [
+                3166,
+                3232
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                3237,
+                3240
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is a `const` constructor and can be used to initialize statics.",
+              "path": "doc",
+              "range": [
+                3245,
+                3317
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            3353,
+            3466
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            3166,
+            3466
+          ],
+          "signature_range": [
+            3326,
+            3352
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [
+            {
+              "doc_text": " Retrieves a mutable pointer to the inner data.",
+              "path": "doc",
+              "range": [
+                3472,
+                3522
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                3527,
+                3530
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is especially useful when interfacing with low level code or FFI where the caller",
+              "path": "doc",
+              "range": [
+                3535,
+                3625
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " explicitly knows that it has exclusive access to the inner data. Note that reading from",
+              "path": "doc",
+              "range": [
+                3630,
+                3721
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " this pointer is UB until initialized or directly written to.",
+              "path": "doc",
+              "range": [
+                3726,
+                3790
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            3830,
+            3877
+          ],
+          "kind": "impl_fn",
+          "name": "as_mut_ptr",
+          "range": [
+            3472,
+            3877
+          ],
+          "signature_range": [
+            3799,
+            3829
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3881,
+            4992
+          ]
+        },
+        {
+          "ancestors": [
+            8
+          ],
+          "attributes": [
+            {
+              "doc_text": " Forces the evaluation of this lazy value and",
+              "path": "doc",
+              "range": [
+                3924,
+                3972
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " returns a reference to result. This is equivalent",
+              "path": "doc",
+              "range": [
+                3977,
+                4030
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " to the `Deref` impl, but is explicit.",
+              "path": "doc",
+              "range": [
+                4035,
+                4076
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                4081,
+                4084
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Examples",
+              "path": "doc",
+              "range": [
+                4089,
+                4103
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                4108,
+                4111
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                4116,
+                4123
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use klazy::Lazy;",
+              "path": "doc",
+              "range": [
+                4128,
+                4148
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                4153,
+                4156
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " let lazy = Lazy::new(|| 92);",
+              "path": "doc",
+              "range": [
+                4161,
+                4193
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                4198,
+                4201
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " assert_eq!(Lazy::force(&lazy), &92);",
+              "path": "doc",
+              "range": [
+                4206,
+                4246
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " assert_eq!(&*lazy, &92);",
+              "path": "doc",
+              "range": [
+                4251,
+                4279
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                4284,
+                4291
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": null,
+              "path": "expect",
+              "range": [
+                4296,
+                4534
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            4571,
+            4990
+          ],
+          "kind": "impl_fn",
+          "name": "force",
+          "range": [
+            3924,
+            4990
+          ],
+          "signature_range": [
+            4543,
+            4570
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            9
+          ],
+          "attributes": [],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            4678,
+            4983
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            9,
+            10
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            4900,
+            4959
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            4994,
+            5126
+          ]
+        },
+        {
+          "ancestors": [
+            12
+          ],
+          "attributes": [],
+          "body_range": [
+            5091,
+            5124
+          ],
+          "kind": "impl_fn",
+          "name": "deref",
+          "range": [
+            5069,
+            5124
+          ],
+          "signature_range": [
+            5069,
+            5090
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            5128,
+            5321
+          ]
+        },
+        {
+          "ancestors": [
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": " Creates a new lazy value using `Default` as the initializing function.",
+              "path": "doc",
+              "range": [
+                5182,
+                5256
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            5282,
+            5319
+          ],
+          "kind": "impl_fn",
+          "name": "default",
+          "range": [
+            5182,
+            5319
+          ],
+          "signature_range": [
+            5261,
+            5281
+          ]
+        }
+      ],
+      "source_sha256": "6709d4ee455c2998b1d31ce6ba20d26f7e6f5001b64f0ff96e0e8806a537b759"
+    },
+    "util/klazy/src/lazy_static.rs": {
+      "diagnostics": [],
+      "file_attributes": [
+        {
+          "doc_text": " Lazily initialized statics backed by [`crate::Lazy`].",
+          "path": "doc",
+          "range": [
+            141,
+            198
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            199,
+            202
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Each `static ref` expands to a distinct, unnameable wrapper type that",
+          "path": "doc",
+          "range": [
+            203,
+            276
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " [`Deref`](core::ops::Deref)s to the inner value `T`, mirroring the upstream `lazy_static`",
+          "path": "doc",
+          "range": [
+            277,
+            370
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " crate. Because the wrapper type intentionally does not implement",
+          "path": "doc",
+          "range": [
+            371,
+            439
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " `Clone`/`Copy`, trait-method lookup on a `static NAME: ...` falls through",
+          "path": "doc",
+          "range": [
+            440,
+            517
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " the `Deref` impl to the inner value `T`. That is what makes idioms like",
+          "path": "doc",
+          "range": [
+            518,
+            593
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " `STATIC.clone()` (when `T: Clone`, e.g. `Arc<_>`) or `STATIC.lock()`",
+          "path": "doc",
+          "range": [
+            594,
+            666
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " behave exactly as if the value were stored inline — matching upstream",
+          "path": "doc",
+          "range": [
+            667,
+            742
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " `lazy_static` dispatch semantics.",
+          "path": "doc",
+          "range": [
+            743,
+            780
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            781,
+            784
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Initialization is protected by the internal [`crate::Once`] spin-wait.",
+          "path": "doc",
+          "range": [
+            785,
+            859
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            860,
+            863
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            864,
+            878
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            879,
+            882
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " ```rust,ignore",
+          "path": "doc",
+          "range": [
+            883,
+            901
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " use klazy::lazy_static;",
+          "path": "doc",
+          "range": [
+            902,
+            929
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            930,
+            933
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " lazy_static! {",
+          "path": "doc",
+          "range": [
+            934,
+            952
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "     static ref TABLE: spin::Mutex<HashMap<u32, String>> =",
+          "path": "doc",
+          "range": [
+            953,
+            1014
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "         spin::Mutex::new(HashMap::new());",
+          "path": "doc",
+          "range": [
+            1015,
+            1060
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1061,
+            1066
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1067,
+            1070
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " fn lookup(key: u32) -> Option<String> {",
+          "path": "doc",
+          "range": [
+            1071,
+            1114
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "     TABLE.lock().get(&key).cloned()",
+          "path": "doc",
+          "range": [
+            1115,
+            1154
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1155,
+            1160
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1161,
+            1168
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1169,
+            1172
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " # Trait method dispatch",
+          "path": "doc",
+          "range": [
+            1173,
+            1200
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1201,
+            1204
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Because the generated type derefs to `T`, methods on `T` (and anything `T`",
+          "path": "doc",
+          "range": [
+            1205,
+            1283
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " itself derefs to) resolve automatically:",
+          "path": "doc",
+          "range": [
+            1284,
+            1328
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1329,
+            1332
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " ```rust,ignore",
+          "path": "doc",
+          "range": [
+            1333,
+            1351
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " use std::sync::Arc;",
+          "path": "doc",
+          "range": [
+            1352,
+            1375
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " use klazy::lazy_static;",
+          "path": "doc",
+          "range": [
+            1376,
+            1403
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1404,
+            1407
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " struct Driver;",
+          "path": "doc",
+          "range": [
+            1408,
+            1426
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " impl Driver { fn ping(&self) -> bool { true } }",
+          "path": "doc",
+          "range": [
+            1427,
+            1478
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1479,
+            1482
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " lazy_static! {",
+          "path": "doc",
+          "range": [
+            1483,
+            1501
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "     static ref DRV: Arc<Driver> = Arc::new(Driver);",
+          "path": "doc",
+          "range": [
+            1502,
+            1557
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1558,
+            1563
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1564,
+            1567
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " // `DRV.clone()` returns `Arc<Driver>`, and `DRV.ping()` reaches `Driver::ping`.",
+          "path": "doc",
+          "range": [
+            1568,
+            1652
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " let _another: Arc<Driver> = DRV.clone();",
+          "path": "doc",
+          "range": [
+            1653,
+            1697
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " assert!(DRV.ping());",
+          "path": "doc",
+          "range": [
+            1698,
+            1722
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1723,
+            1730
+          ],
+          "style": "inner"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2245,
+            2672
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2705,
+            5766
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "cfg",
+              "range": [
+                5768,
+                5780
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": null,
+              "path": "path",
+              "range": [
+                5781,
+                5826
+              ],
+              "style": "outer"
+            }
+          ],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy_static_host_tests",
+          "path_overrides": [
+            "../tests/host/lazy_static_host.rs"
+          ],
+          "range": [
+            5768,
+            5854
+          ]
+        }
+      ],
+      "source_sha256": "f9acd381187b0db8c141bb97a9100eccb72eecbcb405ab4c9c06f9624c78af1b"
+    },
+    "util/klazy/src/lib.rs": {
+      "diagnostics": [],
+      "file_attributes": [
+        {
+          "doc_text": " `no_std`-compatible synchronization primitives for one-time initialization and",
+          "path": "doc",
+          "range": [
+            141,
+            223
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " lazy evaluation.",
+          "path": "doc",
+          "range": [
+            224,
+            244
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            245,
+            248
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Provides [`Once<T>`] and [`Lazy<T, F>`], the foundational building blocks for",
+          "path": "doc",
+          "range": [
+            249,
+            330
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " static lazy initialization of kernel services (tracing, memory management,",
+          "path": "doc",
+          "range": [
+            331,
+            409
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " TEE, cryptography, etc.).",
+          "path": "doc",
+          "range": [
+            410,
+            439
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            440,
+            443
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Unlike their `std::sync` counterparts, these types work in bare-metal `no_std`",
+          "path": "doc",
+          "range": [
+            444,
+            526
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " environments without depending on OS threads or condition variables. Spin-wait",
+          "path": "doc",
+          "range": [
+            527,
+            609
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " is used for coordination during initialization.",
+          "path": "doc",
+          "range": [
+            610,
+            661
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            662,
+            665
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " For detailed design rationale and security analysis, see `docs/design.md` and",
+          "path": "doc",
+          "range": [
+            666,
+            747
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " `docs/security.md` in the crate source directory.",
+          "path": "doc",
+          "range": [
+            748,
+            801
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            803,
+            834
+          ],
+          "style": "inner"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy",
+          "path_overrides": [],
+          "range": [
+            1029,
+            1038
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy_static",
+          "path_overrides": [],
+          "range": [
+            1039,
+            1059
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "once",
+          "path_overrides": [],
+          "range": [
+            1060,
+            1069
+          ]
+        }
+      ],
+      "source_sha256": "2305a1edc14d103f1d68f6bdf605486e07f35057ebb39ea09e6f2b97c3f4e110"
+    },
+    "util/klazy/src/once.rs": {
+      "diagnostics": [],
+      "file_attributes": [
+        {
+          "doc_text": " Synchronization primitives for one-time evaluation.",
+          "path": "doc",
+          "range": [
+            141,
+            196
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            197,
+            200
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " See [`Once`] for the main type.",
+          "path": "doc",
+          "range": [
+            201,
+            236
+          ],
+          "style": "inner"
+        }
+      ],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": " A primitive that provides lazy one-time initialization.",
+              "path": "doc",
+              "range": [
+                347,
+                406
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                407,
+                410
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Unlike its `std::sync` equivalent, this is generalized such that the closure returns a",
+              "path": "doc",
+              "range": [
+                411,
+                501
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " value to be stored by the [`Once`] (`std::sync::Once` can be trivially emulated with",
+              "path": "doc",
+              "range": [
+                502,
+                590
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " `Once`).",
+              "path": "doc",
+              "range": [
+                591,
+                603
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                604,
+                607
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Because [`Once::new`] is `const`, this primitive may be used to safely initialize statics.",
+              "path": "doc",
+              "range": [
+                608,
+                702
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                703,
+                706
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This type is `no_std`-compatible and uses spin-wait for coordination during",
+              "path": "doc",
+              "range": [
+                707,
+                786
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " initialization. After initialization, access is a single atomic load.",
+              "path": "doc",
+              "range": [
+                787,
+                860
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                861,
+                864
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Poisoning",
+              "path": "doc",
+              "range": [
+                865,
+                880
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                881,
+                884
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " If the initialization closure panics, the `Once` is permanently poisoned. All subsequent",
+              "path": "doc",
+              "range": [
+                885,
+                977
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " calls to [`call_once`](Self::call_once), [`try_call_once`](Self::try_call_once),",
+              "path": "doc",
+              "range": [
+                978,
+                1062
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " [`wait`](Self::wait), or [`poll`](Self::poll) will panic.",
+              "path": "doc",
+              "range": [
+                1063,
+                1124
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1125,
+                1128
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " For fallible initialization, use [`try_call_once`](Self::try_call_once) instead — if the",
+              "path": "doc",
+              "range": [
+                1129,
+                1223
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " closure returns `Err`, the cell is reset to `Uninitialized` and can be retried, rather",
+              "path": "doc",
+              "range": [
+                1224,
+                1314
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " than being permanently poisoned.",
+              "path": "doc",
+              "range": [
+                1315,
+                1351
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1352,
+                1355
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Examples",
+              "path": "doc",
+              "range": [
+                1356,
+                1370
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1371,
+                1374
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                1375,
+                1382
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use klazy;",
+              "path": "doc",
+              "range": [
+                1383,
+                1397
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1398,
+                1401
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " static START: klazy::Once = klazy::Once::new();",
+              "path": "doc",
+              "range": [
+                1402,
+                1453
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                1454,
+                1457
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " START.call_once(|| {",
+              "path": "doc",
+              "range": [
+                1458,
+                1482
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     // run initialization here",
+              "path": "doc",
+              "range": [
+                1483,
+                1517
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " });",
+              "path": "doc",
+              "range": [
+                1518,
+                1525
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                1526,
+                1533
+              ],
+              "style": "outer"
+            }
+          ],
+          "kind": "struct",
+          "name": "Once",
+          "range": [
+            347,
+            1737
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1739,
+            1823
+          ]
+        },
+        {
+          "ancestors": [
+            1
+          ],
+          "attributes": [],
+          "body_range": [
+            1794,
+            1821
+          ],
+          "kind": "impl_fn",
+          "name": "default",
+          "range": [
+            1773,
+            1821
+          ],
+          "signature_range": [
+            1773,
+            1793
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1825,
+            2253
+          ]
+        },
+        {
+          "ancestors": [
+            3
+          ],
+          "attributes": [],
+          "body_range": [
+            1927,
+            2251
+          ],
+          "kind": "impl_fn",
+          "name": "fmt",
+          "range": [
+            1874,
+            2251
+          ],
+          "signature_range": [
+            1874,
+            1926
+          ]
+        },
+        {
+          "ancestors": [
+            3,
+            4
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2178,
+            2205
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2551,
+            2598
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2804,
+            2844
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "inline": true,
+          "kind": "mod",
+          "name": "status",
+          "path_overrides": [],
+          "range": [
+            2846,
+            5557
+          ]
+        },
+        {
+          "ancestors": [
+            8
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "repr",
+              "range": [
+                3127,
+                3147
+              ],
+              "style": "outer"
+            }
+          ],
+          "kind": "struct",
+          "name": "AtomicStatus",
+          "range": [
+            3127,
+            3193
+          ]
+        },
+        {
+          "ancestors": [
+            8
+          ],
+          "attributes": [
+            {
+              "doc_text": " Four possible states for the `Once` cell, encoded as `u8` discriminants in",
+              "path": "doc",
+              "range": [
+                3199,
+                3277
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " the atomic state word. Represents the lifecycle:",
+              "path": "doc",
+              "range": [
+                3282,
+                3334
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " `Uninitialized` → `Initializing` → `Ready` / `Failed`",
+              "path": "doc",
+              "range": [
+                3339,
+                3400
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": null,
+              "path": "repr",
+              "range": [
+                3405,
+                3416
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": null,
+              "path": "derive",
+              "range": [
+                3421,
+                3461
+              ],
+              "style": "outer"
+            }
+          ],
+          "kind": "enum",
+          "name": "Status",
+          "range": [
+            3199,
+            3616
+          ]
+        },
+        {
+          "ancestors": [
+            8
+          ],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3621,
+            3959
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            11
+          ],
+          "attributes": [],
+          "body_range": [
+            3672,
+            3953
+          ],
+          "kind": "impl_fn",
+          "name": "from_raw",
+          "range": [
+            3643,
+            3953
+          ],
+          "signature_range": [
+            3643,
+            3671
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            11,
+            12
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            3883,
+            3928
+          ]
+        },
+        {
+          "ancestors": [
+            8
+          ],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3965,
+            5555
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                3993,
+                4010
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            4067,
+            4191
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            3993,
+            4191
+          ],
+          "signature_range": [
+            4030,
+            4066
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                4201,
+                4218
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            4283,
+            4462
+          ],
+          "kind": "impl_fn",
+          "name": "load",
+          "range": [
+            4201,
+            4462
+          ],
+          "signature_range": [
+            4238,
+            4282
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                4472,
+                4489
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            4561,
+            4719
+          ],
+          "kind": "impl_fn",
+          "name": "store",
+          "range": [
+            4472,
+            4719
+          ],
+          "signature_range": [
+            4509,
+            4560
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                4729,
+                4746
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            4954,
+            5411
+          ],
+          "kind": "impl_fn",
+          "name": "compare_exchange",
+          "range": [
+            4729,
+            5411
+          ],
+          "signature_range": [
+            4766,
+            4953
+          ]
+        },
+        {
+          "ancestors": [
+            8,
+            14
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "inline",
+              "range": [
+                5421,
+                5438
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            5490,
+            5549
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut",
+          "range": [
+            5421,
+            5549
+          ],
+          "signature_range": [
+            5458,
+            5489
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            5601,
+            14519
+          ]
+        },
+        {
+          "ancestors": [
+            20
+          ],
+          "attributes": [
+            {
+              "doc_text": " Performs an initialization routine once and only once. The given closure",
+              "path": "doc",
+              "range": [
+                5623,
+                5699
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " will be executed if this is the first time `call_once` has been called,",
+              "path": "doc",
+              "range": [
+                5704,
+                5779
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " and otherwise the routine will *not* be invoked.",
+              "path": "doc",
+              "range": [
+                5784,
+                5836
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                5841,
+                5844
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This method will spin-wait if another thread is currently performing",
+              "path": "doc",
+              "range": [
+                5849,
+                5921
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " initialization.",
+              "path": "doc",
+              "range": [
+                5926,
+                5945
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                5950,
+                5953
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " When this function returns, it is guaranteed that some initialization",
+              "path": "doc",
+              "range": [
+                5958,
+                6031
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " has run and completed (it may not be the closure specified). The",
+              "path": "doc",
+              "range": [
+                6036,
+                6104
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " returned pointer will point to the result from the closure that was",
+              "path": "doc",
+              "range": [
+                6109,
+                6180
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " run.",
+              "path": "doc",
+              "range": [
+                6185,
+                6193
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6198,
+                6201
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Panics",
+              "path": "doc",
+              "range": [
+                6206,
+                6218
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6223,
+                6226
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This function will panic if the [`Once`] previously panicked while attempting",
+              "path": "doc",
+              "range": [
+                6231,
+                6312
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " to initialize. This is similar to the poisoning behaviour of `std::sync`'s",
+              "path": "doc",
+              "range": [
+                6317,
+                6395
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " primitives.",
+              "path": "doc",
+              "range": [
+                6400,
+                6415
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6420,
+                6423
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Examples",
+              "path": "doc",
+              "range": [
+                6428,
+                6442
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6447,
+                6450
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                6455,
+                6462
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use klazy;",
+              "path": "doc",
+              "range": [
+                6467,
+                6481
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6486,
+                6489
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " static INIT: klazy::Once<usize> = klazy::Once::new();",
+              "path": "doc",
+              "range": [
+                6494,
+                6551
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6556,
+                6559
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fn get_cached_val() -> usize {",
+              "path": "doc",
+              "range": [
+                6564,
+                6598
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     *INIT.call_once(expensive_computation)",
+              "path": "doc",
+              "range": [
+                6603,
+                6649
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " }",
+              "path": "doc",
+              "range": [
+                6654,
+                6659
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                6664,
+                6667
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fn expensive_computation() -> usize {",
+              "path": "doc",
+              "range": [
+                6672,
+                6713
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     // ...",
+              "path": "doc",
+              "range": [
+                6718,
+                6732
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # 2",
+              "path": "doc",
+              "range": [
+                6737,
+                6744
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " }",
+              "path": "doc",
+              "range": [
+                6749,
+                6754
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                6759,
+                6766
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            6825,
+            6985
+          ],
+          "kind": "impl_fn",
+          "name": "call_once",
+          "range": [
+            5623,
+            6985
+          ],
+          "signature_range": [
+            6775,
+            6824
+          ]
+        },
+        {
+          "ancestors": [
+            20,
+            21
+          ],
+          "attributes": [],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            6860,
+            6902
+          ]
+        },
+        {
+          "ancestors": [
+            20
+          ],
+          "attributes": [
+            {
+              "doc_text": " This method is similar to `call_once`, but allows the given closure to",
+              "path": "doc",
+              "range": [
+                6991,
+                7065
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fail, and leaves the `Once` in an uninitialized state if it does.",
+              "path": "doc",
+              "range": [
+                7070,
+                7139
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7144,
+                7147
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This method will spin-wait if another thread is currently performing",
+              "path": "doc",
+              "range": [
+                7152,
+                7224
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " initialization.",
+              "path": "doc",
+              "range": [
+                7229,
+                7248
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7253,
+                7256
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " When this function returns without error, it is guaranteed that some",
+              "path": "doc",
+              "range": [
+                7261,
+                7333
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " initialization has run and completed (it may not be the closure",
+              "path": "doc",
+              "range": [
+                7338,
+                7405
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " specified). The returned reference will point to the result from the",
+              "path": "doc",
+              "range": [
+                7410,
+                7482
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " closure that was run.",
+              "path": "doc",
+              "range": [
+                7487,
+                7512
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7517,
+                7520
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Panics",
+              "path": "doc",
+              "range": [
+                7525,
+                7537
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7542,
+                7545
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This function will panic if the [`Once`] previously panicked while attempting",
+              "path": "doc",
+              "range": [
+                7550,
+                7631
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " to initialize. This is similar to the poisoning behaviour of `std::sync`'s",
+              "path": "doc",
+              "range": [
+                7636,
+                7714
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " primitives.",
+              "path": "doc",
+              "range": [
+                7719,
+                7734
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7739,
+                7742
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Examples",
+              "path": "doc",
+              "range": [
+                7747,
+                7761
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7766,
+                7769
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                7774,
+                7781
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " use klazy;",
+              "path": "doc",
+              "range": [
+                7786,
+                7800
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7805,
+                7808
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " static INIT: klazy::Once<usize> = klazy::Once::new();",
+              "path": "doc",
+              "range": [
+                7813,
+                7870
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                7875,
+                7878
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fn get_cached_val() -> Result<usize, String> {",
+              "path": "doc",
+              "range": [
+                7883,
+                7933
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     INIT.try_call_once(expensive_fallible_computation)",
+              "path": "doc",
+              "range": [
+                7938,
+                7996
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "         .map(|x| *x)",
+              "path": "doc",
+              "range": [
+                8001,
+                8025
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " }",
+              "path": "doc",
+              "range": [
+                8030,
+                8035
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                8040,
+                8043
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " fn expensive_fallible_computation() -> Result<usize, String> {",
+              "path": "doc",
+              "range": [
+                8048,
+                8114
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "     // ...",
+              "path": "doc",
+              "range": [
+                8119,
+                8133
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Ok(2)",
+              "path": "doc",
+              "range": [
+                8138,
+                8149
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " }",
+              "path": "doc",
+              "range": [
+                8154,
+                8159
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ```",
+              "path": "doc",
+              "range": [
+                8164,
+                8171
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            8259,
+            8498
+          ],
+          "kind": "impl_fn",
+          "name": "try_call_once",
+          "range": [
+            6991,
+            8498
+          ],
+          "signature_range": [
+            8180,
+            8258
+          ]
+        },
+        {
+          "ancestors": [
+            20
+          ],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "cold",
+              "range": [
+                8504,
+                8511
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            8600,
+            11832
+          ],
+          "kind": "impl_fn",
+          "name": "try_call_once_slow",
+          "range": [
+            8504,
+            11832
+          ],
+          "signature_range": [
+            8516,
+            8599
+          ]
+        },
+        {
+          "ancestors": [
+            20,
+            24
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            9526,
+            9596
+          ]
+        },
+        {
+          "ancestors": [
+            20
+          ],
+          "attributes": [
+            {
+              "doc_text": " Blocks until the [`Once`] contains a value.",
+              "path": "doc",
+              "range": [
+                11838,
+                11885
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                11890,
+                11893
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This method **spin-waits** using `core::hint::spin_loop` while another thread",
+              "path": "doc",
+              "range": [
+                11898,
+                11979
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " is initializing. There is no timeout or blocking primitive involved. Use this",
+              "path": "doc",
+              "range": [
+                11984,
+                12065
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " only when initialization is expected to complete quickly (e.g., kernel early boot).",
+              "path": "doc",
+              "range": [
+                12070,
+                12157
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                12162,
+                12165
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Note that in releases prior to `0.7`, this function had the behaviour of [`Once::poll`].",
+              "path": "doc",
+              "range": [
+                12170,
+                12262
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                12267,
+                12270
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Panics",
+              "path": "doc",
+              "range": [
+                12275,
+                12287
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                12292,
+                12295
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This function will panic if the [`Once`] previously failed while attempting",
+              "path": "doc",
+              "range": [
+                12300,
+                12379
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " to initialize. This is similar to the poisoning behaviour of `std::sync`'s",
+              "path": "doc",
+              "range": [
+                12384,
+                12462
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " primitives.",
+              "path": "doc",
+              "range": [
+                12467,
+                12482
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            12512,
+            12736
+          ],
+          "kind": "impl_fn",
+          "name": "wait",
+          "range": [
+            11838,
+            12736
+          ],
+          "signature_range": [
+            12491,
+            12511
+          ]
+        },
+        {
+          "ancestors": [
+            20
+          ],
+          "attributes": [
+            {
+              "doc_text": " Like [`Once::get`], but will **spin-wait** if the [`Once`] is in the process",
+              "path": "doc",
+              "range": [
+                12742,
+                12822
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " of being initialized. If initialization has not even begun, `None` will be",
+              "path": "doc",
+              "range": [
+                12827,
+                12905
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " returned.",
+              "path": "doc",
+              "range": [
+                12910,
+                12923
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                12928,
+                12931
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This method uses `core::hint::spin_loop` to wait. There is no timeout.",
+              "path": "doc",
+              "range": [
+                12936,
+                13010
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                13015,
+                13018
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Note that in releases prior to `0.7`, this function was named `wait`.",
+              "path": "doc",
+              "range": [
+                13023,
+                13096
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                13101,
+                13104
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Panics",
+              "path": "doc",
+              "range": [
+                13109,
+                13121
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                13126,
+                13129
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This function will panic if the [`Once`] previously failed while attempting",
+              "path": "doc",
+              "range": [
+                13134,
+                13213
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " to initialize. This is similar to the poisoning behaviour of `std::sync`'s",
+              "path": "doc",
+              "range": [
+                13218,
+                13296
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " primitives.",
+              "path": "doc",
+              "range": [
+                13301,
+                13316
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            13354,
+            14517
+          ],
+          "kind": "impl_fn",
+          "name": "poll",
+          "range": [
+            12742,
+            14517
+          ],
+          "signature_range": [
+            13325,
+            13353
+          ]
+        },
+        {
+          "ancestors": [
+            20,
+            27
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            14414,
+            14469
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            14521,
+            23839
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Creates a new [`Once`] in the `Uninitialized` state.",
+              "path": "doc",
+              "range": [
+                15096,
+                15152
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                15157,
+                15160
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The returned cell does not contain a value and must be initialized via",
+              "path": "doc",
+              "range": [
+                15165,
+                15239
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " [`call_once`](Self::call_once) or [`try_call_once`](Self::try_call_once).",
+              "path": "doc",
+              "range": [
+                15244,
+                15321
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            15353,
+            15379
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            15096,
+            15379
+          ],
+          "signature_range": [
+            15330,
+            15352
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Creates a new [`Once`] in the `Ready` state with the given value.",
+              "path": "doc",
+              "range": [
+                15385,
+                15454
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                15459,
+                15462
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The cell behaves as if initialization has already completed. Subsequent",
+              "path": "doc",
+              "range": [
+                15467,
+                15542
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " calls to [`get`](Self::get) will return `Some(&data)`.",
+              "path": "doc",
+              "range": [
+                15547,
+                15605
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            15652,
+            15799
+          ],
+          "kind": "impl_fn",
+          "name": "initialized",
+          "range": [
+            15385,
+            15799
+          ],
+          "signature_range": [
+            15614,
+            15651
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Retrieve a pointer to the inner data.",
+              "path": "doc",
+              "range": [
+                15805,
+                15846
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                15851,
+                15854
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " While this method itself is safe, accessing the pointer before the [`Once`] has been",
+              "path": "doc",
+              "range": [
+                15859,
+                15947
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " initialized is UB, unless this method has already been written to from a pointer coming",
+              "path": "doc",
+              "range": [
+                15952,
+                16043
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " from this method.",
+              "path": "doc",
+              "range": [
+                16048,
+                16069
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            16109,
+            16216
+          ],
+          "kind": "impl_fn",
+          "name": "as_mut_ptr",
+          "range": [
+            15805,
+            16216
+          ],
+          "signature_range": [
+            16078,
+            16108
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Get a reference to the initialized value. Must only be called when Ready.",
+              "path": "doc",
+              "range": [
+                16222,
+                16299
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                16304,
+                16307
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                16312,
+                16324
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                16329,
+                16332
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The value must be initialized and published as `Status::Ready`. The",
+              "path": "doc",
+              "range": [
+                16337,
+                16408
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " caller must have initialized it, observed publication with acquire",
+              "path": "doc",
+              "range": [
+                16413,
+                16483
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " ordering, or own the cell exclusively. Keep it initialized for the",
+              "path": "doc",
+              "range": [
+                16488,
+                16558
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " borrow and permit mutation only through its interior-mutable fields.",
+              "path": "doc",
+              "range": [
+                16563,
+                16635
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            16683,
+            16906
+          ],
+          "kind": "impl_fn",
+          "name": "get_value_unchecked",
+          "range": [
+            16222,
+            16906
+          ],
+          "signature_range": [
+            16640,
+            16682
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Get a mutable reference to the initialized value. Must only be called when Ready.",
+              "path": "doc",
+              "range": [
+                16912,
+                16997
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                17002,
+                17005
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                17010,
+                17022
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                17027,
+                17030
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The cell must be `Status::Ready` with a fully initialized value that",
+              "path": "doc",
+              "range": [
+                17035,
+                17107
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " has not been moved out. The exclusive borrow covers all value access.",
+              "path": "doc",
+              "range": [
+                17112,
+                17185
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            17245,
+            17426
+          ],
+          "kind": "impl_fn",
+          "name": "get_value_mut_unchecked",
+          "range": [
+            16912,
+            17426
+          ],
+          "signature_range": [
+            17190,
+            17244
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Moves the initialized value out of storage.",
+              "path": "doc",
+              "range": [
+                17432,
+                17479
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                17484,
+                17487
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                17492,
+                17504
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                17509,
+                17512
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " The cell must contain a fully initialized value that has not been moved",
+              "path": "doc",
+              "range": [
+                17517,
+                17592
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " out. Consuming the cell gives this operation exclusive access to storage;",
+              "path": "doc",
+              "range": [
+                17597,
+                17674
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " the operation suppresses the cell destructor when moving the value out.",
+              "path": "doc",
+              "range": [
+                17679,
+                17754
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            17804,
+            18209
+          ],
+          "kind": "impl_fn",
+          "name": "extract_value_unchecked",
+          "range": [
+            17432,
+            18209
+          ],
+          "signature_range": [
+            17759,
+            17803
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns a reference to the inner value if the [`Once`] has been initialized.",
+              "path": "doc",
+              "range": [
+                18215,
+                18295
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                18300,
+                18303
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is a non-blocking, non-panicking check using a single `Acquire` load.",
+              "path": "doc",
+              "range": [
+                18308,
+                18386
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Returns `None` if initialization has not completed, is in progress, or has",
+              "path": "doc",
+              "range": [
+                18391,
+                18469
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " failed (poisoned).",
+              "path": "doc",
+              "range": [
+                18474,
+                18496
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            18533,
+            18930
+          ],
+          "kind": "impl_fn",
+          "name": "get",
+          "range": [
+            18215,
+            18930
+          ],
+          "signature_range": [
+            18505,
+            18532
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns a reference to the inner value on the unchecked assumption that the  [`Once`] has been initialized.",
+              "path": "doc",
+              "range": [
+                18936,
+                19047
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                19052,
+                19055
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                19060,
+                19072
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                19077,
+                19080
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is *extremely* unsafe if the `Once` has not already been initialized because a reference to uninitialized",
+              "path": "doc",
+              "range": [
+                19085,
+                19199
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " memory will be returned, immediately triggering undefined behaviour (even if the reference goes unused).",
+              "path": "doc",
+              "range": [
+                19204,
+                19312
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " However, this can be useful in some instances for exposing the `Once` to FFI or when the overhead of atomically",
+              "path": "doc",
+              "range": [
+                19317,
+                19432
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " checking initialization is unacceptable and the `Once` has already been initialized.",
+              "path": "doc",
+              "range": [
+                19437,
+                19525
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            19571,
+            20061
+          ],
+          "kind": "impl_fn",
+          "name": "get_unchecked",
+          "range": [
+            18936,
+            20061
+          ],
+          "signature_range": [
+            19534,
+            19570
+          ]
+        },
+        {
+          "ancestors": [
+            29,
+            37
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            19581,
+            19875
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns a mutable reference to the inner value if the [`Once`] has been initialized.",
+              "path": "doc",
+              "range": [
+                20067,
+                20155
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                20160,
+                20163
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Because this method requires a mutable reference to the [`Once`], no synchronization",
+              "path": "doc",
+              "range": [
+                20168,
+                20256
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " overhead is required to access the inner value. In effect, it is zero-cost.",
+              "path": "doc",
+              "range": [
+                20261,
+                20340
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            20389,
+            20696
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut",
+          "range": [
+            20067,
+            20696
+          ],
+          "signature_range": [
+            20349,
+            20388
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns a mutable reference to the inner value",
+              "path": "doc",
+              "range": [
+                20702,
+                20752
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                20757,
+                20760
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                20765,
+                20777
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                20782,
+                20785
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is *extremely* unsafe if the `Once` has not already been initialized because a reference to uninitialized",
+              "path": "doc",
+              "range": [
+                20790,
+                20904
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " memory will be returned, immediately triggering undefined behaviour (even if the reference goes unused).",
+              "path": "doc",
+              "range": [
+                20909,
+                21017
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " However, this can be useful in some instances for exposing the `Once` to FFI or when the overhead of atomically",
+              "path": "doc",
+              "range": [
+                21022,
+                21137
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " checking initialization is unacceptable and the `Once` has already been initialized.",
+              "path": "doc",
+              "range": [
+                21142,
+                21230
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            21288,
+            21781
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut_unchecked",
+          "range": [
+            20702,
+            21781
+          ],
+          "signature_range": [
+            21239,
+            21287
+          ]
+        },
+        {
+          "ancestors": [
+            29,
+            40
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            21298,
+            21591
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns the inner value if the [`Once`] has been initialized.",
+              "path": "doc",
+              "range": [
+                21787,
+                21852
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                21857,
+                21860
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " Because this method requires ownership of the [`Once`], no synchronization overhead",
+              "path": "doc",
+              "range": [
+                21865,
+                21952
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " is required to access the inner value. In effect, it is zero-cost. Returns `None`",
+              "path": "doc",
+              "range": [
+                21957,
+                22042
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " if the cell is not in the `Ready` state.",
+              "path": "doc",
+              "range": [
+                22047,
+                22091
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            22141,
+            22448
+          ],
+          "kind": "impl_fn",
+          "name": "try_into_inner",
+          "range": [
+            21787,
+            22448
+          ],
+          "signature_range": [
+            22100,
+            22140
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Returns the inner value if the [`Once`] has been initialized.",
+              "path": "doc",
+              "range": [
+                22454,
+                22519
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                22524,
+                22527
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " # Safety",
+              "path": "doc",
+              "range": [
+                22532,
+                22544
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                22549,
+                22552
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is *extremely* unsafe if the `Once` has not already been initialized because a reference to uninitialized",
+              "path": "doc",
+              "range": [
+                22557,
+                22671
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " memory will be returned, immediately triggering undefined behaviour (even if the reference goes unused)",
+              "path": "doc",
+              "range": [
+                22676,
+                22783
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This can be useful, if `Once` has already been initialized, and you want to bypass an",
+              "path": "doc",
+              "range": [
+                22788,
+                22877
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " option check.",
+              "path": "doc",
+              "range": [
+                22882,
+                22899
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            22950,
+            23443
+          ],
+          "kind": "impl_fn",
+          "name": "into_inner_unchecked",
+          "range": [
+            22454,
+            23443
+          ],
+          "signature_range": [
+            22908,
+            22949
+          ]
+        },
+        {
+          "ancestors": [
+            29,
+            43
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            22960,
+            23253
+          ]
+        },
+        {
+          "ancestors": [
+            29
+          ],
+          "attributes": [
+            {
+              "doc_text": " Checks whether the value has been initialized.",
+              "path": "doc",
+              "range": [
+                23449,
+                23499
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": "",
+              "path": "doc",
+              "range": [
+                23504,
+                23507
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " This is done using [`Acquire`](core::sync::atomic::Ordering::Acquire) ordering, and",
+              "path": "doc",
+              "range": [
+                23512,
+                23599
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " therefore it is safe to access the value directly via",
+              "path": "doc",
+              "range": [
+                23604,
+                23661
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": " [`get_unchecked`](Self::get_unchecked) if this returns true.",
+              "path": "doc",
+              "range": [
+                23666,
+                23730
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            23770,
+            23837
+          ],
+          "kind": "impl_fn",
+          "name": "is_completed",
+          "range": [
+            23449,
+            23837
+          ],
+          "signature_range": [
+            23739,
+            23769
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            23841,
+            23941
+          ]
+        },
+        {
+          "ancestors": [
+            46
+          ],
+          "attributes": [],
+          "body_range": [
+            23900,
+            23939
+          ],
+          "kind": "impl_fn",
+          "name": "from",
+          "range": [
+            23875,
+            23939
+          ],
+          "signature_range": [
+            23875,
+            23899
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            23943,
+            24379
+          ]
+        },
+        {
+          "ancestors": [
+            48
+          ],
+          "attributes": [],
+          "body_range": [
+            23993,
+            24377
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            23974,
+            24377
+          ],
+          "signature_range": [
+            23974,
+            23992
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "struct",
+          "name": "PanicGuard",
+          "range": [
+            24381,
+            24435
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            24437,
+            24707
+          ]
+        },
+        {
+          "ancestors": [
+            51
+          ],
+          "attributes": [],
+          "body_range": [
+            24495,
+            24705
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            24476,
+            24705
+          ],
+          "signature_range": [
+            24476,
+            24494
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            24812,
+            24884
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "cfg",
+              "range": [
+                24887,
+                24899
+              ],
+              "style": "outer"
+            },
+            {
+              "doc_text": null,
+              "path": "path",
+              "range": [
+                24900,
+                24938
+              ],
+              "style": "outer"
+            }
+          ],
+          "inline": false,
+          "kind": "mod",
+          "name": "once_host_tests",
+          "path_overrides": [
+            "../tests/host/once_host.rs"
+          ],
+          "range": [
+            24887,
+            24959
+          ]
+        }
+      ],
+      "source_sha256": "dc8ffed2e906bd585b55827cf0b08cee59f6565342abf0ea547a95c522502cae"
+    },
+    "util/klazy/ut-tests/once_unittest.rs": {
+      "diagnostics": [],
+      "file_attributes": [],
+      "schema": "syn-unit-probe/2",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "def_test",
+              "range": [
+                205,
+                216
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            255,
+            552
+          ],
+          "kind": "fn",
+          "name": "initialized_and_from_start_ready",
+          "range": [
+            205,
+            552
+          ],
+          "signature_range": [
+            217,
+            254
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            313,
+            353
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            359,
+            411
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            463,
+            497
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            503,
+            549
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "def_test",
+              "range": [
+                554,
+                565
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            604,
+            964
+          ],
+          "kind": "fn",
+          "name": "try_call_once_error_allows_retry",
+          "range": [
+            554,
+            964
+          ],
+          "signature_range": [
+            566,
+            603
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            678,
+            714
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            721,
+            753
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            759,
+            788
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            794,
+            823
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            829,
+            859
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            893,
+            898
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            905,
+            927
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            933,
+            961
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "def_test",
+              "range": [
+                966,
+                977
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            1025,
+            1523
+          ],
+          "kind": "fn",
+          "name": "get_mut_and_as_mut_ptr_update_ready_value",
+          "range": [
+            966,
+            1523
+          ],
+          "signature_range": [
+            978,
+            1024
+          ]
+        },
+        {
+          "ancestors": [
+            14
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1077,
+            1203
+          ]
+        },
+        {
+          "ancestors": [
+            14
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1479,
+            1520
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "def_test",
+              "range": [
+                1525,
+                1536
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            1584,
+            2362
+          ],
+          "kind": "fn",
+          "name": "extracting_value_transfers_drop_ownership",
+          "range": [
+            1525,
+            2362
+          ],
+          "signature_range": [
+            1537,
+            1583
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "struct",
+          "name": "CountDrop",
+          "range": [
+            1644,
+            1682
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1688,
+            1814
+          ]
+        },
+        {
+          "ancestors": [
+            17,
+            19
+          ],
+          "attributes": [],
+          "body_range": [
+            1745,
+            1808
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            1726,
+            1808
+          ],
+          "signature_range": [
+            1726,
+            1744
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1955,
+            1999
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2022,
+            2066
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2248,
+            2292
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2315,
+            2359
+          ]
+        },
+        {
+          "ancestors": [],
+          "attributes": [
+            {
+              "doc_text": null,
+              "path": "def_test",
+              "range": [
+                2364,
+                2375
+              ],
+              "style": "outer"
+            }
+          ],
+          "body_range": [
+            2416,
+            2547
+          ],
+          "kind": "fn",
+          "name": "try_into_inner_matches_ready_state",
+          "range": [
+            2364,
+            2547
+          ],
+          "signature_range": [
+            2376,
+            2415
+          ]
+        },
+        {
+          "ancestors": [
+            25
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2422,
+            2475
+          ]
+        },
+        {
+          "ancestors": [
+            25
+          ],
+          "attributes": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2481,
+            2544
+          ]
+        }
+      ],
+      "source_sha256": "bde9e8e3421ee03cabe6453e6953618fb8af9700532d0d52a17994f599f62a5f"
+    }
+  },
+  "limitations": [
+    "Parser success is not rustc validation or type checking.",
+    "Name multiset agreement does not independently establish exact spans.",
+    "No macro expansion, cfg evaluation, module loading or identity resolution."
+  ]
+}

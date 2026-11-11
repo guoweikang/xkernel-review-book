@@ -1,0 +1,99 @@
+use std::sync::{Arc, Mutex};
+
+#[derive(Debug, PartialEq)]
+enum AxError { WouldBlock, Io }
+type AxResult<Value> = Result<Value, AxError>;
+type KResult<Value> = AxResult<Value>;
+type KError = AxError;
+
+struct IoEvents;
+impl IoEvents {
+    const IN: Self = Self;
+    fn contains(&self, _: Self) -> bool { true }
+}
+trait FileLike {
+    fn poll(&self) -> IoEvents;
+    fn read(&self, buffer: &mut &mut [u8]) -> AxResult<usize>;
+    fn write(&self, buffer: &mut &[u8]) -> AxResult<usize>;
+}
+trait PointerAccess {
+    fn vm_read(&self) -> AxResult<u64>;
+    fn vm_write(&self, value: u64) -> AxResult<()>;
+}
+impl PointerAccess for *mut u64 {
+    fn vm_read(&self) -> AxResult<u64> { Ok(unsafe { **self }) }
+    fn vm_write(&self, value: u64) -> AxResult<()> {
+        unsafe { **self = value; }
+        Ok(())
+    }
+}
+struct File { bytes: Mutex<Vec<u8>>, limit: usize }
+type VfsFile = File;
+impl File {
+    fn inner(&self) -> &Self { self }
+    fn poll(&self) -> IoEvents { IoEvents }
+    fn read_at(&self, buffer: &mut [u8], offset: u64) -> AxResult<usize> {
+        let bytes = self.bytes.lock().unwrap();
+        let start = (offset as usize).min(bytes.len());
+        let count = buffer.len().min(bytes.len() - start);
+        buffer[..count].copy_from_slice(&bytes[start..start + count]);
+        Ok(count)
+    }
+    fn write_at(&self, buffer: &[u8], offset: u64) -> AxResult<usize> {
+        let count = buffer.len().min(self.limit);
+        let start = offset as usize;
+        let mut bytes = self.bytes.lock().unwrap();
+        let length = bytes.len().max(start + count);
+        bytes.resize(length, 0);
+        bytes[start..start + count].copy_from_slice(&buffer[..count]);
+        Ok(count)
+    }
+    fn read_from(&self, buffer: &mut [u8], offset: &mut u64) -> AxResult<usize> {
+        let count = self.read_at(buffer, *offset)?;
+        *offset += count as u64;
+        Ok(count)
+    }
+    fn write_from(&self, buffer: &[u8], offset: &mut u64) -> AxResult<usize> {
+        let count = self.write_at(buffer, *offset)?;
+        *offset += count as u64;
+        Ok(count)
+    }
+}
+
+@@STARRY@@
+
+@@XKERNEL@@
+
+fn check_transfer(starry: bool, limit: usize, expected: usize, expected_input: u64) {
+    let input = Arc::new(File { bytes: Mutex::new(b"abcdefgh".to_vec()), limit: 8 });
+    let output = Arc::new(File { bytes: Mutex::new(Vec::new()), limit });
+    let mut input_pos = 0;
+    let mut output_pos = 0;
+    let result = if starry {
+        do_send(SendFile::Offset(input.clone(), &mut input_pos),
+                SendFile::Offset(output.clone(), &mut output_pos), 8)
+    } else {
+        pump(8, |buffer, chunk, _total| {
+            file_pair_step(&input, &output, &mut input_pos, &mut output_pos, buffer, chunk)
+        })
+    };
+    let source = input.bytes.lock().unwrap();
+    let destination = output.bytes.lock().unwrap();
+    let tail = &source[input_pos as usize..];
+    println!("starry={starry} limit={limit} result={result:?} input={input_pos} output={output_pos} bytes={destination:?} tail={tail:?}");
+    assert_eq!(result, Ok(expected));
+    assert_eq!(input_pos, expected_input);
+    assert_eq!(output_pos, limit as u64);
+    assert_eq!(*destination, b"abcdefgh"[..limit]);
+    assert_eq!(*source, b"abcdefgh");
+    assert_eq!(tail, &b"abcdefgh"[expected_input as usize..]);
+}
+
+#[test]
+fn starry_short_write_observation() { check_transfer(true, 3, 0, 8); }
+#[test]
+fn xkernel_short_write_observation() { check_transfer(false, 3, 3, 3); }
+#[test]
+fn starry_full_write_control() { check_transfer(true, 8, 8, 8); }
+#[test]
+fn xkernel_full_write_control() { check_transfer(false, 8, 8, 8); }

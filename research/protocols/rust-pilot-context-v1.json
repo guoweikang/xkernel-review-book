@@ -1,0 +1,28 @@
+{
+  "schema": "rust-pilot-context/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "repository": "xkernel",
+  "purpose": "Context evidence for R001/R004; static reading, no executed tests or validated optimization labels",
+  "cases": [
+    {
+      "id": "R001", "label": "unlabelled",
+      "sources": [
+        {"path": "util/xcover/src/runtime.rs", "anchor": "static RUNTIME_IMAGE:"},
+        {"path": "util/xcover/src/lib.rs", "anchor": "mod sync;"},
+        {"path": "util/xcover/Cargo.toml", "anchor": "portable-atomic ="},
+        {"path": "util/xcover/tests/ffi_equivalence.rs", "anchor": "//! Public API tests for xcover."},
+        {"path": "util/klazy/Cargo.toml", "anchor": "paste ="},
+        {"path": "util/klazy/docs/design.md", "anchor": "## 调用约束 / 执行上下文"},
+        {"path": "util/klazy/tests/host/once_host.rs", "anchor": "fn try_call_once_err()"}
+      ]
+    },
+    {
+      "id": "R004", "label": "unlabelled",
+      "sources": [
+        {"path": "fs/kvfs/docs/design.md", "anchor": "## Per-open generated-file snapshots"},
+        {"path": "fs/kvfs/ut-tests/simple_file.rs", "anchor": "fn snapshot_partial_reads_are_stable_across_source_changes()"},
+        {"path": "fs/filesystems/procfs/src/trace_nodes/root.rs", "anchor": "impl SimpleDirOps for TracingDir"}
+      ]
+    }
+  ]
+}

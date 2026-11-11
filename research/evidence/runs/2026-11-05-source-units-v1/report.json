@@ -1,0 +1,268 @@
+{
+  "schema": "source-workflow-run/1",
+  "started_utc": "2026-11-05T02:49:14.408061+00:00",
+  "status": "passed_with_limits",
+  "steps": [
+    {
+      "name": "source-preflight",
+      "command": [
+        "git",
+        "-C",
+        "/root/codes/x-kernel",
+        "cat-file",
+        "-e",
+        "7e3ac94431a0dbb376d2fc8d85098deeff1bba09^{commit}"
+      ],
+      "log": "source-preflight.log",
+      "exit_code": 0
+    },
+    {
+      "name": "rust-version",
+      "command": [
+        "rustup",
+        "run",
+        "1.95.0",
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "log": "rust-version.log",
+      "exit_code": 0
+    },
+    {
+      "name": "cargo-version",
+      "command": [
+        "cargo",
+        "+1.95.0",
+        "--version"
+      ],
+      "log": "cargo-version.log",
+      "exit_code": 0
+    },
+    {
+      "name": "gate-self-check",
+      "command": [
+        "/usr/bin/python3",
+        "scripts/check_source_workflow.py"
+      ],
+      "log": "gate-self-check.log",
+      "exit_code": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "+1.95.0",
+        "build",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "research/tools/rust-syntax-probe/Cargo.toml"
+      ],
+      "log": "build.log",
+      "exit_code": 0
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "+1.95.0",
+        "fmt",
+        "--manifest-path",
+        "research/tools/rust-syntax-probe/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "log": "format.log",
+      "exit_code": 0
+    },
+    {
+      "name": "regression",
+      "command": [
+        "/usr/bin/python3",
+        "scripts/check_syn_probe.py",
+        "--binary",
+        "/root/codes/x-kernel-worktrees/ai-review-book/.build/source-workflow-target/debug/rust-syntax-probe",
+        "--repo",
+        "/root/codes/x-kernel",
+        "--prior",
+        "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/inventory/2026-11-05-rust-unit-probe.json",
+        "--output",
+        "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-05-source-units-v1/regression.json"
+      ],
+      "log": "regression.log",
+      "exit_code": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "commit",
+      "actual": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "expected": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "passed": true
+    },
+    {
+      "name": "regression_commit",
+      "actual": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "expected": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "passed": true
+    },
+    {
+      "name": "binary_identity",
+      "actual": "d9dfdf2d7da4d565c4ba7a0ceab695314e9b1b8e98556e96840039d4f73449f5",
+      "expected": "d9dfdf2d7da4d565c4ba7a0ceab695314e9b1b8e98556e96840039d4f73449f5",
+      "passed": true
+    },
+    {
+      "name": "package_scope",
+      "actual": [
+        "fs/kvfs",
+        "task/kspin",
+        "util/klazy",
+        "util/macros"
+      ],
+      "expected": [
+        "fs/kvfs",
+        "task/kspin",
+        "util/klazy",
+        "util/macros"
+      ],
+      "passed": true
+    },
+    {
+      "name": "fixture_count",
+      "actual": 15,
+      "expected": 15,
+      "passed": true
+    },
+    {
+      "name": "failed_files",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "name": "failure_ledger",
+      "actual": [],
+      "expected": [],
+      "passed": true
+    },
+    {
+      "name": "file_denominator",
+      "actual": 88,
+      "expected": 88,
+      "passed": true
+    },
+    {
+      "name": "unique_snapshot_ids",
+      "actual": 5035,
+      "expected": 5035,
+      "passed": true
+    },
+    {
+      "name": "regression_count:files",
+      "actual": 88,
+      "expected": 88,
+      "passed": true
+    },
+    {
+      "name": "regression_count:functions_with_body",
+      "actual": 2180,
+      "expected": 2180,
+      "passed": true
+    },
+    {
+      "name": "regression_count:function_declarations_without_body",
+      "actual": 45,
+      "expected": 45,
+      "passed": true
+    },
+    {
+      "name": "regression_count:external_module_declarations",
+      "actual": 57,
+      "expected": 57,
+      "passed": true
+    },
+    {
+      "name": "input_files_unchanged",
+      "passed": true
+    }
+  ],
+  "inputs": {
+    "scripts/run_source_workflow.py": "399bba8ec1b2bf85f94a275a70fc6b63f0d8fc2c86eb9c35e28c77314f8d33f6",
+    "scripts/inventory_rust_units.py": "4bedad5ad70a8cbf405e636920e4abcf0d5b7e575691ce3ac528d728655951ac",
+    "scripts/check_syn_probe.py": "5e8369f25c3e0736ec0b89f727fb68641dafdb32b8fff569136dbf6f185a90d9",
+    "scripts/probe_rust_units.py": "a27f8b32a797602d232ae62052045a269808122c445f69ecfdab4b4a8ce6b445",
+    "scripts/audit_facts_sample.py": "11f139b65f9f58216374e84e436b48516e1bae84a75ee8900926ec896b1f1867",
+    "scripts/check_source_workflow.py": "21e3a79415331d8072fb2b9d9d465efe99e315a432336df4656d247080d1d856",
+    "research/tools/rust-syntax-probe/Cargo.toml": "ec22200302d65d3880bd29c7335343d2361db6629b0aff27a29dcad3c3c59d81",
+    "research/tools/rust-syntax-probe/Cargo.lock": "2d1fc92903184052c45941c495337123f7c4c0a092a843643a47e9dbb3e501d1",
+    "research/tools/rust-syntax-probe/src/main.rs": "e327b10498be94b1b3fc4ad51bc3ec0f52bab9b45c2fff0452fa0019a7786973",
+    "research/evidence/inventory/2026-11-05-rust-unit-probe.json": "b4aa8a8f3715ad46d87ebd77d8ff07bcde7df1efb2cbc4d6c2207b696bed2571",
+    "research/evidence/inventory/2026-11-05-four-crate-units.json": "a01372faf95e3559e52634ff7b18ce99d29dda4592b5069355d53a7239800c12",
+    "research/evidence/inventory/2026-11-05-syn-adapter-v2-check.json": "258f6dc84911fe6efe867b10675064ae9aa1b98a97ea634b6f6f91be57b7f7f3"
+  },
+  "artifacts": {
+    "build.log": "dccad65a474a0e64d7c677fc96c87f30265067841005a793f4d82605fea6fe77",
+    "cargo-version.log": "c10ec31b8c6e6e2693cf65fc1971b41edbc3da1ae7db6f9f3f36c4823f8dcab5",
+    "format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gate-self-check.log": "46e75f950a3aefa541242c7a40df75666d6f1ceec570435156c1f101ca6978c1",
+    "inventory.json": "a01372faf95e3559e52634ff7b18ce99d29dda4592b5069355d53a7239800c12",
+    "protocol.json": "599f536f77fe3189a0d4fae2249c21c0da94e102c013cad260f1460ac3904c64",
+    "regression.json": "258f6dc84911fe6efe867b10675064ae9aa1b98a97ea634b6f6f91be57b7f7f3",
+    "regression.log": "8ad1af8613744fb242b36ea7a11f9b57a0ec903f2867502e250ff29e27da4072",
+    "rust-version.log": "4fdff2578428e9c5c08ddd7a0d3079c1a106b1cdaa46e73e46f7cd32b0fb9cad",
+    "source-preflight.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "protocol_sha256": "599f536f77fe3189a0d4fae2249c21c0da94e102c013cad260f1460ac3904c64",
+  "known_limits": [
+    "Physical package ownership is not logical module membership",
+    "External module declarations are not resolved",
+    "No cfg evaluation, macro expansion, type checking or runtime evidence",
+    "Unsupported node kinds and non-top-level Verbatim are not fully inventoried",
+    "No duplicate candidates or refactoring recommendations are produced"
+  ],
+  "python_version": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]",
+  "summary": {
+    "files": 88,
+    "statuses": {
+      "parsed_by_syn": 88
+    },
+    "unit_kinds": {
+      "fn": 522,
+      "impl": 384,
+      "impl_fn": 1577,
+      "closure": 454,
+      "macro_tokens": 1640,
+      "mod": 61,
+      "struct": 224,
+      "trait": 23,
+      "trait_fn": 126,
+      "enum": 24
+    },
+    "external_module_declarations": 57,
+    "direct_cfg_attributes": 41,
+    "functions_with_body": 2180,
+    "function_declarations_without_body": 45,
+    "test_path_files": 34,
+    "per_package": {
+      "fs/kvfs": {
+        "files": 72,
+        "functions": 2075
+      },
+      "task/kspin": {
+        "files": 8,
+        "functions": 82
+      },
+      "util/klazy": {
+        "files": 7,
+        "functions": 59
+      },
+      "util/macros": {
+        "files": 1,
+        "functions": 9
+      }
+    }
+  },
+  "finished_utc": "2026-11-05T02:49:17.101790+00:00"
+}

@@ -1,0 +1,21 @@
+error[E0599]: no method named `write` found for struct `CommandFile<{closure@probe.rs:77:31}>` in the current scope
+  --> /root/codes/x-kernel-worktrees/ai-review-book/.build/pseudofile/2026-11-05-pseudofile-methods-01/work/probe.rs:83:26
+   |
+53 | struct CommandFile<Callback>(Callback);
+   | ---------------------------- method `write` not found for this struct
+...
+83 |     let result = command.write(&handle, b"XY", offset);
+   |                          ^^^^^ method not found in `CommandFile<{closure@probe.rs:77:31}>`
+   |
+   = note: the method was found for
+           - `CommandFile<Callback>`
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following traits define an item `write`, perhaps you need to implement one of them:
+           candidate #1: `Hasher`
+           candidate #2: `std::io::Write`
+   = note: the full name for the type has been written to '/root/codes/x-kernel-worktrees/ai-review-book/.build/pseudofile/2026-11-05-pseudofile-methods-01/work/probe.long-type-7783713384587080997.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0599`.

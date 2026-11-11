@@ -1,0 +1,27 @@
+{
+  "schema": "source-unit-protocol/1",
+  "id": "xkernel-source-units-v1",
+  "purpose": "Source extraction regression, not duplicate detection or semantic correctness",
+  "commit": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "toolchain": "1.95.0",
+  "packages": ["fs/kvfs", "task/kspin", "util/klazy", "util/macros"],
+  "prior": "research/evidence/inventory/2026-11-05-rust-unit-probe.json",
+  "prior_sha256": "b4aa8a8f3715ad46d87ebd77d8ff07bcde7df1efb2cbc4d6c2207b696bed2571",
+  "gates": {
+    "max_failed_files": 0,
+    "expected_fixture_count": 15,
+    "expected_summary": {
+      "files": 88,
+      "functions_with_body": 2180,
+      "function_declarations_without_body": 45,
+      "external_module_declarations": 57
+    }
+  },
+  "known_limits": [
+    "Physical package ownership is not logical module membership",
+    "External module declarations are not resolved",
+    "No cfg evaluation, macro expansion, type checking or runtime evidence",
+    "Unsupported node kinds and non-top-level Verbatim are not fully inventoried",
+    "No duplicate candidates or refactoring recommendations are produced"
+  ]
+}

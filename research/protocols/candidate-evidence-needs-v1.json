@@ -1,0 +1,394 @@
+{
+  "schema": "candidate-evidence-needs/1",
+  "ledger": "research/protocols/discovery-ledger-v4.json",
+  "scope": "18 already reviewed development pairs; researcher-coded needs, not independent labels or automatic inferred coverage",
+  "dimensions": {
+    "identity": {
+      "question": "是否是同版本、同对象、何种配置可见？",
+      "available": "Fixed source units, hashes, candidate mappings, preserved cfg attributes",
+      "gap": "Unexpanded syntax does not prove compiled membership or all-config coverage",
+      "automation": "verified_source_mapping_with_limits"
+    },
+    "reuse": {
+      "question": "公共机制、委托或合适的现有helper在哪里？",
+      "available": "Manual source review and existing exporter capability; verified facts sample is klazy",
+      "gap": "Do not infer verified kvfs graph coverage from exporter implementation or manifest presence",
+      "automation": "source_retrieval_proposed_semantic_reuse_manual"
+    },
+    "contract": {
+      "question": "输入域、默认值、错误与测试目的是否相容？",
+      "available": "Source signatures, literals, assertions and docs",
+      "gap": "Source clues are not complete or correct specifications",
+      "automation": "excerpt_extraction_possible_contract_inference_manual"
+    },
+    "effects": {
+      "question": "副作用顺序、完成量及失败边界是否相同？",
+      "available": "Bodies, callers and case-specific tests",
+      "gap": "Call/use sets do not encode complete path conditions or runtime order",
+      "automation": "manual_with_bounded_experiments"
+    },
+    "resources": {
+      "question": "锁、引用、分配与I/O次数是否改变？",
+      "available": "Source context, existing assertions and one compiler-scope probe",
+      "gap": "No general lock/lifetime/cost equivalence engine or performance evidence",
+      "automation": "manual_with_bounded_experiments"
+    },
+    "validation": {
+      "question": "哪些真实构建、测试和配置支持该变换？",
+      "available": "Metadata paired tests and candidate production build; exact log gate",
+      "gap": "Other pairs have no proposed-change validation; passing original tests is not equivalence proof",
+      "automation": "artifact_and_log_checks_implemented_scope_manual"
+    },
+    "benefit": {
+      "question": "共享后是否真的更易维护或更快？",
+      "available": "Patch size and selected source/history observations",
+      "gap": "No validated maintenance improvement labels or measured performance gains",
+      "automation": "manual_unverified_do_not_score"
+    }
+  },
+  "families": [
+    {
+      "family": "block_byte_io",
+      "pairs": [
+        [
+          735,
+          736
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "resources",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "共同修改需求和简化收益；不重开通用短写缺陷研究",
+      "evidence": [
+        "research/notes/2026-11-06-block-io-review.md"
+      ]
+    },
+    {
+      "family": "block_fault_tests",
+      "pairs": [
+        [
+          1830,
+          1831
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "只检查额外准备逻辑负担，不合并独立故障断言",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ]
+    },
+    {
+      "family": "device_registry_boundary",
+      "pairs": [
+        [
+          702,
+          1809
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "resources",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "只有剩余包装存在实际共同维护需求才重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ]
+    },
+    {
+      "family": "mount_depth_tests",
+      "pairs": [
+        [
+          1598,
+          1599
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "没有额外准备逻辑负担证据则不参数化测试场景",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ]
+    },
+    {
+      "family": "mount_detachment",
+      "pairs": [
+        [
+          505,
+          507
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "resources",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_callers_and_compiler_scope_probe_not_kernel_execution",
+      "decision_gap": "Reopen only with concrete maintenance benefit and a scope-preserving plan; no automatic concurrency investigation",
+      "evidence": [
+        "research/notes/2026-11-06-mount-detach-review.md",
+        "research/notes/2026-11-06-mount-scope-decision.md"
+      ]
+    },
+    {
+      "family": "nullfs_permission_fixture",
+      "pairs": [
+        [
+          1045,
+          1894
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "没有跨生产／测试共享收益证据，保留本地fixture",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ]
+    },
+    {
+      "family": "path_resolution_tests",
+      "pairs": [
+        [
+          1703,
+          1710
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "没有新增维护负担则保留独立测试",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ]
+    },
+    {
+      "family": "pipe_timestamp_wrappers",
+      "pairs": [
+        [
+          1151,
+          1163
+        ],
+        [
+          1153,
+          1165
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "resources",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "具体重复修改需求或后处理维护负担；无证据则不生成补丁",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ]
+    },
+    {
+      "family": "poll_registration_policy",
+      "pairs": [
+        [
+          1135,
+          1800
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "没有新的机制重复证据则不抽取短条件包装",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ]
+    },
+    {
+      "family": "rename_rejections",
+      "pairs": [
+        [
+          1237,
+          1578
+        ],
+        [
+          1237,
+          1660
+        ],
+        [
+          1578,
+          1660
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "需要复杂重复机制或实际维护负担，单个错误常量不触发补丁",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md",
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ]
+    },
+    {
+      "family": "rename_topology_tests",
+      "pairs": [
+        [
+          1765,
+          1766
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "不同拓扑不可因准备步骤相似合并断言",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ]
+    },
+    {
+      "family": "slice_read_adapter",
+      "pairs": [
+        [
+          1281,
+          1672
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "resources",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "先明确合法输入域和锁边界，再判断是否值得做替换实验",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ]
+    },
+    {
+      "family": "stream_vs_command",
+      "pairs": [
+        [
+          125,
+          1249
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "effects",
+        "resources",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "只有提出保留整请求契约且有收益的具体边界才重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ]
+    },
+    {
+      "family": "superblock_constructor",
+      "pairs": [
+        [
+          1348,
+          1349
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "benefit"
+      ],
+      "current_validation": "static_only",
+      "decision_gap": "仅在出现独立机制重复的新证据时重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ]
+    },
+    {
+      "family": "test_directory_metadata",
+      "pairs": [
+        [
+          1571,
+          1732
+        ]
+      ],
+      "needs": [
+        "identity",
+        "reuse",
+        "contract",
+        "validation",
+        "benefit"
+      ],
+      "current_validation": "paired_tests_and_candidate_production_build",
+      "decision_gap": "具体同步缺陷、更多同契约使用者或维护者给出的可读性依据才重开",
+      "evidence": [
+        "research/notes/2026-11-05-metadata-case-disposition.md",
+        "research/protocols/metadata-case-disposition-v1.json"
+      ]
+    }
+  ],
+  "selected_mechanism": "bounded_existing_reuse_evidence_retrieval",
+  "excluded_now": [
+    "automated refactor-worthiness score",
+    "whole-program lock analysis",
+    "new semantic database platform",
+    "new production patch"
+  ],
+  "evaluation_status": "not_run"
+}

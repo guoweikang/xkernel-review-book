@@ -1,0 +1,63 @@
+{
+  "schema": "contract-discrimination-plan/1",
+  "case_group": "X006-R004",
+  "status": "PC01_PC03_extracted_method_checks_passed_PC02_PC04_not_run",
+  "execution_evidence": "research/evidence/runs/2026-11-05-pseudofile-methods-02/report.json",
+  "failed_setup_evidence": "research/evidence/runs/2026-11-05-pseudofile-methods-01/report.json",
+  "revisions": {
+    "xkernel": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "starry": "2e075accf4fb0aefdd1d252ebd9ccf29727d9923"
+  },
+  "boundary": "PC01/PC03 execute verbatim method snippets with substituted wrappers, types and callbacks; not whole-crate or syscall validation. Other checks remain static predictions.",
+  "checks": [
+    {
+      "id": "PC01",
+      "execution": "passed_with_test_doubles",
+      "question": "Does an offset write patch old content or deliver a new command?",
+      "setup": "read callback returns abcdef; write callback records bytes; invoke write with XY at offset 2",
+      "starry_prediction": "SimpleFile::write_at first reads, then delivers abXYef to write_all and returns 2",
+      "xkernel_prediction": "CommandFile::write does not call read_all; delivers XY to callback and returns 2",
+      "assertions": ["callback event order", "exact callback bytes", "return count"],
+      "optimization_gate": "Do not share write algorithm without an explicit policy preserving both contracts"
+    },
+    {
+      "id": "PC02",
+      "execution": "not_run",
+      "question": "Is absence of callback read content an error or a panic path?",
+      "setup": "read callback returns Ok(None)",
+      "starry_prediction": "RwFile::read_all reaches unwrap on None",
+      "xkernel_prediction": "CommandFile::read_all returns InvalidData",
+      "assertions": ["returned error versus panic event"],
+      "optimization_gate": "Do not erase distinct error contracts; production reachability and panic strategy are unknown"
+    },
+    {
+      "id": "PC03",
+      "execution": "passed_with_test_doubles",
+      "question": "Can a write proceed when generating old read content fails?",
+      "setup": "read callback returns an error; write callback would accept input; supply XY at offset 0",
+      "starry_prediction": "SimpleFile::write_at propagates read error without calling write_all",
+      "xkernel_prediction": "CommandFile::write calls write callback without invoking read callback",
+      "assertions": ["callback event order", "error propagation"],
+      "optimization_gate": "Account for pre-write reads and side effects, not just equal return types"
+    },
+    {
+      "id": "PC04",
+      "execution": "not_run",
+      "question": "Is the bounded byte-copy mechanism common independently of content generation?",
+      "setup": "controlled immutable bytes; compare offsets 0, len-1, len, len+1 with empty and nonempty buffers",
+      "starry_prediction": "read_at obtains bytes then bounds and copies",
+      "xkernel_prediction": "read_generated_bytes bounds and copies provided bytes",
+      "assertions": ["return count", "copied bytes", "untouched buffer tail", "generation-call count kept separate"],
+      "optimization_gate": "Common local copy mechanism does not prove a cross-project dependency or shared API is worthwhile"
+    }
+  ],
+  "outcome_axes": {
+    "local_overlap": "supported_by_source",
+    "drop_in_replacement": "not_supported_due_to_contract_differences",
+    "shared_abstraction_feasibility": "unknown",
+    "performance_benefit": "not_measured",
+    "maintenance_benefit": "not_validated",
+    "source_lineage": "unknown",
+    "independent_human_label": "not_obtained"
+  }
+}

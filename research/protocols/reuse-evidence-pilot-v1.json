@@ -1,0 +1,31 @@
+{
+  "schema": "reuse-evidence-pilot/1",
+  "status": "design_only_not_implemented_or_evaluated",
+  "objective": "Retrieve existing delegation/helper evidence for candidate pairs, without deciding equivalence or recommending refactors",
+  "inputs": "Fixed source units, candidate IDs, snapshot and source identity; compiler facts only after exact artifact/config validation",
+  "development_cases": "18 reviewed pairs in discovery-ledger-v4.json; analyst has seen answers",
+  "mechanism": "Extract bounded direct call syntax candidates with existing Rust parser; retrieve possible same-snapshot definitions, preserve ambiguous/missing/macro/config status. Prefer validated compiler resolution when available, never guess trait or dynamic targets.",
+  "not_claimed": ["Novel algorithm", "Resolved call graph from names", "Automatic delegation truth", "Maintenance benefit", "Independent evaluation"],
+  "comparison": {
+    "A": "Candidate source bodies only",
+    "B": "Same bodies plus deterministic adjacent source context",
+    "C": "Same bodies plus call-candidate definition snippets",
+    "budget": "Identical 16384-byte UTF-8 source payload ceiling per pair, at most eight snippets; preserve identical candidate bodies in every arm. Record actual bytes and unused capacity; not an LLM-token-equated experiment.",
+    "overflow": "If bodies alone exceed budget, mark not_evaluated_budget rather than truncate secretly",
+    "implementation_prerequisite": "Freeze window allocation, tie-breaking, recursive expansion depth and ambiguous-target budget rules before running retrieval"
+  },
+  "measurements": [
+    "Known necessary evidence span hits per pair and union bytes within budget, based on explicit development reference spans",
+    "Retrieved definitions confirmed correct, ambiguous, incorrect or unavailable; unknowns remain visible",
+    "Whether evidence is sufficient for an already-delegates judgment versus still unknown, recorded separately from equivalence and benefit",
+    "Actual source bytes, wall time and missing reasons; no automatic token-saving claim"
+  ],
+  "evaluation_limits": "Reference spans are incomplete researcher development targets, not an exhaustive semantic-recall denominator. Do not tune and then evaluate on the same 18 pairs as held-out evidence.",
+  "stop_conditions": [
+    "Snapshot or artifact mismatch stops association; missing compiler facts is not absence of a call",
+    "If syntax target ambiguity dominates, record it instead of building a whole-program resolver",
+    "If C gives no useful evidence gain over equal-budget B, preserve negative result and reconsider the mechanism",
+    "No new patches, graph database or LLM scoring model during this pilot"
+  ],
+  "next_action": "First try to obtain the exact manifest-listed kvfs artifact and reuse the existing auditor; if unavailable, record the gap and use explicitly unresolved syntax candidates rather than build another compiler extractor. Freeze retrieval details and development reference spans before running the smallest evidence-packet comparison."
+}

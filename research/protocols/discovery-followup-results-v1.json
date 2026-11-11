@@ -1,0 +1,34 @@
+{
+  "schema": "discovery-followup-results/1",
+  "queue": "research/protocols/discovery-ledger-v1.json",
+  "status": "two_static_reviews_four_pending_not_truth_labels",
+  "tests_executed_this_round": false,
+  "records": [
+    {"file_ids": [735, 736], "family": "block_byte_io", "finding": "shared_geometry_distinct_io_and_completion_contracts", "action": "retain_geometry_only_hypothesis_without_patch", "gap": "No demonstrated maintenance benefit; allocation and backend call counts must be preserved"},
+    {"file_ids": [505, 507], "family": "mount_detachment", "finding": "existing_mount_edge_detach_helper_with_lock_and_order_constraints", "action": "audit_existing_helper_lock_scope_before_any_reuse", "gap": "Mutex temporary lifetime, caller lock preconditions and subtree root-detach ordering not proven equivalent"}
+  ],
+  "families": {
+    "block_byte_io": {
+      "title": "块设备字节读写",
+      "overlap": "容量裁剪和非对齐分段几何真实重叠",
+      "existing_reuse": "底层块I/O已共享；SeekableDisk带状态、预分配缓冲与flush语义，非直接替代",
+      "boundary": "只保留纯范围规划假设；快路径调用次数、读改写与错误结算仍分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "retained_lead",
+      "next_evidence": "共同修改需求和简化收益；不重开通用短写缺陷研究",
+      "evidence": ["research/notes/2026-11-06-block-io-review.md"]
+    },
+    "mount_detachment": {
+      "title": "挂载卸载提交步骤",
+      "overlap": "恢复covers或移除父child edge并detach",
+      "existing_reuse": "已有mount_edge_detach用于pivot_root，不先创建新helper",
+      "boundary": "锁持有范围、注册表校验与子树清理顺序必须保留；不能合并单点和递归策略",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "constraint_gap",
+      "next_evidence": "先核对match临时guard与let绑定的释放时机及直接Path测试的锁前提",
+      "evidence": ["research/notes/2026-11-06-mount-detach-review.md"]
+    }
+  }
+}

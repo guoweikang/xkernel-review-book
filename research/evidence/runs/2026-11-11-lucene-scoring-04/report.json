@@ -1,0 +1,158 @@
+{
+  "scope": "Lucene runtime control, not InMap execution",
+  "queries": [
+    [
+      "default",
+      "cpu",
+      "TermQuery",
+      "contents:cpu"
+    ],
+    [
+      "default",
+      "cpu*",
+      "PrefixQuery",
+      "contents:cpu*"
+    ],
+    [
+      "default",
+      "cpu~",
+      "FuzzyQuery",
+      "contents:cpu~2"
+    ],
+    [
+      "default",
+      "cpu*~",
+      "PrefixQuery",
+      "contents:cpu*"
+    ],
+    [
+      "default",
+      "( cpu*~ )^30.0 ( node*~ )^2.0",
+      "BooleanQuery",
+      "(contents:cpu*)^30.0 (contents:node*)^2.0"
+    ],
+    [
+      "classic-control",
+      "cpu",
+      "TermQuery",
+      "contents:cpu"
+    ],
+    [
+      "classic-control",
+      "cpu*",
+      "PrefixQuery",
+      "contents:cpu*"
+    ],
+    [
+      "classic-control",
+      "cpu~",
+      "FuzzyQuery",
+      "contents:cpu~2"
+    ],
+    [
+      "classic-control",
+      "cpu*~",
+      "PrefixQuery",
+      "contents:cpu*"
+    ],
+    [
+      "classic-control",
+      "( cpu*~ )^30.0 ( node*~ )^2.0",
+      "BooleanQuery",
+      "(contents:cpu*)^30.0 (contents:node*)^2.0"
+    ]
+  ],
+  "similarities": [
+    [
+      "WRITER",
+      "default",
+      "BM25(k1=1.2,b=0.75)"
+    ],
+    [
+      "SEARCHER",
+      "default",
+      "BM25(k1=1.2,b=0.75)"
+    ],
+    [
+      "WRITER",
+      "classic-control",
+      "ClassicSimilarity"
+    ],
+    [
+      "SEARCHER",
+      "classic-control",
+      "ClassicSimilarity"
+    ]
+  ],
+  "identical_content_controls": [
+    {
+      "mode": "default",
+      "query": "cpu",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "default",
+      "query": "cpu*",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "default",
+      "query": "cpu~",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "default",
+      "query": "cpu*~",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "default",
+      "query": "( cpu*~ )^30.0 ( node*~ )^2.0",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "classic-control",
+      "query": "cpu",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "classic-control",
+      "query": "cpu*",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "classic-control",
+      "query": "cpu~",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "classic-control",
+      "query": "cpu*~",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    },
+    {
+      "mode": "classic-control",
+      "query": "( cpu*~ )^30.0 ( node*~ )^2.0",
+      "raw_equal": true,
+      "adjusted_ratio": 900.0
+    }
+  ],
+  "artifact_sha256": {
+    "dependencies.json": "3f24c6e5c5342e3b67f37f5093cc0aa251591972a20171160efde9c62629f8f0",
+    "LuceneScoringProbe.java": "f2f03d125b2f815a4c5cf8a90bfe7be69e3804df90d629bbcc49b2027eccf686",
+    "runner.py": "28c0452f9f485fdc57046421f6f9486cae16d1887fffd163a75b95d0a1986c7d",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "stdout.txt": "1bd6ef20ea6404fe32179688204d2ab8fcebf211c3c7d7d8c0fbd4bc3210ff2e",
+    "stderr.txt": "91ef6787e0974f05e61f2c4df979de7b545fccda75590a7bbf5b676c0d7e3390",
+    "execution.json": "80cd0022b17ccdf4f93848a2410747079845c3146eb7efb9e7768ab182154c62"
+  }
+}

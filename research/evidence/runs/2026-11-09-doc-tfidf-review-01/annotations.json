@@ -1,0 +1,26 @@
+{
+  "schema": "doc-tfidf-review/1",
+  "scope": "Frozen top20; single assistant static review, not independent ground truth",
+  "records": [
+    {"rank": 1, "assessment": "configuration_alternatives", "finding": "SpinLock::new两版受stats和not(stats)互斥条件控制；stats版委托new_with_stats。不是同配置并存的两个锁实现。", "next": "保留配置感知控制；不据此排除跨配置共享机会"},
+    {"rank": 2, "assessment": "contract_difference", "finding": "Dentry::parent自行获取location读锁；LockedDentry::parent使用已经持有的location guard。不能为统一接口而无条件再加锁。", "next": "保留持锁上下文差异；未证明重新加锁导致具体故障"},
+    {"rank": 3, "assessment": "existing_delegation", "finding": "两个构造器均委托new_dir_with_inode_operations，差异是默认empty flags或显式flags；转换Arc的少量包装有重叠。", "next": "可讨论让默认包装委托带flags包装，但净收益未知，不追加补丁"},
+    {"rank": 4, "assessment": "small_overlap_benefit_unknown", "finding": "FileOperations和DeviceFileOps不同接口的默认ioctl均返回NotATty；默认错误实现真实相同，不代表两个操作接口应合并。", "next": "保留小型共同默认行为，未发现值得引入共享层的证据"},
+    {"rank": 5, "assessment": "configuration_alternatives", "finding": "SpinRwLock::new同样由stats/not(stats)选择，stats版使用new_with_stats。", "next": "保留配置控制；不自动判为无优化空间"},
+    {"rank": 6, "assessment": "contract_difference", "finding": "with_permission保留类型替换权限；with_node_type保留权限替换类型。文档词袋在本表示下相同，但角色关系相反，掩码与位移也不同。", "next": "作为词序／参数角色丢失的开发反例；不是新颖性结论"},
+    {"rank": 7, "assessment": "existing_delegation", "finding": "new_regular调用new并固定RegularFile；new继续调用new_regular_with_type并补默认权限。已有委托链。", "next": "不将用途相同误作独立实现"},
+    {"rank": 8, "assessment": "small_overlap_benefit_unknown", "finding": "WriteBeginRequest和WriteEndRequest各自pos getter相同，但一个为写入准备请求，一个为含copied的完成请求。", "next": "公共范围类型可能可行，新增层的收益未验证"},
+    {"rank": 9, "assessment": "contract_difference", "finding": "NoPreemptIrqSave与NoPreempt的new调用各自BaseGuard实现；IRQ状态保存和仅抢占控制不同，持有状态类型也不同。", "next": "结合对应acquire/release而非仅new正文判断"},
+    {"rank": 10, "assessment": "contract_difference", "finding": "NoPreemptIrqSave与IrqSave的new正文相同，但Self指向不同BaseGuard实现；前者还控制抢占并有明确操作顺序。", "next": "相同trait方法名不等于相同动态效果"},
+    {"rank": 11, "assessment": "contract_difference", "finding": "NoPreempt与IrqSave分别控制抢占与IRQ；统一的简短文档隐藏了不同资源协议。", "next": "保留类型与资源契约上下文"},
+    {"rank": 12, "assessment": "small_overlap_benefit_unknown", "finding": "写入准备／完成请求的len getter相同，与rank8属于同一潜在公共范围主题。", "next": "不按多对重复计成多个独立收益案例"},
+    {"rank": 13, "assessment": "contract_difference", "finding": "VfsFile使用原子fetch_or/fetch_and及AcqRel；VfsFileBuilder通过独占可变借用修改普通flags。目的相同但同步阶段不同。", "next": "不能为减少分支而抹平构建态与共享态"},
+    {"rank": 14, "assessment": "small_overlap_benefit_unknown", "finding": "WriteBeginRequest构造pos/len，WriteEndRequest还构造copied；同文档不足以描述阶段差异。", "next": "与rank8/12/15同主题，公共类型的简洁性需要独立论证"},
+    {"rank": 15, "assessment": "small_overlap_benefit_unknown", "finding": "两请求类型is_empty均判断len==0，真实小片段重复，但未建立维护成本或净收益。", "next": "保留未知，不将相同getter自动作为重构正例"},
+    {"rank": 16, "assessment": "existing_delegation", "finding": "d_is_dir直接调用Dentry::is_dir_entry，后者组合can_lookup与is_autodir。", "next": "已有包装层，不是两个独立判定实现"},
+    {"rank": 17, "assessment": "existing_delegation", "finding": "d_really_is_positive直接调用Dentry::is_really_positive。", "next": "与rank16同类，保留兼容入口和实现关系"},
+    {"rank": 18, "assessment": "existing_delegation", "finding": "VfsFile::mapping返回Arc<AddressSpace>引用，writeback_mapping_range调用其writepages_range，后者构造控制对象后进入writepages_control。", "next": "已有跨层委托，不是独立写回算法"},
+    {"rank": 19, "assessment": "contract_difference", "finding": "Once共享和可变访问共用大段Safety描述，但&self→&T与&mut self→&mut T不同；分别调用共享／独占底层访问函数。", "next": "初始化断言有重叠，借用契约仍须保留；净收益未知"},
+    {"rank": 20, "assessment": "existing_delegation", "finding": "Dentry::downcast经vfs_inode获取Arc<VfsInode>后调用其downcast；后者处理private_data。", "next": "保留委托与dentry需有inode的前置条件，不合并不同层次入口"}
+  ]
+}

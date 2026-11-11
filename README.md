@@ -21,7 +21,19 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory dist
 本机访问 `http://127.0.0.1:8765/`。远程服务器可先建立 SSH 端口转发；
 不要把本机回环地址误认为公网地址。公网或私有托管的部署地址以实际部署结果为准。
 
-## 目录
+## 源码研究工具
+
+固定范围、版本、验收门禁和证据输出的说明见
+[源码单位固定流程](research/tools/source-unit-workflow.md)。统一入口：
+
+```sh
+python3 scripts/run_source_workflow.py --repo /path/to/x-kernel \
+  --output research/evidence/runs/my-source-units-run
+```
+
+此工具只验证源码提取，不判断功能重复；输出目录不可重复使用。
+
+## 文件布局
 
 ```text
 chapters/                 持续维护的教学章节、练习、论文导航

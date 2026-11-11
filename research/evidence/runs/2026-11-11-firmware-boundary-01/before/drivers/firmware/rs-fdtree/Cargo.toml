@@ -1,0 +1,38 @@
+[package]
+name = "rs_fdtree"
+version = { workspace = true }
+edition = { workspace = true }
+authors = { workspace = true }
+license = { workspace = true }
+documentation = { workspace = true }
+description = "A pure-Rust #![no_std] crate for parsing Linux Flattened Devicetrees"
+keywords = [
+    "devicetree",
+    "fdt",
+    "dt",
+    "linux",
+]
+
+[features]
+default = []
+alloc = []
+fwnode = ["alloc", "dep:fwnode", "dep:lazyinit"]
+
+[[test]]
+name = "tests_address"
+required-features = ["alloc"]
+
+[[test]]
+name = "tests_fwnode"
+required-features = ["fwnode"]
+
+[[test]]
+name = "tests_index"
+required-features = ["alloc"]
+
+[dependencies]
+fwnode = { workspace = true, optional = true }
+lazyinit = { workspace = true, optional = true }
+
+[lints]
+workspace = true

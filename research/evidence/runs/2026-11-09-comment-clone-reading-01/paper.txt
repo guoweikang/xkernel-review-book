@@ -1,0 +1,693 @@
+                                          Source Code Comments: Overlooked in the Realm
+                                                     of Code Clone Detection
+                                                                      Sandeep Kaur Kuttal                                       Akash Ghosh
+                                                                       University of Tulsa                                    University of Tulsa
+                                                                    sandeep-kuttal@utulsa.edu                               akashghosh@utulsa.edu
+
+
+
+                                            Abstract—Reusing code can produce duplicate or near-               between code fragments [13], [16], [18], [20], [44], [62], [74],
+                                         duplicate code clones in code repositories. Current code clone        [77], [96].
+                                         detection techniques, like Program Dependence Graphs, rely on
+arXiv:2006.14505v1 [cs.SE] 25 Jun 2020
+
+
+
+
+                                                                                                                  One notable technique for detecting code clones is a
+                                         code structure and their dependencies to detect clones. These
+                                         techniques are expensive, using large amounts of processing           Program Dependency Graph (PDG) [96]; especially to find
+                                         power, time, and memory. In practice, programmers often utilize       semantic clones – functionally similar code fragments that
+                                         code comments to comprehend and reuse code, as comments               have same the pre and post conditions, but may or may not
+                                         carry important domain knowledge. But current code detection          be syntactically similar. PDG based techniques are effective
+                                         techniques ignore code comments, mainly due to the ambiguity          as they preserve statement ordering and analyze the data and
+                                         of the English language. Recent advances in information retrieval
+                                         techniques may have the potential to utilize code comments for        control dependencies of the code [56]. But, these techniques
+                                         clone detection. We investigated this by empirically comparing        are known to be computationally expensive and are biased,
+                                         the accuracy of detecting clones with solely comments versus          detecting certain clones but not others [73], [76], [85], [96],
+                                         solely source code (without comments) on the JHotDraw package,        [99], [100].
+                                         which contains 315 classes and 27K lines of code. To detect clones       Programmers often utilize code comments to understand and
+                                         at the file level, we used a topic modeling technique, Latent
+                                         Dirichlet Allocation, to analyze code comments and GRAPLE             reuse code, as comments carry important domain knowledge
+                                         – utilizing Program Dependency Graph – to analyze code. Our           [11], [17], [40], [84], [94]. But current code clone detection
+                                         results show 94.86% recall and 84.21% precision with Latent           techniques only evaluate the source code and ignore comments
+                                         Dirichlet Allocation and 28.7% recall and 55.39% precision using      within the source code, which are a significant portion of
+                                         GRAPLE. We found Latent Dirichlet Allocation generated false          software systems [79].
+                                         positives in cases where programs lacked quality comments. But
+                                         this limitation can be addressed by using a hybrid approach:             One of the primary reasons that clone detection techniques
+                                         utilizing code comments at the file level to reduce the clone set     ignore code comments is the ambiguity of the English lan-
+                                         and then using Program Dependency Graph-based techniques at           guage. For humans, it is easy to comprehend the similarities
+                                         the method level to detect precise clones. Our further analysis       and differences between words or topics, but a machine may
+                                         across Java and Python packages, Java Swing and PyGUI, found          treat the words differently. However, with recent advancements
+                                         a recall of 74.86% and a precision of 84.21%. Our findings call for
+                                         reexamining the assumptions regarding the use of code comments        in topic modeling techniques, we are able to make more accu-
+                                         in current clone detection techniques.                                rate predictions using machine learning and natural language
+                                            Index Terms—Clone Detection, Semantic Clones, Comments,            processing tools. One of the most versatile topic modeling
+                                         Cross-Language, Python, Java, Type-IV Code Clones.                    techniques is Latent Dirichlet Allocation (LDA), which has
+                                                                                                               been extensively used for mining hidden topic patterns.
+                                                                I. I NTRODUCTION                                  We conjectured that we can utilize code comments by
+                                            Code reuse involves modifying existing code fragments for          applying current topic modeling techniques to detect semantic
+                                         a new context or problem and is a common practice among               clones. Thus, we investigated the following:
+                                         programmers to improve their productivity [12], [14], [28],              RQ1: Can code comments be utilized as effectively as
+                                         [32], [90], [97], [98]. Although reuse practices by program-          source code to detect semantic clones at a file level?
+                                         mers can produce duplicate or near-duplicate fragments of             To answer this, we empirically compared the precision and
+                                         code in code repositories [39]. Studies have found 7% to 23%          recall of LDA (solely using comments) and the PDG-based
+                                         of software systems contain duplicated code fragments [5],            tool GRAPLE [96] (solely using source code) on an open
+                                         [9], [33], [42]. Such duplicated code fragments – code clones –       source software package called JHotDraw (315 java source
+                                         increase the complexity and cost of software maintenance [13].        files with 27KLOC). We found 94.86% recall and 84.21%
+                                         In many cases, code clones are also unintentionally generated         precision with LDA and 28.7% recall and 55.39% precision
+                                         by programmers as they work on similar programming tasks,             using GRAPLE.
+                                         overcome the limitations of programming languages, follow                RQ2: Can we utilize a hybrid approach to detect clones?
+                                         organizational coding conventions, or use design patterns [7].        Despite being able to use code comments to detect clones
+                                         To support reuse and decrease maintenance costs, various code         as in RQ1, our objective was not to replace current state-
+                                         detection techniques have been utilized to find similarities          of-the-art semantic clone techniques such as PDG since they
+are more precise and generate fewer false positives. Hence,             GRAPLE (GRAph samPLE) is a code detection technique
+we formulated RQ2 to investigate if we can utilize the whole        used to sample subgraphs of large graphs and then statistically
+program file, both code comments and source code, to detect         estimate the subgraphs’ characteristics [96]. We decided to
+clones. Therefore, we analyzed the clone sets generated by          use GRAPLE as it (1) is a statistically unbiased method for
+LDA and PDG for the JHotDraw package and found common               sampling dependence clones unlike most PDG-based clone
+clones between them.                                                detection tool that are biased towards detecting certain types of
+   RQ3: Can code comments help in detecting code clones             clones and (2) allows estimating parameters of the whole clone
+across programming languages?                                       population to reduce computational cost as it is impractical to
+Since code comments are in plain English, they are more often       process all dependence clones [96].
+similar across programming languages unlike the syntax of               GRAPLE uses Frequent Subgraph Mining (FSGM). FSGM
+source code. Hence, we conjecture that good quality com-            techniques identify recurring subgraphs of a graph database
+ments can support interoperability across several programming       by traversing the frequently connected subgraph lattices that
+languages. To investigate the utilization of quality comments       recur for k > 1, k being the number of times it occurred
+to detect clones in different languages, we formulated RQ3.         in a subgraph. Once a subgraph is identified, its support
+Thus, we analyzed two popular Java and Python graphics              is calculated as equal to the number of embeddings (map-
+packages, Java Swing (318 source files with 30KLOC) and             pings) that it has in the graph database. Finding reoccurring
+PyGUI (355 source files with 28KLOC). When comparing                isomorphic subgraphs is an expensive technique, and it can
+across languages, we found recall of 74.86% and precision           be improved by storing the embeddings of each subgraph.
+of 84.21%.                                                          Storing embeddings is called the canonicalization process. Af-
+                        II. BACKGROUND                              ter the canonicalization process, GRAPLE randomly samples
+                                                                    from the space of maximal frequent subgraphs. A frequent
+A. Program Dependency Graphs - Solely using Source Code             subgraph is maximal if no larger frequent subgraphs can be
+   Clone detection techniques utilize program representations       constructed. The sampling procedure allows us to compute
+such as source code text, tokens, abstract syntax trees (ASTs),     selection probabilities for subgraphs, which can be used in
+and program dependence graphs (PDGs), each with their own           statistical estimators such as the Horvitz-Thompson unequal
+set of advantages and disadvantages. For our purpose, PDG-          probability estimator [81]. To use the Horvitz-Thompson prob-
+based clone detection techniques are well suited and applied        ability estimator, it is necessary to determine the probability
+to detect semantic (functionally equivalent) clones as the use      pi that the ith maximal frequent pattern [[Hi ]] is selected on a
+of PDGs preserves the semantics of statement ordering and           random walk of k-frequent connected subgraph lattice (k-LG ).
+are oblivious to code syntax.                                       GRAPLE uses Markov chains to compute the probability [10].
+   PDG is a static representation of the flow of data through       A Markov chain moves from one state to another according
+a procedure [38]. The nodes of a PDG could be declara-              to the probability Pi,j (transition probability from state si to
+tions, simple statements, expressions, or control points of a       sj ) in the transition matrix P of a finite set of states, S = s1 ,
+source file. Control points are program branches, loops, or         · · · , sn . Here, states are considered as vertices of the lattice
+enter/exit points for a procedure. The edges of a PDG encode        (i.e. frequent patterns [[Hi ]]). The transition probability for an
+the data and control dependencies between program points.           edge vi to vj is the reciprocal of the out-degree of vi :
+Since PDGs abstract many arbitrary syntactic decisions that a
+                                                                                              1
+                                                                                       
+programmer makes while constructing a function, they are the                            Σk Ei,j                  if Ei,j = 1
+best fit for finding semantic code clones [56].                                 Pi,j =     1        if i = j∧vi is maximal
+   Program Dependence Graph G can be represented as a                                  
+                                                                                           0                      otherwise.
+directed graph G with a set of vertices V and a set of edges
+E = V × V . A labeling function maps vertices or edges to           B. Latent Dirichlet Allocation - Solely using Comments
+labels l: V| E → L. E can be represented by a matrix E. Ei,j =         Latent Dirichlet Allocation (LDA) is a statistical model
+1, if there is an edge between vertex vi to vertex vj . Otherwise   for topic modeling that has been extensively used in natural
+it is 0.                                                            language processing for representing text documents [15]. To
+   A subgraph H of G (H subset of G) only exists if there is        investigate the use of code comments in clone detection, we
+an injective mapping m: VH → VG such that:                          specifically utilized LDA as (1) it is the most popular topic
+   1) Labels of all vertices in H should be the same when           modeling technique in the fields of machine learning and
+        mapped to the labels of vertices in G                       artificial intelligence [31], [53], (2) allows faster training, (3) is
+   2) All edges in H are also in G                                  simple, and (4) efficiently utilize statistics. Further, we wanted
+   3) Labels of all edges in H should map with all edge labels      to use a simple and efficient count based NLP technique to
+        in G                                                        investigate our RQs rather than focusing on the performance
+These mappings m are called embeddings. Fig.?? shows two            as supported by sophisticated techniques like doc2vec. Given
+code fragments and their respective PDGs. Both PDG graphs           a corpus of documents, LDA identifies a set of topics; it
+are the same despite one code fragment using a for-loop and         associates a set of words with a topic, and a specific mixture
+the other a while-loop to calculate the factorial of a number.      of these topics for each document.
+Fig. 1. Code fragments for determining the factorial of a number, fragment 1 uses a for-loop and fragment 2 uses a while-loop. Each fragment is accompanied
+by a program dependency graph. Although the code fragments use different syntax, the dependency graphs are the same. Hence, the code fragments are
+semantic clones and can be detected by PDG-based techniques.
+
+
+
+   Basic terminologies to describe LDA are:                                       3) For each wn  W do
+   Word: A word is a basic unit that has been extracted from                              - choose a topic zn ∼ Multinomial(theta)
+a vocabulary.                                                                             - choose a word wn from p(wn |zn ,β), a multino-
+   Document: A document is a series of words denoted by d                            mial probability φZn
+= w1 , w2 , ..., wn , where wn is the nth word in the series. We
+considered source files as documents.
+   Corpus: A corpus is a set of M documents denoted by D =
+d1 , d2 , ....., dM . We considered a code repository (or package)                The LDA model uses a document word matrix Wd [w,
+of source files as a corpus.                                                   Fd ] = n, where n is a value indicating the importance of
+   Topic: Topics are identified based on frequent and similar                  the word w in the file Fd . The value of n is computed
+words in a corpus. Each document d can be modeled as a                         using Gibbs sampling [91], which uses a Markov Chain
+multinomial distribution θ(d) over T topics, and each topic                    Monte Carlo method to converge to the target distributions
+Zj , j = 1...T as a multinomial distribution ψ(j) over the set                 in some iterations. LDA assumes documents are produced
+of words W.                                                                    from a mixture of topics, and these topics generate words
+   Our task is to make an estimate of ψ and θ in order                         based on their probability distribution. LDA samples topics
+to discover the set of topics used and the distribution of                     of documents. LDA takes primarily two parameters, α and β,
+these topics in each document in a corpus of D documents                       where α represents document-term density and β represents
+[15]. However, the LDA model assumes a prior Dirichlet                         topic-word density. The higher the value of α, the more topics
+distribution on θ, thus allowing the estimation of ψ without                   the documents are composed of. A lower value of α indicates
+requiring the estimation of θ.                                                 that the document contains fewer topics. On the other hand,
+   The LDA algorithm [15] works as follows:                                    the higher the value of β, the more words the topic contains. A
+   1) Choose N ∼ Poisson(ξ): Select the number of words N                      lower value of β indicates that the topic contains fewer words.
+   2) θ∼Dir(α): Select θ from the Dirichlet distribution pa-                   Fig. 2 shows the labelling of code comments from two source
+      rameterized by α                                                         files and indicating the relevant topics.
+Fig. 2. The mechanics of LDA model after the comments are extracted from source files. Bold arrows depict the highest relevance between the comments
+and a topic, whereas the dashed arrows depict the next best relevance between them. Both source files have the highest relevance with Topic 3; the highlighted
+words indicate the occurrence of each word in respect to their topic.
+
+
+
+                            III. A PPROACH
+    To investigate the potential of using code comments to de-
+tect clones, we utilized Open Source Software (OSS) because
+code reuse is an acceptable practice in the OSS community as
+it is believed that knowledge should be shared with humankind
+[49].
+
+A. Dataset
+   We used three open source packages: JHotDraw [47], Java
+Swing [46], and PyGUI [69]. We used JHotDraw and Java                                            Fig. 3. Block Diagram of PDG Evaluation.
+Swing because they are popular packages that have been
+widely used in clone detection studies [77], [107]. JHotDraw
+contain 315 source files with approximately 27 KLOC and                            1) Using PDG: Program Dependence Graph is one of the
+Java Swing contains 318 source files with 30 KLOC. To                           most advanced procedures used for identifying semantic code
+compare PDG and LDA, we used the JHotDraw package.                              clones. Our approach with PDG was accomplished with the
+For cross-language clone detection, we used Java Swing                          help of GRAPLE, an existing code detection tool, which
+and PyGUI. We decided to use PyGUI as it is a graphical                         generates the clone sets by sampling isomorphic subgraphs.
+application similar to Java Swing making the two ideal for                      Fig. 3 shows the overall mechanism for detecting clones
+comparing cross-language clones. PyGUI contains 355 source                      using source code (without comments). The PDG evaluation
+files with 28 KLOC.                                                             consisted of:
+                                                                                   JPDG: We used jpdg [96], a PDG generator developed
+B. System Configuration                                                         by Henderson et al. [24] as it is more effective in detecting
+                                                                                semantic clones over its predecessors. The jpdg tool runs
+   For computing and evaluating our dataset, we used a core
+                                                                                on Apache Buildr 1.4.15 and only works with Java 1.7
+i7 Quad Core 4th Gen processor with 3.6 GHz of clock speed
+                                                                                platform, so we had to rely solely on Java 1.7 for generating
+and 32 GB of RAM.
+                                                                                PDGs. jpdg generates a JSON file, which contains a list of
+                                                                                dictionaries of two types: a list of vertices and a list of edges.
+C. Procedure
+                                                                                The dictionaries for the vertices consist of key-value pairs,
+   To study semantic clone detection, we conducted simula-                      with keys such as“id,” “label,” “package name,” “class name,”
+tions using PDG and LDA.                                                        “method name,” “type,” “start line,” “end line,” etc. For in-
+             Fig. 4. Block Diagram of LDA Evaluation.
+
+
+
+
+stance, the key “id” represents the vertex number in the
+PDG. The dictionaries for the edges contained keys such as,
+“src,”“targ,” “src label,” “targ label,” etc. The jpdg generated
+the whole graph database in a single .veg file (49 MB in
+size), which was used by GRAPLE for sampling out the clone
+sets with and without probability.
+   GRAPLE with probability: GRAPLE takes the .veg
+file as an argument along with standard parameters such as
+minimum-support, sample-size, minimum-vertices, and proba-
+bilities. Then, GRAPLE creates a transition matrix for comput-
+ing the selection probability Pi of the frequent pattern [[Hi ]].            Fig. 5. Different types of comments in a source file.
+Each cell of the transition matrix stores the probability of
+transitioning state from one vertex vi to another vertex vj .
+Thus, this process encounters the “Curse of Dimensionality,’           2) Using LDA: Fig. 4 shows the block diagram of the
+as it consumes a huge amount of resources, both memory              evaluation mechanism, explaining the training of the LDA
+and processing power. To address this, we restricted to only        model and the extracting and generating of topics using it.
+generating subgraphs with <20 edges (still generating matrix           Extracting Comments: In order to train the model we
+of 220 X 220 ) as [96] indicated this to be when the submatrix      needed to extract the comments from the source files. We
+is manageable. The selection probabilities were computed            wrote script in Python using RegEx to extract the comments
+with support=5, sample-size=100, and min-vertices=8. Once           from JHotDraw.
+selection probabilities were computed, GRAPLE generated the            Comments serve as an integral part of a source file, and
+clone sets.                                                         are used for understanding code structure and functionality
+                                                                    of the source file [78], [83], [93]. Seidl et al. differentiated
+   GRAPLE without probability: To avoid the “Curse                  Java’s code comments into seven categories [17]. We used all
+of Dimensionality,” we used the option to turn off                  types of comments (refer Fig. 5), except for copyright and task
+the selection probabilities. GRAPLE generated the                   comments. The reason for this was that copyright comments
+maximal-patterns.dot file containing digraphs                       do not contain information related to the functionality of the
+that represented a clone set. We wrote a script in Python that      source code and task comments (developer notes containing
+identified all the clone sets from maximal-patterns.dot             todo) were not present in our dataset.
+by collecting the nodes of the digraph with labels and strings         Finally, we did not consider the HTML syntax from the
+containing a source file. We varied the standard parameter,         comments. The primary reason for excluding the HTML tags
+sample-size, from 20 to 200 and observed a very small               (e.g. <html>,<p>, and <br>) was that they misdirected the
+increase in the clone sets.                                         LDA training process. As LDA uses multinomial distribution,
+  The outputs from GRAPLE with and without probability              the large frequency of the HTML tags in the corpus caused the
+were then parsed to the recall and precision module. The recall     model to assign higher probabilities to irrelevant characters.
+and precision for GRAPLE with selective probability was                Clean and Normalize: Once the comments were extracted
+reported as Dreported GP and without selective probability as       from the source files, we used the Natural Language ToolKit
+Dreported GN P .                                                    to clean the stopwords and punctuations and then to normalize
+the comments. Once the comments were processed, they were          semantic clones using Java Compare and Eclipse Java Editor to
+combined together to form the corpus.                              build the ground truth. In total, 45 hours were spent generating
+   Create Dictionary: The corpus generated from the previous       the ground truth Dactual . For cross-language, another senior
+module was used to create a dictionary. A dictionary is a          undergraduate and graduate student created the ground truth.
+collection of all the unique words in the corpus. It also maps     They spent 55 hours generating the ground truth.
+between the normalized words and assigned IDs (IDs are                In the JHotDraw package, 52 clone sets were found; simi-
+generated by the function itself). This was used later to train    larly, in Java Swing, 19 clone sets were found, and in PyGUI,
+the LDA model.                                                     50 clone sets were found. The clone sets consisted of clones
+   Create Doc-Term Matrix: Once a dictionary was pre-              ranging from a minimum of 2 to a maximum of 45.
+pared, it was used to create the document-term matrix. A              Precision is the percentage of correctly reported differential
+typical document-term matrix displays the unique words in          multisets. Precision is calculated as |Dreported ∩ Dactual | /
+the columns and documents in rows. So, a cell Ci,j in the          |Dreported |, where Dreported is the set of multisets reported
+doc-term matrix means the frequency of the j th word in the        by either LDA or PDG.
+ith document.                                                         Recall is the percentage of actual differential multisets
+   LDA: After the data was processed, we used the corpus           reported. It is calculated as |Dreported ∩ Dactual | / |Dactual |.
+along with the dictionary to train the LDA model. Once the
+model was trained, individual source files were passed to it                                IV. R ESULTS
+to generate an associated topic for that file. The model used         The state-of-the-art semantic clone detection techniques
+passes and iterations between 1 to 1000 topics and then set to a   [95], [101] rely on programs that yield the same outputs
+specified value that generated the maximum number of topics.       using dynamic code similarity detection [29], [51], [82],
+Our primary concern with LDA was that it cannot assign a           and identify similar behaviors of different programs by
+meaningful label (topic) for the source files. Since we were       comparing instruction-level execution [21]. These approaches
+more interested in the clusters of similar files assigned to a     are precise, but not scalable, and have limitations for practical
+single topic (clone set), we were not concerned with LDAs          usage. Moreover, none of these approaches have considered
+inability to assign meaningful names (topics). Below is an         code comments for identifying similar code fragments. We
+example of our output, with each clone set belonging to a          wanted to explore the feasibility of using code comments as
+topic.                                                             a parameter for clone detection at a file level. Hence, we
+   Clone Set 1:[‘Locator’,                                         investigated:
+‘TriangleRotationHandler’]
+Clone Set 2:[‘DrawApplet’, ‘NetApplet’,                            RQ1: Can code comments be utilized as effectively as source
+‘SVGApplet’, ‘PertApplet’]                                         code for detecting semantic clones at a file level?
+   We did not impose any restriction on the number of words
+for a labeled topic.                                               A. GRAPLE
+   We proposed two mechanisms to compare the clone sets               To investigate RQ1, first, we used GRAPLE [96] with and
+generated by LDA and the ground truth.                             without the selection probability Pi (refer Sec. III).
+   • Method 1: Once the clone sets were generated, we cal-            GRAPLE with Probability: We used jpdg to generate the
+     culated the precision and recall by unifying all the clone    program dependence graph and then used GRAPLE to detect
+     sets into one single clone set with unique file names.        the clone sets. jpdg generated the .veg file for JHotDraw,
+     For instance, Clone Set 1:[‘F1’, ‘F2’] Clone                  which consisted of 61K vertices and over 118K edges, an
+     Set 2: [‘F1’, ‘F4’] would become New Clone                    overall size of 49 MB. We used the same parameters as used
+     Set 1:[ ‘F1’, ‘F2’, ’F4’]. Similarly, with the                by Henderson et al. [96]: with the sample-size set to 100, the
+     ground truth we created another clone set and then            minimum vertices set to 8, and the support set to 5. Using the
+     performed the recall and precision as Dreported LDA1 ;        selection probabilities generated 80 clone sets. By manually
+     similar approach by Maskeri et al. [23].                      inspecting all clone sets, we found most had just one source
+   • Method 2: Here we kept the clone sets intact. We cal-         file. These files were removed from our Dreported GP ; as
+     culated the precision and recall between each individual      GRAPLE detected similar method/function-level clones within
+     clone set from Dreported LDA2 (clone sets reported by         that same file. These files were also excluded from the clone
+     LDA) and Dactual LDA2 (clone sets reported by the             sets, as we were interested in detecting clones at the file level.
+     ground truth), and then we took the highest value, since      Moreover, we also found some clone sets that were duplicates,
+     the pair with the highest value would undoubtedly be          where the file pairs had more than one similar functionality
+     a match. Finally, we took the average of precision and        on different sections of their code. These extra clone sets were
+     recall for all the clone sets of Dreported LDA2 .             removed and only one was retained as it did not matter if more
+                                                                   than one part of a source file was similar to another part of the
+D. Ground Truth                                                    source file. After excluding the function-level and duplicated
+  To evaluate the effectiveness of the PDG and LDA methods,        clone sets, only 22 remained. We found Dreported GP recall
+a senior undergraduate and graduate student investigated the       of 28.7% and precision of 55.39%.
+                                                                                              TABLE I
+                                                                               R ECALL AND P RECISION FOR JH OT D RAW
+
+                                                                                               #Clones   Recall   Precision
+                                                                                  With Pr.       22      28.7%     55.39%
+                                                                         PDG     Without Pr.     17      27.84%    52.94%
+                                                                                 Method 1        66      94.86%    84.21%
+                                                                         LDA     Method 2         7      28.61%    88.57%
+
+
+
+         Fig. 6. Snapshot of Clone Sets of JHotDraw Package.
+                                                                  we can utilize comments for detecting code clones at a file
+                                                                  level.
+   GRAPLE without Probability: Without using the selection           With vs. Without the Selection Probabilities: We wanted
+probabilities, we generated clone sets by varying the sample-     to compare and contrast the clone sets generated with and
+size from 20 to 200, however, only a small increase in clone      without the selection probabilities. Table I shows that 22
+sets were observed. Hence, we generated clone sets using          clone sets were detected using selection probabilities and 17
+the above mentioned specifications: sample-size set to 100,       without using selection probabilities. To check the quality
+minimum-vertices to 8, and support set to 5. We found a total     of the clones, we manually went through all the clone sets
+of 68 clone sets were generated. After excluding the function-    reported between the two approaches and also measured the
+level and duplicated clone sets, only 17 remained. We found       correlation between Dreported GP by GRAPLE with selec-
+Dreported GN P recall of 27.84% and precision of 52.94%.          tion probabilities and Dreported GN P by GRAPLE without
+                                                                  selection probabilities. It was found that 16 out of 17 clone
+B. LDA                                                            sets reported by Dreported GN P had been also reported by
+                                                                  Dreported GP . In addition, we found that without selection
+   Secondly, to study whether comments can be utilized for        probability GRAPLE missed 5 clone sets and wrongly clas-
+clone detection, we trained the LDA model on code comments        sified 1 clone set compared to including the selection proba-
+from 310 files of JHotDraw using Method 1 and Method 2.           bilities. Although the Dreported GP produced a comprehensive
+Five files were excluded from the data set as they did not        clone set, it cost 30 hours and 74 GB of memory. On the other
+contain any code comments.                                        hand, Dreported GN P found 17 clone sets in 4.5 seconds and
+   LDA using Method 1: We used LDA to generate topics             consumed 481.5 MB.
+(interpreted as a set of semantically related linguistic terms)      Effect of PDG based Tool’s Constraints: The PDG’s
+derived from comments. The LDA model was trained using            (GRAPLE) performance was attributed to the parameters, code
+all the files in the corpus. We randomly set the topic limit      structure, and code dependencies. For example, PDG was
+to 100. Using this process, 66 clone sets containing 274          not able to detect the clone set [XMLParseException,
+files were extracted. Fig. 6 depicts a subset of clone sets       XMLException] as clones because while comparing these
+generated by LDA (Note: since the assigned topics were not        files, PDG considered the difference in the number of
+labeled by LDA, we refer to them as clone sets). Once all the     arguments, classes extended (different super classes), and
+clones sets were generated, precision and recall metrics were     the presence of additional methods. XMLParseException
+computed. Based on the Dreported LDA1 , recall was 94.86%         extends Runtime Exception and requires three argu-
+and precision was 84.21%. Hence, it was concluded that we         ment values: ‘name,’ ‘message,’ and ‘LineNr.’ The
+can utilize comments to detect code clones.                       XMLException class extends Exception and requires five
+   LDA using Method 2: In Method 2, we used a more                arguments in the constructor: ‘SystemID,’ ‘lineNr,’
+sophisticated approach to calculate the precision and recall.     ‘Exception,’ ‘msg’ and ‘reportParams’ and has
+The topic number was set to 105 as Ghosh and Kuttal [2]           a separate method to print stack traces for the exceptions.
+found when LDA was trained with over 1-1000 topics using          These constraints by GRAPLE affected the detection.
+1000 iterations with 50 passes, it had highest recall at 100-        Recall vs. Precision using LDA: Balancing the trade-off
+108 topics. LDA found 7 clone sets with 21 files. Based on        between recall and precision is one of the major concerns in
+the Dreported LDA2 , recall was 28.61% and precision was          using LDA. When we applied the LDA model to the comments
+88.57%. After manually analyzing the codes to check the           and varied the topic numbers from 1 to 1000, we observed a
+authenticity of the clone sets, we found that the matched clone   steady increase in precision and decrease in recall. Identifying
+sets, i.e Dreported LDA2 ∩ Dactual LDA , were functionally        the range where the recall and precision will be balanced is
+identical in terms of object or instance creation.                challenging and may differ based on package size and contents
+                                                                  of the comments.
+C. Discussions                                                       Effect of Code Comments on LDA: The performance
+   Table I summarizes the number of clone sets reported, the      of LDA was very much dependent on the quality of the
+recall, and the precision of PDG (with and without probability)   code comments. When the code comments were present LDA
+and LDA (with the different methods). Our results show that       was able to detect clones that were not detected by PDG.
+For example, LDA found the [XMLParseException,                                   of the whole process. This will help in utilizing source
+XMLException] clone set, which PDG did not find. As seen                         code as well as the comments of a program to detect
+in Fig. 2, the code comments of both source files contained                      unique sets of clones. Processing all clone dependencies for
+better information on the exceptions. Although, in the cases                     even moderately sized programs is impractical. As noted
+where the code comments were vague, LDA detected false                           by Henderson et al. [96], for programs with 70 KLOC,
+positives. Moreover, as expected, the lack of code comments                      around 10 million clones were detected before the space was
+resulted in LDA missing clones completely.                                       exhausted. LDA can be utilized to generate the clone sets at
+   The problem of mismatched, missing, and outdated                              the file level and then PDG-based techniques can be applied
+comments has been well approached by the software research                       on these selected clone sets to detect the function-level clones.
+community [25], [67] by utilizing techniques such as manually
+crafted heuristics and stereotypes [52], information retrieval                   RQ3: Can code comments help in detecting clones across
+[87], [88], probabilistic models [59], [66], [86], [102],                        programming languages?
+Recurrent Neural Networks [89], and deep learning [103], we
+believe that these advanced code generation techniques can                          To determine whether comments can be utilized to detect
+be utilized to address LDA’s limitation of vague comments                        clones across multiple programming languages, we investi-
+or lack of comments.                                                             gated code comments in Java Swing and PyGUI which are
+                                                                                 popular options in Java and Python, respectively, to build
+RQ2: Can we utilize a hybrid approach to detect clones?                          graphical user interfaces. We used Method 1 and Method 2
+                                                                                 as discussed in Section III. Table II summarizes the recall
+   To investigate whether we could utilize the whole source                      and precision of Java Swing and PyGUI. For Java Swing, we
+file, i.e. both the source code and its comments, we started by                  found 66 clone sets with a 90.68% recall and 49.49% precision
+examining the similarities between the clone sets generated                      according to Method 1 and 69 clone sets with a 37.83% recall
+by LDA and PDG for the JHotDraw package. We computed                             and 32.77% precision according to Method 2. For PyGUI, we
+|Dreported LDA1 ∩ Dreported GN P |, where Dreported LDA1 is                      found 61 clone sets with 51.12% recall and 39.21% precision
+clones reported by LDA using Method 1 and Dreported GN P                         for Method 1 and 58 clone sets with 65.62% recall and 53.33%
+is clones reported by GRAPLE without selection probability.                      precision for Method 2.
+We started by setting the similarity index to 1 (S1 ), i.e.                         In order to detect the clone sets across the two packages
+all the clone sets with at least one matching file. For                          Java Swing and PyGUI using LDA, we created a dictionary
+instance, ‘BezierPath’ is the matching file among                                using both of the packages. The corpus consisted of 314 source
+Dreported LDA1 = [‘BezierPath,’ ‘DOMStorable,’                                   files from Java Swing and 355 source files from PyGUI. For
+‘RoundRectangleFigure’] and Dreported GN P =                                     each source file, comments were extracted out and parsed to
+[‘BezierPath,’ ‘DoubleStroke’]. Next, we set                                     the LDA model one at a time such that each source file was
+the similarity index to 2 (S2 ) and 3 (S3 ). By following                        assigned to a particular topic number. Source files with similar
+this procedure, we found that the largest clone set can be                       topic numbers were put together to form a clone set. Once the
+generated when the similarity index is 3, making it the                          clone sets were created, we calculated the recall and precision.
+maximum similarity index.                                                        We found 88 clones common between Java Swing and PyGUI
+   After collecting clone sets based on the similarity indices,                  (refer Table II), with recall of 74.86% and precision of 84.21%
+we created a superset containing all those files (S1 ∩ S2 ∩                      using Method 1 and we found recall of 28.61% and precision
+S3 ). The superset contained unique file names. In our case we                   of 58.57% using Method 2.
+found 40-50 common files within the LDA and PDG clone set.
+This superset can be used as input for PDG based techniques                      E. Discussions
+like GRAPLE to detect function level clones. This will help                         Our results show that we can utilize code comments to
+in utilizing code as well as the comments of a program to find                   detect clones across different languages to an extent. But
+unique sets of clones.                                                           limitations of the quality of code comments and large num-
+                                                                                 ber of false positives will persist. As discussed before, we
+D. Discussions
+                                                                                 recommend using automated code comment generation and
+   We recommend the use of a hybrid technique, i.e. utilizing                    hybrid-technique utilizing LDA and language specific PDG to
+both LDA and PDG to detect the semantic clones. By                               detect clones.
+applying LDA, we obtained 130 unique files for our data
+set1 , which reduced the dataset size by more than 50%.                                            V. T HREATS TO VALIDITY
+This reduced dataset obtained from LDA can be used by                               Threat to External Validity: We studied medium-sized
+GRAPLE with selection probabilities. Hence, the hybrid                           Java projects and a Python project, which cannot serve as
+approach can reduce both the time and space complexity                           an exemplar for all software systems. Secondly, for cross-
+   1 LDA generates the clone sets based on the random states assigned. For our
+                                                                                 language verification we studied only two languages, Java
+experiment, we set the random seed to 100, so that the LDA model always          and Python. Thirdly, we explored only one PDG based tool –
+returned the same number of clone sets; i.e., the same number of unique files.   GRAPLE – and only one topic modeling technique – LDA.
+                             TABLE II                                 Despite this detection and analysis, finding Type III along
+     C ROSS -L ANGUAGE E VALUATION OF JAVA S WING AND P Y GUI      with semantic clones (Type IV) is still an open research
+                                   #Clones   Recall    Precision   problem [13]. Semantic clones are functionally similar code
+                       Method 1      66      90.68%     49.49%     fragments that have similar pre and post conditions, but may or
+     Java Swing        Method 2      69      37.83%     32.77%     may not be syntactically similar. Basit et al. [26] have explored
+                       Method 1      61      51.12%     39.21%
+       PyGUI           Method 2      58      65.62%     53.33%     the applicability of generics for the removal of code clones
+                       Method 1      88      74.86%     84.21%     in the Java Buffer Library and the C++ Standard Template
+ Java Swing - PyGUI    Method 2      81      28.61%     58.57%     Library (STL) and concluded that programming language con-
+                                                                   structs limit the applicability of generics or templates for clone
+                                                                   removal. Most existing clone detection techniques analyze the
+Despite these limitations, this study is a first step towards      lower level code (e.g., assembly code, Java Bytecode, or .Net
+exploring the viability of the utilization of code comments        intermediate language) as obtained from the transformation
+in clone detection. Future studies on large-scale systems and      by the compiler rather than from analyzing the textual source
+with different languages, tools, and techniques need to be done    code [19], [35], [36].
+to analyze the generalizability of our results.                       Clone detection mechanisms have utilized various tech-
+   Threat to Internal Validity: LDA’s recall and precision         niques, like searching for isomorphic sub-graphs [71], tracing
+depends largely on the quantity and quality of contents. In        program executions [56], using deep learning [58], and using
+our data, we adjusted the number of passes and iterations          abstract memory states [48]. Overall, prior research has ig-
+to find a balance between the recall and precision of LDA.         nored code comments, therefore, we explored the viability of
+But, in practice, finding the right balance is challenging and     comments to detect semantic clones at a file level by using
+limits the usage of LDA. Additionally, the LDA approach            LDA, a topic modeling technique.
+cannot be applied to visual programming languages as they             1) Clone Detection using PDG: Krinkes Duplix algorithm
+do not contain code comments. Yet, our results indicate that       [41] and Komondoor and Horwitzs algorithms [71] had been
+topic modeling techniques could be applied to text based           utilized as PDG-based techniques to detect clones. Higo and
+programming languages to detect clones.                            Kusomoto extended Komondoor’s algorithm to detect contigu-
+   Threat to Construct Validity: To maintain consistency           ous clones [105], [106]. Deckard [74] showed an innovative
+throughout the study, we analyzed only a single version            way to map PDGs to abstract syntax trees for detecting clones.
+of the Java library files. This decision was based on the          Pham et al. [64] conducted research to detect clones by using
+facts that GRAPLE and past studies used JHOtDraw v7.0.6.           labeled directed graphs and finding clones with vSiGram.
+Furthermore, with different versions, the number of files could    Henderson and Podgurski [96] developed a PDG-based clone
+have been altered by the authors, and thus might have caused       detection tool using maximal frequent subgraph mining with
+mis-matches in the detection process.                              different graph mining patterns [27] and GRAPLE [96]. We
+                                                                   used the GRAPLE semantic clone detection tool to detect
+                     VI. R ELATED W ORK
+                                                                   clones when considering code without comments.
+A. Code Clone Detection Techniques
+   In software engineering, many techniques [13] have been         B. Clone Detection Across Languages
+proposed to detect code clones based on token similarity              The problem of detecting clones persists across multiple
+(e.g., CCFinder [77], CloneMiner [18], and CloneDetective          languages especially in large-scale software systems. With an
+[62]), Abstract Syntax Tree (AST) similarity (e.g., CloneDR        increase in the size of clones the relation between them gets
+[20], Deckard [74]), or Program Dependence Graph similarity        more subtle [4], [8], [57], [80]. The existing approaches as
+(e.g., [16], [44], [96]). These clone detectors can detect not     mentioned above perform clone detection only in a single lan-
+only textually identical clones (Type I), but also parameterized   guage. Some research has been conducted on cross-language
+clones (Type II) and gapped clones (Type III) [55]. Textually      clone detection. Kraft et al. [60] conducted clone detection
+identical clones refer to code fragments with differences only     research mainly on .NET languages. Microsoft’s Common
+in whitespace, layout, and comments. Parameterized clones          Intermediate Language (CIL) has been used by Al-Omari
+refer to syntactically identical code fragments, except for        et al. [20] to represent source code, which detects similar
+differences in identifiers, literals, and types. Gapped clones     code fragments. This tool is restricted to find true positive
+refer to copied fragments with further modifications such          cross-language code clones in .NET languages only. Another
+as changed, added, or removed statements. A code clone             important contribution comes from Avetisyan et al. [1], which
+often appears in multiple places in the system; i.e., it has       uses LLVM bitcode to detect semantic clones. The approach
+multiple instances. Detecting and analyzing differences in         is applicable to any languages that can be compiled to LLVM
+parameterized and gapped clones has been used in the software      bitcode. Cheng et al. [101] conceptualized the notion of
+engineering literature to manage and maintain code clones          detecting similarities in sets of components written in different
+by identifying refactoring opportunities [63], detecting bugs      languages, using Natural Language Processing techniques to
+[76], supporting change propagation in code clones [34], [43],     mine projects’ revision histories. Vislavski et al. [95] designed
+searching code [72], and detecting plagiarism [48].                a tool, LICCA, for cross-language clone detection that is based
+on intermediate program representation to unify semantically               matching parameters, code structure, and code depen-
+similar code fragments. They evaluated the tool on an extended             dencies.
+set of cloning scenarios over five different languages (i.e. Java,   Our study provided evidence that comments, which are under-
+JavaScript, C, Modula-2, Scheme). One of the limitations of          rated in clone detection research, can be effectively utilized.
+LICCA [95] is that it can detect small fragments (few LOCs)
+of code clones and is ineffective in large software systems.                                     R EFERENCES
+None of these techniques consider code comments for clone
+detection.                                                            [1] A. Avetisyan, S. Kurmangaleev, S. Sargsyan, M. Arutunian, and A.
+                                                                          Belevantsev. LLVM-based code clone detection framework. Computer
+C. Software Engineering and LDA                                           Science and Information Technologies, pp.100-104, 2015.
+                                                                      [2] A. Ghosh and S. K. Kuttal, Semantic Code Clones: Can Source Code
+   LDA has been widely used in software engineering but                   Comments Help?, IEEE Conference VL/HCC, 2018.
+mostly for program comprehension and maintainability. Wilde           [3] A. Kuhn, S. Ducasse, and T. Girba, Semantic clustering: Identifying
+et al. [65] proposed the use of linguistic information to                 topics in source code, Information and Software Technology, 49(3),
+                                                                          2006.
+identify the functional intent of the system. Biggerstaff et          [4] A. Sheneamer and J. Kalita, Article: A Survey of Software Clone
+al. [92] have suggested the assignment of domain concepts                 Detection Techniques, International Journal of Computer Applications,
+as an approach to program comprehension. Prior research                   137(10) 2016.
+                                                                      [5] B. Baker, On Finding Duplication and Near-Duplication in Large
+has proposed using function names and signatures to obtain                Software Systems, In Proceedings of Working Conference on Reverse
+domain specific functions [6]. Furthermore, file names often              Engineering, pp. 86-95, 1995.
+carry the functional intent of the source code specified in the       [6] B. Caprile and P. Tonella, Nomen est omen: Analyzing the language of
+                                                                          function identifiers, In Proceedings of the Sixth Working Conference
+file [61]. Antoniol et al. used information retrieval methods             on Reverse Engineering, pp.112-122, 1999.
+to find traceability links between code documentation and             [7] C. K. Roy and J. R. Cordy, A survey on software clone detection
+source code [22]. Oezbek et. al [11] created an Eclipse plugin,           research, Technical Report TR 2007-541, Queens University, 2007.
+                                                                      [8] C. K. Roy, J. R. Cordy, and R. Koschke, Comparison and evaluation
+JTourBus, to lead the programmer directly to relevant details             of code clone detection techniques and tools: A qualitative approach,
+by creating a tour through the source code. Kuhn et al. [3]               Science of Computer Programming, 74(7), 2009.
+used a Latent Semantic Analysis based approach for software           [9] C. Kapser and M. Godfrey, Supporting the Analysis of Clones in
+                                                                          Software Systems: A Case Study. Journal of Software Maintenance
+comprehension identifying topics in source code by seman-                 and Evolution: Research and Practice , 18(2), pp.61-82, 2006.
+tically clustering software artifacts such as methods, files, or     [10] C. M. Grinstead and J. L. Snell, Introduction to Probability, American
+packages based on identifiers’ names and comments. Unlike                 Mathematical Society, Providence, RI, 2 edition, 1997.
+these approaches, we are interested in utilizing linguistic topics   [11] C. Oezbek and L. Prechelt, JTourBus: Simplifying Program Under-
+                                                                          standing by Documentation that Provides Tours Through the Source
+(of code comments) to detect clones rather than comprehend                Code, In Proceedings of IEEE International Conference on Software
+programs (source code).                                                   Maintenance, pp.64-73, 2007.
+                                                                     [12] C. W. Krueger (1992). ”Software reuse”. In ACM Computing Surveys.
+                     VII. C ONCLUSIONS                                    24(2):131-183.
+                                                                     [13] C.K. Roy, M.F. Zibran, and R. Koschke, The vision of software clone
+  This is the first study to investigate the realm of code                management: Past, present, and future (Keynote paper), In Proceedings
+comments to detect code clones. We made the following                     of IEEE Software Maintenance, Reengineering and Reverse Engineer-
+                                                                          ing, pp.18-33, 2014.
+contributions:                                                       [14] Charles W. Krueger. 1992. Software reuse. ACM Comput. Surv. 24, 2
+  1) Provided empirical evidence that code comments can                   (June 1992), 131183.
+      be utilized for detecting clones at a file level and           [15] D. Blei, A. Ng, and M. Jordan, Latent dirichlet allocation, Journal of
+                                                                          Machine Learning Research, pp.993-1022, 2003.
+      even across programming languages. We found that the           [16] D. Chatterji, J. C. Carver, and N. A. Kraft, Cloning: The need to
+      precision of the detected clones largely depended on the            understand developer intent, In Proceedings of International Workshop
+      quality of the comments. In the presence of vague or                on Software Clones, pp.14-15, 2013.
+                                                                     [17] D. Seidl, B. Hummel and E. Juergens, Quality Analysis of Source Code
+      incomplete comments, there was a higher number of                   comments, In Proceedings of International Conference on Program
+      false positives.                                                    Comprehension, pp.43-60, 2013.
+  2) Demonstrated that clone detection may utilize a hybrid          [18] E. Adar and M. Kim, SoftGUESS: Visualization and exploration of
+                                                                          code clones in context, In Proceedings of International Conference on
+      approach, a combination of LDA and PDG, first detect-               Software Engineering, pp.762-766, 2007.
+      ing clones at the file level using code comments and then      [19] F. Al-Omari, I. Keivanloo, C. K. Roy, and J. Rilling, Detecting
+      at the method or statement level using the source code.             clones across Microsoft .net programming languages, In Proceeding
+                                                                          of Working Conference on Reverse Engineering, pp.405-414, 2012.
+      A hybrid approach can help in reducing the cost of clone
+                                                                     [20] F. Al-Omari, I. Keivanloo, C. K. Roy, and J. Rilling, Detecting
+      detection by utilizing less resource-intensive techniques,          clones across microsoft .net programming languages, In Proceedings
+      like LDA which can be applied to reduce the number                  of Working Conference on Reverse Engineering, pp.405-414, 2012.
+      of clone sets. It also helps in increasing accuracy of         [21] F. H. Su, J. Bell, K. Harvey, S. Sethumadhavan, G. Kaiser, and T.
+                                                                          Jebara, Code Relatives: Detecting Similarly Behaving Software, In Pro-
+      clone detection by utilizing sophisticated and resource-            ceedings of the 2016 24th ACM SIGSOFT International Symposium
+      intensive techniques, like PDG which can utilize code               on Foundations of Software Engineering (FSE 2016), pp.702714, 2016.
+      structure for finding method and statement level clones.       [22] G. Antoniol, G. Canfora, G. Casazza, A. De Lucia and E. Merlo,
+                                                                          Recovering traceability links between code and documentation, In
+  3) Revealed that PDG-based techniques can miss detecting                Proceedings of IEEE Transactions on Software Engineering, 28(10),
+      some clones because of their strict constraints, like               pp.970-983, 2002.
+[23] G. Maskeri, S Sarkar and K Heafield, Mining business topics in source      [49] K. Nakakoji, Y. Yamamoto, Y. Nishinaka, Kouichi Kishida, and Y. Ye,
+     code using latent dirichlet allocation, In Proceedings of 1st India             Evolution Patterns of Open-Source Software Systems and Communi-
+     software engineering conference, pp.113-120, 2008.                              ties, In Proceedings of the International Workshop on Principles of
+[24] G. Shu, B.Sun, T.A.D. Henderson and A. Podgurski, JavaPDG: A New                Software Evolution, pp.76-85, 2002.
+     Platform for Program Dependence Analysis, In Proceedings of Inter-         [50] K. T. Stolee, S. Elbaum, and Daniel Dobos, Solving the Search for
+     national Conference on Software Testing, Verification and Validation,           Source Code, ACM Transactions on Software Engineering Methodol-
+     pp.408-415, 2013.                                                               ogy, 23(3), pp.26, 2014
+[25] Giriprasad Sridhara, Emily Hill, Divya Muppaneni, Lori Pollock, and K      [51] L. Jiang and Z. Su, Automatic mining of functionally equivalent
+     VijayShanker. 2010. Towards automatically generating summary com-               code fragments via random testing. In Proceedings of the eighteenth
+     ments for java methods. In Proceedings of the IEEE/ACM international            international symposium on Software testing and analysis, pp.8192,
+     conference on Automated software engineering. ACM, 4352.                        2009.
+[26] H. Basit, D. Rajapakse, and S. Jarzabek, An empirical study on limits      [52] Laura Moreno, Jairo Aponte, Giriprasad Sridhara, Andrian Marcus,
+     of clone unification using generics, In Proceedings of SEKE, pp.109-            Lori Pollock, and K Vijay-Shanker. 2013. Automatic generation of nat-
+     114, 2005.                                                                      ural language summaries for java classes. In Program Comprehension
+[27] H. Cheng, X. Yan, and J. Han, Mining Graph Patterns, In Frequent                (ICPC), 2013 IEEE 21st International Conference on. IEEE, 2332.
+     Pattern Mining, pp.307-338, 2014.                                          [53] Liangjie Hong and Brian D. Davison, Empirical study of topic model-
+[28] H. D. Rombach (1991). Software reuse: a key to the maintenance                  ing in Twitter, In Proceedings of the First Workshop on Social Media
+     problem. In Information and Software Technology Journal, 33(1),                 Analytics, pp 80-88, 2010.
+     Jan/Feb.                                                                   [54] Lopes, Cristina V., Petr Maj, Pedro Martins, Vaibhav Saini, Di Yang,
+[29] H. Kim, Y. Jung, S. Kim, and K. Yi, MeCC: Memory comparison-based               Jakub Zitny, Hitesh Sajnani, and Jan Vitek, DjVu: a map of code
+     clone detector, In Proceedings of the 33rd International Conference on          duplicates on GitHub, In Proceedings of the ACM on Programming
+     Software Engineering, pp.301310, 2011.                                          Languages 1, OOPSLA, pp.84, 2017
+[30] https://docs.python.org/3/tutorial/errors.html                             [55] M. Asaduzzaman, C. K. Roy, and K. A. Schneider, VisCad: Flexible
+[31] https://en.wikipedia.org/wiki/Latent Dirichlet allocation                       code clone analysis support for NiCad, In Proceedings of International
+[32] Hubig R., Morschel I. (1997) Quality and Productivity Improvement               Workshop on Software Clones, pp.77-78, 2011.
+     in Object-Oriented Software Development. In: Lehner F., Dumke R.,          [56] M. Gabel, L Jiang, Zhendong SU, Scalable detection of semantic
+     Abran A. (eds) Software Metrics. Information Engineering und IV-                clones, In Proceedings of the International Conference on Software
+     Controlling. Deutscher Universittsverlag, Wiesbaden                             Engineering, pp.321-330, 2008.
+[33] I. Baxter, A. Yahin, L. Moura and M. Anna, Clone Detection Us-             [57] M. Sudhamani and L. Rangarajan, Duplicate Code Detection using
+     ing Abstract Syntax Trees, In Proceedings of Software Maintenance,              Control Statements, International Journal of Computer Applications
+     pp.368-377, 1998.                                                               Technology and Research, 4(10), 2015
+[34] I. Baxter, A. Yahin, L. Moura, M. SantAnna, and L. Bier, Clone             [58] M. White, M. Tufano,C.Vendome, and D. Poshyvanyk, Deep learning
+     detection using abstract syntax trees, In Proceedings of International          code fragments for code clone detection, In Proceedings of the 31st
+     Conference on Software Maintenance, pp.368-377, 1998.                           IEEE/ACM International Conference on Automated Software Engi-
+[35] I. Davis and M. Godfrey, Clone detection by exploiting assembler, In            neering, pp.87-98, 2016
+     Proceedings of 4th International Workshop on Software Clones, pp.77-
+                                                                                [59] Martin White, Michele Tufano, Christopher Vendome, and Denys
+     78, 2010.
+                                                                                     Poshyvanyk. 2016. Deep learning code fragments for code clone detec-
+[36] I. Keivanloo, C. K. Roy, and J. Rilling, SeByte: Scalable clone and
+                                                                                     tion. In Proceedings of the 31st IEEE/ACM International Conference
+     similarity search for bytecode, Science of Computer Programming, 95,
+                                                                                     on Automated Software Engineering. ACM, 8798.
+     2014
+                                                                                [60] N. A. Kraft, B. W. Bonds, and R. K. Smith, Cross-language Clone
+[37] I.D. Baxter, A. Quigley, L. Bier, M. SantAnna, L. Moura, and A.
+                                                                                     Detection, In Proceedings of SEKE, pp.54-59, 2008.
+     Yahin, CloneDR: clone detection and removal, In Proceedings of the
+     1st International Workshop on Soft Computing Applied to Software           [61] N. Anquetil and T. C. Lethbridge, Recovering software architecture
+     Engineering, pp.111-117, 1999.                                                  from the names of source files, Journal of Software Maintenance:
+[38] J. Ferrante, K. J. Ottenstein, and J. D. Warren, The program dependence         Research and Practice, 11(3),pp.201-221, 1999.
+     graph and its use in optimization, ACM Transactions on Programming         [62] N. Bettenburg, W. Shang, W. Ibrahim, B. Adams, Y. Zou, and A.
+     Languages and Systems, 9(3), pp.319-349, 1987.                                  Hassan, An empirical study on inconsistent changes to code clones
+[39] J. Howard Johnson, Visualizing textual redundancy in legacy source,             at the release level, Science of Computer Programming, 77(6), pp.760-
+     In Proceedings of the conference of the Centre for Advanced Studies             776, 2012.
+     on Collaborative research, John Botsford, Ann Gawman, Morven               [63] N. Gde, and K. Rainer, Studying clone evolution using incremental
+     Gentleman, Evelyn Kidd, Kelly Lyons, Jacob Slonim, and Howard                   clone detection, Journal of Software: Evolution and Process, 25(2),
+     Johnson (Eds.). IBM Press, 1994.                                                pp.165-192, 2013.
+[40] J. Johnson, Visualizing Textual Redundancy in Legacy Source, In            [64] N. H. Pham, H. A. Nguyen, T. T. Nguyen, J. M. Al-Kofahi, and T. N.
+     Proceedings of CASCON, pp.171-183, 1994.                                        Nguyen, Complete and accurate clone detection in graph-based models,
+[41] J. Krinke, Identifying similar code with program dependence graphs. In          In Proceedings of International Conference on Software Engineering,
+     Proceedings of Working Conference on Reverse Engineering, pp.301-               pp.276-286, 2009
+     309, 2001.                                                                 [65] N. Wilde, M. Buckellew, H. Page, V. Rajlich, and L. Pounds, A
+[42] J. Mayrand, C. Leblanc and E. Merlo, Experiment on the Automatic                comparison of methods for locating features in legacy software, Journal
+     Detection of Function Clones in a Software System Using Metrics,                of Systems and Software, 65(2), pp.105-114, 2003.
+     In Proceeding of ICSM, pp.244-253, 1996Measuring Code Behavioral           [66] Pablo Loyola, Edison Marrese-Taylor, and Yutaka Matsuo. 2017. A
+     Similarity for Programming and Software Engineering Education.                  Neural Architecture for Generating Natural Language Descriptions
+[43] J. R. Cordy, Live scatterplots, In Proceedings of International Workshop        from Source Code Changes. arXiv preprint arXiv:1704.04856 (2017).
+     on Software Clones, pp.79-80, 2011.                                        [67] Paul W McBurney and Collin McMillan. 2014. Automatic documen-
+[44] J. R. Cordy. Comprehending reality: Practical barriers to industrial            tation generation via source code summarization of method context.
+     adoption of software maintenance automation, In Proceedings of In-              In Proceedings of the 22nd International Conference on Program
+     ternational Workshop on Program Comprehension, pp.196-206, 2003.                Comprehension. ACM, 279290.
+[45] J.R. Cordy and C. K. Roy, The NiCad clone detector, In Proceedings         [68] Popular           Programming           Language           (2020).URL
+     of Program Comprehension (ICPC), pp.219-220, 2011.                              https://www.tiobe.com/tiobeindex/
+[46] Java     Swing:      https://docs.oracle.com/javase/javax/swing/package-   [69] PyGUI: http://www.cosc.canterbury.ac.nz/greg.ewing/pythongui/version/
+     summary.html                                                                    Doc/index.html
+[47] JHotDraw: http://www.jhotdraw.org/                                         [70] R. Hoffmann, J. Fogarty, and D. S. Weld, Assieme: finding and lever-
+[48] K. Kim, D. Kim, TF Bissyande, E. Choi, L.li, J. Klein, Y. Le Traon,             aging implicit references in a web search interface for programmers,
+     FaCoYA Code-to-Code Search Engine, In Proceedings of the 40th                   In Proceedings of the 20th annual ACM symposium on User interface
+     International Conference on Software Engineering, 2018                          software and technology, pp.1322, 2007.
+[71] R. Komondoor and S. Horwitz, Using Slicing to Identify Duplication         [96] TAD Henderson and A Podgurski, Sampling code clones from pro-
+     in Source Code, In Proceedings of International static analysis sympo-          gram dependence graphs with GRAPLE, In Proceedings of the 2nd
+     sium, pp.40-56, 2001.                                                           International Workshop on Software Analytics, pp.47-53, 2016.
+[72] R. Sirres, T. F. Bissyand, D. Kim, D. Lo, J. Klein, K. Kim, and            [97] V. Basili (1990). Viewing maintenance as reuse-oriented software
+     Y. L. Traon, Augmenting and Structuring User Queries to Support                 development. In IEEE Software, 7(1):1925, Jan.
+     Efficient Free-Form Code Search, In Proceedings of Empirical Software      [98] V. Basili and H. D. Rombach (1991). ”Support for comprehensive
+     Engineering, 23(5), pp.26222654, 2018.                                          reuse”. In IEE Software Engineering Journal. Sept. pp. 303-316
+[73] Roy, Chanchal K., and James R. Cordy, NICAD: Accurate detection            [99] Vaibhav Saini, Farima Farmahini farahani, Yadong Lu, Pierre Baldi,
+     of near-miss intentional clones using flexible pretty-printing and code         and Cristina V. Lopes, Oreo: detection of clones in the twilight zone,
+     normalization, 16th IEEE international conference on program com-               In Proceedings of European Software Engineering Conference and
+     prehension (ICPC), 2008.                                                        Symposium on the Foundations of Software Engineering, pp 354-365,
+[74] S. Bazrafshan, and R. Koschke, An empirical study of clone removals,            2018.
+     In Proceedings of International Conference Software Maintenance,          [100] Wang, Pengcheng, et al., CCAligner: a token based large-gap clone
+     pp.50-59, 2013.                                                                 detector, Proceedings of the 40th International Conference on Software
+[75] S. Bellon, R. Koschke, G. Antoniol, J. Krinke and E. Merlo, ”Compar-            Engineering (ICSE). ACM, 2018.
+     ison and Evaluation of Clone Detection Tools,” in IEEE Transactions       [101] X. Cheng, Z. Peng, L. Jiang, H. Zhong, H. Yu, and J. Zhao, CLCMiner:
+     on Software Engineering, vol. 33, no. 9, pp. 577-591, Sept. 2007.               Detecting Cross-Language Clones without Intermediates. IEICE Trans,
+[76] S. Bellon, R. Koschke, G. Antoniol, J. Krinke, and E. Merlo, Com-               on Information and Systems, 100(2), pp.273-284, 2017.
+     parison and evaluation of clone detection tools, IEEE Transaction on      [102] Xiaodong Gu, Hongyu Zhang, Dongmei Zhang, and Sunghun Kim.
+     Software Engineering, 33(9), pp.577-591, 2007.                                  2016. Deep API learning. In Proceedings of the 2016 24th ACM
+[77] S. Bouktif, G. Antoniol, M. Neteler, and E. Merlo, A novel approach             SIGSOFT International Symposium on Foundations of Software Engi-
+     to optimize clone refactoring activity, In Proceedings of Genetic and           neering. ACM, 631642.
+     Evolutionary Computation, pp.1885-1892, 2006.                             [103] Xing Hu, Ge Li, Xin Xia, David Lo, and Zhi Jin. 2018. Deep
+[78] S. C. B. de Souza, N. Anquetil, and K. M. de Oliveira, A Study of the           code comment generation. In Proceedings of the 26th Conference on
+     Documentation Essential to Software Maintenance, ser. SIGDOC 05,                Program Comprehension, 200-210.
+     2005.                                                                     [104] Y. Higo and S. Kusumoto, Code Clone Detection on Specialized
+[79] S. C. B. de Souza, N. Anquetil, and K. M. de Oliveira, A Study of the           PDGs with Heuristics, In Proceedings of Software Maintenance and
+     Documentation Essential to Software Maintenance, In Proceedings of              Reengineering, pp.75-84, 2011.
+     the 23rd annual international conference on Design of communication:      [105] Y. Higo and S. Kusumoto, Enhancing quality of code clone detection
+     documenting & designing for pervasive information, pp.68-75, 2005.              with program dependency graph, In Proceedings of Working Confer-
+[80] S. Dang and S. A. Wani, Performance Evaluation of Clone Detection               ence on Reverse Engineering, pp.315-316, 2009.
+     Tools, International Journal of Science and Research, 2015                [106] Y. Higo, U. Yasushi, M. Nishino, and S. Kusumoto, Incremental code
+[81] S. K. Thompson. Sampling. John Wiley and Sons, New York, 2 edition,             clone detection: A PDG-based approach, In Proceedings of Working
+     2002.                                                                           Conference on Reverse Engineering, pp.3-12, 2011
+[82] S. Li, X. Xiao, B. Bassett, T. Xie, and Nikolai Tillmann, Measuring       [107] Y. Lin, Z. Xing, Y. Xue, Y. Liu, X. Peng, J. Sun, and W. Zhao, Detecting
+     Code Behavioral Similarity for Programming and Software Engineering             differences across multiple instances of code clones, In Proceedings of
+     Education, In Proceedings of the 38th International Conference on               International Conference on Software Engineering, pp.164-174, 2014.
+     Software Engineering Companion, pp.501510, 2016.                          [108] Yoshiki Higo and Hiroaki Murakami and Shinji Kusumoto, Revisiting
+[83] S. N. Woodfield, H. E. Dunsmore, and V. Y. Shen, The effect of mod-             Capability of PDG-based Clone Detection, Technical Report, Graduate
+     ularization and comments on program comprehension, ser. ICSE81,                 School of Information Science and Technology, Osaka University,
+     1981.                                                                           2013.
+[84] S. N. Woodfield, H. E. Dunsmore, and V. Y. Shen, The effect of modu-
+     larization and comments on program comprehension, In Proceedings of
+     International Conference on Software Engineering, pp.215-223, 1981.
+[85] Sajnani, Hitesh, et al., SourcererCC: scaling code clone detection
+     to big-code, In Proceedings of International Conference on Software
+     Engineering, 2016.
+[86] Song Wang, Taiyue Liu, and Lin Tan. 2016. Automatically learning
+     semantic features for defect prediction. In Proceedings of the 38th
+     International Conference on Software Engineering. ACM, 297308.
+[87] Sonia Haiduc, Jairo Aponte, and Andrian Marcus. 2010. Supporting
+     program comprehension with source code summarization. In Proceed-
+     ings of the 32nd ACM/IEEE International Conference on Software
+     Engineering-Volume 2. ACM, 223 226.
+[88] Sonia Haiduc, Jairo Aponte, Laura Moreno, and Andrian Marcus.
+     2010. On the use of automated text summarization techniques for
+     summarizing source code. In Reverse Engineering (WCRE), 2010 17th
+     Working Conference on. IEEE, 3544.
+[89] Srinivasan Iyer, Ioannis Konstas, Alvin Cheung, and Luke Zettlemoyer.
+     2016. Summarizing Source Code using a Neural Attention Model.. In
+     ACL (1).
+[90] T. C. Jones (1986). Programming Productivity. McGraw-Hill.
+[91] T. Griffiths and M. Steyvers, Finding scientific topics, In Proceedings
+     of the National Academy of Sciences, pp.5228-5235, 2004.
+[92] T. J. Biggerstaff, B. G. Mitbander, and D. Webster, Program under-
+     standing and the concept assignment problem, Communications of the
+     ACM, 37(5):pp.72-83, 1994.
+[93] T. Tenny, Program Readability: Procedures Versus Comments, IEEE
+     Trans. Softw. Eng., vol. 14, no. 9, 1988.
+[94] T. Tenny, Program Readability: Procedures Versus Comments, IEEE
+     Transactions of Software Engineering, 14(9), pp.1271-1279, 1988.
+[95] T. Vislavski, G. Rakic, Z and N Budimac, LICCA: A tool for cross-
+     language clone detection, 2018 IEEE 25th International Conference on
+     Software Analysis, Evolution and Reengineering, pp.512-516, 2018
+

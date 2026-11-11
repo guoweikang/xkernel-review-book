@@ -1,0 +1,1903 @@
+{
+  "schema": "syn-adapter-check/1",
+  "commit": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "binary_sha256": "594cbd1ffd2830c99128f2e928d3617c4b0af24e3c30586a110025807a46d813",
+  "versions": {
+    "syn": "2.0.119",
+    "proc-macro2": "1.0.107"
+  },
+  "fixtures": {
+    "unicode_same_line": {
+      "source": "/// 中文\nfn first() { let text = r#\"} fn fake() {\"#; } fn second() {}",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            22,
+            56
+          ],
+          "kind": "fn",
+          "name": "first",
+          "range": [
+            0,
+            56
+          ],
+          "signature_range": [
+            11,
+            21
+          ]
+        },
+        {
+          "ancestors": [],
+          "body_range": [
+            69,
+            71
+          ],
+          "kind": "fn",
+          "name": "second",
+          "range": [
+            57,
+            71
+          ],
+          "signature_range": [
+            57,
+            68
+          ]
+        }
+      ],
+      "source_sha256": "547de26a5a2dfb7ff5e865f9feda3f891a76408b99caaf5053568e8291c3f287"
+    },
+    "trait_generic": {
+      "source": "trait Sample<T> { fn required(&self); fn defaulted(&self) {} }\nimpl<T> Sample<T> for Vec<T> { fn required(&self) {} }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "trait",
+          "name": "Sample",
+          "range": [
+            0,
+            62
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "body_range": null,
+          "kind": "trait_fn",
+          "name": "required",
+          "range": [
+            18,
+            37
+          ],
+          "signature_range": [
+            18,
+            36
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "body_range": [
+            58,
+            60
+          ],
+          "kind": "trait_fn",
+          "name": "defaulted",
+          "range": [
+            38,
+            60
+          ],
+          "signature_range": [
+            38,
+            57
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            63,
+            117
+          ]
+        },
+        {
+          "ancestors": [
+            3
+          ],
+          "body_range": [
+            113,
+            115
+          ],
+          "kind": "impl_fn",
+          "name": "required",
+          "range": [
+            94,
+            115
+          ],
+          "signature_range": [
+            94,
+            112
+          ]
+        }
+      ],
+      "source_sha256": "868223c8e3b408e30314ad98bd03ede2d5c4ffd3ed88bd59dec661d92a7dfbb3"
+    },
+    "nested_closure": {
+      "source": "fn outer() { fn inner() {} let callback = || { inner(); }; }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            11,
+            60
+          ],
+          "kind": "fn",
+          "name": "outer",
+          "range": [
+            0,
+            60
+          ],
+          "signature_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "body_range": [
+            24,
+            26
+          ],
+          "kind": "fn",
+          "name": "inner",
+          "range": [
+            13,
+            26
+          ],
+          "signature_range": [
+            13,
+            23
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            42,
+            57
+          ]
+        }
+      ],
+      "source_sha256": "71e1a3d3921075c8833f315cf5ad986f6c765eda99fffc09e054823a58050a0b"
+    },
+    "cfg_and_modules": {
+      "source": "#[cfg(any())] fn disabled() {}\nmod external;\nmod inline { pub fn inside() {} }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            28,
+            30
+          ],
+          "kind": "fn",
+          "name": "disabled",
+          "range": [
+            0,
+            30
+          ],
+          "signature_range": [
+            14,
+            27
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "external",
+          "range": [
+            31,
+            44
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": true,
+          "kind": "mod",
+          "name": "inline",
+          "range": [
+            45,
+            78
+          ]
+        },
+        {
+          "ancestors": [
+            2
+          ],
+          "body_range": [
+            74,
+            76
+          ],
+          "kind": "fn",
+          "name": "inside",
+          "range": [
+            58,
+            76
+          ],
+          "signature_range": [
+            62,
+            73
+          ]
+        }
+      ],
+      "source_sha256": "186afde4b3c8c573588146d22c9bb6966c2593bc89702e3bd2b429e59fa4a06f"
+    },
+    "macro_tokens": {
+      "source": "macro_rules! make { () => { fn generated() {} }; }\nmake!();",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            0,
+            50
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            51,
+            58
+          ]
+        }
+      ],
+      "source_sha256": "a84f050293e866d71d04769da9f2e74d224b5cc567fa72aacd563d3de943ffc2"
+    },
+    "missing_delimiters": {
+      "source": "fn broken( {",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "cannot parse string into token stream",
+          "range": [
+            11,
+            11
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/1",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "6953a814c1100d880f4628af012f0bd8157819431b204513f2cdfb68245bf7cc"
+    },
+    "invalid_expression": {
+      "source": "fn broken() { let value = ; }",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "expected an expression",
+          "range": [
+            26,
+            27
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/1",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "490e9c6c9b9273fd72171da4f256d46dc2400fc4420fe5e59ff4c5f0c6b74f9d"
+    },
+    "macro_inner_invalid": {
+      "source": "unknown_macro! { fn broken( }",
+      "expected_rejected": true,
+      "expected_unsupported": false,
+      "diagnostics": [
+        {
+          "message": "cannot parse string into token stream",
+          "range": [
+            28,
+            28
+          ]
+        }
+      ],
+      "schema": "syn-unit-probe/1",
+      "status": "rejected_by_syn",
+      "units": [],
+      "source_sha256": "19a1362bb7ebb8edc980c9e42be80aeb58430d5bbe52341eb1edd4d9b6a162da"
+    },
+    "macro_balanced_invalid_rust": {
+      "source": "unknown_macro! { fn broken() -> }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            0,
+            33
+          ]
+        }
+      ],
+      "source_sha256": "b5aaaf5b282c3117ff342da04e7f739881e6c47ecc7d3ebda5488294a28b68f6"
+    },
+    "unresolved_semantics": {
+      "source": "fn missing() -> Unknown { absent() }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            24,
+            36
+          ],
+          "kind": "fn",
+          "name": "missing",
+          "range": [
+            0,
+            36
+          ],
+          "signature_range": [
+            0,
+            23
+          ]
+        }
+      ],
+      "source_sha256": "c51f75175270c8b07f50b2d0a189053895dbcdf7ab035c102c953bb4c35369c4"
+    },
+    "bom_prefix": {
+      "source": "﻿fn example() {}",
+      "expected_rejected": false,
+      "expected_unsupported": true,
+      "diagnostics": [
+        {
+          "message": "BOM/shebang offset mapping not implemented"
+        }
+      ],
+      "schema": "syn-unit-probe/1",
+      "status": "unsupported_prefix",
+      "units": [],
+      "source_sha256": "e795e6f049b682fd3dc0de0ab8e01aba3ece227f3d728f0b996612b7db84819c"
+    },
+    "shebang_prefix": {
+      "source": "#!/usr/bin/env rust-script\nfn example() {}",
+      "expected_rejected": false,
+      "expected_unsupported": true,
+      "diagnostics": [
+        {
+          "message": "BOM/shebang offset mapping not implemented"
+        }
+      ],
+      "schema": "syn-unit-probe/1",
+      "status": "unsupported_prefix",
+      "units": [],
+      "source_sha256": "c335dc70f8d918025966f5b9ba9cf11d40ed85b6b4f7c0d4ec8c95aa93cab355"
+    },
+    "verbatim_item": {
+      "source": "fn declaration();",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "verbatim_item",
+          "name": null,
+          "range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "source_sha256": "39f6f1d58f0ceefbc37ed350450dda92d5f93636c7837f88331d4f28a3592ebf"
+    },
+    "modifiers": {
+      "source": "pub const unsafe fn raw<T>(value: T) -> T { value }",
+      "expected_rejected": false,
+      "expected_unsupported": false,
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            42,
+            51
+          ],
+          "kind": "fn",
+          "name": "raw",
+          "range": [
+            0,
+            51
+          ],
+          "signature_range": [
+            4,
+            41
+          ]
+        }
+      ],
+      "source_sha256": "ec1e9299d65fa6cca76dacf02a9a564384cc45a6fb407fd067d36e4214d26589"
+    }
+  },
+  "files": {
+    "util/klazy/src/lazy.rs": {
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2062,
+            2590
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "body_range": [
+            2174,
+            2588
+          ],
+          "kind": "impl_fn",
+          "name": "fmt",
+          "range": [
+            2117,
+            2588
+          ],
+          "signature_range": [
+            2117,
+            2173
+          ]
+        },
+        {
+          "ancestors": [
+            0,
+            1
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2513,
+            2537
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3035,
+            3101
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3138,
+            3879
+          ]
+        },
+        {
+          "ancestors": [
+            4
+          ],
+          "body_range": [
+            3353,
+            3466
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            3166,
+            3466
+          ],
+          "signature_range": [
+            3326,
+            3352
+          ]
+        },
+        {
+          "ancestors": [
+            4
+          ],
+          "body_range": [
+            3830,
+            3877
+          ],
+          "kind": "impl_fn",
+          "name": "as_mut_ptr",
+          "range": [
+            3472,
+            3877
+          ],
+          "signature_range": [
+            3799,
+            3829
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3881,
+            4992
+          ]
+        },
+        {
+          "ancestors": [
+            7
+          ],
+          "body_range": [
+            4571,
+            4990
+          ],
+          "kind": "impl_fn",
+          "name": "force",
+          "range": [
+            3924,
+            4990
+          ],
+          "signature_range": [
+            4543,
+            4570
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            8
+          ],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            4678,
+            4983
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            8,
+            9
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            4900,
+            4959
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            4994,
+            5126
+          ]
+        },
+        {
+          "ancestors": [
+            11
+          ],
+          "body_range": [
+            5091,
+            5124
+          ],
+          "kind": "impl_fn",
+          "name": "deref",
+          "range": [
+            5069,
+            5124
+          ],
+          "signature_range": [
+            5069,
+            5090
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            5128,
+            5321
+          ]
+        },
+        {
+          "ancestors": [
+            13
+          ],
+          "body_range": [
+            5282,
+            5319
+          ],
+          "kind": "impl_fn",
+          "name": "default",
+          "range": [
+            5182,
+            5319
+          ],
+          "signature_range": [
+            5261,
+            5281
+          ]
+        }
+      ],
+      "source_sha256": "6709d4ee455c2998b1d31ce6ba20d26f7e6f5001b64f0ff96e0e8806a537b759"
+    },
+    "util/klazy/src/lazy_static.rs": {
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2245,
+            2672
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2705,
+            5766
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy_static_host_tests",
+          "range": [
+            5768,
+            5854
+          ]
+        }
+      ],
+      "source_sha256": "f9acd381187b0db8c141bb97a9100eccb72eecbcb405ab4c9c06f9624c78af1b"
+    },
+    "util/klazy/src/lib.rs": {
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy",
+          "range": [
+            1029,
+            1038
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "lazy_static",
+          "range": [
+            1039,
+            1059
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "once",
+          "range": [
+            1060,
+            1069
+          ]
+        }
+      ],
+      "source_sha256": "2305a1edc14d103f1d68f6bdf605486e07f35057ebb39ea09e6f2b97c3f4e110"
+    },
+    "util/klazy/src/once.rs": {
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1739,
+            1823
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "body_range": [
+            1794,
+            1821
+          ],
+          "kind": "impl_fn",
+          "name": "default",
+          "range": [
+            1773,
+            1821
+          ],
+          "signature_range": [
+            1773,
+            1793
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1825,
+            2253
+          ]
+        },
+        {
+          "ancestors": [
+            2
+          ],
+          "body_range": [
+            1927,
+            2251
+          ],
+          "kind": "impl_fn",
+          "name": "fmt",
+          "range": [
+            1874,
+            2251
+          ],
+          "signature_range": [
+            1874,
+            1926
+          ]
+        },
+        {
+          "ancestors": [
+            2,
+            3
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2178,
+            2205
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2551,
+            2598
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            2804,
+            2844
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": true,
+          "kind": "mod",
+          "name": "status",
+          "range": [
+            2846,
+            5557
+          ]
+        },
+        {
+          "ancestors": [
+            7
+          ],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3621,
+            3959
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            8
+          ],
+          "body_range": [
+            3672,
+            3953
+          ],
+          "kind": "impl_fn",
+          "name": "from_raw",
+          "range": [
+            3643,
+            3953
+          ],
+          "signature_range": [
+            3643,
+            3671
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            8,
+            9
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            3883,
+            3928
+          ]
+        },
+        {
+          "ancestors": [
+            7
+          ],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            3965,
+            5555
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            11
+          ],
+          "body_range": [
+            4067,
+            4191
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            3993,
+            4191
+          ],
+          "signature_range": [
+            4030,
+            4066
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            11
+          ],
+          "body_range": [
+            4283,
+            4462
+          ],
+          "kind": "impl_fn",
+          "name": "load",
+          "range": [
+            4201,
+            4462
+          ],
+          "signature_range": [
+            4238,
+            4282
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            11
+          ],
+          "body_range": [
+            4561,
+            4719
+          ],
+          "kind": "impl_fn",
+          "name": "store",
+          "range": [
+            4472,
+            4719
+          ],
+          "signature_range": [
+            4509,
+            4560
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            11
+          ],
+          "body_range": [
+            4954,
+            5411
+          ],
+          "kind": "impl_fn",
+          "name": "compare_exchange",
+          "range": [
+            4729,
+            5411
+          ],
+          "signature_range": [
+            4766,
+            4953
+          ]
+        },
+        {
+          "ancestors": [
+            7,
+            11
+          ],
+          "body_range": [
+            5490,
+            5549
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut",
+          "range": [
+            5421,
+            5549
+          ],
+          "signature_range": [
+            5458,
+            5489
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            5601,
+            14519
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "body_range": [
+            6825,
+            6985
+          ],
+          "kind": "impl_fn",
+          "name": "call_once",
+          "range": [
+            5623,
+            6985
+          ],
+          "signature_range": [
+            6775,
+            6824
+          ]
+        },
+        {
+          "ancestors": [
+            17,
+            18
+          ],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            6860,
+            6902
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "body_range": [
+            8259,
+            8498
+          ],
+          "kind": "impl_fn",
+          "name": "try_call_once",
+          "range": [
+            6991,
+            8498
+          ],
+          "signature_range": [
+            8180,
+            8258
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "body_range": [
+            8600,
+            11832
+          ],
+          "kind": "impl_fn",
+          "name": "try_call_once_slow",
+          "range": [
+            8504,
+            11832
+          ],
+          "signature_range": [
+            8516,
+            8599
+          ]
+        },
+        {
+          "ancestors": [
+            17,
+            21
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            9526,
+            9596
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "body_range": [
+            12512,
+            12736
+          ],
+          "kind": "impl_fn",
+          "name": "wait",
+          "range": [
+            11838,
+            12736
+          ],
+          "signature_range": [
+            12491,
+            12511
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "body_range": [
+            13354,
+            14517
+          ],
+          "kind": "impl_fn",
+          "name": "poll",
+          "range": [
+            12742,
+            14517
+          ],
+          "signature_range": [
+            13325,
+            13353
+          ]
+        },
+        {
+          "ancestors": [
+            17,
+            24
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            14414,
+            14469
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            14521,
+            23839
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            15353,
+            15379
+          ],
+          "kind": "impl_fn",
+          "name": "new",
+          "range": [
+            15096,
+            15379
+          ],
+          "signature_range": [
+            15330,
+            15352
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            15652,
+            15799
+          ],
+          "kind": "impl_fn",
+          "name": "initialized",
+          "range": [
+            15385,
+            15799
+          ],
+          "signature_range": [
+            15614,
+            15651
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            16109,
+            16216
+          ],
+          "kind": "impl_fn",
+          "name": "as_mut_ptr",
+          "range": [
+            15805,
+            16216
+          ],
+          "signature_range": [
+            16078,
+            16108
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            16683,
+            16906
+          ],
+          "kind": "impl_fn",
+          "name": "get_value_unchecked",
+          "range": [
+            16222,
+            16906
+          ],
+          "signature_range": [
+            16640,
+            16682
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            17245,
+            17426
+          ],
+          "kind": "impl_fn",
+          "name": "get_value_mut_unchecked",
+          "range": [
+            16912,
+            17426
+          ],
+          "signature_range": [
+            17190,
+            17244
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            17804,
+            18209
+          ],
+          "kind": "impl_fn",
+          "name": "extract_value_unchecked",
+          "range": [
+            17432,
+            18209
+          ],
+          "signature_range": [
+            17759,
+            17803
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            18533,
+            18930
+          ],
+          "kind": "impl_fn",
+          "name": "get",
+          "range": [
+            18215,
+            18930
+          ],
+          "signature_range": [
+            18505,
+            18532
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            19571,
+            20061
+          ],
+          "kind": "impl_fn",
+          "name": "get_unchecked",
+          "range": [
+            18936,
+            20061
+          ],
+          "signature_range": [
+            19534,
+            19570
+          ]
+        },
+        {
+          "ancestors": [
+            26,
+            34
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            19581,
+            19875
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            20389,
+            20696
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut",
+          "range": [
+            20067,
+            20696
+          ],
+          "signature_range": [
+            20349,
+            20388
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            21288,
+            21781
+          ],
+          "kind": "impl_fn",
+          "name": "get_mut_unchecked",
+          "range": [
+            20702,
+            21781
+          ],
+          "signature_range": [
+            21239,
+            21287
+          ]
+        },
+        {
+          "ancestors": [
+            26,
+            37
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            21298,
+            21591
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            22141,
+            22448
+          ],
+          "kind": "impl_fn",
+          "name": "try_into_inner",
+          "range": [
+            21787,
+            22448
+          ],
+          "signature_range": [
+            22100,
+            22140
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            22950,
+            23443
+          ],
+          "kind": "impl_fn",
+          "name": "into_inner_unchecked",
+          "range": [
+            22454,
+            23443
+          ],
+          "signature_range": [
+            22908,
+            22949
+          ]
+        },
+        {
+          "ancestors": [
+            26,
+            40
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            22960,
+            23253
+          ]
+        },
+        {
+          "ancestors": [
+            26
+          ],
+          "body_range": [
+            23770,
+            23837
+          ],
+          "kind": "impl_fn",
+          "name": "is_completed",
+          "range": [
+            23449,
+            23837
+          ],
+          "signature_range": [
+            23739,
+            23769
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            23841,
+            23941
+          ]
+        },
+        {
+          "ancestors": [
+            43
+          ],
+          "body_range": [
+            23900,
+            23939
+          ],
+          "kind": "impl_fn",
+          "name": "from",
+          "range": [
+            23875,
+            23939
+          ],
+          "signature_range": [
+            23875,
+            23899
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            23943,
+            24379
+          ]
+        },
+        {
+          "ancestors": [
+            45
+          ],
+          "body_range": [
+            23993,
+            24377
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            23974,
+            24377
+          ],
+          "signature_range": [
+            23974,
+            23992
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            24437,
+            24707
+          ]
+        },
+        {
+          "ancestors": [
+            47
+          ],
+          "body_range": [
+            24495,
+            24705
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            24476,
+            24705
+          ],
+          "signature_range": [
+            24476,
+            24494
+          ]
+        },
+        {
+          "ancestors": [],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            24812,
+            24884
+          ]
+        },
+        {
+          "ancestors": [],
+          "inline": false,
+          "kind": "mod",
+          "name": "once_host_tests",
+          "range": [
+            24887,
+            24959
+          ]
+        }
+      ],
+      "source_sha256": "dc8ffed2e906bd585b55827cf0b08cee59f6565342abf0ea547a95c522502cae"
+    },
+    "util/klazy/ut-tests/once_unittest.rs": {
+      "diagnostics": [],
+      "schema": "syn-unit-probe/1",
+      "status": "parsed_by_syn",
+      "units": [
+        {
+          "ancestors": [],
+          "body_range": [
+            255,
+            552
+          ],
+          "kind": "fn",
+          "name": "initialized_and_from_start_ready",
+          "range": [
+            205,
+            552
+          ],
+          "signature_range": [
+            217,
+            254
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            313,
+            353
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            359,
+            411
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            463,
+            497
+          ]
+        },
+        {
+          "ancestors": [
+            0
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            503,
+            549
+          ]
+        },
+        {
+          "ancestors": [],
+          "body_range": [
+            604,
+            964
+          ],
+          "kind": "fn",
+          "name": "try_call_once_error_allows_retry",
+          "range": [
+            554,
+            964
+          ],
+          "signature_range": [
+            566,
+            603
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            678,
+            714
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            721,
+            753
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            759,
+            788
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            794,
+            823
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            829,
+            859
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "closure",
+          "name": null,
+          "range": [
+            893,
+            898
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            905,
+            927
+          ]
+        },
+        {
+          "ancestors": [
+            5
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            933,
+            961
+          ]
+        },
+        {
+          "ancestors": [],
+          "body_range": [
+            1025,
+            1523
+          ],
+          "kind": "fn",
+          "name": "get_mut_and_as_mut_ptr_update_ready_value",
+          "range": [
+            966,
+            1523
+          ],
+          "signature_range": [
+            978,
+            1024
+          ]
+        },
+        {
+          "ancestors": [
+            14
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1077,
+            1203
+          ]
+        },
+        {
+          "ancestors": [
+            14
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1479,
+            1520
+          ]
+        },
+        {
+          "ancestors": [],
+          "body_range": [
+            1584,
+            2362
+          ],
+          "kind": "fn",
+          "name": "extracting_value_transfers_drop_ownership",
+          "range": [
+            1525,
+            2362
+          ],
+          "signature_range": [
+            1537,
+            1583
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "kind": "impl",
+          "name": null,
+          "range": [
+            1688,
+            1814
+          ]
+        },
+        {
+          "ancestors": [
+            17,
+            18
+          ],
+          "body_range": [
+            1745,
+            1808
+          ],
+          "kind": "impl_fn",
+          "name": "drop",
+          "range": [
+            1726,
+            1808
+          ],
+          "signature_range": [
+            1726,
+            1744
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            1955,
+            1999
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2022,
+            2066
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2248,
+            2292
+          ]
+        },
+        {
+          "ancestors": [
+            17
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2315,
+            2359
+          ]
+        },
+        {
+          "ancestors": [],
+          "body_range": [
+            2416,
+            2547
+          ],
+          "kind": "fn",
+          "name": "try_into_inner_matches_ready_state",
+          "range": [
+            2364,
+            2547
+          ],
+          "signature_range": [
+            2376,
+            2415
+          ]
+        },
+        {
+          "ancestors": [
+            24
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2422,
+            2475
+          ]
+        },
+        {
+          "ancestors": [
+            24
+          ],
+          "kind": "macro_tokens",
+          "name": null,
+          "range": [
+            2481,
+            2544
+          ]
+        }
+      ],
+      "source_sha256": "bde9e8e3421ee03cabe6453e6953618fb8af9700532d0d52a17994f599f62a5f"
+    }
+  },
+  "limitations": [
+    "Parser success is not rustc validation or type checking.",
+    "Name multiset agreement does not independently establish exact spans.",
+    "No macro expansion, cfg evaluation, module loading or identity resolution."
+  ]
+}

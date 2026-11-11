@@ -1,0 +1,50 @@
+{
+  "schema": "baseline-reproduction-plan/1",
+  "execution_supported": false,
+  "purpose": "Baseline status ledger; execution_supported=false means no unified executor for all baselines, not that individual native runners are unavailable",
+  "required_run_records": ["source_revision", "environment", "dataset_revision_and_hashes", "parameters", "command", "raw_outputs", "failures", "metrics_and_denominators", "comparison_to_paper", "deviations"],
+  "baselines": [
+    {
+      "id": "B-SCC", "paper": "P01", "priority": 1,
+      "repository": "https://github.com/Mondego/SourcererCC",
+      "inspected_commit": "88314f51fdf3cd89103eb2c19fb56464308846c8",
+      "paper_commit_alignment": "unverified",
+      "paper_task_audit": "research/notes/2026-11-05-p01-original-task-audit.md",
+      "evaluation_alignment_audit": "research/notes/2026-11-05-scc-evaluation-alignment.md",
+      "method_position_gate": "failed_empty_line_counterexample",
+      "method_position_evidence": "research/evidence/runs/2026-11-05-scc-positions-01/report.json",
+      "native_task": "Token clone detection; align paper block granularity, not only current file-level tutorial",
+      "native_smoke": "passed_file_level_with_limits", "paper_result_reproduction": "not_run", "rust_adaptation": "fixed_four_package_lexical_run_matches_bag_oracle_not_semantic_evaluation",
+      "rust_adaptation_evidence": "research/evidence/runs/2026-11-05-rust-scc-01/report.json",
+      "native_runner": "scripts/run_scc_smoke.py",
+      "native_evidence": "research/evidence/runs/2026-11-05-scc-native-02/report.json",
+      "boundary_evidence": "research/evidence/runs/2026-11-05-scc-boundaries-01/report.json",
+      "evaluation_repository": "https://github.com/jeffsvajlenko/BigCloneEval",
+      "evaluation_commit": "6d393ec8adb1d71493d09881ba520659b6c2c68e",
+      "blockers": ["Paper code/frontend commit and 48-functionality in-progress database snapshot not identified", "Original filtered pair IDs, precision sample and matching implementation not acquired", "Current method frontend fails original source-position check on empty-line fixture", "Large dataset not downloaded"],
+      "next_action": "Stop Java frontend debugging; prepare independently labeled Rust pilot with source-position evidence gates, keeping historical reproduction gaps explicit"
+    },
+    {
+      "id": "B-WR", "paper": "P11", "priority": 2,
+      "repository": "https://github.com/RefactoringTools/wrangler",
+      "inspected_commit": "edb509684808cdec892dce53c1718afba48cb2fc",
+      "paper_commit_alignment": "unverified",
+      "native_task": "Erlang expression-sequence clones, anti-unifiers and incremental versus full detection",
+      "native_smoke": "not_run", "paper_result_reproduction": "not_run", "rust_adaptation": "not_run",
+      "blockers": ["Erlang/Emacs runtime not available on PATH", "Historical source versions and industrial data unverified", "Headless startup and cache reset unverified"],
+      "next_action": "Lock native Erlang runtime and example expectations; separate AST fingerprint reference from full binding-aware adaptation"
+    },
+    {
+      "id": "B-LIB", "paper": "P21", "priority": 3,
+      "repository": "https://github.com/code-refactor/Librarian",
+      "inspected_commit": "f5167b903d00ace774de419a617138b8db69c4bd",
+      "paper_commit_alignment": "unverified",
+      "native_task": "Shared-library generation and caller migration on original CodeContests collections",
+      "native_smoke": "not_run", "paper_result_reproduction": "not_run", "rust_adaptation": "not_run",
+      "benchmark_repository": "https://github.com/code-refactor/minicode",
+      "benchmark_commit": "3cc71a908f16c78e634010523b264671c3546fc2",
+      "blockers": ["Script/data path alignment unresolved", "Paper scoring-model and collection-count discrepancies unresolved", "API model snapshots, budget and data policy not configured", "Test execution isolation not verified"],
+      "next_action": "Align one original collection and scoring protocol before any billable model run; keep function-summary retrieval as a named adaptation"
+    }
+  ]
+}

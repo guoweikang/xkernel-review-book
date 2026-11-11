@@ -1,0 +1,33 @@
+class Length {
+int small0;
+int small1;
+int small2;
+int small3;
+int small4;
+int small5;
+int small6;
+int small7;
+int small8;
+int small9;
+int small10;
+int small11;
+int small12;
+int small13;
+int small14;
+int small15;
+int small16;
+int small17;
+int small18;
+int small19;
+int small20;
+int small21;
+int small22;
+int small23;
+int small24;
+int small25;
+int small26;
+int small27;
+int small28;
+int small29;
+int small30;
+}

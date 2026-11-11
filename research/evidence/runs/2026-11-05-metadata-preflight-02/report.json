@@ -1,0 +1,98 @@
+{
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "source_archive_sha256": "d58e1506a947d66d4385f45795e3a42325b7e5e6a89f6028c6a49faa5b5495f2",
+  "kernel_execution": "not_run",
+  "candidate_execution": "not_run",
+  "steps": [
+    {
+      "name": "compiler",
+      "command": [
+        "rustc",
+        "-vV"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "qemu",
+      "command": [
+        "qemu-system-x86_64",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "xtask-dependencies",
+      "command": [
+        "cargo",
+        "metadata",
+        "--offline",
+        "--locked",
+        "--format-version",
+        "1",
+        "--manifest-path",
+        "xtask/Cargo.toml"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "kernel-dependencies",
+      "command": [
+        "cargo",
+        "metadata",
+        "--offline",
+        "--locked",
+        "--format-version",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "resolve-config",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "--jobs",
+        "2",
+        "--manifest-path",
+        "xtask/Cargo.toml",
+        "-p",
+        "xconfig",
+        "--bin",
+        "xconf",
+        "--",
+        "defconfig",
+        ".config",
+        "--kconfig",
+        "Kconfig",
+        "--srctree",
+        "."
+      ],
+      "exit_code": 0
+    }
+  ],
+  "environment_overrides": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-02/target",
+    "GIT_CEILING_DIRECTORIES": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-02",
+    "RUSTUP_TOOLCHAIN": "1.95.0"
+  },
+  "input_sha256": {
+    "Cargo.lock": "d05e25e7c21dd69bfb53a514fa888433de9a16a5662a3e3fc2ee23b140c10d20",
+    "xtask/Cargo.lock": "d07f9f42f38f65ec4ea773d0bcd2468064042651292832165c80a67fdef877e3",
+    "rust-toolchain.toml": "f4d12f2e595a8514e99ee099c6421159e5ce4ff74209f58f3d68e29763a53794",
+    ".cargo/config.toml": "97bca2ce0e8ed74e8cabcbfe68fc69408361cc488f923ceb16c44c82dc5502b8",
+    "platform_seed": "889c938dd43e0f28f699f8b8d3cff603289e1e6ca46d60fb536341ba42c0161a"
+  },
+  "status": "config_resolved_runtime_pending",
+  "artifact_sha256": {
+    "compiler.log": "4fdff2578428e9c5c08ddd7a0d3079c1a106b1cdaa46e73e46f7cd32b0fb9cad",
+    "config-after-attempt": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+    "kernel-dependencies.log": "5963609d1885511fe47ad410544a63ee358675d75d157a6b04e0f0cefaa3826e",
+    "preflight.py": "603b74de7b62bcd6a3828672bb82ec34b12a27a922e5f31a9ab19eaef57f3a46",
+    "qemu.log": "fd220d2dd514f467e0f4adbff57b0588541c2a44b81fa3c7932735bd8c9c9bab",
+    "resolve-config.log": "2a0579bebc7a87e0b22a743d23b9e20f2acaf190fcf413513c67e936ecf2b459",
+    "xtask-dependencies.log": "afe97c0ac7e752a24ee949eedefc843e54aa2c63c7e6e328e42731cf2b18af39"
+  }
+}

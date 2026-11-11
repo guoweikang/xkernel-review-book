@@ -1,0 +1,108 @@
+WRITER	default	BM25(k1=1.2,b=0.75)
+SEARCHER	default	BM25(k1=1.2,b=0.75)
+QUERY	default	cpu	TermQuery	contents:cpu
+REWRITE	default	cpu	contents:cpu
+HIT	default	cpu	driver.Repeated	0.44719172	0.01490639050801595
+EXPLAIN	default	cpu	driver.Repeated	0.44719172 = weight(contents:cpu in 2) [BM25Similarity], result of:\n  0.44719172 = score(freq=3.0), computed as boost * idf * tf from:\n    0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n      3 = n, number of documents containing term\n      6 = N, total number of documents with field\n    0.6451613 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n      3.0 = freq, occurrences of term within document\n      1.2 = k1, term saturation parameter\n      0.75 = b, length normalization parameter\n      5.0 = dl, length of field\n      3.3333333 = avgdl, average length of field\n
+HIT	default	cpu	driver.Node	0.32850575	0.010950191815694173
+EXPLAIN	default	cpu	driver.Node	0.32850575 = weight(contents:cpu in 0) [BM25Similarity], result of:\n  0.32850575 = score(freq=1.0), computed as boost * idf * tf from:\n    0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n      3 = n, number of documents containing term\n      6 = N, total number of documents with field\n    0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n      1.0 = freq, occurrences of term within document\n      1.2 = k1, term saturation parameter\n      0.75 = b, length normalization parameter\n      3.0 = dl, length of field\n      3.3333333 = avgdl, average length of field\n
+HIT	default	cpu	cpu.Node	0.32850575	9.855172634124756
+EXPLAIN	default	cpu	cpu.Node	0.32850575 = weight(contents:cpu in 1) [BM25Similarity], result of:\n  0.32850575 = score(freq=1.0), computed as boost * idf * tf from:\n    0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n      3 = n, number of documents containing term\n      6 = N, total number of documents with field\n    0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n      1.0 = freq, occurrences of term within document\n      1.2 = k1, term saturation parameter\n      0.75 = b, length normalization parameter\n      3.0 = dl, length of field\n      3.3333333 = avgdl, average length of field\n
+QUERY	default	cpu*	PrefixQuery	contents:cpu*
+REWRITE	default	cpu*	contents:cpu*
+HIT	default	cpu*	driver.Node	1.0	0.03333333333333333
+EXPLAIN	default	cpu*	driver.Node	1.0 = contents:cpu*\n
+HIT	default	cpu*	cpu.Node	1.0	30.0
+EXPLAIN	default	cpu*	cpu.Node	1.0 = contents:cpu*\n
+HIT	default	cpu*	driver.Repeated	1.0	0.03333333333333333
+EXPLAIN	default	cpu*	driver.Repeated	1.0 = contents:cpu*\n
+HIT	default	cpu*	driver.Prefix	1.0	0.03333333333333333
+EXPLAIN	default	cpu*	driver.Prefix	1.0 = contents:cpu*\n
+QUERY	default	cpu~	FuzzyQuery	contents:cpu~2
+REWRITE	default	cpu~	contents:cpu (contents:cpus)^0.6666666 (contents:cpx)^0.6666666
+HIT	default	cpu~	driver.Repeated	0.44719172	0.01490639050801595
+EXPLAIN	default	cpu~	driver.Repeated	0.44719172 = sum of:\n  0.44719172 = weight(contents:cpu in 2) [BM25Similarity], result of:\n    0.44719172 = score(freq=3.0), computed as boost * idf * tf from:\n      0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n        3 = n, number of documents containing term\n        6 = N, total number of documents with field\n      0.6451613 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n        3.0 = freq, occurrences of term within document\n        1.2 = k1, term saturation parameter\n        0.75 = b, length normalization parameter\n        5.0 = dl, length of field\n        3.3333333 = avgdl, average length of field\n
+HIT	default	cpu~	driver.Node	0.32850575	0.010950191815694173
+EXPLAIN	default	cpu~	driver.Node	0.32850575 = sum of:\n  0.32850575 = weight(contents:cpu in 0) [BM25Similarity], result of:\n    0.32850575 = score(freq=1.0), computed as boost * idf * tf from:\n      0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n        3 = n, number of documents containing term\n        6 = N, total number of documents with field\n      0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n        1.0 = freq, occurrences of term within document\n        1.2 = k1, term saturation parameter\n        0.75 = b, length normalization parameter\n        3.0 = dl, length of field\n        3.3333333 = avgdl, average length of field\n
+HIT	default	cpu~	cpu.Node	0.32850575	9.855172634124756
+EXPLAIN	default	cpu~	cpu.Node	0.32850575 = sum of:\n  0.32850575 = weight(contents:cpu in 1) [BM25Similarity], result of:\n    0.32850575 = score(freq=1.0), computed as boost * idf * tf from:\n      0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n        3 = n, number of documents containing term\n        6 = N, total number of documents with field\n      0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n        1.0 = freq, occurrences of term within document\n        1.2 = k1, term saturation parameter\n        0.75 = b, length normalization parameter\n        3.0 = dl, length of field\n        3.3333333 = avgdl, average length of field\n
+HIT	default	cpu~	driver.Prefix	0.21900383	0.007300127545992533
+EXPLAIN	default	cpu~	driver.Prefix	0.21900383 = sum of:\n  0.21900383 = weight(contents:cpus in 3) [BM25Similarity], result of:\n    0.21900383 = score(freq=1.0), computed as boost * idf * tf from:\n      0.6666666 = boost\n      0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n        3 = n, number of documents containing term\n        6 = N, total number of documents with field\n      0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n        1.0 = freq, occurrences of term within document\n        1.2 = k1, term saturation parameter\n        0.75 = b, length normalization parameter\n        3.0 = dl, length of field\n        3.3333333 = avgdl, average length of field\n
+HIT	default	cpu~	driver.Typo	0.21900383	0.007300127545992533
+EXPLAIN	default	cpu~	driver.Typo	0.21900383 = sum of:\n  0.21900383 = weight(contents:cpx in 4) [BM25Similarity], result of:\n    0.21900383 = score(freq=1.0), computed as boost * idf * tf from:\n      0.6666666 = boost\n      0.6931472 = idf, computed as log(1 + (N - n + 0.5) / (n + 0.5)) from:\n        3 = n, number of documents containing term\n        6 = N, total number of documents with field\n      0.47393364 = tf, computed as freq / (freq + k1 * (1 - b + b * dl / avgdl)) from:\n        1.0 = freq, occurrences of term within document\n        1.2 = k1, term saturation parameter\n        0.75 = b, length normalization parameter\n        3.0 = dl, length of field\n        3.3333333 = avgdl, average length of field\n
+QUERY	default	cpu*~	PrefixQuery	contents:cpu*
+REWRITE	default	cpu*~	contents:cpu*
+HIT	default	cpu*~	driver.Node	1.0	0.03333333333333333
+EXPLAIN	default	cpu*~	driver.Node	1.0 = contents:cpu*\n
+HIT	default	cpu*~	cpu.Node	1.0	30.0
+EXPLAIN	default	cpu*~	cpu.Node	1.0 = contents:cpu*\n
+HIT	default	cpu*~	driver.Repeated	1.0	0.03333333333333333
+EXPLAIN	default	cpu*~	driver.Repeated	1.0 = contents:cpu*\n
+HIT	default	cpu*~	driver.Prefix	1.0	0.03333333333333333
+EXPLAIN	default	cpu*~	driver.Prefix	1.0 = contents:cpu*\n
+QUERY	default	( cpu*~ )^30.0 ( node*~ )^2.0	BooleanQuery	(contents:cpu*)^30.0 (contents:node*)^2.0
+REWRITE	default	( cpu*~ )^30.0 ( node*~ )^2.0	(contents:cpu*)^30.0 (contents:node*)^2.0
+HIT	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Node	32.0	1.0666666666666667
+EXPLAIN	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Node	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	default	( cpu*~ )^30.0 ( node*~ )^2.0	cpu.Node	32.0	960.0
+EXPLAIN	default	( cpu*~ )^30.0 ( node*~ )^2.0	cpu.Node	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Repeated	32.0	1.0666666666666667
+EXPLAIN	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Repeated	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Prefix	32.0	1.0666666666666667
+EXPLAIN	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Prefix	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Typo	2.0	0.06666666666666667
+EXPLAIN	default	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Typo	2.0 = sum of:\n  2.0 = contents:node*^2.0\n
+WRITER	classic-control	ClassicSimilarity
+SEARCHER	classic-control	ClassicSimilarity
+QUERY	classic-control	cpu	TermQuery	contents:cpu
+REWRITE	classic-control	cpu	contents:cpu
+HIT	classic-control	cpu	driver.Repeated	1.208073	0.040269100666046144
+EXPLAIN	classic-control	cpu	driver.Repeated	1.208073 = weight(contents:cpu in 2) [ClassicSimilarity], result of:\n  1.208073 = score(freq=3.0), product of:\n    1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n      3 = docFreq, number of documents containing term\n      6 = docCount, total number of documents with field\n    1.7320508 = tf(freq=3.0), with freq of:\n      3.0 = freq, occurrences of term within document\n    0.4472136 = fieldNorm\n
+HIT	classic-control	cpu	driver.Node	0.90044457	0.030014818906784056
+EXPLAIN	classic-control	cpu	driver.Node	0.90044457 = weight(contents:cpu in 0) [ClassicSimilarity], result of:\n  0.90044457 = score(freq=1.0), product of:\n    1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n      3 = docFreq, number of documents containing term\n      6 = docCount, total number of documents with field\n    1.0 = tf(freq=1.0), with freq of:\n      1.0 = freq, occurrences of term within document\n    0.57735026 = fieldNorm\n
+HIT	classic-control	cpu	cpu.Node	0.90044457	27.013337016105652
+EXPLAIN	classic-control	cpu	cpu.Node	0.90044457 = weight(contents:cpu in 1) [ClassicSimilarity], result of:\n  0.90044457 = score(freq=1.0), product of:\n    1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n      3 = docFreq, number of documents containing term\n      6 = docCount, total number of documents with field\n    1.0 = tf(freq=1.0), with freq of:\n      1.0 = freq, occurrences of term within document\n    0.57735026 = fieldNorm\n
+QUERY	classic-control	cpu*	PrefixQuery	contents:cpu*
+REWRITE	classic-control	cpu*	contents:cpu*
+HIT	classic-control	cpu*	driver.Node	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*	driver.Node	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*	cpu.Node	1.0	30.0
+EXPLAIN	classic-control	cpu*	cpu.Node	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*	driver.Repeated	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*	driver.Repeated	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*	driver.Prefix	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*	driver.Prefix	1.0 = contents:cpu*\n
+QUERY	classic-control	cpu~	FuzzyQuery	contents:cpu~2
+REWRITE	classic-control	cpu~	contents:cpu (contents:cpus)^0.6666666 (contents:cpx)^0.6666666
+HIT	classic-control	cpu~	driver.Repeated	1.208073	0.040269100666046144
+EXPLAIN	classic-control	cpu~	driver.Repeated	1.208073 = sum of:\n  1.208073 = weight(contents:cpu in 2) [ClassicSimilarity], result of:\n    1.208073 = score(freq=3.0), product of:\n      1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n        3 = docFreq, number of documents containing term\n        6 = docCount, total number of documents with field\n      1.7320508 = tf(freq=3.0), with freq of:\n        3.0 = freq, occurrences of term within document\n      0.4472136 = fieldNorm\n
+HIT	classic-control	cpu~	driver.Node	0.90044457	0.030014818906784056
+EXPLAIN	classic-control	cpu~	driver.Node	0.90044457 = sum of:\n  0.90044457 = weight(contents:cpu in 0) [ClassicSimilarity], result of:\n    0.90044457 = score(freq=1.0), product of:\n      1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n        3 = docFreq, number of documents containing term\n        6 = docCount, total number of documents with field\n      1.0 = tf(freq=1.0), with freq of:\n        1.0 = freq, occurrences of term within document\n      0.57735026 = fieldNorm\n
+HIT	classic-control	cpu~	cpu.Node	0.90044457	27.013337016105652
+EXPLAIN	classic-control	cpu~	cpu.Node	0.90044457 = sum of:\n  0.90044457 = weight(contents:cpu in 1) [ClassicSimilarity], result of:\n    0.90044457 = score(freq=1.0), product of:\n      1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n        3 = docFreq, number of documents containing term\n        6 = docCount, total number of documents with field\n      1.0 = tf(freq=1.0), with freq of:\n        1.0 = freq, occurrences of term within document\n      0.57735026 = fieldNorm\n
+HIT	classic-control	cpu~	driver.Prefix	0.6002963	0.02000987728436788
+EXPLAIN	classic-control	cpu~	driver.Prefix	0.6002963 = sum of:\n  0.6002963 = weight(contents:cpus in 3) [ClassicSimilarity], result of:\n    0.6002963 = score(freq=1.0), product of:\n      0.6666666 = boost\n      1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n        3 = docFreq, number of documents containing term\n        6 = docCount, total number of documents with field\n      1.0 = tf(freq=1.0), with freq of:\n        1.0 = freq, occurrences of term within document\n      0.57735026 = fieldNorm\n
+HIT	classic-control	cpu~	driver.Typo	0.6002963	0.02000987728436788
+EXPLAIN	classic-control	cpu~	driver.Typo	0.6002963 = sum of:\n  0.6002963 = weight(contents:cpx in 4) [ClassicSimilarity], result of:\n    0.6002963 = score(freq=1.0), product of:\n      0.6666666 = boost\n      1.5596157 = idf, computed as log((docCount+1)/(docFreq+1)) + 1 from:\n        3 = docFreq, number of documents containing term\n        6 = docCount, total number of documents with field\n      1.0 = tf(freq=1.0), with freq of:\n        1.0 = freq, occurrences of term within document\n      0.57735026 = fieldNorm\n
+QUERY	classic-control	cpu*~	PrefixQuery	contents:cpu*
+REWRITE	classic-control	cpu*~	contents:cpu*
+HIT	classic-control	cpu*~	driver.Node	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*~	driver.Node	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*~	cpu.Node	1.0	30.0
+EXPLAIN	classic-control	cpu*~	cpu.Node	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*~	driver.Repeated	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*~	driver.Repeated	1.0 = contents:cpu*\n
+HIT	classic-control	cpu*~	driver.Prefix	1.0	0.03333333333333333
+EXPLAIN	classic-control	cpu*~	driver.Prefix	1.0 = contents:cpu*\n
+QUERY	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	BooleanQuery	(contents:cpu*)^30.0 (contents:node*)^2.0
+REWRITE	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	(contents:cpu*)^30.0 (contents:node*)^2.0
+HIT	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Node	32.0	1.0666666666666667
+EXPLAIN	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Node	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	cpu.Node	32.0	960.0
+EXPLAIN	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	cpu.Node	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Repeated	32.0	1.0666666666666667
+EXPLAIN	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Repeated	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Prefix	32.0	1.0666666666666667
+EXPLAIN	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Prefix	32.0 = sum of:\n  30.0 = contents:cpu*^30.0\n  2.0 = contents:node*^2.0\n
+HIT	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Typo	2.0	0.06666666666666667
+EXPLAIN	classic-control	( cpu*~ )^30.0 ( node*~ )^2.0	driver.Typo	2.0 = sum of:\n  2.0 = contents:node*^2.0\n

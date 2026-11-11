@@ -1,0 +1,68 @@
+{
+  "schema": "rust-pilot-seeds/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "repository": "xkernel",
+  "stage": "pilot_preparation_not_frozen_evaluation",
+  "sampling": "Purposive manual source reading, not detector-selected or random; four seed groups, not a representative dataset",
+  "cases": [
+    {
+      "id": "R001",
+      "question": "xcover与klazy的Once是否存在值得复用的初始化机制？",
+      "origin": "Historical C001 lead, re-read at current fixed snapshot; not copied as a label",
+      "label": "unlabelled",
+      "observed": "xcover自行以AtomicU8和MaybeUninit实现初始化；模块注释明确提及替代klazy的意图。",
+      "hypothesis": "可能共享机制，但依赖、panic及初始化契约差异可能要求独立实现。",
+      "next_evidence": ["逐项核对Err、panic、重入和Drop契约", "核查portable-atomic与core原子的目标约束", "取得xcover自举/依赖限制的设计依据"],
+      "sources": [
+        {"path": "util/xcover/src/sync.rs", "anchor": "pub(crate) struct Once<T>"},
+        {"path": "util/klazy/src/once.rs", "anchor": "pub struct Once<T = ()>"}
+      ]
+    },
+    {
+      "id": "R002",
+      "question": "Lazy和Once是重复实现，还是已分层复用的不同职责？",
+      "origin": "Existing klazy source inventory and manual reading",
+      "label": "unlabelled",
+      "observed": "Lazy保存Once<T>，force委托value_storage.call_once，另保存初始化闭包。",
+      "hypothesis": "用于检验是否把既有组合复用误判成再次实现；不预设维护者的最终质量评价。",
+      "next_evidence": ["确认工厂闭包消费和panic后状态契约", "核查调用方是否需要两个不同接口", "核查已有测试，勿把单纯同职责描述当冗余"],
+      "sources": [
+        {"path": "util/klazy/src/lazy.rs", "anchor": "pub struct Lazy<T, F = fn() -> T>"},
+        {"path": "util/klazy/src/once.rs", "anchor": "pub struct Once<T = ()>"}
+      ]
+    },
+    {
+      "id": "R003",
+      "question": "SpinLock与SpinRwLock的guard/统计支撑是否有局部共享机会，而非合并锁语义？",
+      "origin": "Existing kspin source inventory and manual reading",
+      "label": "unlabelled",
+      "observed": "两个锁均以BaseGuard参数化；lock/read先调用G::acquire，后续分别处理互斥状态和读者计数。",
+      "hypothesis": "或有局部机制重叠，但读写并发、cfg和热路径成本可能使额外抽象不值得。",
+      "next_evidence": ["比较状态转换、guard释放顺序及内存序", "确认smp/preempt/stats配置范围", "比较共享方案与保持独立的代码清晰度、生成代码和竞争性能"],
+      "sources": [
+        {"path": "task/kspin/src/lock.rs", "anchor": "pub struct SpinLock<G: BaseGuard"},
+        {"path": "task/kspin/src/rwlock.rs", "anchor": "pub struct SpinRwLock<G: BaseGuard"}
+      ]
+    },
+    {
+      "id": "R004",
+      "question": "GeneratedFileOperations与SnapshotFileOperations是否已共享适当层次，剩余相似包装是否值得抽象？",
+      "origin": "Existing kvfs source inventory and manual reading",
+      "label": "unlabelled",
+      "observed": "二者read均调用read_generated_bytes；前者每次read_all，后者open保存数据并在read读取private_data。",
+      "hypothesis": "数据生命周期是重要差异；相似poll和read包装不等于应统一整个实现。",
+      "next_evidence": ["确认按次生成与按打开快照的需求", "核查重复读取、seek及写权限的测试与调用方", "比较分配成本、数据一致性和新增抽象复杂度"],
+      "sources": [
+        {"path": "fs/kvfs/src/simple_file.rs", "anchor": "impl FileOperations for GeneratedFileOperations"},
+        {"path": "fs/kvfs/src/simple_file.rs", "anchor": "impl FileOperations for SnapshotFileOperations"}
+      ]
+    }
+  ],
+  "remaining_sampling_requirements": [
+    "Select and pin ArceOS and Starry snapshots before cross-project claims; related projects are not independent by default",
+    "Expand toward 12–20 cases only with reviewable source and rationale; do not fill label quotas with guesses",
+    "Include low-lexical-similarity functional overlap and multi-function mechanisms, not just named pairs",
+    "Keep construction tests separate from real cases; discovery seeds must not become an untouched test set",
+    "Treat R001/R002 as related initialization cases, not independent replications"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "optimization-candidate-disposition/1",
+  "candidate": "SCC-1571-1732",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "discovery": "Rust token-bag adapted SCC development corpus; not independent held-out evaluation",
+  "overlap": "Two identical 13-field test directory metadata constructions",
+  "existing_reuse": "Inspected existing helpers have differing state or default contracts; no drop-in selected",
+  "abstraction_boundary": "Private cfg(unittest) pure constructor; keep mock state and test oracles independent",
+  "behavior_validation": {
+    "status": "passed_in_one_configuration",
+    "original_tests": 94,
+    "candidate_tests": 94,
+    "evidence": "research/evidence/runs/2026-11-05-metadata-pair-01/report.json"
+  },
+  "production_gate": {
+    "status": "candidate_non_unittest_build_passed_test_inputs_excluded",
+    "runtime": "not_run",
+    "evidence": "research/evidence/runs/2026-11-05-metadata-production-01/report.json"
+  },
+  "benefit": {
+    "constructor_sites_before": 2,
+    "constructor_sites_after": 1,
+    "added_lines": 25,
+    "deleted_lines": 30,
+    "changed_files": 4,
+    "added_modules": 1,
+    "net_maintainability": "unverified",
+    "historical_sync_defects": "not_established",
+    "performance": "not_measured"
+  },
+  "disposition": "close_development_experiment_retain_feasible_candidate_defer_adoption",
+  "merge_recommendation": "not_recommended_as_standalone_PR_on_current_evidence",
+  "truth_label": "unassigned",
+  "reopen_if": [
+    "Concrete shared-change requirement or synchronization defect is demonstrated",
+    "Additional callers with the same contract justify shared ownership",
+    "Maintainer review provides a concrete readability or maintenance rationale"
+  ],
+  "note": "research/notes/2026-11-05-metadata-case-disposition.md"
+}

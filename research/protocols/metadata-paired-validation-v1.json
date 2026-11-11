@@ -1,0 +1,31 @@
+{
+  "schema": "metadata-paired-validation/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "patch_sha256": "a6f6b4a4c207c12127d775e7a3ef7715826cfdca307a1091972865756116386e",
+  "runner": "scripts/run_metadata_pair.py",
+  "inputs": {
+    "config_sha256": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+    "disk": "one saved preboot 64MiB ext4 template copied separately for each variant; initial SHA256 equality required",
+    "coverage": false,
+    "acceleration": false,
+    "network": false,
+    "vsock": false,
+    "block": true,
+    "cargo_offline": true,
+    "build_jobs": 2
+  },
+  "acceptance": [
+    "Original must pass before candidate is attempted",
+    "Each variant reports exactly the expected 94 distinct test names once, all ok, with success exit and unique success marker",
+    "Original tracked regular files equal fixed archive before and after; candidate differs only by exact archived four-file proposal",
+    "Resolved config and lockfiles remain fixed; generated Cargo configs require path-aware comparison",
+    "Preboot template is unchanged; both runs begin with its exact bytes"
+  ],
+  "budget": "600 seconds per make invocation, kill after 10 additional seconds",
+  "cache_policy": "Original may reuse verified original outputs; candidate builds in fresh isolated outputs. No timing or performance comparison.",
+  "limits": [
+    "Not a normal non-unittest production build check",
+    "Not all-config equivalence or performance validation",
+    "Passing tests does not establish net maintainability benefit or justify merging"
+  ]
+}

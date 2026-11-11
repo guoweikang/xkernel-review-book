@@ -1,0 +1,151 @@
+{
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "environment": {
+    "HOME": "/root",
+    "PATH": "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin:/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "LANG": "C.UTF-8",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.95.0",
+    "XKERNEL_ENABLE_COVERAGE": "0",
+    "GIT_CEILING_DIRECTORIES": "/root/codes/x-kernel-worktrees/ai-review-book/.build"
+  },
+  "steps": [
+    {
+      "name": "format",
+      "command": [
+        "timeout",
+        "60",
+        "mkfs.ext4",
+        "-q",
+        "-F",
+        "-b",
+        "4096",
+        "-O",
+        "^metadata_csum,^64bit",
+        "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/preboot.img"
+      ],
+      "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01",
+      "exit_code": 0
+    },
+    {
+      "name": "original",
+      "command": [
+        "timeout",
+        "--kill-after=10",
+        "600",
+        "make",
+        "unittest",
+        "UNITTEST_CRATE=kvfs::mount::tests,kvfs::node::dentry::tests_dentry",
+        "ACCEL=n",
+        "NET=n",
+        "VSOCK=n",
+        "BLK=y",
+        "DISK_IMG=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/original.img",
+        "TARGET_DIR=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target"
+      ],
+      "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/source",
+      "exit_code": 0
+    },
+    {
+      "name": "patch-check",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-05-metadata-fixture-patch-02/candidate.patch"
+      ],
+      "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/candidate-source",
+      "exit_code": 0
+    },
+    {
+      "name": "patch-apply",
+      "command": [
+        "git",
+        "apply",
+        "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-05-metadata-fixture-patch-02/candidate.patch"
+      ],
+      "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/candidate-source",
+      "exit_code": 0
+    },
+    {
+      "name": "candidate",
+      "command": [
+        "timeout",
+        "--kill-after=10",
+        "600",
+        "make",
+        "unittest",
+        "UNITTEST_CRATE=kvfs::mount::tests,kvfs::node::dentry::tests_dentry",
+        "ACCEL=n",
+        "NET=n",
+        "VSOCK=n",
+        "BLK=y",
+        "DISK_IMG=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/candidate.img",
+        "TARGET_DIR=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/candidate-target"
+      ],
+      "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/candidate-source",
+      "exit_code": 0
+    }
+  ],
+  "runs": {
+    "original": {
+      "test_gate": {
+        "passed": true,
+        "exit_code": 0,
+        "expected": 94,
+        "observed": 94,
+        "missing": [],
+        "unexpected": [],
+        "duplicate_results": 0,
+        "non_ok": []
+      },
+      "initial_disk_sha256": "69911cb5433be3bc99d783461fe5ecb72a57e0e30aac542c02bcc1b4a22ce6a4",
+      "final_disk_sha256": "e9eb1d6369c7ebfc7c36f21af1531afd761e8cca823d5f6dde73bf2dd21eb925",
+      "source_files_checked_before": 3634,
+      "source_files_checked_after": 3634
+    },
+    "candidate": {
+      "test_gate": {
+        "passed": true,
+        "exit_code": 0,
+        "expected": 94,
+        "observed": 94,
+        "missing": [],
+        "unexpected": [],
+        "duplicate_results": 0,
+        "non_ok": []
+      },
+      "initial_disk_sha256": "69911cb5433be3bc99d783461fe5ecb72a57e0e30aac542c02bcc1b4a22ce6a4",
+      "final_disk_sha256": "be56fa996911d550ebaed24de7e3161793f3eb9d9fc25f74104f9572806186c8",
+      "source_files_checked_before": 3634,
+      "source_files_checked_after": 3634
+    }
+  },
+  "status": "paired_tests_passed",
+  "production_build": "not_run",
+  "net_benefit": "unverified",
+  "cache_policy": "original reuses verified original outputs; candidate has fresh outputs; not a timing experiment",
+  "source_archive_sha256": "d58e1506a947d66d4385f45795e3a42325b7e5e6a89f6028c6a49faa5b5495f2",
+  "patch_sha256": "a6f6b4a4c207c12127d775e7a3ef7715826cfdca307a1091972865756116386e",
+  "template_sha256": "69911cb5433be3bc99d783461fe5ecb72a57e0e30aac542c02bcc1b4a22ce6a4",
+  "artifact_sha256": {
+    "format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preboot.img.gz": "5fe5d32eff0ccf47f310bc7279095b00624663def0b791e0f23e15e423f3750c",
+    "original.log": "2ef1a71f697976f86d52bf17a13857ad012896c0ee7d91d4162e69222455b2e9",
+    "original-.config": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+    "original-.cargo__.xconfig.toml": "1dee95ffd539a3b84062337492aa56567bf8437ba7c3ea4814d9b4f24fcd8bf3",
+    "original-Cargo.lock": "d05e25e7c21dd69bfb53a514fa888433de9a16a5662a3e3fc2ee23b140c10d20",
+    "original-xtask__Cargo.lock": "d07f9f42f38f65ec4ea773d0bcd2468064042651292832165c80a67fdef877e3",
+    "patch-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "patch-apply.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "candidate.log": "0d195ccd56a9045e0271f8a1fcc7c3c915cde2c7e1309700c72c8fe19a1f6cf6",
+    "candidate-.config": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+    "candidate-.cargo__.xconfig.toml": "db1073334ddc2c7dd977642fbf24c328a036e93a9fd29f489cbee1fae9029e3a",
+    "candidate-Cargo.lock": "d05e25e7c21dd69bfb53a514fa888433de9a16a5662a3e3fc2ee23b140c10d20",
+    "candidate-xtask__Cargo.lock": "d07f9f42f38f65ec4ea773d0bcd2468064042651292832165c80a67fdef877e3",
+    "runner.py": "67fe687044fd6d6b5e7670f3958f01aa9c910c469a3e78344f35974c5976d48c",
+    "log-checker.py": "f9af946bcfd3579b909882c2e3abbcb22cbc929b53bcf137bb2498bba18e9c10",
+    "candidate.patch": "a6f6b4a4c207c12127d775e7a3ef7715826cfdca307a1091972865756116386e"
+  }
+}

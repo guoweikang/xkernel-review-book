@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>RMTool: Command-line Interface</title>
+</head>
+
+<body>
+
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="8" width="98%">
+    <tr>
+      <td align="right" valign="top" width="20%">&nbsp;</td>
+      <td width="15"></td>
+      <td valign="bottom" width="80%">
+        <h1><font size="5" color="#000080"><a href="index.htm">RMTool</a>:
+        Command-Line Interface</font></h1>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" width="20%"><font size="2"><strong><a href="#Compiling the Map">Compiling
+        the Map</a></strong></font>
+        <p><font size="2"><strong><a href="#Mapping the Source Model">Mapping
+        the Source Model</a></strong></font></p>
+        <p><font size="2"><strong><a href="#Forming the Reflexion Model">Forming
+        the Reflexion Model</a></strong></font><font size="3"><br>
+        </font></p>
+        <p><font size="3"><br>
+        <br>
+        </font></td>
+      <td width="15"></td>
+      <td valign="top" width="80%">Reflexion models may also be computed using a
+        series of command-line tools. Computing a reflexion model using these
+        tools involves three steps:
+        <ol>
+          <li>compiling the mapping file,</li>
+          <li>pushing the source model values through the map to create an
+            induced high-level model,</li>
+          <li>comparing the induced high-level model to the original high-level
+            model.</li>
+        </ol>
+        <p>The textual description of the computed reflexion model is output.
+        This description may also be output in dot format for display with <a href="http://www.research.att.com/sw/tools/graphviz">
+        AT&amp;T's graphviz </a> package.</p>
+        <h3><a name="Compiling the Map">Compiling the Map</a></h3>
+        <p>To compile a mapping file, execute:</p>
+        <p>java -Dml2map.structFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        -Dml2map.mapFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        -Dml2map.compiledMapFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jRMTool.map.Ml2map</p>
+        <p>where:</p>
+        <ul>
+          <li>structFilename specifies the structure description file to use,</li>
+          <li>mapFilename specifies the mapping file to use, and</li>
+          <li>compiledMapFilename specifies the file in which to output a
+            compiled version of the map.</li>
+        </ul>
+        <p>Two optional properties are also available:</p>
+        <ul>
+          <li>-Dml2map.version which reports version information</li>
+          <li>-Dml2map.debug which turns on debugging information</li>
+        </ul>
+        <h3><a name="Mapping the Source Model">Mapping the Source Model</a></h3>
+        <p>To map the source model, execute:</p>
+        <p>java -Dcompute.compiledMapFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -Dcompute.sourceModelFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -Dcompute.errorFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -Dcompute.infoFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -Dcompute.inducedHLMFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jRMTool.compute.Compute</p>
+        <p>where:</p>
+        <ul>
+          <li>compiledMapFilename specifies the compiled map to use</li>
+          <li>sourceModelFilename specifies the source model to use</li>
+          <li>errorFilename specifies the name of a file in which to leave
+            information about all unmapped source model entities</li>
+          <li>infoFilename specifies the name of a file in which to leave
+            information about which source model entities mapped to which
+            high-level model entities</li>
+          <li>inducedHLMFilename specifies the name of a file in which to leave
+            the induced high-level model&nbsp;</li>
+        </ul>
+        <p>Three optional properties are also available:</p>
+        <ul>
+          <li>-Dcompute.version reports version information</li>
+          <li>-Dcompute.debug[=level] reports debugging information</li>
+          <li>-Dcompute.noOptimize causes the tool to refrain from optimizing
+            regular expression comparisons</li>
+        </ul>
+        <h3><a name="Forming the Reflexion Model">Forming the Reflexion Model</a></h3>
+        <p>To form a RM, execute:</p>
+        <p>java -DmakeRM.HLMFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -DmakeRM.inducedHLMFilename=&lt;filename&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -DmakeRM.RMFilename=&lt;filename&gt;</br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jRMTool.model.MakeRM</p>
+        <p>where:</p>
+        <ul>
+          <li>HLMFilename specifies the high-level model to use</li>
+          <li>inducedHLMFilename specifies the result of the mapping the source
+            model step</li>
+          <li>RMFilename specifies the name of a file in which to leave a
+            textual description of the computed reflexion model</li>
+        </ul>
+        <p>Four optional properties are also available:</p>
+        <ul>
+          <li>-DmakeRM.version reports version information</li>
+          <li>-DmakeRM.debug[=level] reports debugging information</li>
+          <li>-DmakeRM.configFilename=&lt;filename&gt; specifies the name of a
+            file to use to visually configure the reflexion model (dot format)</li>
+          <li>-DmakeRM.RMDotFilename=&lt;filename&gt; specifies the name of a
+            file in which to leave a &quot;dot&quot; version of the computed
+            reflexion model for display.</li>
+        </ul>
+        <hr>
+        <p>Last Updated on: <!--webbot bot="Timestamp" S-Type="EDITED"
+        S-Format="%B %d, %Y" startspan -->March 13, 2001<!--webbot bot="Timestamp" endspan i-checksum="16899" -->
+        <br>
+        <br>
+        Contact <a href="mailto:murphy@cs.ubc.ca">murphy@cs.ubc.ca</a> for more
+information or any problems with this page.</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</td>
+    </tr>
+  </table>
+  </center>
+</div>
+
+</body>
+
+</html>

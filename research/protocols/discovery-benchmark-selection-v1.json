@@ -1,0 +1,41 @@
+{
+  "schema": "discovery-benchmark-selection/1",
+  "date": "2026-11-11",
+  "status": "entrypoint_probed_not_evaluated",
+  "research_question": "Can we establish a task-aligned, reproducible clone-discovery reference evaluation before assessing Rust-specific extensions?",
+  "selected_reference": {
+    "name": "BigCloneBench V2 via BigCloneEval",
+    "evaluator_revision": "6d393ec8adb1d71493d09881ba520659b6c2c68e",
+    "benchmark_readme_revision": "37f6c7141dac914d7eb13c09a967c6ce1a821f91",
+    "reason": "Known clone discovery and range-based recall are aligned with the existing SourcererCC baseline, unlike query retrieval or library generation",
+    "not_claimed": ["Rust support", "Optimization truth", "Complete negative labels", "Original paper numeric reproduction"]
+  },
+  "other_tasks": [
+    {"name": "CodeSearchNet", "decision": "retain_for_query_retrieval_only_not_substitute_clone_truth"},
+    {"name": "MiniCode", "decision": "retain_for_later_refactoring_generation_and_quality_not_current_discovery"},
+    {"name": "Rust controlled mechanisms", "decision": "parallel_development_suite_not_replacement_for_public_benchmark"}
+  ],
+  "actual_acquisition": {
+    "official_share_links": 2,
+    "response": "HTTP 200 HTML landing pages; no gzip archive magic in bounded prefixes",
+    "bytes_limit_per_response": 65536,
+    "dataset_downloaded": false,
+    "global_availability": "unknown",
+    "credentials_used": false
+  },
+  "entry_gates": [
+    "Obtain exact V2 database and corresponding reduced source corpus; archive version, size, digest and source links",
+    "Separate benchmark database license from per-file corpus licenses; no automatic raw-data redistribution",
+    "Record database schema and eligible reference denominators before running a detector",
+    "Check reference source coordinates and detector range projection using boundary fixtures",
+    "Verify chosen coverage matcher mode by executing controlled integration tests before benchmark scoring",
+    "Freeze functionality/source slice selection independently of detector outputs; both endpoints of every evaluated pair must lie within scanned input",
+    "Report subset protocol as subset evaluation, not whole benchmark recall or original paper reproduction"
+  ],
+  "resource_policy": "Current work limited to pinned metadata and bounded share entry probes; no full VM, paid service, login or speculative mirrors. A later bulk transfer requires size and integrity plan, not a repeated blind crawl.",
+  "next_actions": [
+    "Resolve the official public file-download route or another author-confirmed release; if it requires credentials, retain gap and do not bypass access controls",
+    "Execute a small evaluator/range-mapping integration test separately from any dataset score",
+    "Prepare a separately identified Rust mechanism-suite protocol with constructive relations and independent checking, without treating seen xkernel examples as held-out"
+  ]
+}

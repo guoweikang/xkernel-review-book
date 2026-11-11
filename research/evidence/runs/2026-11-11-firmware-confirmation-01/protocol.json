@@ -1,0 +1,33 @@
+{
+  "schema": "firmware-confirmation-development/1",
+  "kind": "retrospective_development_not_blind_evaluation",
+  "source_run": "research/evidence/runs/2026-11-11-firmware-boundary-01",
+  "selection_basis": "Historical CPU patch and source already read; selected names are not learned detector output",
+  "files": {
+    "drivers/firmware/of/src/lib.rs": ["is_cpu_node", "is_enabled_cpu_node", "cpu_node_reg", "node_reg", "enabled_cpu_nodes", "syscon_poweroff"],
+    "drivers/firmware/rs-fdtree/src/cpu.rs": ["from_node", "hardware_id"],
+    "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs": ["hardware_cpu_id"]
+  },
+  "lexical_signals": {
+    "low_level_read": ["property", "property_str", "property_u32", "parent_property", "parent_property_u32", "property_u32_cells"],
+    "cpu_view_spelling": ["CpuNode::from_node", "hardware_id"],
+    "local_reg_spelling": ["node_reg"],
+    "traversal_spelling": ["all_nodes", "filter"]
+  },
+  "invariants": [
+    "Syntactic names never imply resolved callee identity",
+    "No direct low-level read is not evidence of no transitive parsing",
+    "Existing delegation does not establish correctness of surrounding policy",
+    "Missing function, missing document and unresolved target remain distinct",
+    "No architecture violations or semantic accuracy scores are produced"
+  ],
+  "controls": [
+    {"name": "direct_read", "source": "fn sample(node: Node) { node.property_str(\"device_type\"); }", "signals": ["low_level_read"]},
+    {"name": "view_call", "source": "fn sample(node: Node) { CpuNode::from_node(node).hardware_id(); }", "signals": ["cpu_view_spelling"]},
+    {"name": "comment_and_string", "source": "fn sample() { /* CpuNode::from_node(node); */ let text = \"node.property_str(\\\"reg\\\")\"; }", "signals": []},
+    {"name": "opaque_macro", "source": "fn sample(node: Node) { hidden!(node.property_str(\"reg\")); }", "signals": [], "opaque_macros": 1},
+    {"name": "shadowable_name", "source": "fn sample(node: Node) { unrelated::CpuNode::from_node(node).hardware_id(); }", "signals": ["cpu_view_spelling"]},
+    {"name": "deferred_read", "source": "fn sample(node: Node) { let callback = || node.property_str(\"reg\"); }", "signals": ["low_level_read"], "deferred_sites": 1},
+    {"name": "invalid", "source": "fn broken( {", "status": "rejected", "signals": []}
+  ]
+}

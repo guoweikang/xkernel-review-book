@@ -1,0 +1,105 @@
+{
+  "schema": "discovery-family-assessments/1",
+  "scope": "Researcher assessments of the first 12 development pairs, not automatic semantic inference or truth labels",
+  "families": {
+    "pipe_timestamp_wrappers": {
+      "title": "管道时间戳包装",
+      "overlap": "相同读写包装和时间戳后处理，不是两份管道算法",
+      "existing_reuse": "底层pipe_read_iter和pipe_write_iter已共享",
+      "boundary": "仅考虑后处理；保留FIFO与匿名管道生命周期及数据入队后的错误传播",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "retained_lead",
+      "next_evidence": "具体重复修改需求或后处理维护负担；无证据则不生成补丁",
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md"]
+    },
+    "stream_vs_command": {
+      "title": "流式写与完整命令",
+      "overlap": "复制输入、结算消费量和更新位置的局部结构相似",
+      "existing_reuse": "SimpleFileOps默认实现已委托scalar_write_iter，CommandFile显式覆盖",
+      "boundary": "不能把完整命令拆成分块回调；较小结算边界尚无收益依据",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "direct_replacement_rejected",
+      "next_evidence": "只有提出保留整请求契约且有收益的具体边界才重开",
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md"]
+    },
+    "superblock_constructor": {
+      "title": "superblock构造适配",
+      "overlap": "长签名与参数传递相似",
+      "existing_reuse": "不可失败构造器已经委托可失败公共实现",
+      "boundary": "类型适配层，不是第二套初始化机制",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "仅在出现独立机制重复的新证据时重开",
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md"]
+    },
+    "rename_rejections": {
+      "title": "rename拒绝策略",
+      "overlap": "长trait签名和短错误返回；三个配对共享成员",
+      "existing_reuse": "trait有默认实现，但默认NotADirectory不同于显式拒绝值",
+      "boundary": "保留生产与测试错误策略，不能直接删除override",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "需要复杂重复机制或实际维护负担，单个错误常量不触发补丁",
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md", "research/notes/2026-11-05-scc-review-sidecar.md"]
+    },
+    "device_registry_boundary": {
+      "title": "设备注册边界",
+      "overlap": "校验和注册的调用形状相似",
+      "existing_reuse": "范围校验与registry.add已共享",
+      "boundary": "保留全局锁、解锁后析构与局部测试registry差异",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "只有剩余包装存在实际共同维护需求才重开",
+      "evidence": ["research/notes/2026-11-05-scc-review-sidecar.md"]
+    },
+    "slice_read_adapter": {
+      "title": "切片读取适配",
+      "overlap": "字节拷贝与范围处理重叠",
+      "existing_reuse": "有公共read_generated_bytes，但不能直接认定可替代测试实现",
+      "boundary": "offset整数域、usize截断顺序和持锁范围未对齐",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "constraint_gap",
+      "next_evidence": "先明确合法输入域和锁边界，再判断是否值得做替换实验",
+      "evidence": ["research/notes/2026-11-05-scc-review-sidecar.md"]
+    },
+    "test_directory_metadata": {
+      "title": "测试目录metadata构造",
+      "overlap": "两处相同13字段纯构造",
+      "existing_reuse": "已读helper具有不同状态或默认值，未选择直接替代",
+      "boundary": "仅共享cfg(unittest)纯构造，不合并mock或测试断言",
+      "validation": "paired_tests_and_candidate_production_build",
+      "benefit": "unverified",
+      "disposition": "validated_candidate_adoption_deferred",
+      "next_evidence": "具体同步缺陷、更多同契约使用者或维护者给出的可读性依据才重开",
+      "evidence": ["research/notes/2026-11-05-metadata-case-disposition.md", "research/protocols/metadata-case-disposition-v1.json"]
+    },
+    "block_fault_tests": {
+      "title": "块设备故障测试",
+      "overlap": "共享fixture及相似调用步骤",
+      "existing_reuse": "准备逻辑已有fixture",
+      "boundary": "部分写后失败与前置读取失败具有不同断言目的",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "只检查额外准备逻辑负担，不合并独立故障断言",
+      "evidence": ["research/notes/2026-11-05-scc-review-sidecar.md"]
+    },
+    "path_resolution_tests": {
+      "title": "路径解析测试",
+      "overlap": "相同API调用与树形fixture",
+      "existing_reuse": "已有test_tree",
+      "boundary": "magic link标志和尾斜杠目录要求是不同契约",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有新增维护负担则保留独立测试",
+      "evidence": ["research/notes/2026-11-05-scc-review-sidecar.md"]
+    }
+  }
+}

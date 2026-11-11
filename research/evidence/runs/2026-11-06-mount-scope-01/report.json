@@ -1,0 +1,36 @@
+{
+  "schema": "rust-scope-probe/1",
+  "kernel_revision_context": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "edition": 2024,
+  "steps": [
+    {
+      "command": [
+        "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2024",
+        "research/tools/mount-temporary-scope.rs",
+        "-o",
+        ".build/mount-temporary-scope"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        ".build/mount-temporary-scope"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "passed": true,
+  "kernel_execution": "not_run",
+  "limits": [
+    "std Mutex and instrumented owned payload, not ksync or actual Mount graph",
+    "Drop of a local Arc handle need not destroy its referent",
+    "Not a deadlock, semantic-equivalence or performance proof"
+  ],
+  "artifact_sha256": {
+    "compiler.log": "4fdff2578428e9c5c08ddd7a0d3079c1a106b1cdaa46e73e46f7cd32b0fb9cad",
+    "probe.rs": "d4e22a1e6e4feb45c2cb567aa3dbdf12d0c98450afb55314f5fdfa1b5754105d",
+    "compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe.log": "5f23ea7dfc975587c684848897ba957b1fa875aeb4c992fa87ea1b6eb911d367"
+  }
+}

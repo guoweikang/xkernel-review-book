@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>RMTool: Examples</title>
+</head>
+
+<body>
+
+<h1><font size="5" color="#000080"><a href="index.htm">RMTool</a>: Examples</font></h1>
+<p>In the distribution are three examples to try:</p>
+<ul>
+  <li>401_pl0: A reflexion model of an undergraduate compiler written in C++ at
+    the University of Washington</li>
+  <li>netbsd: A reflexion model of the virtual memory portion of C-based netbsd&nbsp;</li>
+  <li>jRMTool - A reflexion model of the Java source of the RMTool (Java version
+    2.0)</li>
+</ul>
+<p>Eventually, there should be some more examples and some more discussion of
+the examples but this is all for now!&nbsp;</p>
+<h3>401_pl0</h3>
+<p>To run the use 401_pl0 example, use:</p>
+<ul>
+  <li>structure description file = lib/cplusplus.des</li>
+  <li>source model = data/401_pl0.lss</li>
+  <li>mapping = data/401_pl0.map</li>
+  <li>high-level model = data/401_pl0.hlm</li>
+  <li>leave the config field empty</li>
+  <li>leave typed input unchecked</li>
+</ul>
+<p>The computed reflexion model shows that some interactions were anticipated by
+the software developer (such as the convergences between Parse and AST, AST and
+SymTab, and AST and CodeGen). Other interactions were either not anticipated or
+require further investigation with possible refinements of the input (such as
+the divergence between CodeGen and SymTab. Finally, some interactions were
+anticipated but no evidence of such an interaction was found with the current
+map (such as the absence between CodeGen and Object).</p>
+<p>Click on the arc between CodeGen and SymTab. A window appears detailing the
+two calls mapped to this high-level model interaction. These calls indicate that
+CodeGen related functions indeed do require size information from routines
+mapped to SymTab.</p>
+<h3>netbsd</h3>
+<p>To run the netbsd example, use:</p>
+<ul>
+  <li>structure description file = lib/c.des</li>
+  <li>source model = data/vm.lss</li>
+  <li>mapping = data/vm.map</li>
+  <li>high-level model = data/vm.hlm</li>
+  <li>config = data/vm.config</li>
+  <li>check the typed input box</li>
+</ul>
+<p>The computed reflexion model&nbsp; shows some divergences in blue and some in
+red. The blue divergences are of type &quot;call&quot;. The red divergence is of
+type &quot;data&quot;. This is an example of computing a reflexion model where
+the source model is typed but the high-level model is not typed. Because the
+high-level model is not typed, there are no convergences in the reflexion model.
+Note that the absences are untyped (they appear black since &quot;notype&quot;
+is not mentioned in the config file).</p>
+<p>Without closing the interface, try using the file data/vm-typed.hlm as the
+high-level model and recomputing the reflexion model. In this high-level model,
+all arcs are set to type &quot;call&quot;. The computed reflexion model now
+shows convergences, divergences, and absences of type &quot;call&quot;. A red
+divergence indicates a divergence of type &quot;data&quot; as before.</p>
+<p>Try removing the config file specification from the config field in the
+interface, unchecking the typed input box, changing the high-level model back to
+data/vm.hlm and recomputing a reflexion model. Note that there are now
+convergences in the reflexion model since type information is not being
+considered. (Please note that to not consider any typed information, you must
+have the typed input box checked off and the high-level model must not include
+any type information).</p>
+<h3>jRMTool</h3>
+<p>To run the jRMTool example, use:</p>
+<ul>
+  <li>structure description file = lib/java.des</li>
+  <li>source model = data/jRMTool.lss</li>
+  <li>mapping = data/jRMTool.map</li>
+  <li>high-level model = data/jRMTool.hlm</li>
+  <li>config is left empty</li>
+  <li>typed input box is uncheck</li>
+</ul>
+<p>The computed reflexion model shows a node (&quot;convert&quot;) without an
+arcs to or from it. This node was simply stated in the high-level model without
+any interactions to any other nodes. No source model entities have been mapped
+to it. This example is indicative of a reflexion model in the early stages of
+refinement.</p>
+<hr>
+<p>Last updated on: <!--webbot bot="Timestamp" S-Type="EDITED"
+S-Format="%B %d, %Y" startspan -->July 21, 2000<!--webbot bot="Timestamp" endspan i-checksum="14064" -->
+</p>
+<p>Contact <a href="mailto:murphy@cs.ubc.ca">murphy@cs.ubc.ca</a> for more
+information or any problems with this page.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

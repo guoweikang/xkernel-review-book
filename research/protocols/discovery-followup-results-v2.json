@@ -1,0 +1,148 @@
+{
+  "schema": "discovery-followup-results/1",
+  "queue": "research/protocols/discovery-ledger-v1.json",
+  "status": "six_static_reviews_complete_not_truth_labels",
+  "tests_executed_this_round": false,
+  "records": [
+    {
+      "file_ids": [
+        735,
+        736
+      ],
+      "family": "block_byte_io",
+      "finding": "shared_geometry_distinct_io_and_completion_contracts",
+      "action": "retain_geometry_only_hypothesis_without_patch",
+      "gap": "No demonstrated maintenance benefit; allocation and backend call counts must be preserved"
+    },
+    {
+      "file_ids": [
+        505,
+        507
+      ],
+      "family": "mount_detachment",
+      "finding": "existing_mount_edge_detach_helper_with_lock_and_order_constraints",
+      "action": "audit_existing_helper_lock_scope_before_any_reuse",
+      "gap": "Mutex temporary lifetime, caller lock preconditions and subtree root-detach ordering not proven equivalent"
+    },
+    {
+      "file_ids": [
+        1045,
+        1894
+      ],
+      "family": "nullfs_permission_fixture",
+      "finding": "相同Metadata形状和少量固定字段",
+      "action": "preserve_contract_control",
+      "gap": "没有跨生产／测试共享收益证据，保留本地fixture"
+    },
+    {
+      "file_ids": [
+        1135,
+        1800
+      ],
+      "family": "poll_registration_policy",
+      "finding": "事件位判断与register调用相似",
+      "action": "existing_reuse_control",
+      "gap": "没有新的机制重复证据则不抽取短条件包装"
+    },
+    {
+      "file_ids": [
+        1765,
+        1766
+      ],
+      "family": "rename_topology_tests",
+      "finding": "构造目录、缓存和superblock的步骤相似",
+      "action": "preserve_contract_control",
+      "gap": "不同拓扑不可因准备步骤相似合并断言"
+    },
+    {
+      "file_ids": [
+        1598,
+        1599
+      ],
+      "family": "mount_depth_tests",
+      "finding": "挂载准备与路径断言部分相似",
+      "action": "preserve_contract_control",
+      "gap": "没有额外准备逻辑负担证据则不参数化测试场景"
+    }
+  ],
+  "families": {
+    "block_byte_io": {
+      "title": "块设备字节读写",
+      "overlap": "容量裁剪和非对齐分段几何真实重叠",
+      "existing_reuse": "底层块I/O已共享；SeekableDisk带状态、预分配缓冲与flush语义，非直接替代",
+      "boundary": "只保留纯范围规划假设；快路径调用次数、读改写与错误结算仍分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "retained_lead",
+      "next_evidence": "共同修改需求和简化收益；不重开通用短写缺陷研究",
+      "evidence": [
+        "research/notes/2026-11-06-block-io-review.md"
+      ]
+    },
+    "mount_detachment": {
+      "title": "挂载卸载提交步骤",
+      "overlap": "恢复covers或移除父child edge并detach",
+      "existing_reuse": "已有mount_edge_detach用于pivot_root，不先创建新helper",
+      "boundary": "锁持有范围、注册表校验与子树清理顺序必须保留；不能合并单点和递归策略",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "constraint_gap",
+      "next_evidence": "先核对match临时guard与let绑定的释放时机及直接Path测试的锁前提",
+      "evidence": [
+        "research/notes/2026-11-06-mount-detach-review.md"
+      ]
+    },
+    "nullfs_permission_fixture": {
+      "title": "nullfs与权限输入",
+      "overlap": "相同Metadata形状和少量固定字段",
+      "existing_reuse": "权限meta已供本地测试复用",
+      "boundary": "生产只读目录默认值与可变权限测试输入分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有跨生产／测试共享收益证据，保留本地fixture",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ]
+    },
+    "poll_registration_policy": {
+      "title": "poll注册包装",
+      "overlap": "事件位判断与register调用相似",
+      "existing_reuse": "PollContext::register已共享真实注册管理",
+      "boundary": "管道IN/OUT双源策略与测试InvalidState注入分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "没有新的机制重复证据则不抽取短条件包装",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ]
+    },
+    "rename_topology_tests": {
+      "title": "rename拓扑测试",
+      "overlap": "构造目录、缓存和superblock的步骤相似",
+      "existing_reuse": "已有make_renamable_dir_entry和make_file_entry",
+      "boundary": "祖先目标错误与跨目录成功移动保持独立oracle",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "不同拓扑不可因准备步骤相似合并断言",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ]
+    },
+    "mount_depth_tests": {
+      "title": "挂载深度测试",
+      "overlap": "挂载准备与路径断言部分相似",
+      "existing_reuse": "已有mock_filesystem、mount_filesystem等支撑",
+      "boundary": "单层与嵌套层级的dotdot目标不同",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有额外准备逻辑负担证据则不参数化测试场景",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ]
+    }
+  }
+}

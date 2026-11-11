@@ -1,0 +1,13 @@
+
+running 4 tests
+test pc01_starry_patches_old_content ... starry fail_read=false offset=2 result=Ok(2) events=["read", "write:abXYef"]
+ok
+test pc01_xkernel_delivers_one_command ... xkernel unused_read_failure=false offset=2 result=Ok(2) events=["write:XY"]
+ok
+test pc03_starry_stops_on_read_error ... starry fail_read=true offset=0 result=Err("read_failure") events=["read"]
+ok
+test pc03_xkernel_does_not_read_old_content ... xkernel unused_read_failure=true offset=0 result=Ok(2) events=["write:XY"]
+ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

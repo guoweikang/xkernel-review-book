@@ -1,0 +1,5423 @@
+{
+  "schema": "discovery-ledger/1",
+  "summary": {
+    "candidate_pairs": 156,
+    "reviewed_pairs": 18,
+    "unreviewed_pairs": 138,
+    "reviewed_families": 15,
+    "family_dispositions": {
+      "constraint_gap": 2,
+      "direct_replacement_rejected": 1,
+      "existing_reuse_control": 3,
+      "preserve_contract_control": 6,
+      "retained_lead": 2,
+      "validated_candidate_adoption_deferred": 1
+    },
+    "net_benefit_confirmed": 0
+  },
+  "families": [
+    {
+      "family": "block_byte_io",
+      "pairs": [
+        [
+          735,
+          736
+        ]
+      ],
+      "title": "块设备字节读写",
+      "overlap": "容量裁剪和非对齐分段几何真实重叠",
+      "existing_reuse": "底层块I/O已共享；SeekableDisk带状态、预分配缓冲与flush语义，非直接替代",
+      "boundary": "只保留纯范围规划假设；快路径调用次数、读改写与错误结算仍分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "retained_lead",
+      "next_evidence": "共同修改需求和简化收益；不重开通用短写缺陷研究",
+      "evidence": [
+        "research/notes/2026-11-06-block-io-review.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "block_fault_tests",
+      "pairs": [
+        [
+          1830,
+          1831
+        ]
+      ],
+      "title": "块设备故障测试",
+      "overlap": "共享fixture及相似调用步骤",
+      "existing_reuse": "准备逻辑已有fixture",
+      "boundary": "部分写后失败与前置读取失败具有不同断言目的",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "只检查额外准备逻辑负担，不合并独立故障断言",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "device_registry_boundary",
+      "pairs": [
+        [
+          702,
+          1809
+        ]
+      ],
+      "title": "设备注册边界",
+      "overlap": "校验和注册的调用形状相似",
+      "existing_reuse": "范围校验与registry.add已共享",
+      "boundary": "保留全局锁、解锁后析构与局部测试registry差异",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "只有剩余包装存在实际共同维护需求才重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "mount_depth_tests",
+      "pairs": [
+        [
+          1598,
+          1599
+        ]
+      ],
+      "title": "挂载深度测试",
+      "overlap": "挂载准备与路径断言部分相似",
+      "existing_reuse": "已有mock_filesystem、mount_filesystem等支撑",
+      "boundary": "单层与嵌套层级的dotdot目标不同",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有额外准备逻辑负担证据则不参数化测试场景",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "mount_detachment",
+      "pairs": [
+        [
+          505,
+          507
+        ]
+      ],
+      "title": "挂载卸载提交步骤",
+      "overlap": "恢复covers或移除父child edge并detach",
+      "existing_reuse": "已有mount_edge_detach用于pivot_root，不先创建新helper",
+      "boundary": "锁持有范围、注册表校验与子树清理顺序必须保留；不能合并单点和递归策略",
+      "validation": "static_callers_and_compiler_scope_probe_not_kernel_execution",
+      "benefit": "unverified",
+      "disposition": "constraint_gap",
+      "next_evidence": "Reopen only with concrete maintenance benefit and a scope-preserving plan; no automatic concurrency investigation",
+      "evidence": [
+        "research/notes/2026-11-06-mount-detach-review.md",
+        "research/notes/2026-11-06-mount-scope-decision.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "nullfs_permission_fixture",
+      "pairs": [
+        [
+          1045,
+          1894
+        ]
+      ],
+      "title": "nullfs与权限输入",
+      "overlap": "相同Metadata形状和少量固定字段",
+      "existing_reuse": "权限meta已供本地测试复用",
+      "boundary": "生产只读目录默认值与可变权限测试输入分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有跨生产／测试共享收益证据，保留本地fixture",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "path_resolution_tests",
+      "pairs": [
+        [
+          1703,
+          1710
+        ]
+      ],
+      "title": "路径解析测试",
+      "overlap": "相同API调用与树形fixture",
+      "existing_reuse": "已有test_tree",
+      "boundary": "magic link标志和尾斜杠目录要求是不同契约",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "没有新增维护负担则保留独立测试",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "pipe_timestamp_wrappers",
+      "pairs": [
+        [
+          1151,
+          1163
+        ],
+        [
+          1153,
+          1165
+        ]
+      ],
+      "title": "管道时间戳包装",
+      "overlap": "相同读写包装和时间戳后处理，不是两份管道算法",
+      "existing_reuse": "底层pipe_read_iter和pipe_write_iter已共享",
+      "boundary": "仅考虑后处理；保留FIFO与匿名管道生命周期及数据入队后的错误传播",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "retained_lead",
+      "next_evidence": "具体重复修改需求或后处理维护负担；无证据则不生成补丁",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "poll_registration_policy",
+      "pairs": [
+        [
+          1135,
+          1800
+        ]
+      ],
+      "title": "poll注册包装",
+      "overlap": "事件位判断与register调用相似",
+      "existing_reuse": "PollContext::register已共享真实注册管理",
+      "boundary": "管道IN/OUT双源策略与测试InvalidState注入分离",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "没有新的机制重复证据则不抽取短条件包装",
+      "evidence": [
+        "research/notes/2026-11-06-followup-mixed-pairs.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "rename_rejections",
+      "pairs": [
+        [
+          1237,
+          1578
+        ],
+        [
+          1237,
+          1660
+        ],
+        [
+          1578,
+          1660
+        ]
+      ],
+      "title": "rename拒绝策略",
+      "overlap": "长trait签名和短错误返回；三个配对共享成员",
+      "existing_reuse": "trait有默认实现，但默认NotADirectory不同于显式拒绝值",
+      "boundary": "保留生产与测试错误策略，不能直接删除override",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "需要复杂重复机制或实际维护负担，单个错误常量不触发补丁",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md",
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "rename_topology_tests",
+      "pairs": [
+        [
+          1765,
+          1766
+        ]
+      ],
+      "title": "rename拓扑测试",
+      "overlap": "构造目录、缓存和superblock的步骤相似",
+      "existing_reuse": "已有make_renamable_dir_entry和make_file_entry",
+      "boundary": "祖先目标错误与跨目录成功移动保持独立oracle",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "preserve_contract_control",
+      "next_evidence": "不同拓扑不可因准备步骤相似合并断言",
+      "evidence": [
+        "research/notes/2026-11-06-followup-test-pairs.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "slice_read_adapter",
+      "pairs": [
+        [
+          1281,
+          1672
+        ]
+      ],
+      "title": "切片读取适配",
+      "overlap": "字节拷贝与范围处理重叠",
+      "existing_reuse": "有公共read_generated_bytes，但不能直接认定可替代测试实现",
+      "boundary": "offset整数域、usize截断顺序和持锁范围未对齐",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "constraint_gap",
+      "next_evidence": "先明确合法输入域和锁边界，再判断是否值得做替换实验",
+      "evidence": [
+        "research/notes/2026-11-05-scc-review-sidecar.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "stream_vs_command",
+      "pairs": [
+        [
+          125,
+          1249
+        ]
+      ],
+      "title": "流式写与完整命令",
+      "overlap": "复制输入、结算消费量和更新位置的局部结构相似",
+      "existing_reuse": "SimpleFileOps默认实现已委托scalar_write_iter，CommandFile显式覆盖",
+      "boundary": "不能把完整命令拆成分块回调；较小结算边界尚无收益依据",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "direct_replacement_rejected",
+      "next_evidence": "只有提出保留整请求契约且有收益的具体边界才重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "superblock_constructor",
+      "pairs": [
+        [
+          1348,
+          1349
+        ]
+      ],
+      "title": "superblock构造适配",
+      "overlap": "长签名与参数传递相似",
+      "existing_reuse": "不可失败构造器已经委托可失败公共实现",
+      "boundary": "类型适配层，不是第二套初始化机制",
+      "validation": "static_only",
+      "benefit": "unverified",
+      "disposition": "existing_reuse_control",
+      "next_evidence": "仅在出现独立机制重复的新证据时重开",
+      "evidence": [
+        "research/notes/2026-11-05-scc-first-review.md"
+      ],
+      "truth_label": null
+    },
+    {
+      "family": "test_directory_metadata",
+      "pairs": [
+        [
+          1571,
+          1732
+        ]
+      ],
+      "title": "测试目录metadata构造",
+      "overlap": "两处相同13字段纯构造",
+      "existing_reuse": "已读helper具有不同状态或默认值，未选择直接替代",
+      "boundary": "仅共享cfg(unittest)纯构造，不合并mock或测试断言",
+      "validation": "paired_tests_and_candidate_production_build",
+      "benefit": "unverified",
+      "disposition": "validated_candidate_adoption_deferred",
+      "next_evidence": "具体同步缺陷、更多同契约使用者或维护者给出的可读性依据才重开",
+      "evidence": [
+        "research/notes/2026-11-05-metadata-case-disposition.md",
+        "research/protocols/metadata-case-disposition-v1.json"
+      ],
+      "truth_label": null
+    }
+  ],
+  "records": [
+    {
+      "file_ids": [
+        1151,
+        1163
+      ],
+      "members": [
+        {
+          "id": "e1f0be1a5c1766dd1bdb64328da75c76f844993b7f97517d9837e4da6fe0e716",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 813,
+          "end_line": 819,
+          "test_path_hint": false
+        },
+        {
+          "id": "95f66f721c9a5231311ee0054cca843ac4997426e057c60744d7fac732f58876",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 913,
+          "end_line": 919,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 65
+      },
+      "review_status": "reviewed",
+      "family": "pipe_timestamp_wrappers",
+      "disposition": "retained_lead",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1153,
+        1165
+      ],
+      "members": [
+        {
+          "id": "b35056516ba922d7a6e29de892e8505a66b6946c64153436df408d9260f8c756",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 840,
+          "end_line": 846,
+          "test_path_hint": false
+        },
+        {
+          "id": "cf1c1321bc7269ae73623e07779bd090971bfaf935308af7e1f1860b95703fba",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 929,
+          "end_line": 935,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 66,
+        "denominator": 66
+      },
+      "review_status": "reviewed",
+      "family": "pipe_timestamp_wrappers",
+      "disposition": "retained_lead",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1571,
+        1732
+      ],
+      "members": [
+        {
+          "id": "867d25765b6da9aacbe6a9cb2b94472718b81ecf545c00ad8cbd7c93c321a3d1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "getattr",
+          "start_line": 172,
+          "end_line": 194,
+          "test_path_hint": true
+        },
+        {
+          "id": "3531d7cd464fe0d57628450fb4600b3d16b5b92db21b9c92da2c14c966f7defd",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 246,
+          "end_line": 268,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 141,
+        "denominator": 141
+      },
+      "review_status": "reviewed",
+      "family": "test_directory_metadata",
+      "disposition": "validated_candidate_adoption_deferred",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1578,
+        1660
+      ],
+      "members": [
+        {
+          "id": "58336c6ffea0b0e6b69164d7d5a23b41bc8915bbaa8ebf3163ff17f218acd93b",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "rename",
+          "start_line": 274,
+          "end_line": 284,
+          "test_path_hint": true
+        },
+        {
+          "id": "72656f057dd5ca86f0356251d4e166a542fc22ed2b562040287a20aaca2cf381",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "rename",
+          "start_line": 217,
+          "end_line": 227,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 66,
+        "denominator": 66
+      },
+      "review_status": "reviewed",
+      "family": "rename_rejections",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1669,
+        1721
+      ],
+      "members": [
+        {
+          "id": "979b7cb949b7655265793c385590b62f35d5e163a7927970b916ea7666ace817",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "get_link",
+          "start_line": 313,
+          "end_line": 320,
+          "test_path_hint": true
+        },
+        {
+          "id": "c67258e8f4684bd23732a8fe2ce080c495626ebfffa4fbb09008df5b45d1bcac",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "get_link",
+          "start_line": 113,
+          "end_line": 120,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 65
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1685,
+        1749
+      ],
+      "members": [
+        {
+          "id": "6cc00be048f53a2d880793f37581c9cc185405ad9f7e3286e6d72c8669323fad",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "inode_init",
+          "start_line": 467,
+          "end_line": 481,
+          "test_path_hint": true
+        },
+        {
+          "id": "02e1c982b06618f0e1970c59100a696c3513bcc859398cbba6f426befae6d83d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "inode_init",
+          "start_line": 432,
+          "end_line": 446,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 87,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1823,
+        1997
+      ],
+      "members": [
+        {
+          "id": "9259c664b9e2c2ca5c52a74bf3faffc696492e103195f2debb933e59245ebed3",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "submit_bio",
+          "start_line": 522,
+          "end_line": 534,
+          "test_path_hint": true
+        },
+        {
+          "id": "7d3785ae0efcc0d8a0913a0d34966c77f7f6910bd94ca998422299121ff082cc",
+          "path": "fs/kvfs/ut-tests/super_block.rs",
+          "name": "submit_bio",
+          "start_line": 245,
+          "end_line": 257,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 130,
+        "denominator": 130
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        115,
+        116
+      ],
+      "members": [
+        {
+          "id": "78e6173735013e9e01c3ffe31199da188777727dc01f21fc999802b701eb1537",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "lock",
+          "start_line": 317,
+          "end_line": 324,
+          "test_path_hint": false
+        },
+        {
+          "id": "b4401ea949c9ec496e5dcadb4bb1d86814608f0483873942c3f0b148e1f8cf8d",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "flock",
+          "start_line": 328,
+          "end_line": 335,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 87,
+        "denominator": 88
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1792,
+        1832
+      ],
+      "members": [
+        {
+          "id": "14db1bdadde7931878299635827c5f6cdd248cfe2ac002093fc33b512fbdc75e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 47,
+          "end_line": 72,
+          "test_path_hint": true
+        },
+        {
+          "id": "3e9f602a92d3d0d73c7dfbd4795bf1b2973fb06d6d0880fc58c4c5124d629451",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 822,
+          "end_line": 847,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 124,
+        "denominator": 126
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2177,
+        2178
+      ],
+      "members": [
+        {
+          "id": "3c76eab1d5c73a3fb5e5b9aaadd3360adb366b97cb29b554468906b21395c894",
+          "path": "util/macros/src/lib.rs",
+          "name": "derive_user_read",
+          "start_line": 314,
+          "end_line": 326,
+          "test_path_hint": false
+        },
+        {
+          "id": "584dfac757739a0e92f08f25414500c0b6779963deb2a3f083a4c9e5b1cd5fe1",
+          "path": "util/macros/src/lib.rs",
+          "name": "derive_user_write",
+          "start_line": 332,
+          "end_line": 344,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 110,
+        "denominator": 112
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        918,
+        941
+      ],
+      "members": [
+        {
+          "id": "2edfbf1ca773384073ab8bc0b5367a0d00b75d81a84814e0131f74cab2b8bca7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_flags",
+          "start_line": 1468,
+          "end_line": 1476,
+          "test_path_hint": false
+        },
+        {
+          "id": "d0f37b1569c8fd5549da3ed67d246bc77c40e1fc0f98b4b3218b238b8f740dca",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_openable_dir_with_flags",
+          "start_line": 1823,
+          "end_line": 1835,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 100,
+        "denominator": 103
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        563,
+        565
+      ],
+      "members": [
+        {
+          "id": "5d658e8b1f260419a161ff5d3cb39496d8030e385a854d83a77d82f47138ca94",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "symlink_at_entry",
+          "start_line": 1056,
+          "end_line": 1083,
+          "test_path_hint": false
+        },
+        {
+          "id": "deafe21528a03c1172eed813fc36fc3b9829815cf1207240ab818997eb8dc9fd",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "link_at_entry",
+          "start_line": 1099,
+          "end_line": 1126,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 158,
+        "denominator": 163
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        681,
+        683
+      ],
+      "members": [
+        {
+          "id": "43f18f21cc18955475ef4404ef1761de33e5c453a5c1a6fa43f83da380c546af",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "unlink_with",
+          "start_line": 1214,
+          "end_line": 1236,
+          "test_path_hint": false
+        },
+        {
+          "id": "fbe1d876173ef6a46419d8bd9e6e989e4e6a27596f41e170db96e4dcf6ab4cb1",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "rmdir_with",
+          "start_line": 1247,
+          "end_line": 1269,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 178,
+        "denominator": 184
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2070,
+        2087
+      ],
+      "members": [
+        {
+          "id": "8d037cc1b00000234c9628a830371711863edf6bbf92b412a4f61426878eca28",
+          "path": "task/kspin/src/lock.rs",
+          "name": "fmt",
+          "start_line": 254,
+          "end_line": 262,
+          "test_path_hint": false
+        },
+        {
+          "id": "00536a0213716065e0c064fd31308853a77fcbef46b71f550f68a0d8ad670dd7",
+          "path": "task/kspin/src/rwlock.rs",
+          "name": "fmt",
+          "start_line": 226,
+          "end_line": 237,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 77,
+        "denominator": 80
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        919,
+        920
+      ],
+      "members": [
+        {
+          "id": "ca685b771bcb4e957b9d9ee45cf23436808aadcf4ba5d3111f1256d1f78ce0d0",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space",
+          "start_line": 1479,
+          "end_line": 1498,
+          "test_path_hint": false
+        },
+        {
+          "id": "d3e498b163d5dbad0c8bc4d099e404ae31e508a670a082af28003838d31f3500",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_and_flags",
+          "start_line": 1501,
+          "end_line": 1521,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 117,
+        "denominator": 122
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1672,
+        1724
+      ],
+      "members": [
+        {
+          "id": "aa0dbbff860cde472004777627a4890c894aecc6ca1fc056634b81730df2e9c7",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "read",
+          "start_line": 332,
+          "end_line": 341,
+          "test_path_hint": true
+        },
+        {
+          "id": "33298071d8fba581e4b886aca037fdbb73eeb9e9ada9beb9e928d21367b0bc3f",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "read",
+          "start_line": 132,
+          "end_line": 141,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 106,
+        "denominator": 111
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1915,
+        1916
+      ],
+      "members": [
+        {
+          "id": "f2a251c28f0639803ff5ed64157efd27e4b8567f2dfccce5c0a99c4bc47037c5",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_dir_search_allowed_for_owner",
+          "start_line": 194,
+          "end_line": 198,
+          "test_path_hint": true
+        },
+        {
+          "id": "d757ddf65bceedd090d38967cb89e82f3db2dc2daf21309d1a7e19210f13be85",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_dir_search_denied_when_exec_bit_clear",
+          "start_line": 201,
+          "end_line": 205,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 63,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1630,
+        1631
+      ],
+      "members": [
+        {
+          "id": "856ce2a4064eda42323dd8ecea4eb08359d3d207c6ed730d2964637d99efe7fd",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_chown_without_new_ids_still_cleans_setid",
+          "start_line": 1420,
+          "end_line": 1429,
+          "test_path_hint": true
+        },
+        {
+          "id": "e810ded2c80ff80dacebda20eb6228f31dae554f9d2fee755e465689b56a168d",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_chown_without_new_ids_is_a_noop_when_mode_does_not_change",
+          "start_line": 1432,
+          "end_line": 1444,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 102,
+        "denominator": 107
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1673,
+        1725
+      ],
+      "members": [
+        {
+          "id": "5ea7d64a54adf389c2664f9be9475bb927526c009a66fe8d4e8b985afc8362dd",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "write",
+          "start_line": 343,
+          "end_line": 351,
+          "test_path_hint": true
+        },
+        {
+          "id": "de6e24b9814fc992bbf74cf7b4d32148b45783eb5ccfd45461690398ed36df5d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "write",
+          "start_line": 143,
+          "end_line": 151,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 102,
+        "denominator": 107
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        917,
+        918
+      ],
+      "members": [
+        {
+          "id": "d883dd78d3a5caffe010e6d33ca8ecc3506615a80aa3d8c12a10db16044967ec",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file",
+          "start_line": 1451,
+          "end_line": 1465,
+          "test_path_hint": false
+        },
+        {
+          "id": "2edfbf1ca773384073ab8bc0b5367a0d00b75d81a84814e0131f74cab2b8bca7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_flags",
+          "start_line": 1468,
+          "end_line": 1476,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 99,
+        "denominator": 104
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1539,
+        1543
+      ],
+      "members": [
+        {
+          "id": "9e212e97f78ed5d21cc5a580e2eaeec52a26edfd51ad4d9e655dcf017427f5eb",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_noreplace_rejects_positive_target",
+          "start_line": 129,
+          "end_line": 154,
+          "test_path_hint": true
+        },
+        {
+          "id": "565dd63de02a8d7f7b3297926b5951d34471f6abe42bc28ca531b3ba331fc295",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_rejects_noreplace_exchange_combination",
+          "start_line": 213,
+          "end_line": 238,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 214,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        917,
+        941
+      ],
+      "members": [
+        {
+          "id": "d883dd78d3a5caffe010e6d33ca8ecc3506615a80aa3d8c12a10db16044967ec",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file",
+          "start_line": 1451,
+          "end_line": 1465,
+          "test_path_hint": false
+        },
+        {
+          "id": "d0f37b1569c8fd5549da3ed67d246bc77c40e1fc0f98b4b3218b238b8f740dca",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_openable_dir_with_flags",
+          "start_line": 1823,
+          "end_line": 1835,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 98,
+        "denominator": 104
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        936,
+        937
+      ],
+      "members": [
+        {
+          "id": "09a23909db7e8b37e937f1d98d20b3f805ac62e7bdab962a9225c32238fc22d7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_dir",
+          "start_line": 1767,
+          "end_line": 1779,
+          "test_path_hint": false
+        },
+        {
+          "id": "eadf9c6eac975b87c6a868123ebf9168c4f3831b2e661efd907c463956bb9b61",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_dir_with_flags",
+          "start_line": 1782,
+          "end_line": 1789,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 80,
+        "denominator": 85
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1709,
+        1710
+      ],
+      "members": [
+        {
+          "id": "8e2b26e7a5d92782ef9f687b083a056eca530e304a38c3dff00e7115b91e709b",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "o_path_directory_rejects_non_directory",
+          "start_line": 1278,
+          "end_line": 1313,
+          "test_path_hint": true
+        },
+        {
+          "id": "9617c02fe70b690322c94470f660847fe04b6dc5db182ef4aa445c988552ff79",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "o_path_trailing_slash_follows_symlink_and_requires_directory",
+          "start_line": 1316,
+          "end_line": 1351,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 223,
+        "denominator": 237
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1907,
+        1915
+      ],
+      "members": [
+        {
+          "id": "529e3f093dbcce8605ceb3c1a4a55c018154df441bb16c69ab00956765f9f396",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_root_dir_search_bypasses_missing_exec_bit",
+          "start_line": 138,
+          "end_line": 142,
+          "test_path_hint": true
+        },
+        {
+          "id": "f2a251c28f0639803ff5ed64157efd27e4b8567f2dfccce5c0a99c4bc47037c5",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_dir_search_allowed_for_owner",
+          "start_line": 194,
+          "end_line": 198,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 62,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1617,
+        1618
+      ],
+      "members": [
+        {
+          "id": "e347a1021b1a8250fa7d312c897cfc3657a902554a032a6cc17fb4ee49a20806",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unmount_rejects_mount_with_nested_children",
+          "start_line": 1059,
+          "end_line": 1080,
+          "test_path_hint": true
+        },
+        {
+          "id": "1f0f5385d36329d5f0bcf0803a0d2b160ca9eda43b43dbed27b82f8ba8c041c6",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unmount_all_recursively_clears_nested_mounts",
+          "start_line": 1083,
+          "end_line": 1105,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 211,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1757,
+        1758
+      ],
+      "members": [
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        },
+        {
+          "id": "719e020fb777cb88656f86711369e7f40e0424461cec3892965c03c85ce99947",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_target_with_source_inode",
+          "start_line": 620,
+          "end_line": 639,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 183,
+        "denominator": 196
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        493,
+        494
+      ],
+      "members": [
+        {
+          "id": "233f3ab671de23b58649f1df6bdb5ac07c668986463d6324f144e5a921b51dc0",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "link",
+          "start_line": 1510,
+          "end_line": 1515,
+          "test_path_hint": false
+        },
+        {
+          "id": "0ad1bd8bb3bc717ad5fb7dc9646bc01ba39a884f83f79a4ce2937cbb514e77a6",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "symlink",
+          "start_line": 1518,
+          "end_line": 1523,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 64,
+        "denominator": 69
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2156,
+        2158
+      ],
+      "members": [
+        {
+          "id": "ff839d21cf413b1404d999e8714b6fac494bc65625e2c32760a932a325fc6bd5",
+          "path": "util/klazy/tests/host/once_host.rs",
+          "name": "get",
+          "start_line": 74,
+          "end_line": 80,
+          "test_path_hint": true
+        },
+        {
+          "id": "072146d4410243d1e25f648ea553efbd486845fd4a775c565c9dbe74cb9c457b",
+          "path": "util/klazy/tests/host/once_host.rs",
+          "name": "poll",
+          "start_line": 99,
+          "end_line": 105,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 63,
+        "denominator": 68
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1907,
+        1916
+      ],
+      "members": [
+        {
+          "id": "529e3f093dbcce8605ceb3c1a4a55c018154df441bb16c69ab00956765f9f396",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_root_dir_search_bypasses_missing_exec_bit",
+          "start_line": 138,
+          "end_line": 142,
+          "test_path_hint": true
+        },
+        {
+          "id": "d757ddf65bceedd090d38967cb89e82f3db2dc2daf21309d1a7e19210f13be85",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "test_dir_search_denied_when_exec_bit_clear",
+          "start_line": 201,
+          "end_line": 205,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 61,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1700,
+        1706
+      ],
+      "members": [
+        {
+          "id": "432311dea8d6650d66ccd2ce2fd8b3a7c2ab27d0ae1147c0095ce1a7d6d39193",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "non_final_symlink_is_followed_even_when_final_no_follow",
+          "start_line": 1037,
+          "end_line": 1051,
+          "test_path_hint": true
+        },
+        {
+          "id": "6c65c337018494df6c68fc45b7602f91a73109149ba84149bf9c242e70b4ee8a",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "non_final_magic_link_is_followed_by_namei",
+          "start_line": 1179,
+          "end_line": 1193,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 85,
+        "denominator": 94
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1237,
+        1578
+      ],
+      "members": [
+        {
+          "id": "ea9374a684f64461df27d23277dd892b20b70a433b62baba38c45cf7f2b32e07",
+          "path": "fs/kvfs/src/simple_dir.rs",
+          "name": "rename",
+          "start_line": 603,
+          "end_line": 613,
+          "test_path_hint": false
+        },
+        {
+          "id": "58336c6ffea0b0e6b69164d7d5a23b41bc8915bbaa8ebf3163ff17f218acd93b",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "rename",
+          "start_line": 274,
+          "end_line": 284,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 72
+      },
+      "review_status": "reviewed",
+      "family": "rename_rejections",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1237,
+        1660
+      ],
+      "members": [
+        {
+          "id": "ea9374a684f64461df27d23277dd892b20b70a433b62baba38c45cf7f2b32e07",
+          "path": "fs/kvfs/src/simple_dir.rs",
+          "name": "rename",
+          "start_line": 603,
+          "end_line": 613,
+          "test_path_hint": false
+        },
+        {
+          "id": "72656f057dd5ca86f0356251d4e166a542fc22ed2b562040287a20aaca2cf381",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "rename",
+          "start_line": 217,
+          "end_line": 227,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 72
+      },
+      "review_status": "reviewed",
+      "family": "rename_rejections",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        499,
+        501
+      ],
+      "members": [
+        {
+          "id": "211fc735db1d5f1122a58fc92c8b0a08504c72db7acd28510fa8ce585cf62ffc",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "unlink_with_pathname_tracked",
+          "start_line": 1625,
+          "end_line": 1668,
+          "test_path_hint": false
+        },
+        {
+          "id": "4b2b1dea08992c50884918f668f19d5c3fbc1f3d41499f314cac5028e74bfe16",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "rmdir_tracked",
+          "start_line": 1676,
+          "end_line": 1701,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 182,
+        "denominator": 202
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1641,
+        1642
+      ],
+      "members": [
+        {
+          "id": "bf20f08959917e42fe68cab71863dbc356570f9fbcb819736f6e7c223b8565cf",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_relatime_equal_times_updates_atime",
+          "start_line": 1670,
+          "end_line": 1682,
+          "test_path_hint": true
+        },
+        {
+          "id": "d9c7a452853c2886a8a5fcaa7878ec677f6cb2f32e6add1616ff204a6ac3adf1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_update_cmtime_advances_mtime_and_ctime",
+          "start_line": 1685,
+          "end_line": 1697,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 117,
+        "denominator": 130
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1398,
+        1399
+      ],
+      "members": [
+        {
+          "id": "ed886c3b259f5ea97998746d879d1f0d32b253ec2383047e44661298648a4c18",
+          "path": "fs/kvfs/src/transfer.rs",
+          "name": "pump_file_to_pipe",
+          "start_line": 350,
+          "end_line": 384,
+          "test_path_hint": false
+        },
+        {
+          "id": "e697af10ba6958d2437d7a4af5c4338128954b7ec4daabe6a78ab4aa9be680de",
+          "path": "fs/kvfs/src/transfer.rs",
+          "name": "pump_pipe_to_file",
+          "start_line": 391,
+          "end_line": 423,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 222,
+        "denominator": 247
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1534,
+        1792
+      ],
+      "members": [
+        {
+          "id": "7d60c06af6507654b438bb244e3712efd7250463c3c016f7ec23bb30e84002da",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "getattr",
+          "start_line": 34,
+          "end_line": 56,
+          "test_path_hint": true
+        },
+        {
+          "id": "14db1bdadde7931878299635827c5f6cdd248cfe2ac002093fc33b512fbdc75e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 47,
+          "end_line": 72,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 114,
+        "denominator": 127
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1534,
+        1832
+      ],
+      "members": [
+        {
+          "id": "7d60c06af6507654b438bb244e3712efd7250463c3c016f7ec23bb30e84002da",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "getattr",
+          "start_line": 34,
+          "end_line": 56,
+          "test_path_hint": true
+        },
+        {
+          "id": "3e9f602a92d3d0d73c7dfbd4795bf1b2973fb06d6d0880fc58c4c5124d629451",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 822,
+          "end_line": 847,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 114,
+        "denominator": 127
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1579,
+        1685
+      ],
+      "members": [
+        {
+          "id": "7e12ab1ec109de79b869187c40c3f2aa4fc15445ed30d91f4795a21b695ce9a5",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "inode_init",
+          "start_line": 287,
+          "end_line": 301,
+          "test_path_hint": true
+        },
+        {
+          "id": "6cc00be048f53a2d880793f37581c9cc185405ad9f7e3286e6d72c8669323fad",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "inode_init",
+          "start_line": 467,
+          "end_line": 481,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 78,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1579,
+        1749
+      ],
+      "members": [
+        {
+          "id": "7e12ab1ec109de79b869187c40c3f2aa4fc15445ed30d91f4795a21b695ce9a5",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "inode_init",
+          "start_line": 287,
+          "end_line": 301,
+          "test_path_hint": true
+        },
+        {
+          "id": "02e1c982b06618f0e1970c59100a696c3513bcc859398cbba6f426befae6d83d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "inode_init",
+          "start_line": 432,
+          "end_line": 446,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 78,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        662,
+        669
+      ],
+      "members": [
+        {
+          "id": "e35a22b6826b9852e5b11dfe7c0e6fba2b502e916efb29330697ff8559347403",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "cache_lookup_candidate",
+          "start_line": 831,
+          "end_line": 845,
+          "test_path_hint": false
+        },
+        {
+          "id": "00d2ba4c7ab8ff788d140a372f85089e252ba7fbdfbceba921ea0fc9ca3450d7",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "insert_cache",
+          "start_line": 933,
+          "end_line": 949,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 121,
+        "denominator": 135
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        986,
+        990
+      ],
+      "members": [
+        {
+          "id": "e438e10212150b0a9c1451e6f34fe2bd767fad6ff0c190064c25b1cc43db8a16",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "create_with_mode",
+          "start_line": 2202,
+          "end_line": 2218,
+          "test_path_hint": false
+        },
+        {
+          "id": "c6e1b397ca7dabd772fb555c3cf47d1bd22fc715589dcbf15a8cdf4cb286be33",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "mknod_with_mode",
+          "start_line": 2259,
+          "end_line": 2269,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 60,
+        "denominator": 67
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1571,
+        1719
+      ],
+      "members": [
+        {
+          "id": "867d25765b6da9aacbe6a9cb2b94472718b81ecf545c00ad8cbd7c93c321a3d1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "getattr",
+          "start_line": 172,
+          "end_line": 194,
+          "test_path_hint": true
+        },
+        {
+          "id": "9e5ae91ba586946f3fd410e2b9ac41b54938adacd925913e841b77e3195116a1",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 76,
+          "end_line": 98,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 136,
+        "denominator": 152
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1719,
+        1732
+      ],
+      "members": [
+        {
+          "id": "9e5ae91ba586946f3fd410e2b9ac41b54938adacd925913e841b77e3195116a1",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 76,
+          "end_line": 98,
+          "test_path_hint": true
+        },
+        {
+          "id": "3531d7cd464fe0d57628450fb4600b3d16b5b92db21b9c92da2c14c966f7defd",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 246,
+          "end_line": 268,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 136,
+        "denominator": 152
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1121,
+        1122
+      ],
+      "members": [
+        {
+          "id": "e5101431e5c7bc2b28cfd036d226a75a9d1215af1f447020cbfc33ad60a77347",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "splice_read",
+          "start_line": 260,
+          "end_line": 293,
+          "test_path_hint": false
+        },
+        {
+          "id": "1bf31444d913700041ee173f7e89da40c8ffed066fb0e220713e7fc6ae714df1",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "splice_write",
+          "start_line": 303,
+          "end_line": 336,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 233,
+        "denominator": 261
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        490,
+        492
+      ],
+      "members": [
+        {
+          "id": "e1a2d5eb821e9e923060fd4dd211040db26459dc5b03966d2e357058c913972d",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "create",
+          "start_line": 1467,
+          "end_line": 1475,
+          "test_path_hint": false
+        },
+        {
+          "id": "2a7aaf9248a597f0ae7775eea92ab794470d88b8ced107b99666493932a5e88e",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "mknod",
+          "start_line": 1492,
+          "end_line": 1507,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 90,
+        "denominator": 101
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1539,
+        1540
+      ],
+      "members": [
+        {
+          "id": "9e212e97f78ed5d21cc5a580e2eaeec52a26edfd51ad4d9e655dcf017427f5eb",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_noreplace_rejects_positive_target",
+          "start_line": 129,
+          "end_line": 154,
+          "test_path_hint": true
+        },
+        {
+          "id": "ec967bef9b3ce3ec85c059f33f6a15e488a555303a59883595f7412de7f8f18b",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_directory_to_negative_target_updates_parent_links",
+          "start_line": 157,
+          "end_line": 180,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 196,
+        "denominator": 220
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1538,
+        1539
+      ],
+      "members": [
+        {
+          "id": "59bdc3f1ddceb5d71e36779811a58deba9b389f40d241be2977e747a3589664c",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_replaces_positive_target",
+          "start_line": 100,
+          "end_line": 126,
+          "test_path_hint": true
+        },
+        {
+          "id": "9e212e97f78ed5d21cc5a580e2eaeec52a26edfd51ad4d9e655dcf017427f5eb",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_noreplace_rejects_positive_target",
+          "start_line": 129,
+          "end_line": 154,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 212,
+        "denominator": 238
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1756,
+        1757
+      ],
+      "members": [
+        {
+          "id": "79e44d3d23428ebe90529204a98c62f9f987ff2579e75c8dd8cd962bc2890eeb",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_replace_keeps_source_inode_identity",
+          "start_line": 585,
+          "end_line": 599,
+          "test_path_hint": true
+        },
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 171,
+        "denominator": 192
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        88,
+        90
+      ],
+      "members": [
+        {
+          "id": "18a9d75a2fe82d97d681f204d5bbd8faf31fc31ff161f48a4ef8bea2f1384234",
+          "path": "fs/kvfs/src/address_space/writeback.rs",
+          "name": "writeback_cached_folios",
+          "start_line": 147,
+          "end_line": 159,
+          "test_path_hint": false
+        },
+        {
+          "id": "6434775be9d078a8310f9f6d161e16398fcecd9e0f46f784a0e60c118dd432ba",
+          "path": "fs/kvfs/src/address_space/writeback.rs",
+          "name": "writeback_cached_ranges",
+          "start_line": 196,
+          "end_line": 210,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 78,
+        "denominator": 88
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1610,
+        1611
+      ],
+      "members": [
+        {
+          "id": "b08540c63efb75aaceb6e39eb600e84cae4ec4536fa35920599733d84d42e903",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_pivot_root_allows_put_old_equal_to_new_root",
+          "start_line": 898,
+          "end_line": 930,
+          "test_path_hint": true
+        },
+        {
+          "id": "cb169aa61d3f98f683236aaf2403a5a0ee85c9d9be1d79c23e4e0b3c5db105c5",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unresolved_root_path_resolves_covering_mount_after_pivot",
+          "start_line": 933,
+          "end_line": 964,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 192,
+        "denominator": 217
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1254,
+        1256
+      ],
+      "members": [
+        {
+          "id": "2aa7587a4af5740137f9f51a96db347c37adbdbbf6bc1919b99f7426bec2f41b",
+          "path": "fs/kvfs/src/simple_file.rs",
+          "name": "new_snapshot",
+          "start_line": 189,
+          "end_line": 198,
+          "test_path_hint": false
+        },
+        {
+          "id": "6dfe67cfd5d499b91e72e809bf15c4bad14135a2d33784452a663c9de6b98d71",
+          "path": "fs/kvfs/src/simple_file.rs",
+          "name": "new_regular_with_type",
+          "start_line": 209,
+          "end_line": 223,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 69,
+        "denominator": 78
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1759,
+        1760
+      ],
+      "members": [
+        {
+          "id": "d42f2a610fc910d3a46cb814dbd00433a68377654127af19765e1cf3f91a059e",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_exchange_swaps_cache_entries_without_changing_inode_identity",
+          "start_line": 642,
+          "end_line": 657,
+          "test_path_hint": true
+        },
+        {
+          "id": "f9f1529a634b2eeb5f92077ee0de5f4f4c0a7dd55ff3514d1f49f9f8f1d00f50",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_rejects_noreplace_exchange_combination",
+          "start_line": 660,
+          "end_line": 680,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 184,
+        "denominator": 208
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        559,
+        563
+      ],
+      "members": [
+        {
+          "id": "3e702203678f3d9aadf9ba9e1b00839edfef10da6b1f286fc9a635f562f16972",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "mkdir_at_entry",
+          "start_line": 935,
+          "end_line": 960,
+          "test_path_hint": false
+        },
+        {
+          "id": "5d658e8b1f260419a161ff5d3cb39496d8030e385a854d83a77d82f47138ca94",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "symlink_at_entry",
+          "start_line": 1056,
+          "end_line": 1083,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 144,
+        "denominator": 163
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        559,
+        565
+      ],
+      "members": [
+        {
+          "id": "3e702203678f3d9aadf9ba9e1b00839edfef10da6b1f286fc9a635f562f16972",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "mkdir_at_entry",
+          "start_line": 935,
+          "end_line": 960,
+          "test_path_hint": false
+        },
+        {
+          "id": "deafe21528a03c1172eed813fc36fc3b9829815cf1207240ab818997eb8dc9fd",
+          "path": "fs/kvfs/src/namei.rs",
+          "name": "link_at_entry",
+          "start_line": 1099,
+          "end_line": 1126,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 144,
+        "denominator": 163
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1471,
+        1474
+      ],
+      "members": [
+        {
+          "id": "ab9636b7fb3921793c208c88181686626e4bb195ae2a5b6eef0318733591bfe1",
+          "path": "fs/kvfs/ut-tests/address_space/read.rs",
+          "name": "readahead",
+          "start_line": 603,
+          "end_line": 610,
+          "test_path_hint": true
+        },
+        {
+          "id": "ba968a49ef8e9613e9b8b904b42b9878fdf460e8fc3302817a633cbee0b9edeb",
+          "path": "fs/kvfs/ut-tests/address_space/read.rs",
+          "name": "readahead",
+          "start_line": 666,
+          "end_line": 676,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 74,
+        "denominator": 84
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1151,
+        1153
+      ],
+      "members": [
+        {
+          "id": "e1f0be1a5c1766dd1bdb64328da75c76f844993b7f97517d9837e4da6fe0e716",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 813,
+          "end_line": 819,
+          "test_path_hint": false
+        },
+        {
+          "id": "b35056516ba922d7a6e29de892e8505a66b6946c64153436df408d9260f8c756",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 840,
+          "end_line": 846,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 58,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1151,
+        1165
+      ],
+      "members": [
+        {
+          "id": "e1f0be1a5c1766dd1bdb64328da75c76f844993b7f97517d9837e4da6fe0e716",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 813,
+          "end_line": 819,
+          "test_path_hint": false
+        },
+        {
+          "id": "cf1c1321bc7269ae73623e07779bd090971bfaf935308af7e1f1860b95703fba",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 929,
+          "end_line": 935,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 58,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1153,
+        1163
+      ],
+      "members": [
+        {
+          "id": "b35056516ba922d7a6e29de892e8505a66b6946c64153436df408d9260f8c756",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 840,
+          "end_line": 846,
+          "test_path_hint": false
+        },
+        {
+          "id": "95f66f721c9a5231311ee0054cca843ac4997426e057c60744d7fac732f58876",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 913,
+          "end_line": 919,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 58,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1163,
+        1165
+      ],
+      "members": [
+        {
+          "id": "95f66f721c9a5231311ee0054cca843ac4997426e057c60744d7fac732f58876",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "read_iter",
+          "start_line": 913,
+          "end_line": 919,
+          "test_path_hint": false
+        },
+        {
+          "id": "cf1c1321bc7269ae73623e07779bd090971bfaf935308af7e1f1860b95703fba",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "write_iter",
+          "start_line": 929,
+          "end_line": 935,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 58,
+        "denominator": 66
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1538,
+        1543
+      ],
+      "members": [
+        {
+          "id": "59bdc3f1ddceb5d71e36779811a58deba9b389f40d241be2977e747a3589664c",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_replaces_positive_target",
+          "start_line": 100,
+          "end_line": 126,
+          "test_path_hint": true
+        },
+        {
+          "id": "565dd63de02a8d7f7b3297926b5951d34471f6abe42bc28ca531b3ba331fc295",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_rejects_noreplace_exchange_combination",
+          "start_line": 213,
+          "end_line": 238,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 209,
+        "denominator": 238
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2011,
+        2012
+      ],
+      "members": [
+        {
+          "id": "4613c93c6df4d5ea96002201886ab7f36a49a0af0877dadcc40b442e118d7c5f",
+          "path": "fs/kvfs/ut-tests/super_block.rs",
+          "name": "failed_fill_wakes_waiter_and_allows_retry",
+          "start_line": 593,
+          "end_line": 623,
+          "test_path_hint": true
+        },
+        {
+          "id": "9fe285b942dc32ede74dcf36b9e841e01de67670028ee1dd71bd3a3c7b533908",
+          "path": "fs/kvfs/ut-tests/super_block.rs",
+          "name": "dying_superblock_wakes_waiter_after_shutdown",
+          "start_line": 626,
+          "end_line": 656,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 213,
+        "denominator": 243
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        920,
+        921
+      ],
+      "members": [
+        {
+          "id": "d3e498b163d5dbad0c8bc4d099e404ae31e508a670a082af28003838d31f3500",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_and_flags",
+          "start_line": 1501,
+          "end_line": 1521,
+          "test_path_hint": false
+        },
+        {
+          "id": "a00e74afc2632453e4faf8922d28af525bbb4cb999fe07e53d5bb67308a7214b",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_symlink_with_address_space_and_flags",
+          "start_line": 1524,
+          "end_line": 1544,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 106,
+        "denominator": 121
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        250,
+        251
+      ],
+      "members": [
+        {
+          "id": "3afd3b65409b440e3c7ac3c00d187e630b9152cf45a9ff342a9ab986a145e7b8",
+          "path": "fs/kvfs/src/fs_context.rs",
+          "name": "new",
+          "start_line": 59,
+          "end_line": 79,
+          "test_path_hint": false
+        },
+        {
+          "id": "af1ea0c10c1bc4ffd9a3dcc6e746dec8b6bc855cde0e2a8c4f32e327ff9ed4aa",
+          "path": "fs/kvfs/src/fs_context.rs",
+          "name": "new_reconfigure",
+          "start_line": 90,
+          "end_line": 111,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 98,
+        "denominator": 112
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1757,
+        1760
+      ],
+      "members": [
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        },
+        {
+          "id": "f9f1529a634b2eeb5f92077ee0de5f4f4c0a7dd55ff3514d1f49f9f8f1d00f50",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_rejects_noreplace_exchange_combination",
+          "start_line": 660,
+          "end_line": 680,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 173,
+        "denominator": 198
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        939,
+        942
+      ],
+      "members": [
+        {
+          "id": "f70bdde6abb3e48d0ae2d6529d4b8b2f2a727f8e635415e19e7b226eb6d43446",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_dir_with_inode_operations",
+          "start_line": 1796,
+          "end_line": 1812,
+          "test_path_hint": false
+        },
+        {
+          "id": "4e9e9dd6e59e77842d6cd031cf58f4252bcf60044d12fa5ab194fdc46b35edc7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_dir_with_operations",
+          "start_line": 1838,
+          "end_line": 1855,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 88,
+        "denominator": 101
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1782,
+        1784
+      ],
+      "members": [
+        {
+          "id": "00dd9b36d0a6a71ebb1811a5d49aa98b6a4e15dd0e36d4241701a338efbacac3",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_parallel_lookup_candidate_does_not_escape_cache_snapshot",
+          "start_line": 1147,
+          "end_line": 1160,
+          "test_path_hint": true
+        },
+        {
+          "id": "9ec5398820676c69b17729ef97120811aba819b2d85f34f6e88c647b3a22ce1a",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_completed_negative_lookup_remains_cacheable",
+          "start_line": 1180,
+          "end_line": 1193,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 136
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1689,
+        1713
+      ],
+      "members": [
+        {
+          "id": "de119f699e0f2e25a709fb5ecff15f4357b173b67a64ea4d9700238e71f74e29",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "mkdir_at_reports_existing_root",
+          "start_line": 595,
+          "end_line": 609,
+          "test_path_hint": true
+        },
+        {
+          "id": "27ba037cfa2dc2f48e7f20171991f65288f44ccf6a39efe2e6fbd90c453df19c",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "component_under_regular_file_is_not_a_directory",
+          "start_line": 1440,
+          "end_line": 1455,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 75
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1044,
+        1579
+      ],
+      "members": [
+        {
+          "id": "0e3109fabcc910aa5bda8ee906e5ca89885b0ff8a9fac9a356c9bf7a9e707fdc",
+          "path": "fs/kvfs/src/nullfs.rs",
+          "name": "inode_init",
+          "start_line": 49,
+          "end_line": 66,
+          "test_path_hint": false
+        },
+        {
+          "id": "7e12ab1ec109de79b869187c40c3f2aa4fc15445ed30d91f4795a21b695ce9a5",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "inode_init",
+          "start_line": 287,
+          "end_line": 301,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 71,
+        "denominator": 82
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1231,
+        1234
+      ],
+      "members": [
+        {
+          "id": "bbcb0c413781b5d58437d8b64e52582ae352effe4eb76c046567138296db74d8",
+          "path": "fs/kvfs/src/simple_dir.rs",
+          "name": "mknod",
+          "start_line": 504,
+          "end_line": 539,
+          "test_path_hint": false
+        },
+        {
+          "id": "80feccfd31bf273dc83f93a896a707be20f4f269af322abf3d4a3971f4e5fa54",
+          "path": "fs/kvfs/src/simple_dir.rs",
+          "name": "symlink",
+          "start_line": 557,
+          "end_line": 588,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 225,
+        "denominator": 260
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1636,
+        1637
+      ],
+      "members": [
+        {
+          "id": "795ed8dd23d27e4dbb822d59f061f0210b893a9bfd7d661ed7d584d25b939785",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_statfs_flags_values",
+          "start_line": 1598,
+          "end_line": 1607,
+          "test_path_hint": true
+        },
+        {
+          "id": "d381e0b84e5328b175f5df31d8ffb2b1433d624a7dc56cbfdbbfb7a3877e85ae",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_mount_flags_constants_values",
+          "start_line": 1610,
+          "end_line": 1619,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 109,
+        "denominator": 126
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1590,
+        1591
+      ],
+      "members": [
+        {
+          "id": "6449ec47a2d9dc84e0b21446c4e72e19ea1316137035ecce2b115b61316b1afa",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_root_mount_defaults_to_writable",
+          "start_line": 391,
+          "end_line": 401,
+          "test_path_hint": true
+        },
+        {
+          "id": "c1e1e08fbfef83eb237c25e3771ab77a34ce5c1e7daec06edc982b53179786a0",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_root_mount_can_be_readonly",
+          "start_line": 404,
+          "end_line": 417,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 96,
+        "denominator": 111
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1681,
+        1894
+      ],
+      "members": [
+        {
+          "id": "5d00f5af8e2038d81517048debeb133ee6ad568a3056823d06f50c810b1f3702",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "kstat",
+          "start_line": 417,
+          "end_line": 433,
+          "test_path_hint": true
+        },
+        {
+          "id": "9e9f38d08f7465469706737a5c907d65a44e7824befecc99844f2f7a23a47fdc",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "meta",
+          "start_line": 44,
+          "end_line": 63,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 89,
+        "denominator": 103
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1540,
+        1543
+      ],
+      "members": [
+        {
+          "id": "ec967bef9b3ce3ec85c059f33f6a15e488a555303a59883595f7412de7f8f18b",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_directory_to_negative_target_updates_parent_links",
+          "start_line": 157,
+          "end_line": 180,
+          "test_path_hint": true
+        },
+        {
+          "id": "565dd63de02a8d7f7b3297926b5951d34471f6abe42bc28ca531b3ba331fc295",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_rejects_noreplace_exchange_combination",
+          "start_line": 213,
+          "end_line": 238,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 194,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1746,
+        1747
+      ],
+      "members": [
+        {
+          "id": "9f4ef5aba15893418c8da1d3a11bb9899be3c444952f726fa4d996464deba5ab",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "make_dir_entry_with_parent",
+          "start_line": 395,
+          "end_line": 406,
+          "test_path_hint": true
+        },
+        {
+          "id": "ce0abb8d6984e96c1809ae53063df4afe143f483fedf7f62976dd31471ccfd91",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "make_renamable_dir_entry",
+          "start_line": 408,
+          "end_line": 414,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 75,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1045,
+        1681
+      ],
+      "members": [
+        {
+          "id": "4ddf811d783d4b9f803bf162af3e4ec78117d88f2ca8108744f3934f09220c9a",
+          "path": "fs/kvfs/src/nullfs.rs",
+          "name": "metadata",
+          "start_line": 68,
+          "end_line": 87,
+          "test_path_hint": false
+        },
+        {
+          "id": "5d00f5af8e2038d81517048debeb133ee6ad568a3056823d06f50c810b1f3702",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "kstat",
+          "start_line": 417,
+          "end_line": 433,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 87,
+        "denominator": 101
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1758,
+        1760
+      ],
+      "members": [
+        {
+          "id": "719e020fb777cb88656f86711369e7f40e0424461cec3892965c03c85ce99947",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_target_with_source_inode",
+          "start_line": 620,
+          "end_line": 639,
+          "test_path_hint": true
+        },
+        {
+          "id": "f9f1529a634b2eeb5f92077ee0de5f4f4c0a7dd55ff3514d1f49f9f8f1d00f50",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_rejects_noreplace_exchange_combination",
+          "start_line": 660,
+          "end_line": 680,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 170,
+        "denominator": 198
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1755,
+        1756
+      ],
+      "members": [
+        {
+          "id": "88a870a19396123705c0ca27ac980adf8cff1939b55b05ee870860741fb30756",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_moves_cache_entry_without_changing_inode_identity",
+          "start_line": 567,
+          "end_line": 582,
+          "test_path_hint": true
+        },
+        {
+          "id": "79e44d3d23428ebe90529204a98c62f9f987ff2579e75c8dd8cd962bc2890eeb",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_replace_keeps_source_inode_identity",
+          "start_line": 585,
+          "end_line": 599,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 157,
+        "denominator": 183
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1843,
+        2015
+      ],
+      "members": [
+        {
+          "id": "096a37beeacf91d9132b91c4025ff3ffd434aba57ac4d6aa02d11f53f18b4467",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "open",
+          "start_line": 1285,
+          "end_line": 1292,
+          "test_path_hint": true
+        },
+        {
+          "id": "ff6919bd45792699f289e3596c75b32fb5b8c4422bbf6fd8afc197f6c397b404",
+          "path": "fs/kvfs/ut-tests/super_block.rs",
+          "name": "open",
+          "start_line": 673,
+          "end_line": 682,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 71,
+        "denominator": 83
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1641,
+        1643
+      ],
+      "members": [
+        {
+          "id": "bf20f08959917e42fe68cab71863dbc356570f9fbcb819736f6e7c223b8565cf",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_relatime_equal_times_updates_atime",
+          "start_line": 1670,
+          "end_line": 1682,
+          "test_path_hint": true
+        },
+        {
+          "id": "ea0072e59f857466e04c931ee324096276188ff6a9d522044e6db22bccdd0cca",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_skips_time_updates",
+          "start_line": 1700,
+          "end_line": 1712,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 117,
+        "denominator": 137
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1538,
+        1540
+      ],
+      "members": [
+        {
+          "id": "59bdc3f1ddceb5d71e36779811a58deba9b389f40d241be2977e747a3589664c",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_replaces_positive_target",
+          "start_line": 100,
+          "end_line": 126,
+          "test_path_hint": true
+        },
+        {
+          "id": "ec967bef9b3ce3ec85c059f33f6a15e488a555303a59883595f7412de7f8f18b",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "simple_rename_directory_to_negative_target_updates_parent_links",
+          "start_line": 157,
+          "end_line": 180,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 203,
+        "denominator": 238
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        919,
+        921
+      ],
+      "members": [
+        {
+          "id": "ca685b771bcb4e957b9d9ee45cf23436808aadcf4ba5d3111f1256d1f78ce0d0",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space",
+          "start_line": 1479,
+          "end_line": 1498,
+          "test_path_hint": false
+        },
+        {
+          "id": "a00e74afc2632453e4faf8922d28af525bbb4cb999fe07e53d5bb67308a7214b",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_symlink_with_address_space_and_flags",
+          "start_line": 1524,
+          "end_line": 1544,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 104,
+        "denominator": 122
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1756,
+        1758
+      ],
+      "members": [
+        {
+          "id": "79e44d3d23428ebe90529204a98c62f9f987ff2579e75c8dd8cd962bc2890eeb",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_replace_keeps_source_inode_identity",
+          "start_line": 585,
+          "end_line": 599,
+          "test_path_hint": true
+        },
+        {
+          "id": "719e020fb777cb88656f86711369e7f40e0424461cec3892965c03c85ce99947",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_target_with_source_inode",
+          "start_line": 620,
+          "end_line": 639,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 167,
+        "denominator": 196
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1314,
+        1383
+      ],
+      "members": [
+        {
+          "id": "36d6c536ddc7d9e386933909bb8b21d2b12b86873a0d17f6e786b30c5214ef9a",
+          "path": "fs/kvfs/src/super_block.rs",
+          "name": "live_super_blocks",
+          "start_line": 168,
+          "end_line": 179,
+          "test_path_hint": false
+        },
+        {
+          "id": "92a721fe2a5697a849a67315b5b42f58d1484f91b35e4bae91cfbded0187ded1",
+          "path": "fs/kvfs/src/super_block.rs",
+          "name": "live_inodes",
+          "start_line": 1263,
+          "end_line": 1273,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 62,
+        "denominator": 73
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1757,
+        1763
+      ],
+      "members": [
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        },
+        {
+          "id": "6e52402ad80df54a5d15f588cc74bd77e4462033128d73fe4946117c8e00bdb7",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_directory_emptiness_is_filesystem_owned",
+          "start_line": 728,
+          "end_line": 741,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 163,
+        "denominator": 192
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1593,
+        1635
+      ],
+      "members": [
+        {
+          "id": "f10df4b542166eb6764e4967b2a77a4545da0ab1bb60a08cb5d4ccd2e59b853f",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_filesystem_stat_readonly_makes_location_effectively_readonly",
+          "start_line": 442,
+          "end_line": 454,
+          "test_path_hint": true
+        },
+        {
+          "id": "11baad07a4b52d8e046d6d08a253d98e2e4a1f46ce266dbf06dfe49550bd2174",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_stat_rdonly_combined_with_mount_rdonly_is_readonly",
+          "start_line": 1584,
+          "end_line": 1595,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 74,
+        "denominator": 88
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1598,
+        1618
+      ],
+      "members": [
+        {
+          "id": "b4e6a2470a5e5d1f25f518f49d6774e393e90a8e7d42f1dfe5bc002638075788",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_mount_root_keeps_root_dentry_name_and_dotdot_crosses_mount",
+          "start_line": 516,
+          "end_line": 541,
+          "test_path_hint": true
+        },
+        {
+          "id": "1f0f5385d36329d5f0bcf0803a0d2b160ca9eda43b43dbed27b82f8ba8c041c6",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unmount_all_recursively_clears_nested_mounts",
+          "start_line": 1083,
+          "end_line": 1105,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 189,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1642,
+        1643
+      ],
+      "members": [
+        {
+          "id": "d9c7a452853c2886a8a5fcaa7878ec677f6cb2f32e6add1616ff204a6ac3adf1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_update_cmtime_advances_mtime_and_ctime",
+          "start_line": 1685,
+          "end_line": 1697,
+          "test_path_hint": true
+        },
+        {
+          "id": "ea0072e59f857466e04c931ee324096276188ff6a9d522044e6db22bccdd0cca",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_skips_time_updates",
+          "start_line": 1700,
+          "end_line": 1712,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 115,
+        "denominator": 137
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1804,
+        1835
+      ],
+      "members": [
+        {
+          "id": "2e978b25f3275a83b3bd03539807a1c063a4fa27eb751838e1b92e9022524dd1",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "open_test_character_at",
+          "start_line": 179,
+          "end_line": 202,
+          "test_path_hint": true
+        },
+        {
+          "id": "8a7e7521353b8fee97ab63f6abe9c9aa2a2e7b4e3461528717821b9434982f96",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "open_block_device_file_with",
+          "start_line": 866,
+          "end_line": 890,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 193,
+        "denominator": 230
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1672,
+        1673
+      ],
+      "members": [
+        {
+          "id": "aa0dbbff860cde472004777627a4890c894aecc6ca1fc056634b81730df2e9c7",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "read",
+          "start_line": 332,
+          "end_line": 341,
+          "test_path_hint": true
+        },
+        {
+          "id": "5ea7d64a54adf389c2664f9be9475bb927526c009a66fe8d4e8b985afc8362dd",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "write",
+          "start_line": 343,
+          "end_line": 351,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 93,
+        "denominator": 111
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1724,
+        1725
+      ],
+      "members": [
+        {
+          "id": "33298071d8fba581e4b886aca037fdbb73eeb9e9ada9beb9e928d21367b0bc3f",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "read",
+          "start_line": 132,
+          "end_line": 141,
+          "test_path_hint": true
+        },
+        {
+          "id": "de6e24b9814fc992bbf74cf7b4d32148b45783eb5ccfd45461690398ed36df5d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "write",
+          "start_line": 143,
+          "end_line": 151,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 93,
+        "denominator": 111
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1534,
+        1571
+      ],
+      "members": [
+        {
+          "id": "7d60c06af6507654b438bb244e3712efd7250463c3c016f7ec23bb30e84002da",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "getattr",
+          "start_line": 34,
+          "end_line": 56,
+          "test_path_hint": true
+        },
+        {
+          "id": "867d25765b6da9aacbe6a9cb2b94472718b81ecf545c00ad8cbd7c93c321a3d1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "getattr",
+          "start_line": 172,
+          "end_line": 194,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1534,
+        1732
+      ],
+      "members": [
+        {
+          "id": "7d60c06af6507654b438bb244e3712efd7250463c3c016f7ec23bb30e84002da",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "getattr",
+          "start_line": 34,
+          "end_line": 56,
+          "test_path_hint": true
+        },
+        {
+          "id": "3531d7cd464fe0d57628450fb4600b3d16b5b92db21b9c92da2c14c966f7defd",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 246,
+          "end_line": 268,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1571,
+        1792
+      ],
+      "members": [
+        {
+          "id": "867d25765b6da9aacbe6a9cb2b94472718b81ecf545c00ad8cbd7c93c321a3d1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "getattr",
+          "start_line": 172,
+          "end_line": 194,
+          "test_path_hint": true
+        },
+        {
+          "id": "14db1bdadde7931878299635827c5f6cdd248cfe2ac002093fc33b512fbdc75e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 47,
+          "end_line": 72,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1571,
+        1832
+      ],
+      "members": [
+        {
+          "id": "867d25765b6da9aacbe6a9cb2b94472718b81ecf545c00ad8cbd7c93c321a3d1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "getattr",
+          "start_line": 172,
+          "end_line": 194,
+          "test_path_hint": true
+        },
+        {
+          "id": "3e9f602a92d3d0d73c7dfbd4795bf1b2973fb06d6d0880fc58c4c5124d629451",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 822,
+          "end_line": 847,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1732,
+        1792
+      ],
+      "members": [
+        {
+          "id": "3531d7cd464fe0d57628450fb4600b3d16b5b92db21b9c92da2c14c966f7defd",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 246,
+          "end_line": 268,
+          "test_path_hint": true
+        },
+        {
+          "id": "14db1bdadde7931878299635827c5f6cdd248cfe2ac002093fc33b512fbdc75e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 47,
+          "end_line": 72,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1732,
+        1832
+      ],
+      "members": [
+        {
+          "id": "3531d7cd464fe0d57628450fb4600b3d16b5b92db21b9c92da2c14c966f7defd",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 246,
+          "end_line": 268,
+          "test_path_hint": true
+        },
+        {
+          "id": "3e9f602a92d3d0d73c7dfbd4795bf1b2973fb06d6d0880fc58c4c5124d629451",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "getattr",
+          "start_line": 822,
+          "end_line": 847,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 118,
+        "denominator": 141
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        917,
+        919
+      ],
+      "members": [
+        {
+          "id": "d883dd78d3a5caffe010e6d33ca8ecc3506615a80aa3d8c12a10db16044967ec",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file",
+          "start_line": 1451,
+          "end_line": 1465,
+          "test_path_hint": false
+        },
+        {
+          "id": "ca685b771bcb4e957b9d9ee45cf23436808aadcf4ba5d3111f1256d1f78ce0d0",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space",
+          "start_line": 1479,
+          "end_line": 1498,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 102,
+        "denominator": 122
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        134,
+        135
+      ],
+      "members": [
+        {
+          "id": "fbebd4a3deb985fb94fe4711023db71b10f8587ced2ac9c20a5b212a21791cbe",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "from_path_state",
+          "start_line": 588,
+          "end_line": 599,
+          "test_path_hint": false
+        },
+        {
+          "id": "118bb87d22bfe9145845580ddb999035216fdf9fdc07418d4be580cbeca1e656",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "cloned_from",
+          "start_line": 601,
+          "end_line": 611,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 61,
+        "denominator": 73
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        735,
+        736
+      ],
+      "members": [
+        {
+          "id": "563a5c6f32aad9fe7d806e5009737b38b6729abc4038ca6f66e96b4a5e14137f",
+          "path": "fs/kvfs/src/node/device.rs",
+          "name": "read_block_device",
+          "start_line": 487,
+          "end_line": 535,
+          "test_path_hint": false
+        },
+        {
+          "id": "43e9707f451432fde304bce8fd93c8c0e1d376b98f3077e08c04991181f0d45b",
+          "path": "fs/kvfs/src/node/device.rs",
+          "name": "write_block_device",
+          "start_line": 537,
+          "end_line": 593,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 370,
+        "denominator": 443
+      },
+      "review_status": "reviewed",
+      "family": "block_byte_io",
+      "disposition": "retained_lead",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1765,
+        1766
+      ],
+      "members": [
+        {
+          "id": "a0264040ff2c5cbf0abb0b5b567cfb2f3da6de1ead4eb66fe2573c22c6c6e1b0",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_target_ancestor_uses_linux_trap_errors",
+          "start_line": 762,
+          "end_line": 789,
+          "test_path_hint": true
+        },
+        {
+          "id": "1a1e20a45f27386d55bb5238916cabe787b37deccb44c93dcc35744feed1c63c",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_cross_directory_rename_moves_source_dentry",
+          "start_line": 792,
+          "end_line": 812,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 228,
+        "denominator": 273
+      },
+      "review_status": "reviewed",
+      "family": "rename_topology_tests",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1045,
+        1894
+      ],
+      "members": [
+        {
+          "id": "4ddf811d783d4b9f803bf162af3e4ec78117d88f2ca8108744f3934f09220c9a",
+          "path": "fs/kvfs/src/nullfs.rs",
+          "name": "metadata",
+          "start_line": 68,
+          "end_line": 87,
+          "test_path_hint": false
+        },
+        {
+          "id": "9e9f38d08f7465469706737a5c907d65a44e7824befecc99844f2f7a23a47fdc",
+          "path": "fs/kvfs/ut-tests/permission.rs",
+          "name": "meta",
+          "start_line": 44,
+          "end_line": 63,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 86,
+        "denominator": 103
+      },
+      "review_status": "reviewed",
+      "family": "nullfs_permission_fixture",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2157,
+        2159
+      ],
+      "members": [
+        {
+          "id": "5059063f0281f3ae2120503b893012a9d1f76f059292bb2c9428c8dcb1cea4a1",
+          "path": "util/klazy/tests/host/once_host.rs",
+          "name": "get_no_wait",
+          "start_line": 83,
+          "end_line": 96,
+          "test_path_hint": true
+        },
+        {
+          "id": "16fed1cf1c102e3dbf2257c320b6faeec9a0cfa49c58c648e9f38878754f8009",
+          "path": "util/klazy/tests/host/once_host.rs",
+          "name": "wait",
+          "start_line": 108,
+          "end_line": 124,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 91,
+        "denominator": 109
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        920,
+        941
+      ],
+      "members": [
+        {
+          "id": "d3e498b163d5dbad0c8bc4d099e404ae31e508a670a082af28003838d31f3500",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_and_flags",
+          "start_line": 1501,
+          "end_line": 1521,
+          "test_path_hint": false
+        },
+        {
+          "id": "d0f37b1569c8fd5549da3ed67d246bc77c40e1fc0f98b4b3218b238b8f740dca",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_openable_dir_with_flags",
+          "start_line": 1823,
+          "end_line": 1835,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 101,
+        "denominator": 121
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1639,
+        1640
+      ],
+      "members": [
+        {
+          "id": "1531002126d94dd61e8f9931eb64e872f7e3d3aac8901974e2d3b5a414a1183d",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_inode_times_returns_seeded_timestamps",
+          "start_line": 1631,
+          "end_line": 1648,
+          "test_path_hint": true
+        },
+        {
+          "id": "40c645a1cdcdf699f18ec4a9ec76b1bdc3ac50cf11efc62a79df366c3feaad56",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_relatime_future_atime_skips_touch_atime",
+          "start_line": 1651,
+          "end_line": 1667,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 130,
+        "denominator": 156
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1609,
+        1612
+      ],
+      "members": [
+        {
+          "id": "351cbf85af6a39c0aedeeceb14cf211f3b3ea3e792caf14b6892f12e5898558c",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_pivot_root_rejects_mounted_put_old",
+          "start_line": 866,
+          "end_line": 895,
+          "test_path_hint": true
+        },
+        {
+          "id": "04e6af704b227184c444772e59f7f0e0cad332fe49f95ba114293c2a9c403b64",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_pivot_root_rejects_put_old_outside_new_root",
+          "start_line": 967,
+          "end_line": 1004,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 183,
+        "denominator": 220
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1758,
+        1763
+      ],
+      "members": [
+        {
+          "id": "719e020fb777cb88656f86711369e7f40e0424461cec3892965c03c85ce99947",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_target_with_source_inode",
+          "start_line": 620,
+          "end_line": 639,
+          "test_path_hint": true
+        },
+        {
+          "id": "6e52402ad80df54a5d15f588cc74bd77e4462033128d73fe4946117c8e00bdb7",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_directory_emptiness_is_filesystem_owned",
+          "start_line": 728,
+          "end_line": 741,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 163,
+        "denominator": 196
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1756,
+        1763
+      ],
+      "members": [
+        {
+          "id": "79e44d3d23428ebe90529204a98c62f9f987ff2579e75c8dd8cd962bc2890eeb",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_replace_keeps_source_inode_identity",
+          "start_line": 585,
+          "end_line": 599,
+          "test_path_hint": true
+        },
+        {
+          "id": "6e52402ad80df54a5d15f588cc74bd77e4462033128d73fe4946117c8e00bdb7",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_directory_emptiness_is_filesystem_owned",
+          "start_line": 728,
+          "end_line": 741,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 156,
+        "denominator": 188
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        917,
+        920
+      ],
+      "members": [
+        {
+          "id": "d883dd78d3a5caffe010e6d33ca8ecc3506615a80aa3d8c12a10db16044967ec",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file",
+          "start_line": 1451,
+          "end_line": 1465,
+          "test_path_hint": false
+        },
+        {
+          "id": "d3e498b163d5dbad0c8bc4d099e404ae31e508a670a082af28003838d31f3500",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_and_flags",
+          "start_line": 1501,
+          "end_line": 1521,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 100,
+        "denominator": 121
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        918,
+        920
+      ],
+      "members": [
+        {
+          "id": "2edfbf1ca773384073ab8bc0b5367a0d00b75d81a84814e0131f74cab2b8bca7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_flags",
+          "start_line": 1468,
+          "end_line": 1476,
+          "test_path_hint": false
+        },
+        {
+          "id": "d3e498b163d5dbad0c8bc4d099e404ae31e508a670a082af28003838d31f3500",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_and_flags",
+          "start_line": 1501,
+          "end_line": 1521,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 100,
+        "denominator": 121
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        2113,
+        2120
+      ],
+      "members": [
+        {
+          "id": "33306a29d0baf6f75e7e70d9375856f76015a17d1dfcc6fec86c134c9c0d754a",
+          "path": "util/klazy/src/lazy.rs",
+          "name": "fmt",
+          "start_line": 72,
+          "end_line": 83,
+          "test_path_hint": false
+        },
+        {
+          "id": "74a33ef92bf2a66f143a1360a880baeaaac9751edd0a3f9bd0293452925c165f",
+          "path": "util/klazy/src/once.rs",
+          "name": "fmt",
+          "start_line": 62,
+          "end_line": 71,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 71,
+        "denominator": 86
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1578,
+        1739
+      ],
+      "members": [
+        {
+          "id": "58336c6ffea0b0e6b69164d7d5a23b41bc8915bbaa8ebf3163ff17f218acd93b",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "rename",
+          "start_line": 274,
+          "end_line": 284,
+          "test_path_hint": true
+        },
+        {
+          "id": "4f35c441413ef9303f5a6ed7c9eda9ecc71030bf4031f15caa91d8f436141aee",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "rename",
+          "start_line": 335,
+          "end_line": 349,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 66,
+        "denominator": 80
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1660,
+        1739
+      ],
+      "members": [
+        {
+          "id": "72656f057dd5ca86f0356251d4e166a542fc22ed2b562040287a20aaca2cf381",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "rename",
+          "start_line": 217,
+          "end_line": 227,
+          "test_path_hint": true
+        },
+        {
+          "id": "4f35c441413ef9303f5a6ed7c9eda9ecc71030bf4031f15caa91d8f436141aee",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "rename",
+          "start_line": 335,
+          "end_line": 349,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 66,
+        "denominator": 80
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1655,
+        1657
+      ],
+      "members": [
+        {
+          "id": "d88eaa850eb6cf7538246cfe42eda9a239a901dd6d861a390e77832c20ca7455",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "create",
+          "start_line": 141,
+          "end_line": 156,
+          "test_path_hint": true
+        },
+        {
+          "id": "826cee5653efd066ea3d4d12a0935d5f2d41a62d1abaa394d4b5279d04960468",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "mknod",
+          "start_line": 187,
+          "end_line": 202,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 80,
+        "denominator": 97
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        927,
+        942
+      ],
+      "members": [
+        {
+          "id": "a3b07f3e4054874e230d15dcad9f74147def401275fad585e8aecbce28a1812e",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space_operations",
+          "start_line": 1656,
+          "end_line": 1674,
+          "test_path_hint": false
+        },
+        {
+          "id": "4e9e9dd6e59e77842d6cd031cf58f4252bcf60044d12fa5ab194fdc46b35edc7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_dir_with_operations",
+          "start_line": 1838,
+          "end_line": 1855,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 88,
+        "denominator": 107
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1622,
+        1623
+      ],
+      "members": [
+        {
+          "id": "a07370c9d08feff3260450ef298d1d86dd6fd61dd191f99b2ffcbc7adf03a3a0",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_blocks_unlink",
+          "start_line": 1157,
+          "end_line": 1164,
+          "test_path_hint": true
+        },
+        {
+          "id": "0bcb771e32f0d855187f36a001ff7bb8135b1e08070dbfe691b9723c62d6ba74",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_blocks_rename",
+          "start_line": 1167,
+          "end_line": 1180,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 74,
+        "denominator": 90
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1621,
+        1623
+      ],
+      "members": [
+        {
+          "id": "464ecaa997497b1f6b29d477da8d3fceb5fe49e33b5b4965917ee3a7cf1c9beb",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_blocks_create",
+          "start_line": 1146,
+          "end_line": 1154,
+          "test_path_hint": true
+        },
+        {
+          "id": "0bcb771e32f0d855187f36a001ff7bb8135b1e08070dbfe691b9723c62d6ba74",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_blocks_rename",
+          "start_line": 1167,
+          "end_line": 1180,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 78,
+        "denominator": 95
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1665,
+        1717
+      ],
+      "members": [
+        {
+          "id": "c4a1e0701cc7c55aa0258d845fab74ac27189c2c10b448e4ac8f2c24bfb42e25",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "new",
+          "start_line": 263,
+          "end_line": 276,
+          "test_path_hint": true
+        },
+        {
+          "id": "3dfde20e07da43b1cd3c157aa061300b1c2611c1d887582f9701f6eba2f0d610",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "new_with_type",
+          "start_line": 56,
+          "end_line": 64,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 64,
+        "denominator": 78
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        661,
+        665
+      ],
+      "members": [
+        {
+          "id": "e03a8db6ddb241fea49268f57bc32a22f3117cae3b0f3a23d4f3c7ee0345e5f8",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "lookup_cache_entry",
+          "start_line": 820,
+          "end_line": 829,
+          "test_path_hint": false
+        },
+        {
+          "id": "2805b733d1bd65f914c84b63fa67ed11904a62c8e5c4a4030588f0e6dbe672e2",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "remove_cache_entry",
+          "start_line": 875,
+          "end_line": 888,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 73,
+        "denominator": 89
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        491,
+        493
+      ],
+      "members": [
+        {
+          "id": "75de64c41655a8ab45e91220adec633b888bb443ba07bf7aa3229df4382a0257",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "mkdir",
+          "start_line": 1478,
+          "end_line": 1485,
+          "test_path_hint": false
+        },
+        {
+          "id": "233f3ab671de23b58649f1df6bdb5ac07c668986463d6324f144e5a921b51dc0",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "link",
+          "start_line": 1510,
+          "end_line": 1515,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 63,
+        "denominator": 77
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        491,
+        494
+      ],
+      "members": [
+        {
+          "id": "75de64c41655a8ab45e91220adec633b888bb443ba07bf7aa3229df4382a0257",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "mkdir",
+          "start_line": 1478,
+          "end_line": 1485,
+          "test_path_hint": false
+        },
+        {
+          "id": "0ad1bd8bb3bc717ad5fb7dc9646bc01ba39a884f83f79a4ce2937cbb514e77a6",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "symlink",
+          "start_line": 1518,
+          "end_line": 1523,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 63,
+        "denominator": 77
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1135,
+        1800
+      ],
+      "members": [
+        {
+          "id": "9144ba9f0dd2d2cac80eca25e0f5761b16a9822e28689564a2b40678faeecc4d",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "register",
+          "start_line": 603,
+          "end_line": 615,
+          "test_path_hint": false
+        },
+        {
+          "id": "4284c52b941a3813a5b74d70e857d0290c1320582702ccff3d271b8313e36181",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "register_poll",
+          "start_line": 141,
+          "end_line": 154,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 72,
+        "denominator": 88
+      },
+      "review_status": "reviewed",
+      "family": "poll_registration_policy",
+      "disposition": "existing_reuse_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1755,
+        1757
+      ],
+      "members": [
+        {
+          "id": "88a870a19396123705c0ca27ac980adf8cff1939b55b05ee870860741fb30756",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_moves_cache_entry_without_changing_inode_identity",
+          "start_line": 567,
+          "end_line": 582,
+          "test_path_hint": true
+        },
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 157,
+        "denominator": 192
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1598,
+        1599
+      ],
+      "members": [
+        {
+          "id": "b4e6a2470a5e5d1f25f518f49d6774e393e90a8e7d42f1dfe5bc002638075788",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_mount_root_keeps_root_dentry_name_and_dotdot_crosses_mount",
+          "start_line": 516,
+          "end_line": 541,
+          "test_path_hint": true
+        },
+        {
+          "id": "9b3e5a9c08c131b75e12078524c6d41dce6aafe3a44b44feed70b10307818f13",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_nested_mount_root_dotdot_crosses_to_parent_mount",
+          "start_line": 544,
+          "end_line": 570,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 206,
+        "denominator": 252
+      },
+      "review_status": "reviewed",
+      "family": "mount_depth_tests",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1599,
+        1618
+      ],
+      "members": [
+        {
+          "id": "9b3e5a9c08c131b75e12078524c6d41dce6aafe3a44b44feed70b10307818f13",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_nested_mount_root_dotdot_crosses_to_parent_mount",
+          "start_line": 544,
+          "end_line": 570,
+          "test_path_hint": true
+        },
+        {
+          "id": "1f0f5385d36329d5f0bcf0803a0d2b160ca9eda43b43dbed27b82f8ba8c041c6",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unmount_all_recursively_clears_nested_mounts",
+          "start_line": 1083,
+          "end_line": 1105,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 206,
+        "denominator": 252
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1825,
+        1840
+      ],
+      "members": [
+        {
+          "id": "9547795668ecb3270e711a9cc3099091fb1ece874f627468e74680792a299d9a",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "new",
+          "start_line": 651,
+          "end_line": 672,
+          "test_path_hint": true
+        },
+        {
+          "id": "482ce9ea77a57aa924f1c924aabdccc7fb58d1825bdfa5238d63fb383d11939e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "new",
+          "start_line": 1256,
+          "end_line": 1273,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 171,
+        "denominator": 210
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1641,
+        1644
+      ],
+      "members": [
+        {
+          "id": "bf20f08959917e42fe68cab71863dbc356570f9fbcb819736f6e7c223b8565cf",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_relatime_equal_times_updates_atime",
+          "start_line": 1670,
+          "end_line": 1682,
+          "test_path_hint": true
+        },
+        {
+          "id": "e5ab25aa21ec40078507c2e88053f7415545179b068eaea6fc09e7246cad7c21",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_non_relatime_overwrites_future_atime",
+          "start_line": 1715,
+          "end_line": 1728,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 105,
+        "denominator": 129
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1701,
+        1702
+      ],
+      "members": [
+        {
+          "id": "cf59caae14d901dd62dfec670c4bf48eb1f26b2b2c416165f99a0d948689e067",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "magic_link_follow_uses_lookup_intent",
+          "start_line": 1054,
+          "end_line": 1069,
+          "test_path_hint": true
+        },
+        {
+          "id": "6ac164478a728a93bb863452c398754b34d5fb0919244a1b3401569cd05e377a",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "open_magic_link_uses_captured_path_not_display_name",
+          "start_line": 1072,
+          "end_line": 1089,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 100,
+        "denominator": 123
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1237,
+        1739
+      ],
+      "members": [
+        {
+          "id": "ea9374a684f64461df27d23277dd892b20b70a433b62baba38c45cf7f2b32e07",
+          "path": "fs/kvfs/src/simple_dir.rs",
+          "name": "rename",
+          "start_line": 603,
+          "end_line": 613,
+          "test_path_hint": false
+        },
+        {
+          "id": "4f35c441413ef9303f5a6ed7c9eda9ecc71030bf4031f15caa91d8f436141aee",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "rename",
+          "start_line": 335,
+          "end_line": 349,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 65,
+        "denominator": 80
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        919,
+        941
+      ],
+      "members": [
+        {
+          "id": "ca685b771bcb4e957b9d9ee45cf23436808aadcf4ba5d3111f1256d1f78ce0d0",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space",
+          "start_line": 1479,
+          "end_line": 1498,
+          "test_path_hint": false
+        },
+        {
+          "id": "d0f37b1569c8fd5549da3ed67d246bc77c40e1fc0f98b4b3218b238b8f740dca",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_openable_dir_with_flags",
+          "start_line": 1823,
+          "end_line": 1835,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 99,
+        "denominator": 122
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1684,
+        1748
+      ],
+      "members": [
+        {
+          "id": "5e4c0e2acb64c5e5afe0e922f1fa686d7d2a0ead00ba5496333e6127db5426a1",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "dir_entry",
+          "start_line": 460,
+          "end_line": 465,
+          "test_path_hint": true
+        },
+        {
+          "id": "850ab563188407249aa39f45e044691aecb0ae83b1b2f2b10ca6e4ea408ef0a2",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "make_removable_dir_entry",
+          "start_line": 416,
+          "end_line": 430,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 86,
+        "denominator": 106
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1690,
+        1704
+      ],
+      "members": [
+        {
+          "id": "4d9cbfd1c40a6d45aeb180271bd525ff0ca3386944c4baa33bce8af47a08925c",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "create_operations_preserve_trailing_slash_policy",
+          "start_line": 612,
+          "end_line": 631,
+          "test_path_hint": true
+        },
+        {
+          "id": "95668cb54ef271a8791420b8cdad878065cf361f1cef7f02c074f80cec5e0dc4",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "magic_link_no_follow_and_readlink_do_not_follow_target",
+          "start_line": 1126,
+          "end_line": 1148,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 120,
+        "denominator": 148
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1598,
+        1617
+      ],
+      "members": [
+        {
+          "id": "b4e6a2470a5e5d1f25f518f49d6774e393e90a8e7d42f1dfe5bc002638075788",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_mount_root_keeps_root_dentry_name_and_dotdot_crosses_mount",
+          "start_line": 516,
+          "end_line": 541,
+          "test_path_hint": true
+        },
+        {
+          "id": "e347a1021b1a8250fa7d312c897cfc3657a902554a032a6cc17fb4ee49a20806",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_unmount_rejects_mount_with_nested_children",
+          "start_line": 1059,
+          "end_line": 1080,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 182,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        505,
+        507
+      ],
+      "members": [
+        {
+          "id": "2a9c306dd9e052d341e0cf1c933cfda6e2f8e1af9d6d044058fe1fab99f9e4bf",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "unmount",
+          "start_line": 1752,
+          "end_line": 1783,
+          "test_path_hint": false
+        },
+        {
+          "id": "028c8c89570ba5d353cd9882bbf70595ec8ad99ab88eb46d8c6d6e95023d932c",
+          "path": "fs/kvfs/src/mount.rs",
+          "name": "detach_mount_subtree",
+          "start_line": 1792,
+          "end_line": 1834,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 220,
+        "denominator": 272
+      },
+      "review_status": "reviewed",
+      "family": "mount_detachment",
+      "disposition": "constraint_gap",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1433,
+        1434
+      ],
+      "members": [
+        {
+          "id": "05c1d936f9c14ce3812f360eb083445383e02d94c17e8e66310c6399be4e6dde",
+          "path": "fs/kvfs/src/xattr.rs",
+          "name": "set_xattr",
+          "start_line": 239,
+          "end_line": 251,
+          "test_path_hint": false
+        },
+        {
+          "id": "22367d965ed4cab53abdb24e78c57631570dc1339ed8e3de5a41e29ff0ddb3c2",
+          "path": "fs/kvfs/src/xattr.rs",
+          "name": "remove_xattr",
+          "start_line": 257,
+          "end_line": 263,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 76,
+        "denominator": 94
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1746,
+        1748
+      ],
+      "members": [
+        {
+          "id": "9f4ef5aba15893418c8da1d3a11bb9899be3c444952f726fa4d996464deba5ab",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "make_dir_entry_with_parent",
+          "start_line": 395,
+          "end_line": 406,
+          "test_path_hint": true
+        },
+        {
+          "id": "850ab563188407249aa39f45e044691aecb0ae83b1b2f2b10ca6e4ea408ef0a2",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "make_removable_dir_entry",
+          "start_line": 416,
+          "end_line": 430,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 80,
+        "denominator": 99
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1640,
+        1643
+      ],
+      "members": [
+        {
+          "id": "40c645a1cdcdf699f18ec4a9ec76b1bdc3ac50cf11efc62a79df366c3feaad56",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_relatime_future_atime_skips_touch_atime",
+          "start_line": 1651,
+          "end_line": 1667,
+          "test_path_hint": true
+        },
+        {
+          "id": "ea0072e59f857466e04c931ee324096276188ff6a9d522044e6db22bccdd0cca",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_readonly_mount_skips_time_updates",
+          "start_line": 1700,
+          "end_line": 1712,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 126,
+        "denominator": 156
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1642,
+        1644
+      ],
+      "members": [
+        {
+          "id": "d9c7a452853c2886a8a5fcaa7878ec677f6cb2f32e6add1616ff204a6ac3adf1",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_update_cmtime_advances_mtime_and_ctime",
+          "start_line": 1685,
+          "end_line": 1697,
+          "test_path_hint": true
+        },
+        {
+          "id": "e5ab25aa21ec40078507c2e88053f7415545179b068eaea6fc09e7246cad7c21",
+          "path": "fs/kvfs/ut-tests/mount.rs",
+          "name": "test_non_relatime_overwrites_future_atime",
+          "start_line": 1715,
+          "end_line": 1728,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 105,
+        "denominator": 130
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1757,
+        1759
+      ],
+      "members": [
+        {
+          "id": "7af81f694172930d05ac13c679f5e64dc3f0cbd55d460129e33eab75d9c0828d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_existing_target_before_filesystem_callback",
+          "start_line": 602,
+          "end_line": 617,
+          "test_path_hint": true
+        },
+        {
+          "id": "d42f2a610fc910d3a46cb814dbd00433a68377654127af19765e1cf3f91a059e",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_exchange_swaps_cache_entries_without_changing_inode_identity",
+          "start_line": 642,
+          "end_line": 657,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 168,
+        "denominator": 208
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1514,
+        1515
+      ],
+      "members": [
+        {
+          "id": "95f9c3a7c2533154a909fc928739cdbb1d6bc68402960dd1e17c20cc7a553edd",
+          "path": "fs/kvfs/ut-tests/file.rs",
+          "name": "read",
+          "start_line": 170,
+          "end_line": 176,
+          "test_path_hint": true
+        },
+        {
+          "id": "0fadbfb495479618c0e3c9fab938cf55499c4045f7d315c955ce1d665a8c0395",
+          "path": "fs/kvfs/ut-tests/file.rs",
+          "name": "write",
+          "start_line": 178,
+          "end_line": 184,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 71,
+        "denominator": 88
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        125,
+        1143
+      ],
+      "members": [
+        {
+          "id": "a712a50903fb5b2e1c5d0300954f6f3b945982ad5272fd86e395a2e601124a5c",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "scalar_write_iter",
+          "start_line": 446,
+          "end_line": 491,
+          "test_path_hint": false
+        },
+        {
+          "id": "f6c24a483b099128bb3e55f92b347e45765f4de27799ab996c0bf999d4c7bdb1",
+          "path": "fs/kvfs/src/pipe.rs",
+          "name": "pipe_write_iter",
+          "start_line": 697,
+          "end_line": 735,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 254,
+        "denominator": 315
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        662,
+        663
+      ],
+      "members": [
+        {
+          "id": "e35a22b6826b9852e5b11dfe7c0e6fba2b502e916efb29330697ff8559347403",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "cache_lookup_candidate",
+          "start_line": 831,
+          "end_line": 845,
+          "test_path_hint": false
+        },
+        {
+          "id": "f3adc7bbe6b011653c1534d371dd895b78aa576f4339fdcc0162b9b1b1955564",
+          "path": "fs/kvfs/src/node/dentry.rs",
+          "name": "replace_lookup_candidate",
+          "start_line": 847,
+          "end_line": 859,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 104,
+        "denominator": 129
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1755,
+        1758
+      ],
+      "members": [
+        {
+          "id": "88a870a19396123705c0ca27ac980adf8cff1939b55b05ee870860741fb30756",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_moves_cache_entry_without_changing_inode_identity",
+          "start_line": 567,
+          "end_line": 582,
+          "test_path_hint": true
+        },
+        {
+          "id": "719e020fb777cb88656f86711369e7f40e0424461cec3892965c03c85ce99947",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rename_noreplace_rejects_target_with_source_inode",
+          "start_line": 620,
+          "end_line": 639,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 158,
+        "denominator": 196
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1044,
+        1685
+      ],
+      "members": [
+        {
+          "id": "0e3109fabcc910aa5bda8ee906e5ca89885b0ff8a9fac9a356c9bf7a9e707fdc",
+          "path": "fs/kvfs/src/nullfs.rs",
+          "name": "inode_init",
+          "start_line": 49,
+          "end_line": 66,
+          "test_path_hint": false
+        },
+        {
+          "id": "6cc00be048f53a2d880793f37581c9cc185405ad9f7e3286e6d72c8669323fad",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "inode_init",
+          "start_line": 467,
+          "end_line": 481,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 70,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1044,
+        1749
+      ],
+      "members": [
+        {
+          "id": "0e3109fabcc910aa5bda8ee906e5ca89885b0ff8a9fac9a356c9bf7a9e707fdc",
+          "path": "fs/kvfs/src/nullfs.rs",
+          "name": "inode_init",
+          "start_line": 49,
+          "end_line": 66,
+          "test_path_hint": false
+        },
+        {
+          "id": "02e1c982b06618f0e1970c59100a696c3513bcc859398cbba6f426befae6d83d",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "inode_init",
+          "start_line": 432,
+          "end_line": 446,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 70,
+        "denominator": 87
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1761,
+        1762
+      ],
+      "members": [
+        {
+          "id": "280da635e65a8182953cfa9fa37584cf30418faddb2c77838b175443ca17a6c9",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_rmdir_uses_directory_removal_callback",
+          "start_line": 683,
+          "end_line": 701,
+          "test_path_hint": true
+        },
+        {
+          "id": "eb321ad43566f1ba23d32478c0d21f05821227eac1f034fa92f6dff0283acad8",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_unlink_validator_observes_callback_victim",
+          "start_line": 704,
+          "end_line": 725,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 181,
+        "denominator": 225
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        88,
+        89
+      ],
+      "members": [
+        {
+          "id": "18a9d75a2fe82d97d681f204d5bbd8faf31fc31ff161f48a4ef8bea2f1384234",
+          "path": "fs/kvfs/src/address_space/writeback.rs",
+          "name": "writeback_cached_folios",
+          "start_line": 147,
+          "end_line": 159,
+          "test_path_hint": false
+        },
+        {
+          "id": "b719e0b3e19cacd74fe0db018268165a28d593e8c99c43396c76efd672ad3482",
+          "path": "fs/kvfs/src/address_space/writeback.rs",
+          "name": "submit_cached_ranges",
+          "start_line": 171,
+          "end_line": 185,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 78,
+        "denominator": 97
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1781,
+        1783
+      ],
+      "members": [
+        {
+          "id": "bd3b463b2b0562fbd25f227fb753b452e7e124fe4ec10f429097e553b48f9907",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_lookup_non_cacheable_positive_retracts",
+          "start_line": 1127,
+          "end_line": 1144,
+          "test_path_hint": true
+        },
+        {
+          "id": "605617185ebb1dee7ab234e48e83e9e14dfc1d06e696c1c97fcfd25081e5cef9",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "test_parallel_lookup_replacement_publishes_only_completed_entry",
+          "start_line": 1163,
+          "end_line": 1177,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 135,
+        "denominator": 168
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        918,
+        919
+      ],
+      "members": [
+        {
+          "id": "2edfbf1ca773384073ab8bc0b5367a0d00b75d81a84814e0131f74cab2b8bca7",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_flags",
+          "start_line": 1468,
+          "end_line": 1476,
+          "test_path_hint": false
+        },
+        {
+          "id": "ca685b771bcb4e957b9d9ee45cf23436808aadcf4ba5d3111f1256d1f78ce0d0",
+          "path": "fs/kvfs/src/node/inode.rs",
+          "name": "new_file_with_address_space",
+          "start_line": 1479,
+          "end_line": 1498,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 98,
+        "denominator": 122
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        125,
+        1249
+      ],
+      "members": [
+        {
+          "id": "a712a50903fb5b2e1c5d0300954f6f3b945982ad5272fd86e395a2e601124a5c",
+          "path": "fs/kvfs/src/file.rs",
+          "name": "scalar_write_iter",
+          "start_line": 446,
+          "end_line": 491,
+          "test_path_hint": false
+        },
+        {
+          "id": "3aea8d8fc63cef286a400029580a58c8a53033d2d27cb7600032ebb10a542b3c",
+          "path": "fs/kvfs/src/simple_file.rs",
+          "name": "write_iter",
+          "start_line": 87,
+          "end_line": 129,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 253,
+        "denominator": 315
+      },
+      "review_status": "reviewed",
+      "family": "stream_vs_command",
+      "disposition": "direct_replacement_rejected",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        702,
+        1809
+      ],
+      "members": [
+        {
+          "id": "a56c6e677b9351394140302e528bdfa8f87340ea2ccf22c98ee7637b325aedfa",
+          "path": "fs/kvfs/src/node/device.rs",
+          "name": "cdev_add",
+          "start_line": 151,
+          "end_line": 157,
+          "test_path_hint": false
+        },
+        {
+          "id": "5c7b6f8ea2ec1a4f42d396e9c9854649d7fc02ea5646378a31f39eb5fb954cd6",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "add_test_range",
+          "start_line": 296,
+          "end_line": 304,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 57,
+        "denominator": 71
+      },
+      "review_status": "reviewed",
+      "family": "device_registry_boundary",
+      "disposition": "existing_reuse_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1534,
+        1719
+      ],
+      "members": [
+        {
+          "id": "7d60c06af6507654b438bb244e3712efd7250463c3c016f7ec23bb30e84002da",
+          "path": "fs/kvfs/ut-tests/libfs.rs",
+          "name": "getattr",
+          "start_line": 34,
+          "end_line": 56,
+          "test_path_hint": true
+        },
+        {
+          "id": "9e5ae91ba586946f3fd410e2b9ac41b54938adacd925913e841b77e3195116a1",
+          "path": "fs/kvfs/ut-tests/node_dentry.rs",
+          "name": "getattr",
+          "start_line": 76,
+          "end_line": 98,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 122,
+        "denominator": 152
+      },
+      "review_status": "unreviewed",
+      "family": null,
+      "disposition": "unknown",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1830,
+        1831
+      ],
+      "members": [
+        {
+          "id": "c8ff03ba95e2463913c282c759ea1025056a58c3102fbbaca50862ca537334d3",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "block_partial_backend_write_error_is_not_retried",
+          "start_line": 780,
+          "end_line": 794,
+          "test_path_hint": true
+        },
+        {
+          "id": "caaea0a8e8669f0538588c99a93a88bc062488daa30efa442cd8ae6afb06286e",
+          "path": "fs/kvfs/ut-tests/node_device.rs",
+          "name": "block_read_failure_prevents_read_modify_write",
+          "start_line": 797,
+          "end_line": 815,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 174,
+        "denominator": 217
+      },
+      "review_status": "reviewed",
+      "family": "block_fault_tests",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1281,
+        1672
+      ],
+      "members": [
+        {
+          "id": "98191373a3d60a7e963b581f7def56132b14f8394213b7db85356519bfb3ff08",
+          "path": "fs/kvfs/src/simple_file.rs",
+          "name": "read_generated_bytes",
+          "start_line": 419,
+          "end_line": 427,
+          "test_path_hint": false
+        },
+        {
+          "id": "aa0dbbff860cde472004777627a4890c894aecc6ca1fc056634b81730df2e9c7",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "read",
+          "start_line": 332,
+          "end_line": 341,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 89,
+        "denominator": 111
+      },
+      "review_status": "reviewed",
+      "family": "slice_read_adapter",
+      "disposition": "constraint_gap",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1703,
+        1710
+      ],
+      "members": [
+        {
+          "id": "4070da841fc7c8aebfae9bcbca1502f27fe2594f17b0eeddd79f94c4a62be48a",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "open_magic_link_preserves_no_follow_and_exclusive_create",
+          "start_line": 1092,
+          "end_line": 1123,
+          "test_path_hint": true
+        },
+        {
+          "id": "9617c02fe70b690322c94470f660847fe04b6dc5db182ef4aa445c988552ff79",
+          "path": "fs/kvfs/ut-tests/namei.rs",
+          "name": "o_path_trailing_slash_follows_symlink_and_requires_directory",
+          "start_line": 1316,
+          "end_line": 1351,
+          "test_path_hint": true
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 190,
+        "denominator": 237
+      },
+      "review_status": "reviewed",
+      "family": "path_resolution_tests",
+      "disposition": "preserve_contract_control",
+      "truth_label": null
+    },
+    {
+      "file_ids": [
+        1348,
+        1349
+      ],
+      "members": [
+        {
+          "id": "c8a049addf7accbf2c3e1c9e31d03ab22e8e9c5ba1ea276ed297d2ffe5ed7ea2",
+          "path": "fs/kvfs/src/super_block.rs",
+          "name": "new_with_flags_and_private",
+          "start_line": 705,
+          "end_line": 729,
+          "test_path_hint": false
+        },
+        {
+          "id": "f681af8f9ff99d6d4d260f995fb99124961a946219e66d30cd0d9066f7b33042",
+          "path": "fs/kvfs/src/super_block.rs",
+          "name": "try_new_with_flags_and_private",
+          "start_line": 743,
+          "end_line": 766,
+          "test_path_hint": false
+        }
+      ],
+      "text_similarity": {
+        "shared_tokens": 112,
+        "denominator": 140
+      },
+      "review_status": "reviewed",
+      "family": "superblock_constructor",
+      "disposition": "existing_reuse_control",
+      "truth_label": null
+    }
+  ],
+  "followup": {
+    "selection": "For each test-path-hint count 0/1/2 in order, take up to two largest denominator pairs; IDs break ties. Exclude reviewed members and repeated members/path pairs within this batch.",
+    "purpose": "Bounded development review of larger text overlaps with path diversity; size is not benefit or semantic complexity",
+    "bias": "Post-output purposive selection, not random, independent or representative",
+    "records": [
+      {
+        "file_ids": [
+          735,
+          736
+        ],
+        "test_path_hint_count": 0,
+        "review_status": "reviewed",
+        "denominator": 443
+      },
+      {
+        "file_ids": [
+          505,
+          507
+        ],
+        "test_path_hint_count": 0,
+        "review_status": "reviewed",
+        "denominator": 272
+      },
+      {
+        "file_ids": [
+          1045,
+          1894
+        ],
+        "test_path_hint_count": 1,
+        "review_status": "reviewed",
+        "denominator": 103
+      },
+      {
+        "file_ids": [
+          1135,
+          1800
+        ],
+        "test_path_hint_count": 1,
+        "review_status": "reviewed",
+        "denominator": 88
+      },
+      {
+        "file_ids": [
+          1765,
+          1766
+        ],
+        "test_path_hint_count": 2,
+        "review_status": "reviewed",
+        "denominator": 273
+      },
+      {
+        "file_ids": [
+          1598,
+          1599
+        ],
+        "test_path_hint_count": 2,
+        "review_status": "reviewed",
+        "denominator": 252
+      }
+    ],
+    "quota_shortfalls": {}
+  },
+  "limits": [
+    "Family grouping is researcher-assigned, not automatic semantic detection",
+    "Unreviewed pairs remain unknown, not negative or low-value",
+    "Families are maintenance themes, not independent statistical samples",
+    "No precision, recall, probability score or independent truth labels established"
+  ],
+  "input_sha256": {
+    "research/evidence/runs/2026-11-05-rust-scc-01/candidates.json": "bc6c8a60781f874d8aa2da6839ddc913711b073293005d68707721cfc81d2735",
+    "research/evidence/runs/2026-11-05-rust-scc-01/report.json": "b7cdc0fa1457d74b22d32a8b731ac8683e731b70e64d74c10f5f259fb59ed774",
+    "research/protocols/scc-development-review-batch-v1.json": "f2edc3e52c803349b8ec6999a1f89ac321feadadd3715bd9895468543c989991",
+    "research/protocols/scc-development-review-results-v1.json": "1d1557f00bec270f546b3b5c307f90eea77f74b9ed470ac13f60a9d2925e360d",
+    "research/protocols/discovery-family-assessments-v1.json": "7c75a1ce4fbc1b65788d84bc76ce17614c1728b60651383ce8e707360aeccd2a",
+    "research/protocols/metadata-case-disposition-v1.json": "e72d3d90d1a88a41d86c18d428be2cba2db44ec53cb0e00287008e3772af9f20",
+    "research/protocols/discovery-followup-results-v3.json": "b76bb831c621766216cc335e77d02d72ccaec92c925ffab754f10bfb5a81bb34",
+    "research/protocols/discovery-ledger-v1.json": "0dcbbebab2b0eeaaf5c4e6f4f94ce8e705f8d43705388557eada19751d0712de"
+  },
+  "builder_sha256": "5a40624189e5cb1d3ee65cacc43ba4a2a508b28faaf998e229b357d352e16141"
+}

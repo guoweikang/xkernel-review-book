@@ -1,0 +1,209 @@
+[
+  {
+    "fixture": {
+      "name": "direct_read",
+      "source": "fn sample(node: Node) { node.property_str(\"device_type\"); }",
+      "signals": [
+        "low_level_read"
+      ]
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "property_str",
+          "range": [
+            29,
+            41
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "property_str"
+        }
+      ],
+      "status": "parsed",
+      "signals": [
+        "low_level_read"
+      ]
+    }
+  },
+  {
+    "fixture": {
+      "name": "view_call",
+      "source": "fn sample(node: Node) { CpuNode::from_node(node).hardware_id(); }",
+      "signals": [
+        "cpu_view_spelling"
+      ]
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "CpuNode::from_node",
+          "range": [
+            24,
+            42
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "CpuNode::from_node"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "hardware_id",
+          "range": [
+            49,
+            60
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "hardware_id"
+        }
+      ],
+      "status": "parsed",
+      "signals": [
+        "cpu_view_spelling"
+      ]
+    }
+  },
+  {
+    "fixture": {
+      "name": "comment_and_string",
+      "source": "fn sample() { /* CpuNode::from_node(node); */ let text = \"node.property_str(\\\"reg\\\")\"; }",
+      "signals": []
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [],
+      "status": "parsed",
+      "signals": []
+    }
+  },
+  {
+    "fixture": {
+      "name": "opaque_macro",
+      "source": "fn sample(node: Node) { hidden!(node.property_str(\"reg\")); }",
+      "signals": [],
+      "opaque_macros": 1
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "opaque_macro",
+          "name": "hidden",
+          "range": [
+            24,
+            57
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "hidden!(node.property_str(\"reg\"))"
+        }
+      ],
+      "status": "parsed",
+      "signals": []
+    }
+  },
+  {
+    "fixture": {
+      "name": "shadowable_name",
+      "source": "fn sample(node: Node) { unrelated::CpuNode::from_node(node).hardware_id(); }",
+      "signals": [
+        "cpu_view_spelling"
+      ]
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "call_expression",
+          "name": "unrelated::CpuNode::from_node",
+          "range": [
+            24,
+            53
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "unrelated::CpuNode::from_node"
+        },
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "hardware_id",
+          "range": [
+            60,
+            71
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "hardware_id"
+        }
+      ],
+      "status": "parsed",
+      "signals": [
+        "cpu_view_spelling"
+      ]
+    }
+  },
+  {
+    "fixture": {
+      "name": "deferred_read",
+      "source": "fn sample(node: Node) { let callback = || node.property_str(\"reg\"); }",
+      "signals": [
+        "low_level_read"
+      ],
+      "deferred_sites": 1
+    },
+    "actual": {
+      "schema": "rust-call-syntax/1",
+      "sites": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 1,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "property_str",
+          "range": [
+            47,
+            59
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "property_str"
+        }
+      ],
+      "status": "parsed",
+      "signals": [
+        "low_level_read"
+      ]
+    }
+  },
+  {
+    "fixture": {
+      "name": "invalid",
+      "source": "fn broken( {",
+      "status": "rejected",
+      "signals": []
+    },
+    "actual": {
+      "error": "cannot parse string into token stream",
+      "schema": "rust-call-syntax/1",
+      "sites": [],
+      "status": "rejected",
+      "signals": []
+    }
+  }
+]

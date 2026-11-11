@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "scope": "TM01 Offset variant and local file-pair positions with test doubles",
+  "provenance": {
+    "STARRY": {
+      "source": "2026-11-05-starry-transfer-01/sources/kernel/src/syscall/fs/io.rs",
+      "source_sha256": "ccbc859f0a8e12f77f0f60bf6483f779dff5f9edab38babb5aeb8dfc765afe76",
+      "start_line": 224,
+      "snippet_sha256": "b50f8860976b5a37fb874d8fe88d6d1a10dc10ccfc24f97ee744122b535dedb6"
+    },
+    "XKERNEL": {
+      "source": "2026-11-05-xkernel-transfer-01/sources/fs/kvfs/src/transfer.rs",
+      "source_sha256": "f5e4829a2a3b5faa26f832d927eed870bdb9288daf00befa7ee89284383ce2ff",
+      "start_line": 186,
+      "snippet_sha256": "3a9f2d0040b05e8ddd0e7bb4d1628f4f1e7c0f081b9a0fa0055bd8a878402451"
+    }
+  },
+  "commands": [
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work/probe.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work/probe"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/probe-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/probe",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work/negative.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work/negative"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/negative-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/transfer/2026-11-05-transfer-tm01-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/negative",
+      "--test-threads=1",
+      "--nocapture",
+      "starry_short_write_observation",
+      "--exact"
+    ]
+  ],
+  "kernel_integration": "not_run",
+  "negative_control": "equal_completed_count_expectation_rejected"
+}

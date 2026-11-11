@@ -1,0 +1,68 @@
+# Automatically generated file; DO NOT EDIT.
+# Derived from .config by xtask xconfig gen-cargo.
+
+features = [
+    "kfeat/alloc",
+    "kfeat/alloc_slab",
+    "kfeat/char",
+    "kfeat/display",
+    "kfeat/driver_console_ns16550_ioport",
+    "kfeat/driver_serial_ns16550_ioport",
+    "kfeat/driver_virtio_blk",
+    "kfeat/driver_virtio_net",
+    "kfeat/driver_virtio_rng",
+    "kfeat/driver_virtio_socket",
+    "kfeat/ebpf",
+    "kfeat/entropy_arch_cpu",
+    "kfeat/entropy_jitter",
+    "kfeat/entropy_smccc_trng",
+    "kfeat/entropy_virtio_rng",
+    "kfeat/fs_cgroup2",
+    "kfeat/fs_devpts",
+    "kfeat/fs_ext4",
+    "kfeat/fs_times",
+    "kfeat/input",
+    "kfeat/net",
+    "kfeat/platform_kplat_x86_64",
+    "kfeat/rtc",
+    "kfeat/tee",
+    "kfeat/tee_ta_sign",
+    "kfeat/vsock",
+]
+
+[build]
+rustflags = [
+    "--check-cfg",
+    "cfg(unittest)",
+    "--check-cfg",
+    'cfg(k_plat_name, values("kplat-aarch64", "kplat-x86_64"))',
+    "--cfg",
+    'k_plat_name="kplat-x86_64"',
+]
+
+[target.x86_64-unknown-none]
+rustflags = [
+    "--check-cfg",
+    "cfg(unittest)",
+    "--check-cfg",
+    'cfg(k_plat_name, values("kplat-aarch64", "kplat-x86_64"))',
+    "--cfg",
+    'k_plat_name="kplat-x86_64"',
+    "-C",
+    "link-arg=-T/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/production-target/x86_64-unknown-none/release/linker_kplat-x86_64.lds",
+    "-C",
+    "link-arg=-no-pie",
+    "-C",
+    "link-arg=-znostart-stop-gc",
+    "-C",
+    "force-frame-pointers",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "strip=none",
+]
+
+[env]
+K_PLAT_NAME = "kplat-x86_64"
+RUST_TARGET_PATH = "platforms/kplat-x86_64"
+

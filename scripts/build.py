@@ -31,6 +31,7 @@ def main():
     research_files = sorted(
         source for source in RESEARCH.rglob("*.md")
         if not source.is_relative_to(RESEARCH / "evidence" / "originals")
+        and not source.is_relative_to(RESEARCH / "evidence" / "runs")
     )
     for source in research_files:
         destination = STAGING / "research" / source.relative_to(RESEARCH)
@@ -67,6 +68,11 @@ def main():
         title = title_match.group(1) if title_match else source.stem
         summary += f"- [{title}]({relative})\n"
     summary_path.write_text(summary)
+    for source in (RESEARCH / "publications").rglob("*"):
+        if source.is_file() and source.suffix in {".pdf", ".docx", ".pptx"}:
+            destination = STAGING / "research" / source.relative_to(RESEARCH)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
     evidence = [
         "# 证据索引", "",
         "原始全文仅保存在本地，不进入网页或 Git。以下链接指向一手来源。",

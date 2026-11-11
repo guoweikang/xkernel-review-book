@@ -1,0 +1,21 @@
+{
+  "schema": "cross-project-scope/1",
+  "status": "sampling_scope_not_evaluation",
+  "repositories": [
+    {"name": "xkernel", "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09", "evidence": "research/evidence/runs/2026-11-05-rust-pilot-seeds-01", "lineage": "not_audited_against_other_projects"},
+    {"name": "arceos", "url": "https://github.com/arceos-org/arceos", "revision": "8d2e6f97efc4a67359b99db5e519a55b7067b524", "evidence": "research/evidence/runs/2026-11-05-arceos-scope-01", "reading_evidence": "research/evidence/runs/2026-11-05-arceos-reading-scope-01", "tracked_rs_files": 184, "lineage": "arceos_ecosystem"},
+    {"name": "starry", "url": "https://github.com/Starry-OS/StarryOS", "revision": "2e075accf4fb0aefdd1d252ebd9ccf29727d9923", "evidence": "research/evidence/runs/2026-11-05-starry-scope-01", "reading_evidence": "research/evidence/runs/2026-11-05-starry-reading-scope-01", "tracked_rs_files": 105, "lineage": "arceos_ecosystem"}
+  ],
+  "reading_units": [
+    {"id": "X005", "repository": "arceos", "paths": ["modules/axsync/src/lib.rs", "modules/axsync/src/mutex.rs", "modules/axsync/Cargo.toml"], "question": "Distinguish reexports and cfg aliases from independent lock implementations; preserve sleeping versus spinning context", "label": "unlabelled", "role": "reuse_and_configuration_control"},
+    {"id": "X006", "repository": "starry", "paths": ["kernel/src/pseudofs/file.rs", "kernel/src/pseudofs/proc.rs", "kernel/src/pseudofs/dir.rs"], "question": "Trace pseudo-file generation, write contracts and caller composition before proposing a shared abstraction", "label": "unlabelled", "role": "context_reading_not_confirmed_duplicate"}
+  ],
+  "gates": [
+    "Do not count registry dependencies as repository-owned implementations",
+    "Do not equate same-name packages with identical source; compare version, checksum and provenance",
+    "Keep related upstream/fork/case families together when splitting evaluation sets",
+    "Freeze target/features before interpreting cfg-dependent behavior",
+    "Reserve low-text-similarity and multi-function cases; current scope does not satisfy full pilot coverage",
+    "Three repository names do not prove three independent replications"
+  ]
+}

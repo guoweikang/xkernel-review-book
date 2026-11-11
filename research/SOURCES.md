@@ -6,6 +6,74 @@
 
 ## 论文和评估研究
 
+### 2026-11-11 InMap原文与固定工件
+
+后续：[评分静态审计](notes/2026-11-11-inmap-scoring-audit.md)、[Lucene实际组件实验](notes/2026-11-11-lucene-scoring-runtime.md)、[历史版本及文件级许可核查](notes/2026-11-11-inmap-history-preflight.md)。Lucene8.6.2实际依赖来自Maven Central，记录下载URL、仓库SHA1与本地SHA256；运行查询解释纠正了“默认similarity决定全部子句分数”的潜在误解。未把这一组件实验登记为InMap复现。
+
+INMAP-SAC21：Sinkala、Herold，InMap: Automated Interactive Code-to-Architecture Mapping，SAC 2021，DOI 10.1145/3412841.3442124。[作者稿](https://www.diva-portal.org/smash/get/diva2:1552606/FULLTEXT01.pdf)及[工件](https://git.cs.kau.se/zipasink/InMap)已取得部分本地归档，URL、字节数和hash见[工件记录](notes/2026-11-11-reflexion-artifact-readiness.md)。已定向阅读§3–5并静态核对反馈入口；固定工件版本晚于论文，未运行，不称数值复现。见[执行前检查](notes/2026-11-11-inmap-execution-preflight.md)和[评价边界](notes/2026-11-11-inmap-label-boundary.md)。RM-FSE95后续已补读§3、§6并完成有限定义重实现，见[精读](notes/2026-11-11-reflexion-confirmation-reading.md)，不再仅停留在初始摘要阅读状态。
+
+### 2026-11-11 职责归属与架构一致性入口
+
+RM-FSE95：Murphy、Notkin、Sullivan，Software Reflexion Models: Bridging the Gap Between Source and High-Level Models，FSE 1995。[作者全文](https://www.cs.ubc.ca/~murphy/papers/rm/reflexion_model_fse95.pdf)已下载（275008字节），SHA-256登记于证据manifest。定向阅读摘要、引言和§2 NetBSD案例；形式化定义及其余实验仍待精读，未运行RMTool。经典方法作为新分支起点，不能替代最近邻调研。ArchUnit仅核查官方指南介绍与规则入口，未安装运行。下一步见[执行安排](notes/2026-11-11-next-research-execution.md)。
+
+### 2026-11-11 BigClone基准接入
+
+固定BigCloneEval `6d393ec8adb1d71493d09881ba520659b6c2c68e` 的说明／Makefile／matcher及BigCloneBench `37f6c7141dac914d7eb13c09a967c6ce1a821f91`说明，Git blob校验归档。实际探测两个官方分享入口只取得HTML前缀，未下载数据集或运行基准；见[接入预检](notes/2026-11-11-discovery-benchmark-preflight.md)。
+
+### 2026-11-09 文档检索实现基线
+
+核查scikit-learn 1.7官方TF-IDF文档与1.7.2源码，采用固定版本公开实现；[方法依据](notes/2026-11-09-tfidf-baseline-reference.md)与[实际运行](notes/2026-11-09-doc-tfidf-first-run.md)分列。此次是简单文档检索基线，不是注释LDA论文复现；未报告语义准确率。
+
+### 2026-11-09 相似性与文档语义定向检索
+
+后续已对注释辅助检测v1的§II-B、III–V和表I/II做[正文精读](notes/2026-11-09-comment-clone-method-reading.md)，PDF和提取文本归档；其余条目仍保持下述摘要级状态。另核查LDA经典JMLR 2003书目／摘要，未审计推导或实现。
+
+新增检索CodeSearchNet、CodeBERT、GraphCodeBERT、注释辅助克隆检测、RepliComment及2026鲁棒性预印本；本轮主要为摘要／书目核查，不能记为全文精读或复现。版本、来源、捕获路径与方法取舍见[研究路线](notes/2026-11-09-similarity-research-route.md)。注释辅助检测及跨领域序列比对已有先例，不以“加入rustdoc”或“借用DNA相似算法”本身主张创新。
+
+### 2026-11-05 跨项目取样来源
+
+固定ArceOS `8d2e6f97efc4a67359b99db5e519a55b7067b524` 与StarryOS `2e075accf4fb0aefdd1d252ebd9ccf29727d9923`。
+官方仓库、谱系来源及读取边界见[范围记录](notes/2026-11-05-cross-project-scope.md)与[谱系记录](notes/2026-11-05-cross-project-lineage.md)。
+四份capture manifest在evidence/runs中逐项登记URL与哈希；本轮不将源码捕获算作算法验证。
+
+### 2026-11-05 原任务与评价器对齐
+
+P01补核§3.5、§4表1/3/4/5及相关筛选、抽样段落，见[原任务审计](notes/2026-11-05-p01-original-task-audit.md)。
+T12固定版README核对输入位置格式、参考筛选、CoverageMatcher；P01固定树补读方法前端及配置，三份源码归档。
+见[评价接入与限制](notes/2026-11-05-scc-evaluation-alignment.md)。文件级冒烟已运行，方法前端、评价器和论文结果均未运行复现。
+
+### 2026-11-05 候选发现基线补读
+
+P01 归档实际为 arXiv v1，已直接核对 §2、§3.1–3.4、§4.3–4.4 及 §5 的指定机制与评估段落，
+见 [token 基线边界](notes/2026-11-05-candidate-token-baseline.md)。不把 token 阈值准确率当成
+功能重复或安全重构准确率；未运行工具、未核查当前 Rust 支持。
+
+### 2026-11-05 失败反馈与错误拒绝
+
+| ID | 来源 | 阅读范围 | 边界 |
+| --- | --- | --- | --- |
+| P30 | [Detecting Overly Strong Preconditions in Refactoring Engines，TSE 44(5), 2018](https://leopoldomt.github.io/assets/pdf/2018-tse.pdf) | 摘要、§3.2、§4.1、oracle 有效性威胁 | 实验中禁用条件以测试重构器，不是生产免检；测试 oracle 有盲区，未复现 |
+| P31 | [Kayak: Safe Semantic Refactoring to Java Streams，v1](https://arxiv.org/html/1712.07388v1) | 问题定义与 §5 合成、验证、异常/终止边界 | 特定 Java Stream 模型的 CEGIS，非通用 Rust 重构证明 |
+
+检索与取舍见 [定向查新](notes/2026-11-05-feedback-and-rejection-prior-work.md)。三份新归档含 P19 完整 v2 HTML，
+不覆盖原摘要副本；未执行作者工件。牛津 precondition inference 页面 403，不纳入已读正文来源。
+P19 阅读状态已从摘要推进到 §3.2–3.3、附录 A.2–A.3、Algorithm 1 与表9/13 的定向核查，
+见 [ReGAL 反馈记录](notes/2026-11-05-regal-feedback.md)；未审计实现或完整实验。
+
+### 2026-11-05 P16 前置条件精读
+
+直接读取已归档作者 PDF 的 §3 概述、§3.3.4、§3.4.1–3.4.3、§3.5，逐项核对八条前置条件、
+求值顺序例子及作者对替代编码成本的讨论。未形式化审查公式或运行工具。
+见 [P16 精读](notes/2026-11-05-p16-preconditions-reading.md)；旧版本工具边界不外推为最新能力。
+另直接复核 §5.2、§5.4.6 的样本分母、序列化修正和并发未验证边界，见
+[验证审计](notes/2026-11-05-p16-validation-audit.md)；未运行工具或审查原始结果工件。
+
+### 2026-11-04 A4 定向复核
+
+本轮未新增来源编号。P04 已读取归档作者 PDF 的 III.E/F、Table II 及有效性威胁中历史标签段落，
+明确平衡采样、部分人工特征及历史重构偏差；未复现。P21 v3 §5 与 P15 v1 §4.6 在线复核，
+未检查最新工具实现。具体范围和研究取舍见 [A4 收敛记录](notes/2026-11-04-a4-research-convergence.md)。
+
 ### 2026-10-29 历史意见与规则自动化
 
 | ID | 来源 | 阅读范围 | 主要边界 |
@@ -21,10 +89,10 @@
 
 | ID | 来源 | 本轮阅读范围 | 支撑问题 |
 | --- | --- | --- | --- |
-| P01 | [SourcererCC: Scaling Code Clone Detection to Big Code](https://arxiv.org/abs/1512.06448) | 作者摘要及官方仓库说明 | token 克隆和索引化召回基线 |
+| P01 | [SourcererCC: Scaling Code Clone Detection to Big Code](https://arxiv.org/abs/1512.06448v1) | 摘要；2026-11-05 补读 §2、§3.1–3.4 与指定评估/威胁段落 | token 克隆和索引化召回基线；非功能等价，未复现 |
 | P02 | [RepoCoder](https://arxiv.org/abs/2303.12570)；[EMNLP 2023 正文](https://aclanthology.org/2023.emnlp-main.151.pdf) | 摘要与方法概述 | 仓库级检索增强已有工作；任务是补全 |
 | P03 | [GraphCoder](https://arxiv.org/abs/2406.07003) | v2 摘要 | 代码上下文图和粗到细检索 |
-| P04 | [Recommending Clones for Refactoring Using Design, Context, and History](https://cormack.uwaterloo.ca/~migod/papers/2014/icsme14-wei.pdf) | 作者 PDF 的摘要、引言与问题定义 | 设计/上下文/历史参与可重构性判断已有先例 |
+| P04 | [Recommending Clones for Refactoring Using Design, Context, and History](https://cormack.uwaterloo.ca/~migod/papers/2014/icsme14-wei.pdf) | 摘要、引言、问题定义；2026-11-04 补核 III.E/F、Table II 及历史标签有效性威胁 | 设计/上下文/历史推荐已有；下采样、人工特征与标签偏差，未复现 |
 | P05 | [LAURA](https://yuxiazhang-bit.github.io/papers/ASE25_LAURA.pdf) | 作者 PDF 的方法、评估/消融表及重复代码案例 | 检索增强 review、评论价值评价 |
 | P06 | [How the Misuse of a Dataset Harmed Semantic Clone Detection](https://arxiv.org/html/2505.04311v1) | 作者正文及摘要核对；未复验原样本 | BigCloneBench 语义标签有效性的警示；统计范围见研究笔记 |
 | P07 | [Semantic Code Clone Detection: Are We There Yet?](https://arxiv.org/abs/2606.25272) | 预印本摘要 | 分布迁移与捷径学习风险；不是本项目实测 |
@@ -105,6 +173,12 @@ A05 的 [US20150378692A1](https://patents.google.com/patent/US20150378692A1/en)�
 
 ## 工具、协议与产业资料
 
+2026-11-05 新增 T11：[Jenkins 构建 3885](https://jenkins.openkylin.top/job/x-kernel-ci-test/3885/)
+及其 `artifact/artifacts/facts/` 下双平台 status/manifest、aarch64 klazy 样本。五份原始文件登记哈希；
+校验范围见 [执行准备](notes/2026-11-05-execution-readiness.md)，未下载全量、未验证语义正确性。
+三项目官方仓库与固定 HEAD 的定向身份调查见 [Rust OS 记录](notes/2026-11-05-rust-os-identities.md)，
+包含滚动 README 与固定 SHA 读取的区别；未保存整仓副本或完整许可证审计。
+
 | ID | 来源 | 阅读范围与用途 |
 | --- | --- | --- |
 | T01 | [SourcererCC 仓库](https://github.com/Mondego/SourcererCC) | README；机械克隆基线 |
@@ -153,6 +227,33 @@ evidence 中保存关键固定版本源码/文档；完整仓库可由固定 SHA
 | 科研规划补充 | `site.arxiv.org code clone refactoring benchmark evaluation semantic clones dataset 2025 2026`；`site.conf.researchr.org refactoring large language models behavior preservation benchmark 2025` | P09/P10；重新核对 P06/P07；其余搜索命中未作为结论证据 |
 
 ## 本地项目证据
+
+- [基线复现矩阵](notes/2026-11-05-baseline-reproduction-matrix.md)、
+  [SourcererCC/Wrangler准备核查](notes/2026-11-05-scc-wrangler-reproduction-readiness.md)、
+  [Librarian准备核查](notes/2026-11-05-librarian-reproduction-readiness.md)：官方仓库固定SHA及任务/环境差异，尚未运行。
+- T12：[BigCloneEval官方评价器](https://github.com/jeffsvajlenko/BigCloneEval)，
+  本轮固定`6d393ec8adb1d71493d09881ba520659b6c2c68e`，仅ReadMe归档，未下载基准数据库。
+
+- [模块路径官方规则](notes/2026-11-05-module-path-rules.md)与
+  [v2模块映射实现](notes/2026-11-05-module-mapping-workflow.md)：官方Reference/Cargo Book、
+  固定树57声明、18项路径案例和3项门禁反例；文件候选不作为编译语义真值。
+
+- [四 crate 单位清单](notes/2026-11-05-multi-crate-unit-inventory.md)：固定树88文件、
+  syn v2输出、15个适配样例及解析器失败负向检查；记录在 evidence/inventory，不是检测效果证据。
+
+- [结构化解析验证](notes/2026-11-05-structured-parser-check.md)及
+  [syn 接口边界](notes/2026-11-05-syn-interface-boundaries.md)：
+  固定依赖源码、14个构造输入、5个固定源码文件；工具源码/锁文件和机器可读结果保留。
+
+- [Rust 单位定位探针](notes/2026-11-05-rust-unit-location-probe.md)：
+  本机 rust-analyzer 1.95.0 的版本/帮助/实际解析输出，以及固定 klazy 源码和 T11 制品。
+  结果含七个构造输入、五个源文件及关联失败记录，不是新论文或检测效果评估。
+
+- CI 3885 固定树 `7e3ac94431a0dbb376d2fc8d85098deeff1bba09`：
+  [源码关联及字段核查](notes/2026-11-05-facts-source-alignment.md)、
+  [配置生成与可恢复边界](notes/2026-11-05-facts-config-provenance.md)。
+  对应材料盘点和 klazy 样本核查结果保存在 `research/evidence/inventory/`；
+  这是固定源码和既有制品的检查，不是新论文证据或重复检测实验。
 
 - X-Kernel 快照：`43b5f35d4a7bc6a0fa766d4fd3654844bb66e028`。
 - [现有复用审查](../../review/guidelines.md)、[CG-041](../../../code-guidelines/CG-041-reuse-safe-boundary-abstractions.md)、

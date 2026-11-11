@@ -1,0 +1,305 @@
+Running x-kernel...
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s
+     Running `/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target/tools/xkmake/x86_64-unknown-linux-gnu/debug/xkmake run --target-dir /root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target --unittest --unittest-crate 'kvfs::mount::tests,kvfs::node::dentry::tests_dentry' --disk-image /root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/original.img --no-net --no-vsock --no-accel`
+📝 Generating Rust const definitions from resolved Kconfig...
+Output: /root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target/kbuild/kplat-x86_64
+📝 Generated config.rs at: /root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target/kbuild/kplat-x86_64/config.rs
+✅ Generated config.rs successfully
+warning: enum `NmiAttributeSlot` is never used
+  --> vendor/arm-gic-driver/src/define.rs:85:17
+   |
+85 | pub(crate) enum NmiAttributeSlot {
+   |                 ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `nmi_attribute_slot` is never used
+  --> vendor/arm-gic-driver/src/define.rs:93:15
+   |
+93 | pub(crate) fn nmi_attribute_slot(intid: IntId) -> Option<NmiAttributeSlot> {
+   |               ^^^^^^^^^^^^^^^^^^
+
+warning: `arm-gic-driver` (lib) generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 0.23s
+    Finished `release` profile [optimized] target(s) in 0.11s
+    Finished `release` profile [optimized] target(s) in 0.12s
+Running kplat-x86_64 (x86_64-unknown-none)
+qemu-system-x86_64 \
+  -m 1g \
+  -smp 4 \
+  -machine q35 \
+  -kernel /root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-preflight/2026-11-05-metadata-preflight-03/kernel-target/xkmake/kplat-x86_64/release/kernel.bzimg \
+  -device 'virtio-blk-pci,drive=disk0' \
+  -drive 'id=disk0,if=none,format=raw,file=/root/codes/x-kernel-worktrees/ai-review-book/.build/metadata-pair/2026-11-05-metadata-pair-01/original.img' \
+  -object 'rng-random,id=host_rng0' \
+  -device 'virtio-rng-pci,rng=host_rng0' \
+  -nographic
+c[?7l[2J[0mSeaBIOS (version 1.16.3-debian-1.16.3-2)
+
+
+iPXE (https://ipxe.org) 00:02.0 CA00 PCI2.10 PnP PMM+3EFC6A20+3EF06A20 CA00
+Press Ctrl-B to configure iPXE (PCI 00:02.0)...                                                                               
+
+
+Booting from ROM..[boot] kruntime primary start cpu=0 boot_info=0xffff80000020b160
+[boot] firmware: ACPI RSDP at 0xf52b0
+[boot] firmware: hwdesc source=acpi
+[boot] firmware: memory source=x86 boot protocol
+[boot] firmware: no cmdline
+[boot] kruntime memory regions ready
+[boot] [boot] page metadata: covered_pages=254463, metadata_pages=994, free inventory pages=253469
+[boot] kruntime allocator ready
+[boot] memory space map ready
+[boot] TSC frequency: 2497731 kHz, source: PIT calibration
+[boot] timer init
+[boot] console driver init
+[boot] rtc init
+
+                 ++
+             *  ***
+           *******
+         *******++
+      ********+===
+    ******#*+======
+   *******#***++===
+   *********+**===
+  ##*********##==                  ====+
+%##****++==+****#                ***+=**
+#****++=====++****##            ********
+####*+=======+******===-     ***#*##****
+ #%#******+**+==++**=======+*+*#%
+ %#****+******=====+====+++==**
+  #*********##***###********##%
+   ***##%#%%%%*****#*###*****#%
+   *#%%%#%%%%%****   %%*******#%
+   #%%%%%%          %%%##***###%%
+    **#%           %%%%#% **#**##
+   ###%%         %%%%%   %%%***
+ %%%%%%        %%%%%%%  %%%%#*
+ %%%%%%                %%%%%%+=
+
+Boot at 2026-11-05 09:23:27.001325168 UTC
+
+[37m[  0.011426 kruntime:863] [33mCPU 0: local irq_work unavailable; NMI reclamation is unsupported (see platform preparation diagnostics)[m[m
+[37m[  0.065007 kruntime:863] [33mCPU 2: local irq_work unavailable; NMI reclamation is unsupported (see platform preparation diagnostics)[m[m
+[37m[  0.065031 kruntime:863] [33mCPU 3: local irq_work unavailable; NMI reclamation is unsupported (see platform preparation diagnostics)[m[m
+[37m[  0.065035 kruntime:863] [33mCPU 1: local irq_work unavailable; NMI reclamation is unsupported (see platform preparation diagnostics)[m[m
+[37m[  0.486405 0:18446603336967059504 fbdevice:84] [33mfbdev emulation unavailable: ()[m[m
+[37m[  8.853369 0:18446603336967059504 knet:187] [33m  No network device found![m[m
+[37m[  8.855979 0:18446603336967059504 knet:242] [33m  No vsock device found![m[m
+arch = x86_64
+platform = kplat-x86_64
+target = x86_64-unknown-none
+build_mode = release
+build_machine = unknown@75130fdbd48d
+build_time = 2026-11-05T09:19:58.894398492Z
+log_level = warn
+backtrace = false
+nr_cpus_max = 4
+vmm = off
+config_sha256 = b1670e76942c414e88698891ac563c5dd3cd2aad241fc70555c9ec943f01ce08
+git_commit = unknown
+git_dirty = unknown
+build_id = 566b8f1722e2c404649441e4b0438a8780ff456b433951bd136ccd09d39ca8ca
+smp = 4
+[37m[  8.859114 0:18446603336967059504 entry:138] [33mCleaning up stale coverage data if exists...[m[m
+Running unit tests with crate filter: kvfs::mount::tests,kvfs::node::dentry::tests_dentry
+================================
+Starting unit tests [unittest] (parallel)...
+  2 module(s), 94 test(s)
+================================
+  [kvfs::mount::tests] (57 tests)
+  [kvfs::node::dentry::tests_dentry] (37 tests)
+      START  kvfs::mount::tests::test_mount_flags_combine
+      START  kvfs::mount::tests::test_statfs_flags_values
+      START  kvfs::mount::tests::test_mount_flags_relatime
+      RESULT kvfs::mount::tests::test_statfs_flags_values ... ok
+      RESULT kvfs::mount::tests::test_mount_flags_combine ... ok
+      RESULT kvfs::mount::tests::test_mount_flags_relatime ... ok
+      START  kvfs::mount::tests::test_mountpoint_thread_safety
+      START  kvfs::mount::tests::test_mount_flags_constants_values
+      RESULT kvfs::mount::tests::test_mount_flags_constants_values ... ok
+      START  kvfs::mount::tests::test_readonly_mount_blocks_create
+      RESULT kvfs::mount::tests::test_mountpoint_thread_safety ... ok
+      START  kvfs::mount::tests::test_readonly_mount_blocks_rename
+      START  kvfs::mount::tests::test_root_mount_can_be_readonly
+      START  kvfs::mount::tests::test_readonly_mount_blocks_unlink
+      START  kvfs::mount::tests::test_root_mount_defaults_to_writable
+      START  kvfs::mount::tests::test_chown_setid_cleanup_matches_linux
+      START  kvfs::mount::tests::test_readonly_mount_skips_time_updates
+      START  kvfs::mount::tests::test_pivot_root_rejects_mounted_put_old
+      START  kvfs::mount::tests::test_relatime_equal_times_updates_atime
+      START  kvfs::mount::tests::test_unmount_rejects_non_mount_root_path
+      RESULT kvfs::mount::tests::test_chown_setid_cleanup_matches_linux ... ok
+      START  kvfs::mount::tests::test_non_relatime_overwrites_future_atime
+      RESULT kvfs::mount::tests::test_root_mount_defaults_to_writable ... ok
+      RESULT kvfs::mount::tests::test_unmount_rejects_non_mount_root_path ... ok
+      START  kvfs::mount::tests::test_metadata_owner_and_group_authorization
+      START  kvfs::mount::tests::test_inode_times_returns_seeded_timestamps
+      RESULT kvfs::mount::tests::test_readonly_mount_blocks_create ... ok
+      RESULT kvfs::mount::tests::test_non_relatime_overwrites_future_atime ... ok
+      START  kvfs::mount::tests::test_update_cmtime_advances_mtime_and_ctime
+      START  kvfs::mount::tests::test_metadata_uses_synthetic_device_identity
+      RESULT kvfs::mount::tests::test_inode_times_returns_seeded_timestamps ... ok
+      RESULT kvfs::mount::tests::test_readonly_mount_skips_time_updates ... ok
+      START  kvfs::mount::tests::test_chown_without_new_ids_still_cleans_setid
+      RESULT kvfs::mount::tests::test_update_cmtime_advances_mtime_and_ctime ... ok
+      START  kvfs::mount::tests::test_relatime_future_atime_skips_touch_atime
+      START  kvfs::mount::tests::test_bind_mount_unmount_preserves_source_dentry
+      RESULT kvfs::mount::tests::test_metadata_uses_synthetic_device_identity ... ok
+      START  kvfs::mount::tests::test_render_from_reports_unreachable_mount_tree
+      START  kvfs::mount::tests::test_pivot_root_allows_put_old_equal_to_new_root
+      START  kvfs::mount::tests::test_unmount_rejects_mount_with_nested_children
+      RESULT kvfs::mount::tests::test_render_from_reports_unreachable_mount_tree ... ok
+      START  kvfs::mount::tests::test_pivot_root_rejects_plain_directory_new_root
+      RESULT kvfs::mount::tests::test_readonly_mount_blocks_rename ... ok
+      START  kvfs::mount::tests::test_pivot_root_rejects_put_old_outside_new_root
+      RESULT kvfs::mount::tests::test_root_mount_can_be_readonly ... ok
+      START  kvfs::mount::tests::test_unmount_all_recursively_clears_nested_mounts
+      START  kvfs::mount::tests::test_child_mount_flags_are_independent_from_parent
+      RESULT kvfs::mount::tests::test_relatime_equal_times_updates_atime ... ok
+      START  kvfs::mount::tests::test_make_mount_private_rejects_non_mount_root_path
+      RESULT kvfs::mount::tests::test_child_mount_flags_are_independent_from_parent ... ok
+      START  kvfs::mount::tests::test_sticky_directory_rejects_unrelated_user_delete
+      RESULT kvfs::mount::tests::test_chown_without_new_ids_still_cleans_setid ... ok
+      START  kvfs::mount::tests::test_make_mount_private_accepts_visible_initial_root
+      RESULT kvfs::mount::tests::test_make_mount_private_rejects_non_mount_root_path ... ok
+      START  kvfs::mount::tests::test_pivot_root_swaps_visible_root_and_relocates_old
+      RESULT kvfs::mount::tests::test_make_mount_private_accepts_visible_initial_root ... ok
+      START  kvfs::mount::tests::context_private_state_replacement_drops_erased_values
+      RESULT kvfs::mount::tests::test_pivot_root_rejects_plain_directory_new_root ... ok
+      RESULT kvfs::mount::tests::context_private_state_replacement_drops_erased_values ... ok
+      START  kvfs::mount::tests::test_overmount_hides_previous_and_restores_on_unmount
+      START  kvfs::mount::tests::test_nested_mount_root_dotdot_crosses_to_parent_mount
+      RESULT kvfs::mount::tests::test_readonly_mount_blocks_unlink ... ok
+      START  kvfs::mount::tests::test_chmod_setgid_retention_requires_fsetid_not_fowner
+      RESULT kvfs::mount::tests::test_metadata_owner_and_group_authorization ... ok
+      START  kvfs::mount::tests::test_remount_updates_mount_and_shared_superblock_flags
+      RESULT kvfs::mount::tests::test_pivot_root_rejects_mounted_put_old ... ok
+      RESULT kvfs::mount::tests::test_chmod_setgid_retention_requires_fsetid_not_fowner ... ok
+      START  kvfs::mount::tests::test_reconfigure_rw_rejects_backend_readonly_superblock
+      START  kvfs::mount::tests::test_hidden_mount_cannot_be_unmounted_while_overmounted
+      START  kvfs::mount::tests::failed_context_initialization_drops_both_private_states
+      RESULT kvfs::mount::tests::test_relatime_future_atime_skips_touch_atime ... ok
+      START  kvfs::mount::tests::test_stat_rdonly_combined_with_mount_rdonly_is_readonly
+      RESULT kvfs::mount::tests::test_stat_rdonly_combined_with_mount_rdonly_is_readonly ... ok
+      START  kvfs::mount::tests::test_pivot_root_rejects_current_visible_root_as_new_root
+      RESULT kvfs::mount::tests::test_pivot_root_allows_put_old_equal_to_new_root ... ok
+      START  kvfs::mount::tests::test_chown_new_group_drops_sgid_on_generated_mode_change
+      START  kvfs::mount::tests::test_chown_without_new_ids_requires_fowner_to_clear_setid
+      RESULT kvfs::mount::tests::test_pivot_root_rejects_current_visible_root_as_new_root ... ok
+      RESULT kvfs::mount::tests::test_unmount_rejects_mount_with_nested_children ... ok
+      RESULT kvfs::mount::tests::test_sticky_directory_rejects_unrelated_user_delete ... ok
+      START  kvfs::mount::tests::test_writable_mount_allows_operations_to_reach_filesystem
+      RESULT kvfs::mount::tests::test_chown_new_group_drops_sgid_on_generated_mode_change ... ok
+      START  kvfs::mount::tests::test_mount_namespace_clone_copies_tree_and_retargets_paths
+      RESULT kvfs::mount::tests::test_unmount_all_recursively_clears_nested_mounts ... ok
+      RESULT kvfs::mount::tests::test_pivot_root_rejects_put_old_outside_new_root ... ok
+      START  kvfs::mount::tests::test_mountpoint_child_tracking_updates_for_mount_and_unmount
+      START  kvfs::mount::tests::test_mounting_a_superblock_over_itself_preserves_child_mounts
+      RESULT kvfs::mount::tests::test_writable_mount_allows_operations_to_reach_filesystem ... ok
+      START  kvfs::mount::tests::test_unresolved_root_path_resolves_covering_mount_after_pivot
+      RESULT kvfs::mount::tests::test_mountpoint_child_tracking_updates_for_mount_and_unmount ... ok
+      START  kvfs::mount::tests::test_chown_without_new_ids_is_a_noop_when_mode_does_not_change
+      START  kvfs::mount::tests::test_initial_namespace_layers_visible_root_over_structural_root
+      RESULT kvfs::mount::tests::test_nested_mount_root_dotdot_crosses_to_parent_mount ... ok
+      START  kvfs::mount::tests::test_mount_root_keeps_root_dentry_name_and_dotdot_crosses_mount
+      RESULT kvfs::mount::tests::test_pivot_root_swaps_visible_root_and_relocates_old ... ok
+      START  kvfs::mount::tests::test_filesystem_stat_readonly_makes_location_effectively_readonly
+      RESULT kvfs::mount::tests::test_initial_namespace_layers_visible_root_over_structural_root ... ok
+      START  kvfs::mount::tests::test_mkdir_strips_requested_setid_bits_before_owner_initialization
+      RESULT kvfs::mount::tests::test_filesystem_stat_readonly_makes_location_effectively_readonly ... ok
+      START  kvfs::mount::tests::test_timestamp_authorization_distinguishes_current_and_explicit_values
+      RESULT kvfs::mount::tests::test_overmount_hides_previous_and_restores_on_unmount ... ok
+      RESULT kvfs::mount::tests::test_mount_root_keeps_root_dentry_name_and_dotdot_crosses_mount ... ok
+      START  kvfs::node::dentry::tests_dentry::test_dentry_key_uniqueness
+      START  kvfs::node::dentry::tests_dentry::test_dentry_rejects_invalid_child_names
+      RESULT kvfs::mount::tests::test_mkdir_strips_requested_setid_bits_before_owner_initialization ... ok
+      START  kvfs::node::dentry::tests_dentry::test_dentry_file_helpers_and_private_data
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_rejects_invalid_child_names ... ok
+      START  kvfs::node::dentry::tests_dentry::test_dentry_positive_and_negative_helpers
+      RESULT kvfs::mount::tests::test_reconfigure_rw_rejects_backend_readonly_superblock ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_file_helpers_and_private_data ... ok
+      START  kvfs::node::dentry::tests_dentry::test_remove_rejects_parent_inode_as_victim
+      START  kvfs::node::dentry::tests_dentry::test_direntry_read_link_and_downcast_paths
+      RESULT kvfs::mount::tests::test_mounting_a_superblock_over_itself_preserves_child_mounts ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rmdir_uses_directory_removal_callback
+      RESULT kvfs::mount::tests::test_mount_namespace_clone_copies_tree_and_retargets_paths ... ok
+      START  kvfs::node::dentry::tests_dentry::test_create_instantiates_cached_lookup_miss
+      RESULT kvfs::mount::tests::test_hidden_mount_cannot_be_unmounted_while_overmounted ... ok
+      START  kvfs::node::dentry::tests_dentry::test_lookup_non_cacheable_negative_retracts
+      RESULT kvfs::mount::tests::test_unresolved_root_path_resolves_covering_mount_after_pivot ... ok
+      START  kvfs::node::dentry::tests_dentry::test_lookup_non_cacheable_positive_retracts
+      RESULT kvfs::mount::tests::test_timestamp_authorization_distinguishes_current_and_explicit_values ... ok
+      RESULT kvfs::mount::tests::test_chown_without_new_ids_is_a_noop_when_mode_does_not_change ... ok
+      START  kvfs::node::dentry::tests_dentry::test_directory_inode_rejects_second_live_alias
+      RESULT kvfs::node::dentry::tests_dentry::test_lookup_non_cacheable_positive_retracts ... ok
+      START  kvfs::node::dentry::tests_dentry::test_direntry_parent_path_and_ancestor_helpers
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_key_uniqueness ... ok
+      START  kvfs::node::dentry::tests_dentry::test_unlink_validator_observes_callback_victim
+      RESULT kvfs::node::dentry::tests_dentry::test_directory_inode_rejects_second_live_alias ... ok
+      START  kvfs::node::dentry::tests_dentry::test_cross_directory_rename_moves_source_dentry
+      RESULT kvfs::mount::tests::test_chown_without_new_ids_requires_fowner_to_clear_setid ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_replace_keeps_source_inode_identity
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_positive_and_negative_helpers ... ok
+      START  kvfs::node::dentry::tests_dentry::test_replace_lookup_candidate_preserves_replacer
+      RESULT kvfs::node::dentry::tests_dentry::test_unlink_validator_observes_callback_victim ... ok
+      START  kvfs::node::dentry::tests_dentry::test_completed_negative_lookup_remains_cacheable
+      RESULT kvfs::node::dentry::tests_dentry::test_rmdir_uses_directory_removal_callback ... ok
+      START  kvfs::node::dentry::tests_dentry::test_superblock_inode_cache_reuses_live_identity
+      RESULT kvfs::mount::tests::test_bind_mount_unmount_preserves_source_dentry ... ok
+      START  kvfs::node::dentry::tests_dentry::test_bind_super_block_skips_non_cacheable_children
+      RESULT kvfs::node::dentry::tests_dentry::test_remove_rejects_parent_inode_as_victim ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_rejects_directory_move_into_descendant
+      RESULT kvfs::node::dentry::tests_dentry::test_create_instantiates_cached_lookup_miss ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_rejects_noreplace_exchange_combination
+      START  kvfs::node::dentry::tests_dentry::test_rename_target_ancestor_uses_linux_trap_errors
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_rejects_noreplace_exchange_combination ... ok
+      RESULT kvfs::mount::tests::failed_context_initialization_drops_both_private_states ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_directory_emptiness_is_filesystem_owned
+      RESULT kvfs::node::dentry::tests_dentry::test_lookup_non_cacheable_negative_retracts ... ok
+      START  kvfs::node::dentry::tests_dentry::test_invalidate_cached_child_handles_negative_dentry
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_target_ancestor_uses_linux_trap_errors ... ok
+      START  kvfs::node::dentry::tests_dentry::test_distinct_entries_create_distinct_inode_identities
+      RESULT kvfs::mount::tests::test_remount_updates_mount_and_shared_superblock_flags ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_noreplace_rejects_target_with_source_inode
+      RESULT kvfs::node::dentry::tests_dentry::test_invalidate_cached_child_handles_negative_dentry ... ok
+      START  kvfs::node::dentry::tests_dentry::test_directory_constructor_reuses_alias_at_same_location
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_directory_emptiness_is_filesystem_owned ... ok
+      START  kvfs::node::dentry::tests_dentry::test_failed_root_initialization_drops_nascent_superblock
+      RESULT kvfs::node::dentry::tests_dentry::test_distinct_entries_create_distinct_inode_identities ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_directory_constructor_reuses_alias_at_same_location ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_noreplace_rejects_target_with_source_inode ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_direntry_read_link_and_downcast_paths ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_direntry_parent_path_and_ancestor_helpers ... ok
+      START  kvfs::node::dentry::tests_dentry::test_dentry_backing_metadata_refresh_validates_entry_state
+      START  kvfs::node::dentry::tests_dentry::test_superblock_inode_cache_isolates_equal_inode_numbers
+      START  kvfs::node::dentry::tests_dentry::test_parallel_lookup_candidate_does_not_escape_cache_snapshot
+      RESULT kvfs::node::dentry::tests_dentry::test_parallel_lookup_candidate_does_not_escape_cache_snapshot ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_moves_cache_entry_without_changing_inode_identity
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_replace_keeps_source_inode_identity ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_completed_negative_lookup_remains_cacheable ... ok
+      START  kvfs::node::dentry::tests_dentry::test_hashed_child_without_external_reference_keeps_directory_nonempty
+      START  kvfs::node::dentry::tests_dentry::test_parallel_lookup_replacement_publishes_only_completed_entry
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_moves_cache_entry_without_changing_inode_identity ... ok
+      START  kvfs::node::dentry::tests_dentry::test_dentry_cache_retains_hashed_children_and_preserves_parent_lifetime
+      RESULT kvfs::node::dentry::tests_dentry::test_parallel_lookup_replacement_publishes_only_completed_entry ... ok
+      START  kvfs::node::dentry::tests_dentry::test_rename_noreplace_rejects_existing_target_before_filesystem_callback
+      START  kvfs::node::dentry::tests_dentry::test_rename_exchange_swaps_cache_entries_without_changing_inode_identity
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_noreplace_rejects_existing_target_before_filesystem_callback ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_backing_metadata_refresh_validates_entry_state ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_failed_root_initialization_drops_nascent_superblock ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_replace_lookup_candidate_preserves_replacer ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_rejects_directory_move_into_descendant ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_bind_super_block_skips_non_cacheable_children ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_cross_directory_rename_moves_source_dentry ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_hashed_child_without_external_reference_keeps_directory_nonempty ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_rename_exchange_swaps_cache_entries_without_changing_inode_identity ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_superblock_inode_cache_reuses_live_identity ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_superblock_inode_cache_isolates_equal_inode_numbers ... ok
+      RESULT kvfs::node::dentry::tests_dentry::test_dentry_cache_retains_hashed_children_and_preserves_parent_lifetime ... ok
+
+  >>> Test results: 94 passed, 0 failed, 0 ignored, 94 total
+=== UNITTEST_STATUS: ALL_TESTS_PASSED ===
+=== UNITTEST_STATUS: COVERAGE_PERSISTED ===
+Skipping coverage generation (unittest image built without coverage)

@@ -1,0 +1,52 @@
+{
+  "schema": "multi-unit-candidate/1",
+  "id": "X007",
+  "label": "unlabelled",
+  "tm01_evidence": "research/evidence/runs/2026-11-05-transfer-tm01-01/report.json",
+  "tm01_scope": "Verbatim snippets with controlled I/O; Starry Offset and X-Kernel local file-pair positions only; not syscall or f_pos integration",
+  "discovery": "Purposive reading of transfer entry points and shared implementation; not detector output",
+  "question": "How do entry adapters, data movement, position advancement and completion accounting jointly implement buffered transfer?",
+  "claim": "Both snapshots contain shared transfer mechanisms across multiple entries; opportunity for further abstraction is unconfirmed",
+  "lexical_similarity": "not_measured",
+  "source_lineage": "not_audited",
+  "groups": [
+    {
+      "repository": "starry",
+      "revision": "2e075accf4fb0aefdd1d252ebd9ccf29727d9923",
+      "path": "kernel/src/syscall/fs/io.rs",
+      "evidence": "research/evidence/runs/2026-11-05-starry-transfer-01",
+      "members": ["sys_sendfile", "sys_copy_file_range", "sys_splice", "do_send", "SendFile::read", "SendFile::write", "SendFile::has_data"],
+      "observed_edges": [
+        ["sys_sendfile", "do_send"], ["sys_copy_file_range", "do_send"], ["sys_splice", "do_send"],
+        ["do_send", "SendFile::read"], ["do_send", "SendFile::write"], ["do_send", "SendFile::has_data"]
+      ],
+      "existing_reuse": "Three syscall entries delegate transfer iteration to do_send"
+    },
+    {
+      "repository": "xkernel",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "path": "fs/kvfs/src/transfer.rs",
+      "evidence": "research/evidence/runs/2026-11-05-xkernel-transfer-01",
+      "members": ["transfer_files", "copy_file_range", "resolve_pair_positions", "PairPositions::commit", "pump", "file_pair_step", "pump_file_to_pipe", "pump_pipe_to_file"],
+      "observed_edges": [
+        ["transfer_files", "resolve_pair_positions"], ["transfer_files", "pump"], ["transfer_files", "file_pair_step"],
+        ["copy_file_range", "resolve_pair_positions"], ["copy_file_range", "pump"], ["copy_file_range", "file_pair_step"],
+        ["pump_file_to_pipe", "pump"], ["pump_pipe_to_file", "pump"]
+      ],
+      "existing_reuse": "Selected plain-file and pipe adapters share settlement through pump; native copy and pipe-to-pipe branches need separate treatment"
+    }
+  ],
+  "edge_status": "Manually read source-level calls, including closure calls; not a compiler-generated or complete runtime graph",
+  "obligations": [
+    {"id": "TM01", "scenario": "source reads 8 bytes, destination accepts 3", "observe": ["returned count", "source position", "destination position", "pending tail"], "status": "observed_difference_with_test_doubles"},
+    {"id": "TM02", "scenario": "one full chunk succeeds, next write fails", "observe": ["error versus completed-prefix return", "committed positions", "destination side effects"], "status": "not_run"},
+    {"id": "TM03", "scenario": "same open file description versus distinct descriptions with managed/explicit offsets", "observe": ["lock acquisition order", "shared position policy", "validation order"], "status": "not_run"}
+  ],
+  "scope_limits": [
+    "Not a zero-copy equivalence claim",
+    "No whole-kernel or concurrency tests executed",
+    "Do not count callers of one shared engine as independent duplicate opportunities",
+    "Do not infer low lexical similarity without measurement",
+    "This is one mechanism case group, not a pairwise cross product of all functions"
+  ]
+}

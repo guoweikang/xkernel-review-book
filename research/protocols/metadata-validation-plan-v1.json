@@ -1,0 +1,37 @@
+{
+  "schema": "metadata-validation-plan/1",
+  "status": "paired_tests_and_candidate_non_unittest_build_passed_development_case_closed",
+  "disposition": "research/protocols/metadata-case-disposition-v1.json",
+  "paired_evidence": "research/evidence/runs/2026-11-05-metadata-pair-01/report.json",
+  "original_evidence": "research/evidence/runs/2026-11-05-metadata-original-01/report.json",
+  "preflight_evidence": "research/evidence/runs/2026-11-05-metadata-preflight-03/report.json",
+  "next_gate": "No further experiment without new maintenance evidence; return to discovery evidence classification",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "patch": "research/evidence/runs/2026-11-05-metadata-fixture-patch-02/candidate.patch",
+  "filter": "kvfs::mount::tests,kvfs::node::dentry::tests_dentry",
+  "static_test_counts": {"kvfs::mount::tests": 57, "kvfs::node::dentry::tests_dentry": 37},
+  "platform_seed": "platforms/kplat-x86_64/qemu_defconfig",
+  "proposed_command": "timeout --kill-after=10 600 make unittest UNITTEST_CRATE=kvfs::mount::tests,kvfs::node::dentry::tests_dentry ACCEL=n XKMAKE_ARGS='--no-net --no-vsock'",
+  "command_status": "Historical proposed command superseded by original_evidence exact command with dedicated ext4 and explicit coverage disabled",
+  "required_before_execution": [
+    "Use separate fixed-source scratch copies and output directories, not current kernel working tree",
+    "Resolve platform seed using same-revision xconfig; record final .config, generated Cargo config and environment",
+    "Identify required disk/image/firmware inputs and dependency cache without automatic downloads or altering user images",
+    "Build same-revision xtask tools rather than trust existing binaries with unknown provenance",
+    "Record original and candidate inputs, exact patch, lockfile identities and compiler/QEMU versions"
+  ],
+  "acceptance": [
+    "Original run passes before judging candidate",
+    "Both logs contain exactly the same expected 94 distinct result names, all ok; no missing, extra, ignored or duplicate results",
+    "One success marker, no failure marker, successful command exit; timeout is not a pass",
+    "Original and candidate differ only by proposal, use matching resolved config and execution arguments",
+    "Separately check normal non-unittest build gating before claiming no production effect"
+  ],
+  "stop_conditions": [
+    "Missing dependency/image/configuration is a precondition gap, not a patch regression",
+    "If baseline fails, retain logs and do not fix unrelated kernel failures",
+    "Do not create host mocks or a new runner to bypass a costly real-kernel validation path",
+    "Do not reuse this static count as evidence that 94 tests actually ran"
+  ],
+  "log_gate": "scripts/check_metadata_test_log.py"
+}

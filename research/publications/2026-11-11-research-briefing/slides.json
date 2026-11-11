@@ -1,0 +1,632 @@
+{
+  "title": "Rust系统代码相似与重构研究：动机、相关工作及复现进展",
+  "sources": {
+    "SCC": {
+      "short": "SourcererCC §3–4 / 表3、5",
+      "title": "Sajnani等，SourcererCC: Scaling Code Clone Detection to Big Code，ICSE 2016（固定v1）",
+      "url": "https://arxiv.org/pdf/1512.06448v1",
+      "paths": [
+        "research/notes/2026-11-05-candidate-token-baseline.md",
+        "research/evidence/originals/P01-sourcerercc.pdf"
+      ]
+    },
+    "SMOKE": {
+      "short": "本地原工具/边界验证",
+      "title": "SCC原工具冒烟与阈值/长度边界验证",
+      "paths": [
+        "research/notes/2026-11-05-scc-native-smoke.md",
+        "research/notes/2026-11-05-scc-boundaries-and-goal-gate.md",
+        "research/evidence/runs/2026-11-05-scc-native-02/report.json",
+        "research/evidence/runs/2026-11-05-scc-boundaries-01/report.json"
+      ]
+    },
+    "RUST": {
+      "short": "本地Rust适配报告",
+      "title": "固定xkernel四包语料与Rust输入适配实验",
+      "paths": [
+        "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/report.json",
+        "research/evidence/runs/2026-11-05-rust-scc-01/report.json"
+      ]
+    },
+    "COMMENT": {
+      "short": "Kuttal/Ghosh §III–IV / 表I",
+      "title": "Kuttal与Ghosh，Source Code Comments: Overlooked in the Realm of Code Clone Detection，2020",
+      "url": "https://arxiv.org/html/2006.14505v1",
+      "paths": [
+        "research/notes/2026-11-09-comment-clone-method-reading.md",
+        "research/notes/2026-11-09-comment-clone-artifact-readiness.md"
+      ]
+    },
+    "DOC": {
+      "short": "本地文档检索与逐对核查",
+      "title": "原生文档TF-IDF开发基线及top20源码核查",
+      "paths": [
+        "research/evidence/runs/2026-11-09-source-doc-inventory-02/report.json",
+        "research/evidence/runs/2026-11-09-doc-tfidf-01/report.json",
+        "research/evidence/runs/2026-11-09-doc-tfidf-review-01/report.json",
+        "research/notes/2026-11-09-doc-tfidf-review.md"
+      ]
+    },
+    "TFIDF": {
+      "short": "sklearn 1.7 官方定义",
+      "title": "scikit-learn 1.7 TF-IDF定义与本地参数核查",
+      "url": "https://scikit-learn.org/1.7/modules/feature_extraction.html#tfidf-term-weighting",
+      "paths": [
+        "research/notes/2026-11-09-tfidf-baseline-reference.md"
+      ]
+    },
+    "WRANGLER": {
+      "short": "Wrangler §4.1 / 本地未运行",
+      "title": "Li与Thompson，Incremental Clone Detection and Elimination for Erlang Programs，2011",
+      "url": "https://www.cs.kent.ac.uk/pubs/2011/3087/content.pdf",
+      "paths": [
+        "research/notes/2026-11-05-structural-semantic-candidates.md",
+        "research/notes/2026-11-05-scc-wrangler-reproduction-readiness.md"
+      ]
+    },
+    "LIB": {
+      "short": "Librarian v3 §3–6 / 附录E",
+      "title": "Kovačič等，Refactoring Codebases through Library Design，2025（v3）",
+      "url": "https://arxiv.org/html/2506.11058v3",
+      "paths": [
+        "research/notes/2026-10-27-librarian-reading-01.md",
+        "research/notes/2026-11-05-librarian-reproduction-readiness.md",
+        "research/notes/2026-11-11-librarian-presentation-audit.md",
+        "research/evidence/originals/P21-librarian-v3-full.html"
+      ]
+    },
+    "META": {
+      "short": "本地metadata成对验证",
+      "title": "metadata测试夹具提取、成对测试与采纳处置",
+      "paths": [
+        "research/notes/2026-11-05-metadata-paired-validation.md",
+        "research/notes/2026-11-05-metadata-case-disposition.md"
+      ]
+    },
+    "PLAN": {
+      "short": "研究计划 / 分层评价设计",
+      "title": "既定六阶段研究计划及分层评价方案",
+      "paths": [
+        "research/RESEARCH-PLAN.md",
+        "research/notes/2026-11-11-evaluation-layers.md",
+        "research/notes/2026-11-11-tool-model-boundaries.md"
+      ]
+    },
+    "BIG": {
+      "short": "BigClone入口核查 / 未运行",
+      "title": "BigCloneBench/BigCloneEval固定版本入口预检",
+      "url": "https://github.com/clonebench/BigCloneEval/tree/6d393ec8adb1d71493d09881ba520659b6c2c68e",
+      "paths": [
+        "research/notes/2026-11-11-discovery-benchmark-preflight.md"
+      ]
+    },
+    "AUDIT": {
+      "short": "历史证据审计",
+      "title": "本地论文材料主张与证据审计",
+      "paths": [
+        "research/notes/2026-11-11-manuscript-evidence-audit.md"
+      ]
+    }
+  },
+  "slides": [
+    {
+      "title": "Rust系统代码：从相似发现到合理重构",
+      "subtitle": "研究中汇报 · 以xkernel为主要试验场 · 2026.11.11",
+      "cards": [
+        {
+          "heading": "为什么研究",
+          "body": "发现已有实现与功能重叠\n减少重复维护与理解成本\n守住正确性、性能与代码清晰度"
+        },
+        {
+          "heading": "本次汇报",
+          "body": "研究问题与项目价值\n代表论文、数据与评价方法\n实际复现进展与下一步尝试"
+        }
+      ],
+      "takeaway": "已有材料用于明确研究方向，不提前宣告新方法成功。",
+      "sources": [
+        "PLAN"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "为什么值得做：优化机会不只在PR里",
+      "subtitle": "对象包括已合入代码的全仓盘点，以及新增代码的增量检查。",
+      "cards": [
+        {
+          "heading": "我们希望发现",
+          "body": "已有能力被再次实现\n局部机制可以共享\n现有公共模块可被复用"
+        },
+        {
+          "heading": "必须避免误改",
+          "body": "不同配置的合法版本\n用途相近但契约不同\n抽象层增加调用和理解成本"
+        },
+        {
+          "heading": "预期项目价值",
+          "body": "缩小人工查找范围\n提供可定位的整改线索\n用真实补丁衡量最终收益"
+        }
+      ],
+      "takeaway": "价值是待验证的工程收益，不是候选数量越多越好。",
+      "sources": [
+        "PLAN",
+        "DOC",
+        "META"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "把问题拆开，才能设计可验证的研究",
+      "subtitle": "相似、功能关系、共享前提和优化收益，是不同问题。",
+      "cards": [
+        {
+          "heading": "发现",
+          "body": "哪些函数／模块值得比较？\n代码、文档与结构信号\n在同预算下能找到什么？"
+        },
+        {
+          "heading": "确认",
+          "body": "是独立实现还是已有委托？\n是否存在可共享的局部机制？\n类型／配置／副作用允许吗？"
+        },
+        {
+          "heading": "优化",
+          "body": "提取函数、泛型还是保持独立？\n行为与性能是否保持？\n整体结构是否更清晰？"
+        }
+      ],
+      "takeaway": "先生成怀疑清单，再确认与优化；不让一个相似分数包办所有判断。",
+      "sources": [
+        "PLAN"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "相关研究地图：发现与重构不能混为一个榜单",
+      "subtitle": "按论文解决的任务理解它们，而不是把不同分数横向排序。",
+      "cards": [
+        {
+          "heading": "候选发现",
+          "body": "SourcererCC：token克隆\n注释研究：主题组检索\n评价：克隆／检索命中"
+        },
+        {
+          "heading": "结构抽象",
+          "body": "Wrangler：表达式序列\n绑定与反统一约束\n输出：公共函数候选"
+        },
+        {
+          "heading": "共享库设计",
+          "body": "Librarian：库＋调用方改写\n测试约束与整体质量排序\n评价：方案而非克隆数量"
+        }
+      ],
+      "takeaway": "我们的研究连接这些环节，但需要分别建立评价依据。",
+      "sources": [
+        "SCC",
+        "COMMENT",
+        "WRANGLER",
+        "LIB"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "SourcererCC：为什么适合作为发现基线",
+      "subtitle": "原作者方法 · 面向精确与近似代码克隆，重点解决规模化检索。",
+      "cards": [
+        {
+          "heading": "相似度定义",
+          "body": "把代码块变成token多重集\n保留token频次\n共享量 ≥ θ × 较大块长度\n不以语句顺序表示执行语义"
+        },
+        {
+          "heading": "如何减少比较",
+          "body": "统一token排序\n部分倒排索引召回候选\n位置／剩余量上界过滤\n过滤针对既定token判据"
+        }
+      ],
+      "takeaway": "适合提供廉价、可解释的候选；并不判定行为等价或重构安全。",
+      "sources": [
+        "SCC"
+      ],
+      "notes": "公式严格判定使用ceil(θ × max(|A|,|B|))；不是Jaccard。算法position是排序后token位置，不是控制流。固定论文v1 §3。"
+    },
+    {
+      "title": "SourcererCC：作者用了什么数据，效果如何？",
+      "subtitle": "原论文结果 · 固定v1 §4，不能当作我们在Rust上的复现成绩。",
+      "cards": [
+        {
+          "heading": "数据与规模",
+          "body": "真实克隆：BigCloneBench\n构造克隆：Mutation/Injection\n扩展性：IJaDataset 2.0\n约250MLOC（2.5亿行）"
+        },
+        {
+          "heading": "分层召回率",
+          "body": "BigCloneBench 全部克隆\nT1 / T2：100% / 98%\nVST3 / ST3：93% / 61%\nMT3 / WT3-T4：5% / 0%"
+        },
+        {
+          "heading": "人工核查",
+          "body": "约200万输出中抽390对\n355真、35假：precision 91%\n三位专家分担核验\n不是每对三人独立双重确认"
+        }
+      ],
+      "takeaway": "启发：必须看分层结果；词法克隆精度不是功能重复或重构收益精度。",
+      "sources": [
+        "SCC"
+      ],
+      "notes": "原论文表5 All Clones；表3构造变异基准Java/C/C#的T1–T3均报告100%，不能外推真实弱语法相似。召回类别的语法相似度定义见§4.3；0%是表中报告的取整值。人工precision见§4.4。与本地80%门槛、Rust tokenizer和数据不对齐，因此不做数值复现声明。"
+    },
+    {
+      "title": "我们复现到哪里：原工具与边界验证",
+      "subtitle": "已运行 · 固定SCC源码88314f51…；原算法Java文件未修改。",
+      "cards": [
+        {
+          "heading": "原生冒烟",
+          "body": "六个Java文件\n先冻结期望，再运行\n精确／近似：共3对命中\n无关输入与短文件不命中"
+        },
+        {
+          "heading": "边界验证",
+          "body": "七文件、21个无序组合\n80%命中，79%不命中\n相同64-token文件被排除\n相同65-token文件被检出"
+        },
+        {
+          "heading": "得到的判断",
+          "body": "当前参数控制符合预期\n相似关系不具传递性\n记录被门槛排除的单位\n尚未复现论文基准分数"
+        }
+      ],
+      "takeaway": "这是原工具运行与判据验证，不是功能重复检测准确率验证。",
+      "sources": [
+        "SMOKE"
+      ],
+      "notes": "边界套件预期与实际都是3对；10个组合满足最小长度条件。独立计数器只验证token重叠判据，不是语义oracle。未实测论文吞吐量或峰值内存。"
+    },
+    {
+      "title": "我们做了Rust适配，但没有改变原算法",
+      "subtitle": "已运行 · xkernel固定7e3ac944…，kvfs / kspin / klazy / macros。",
+      "cards": [
+        {
+          "heading": "输入范围",
+          "body": "88文件、2,180源码单位\n有函数体的语法单位\n未展开宏、未求值cfg\n不是全内核所有配置"
+        },
+        {
+          "heading": "工具输出",
+          "body": "最少65 tokens、阈值80%\n812个合格单位 → 156对\n329,266次穷举判据比较\n输出与token oracle一致"
+        },
+        {
+          "heading": "解释边界",
+          "body": "确认适配管线有可核查输出\n不能据此计算语义precision\n未运行原论文公开基准\n不是原论文实验同条件复现"
+        }
+      ],
+      "takeaway": "先验证方法运行正确，再设计公平的语义与工程效果评价。",
+      "sources": [
+        "RUST"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "注释研究：自然语言能补充代码信号吗？",
+      "subtitle": "原作者方法与数据 · Kuttal / Ghosh，2020；不等同于rustdoc专用方法。",
+      "cards": [
+        {
+          "heading": "处理路线",
+          "body": "文件注释 → 清洗 → LDA\n按主题组织疑似克隆组\n与Java PDG/GRAPLE对照\n输出主要是文件级对象"
+        },
+        {
+          "heading": "数据与标签",
+          "body": "JHotDraw：315文件、约27K行\n5文件无注释，LDA用310个\n学生借助工具建立真值\n作者报告该部分投入45小时"
+        },
+        {
+          "heading": "作者结果：表I",
+          "body": "LDA Method 1\nRecall 94.86% / Precision 84.21%\nLDA Method 2\nRecall 28.61% / Precision 88.57%"
+        }
+      ],
+      "takeaway": "文档信号值得测试，但先确认这些分数究竟在评价什么。",
+      "sources": [
+        "COMMENT"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "同一论文的两种指标，回答的不是同一个问题",
+      "subtitle": "原论文分析 · Method 1看参与克隆的文件；Method 2保留组的匹配。",
+      "cards": [
+        {
+          "heading": "Method 1的边界",
+          "body": "真实组：{A,B}、{C,D}\n预测组：{A,C}、{B,D}\n参与文件相同，文件级可满分\n但两个预测配对都错误"
+        },
+        {
+          "heading": "我们的评价选择",
+          "body": "发现清单需要对象对标签\n同时记录无文档对象覆盖\n同单位、同预算下比较\n不以文件覆盖代替配对正确性"
+        }
+      ],
+      "takeaway": "自构反例用于解释指标，不是作者数据的实际错误；两行主题数也不同。",
+      "sources": [
+        "COMMENT"
+      ],
+      "notes": "表I Method 1/2分别用100/105个主题，不能把数值差全部归因于指标。原始组和标签未取得，Method 2匹配细节待澄清。我们的pairwise评价选择是研究设计，尚未完成独立标注实验。"
+    },
+    {
+      "title": "文档路线：我们做的是简单基线，不是LDA复现",
+      "subtitle": "已运行TF-IDF / cosine；原作者LDA实现与标签包尚未取得。",
+      "cards": [
+        {
+          "heading": "可复用的实现",
+          "body": "scikit-learn 1.7.2\n固定TF-IDF与cosine\n先冻结top20排序规则\n两次运行队列一致"
+        },
+        {
+          "heading": "实际文档覆盖",
+          "body": "2,180单位中780有非空文档\n1,400缺失或为空\n只取直接字面量文档\n不继承trait或父模块说明"
+        },
+        {
+          "heading": "得到的认识",
+          "body": "能产生可定位的候选\n覆盖只有约35.8%\n高分不等于功能等价\n文档缺失与角色混淆须评估"
+        }
+      ],
+      "takeaway": "保留文档辅助假设；不把替代基线包装成作者LDA成果复现。",
+      "sources": [
+        "DOC",
+        "TFIDF",
+        "COMMENT"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "Wrangler：从结构相似进一步走向公共函数",
+      "subtitle": "机制阅读与资源核查 · Erlang方法；本地尚未执行。",
+      "cards": [
+        {
+          "heading": "作者机制",
+          "body": "带变量绑定信息的AST\n表达式泛化与序列索引\n再做anti-unification\n形成公共函数与替换调用"
+        },
+        {
+          "heading": "对我们的启发",
+          "body": "不只比较整个函数\n研究局部机制能否共享\n类型／绑定关系可能很关键\n结构候选仍需人工取舍"
+        },
+        {
+          "heading": "Rust迁移问题",
+          "body": "所有权、生命周期与unsafe\n宏／cfg、锁与副作用\n泛型或trait引入的复杂度\n不能把AST指纹冒称复现"
+        }
+      ],
+      "takeaway": "此项用于界定抽象方向；没有本地运行数据，不编造复现结论。",
+      "sources": [
+        "WRANGLER"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "Librarian：研究输出不只是“哪些代码相似”",
+      "subtitle": "原论文v3 · 输入相关文件，输出共享库以及迁移后的原程序。",
+      "cards": [
+        {
+          "heading": "搜索与生成",
+          "body": "文件摘要 → 嵌入聚类\n按组生成K个重构方案\n方案包含库与调用方修改\n可进一步考虑已有库"
+        },
+        {
+          "heading": "验证与选择",
+          "body": "保留原先通过的测试\n对完整方案计算损失\n比较库＋迁移程序总成本\n采样后重排，不只看一份生成"
+        }
+      ],
+      "takeaway": "借鉴的是“生成—验证—评价”分离，而不是让大模型直接宣布重构更好。",
+      "sources": [
+        "LIB"
+      ],
+      "notes": "§3/5；MiniCode是基准，Librarian是方法。测试集合保留约束不同于仅比较测试通过率大小。本地未运行Librarian，不能称Rust文档检索为Librarian复现。"
+    },
+    {
+      "title": "Librarian的数据：有竞赛，也有选定工程文件",
+      "subtitle": "作者MiniCode · 固定v3表1；文件数、任务数与测试数必须区分。",
+      "cards": [
+        {
+          "heading": "CodeContests",
+          "body": "300文件 / 10任务\n每文件平均87行\n每文件平均10个测试\n不是300个独立重构任务"
+        },
+        {
+          "heading": "选定真实工程文件",
+          "body": "Transformers：10文件 / 1任务\n平均538行、181测试/文件\nDiffusers：11文件 / 2任务\n平均685行、75测试/文件"
+        },
+        {
+          "heading": "其他任务域",
+          "body": "Logo：300文件 / 1任务\nDate：246文件 / 1任务\n分别平均10行 / 14行\n并涉及留出程序合成评价"
+        }
+      ],
+      "takeaway": "数据不是Rust内核；表1写10个CodeContests任务，附录另有6组表述待对齐。",
+      "sources": [
+        "LIB"
+      ],
+      "notes": "固定v3 §4表1，均为作者汇总；不得将平均测试数相乘当精确总数。Transformers/Diffusers不是全仓。Logo/Date用于库辅助留出合成，与克隆检测不是同一任务。CodeContests选定样本和模型的全部重现条件尚待对齐。"
+    },
+    {
+      "title": "Librarian的作者结果：整体压缩不等于运行加速",
+      "subtitle": "原论文v3表2与§7 · 以下均是作者报告，不是我们的实验成绩。",
+      "cards": [
+        {
+          "heading": "CodeContests 表2",
+          "body": "K=8、S=3，模型o4-mini\nMDL Ratio：0.53 ± 0.03\nToken Ratio：0.66 ± 0.04\nPass Rate：90.67% ± 1.88"
+        },
+        {
+          "heading": "Transformers 选定10文件",
+          "body": "系统MDL：原来的67.2%\n作者报告全部集成测试通过\n同指标人工重构：66.5%\n论文作者人工方案：62%"
+        }
+      ],
+      "takeaway": "MDL衡量模型描述长度，不代表性能；Token Ratio与正文降幅存在待核对差异。",
+      "sources": [
+        "LIB"
+      ],
+      "notes": "CodeContests表2的误差项照原表，不自行定义为标准差或标准误。90.67%不是90.67%的重构完全正确，本轮未核对逐测试分母和跨任务加权。Token Ratio 0.66与正文减少44%不一致。Transformers K=15、S=5、Claude Code；人工方案比较仅限同一MDL指标，不能称维护能力达到人类水平。"
+    },
+    {
+      "title": "Librarian怎样证明评价指标有意义？",
+      "subtitle": "原论文§6与附录E · 不仅提出指标，还将指标选择与人类偏好比较。",
+      "cards": [
+        {
+          "heading": "可计算的代理",
+          "body": "Tokens：库＋改写文件总长度\nMDL：库及条件程序的负对数概率\n另比较CC、MI与复用代理\nMDL依赖所用概率模型"
+        },
+        {
+          "heading": "作者人类实验",
+          "body": "14位参与者、129次判断\nMDL相对MI有显著偏好优势\n相对Tokens未得同样显著结论\n不能外推全部Rust维护场景"
+        }
+      ],
+      "takeaway": "我们的借鉴：指标也需要验证；性能、清晰度与维护价值不能被压缩率替代。",
+      "sources": [
+        "LIB"
+      ],
+      "notes": "MDL=-log p(L)-Σlog p(P'|L)。129是判断次数，不是129位参与者或独立任务。附录允许近似相同，使用共识阈值筛选；原始分歧、选择偏差和模型配置需要复现时核对。本地仅文献与资源审计，未复现人类实验。"
+    },
+    {
+      "title": "复现进展：明确哪些已有结果，哪些还没有",
+      "subtitle": "原工具运行、Rust适配、替代基线和论文数值复现，分开登记。",
+      "cards": [
+        {
+          "heading": "已执行",
+          "body": "SCC原工具冒烟与边界检查\nSCC的Rust输入适配\n原生文档TF-IDF两轮运行\nmetadata候选成对测试"
+        },
+        {
+          "heading": "阅读／工件核查",
+          "body": "注释LDA：未运行原方法\nWrangler：未运行\nLibrarian：未调用原管线\nBigClone：入口预检，未评测"
+        },
+        {
+          "heading": "还不能声称",
+          "body": "未复现原论文完整指标\n尚无独立语义真值\n尚无同预算优势结论\n不能给出方法准确率排行榜"
+        }
+      ],
+      "takeaway": "原工具跑通是真实进展，但“找到代码／有输出”不等于论文结果已复现。",
+      "sources": [
+        "SMOKE",
+        "RUST",
+        "DOC",
+        "LIB",
+        "BIG"
+      ],
+      "notes": "Librarian固定仓库f5167b903d00ace774de419a617138b8db69c4bd，脚本数据路径、模型、集合数和评分端点需对齐；不是实测运行失败。BigClone官方分享入口返回HTML，既不算数据下载成功，也不证明数据不可得。"
+    },
+    {
+      "title": "先导实验暴露了什么值得研究的问题？",
+      "subtitle": "本地开发案例 · 不是新方法效果结论，也不是独立测试集。",
+      "cards": [
+        {
+          "heading": "输入门槛混杂",
+          "body": "文档top20中19对不在SCC输出\n但两端都小于65 tokens\n增量不能直接归因于语义能力\n下一轮先统一可评价范围"
+        },
+        {
+          "heading": "词袋丢失角色关系",
+          "body": "权限与类型两个接口\n同一组词，替换对象不同\n文档cosine可为1\n高分仍不能证明可合并"
+        },
+        {
+          "heading": "已有复用与合理差异",
+          "body": "20对解释：配置2、契约7\n已有委托6、小重叠未知5\n未确认收益不等于全部误报\n需要独立标签与不确定类"
+        }
+      ],
+      "takeaway": "这些观察给出实验假设；不能把开发样本上的解释当作精度验证。",
+      "sources": [
+        "DOC",
+        "RUST",
+        "AUDIT"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "一次真实整改试验：测试通过，仍需权衡收益",
+      "subtitle": "本地metadata测试夹具抽取 · 对候选做验证，不是强行采纳每个建议。",
+      "cards": [
+        {
+          "heading": "做了什么",
+          "body": "两个13字段构造点抽取共享\n修改4文件并新增模块\n增加25行、删除30行\n整体净减5行"
+        },
+        {
+          "heading": "验证得到什么",
+          "body": "原版与候选各通过相同94项测试\n同配置、同初始磁盘模板\n非unittest构建通过\n候选未直接落入用户内核"
+        },
+        {
+          "heading": "仍然不知道什么",
+          "body": "缺少维护成本的独立评价\n没有性能提升测量\n不证明所有配置行为等价\n当前暂缓采纳"
+        }
+      ],
+      "takeaway": "经验：更少的重复构造不一定带来更好的整体设计。",
+      "sources": [
+        "META"
+      ],
+      "notes": "这是历史实验，本轮没有重跑内核。94/94指两版本各自同一94项测试，不是188个独立样本。原版使用构建缓存、候选重建，不能比较构建耗时；非unittest只构建、未运行生产内核。"
+    },
+    {
+      "title": "准备尝试的方向：每一项都需要可否证的实验",
+      "subtitle": "研究假设 · 由论文与先导观察共同引出；不预设效果和创新性。",
+      "cards": [
+        {
+          "heading": "代码＋文档",
+          "body": "与单token、单文档比较\n同单位、同长度范围、同预算\n去文档／打乱文档消融\n看额外确认数与核查成本"
+        },
+        {
+          "heading": "角色与结构约束",
+          "body": "类型、输入输出与副作用\n调用委托、配置及局部机制\n测试角色交换与合理独立例\n比较是否减少错误合并建议"
+        },
+        {
+          "heading": "重构质量评价",
+          "body": "包含“不改”的方案基线\n编译、测试、性能分别测量\n独立成对评价代码清晰度\n检查抽象成本与实际复用"
+        }
+      ],
+      "takeaway": "先验证一个聚焦机制；没有增益或代价过高，也应成为保留结果。",
+      "sources": [
+        "COMMENT",
+        "WRANGLER",
+        "LIB",
+        "PLAN",
+        "DOC"
+      ],
+      "notes": ""
+    },
+    {
+      "title": "仍沿用六阶段：前期材料服务后续可检验实验",
+      "subtitle": "阶段顺序不变；已经开展的小试验用于可行性排查，不替代正式评价。",
+      "cards": [
+        {
+          "heading": "基础调研 → 真实试点",
+          "body": "技术谱系与最近邻正文分析\n专利技术特征及失败模式\n首批约12–20案例设计\n含可抽象、独立、重叠与未知"
+        },
+        {
+          "heading": "基线复现 → 核心实验",
+          "body": "先对齐原任务和指标\n排除配置／使用问题\n一个机制、同预算对照\n消融与独立测试"
+        },
+        {
+          "heading": "场景验证 → 研究产出",
+          "body": "全仓扫描、真实重构补丁\n跨配置与增量旁路运行\n论文与技术交底证据\n完整记录失败与负结果"
+        }
+      ],
+      "takeaway": "当前案例是开发材料；最终论文贡献与专利候选由实验和查新决定。",
+      "sources": [
+        "PLAN"
+      ],
+      "notes": "首批12–20是既定试点设计规模，不是声明本轮新采样。现有38个不同配对来自两条开发审阅队列，不能当作38个独立案例。正式阶段准入仍需对应计划中的证据要求。"
+    },
+    {
+      "title": "怎样评价，才不只是在xkernel上调出好结果？",
+      "subtitle": "后续评价安排 · 尚未完成公开基准或跨项目实验，只描述用途。",
+      "cards": [
+        {
+          "heading": "公开基准＋Rust受控集",
+          "body": "公开克隆基准：校验原任务\n受控变换：角色／文档／委托\n已知分母时报告precision/recall\n未知分母不报全仓召回率"
+        },
+        {
+          "heading": "真实库＋独立工程",
+          "body": "std/core历史：材料，不是真值\nxkernel既有样本归开发集\nArceOS／Starry／星绽等候选\n固定版本，控制共同来源泄漏"
+        }
+      ],
+      "takeaway": "下一步优先：对齐一条原任务基线，同时冻结同范围对照与标注协议。",
+      "sources": [
+        "PLAN",
+        "BIG"
+      ],
+      "notes": "没有保证能取得每个项目的独立真值。项目选择须核查许可、谱系、可构建配置与审阅资源；历史PR合入不等于最优方案。性能实验采用相同配置和负载；维护性需要独立审阅及分歧记录。"
+    },
+    {
+      "title": "主要参考与材料入口",
+      "subtitle": "每页备注提供原始链接、具体章节与本地报告；作者结果与本地结果分别标注。",
+      "cards": [
+        {
+          "heading": "候选与结构方法",
+          "body": "SourcererCC · ICSE 2016\narXiv:1512.06448v1\n注释/LDA · arXiv:2006.14505v1\nWrangler · Li & Thompson, 2011"
+        },
+        {
+          "heading": "共享库与本地证据",
+          "body": "Librarian · arXiv:2506.11058v3\nMiniCode：作者的评价基准\n本地reports / 协议 / 日志\nSLIDE-NOTES.md逐页索引"
+        }
+      ],
+      "takeaway": "目标是找到值得做、能够验证的改进，不是提前拼出一个成功故事。",
+      "sources": [
+        "SCC",
+        "COMMENT",
+        "WRANGLER",
+        "LIB",
+        "AUDIT"
+      ],
+      "notes": ""
+    }
+  ]
+}
