@@ -1,0 +1,307 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Common VFS data types.
+
+/// Device number stored in special inodes (`dev_t`).
+pub use kdevice::DeviceNumber as DeviceId;
+use ktime_types::SystemTime;
+
+use crate::Dentry;
+
+/// Filesystem node type values.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+pub enum NodeType {
+    Unknown         = 0,
+    Fifo            = 0o1,
+    CharacterDevice = 0o2,
+    Directory       = 0o4,
+    BlockDevice     = 0o6,
+    RegularFile     = 0o10,
+    Symlink         = 0o12,
+    Socket          = 0o14,
+}
+
+impl NodeType {
+    const fn from_mode_type(value: u8) -> Self {
+        match value {
+            0o1 => Self::Fifo,
+            0o2 => Self::CharacterDevice,
+            0o4 => Self::Directory,
+            0o6 => Self::BlockDevice,
+            0o10 => Self::RegularFile,
+            0o12 => Self::Symlink,
+            0o14 => Self::Socket,
+            _ => Self::Unknown,
+        }
+    }
+
+    pub(crate) const fn is_special(self) -> bool {
+        matches!(
+            self,
+            Self::CharacterDevice | Self::BlockDevice | Self::Fifo | Self::Socket
+        )
+    }
+}
+
+impl From<u8> for NodeType {
+    fn from(value: u8) -> Self {
+        Self::from_mode_type(value)
+    }
+}
+
+bitflags::bitflags! {
+    /// Inode permission mode.
+    #[derive(Debug, Clone, Copy)]
+    pub struct NodePermission: u16 {
+        /// Set user ID on execution.
+        const SET_UID = 0o4000;
+        /// Set group ID on execution.
+        const SET_GID = 0o2000;
+        /// Sticky bit.
+        const STICKY = 0o1000;
+
+        /// Owner has read permission.
+        const OWNER_READ = 0o400;
+        /// Owner has write permission.
+        const OWNER_WRITE = 0o200;
+        /// Owner has execute permission.
+        const OWNER_EXEC = 0o100;
+
+        /// Group has read permission.
+        const GROUP_READ = 0o40;
+        /// Group has write permission.
+        const GROUP_WRITE = 0o20;
+        /// Group has execute permission.
+        const GROUP_EXEC = 0o10;
+
+        /// Others have read permission.
+        const OTHER_READ = 0o4;
+        /// Others have write permission.
+        const OTHER_WRITE = 0o2;
+        /// Others have execute permission.
+        const OTHER_EXEC = 0o1;
+    }
+}
+
+impl Default for NodePermission {
+    fn default() -> Self {
+        Self::from_bits_truncate(0o666)
+    }
+}
+
+const NODE_TYPE_SHIFT: u16 = 12;
+const NODE_TYPE_MASK: u16 = 0o170000;
+const PERMISSION_MASK: u16 = 0o7777;
+
+/// Inode mode value encoded with Linux `umode_t` layout.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct Umode(u16);
+
+impl Umode {
+    /// Creates a mode value from raw Linux mode bits.
+    pub const fn from_bits(bits: u16) -> Self {
+        Self(bits)
+    }
+
+    /// Creates a mode value from a node type and permission bits.
+    pub const fn new(node_type: NodeType, permission: NodePermission) -> Self {
+        Self(((node_type as u16) << NODE_TYPE_SHIFT) | (permission.bits() & PERMISSION_MASK))
+    }
+
+    /// Returns the raw Linux mode bits.
+    pub const fn bits(self) -> u16 {
+        self.0
+    }
+
+    /// Returns the file type encoded in this mode.
+    pub const fn node_type(self) -> NodeType {
+        NodeType::from_mode_type(((self.0 & NODE_TYPE_MASK) >> NODE_TYPE_SHIFT) as u8)
+    }
+
+    const fn type_bits(self) -> u16 {
+        self.0 & NODE_TYPE_MASK
+    }
+
+    /// Returns the node type requested through a Linux `mknod(2)` mode.
+    ///
+    /// An absent type field denotes a regular file. Unsupported or malformed
+    /// type fields are returned as their decoded [`NodeType`] so the namei
+    /// boundary can assign the operation-specific error.
+    pub const fn mknod_node_type(self) -> NodeType {
+        match self.type_bits() {
+            0 => NodeType::RegularFile,
+            _ => self.node_type(),
+        }
+    }
+
+    /// Returns the permission bits encoded in this mode.
+    pub const fn permission(self) -> NodePermission {
+        NodePermission::from_bits_truncate(self.0 & PERMISSION_MASK)
+    }
+
+    /// Returns this mode with new permission bits and the same file type.
+    pub const fn with_permission(self, permission: NodePermission) -> Self {
+        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))
+    }
+
+    /// Returns this mode with a new file type and the same permission bits.
+    pub const fn with_node_type(self, node_type: NodeType) -> Self {
+        Self(((node_type as u16) << NODE_TYPE_SHIFT) | (self.0 & PERMISSION_MASK))
+    }
+}
+
+/// What a completed unlink/rmdir removed, captured under the namespace lock
+/// the removal held.
+///
+/// The parent inode, the entry name and the victim dentry all come from
+/// the operation itself, so no later lookup can describe a different object.
+#[derive(Clone, Debug)]
+pub struct RemovedEntry {
+    /// Pinned parent inode, as the removal saw it.
+    pub parent: alloc::sync::Arc<crate::VfsInode>,
+    /// The removed entry's name.
+    pub name: alloc::string::String,
+    /// A reference to the dentry that was unlinked.
+    ///
+    /// Held only until the caller has reported the removal and dropped this
+    /// value. Without it the victim's inode can be evicted inside the removal
+    /// itself -- before the caller queues the parent's `IN_DELETE` -- and the
+    /// eviction-driven retirement would then report the object's own death
+    /// first, inverting the order Linux produces.
+    pub victim_dentry: Dentry,
+    /// The victim's authoritative pre-unlink link count, when the backend could
+    /// report it. Retirement needs this; everything else does not, so a failed
+    /// read costs only the retirement decision, not the events.
+    pub victim_nlink: Option<u64>,
+}
+
+/// What a completed rename moved and replaced, captured under the namespace
+/// lock the rename itself held.
+///
+/// The identities come from the dentries the rename operated on, not from a
+/// second path lookup, so a concurrent namespace change between lookups cannot
+/// make them describe a different object than the one that actually moved.
+#[derive(Clone, Debug)]
+pub struct RenameOutcome {
+    /// Whether the rename actually moved something. kvfs short-circuits a
+    /// rename between two links of one inode without touching the namespace,
+    /// and then this is `false` and both identities are `None`.
+    pub moved: bool,
+    /// Pinned source inode, captured when the move executed.
+    pub source: Option<alloc::sync::Arc<crate::VfsInode>>,
+    /// Pinned target inode, when the rename replaced one.
+    pub replaced: Option<alloc::sync::Arc<crate::VfsInode>>,
+    /// The replaced target's authoritative pre-rename link count, when the
+    /// backend could report it; retirement needs it, the events do not.
+    pub replaced_nlink: Option<u64>,
+}
+
+/// Filesystem node metadata.
+#[derive(Clone, Debug)]
+pub struct Metadata {
+    /// ID of device containing file
+    pub device: u64,
+    /// Inode number
+    pub inode: u64,
+    /// Number of hard links
+    pub nlink: u64,
+    /// File type and permission mode.
+    pub mode: Umode,
+    /// User ID of owner
+    pub uid: u32,
+    /// Group ID of owner
+    pub gid: u32,
+    /// Total size in bytes
+    pub size: u64,
+    /// Block size for filesystem I/O
+    pub block_size: u64,
+    /// Number of 512B blocks allocated
+    pub blocks: u64,
+    /// Device ID (if special file)
+    pub rdev: DeviceId,
+
+    /// Time of last access
+    pub atime: SystemTime,
+    /// Time of last modification
+    pub mtime: SystemTime,
+    /// Time of last status change
+    pub ctime: SystemTime,
+}
+
+/// Inode access, modification, and status-change timestamps.
+///
+/// A cheap copyable snapshot of the resident timestamps read under a single
+/// storage lock; the timestamp-only counterpart to [`Metadata`]. Field names
+/// follow the `VfsInode` timestamp setter family and correspond to
+/// [`Metadata::atime`], [`Metadata::mtime`], and [`Metadata::ctime`].
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct InodeTimes {
+    /// Time of last access
+    pub accessed_at: SystemTime,
+    /// Time of last modification
+    pub modified_at: SystemTime,
+    /// Time of last status change
+    pub changed_at: SystemTime,
+}
+
+/// Filesystem node metadata update.
+#[derive(Default, Clone, Debug)]
+pub struct MetadataUpdate {
+    /// File size
+    pub size: Option<u64>,
+    /// Permission mode
+    pub mode: Option<NodePermission>,
+    /// The owner (uid, gid)
+    pub owner: Option<(u32, u32)>,
+
+    /// Time of last access
+    pub atime: Option<SystemTime>,
+    /// Time of last modification
+    pub mtime: Option<SystemTime>,
+    /// Time of last status change
+    pub ctime: Option<SystemTime>,
+}
+
+/// Requested timestamp value together with its authorization semantics.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum SetattrTime {
+    /// Set the timestamp to the current wall-clock value.
+    Current(SystemTime),
+    /// Set the timestamp to a caller-supplied value.
+    Explicit(SystemTime),
+}
+
+impl SetattrTime {
+    /// Returns the resolved timestamp written to the filesystem.
+    pub const fn value(self) -> SystemTime {
+        match self {
+            Self::Current(value) | Self::Explicit(value) => value,
+        }
+    }
+}
+
+unittest::path_mod_test!(tests, "../ut-tests/types.rs");
+
+bitflags::bitflags! {
+    /// `fallocate(2)` mode flags (`FALLOC_FL_*` in the Linux UAPI).
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub struct FallocateFlags: u32 {
+        /// Keep the file size unchanged when the range extends it.
+        const KEEP_SIZE = 0x01;
+        /// De-allocate the range; requires [`FallocateFlags::KEEP_SIZE`].
+        const PUNCH_HOLE = 0x02;
+        /// Remove the range and shift the tail left; must be used alone.
+        const COLLAPSE_RANGE = 0x08;
+        /// Convert the range to zeros.
+        const ZERO_RANGE = 0x10;
+        /// Insert zero-filled space and shift the tail right; must be used
+        /// alone.
+        const INSERT_RANGE = 0x20;
+        /// Break shared storage for the range; only [`FallocateFlags::KEEP_SIZE`]
+        /// may accompany it.
+        const UNSHARE_RANGE = 0x40;
+    }
+}

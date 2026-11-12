@@ -8,6 +8,8 @@
 
 ### 2026-11-11 InMap原文与固定工件
 
+执行状态更新：[2020输入流水线](notes/2026-11-11-inmap-original-input-run.md)、显式缺方法反馈循环、[方法词四组对照](notes/2026-11-12-inmap-factorial-results.md)及[检索机制控制](notes/2026-11-12-inmap-retrieval-path-controls.md)已运行。作者原调用图仍缺失，不能称原论文完整复现；下文历史阅读状态保留其时点。当前方法、变体和结果边界见职责归属专题。
+
 后续：[评分静态审计](notes/2026-11-11-inmap-scoring-audit.md)、[Lucene实际组件实验](notes/2026-11-11-lucene-scoring-runtime.md)、[历史版本及文件级许可核查](notes/2026-11-11-inmap-history-preflight.md)。Lucene8.6.2实际依赖来自Maven Central，记录下载URL、仓库SHA1与本地SHA256；运行查询解释纠正了“默认similarity决定全部子句分数”的潜在误解。未把这一组件实验登记为InMap复现。
 
 INMAP-SAC21：Sinkala、Herold，InMap: Automated Interactive Code-to-Architecture Mapping，SAC 2021，DOI 10.1145/3412841.3442124。[作者稿](https://www.diva-portal.org/smash/get/diva2:1552606/FULLTEXT01.pdf)及[工件](https://git.cs.kau.se/zipasink/InMap)已取得部分本地归档，URL、字节数和hash见[工件记录](notes/2026-11-11-reflexion-artifact-readiness.md)。已定向阅读§3–5并静态核对反馈入口；固定工件版本晚于论文，未运行，不称数值复现。见[执行前检查](notes/2026-11-11-inmap-execution-preflight.md)和[评价边界](notes/2026-11-11-inmap-label-boundary.md)。RM-FSE95后续已补读§3、§6并完成有限定义重实现，见[精读](notes/2026-11-11-reflexion-confirmation-reading.md)，不再仅停留在初始摘要阅读状态。

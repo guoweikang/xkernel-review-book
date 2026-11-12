@@ -1,0 +1,71 @@
+{
+  "scope": "source-declared method feedback variant; not full paper reproduction",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 0,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-od-2/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-od-2/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapLoopProbe declared-method-input.tsv"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/AutoMap.java",
+      "anchor": "System.out.print( pageNumber + \".\" );",
+      "insertion": "recommender.InMapTrace.begin(pageNumber, acceptedMappings);\n            if (pageNumber > 200) throw new IllegalStateException(\"Page budget exceeded\");",
+      "before_sha256": "43d2bd4fc4bad4b9cd0b83ca0af53a1aedae209466b1aa3565ab6e1eefb9bd4c",
+      "after_sha256": "a3434cbed716420660a8edea854d7cb1f35c7349af88bc1aca41c6250f7aec8c"
+    },
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, 1024 - filteredModuleDescriptionList.size() - numOfModuleClasses, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "8fee50eb7295c8e1f348ee96693f71a8e0e847091c73d3cad6af0b2a9333e0db"
+    }
+  ],
+  "method_feedback": "declared-top-level",
+  "selector_variant": "original",
+  "selector_change": null,
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "declared-method-input.tsv": "cb01442959a18d6e2929ccce9d775afa3db0ee6804463e6916bd16d90b8696a8",
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapLoopProbe.java": "88dcdbafeac4d6137ded5da63b00628fed4ec608782e2a348f536f37a3736e42",
+    "runner.py": "290b871b86c8510ba0fb52b5ba001f818bae3a8cf6e3cf129273cba3ae16cf1d",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "15b0728f6822a00363a7f64b69bde54c49c600dd3136a3e374096beba1847d97",
+    "stderr.txt": "be26a820ce646710b131ea2e9283ca042d7e68d66aeff1c629e8ebbe12df58b4",
+    "filtered-classes.txt": "b85f95157a0729a7454d464bcafdd3ce1b71009069a306128a32449e5572cddd",
+    "oracle.tsv": "67bab78329f36e6ec361ef8715da53f5a7e83a6a78134f33a9ed0eac206f8487",
+    "pages.tsv": "7e9242f8b245bd0730a3d62c11af6b9192c299fbc77adb46726ecc296a39d645",
+    "acceptedMappings.tsv": "1dc13adaea08105ae15d580eed83e41f02d38ebca2385617578f01315d3ea901",
+    "rejectedMappings.tsv": "576d0300bdbf4843b29a2c6ba68f2a556e48c81bea7dfe80eaa87ee9961b82c4",
+    "terminal-classModuleSimilarity_AffinityScores.tsv": "25c4b2583c9173e492cb5ed7e8f8746e9c7d84c577205fa160ab3b58399375eb",
+    "terminal-classModule_AffinityScores.tsv": "25c4b2583c9173e492cb5ed7e8f8746e9c7d84c577205fa160ab3b58399375eb",
+    "terminal-highestClassScoreMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-recommendedMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-state.tsv": "1b552f2e374027d26ee217db43bf0a78a672dc0a1c851700ae9782eeab6d9dc8",
+    "terminal-selection-controls.tsv": "a6e89d6529b0cf3b6dbdfd32021eaab26d4151e95e03f507686515af15851d05",
+    "trace-pages.tsv": "4becb4afc4bbb0706eb8df24e32b8924925961ef48a2ac0e4a95cd7da10e97a5",
+    "trace-queries.tsv": "f3338c121d52e37e037f3ef1fdc9741724a82a197043d1f455a527565ea6c880",
+    "trace-accepted.tsv": "6455e3cf1521c60faffd2991dca66aafd3109f08c432c64f48464118e80740ee"
+  }
+}

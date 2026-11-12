@@ -1,0 +1,13 @@
+Static source review by delegated agent Goodall, 2026-11-12.
+Pinned InMap revision cae17d87f8c17d8108d21abd41e0520b6ca65d7c.
+IRAnalysis.java:325 applies module-name query boost before :494 parsing and
+:495 retrieval. :513 reads ScoreDoc.score. :516 tests case-sensitive substring
+in the entire entity name, not package segments. :526 multiplies by 33 and
+:530 divides by 33. :535 stores the result. :550 only filters accepted classes;
+:551 calls architecture transform with false; range shifting is disabled.
+Inverse postprocessing therefore removes only the post-retrieval multiplier,
+not query name weighting or names in the indexed text. Missing scores cannot
+be recovered by inversion and must not be replaced by zero.
+This is a recorded summary of a static agent review, not independent execution
+or semantic validation. The experiment verifies weighted-score round trips;
+it does not capture raw ScoreDoc.score separately to compare floating bits.

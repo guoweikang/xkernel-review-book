@@ -1,0 +1,38 @@
+--- a/arch/kcpu_slot/src/dynamic.rs
++++ b/arch/kcpu_slot/src/dynamic.rs
+@@ -266,7 +266,5 @@
+ 
+ fn align_up(value: usize, align: usize) -> Option<usize> {
+     debug_assert!(align.is_power_of_two());
+-    value
+-        .checked_add(align - 1)
+-        .map(|value| value & !(align - 1))
+-}
++    value.checked_next_multiple_of(align)
++}
+--- a/boot/kernel-elf-loader/src/lib.rs
++++ b/boot/kernel-elf-loader/src/lib.rs
+@@ -229,9 +229,7 @@
+     if align == 0 || !align.is_power_of_two() {
+         return Err("invalid alignment");
+     }
+-    value
+-        .checked_add(align - 1)
+-        .map(|value| value & !(align - 1))
++    value.checked_next_multiple_of(align)
+         .ok_or("aligned address overflow")
+ }
+ 
+--- a/xtask/xkmake/src/image_metadata.rs
++++ b/xtask/xkmake/src/image_metadata.rs
+@@ -424,9 +424,7 @@
+ }
+ 
+ fn align_up(value: usize, alignment: usize) -> Option<usize> {
+-    value
+-        .checked_add(alignment - 1)
+-        .map(|value| value & !(alignment - 1))
++    value.checked_next_multiple_of(alignment)
+ }
+ 
+ fn metadata_error(path: &Path, error: impl std::fmt::Display) -> Error {

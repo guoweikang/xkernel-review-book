@@ -1,0 +1,86 @@
+{
+  "id": "DEV-ALIGNMENT-DOMAIN",
+  "family": "alignment_three_consumers",
+  "selector": {
+    "alignment": true
+  },
+  "question": "When does shared core arithmetic preserve each consumer's input and error contract?",
+  "configuration_scope": "Rust 1.95.0 extracted-function host tests, debug/release; five-target metadata compilation only; no kernel integration or runtime performance",
+  "challenge": {
+    "status": "executed_bounded_counterexample",
+    "claim_to_challenge": "Unguarded next-multiple arithmetic preserves boot invalid-alignment rejection",
+    "observation_needed": "Existing assertion: input (17,3), boot rejects while core returns Some(18); finite sampling is not full equivalence"
+  },
+  "evidence": [
+    "research/evidence/runs/2026-11-12-evaluation-alignment-replay-01/report.json",
+    "research/notes/2026-11-05-alignment-core-contract.md"
+  ],
+  "next": "Retain input guard and overflow contract; no new optimization patch or benefit label",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "origin_group": "xkernel-7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "relation_label": "unknown",
+  "reuse_preconditions": "Rust 1.95.0 extracted-function host tests, debug/release; five-target metadata compilation only; no kernel integration or runtime performance",
+  "optimization_benefit": "unverified",
+  "independent_adjudication": "not_available",
+  "members": [
+    {
+      "id": "alignment-cpu",
+      "path": "arch/kcpu_slot/src/dynamic.rs",
+      "name": "align_up",
+      "range": [
+        10408,
+        10597
+      ],
+      "start_line": 267,
+      "end_line": 272,
+      "sha256": "486befeff17446dd472e7998a9a0fb2f7f40831f867d3901d778d98dda439758",
+      "source_sha256": "3d061dc00ecc73b802554bc3725284a5b915d7b8606c2e99a08b3839dd84e352",
+      "source_file": "cpu-source.rs",
+      "unit_file": "cpu-unit.rs",
+      "cfg": "not_evaluated",
+      "doc_scope": "not_extracted",
+      "doc_text": null
+    },
+    {
+      "id": "alignment-boot",
+      "path": "boot/kernel-elf-loader/src/lib.rs",
+      "name": "align_up",
+      "range": [
+        7661,
+        7952
+      ],
+      "start_line": 228,
+      "end_line": 236,
+      "sha256": "3f4d05355a620c310bada46933112e39c3ac8b2655df46f0c16b96caadd2248d",
+      "source_sha256": "959a83e57ed2a14679a8ce475e5ff4b614445a155e9751a4b3a9dc3943bf5d5e",
+      "source_file": "boot-source.rs",
+      "unit_file": "boot-unit.rs",
+      "cfg": "not_evaluated",
+      "doc_scope": "not_extracted",
+      "doc_text": null
+    },
+    {
+      "id": "alignment-host",
+      "path": "xtask/xkmake/src/image_metadata.rs",
+      "name": "align_up",
+      "range": [
+        15558,
+        15715
+      ],
+      "start_line": 426,
+      "end_line": 430,
+      "sha256": "30f428a035212d33cc9a6d185a3d8cfe1427b4d7999663e73570d0397265a24e",
+      "source_sha256": "593643be32c418407f66ec4f4fc58f46c4badfe87c29e3efc073fc69c9207763",
+      "source_file": "host-source.rs",
+      "unit_file": "host-unit.rs",
+      "cfg": "not_evaluated",
+      "doc_scope": "not_extracted",
+      "doc_text": null
+    }
+  ],
+  "evidence_sha256": {
+    "research/evidence/runs/2026-11-12-evaluation-alignment-replay-01/report.json": "9d349e1473b8e1f81b7be500b944b4dcc8a9bccaa6fd705bb742db28bee1486c",
+    "research/notes/2026-11-05-alignment-core-contract.md": "e57724d14ccb16f9a38a13bb93150123456280fdecda3bbee685f9eb9eddc58e"
+  }
+}

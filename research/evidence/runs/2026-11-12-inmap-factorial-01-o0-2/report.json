@@ -1,0 +1,56 @@
+{
+  "scope": "explicit missing-method-feedback control; not full paper reproduction",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 1,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-01-o0-2/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-01-o0-2/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapLoopProbe"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/AutoMap.java",
+      "anchor": "System.out.print( pageNumber + \".\" );",
+      "insertion": "recommender.InMapTrace.begin(pageNumber, acceptedMappings);\n            if (pageNumber > 200) throw new IllegalStateException(\"Page budget exceeded\");",
+      "before_sha256": "43d2bd4fc4bad4b9cd0b83ca0af53a1aedae209466b1aa3565ab6e1eefb9bd4c",
+      "after_sha256": "a3434cbed716420660a8edea854d7cb1f35c7349af88bc1aca41c6250f7aec8c"
+    },
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, numOfMethodsToAdd, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "c5d441ac407d48ff8cff959a29fb59baa7d48c2e33f108e6159b52e25da938c4"
+    }
+  ],
+  "method_feedback": "none",
+  "selector_variant": "original",
+  "selector_change": null,
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapLoopProbe.java": "88dcdbafeac4d6137ded5da63b00628fed4ec608782e2a348f536f37a3736e42",
+    "runner.py": "f9ed5288e566550a148a62665456f676255dce1a1ce2ceaabca73f66fa50264f",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.txt": "f866975f9d5909c86179eaf860ba88553d3098967d4be64b10c3628c89939443"
+  }
+}

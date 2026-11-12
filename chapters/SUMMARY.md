@@ -34,9 +34,14 @@
 - [教材与工程指南](references.md)
 - [来源说明](content-basis.md)
 
-# 附录 研究档案与维护
+# 第五部分 相似功能与重构研究
 
-- [档案目录](archive.md)
+- [研究总图与证据链](archive.md)
+
+<!-- RESEARCH_CATALOG -->
+
+# 附录 维护与证据检索
+
 - [维护说明](maintenance.md)
 - [原仓库引用边界](source-boundary.md)
 - [证据索引](evidence-index.md)

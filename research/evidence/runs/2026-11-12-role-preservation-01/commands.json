@@ -1,0 +1,247 @@
+[
+  {
+    "name": "dependency-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-name",
+      "bitflags",
+      "--crate-type=rlib",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/bitflags-2.13.2/src/lib.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "debug-original-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/original.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/debug-original"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "debug-original",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/debug-original-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/debug-original",
+      "--test-threads=1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "debug-drop_type-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/drop_type.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/debug-drop_type"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "debug-drop_type",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/debug-drop_type-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/debug-drop_type",
+      "--test-threads=1"
+    ],
+    "returncode": 101
+  },
+  {
+    "name": "debug-drop_permission-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/drop_permission.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/debug-drop_permission"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "debug-drop_permission",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/debug-drop_permission-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/debug-drop_permission",
+      "--test-threads=1"
+    ],
+    "returncode": 101
+  },
+  {
+    "name": "release-original-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/original.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/release-original",
+      "-O"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "release-original",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/release-original-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/release-original",
+      "--test-threads=1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "release-drop_type-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/drop_type.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/release-drop_type",
+      "-O"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "release-drop_type",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/release-drop_type-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/release-drop_type",
+      "--test-threads=1"
+    ],
+    "returncode": 101
+  },
+  {
+    "name": "release-drop_permission-compile",
+    "command": [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/drop_permission.rs",
+      "--extern",
+      "bitflags=/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/libbitflags.rlib",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work/release-drop_permission",
+      "-O"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "release-drop_permission",
+    "command": [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--fork",
+      "--net",
+      "--ipc",
+      "--uts",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/release-drop_permission-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/role-probes/2026-11-12-role-preservation-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/release-drop_permission",
+      "--test-threads=1"
+    ],
+    "returncode": 101
+  }
+]

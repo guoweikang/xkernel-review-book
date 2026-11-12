@@ -1,0 +1,40 @@
+{
+  "schema": "layered-candidate-evaluation/1",
+  "status": "development_contract_not_effectiveness_result",
+  "tasks": {
+    "functional_overlap": "Undirected implementation pair; specified shared behavior, not automatic merge eligibility",
+    "responsibility_boundary": "Directed implementation-to-owner claim with independent architecture evidence"
+  },
+  "case_fields": ["id", "family", "split", "label", "label_basis", "evidence", "configuration"],
+  "labels": ["positive", "negative", "unknown"],
+  "label_bases": ["independent_adjudication", "controlled_fixture", "unlabelled"],
+  "input_identity": "Each case ID must resolve to pinned source ranges and configuration in its evidence; label scope is the dataset task only",
+  "discovery": "retrieved is an unordered, duplicate-free set of case IDs; ranking must be an explicit permutation, never inferred from file order",
+  "budget": "Top-k candidate judgments per task; CPU, extraction coverage, model cost and runtime separately reported",
+  "confirmation": "One positive/negative/abstain decision for every selected case; positive means the declared task relation, never safe optimization",
+  "metrics": {
+    "candidate_known_positive_recall": "retrieved known positives / all known positives in the frozen reference population; null when no positives",
+    "top_k_known_positive_recall": "top-k known positives / all reference known positives",
+    "top_k_relevance_bounds": "[positive/n, (positive+unknown)/n]; null for empty output; not confidence intervals",
+    "judged_precision": "positive/(positive+negative) within top-k; null if no judged labels; not whole-output precision",
+    "judgment_coverage": "(positive+negative)/n within top-k; null for empty output",
+    "confirmation": "confusion counts only for judged selected cases; abstention and predictions on unknown labels separately counted"
+  },
+  "guards": [
+    "No global recall with incomplete or output-selected reference labels",
+    "No conversion of review disposition, test pass or merged PR into positive labels",
+    "No unknown-as-negative treatment",
+    "No mixed tasks in a single aggregate score",
+    "No origin/family overlap across development and test splits",
+    "No post-change docs or patch explanation as pre-change detector input",
+    "No optimization claims from overlap or responsibility labels",
+    "Exclude unresolvable source/configuration from scored population with explicit counts; do not silently drop"
+  ],
+  "next_collection": {
+    "development": "Reuse existing xkernel findings as hypotheses and hard-case sources, not independent labels",
+    "controlled": "Pair rename/equivalent mechanism with changed side effect, existing delegation, cfg alternatives and stale/misleading documentation controls",
+    "external": "Freeze unrelated Rust projects and provenance before test use; shared upstream ancestry is one split group",
+    "history": "Record pre-change source, accepted/refused/reverted outcome and dimension-specific rationale separately",
+    "release_gate": "Independent adjudication and benchmark protocol compatibility before effectiveness claims"
+  }
+}

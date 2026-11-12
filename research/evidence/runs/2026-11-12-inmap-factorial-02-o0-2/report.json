@@ -1,0 +1,70 @@
+{
+  "scope": "explicit missing-method-feedback control; not full paper reproduction",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 0,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-o0-2/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-o0-2/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapLoopProbe"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/AutoMap.java",
+      "anchor": "System.out.print( pageNumber + \".\" );",
+      "insertion": "recommender.InMapTrace.begin(pageNumber, acceptedMappings);\n            if (pageNumber > 200) throw new IllegalStateException(\"Page budget exceeded\");",
+      "before_sha256": "43d2bd4fc4bad4b9cd0b83ca0af53a1aedae209466b1aa3565ab6e1eefb9bd4c",
+      "after_sha256": "a3434cbed716420660a8edea854d7cb1f35c7349af88bc1aca41c6250f7aec8c"
+    },
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, 1024 - filteredModuleDescriptionList.size() - numOfModuleClasses, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "8fee50eb7295c8e1f348ee96693f71a8e0e847091c73d3cad6af0b2a9333e0db"
+    }
+  ],
+  "method_feedback": "none",
+  "selector_variant": "original",
+  "selector_change": null,
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapLoopProbe.java": "88dcdbafeac4d6137ded5da63b00628fed4ec608782e2a348f536f37a3736e42",
+    "runner.py": "290b871b86c8510ba0fb52b5ba001f818bae3a8cf6e3cf129273cba3ae16cf1d",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "0bfbd1e3395637c969373ab3ec8bf5ed93ba3e258a88be432ec1f9a0894429b3",
+    "stderr.txt": "be26a820ce646710b131ea2e9283ca042d7e68d66aeff1c629e8ebbe12df58b4",
+    "filtered-classes.txt": "b85f95157a0729a7454d464bcafdd3ce1b71009069a306128a32449e5572cddd",
+    "oracle.tsv": "67bab78329f36e6ec361ef8715da53f5a7e83a6a78134f33a9ed0eac206f8487",
+    "pages.tsv": "f370a58afafea1642404350f9f23d76c5a2a9af712035c3ac39b3bbc5b97c56b",
+    "acceptedMappings.tsv": "c4b5000ab720c88ed2afe393332f9837738753662fe986697ee44c10a54d9483",
+    "rejectedMappings.tsv": "fe8dc517e5c210adf755b97e8b6e947b0aa5cf7989004100c1da5c5dd1c87794",
+    "terminal-classModuleSimilarity_AffinityScores.tsv": "066d100f249f16e02cffdac75ca53039282c321a804b43e0c3ed27e70c29b750",
+    "terminal-classModule_AffinityScores.tsv": "066d100f249f16e02cffdac75ca53039282c321a804b43e0c3ed27e70c29b750",
+    "terminal-highestClassScoreMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-recommendedMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-state.tsv": "d1312c164a67cfb11c34170117441f5ab61d4d753f7fe057c9f52fd0ecc27c17",
+    "terminal-selection-controls.tsv": "a6e89d6529b0cf3b6dbdfd32021eaab26d4151e95e03f507686515af15851d05",
+    "trace-pages.tsv": "db87cde5545d4851aec8c30a9d1e347cc22b562d31b5ece93e37493d797f47ca",
+    "trace-queries.tsv": "52d23dfe1d30e854b9992e16ccda2074ee3fa00c8fa3bde5e32a0c68b3be09fc",
+    "trace-accepted.tsv": "7a79a6cf54bdde9530ed49a874e727ae94ae0767ebebb7f14201c0e7c4038277"
+  }
+}

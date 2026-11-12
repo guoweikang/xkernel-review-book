@@ -1,0 +1,31 @@
+#[test]
+fn permission_preserves_type() {
+    for bits in 0..=u16::MAX {
+        for permission_bits in [0, 1, 0o644, 0o755, 0o4000, 0o7777] {
+            let permission = NodePermission::from_bits_retain(permission_bits);
+            let result = Umode::from_bits(bits).with_permission(permission).bits();
+            assert_eq!(result & NODE_TYPE_MASK, bits & NODE_TYPE_MASK);
+            assert_eq!(result & PERMISSION_MASK, permission_bits);
+        }
+    }
+}
+
+#[test]
+fn node_type_preserves_permission() {
+    for bits in 0..=u16::MAX {
+        for node_type in [NodeType::Unknown, NodeType::Fifo, NodeType::CharacterDevice,
+                          NodeType::Directory, NodeType::BlockDevice, NodeType::RegularFile,
+                          NodeType::Symlink, NodeType::Socket] {
+            let result = Umode::from_bits(bits).with_node_type(node_type).bits();
+            assert_eq!(result & PERMISSION_MASK, bits & PERMISSION_MASK);
+            assert_eq!(result & NODE_TYPE_MASK, (node_type as u16) << NODE_TYPE_SHIFT);
+        }
+    }
+}
+
+#[test]
+fn same_initial_mode_has_different_role_updates() {
+    let initial = Umode::from_bits(0o100644);
+    assert_eq!(initial.with_permission(NodePermission::from_bits_retain(0o755)).bits(), 0o100755);
+    assert_eq!(initial.with_node_type(NodeType::Directory).bits(), 0o40644);
+}

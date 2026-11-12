@@ -1,26 +1,38 @@
-# 研究档案
+# 相似功能与重构：研究总图
 
-本附录保存阅读过程、研究计划、来源审计与历史讨论，不属于基础课程。
+核心问题：怎样在Rust系统代码中发现重复功能或职责外散，确认共享条件，并判断重构是否真正改善工程质量？xkernel是开发试点，不是全部适用范围，也不是独立测试集的替代品。
 
-## 规划与记录
+## 研究问题与证据链
 
-- [研究进度](research/PROGRESS.md)
-- [研究计划](research/RESEARCH-PLAN.md)
-- [来源与检索台账](research/SOURCES.md)
-- [概念图讨论记录](research/KNOWLEDGE-MAP.md)
+输入身份与配置 → 多视角候选发现 → 实现关系与共享条件确认 → 方案比较与验证。
+评价设计贯穿各环节，职责归属是与代码相似度互补的研究方向。
 
-## 论文阅读笔记
+|主题|当前能回答什么|尚不能回答什么|
+|---|---|---|
+|[目标与方法边界](research-topics/scope.md)|研究任务和工具／模型分工|创新性或最终收益|
+|[输入证据](research-topics/inputs.md)|材料存在性、部分对象与来源对齐|文档全正确、调用图完整|
+|[候选发现](research-topics/discovery.md)|原SCC运行、Rust适配和文档基线的具体输出|多视角融合提高了语义召回|
+|[职责归属](research-topics/responsibility.md)|粗粒度关系与映射方法的能力边界|自动裁决职责合理性|
+|[候选确认](research-topics/confirmation.md)|开发案例中的委托、契约差异和验证条件|全仓独立确认准确率|
+|[评价与基准](research-topics/evaluation.md)|任务分母、对照与数据隔离要求|已经完成标准基准与跨项目验证|
+|[优化与反馈](research-topics/optimization.md)|方案和评价方法参照、局部探索|端到端净收益已证实|
 
-- [Librarian](research/notes/2026-10-27-librarian-reading-01.md)
-- [Themis](research/notes/2026-10-28-themis-reading-01.md)
-- [历史偏好与最近邻查新](research/notes/2026-10-28-historical-preference-prior-work.md)
-- [拒绝、保留重复与回退](research/notes/2026-10-28-refactoring-decisions-sidecar.md)
+[AI Review规则学习](research-topics/review.md)研究结果如何进入审查与规则演进；[研究产出与查新](research-topics/outputs.md)管理汇报、草稿与创新候选；[来源和历史](research-topics/maintenance.md)保存接续和追溯信息。
 
-## 来源审计与编辑记录
+## 怎样从材料形成判断
 
-- [基础章节来源审计](research/notes/2026-10-28-book-source-audit.md)
-- [评价指标来源审计](research/notes/2026-10-28-metrics-source-audit.md)
-- [整体编辑前快照](research/notes/2026-10-28-book-before-editorial-review.md)
+以文档相似度为例：注释克隆论文是方法输入，本地TF-IDF实现是自主基线，top20源码核查是开发证据。“角色相反的描述仍可能高相似”是有案例支撑的局限；“加入角色字段会提高效果”仍是假设。四者不能写成同一种已完成成果。
 
-其余笔记列于本附录侧栏。旧提案和探索案例保留原始语境，不作为已验证结论。
-原始全文保存在本地 `research/evidence/originals/`，网页只提供来源链接与校验清单。
+每个专题将论文、实现、证据和未决问题放在同一条论证链上；下属“材料与实验记录”保留原始文件。一个材料可支持多个问题，但只有一个主要目录归属，避免重复计作多份独立证据。
+
+## 实验类型不能混称
+
+|类型|本研究例子|可支持的判断|
+|---|---|---|
+|原工具冒烟／适配|SourcererCC小输入、Rust前端|工具可运行及指定契约符合|
+|受控输入比较|Lucene查询、检索上限控制|指定输入因素的局部影响|
+|模型敏感性|严格／过渡架构模型|输出依赖哪些模型假设|
+|缺失输入对照|InMap缺方法反馈循环|该降级条件下的运行行为|
+|消融实验|完整机制与移除因素的匹配对照|因素贡献；当前不能用缺图运行冒充已完成完整消融|
+
+原始运行文件、固定版本和命令从各专题的实验笔记追溯。PDF/PPT/论文应引用具体证据及范围，不从目录标题或完成日志推导结论。

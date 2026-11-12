@@ -1,0 +1,93 @@
+{
+  "id": "DEV-BLOCK-RANGE",
+  "family": "block_byte_io",
+  "selector": {
+    "scc_pair": [
+      735,
+      736
+    ]
+  },
+  "question": "Can a local range-planning mechanism be shared while keeping read/write effects separate?",
+  "configuration_scope": "Unexpanded Rust source; actual target/features and fast-path reachability not verified",
+  "challenge": {
+    "status": "planned_not_executed",
+    "claim_to_challenge": "Similar range arithmetic permits replacing the whole operation",
+    "observation_needed": "Read-modify-write, flush and completion/error ordering under the same configuration"
+  },
+  "evidence": [
+    "research/notes/2026-11-06-block-io-review.md"
+  ],
+  "next": "Bind local arithmetic boundary and distinct effects before constructing a controlled variant",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "origin_group": "xkernel-7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "relation_label": "unknown",
+  "reuse_preconditions": "Unexpanded Rust source; actual target/features and fast-path reachability not verified",
+  "optimization_benefit": "unverified",
+  "independent_adjudication": "not_available",
+  "members": [
+    {
+      "id": "563a5c6f32aad9fe7d806e5009737b38b6729abc4038ca6f66e96b4a5e14137f",
+      "path": "fs/kvfs/src/node/device.rs",
+      "name": "read_block_device",
+      "start_line": 487,
+      "end_line": 535,
+      "range": [
+        17164,
+        19116
+      ],
+      "sha256": "fb5373eb23ce610205353319304d5d191efddbaf6d22cf9bba0f2c3d21f75cb1",
+      "source_sha256": "af72600b00dddc1b4c06bde533792b1a6d94c0094314ac5ba8c4b98348765312",
+      "attributes": [],
+      "ancestor_attributes": [],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            202
+          ],
+          "source": "//! Device file operations trait and memory mapping callback."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "1-source.rs",
+      "unit_file": "1-unit.rs",
+      "doc_text": "",
+      "doc_scope": "direct literal docs, truth not verified"
+    },
+    {
+      "id": "43e9707f451432fde304bce8fd93c8c0e1d376b98f3077e08c04991181f0d45b",
+      "path": "fs/kvfs/src/node/device.rs",
+      "name": "write_block_device",
+      "start_line": 537,
+      "end_line": 593,
+      "range": [
+        19118,
+        21258
+      ],
+      "sha256": "944e2103c0bb8cb066f70fd142ac32aaf036b9d2bcebb5305f10291479fd3590",
+      "source_sha256": "af72600b00dddc1b4c06bde533792b1a6d94c0094314ac5ba8c4b98348765312",
+      "attributes": [],
+      "ancestor_attributes": [],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            202
+          ],
+          "source": "//! Device file operations trait and memory mapping callback."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "2-source.rs",
+      "unit_file": "2-unit.rs",
+      "doc_text": "",
+      "doc_scope": "direct literal docs, truth not verified"
+    }
+  ],
+  "evidence_sha256": {
+    "research/notes/2026-11-06-block-io-review.md": "8b3337718647a9666f5ff57baa40e7091f8a7795a918c01e9b8a510b208c576b"
+  }
+}

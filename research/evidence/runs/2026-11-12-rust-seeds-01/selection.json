@@ -1,0 +1,57 @@
+{
+  "schema": "rust-development-seeds/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "selection": "Purposive retrospective coverage of six known failure mechanisms; no random sampling, held-out claim or effectiveness estimate",
+  "label_policy": "All relation and optimization labels remain unknown; observations and executable counterexamples are separate evidence",
+  "seeds": [
+    {
+      "id": "DEV-BLOCK-RANGE", "family": "block_byte_io", "selector": {"scc_pair": [735, 736]},
+      "question": "Can a local range-planning mechanism be shared while keeping read/write effects separate?",
+      "configuration_scope": "Unexpanded Rust source; actual target/features and fast-path reachability not verified",
+      "challenge": {"status": "planned_not_executed", "claim_to_challenge": "Similar range arithmetic permits replacing the whole operation", "observation_needed": "Read-modify-write, flush and completion/error ordering under the same configuration"},
+      "evidence": ["research/notes/2026-11-06-block-io-review.md"],
+      "next": "Bind local arithmetic boundary and distinct effects before constructing a controlled variant"
+    },
+    {
+      "id": "DEV-SUPERBLOCK-DELEGATION", "family": "superblock_constructor", "selector": {"scc_pair": [1348, 1349]},
+      "question": "Do similar constructors instantiate separate mechanisms or adapt an existing common constructor?",
+      "configuration_scope": "Source call spelling and generic context; no resolved call graph or runtime constructor tracing",
+      "challenge": {"status": "static_source_observation", "claim_to_challenge": "Two long similar constructors imply two independent implementations", "observation_needed": "Verify target identity and type adaptation; existing delegation is not absence of all possible cleanup"},
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md"],
+      "next": "Collect resolved callee/type evidence only if independent-mechanism claim remains disputed"
+    },
+    {
+      "id": "DEV-STREAM-COMMAND", "family": "stream_vs_command", "selector": {"scc_pair": [125, 1249]},
+      "question": "Does sharing write-loop structure preserve complete-command callback semantics?",
+      "configuration_scope": "Static source pair; no executed replacement validation for this exact pair",
+      "challenge": {"status": "planned_not_executed", "claim_to_challenge": "A streaming chunk adapter can replace complete-command handling", "observation_needed": "Callback count, complete payload, short completion and errors; adjacent historical fixtures are not this exact-pair test"},
+      "evidence": ["research/notes/2026-11-05-scc-first-review.md"],
+      "next": "Build an exact-pair event-trace control without reopening general I/O bug research"
+    },
+    {
+      "id": "DEV-CFG-SPINLOCK", "family": "spinlock_configuration", "selector": {"doc_rank": 1},
+      "question": "Does identical documentation conceal mutually exclusive implementations?",
+      "configuration_scope": "stats/not(stats) attributes observed; smp also appears in a body; no feature matrix compiled",
+      "challenge": {"status": "static_source_observation", "claim_to_challenge": "Both new constructors coexist in the same selected configuration", "observation_needed": "Feature-resolved membership; do not infer that cross-configuration reuse is impossible"},
+      "evidence": ["research/protocols/doc-tfidf-review-v1.json"],
+      "next": "Freeze stats x smp build context and distinguish source alternatives from compiled coexistence"
+    },
+    {
+      "id": "DEV-DOC-PARAMETER-ROLE", "family": "mode_parameter_roles", "selector": {"doc_rank": 6},
+      "question": "Can document similarity preserve which field is changed and which is retained?",
+      "configuration_scope": "Source methods and literal documentation; no new behavioral test in this seed packaging run",
+      "challenge": {"status": "static_source_observation", "claim_to_challenge": "Equal bag-of-words document similarity implies interchangeable functions", "observation_needed": "Compare permission/type role-preservation assertions; a shared bitfield mechanism remains a separate hypothesis"},
+      "evidence": ["research/protocols/doc-tfidf-review-v1.json"],
+      "next": "Use controlled field-preservation assertions before testing alternate document representations"
+    },
+    {
+      "id": "DEV-ALIGNMENT-DOMAIN", "family": "alignment_three_consumers", "selector": {"alignment": true},
+      "question": "When does shared core arithmetic preserve each consumer's input and error contract?",
+      "configuration_scope": "Rust 1.95.0 extracted-function host tests, debug/release; five-target metadata compilation only; no kernel integration or runtime performance",
+      "challenge": {"status": "executed_bounded_counterexample", "claim_to_challenge": "Unguarded next-multiple arithmetic preserves boot invalid-alignment rejection", "observation_needed": "Existing assertion: input (17,3), boot rejects while core returns Some(18); finite sampling is not full equivalence"},
+      "evidence": ["research/evidence/runs/2026-11-12-evaluation-alignment-replay-01/report.json", "research/notes/2026-11-05-alignment-core-contract.md"],
+      "next": "Retain input guard and overflow contract; no new optimization patch or benefit label"
+    }
+  ]
+}

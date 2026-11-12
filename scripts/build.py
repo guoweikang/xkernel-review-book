@@ -11,6 +11,20 @@ STAGING = ROOT / ".build" / "src"
 RESEARCH = ROOT / "research"
 
 
+def validate_catalog(actual, catalog):
+    groups = catalog["groups"]
+    identifiers = [group["id"] for group in groups]
+    if len(identifiers) != len(set(identifiers)) or any(
+        not re.fullmatch(r"[a-z][a-z0-9-]*", identifier) for identifier in identifiers
+    ):
+        raise SystemExit("Invalid or duplicate research topic identifiers")
+    registered = [name for group in groups for name in group["documents"]]
+    if len(registered) != len(set(registered)):
+        raise SystemExit("Duplicate primary assignment in research/catalog.json")
+    if set(registered) != actual:
+        raise SystemExit(f"Research catalog mismatch: unassigned={sorted(actual - set(registered))}; missing={sorted(set(registered) - actual)}")
+
+
 def main():
     local_binary = ROOT / ".tools" / "mdbook"
     binary = str(local_binary) if local_binary.exists() else shutil.which("mdbook")
@@ -33,6 +47,9 @@ def main():
         if not source.is_relative_to(RESEARCH / "evidence" / "originals")
         and not source.is_relative_to(RESEARCH / "evidence" / "runs")
     )
+    catalog = json.loads((RESEARCH / "catalog.json").read_text())
+    actual = {source.relative_to(RESEARCH).as_posix() for source in research_files}
+    validate_catalog(actual, catalog)
     for source in research_files:
         destination = STAGING / "research" / source.relative_to(RESEARCH)
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -59,14 +76,29 @@ def main():
         destination.write_text(content)
     summary_path = STAGING / "SUMMARY.md"
     summary = summary_path.read_text()
-    listed = set(re.findall(r"\]\(([^)]+)\)", summary))
-    for source in research_files:
-        relative = "research/" + source.relative_to(RESEARCH).as_posix()
-        if relative in listed:
-            continue
-        title_match = re.search(r"^# (.+)$", source.read_text(), re.MULTILINE)
-        title = title_match.group(1) if title_match else source.stem
-        summary += f"- [{title}]({relative})\n"
+    navigation = []
+    for group in catalog["groups"]:
+        overview = STAGING / "research-topics" / (group["id"] + ".md")
+        if not overview.exists():
+            raise SystemExit(f"Missing research synthesis: {overview}")
+        navigation.append(f'- [{group["title"]}](research-topics/{group["id"]}.md)')
+        archive_path = f'research-topics/{group["id"]}-records.md'
+        navigation.append(f'  - [材料与实验记录]({archive_path})')
+        records = [f'# {group["title"]}：材料与实验记录', '',
+                   f'[专题综合]({group["id"]}.md)', '',
+                   '以下保留原始记录的标题和时点；历史计划不代表当前完成状态。', '']
+        for name in group["documents"]:
+            source = RESEARCH / name
+            title_match = re.search(r"^# (.+)$", source.read_text(), re.MULTILINE)
+            title = title_match.group(1) if title_match else source.stem
+            navigation.append(f'    - [{title}](research/{name})')
+            link = name.removesuffix("README.md") + "index.md" if name.endswith("README.md") else name
+            records.append(f'- [{title}](../research/{link})')
+        (STAGING / archive_path).write_text("\n".join(records) + "\n")
+    marker = "<!-- RESEARCH_CATALOG -->"
+    if summary.count(marker) != 1:
+        raise SystemExit("SUMMARY must contain exactly one research catalog marker")
+    summary = summary.replace(marker, "\n".join(navigation))
     summary_path.write_text(summary)
     for source in (RESEARCH / "publications").rglob("*"):
         if source.is_file() and source.suffix in {".pdf", ".docx", ".pptx"}:

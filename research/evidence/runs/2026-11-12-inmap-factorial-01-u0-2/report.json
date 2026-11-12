@@ -1,0 +1,62 @@
+{
+  "scope": "explicit missing-method-feedback control; not full paper reproduction",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 1,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-01-u0-2/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-01-u0-2/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapLoopProbe"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/AutoMap.java",
+      "anchor": "System.out.print( pageNumber + \".\" );",
+      "insertion": "recommender.InMapTrace.begin(pageNumber, acceptedMappings);\n            if (pageNumber > 200) throw new IllegalStateException(\"Page budget exceeded\");",
+      "before_sha256": "01015f28a9e64e08545239fc3bdcc0f075ad75553cef30f7185d413cc1efdb08",
+      "after_sha256": "0c1cbc04a1a0e9f067ed21ec1664588cc8d7a7d97433a263f2391b0f5dc86f22"
+    },
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, numOfMethodsToAdd, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "c5d441ac407d48ff8cff959a29fb59baa7d48c2e33f108e6159b52e25da938c4"
+    }
+  ],
+  "method_feedback": "none",
+  "selector_variant": "unique-maximum-only",
+  "selector_change": {
+    "method": "pickHighestClassScore",
+    "before_sha256": "43d2bd4fc4bad4b9cd0b83ca0af53a1aedae209466b1aa3565ab6e1eefb9bd4c",
+    "after_sha256": "01015f28a9e64e08545239fc3bdcc0f075ad75553cef30f7185d413cc1efdb08",
+    "removed_method": "\tprivate void pickHighestClassScore() \n\t{\t\n\t\t// TODO: remove for dependency analysis\n\t\tclassModule_AffinityScores.clear();\n\t\tclassModule_AffinityScores.putAll( classModuleSimilarity_AffinityScores );\n\t\t\n\t\t// get the highest affinity score of a class to a module and store it, discard all lower scores\n\t\thighestClassScoreMappings.clear();\n\t\tretrieveUnMappedClasses();\n\t\t\n\t\tMap<Map<String, String>, Double> similarScoreMappings = new HashMap<>();\n\t\t\n\t\tfor( String unMappedClass : unMappedClasses )\n\t\t{\t\n\t\t\tMap<String, String> oldMap = new HashMap<>();\n\t\t\t// TODO: Figure out oldhighscore value to use for dependency analysis...an extreme negative score?\n\t\t\tdouble oldHighScore = -1.0f;\n\t\t\t\n\t\t\tfor( int i = 0; i < moduleNames.length; i++ )\n\t\t\t{\n\t\t\t\tString module = moduleNames[ i ];\n\t\t\t\tMap<String, String> newMap = new HashMap<>();\n\t\t\t\tnewMap.put( unMappedClass, module );\n\t\t\t\t\n\t\t\t\tif( classModule_AffinityScores.get( newMap ) != null )\n\t\t\t\t{\n\t\t\t\t\tdouble newHighScore = classModule_AffinityScores.get( newMap );\n\t\t\t\t\t\n\t\t\t\t\t// store mapping with similar score\n\t\t\t\t\tif( newHighScore == oldHighScore )\n\t\t\t\t\t{\n\t\t\t\t\t\tsimilarScoreMappings.put( oldMap, oldHighScore );\n\t\t\t\t\t}\n\t\t\t\t\telse if( newHighScore > oldHighScore )\n\t\t\t\t\t{\n\t\t\t\t\t\thighestClassScoreMappings.remove( oldMap, oldHighScore );\n\t\t\t\t\t\thighestClassScoreMappings.put( newMap, newHighScore );\n\t\t\t\t\t\toldMap.putAll( newMap );\n\t\t\t\t\t\toldHighScore = newHighScore;\n\t\t\t\t\t}\n\t\t\t\t}\t\n\t\t\t}\n\t\t}\n\t\t\n\t\t// remove mappings with similar scores\n\t\tfor( Map<String, String> map : similarScoreMappings.keySet() )\n\t\t{\n\t\t\thighestClassScoreMappings.remove( map );\n\t\t}\n\t}\n\t\n"
+  },
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "InMapUniqueMaximum.txt": "09fe7c6b32de35bf5f785916025a20d4aef5e71454810027faa913fccdebebc5",
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapLoopProbe.java": "88dcdbafeac4d6137ded5da63b00628fed4ec608782e2a348f536f37a3736e42",
+    "runner.py": "f9ed5288e566550a148a62665456f676255dce1a1ce2ceaabca73f66fa50264f",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.txt": "f866975f9d5909c86179eaf860ba88553d3098967d4be64b10c3628c89939443"
+  }
+}

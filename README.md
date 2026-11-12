@@ -6,6 +6,11 @@
 仓库：<https://github.com/guoweikang/xkernel-review-book>。
 内容按基础前置知识、流程地图、六个审查环节组织；论文与工程实践归入对应环节。
 
+研究材料归档规则见 `research/archive/README.md`；外部仓库版本与恢复入口见
+`research/archive/sources.json`。实验原始输入输出按批次存放在 `research/evidence/runs/`，
+公开文件摘要清单位于 `research/archive/snapshots/`。缓存与部分本地原件不随Git上传，
+当前不宣称提供完整离线复现环境。
+
 ## 构建与访问
 
 需要 Python 3.11+ 和 mdBook 0.5.4。当前环境已在 `.tools/mdbook` 安装校验过的二进制；

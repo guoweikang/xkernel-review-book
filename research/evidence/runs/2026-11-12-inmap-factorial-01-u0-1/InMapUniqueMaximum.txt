@@ -1,0 +1,27 @@
+    private void pickHighestClassScore()
+    {
+        classModule_AffinityScores.clear();
+        classModule_AffinityScores.putAll(classModuleSimilarity_AffinityScores);
+        highestClassScoreMappings.clear();
+        retrieveUnMappedClasses();
+        for (String entity : unMappedClasses) {
+            double maximum = -1.0;
+            int maximumCount = 0;
+            Map<String, String> selected = null;
+            for (String module : moduleNames) {
+                Map<String, String> pair = new HashMap<>();
+                pair.put(entity, module);
+                Double score = classModule_AffinityScores.get(pair);
+                if (score == null) continue;
+                if (score > maximum) {
+                    maximum = score;
+                    maximumCount = 1;
+                    selected = pair;
+                } else if (score == maximum) {
+                    maximumCount++;
+                }
+            }
+            if (maximumCount == 1) highestClassScoreMappings.put(selected, maximum);
+        }
+    }
+

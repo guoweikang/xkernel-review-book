@@ -1,0 +1,176 @@
+{
+  "passed": true,
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "commands": [
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/probe.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/debug"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/debug-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/debug",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/probe.rs",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/release",
+      "-O"
+    ],
+    [
+      "timeout",
+      "60",
+      "unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "--pid",
+      "--net",
+      "--ipc",
+      "--uts",
+      "--fork",
+      "bash",
+      "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/release-root",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+      "/work/release",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-type=lib",
+      "--target",
+      "x86_64-unknown-none",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/library.rs",
+      "--emit=metadata",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/x86_64-unknown-none.rmeta"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-type=lib",
+      "--target",
+      "x86_64-unknown-uefi",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/library.rs",
+      "--emit=metadata",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/x86_64-unknown-uefi.rmeta"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-type=lib",
+      "--target",
+      "riscv64gc-unknown-none-elf",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/library.rs",
+      "--emit=metadata",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/riscv64gc-unknown-none-elf.rmeta"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-type=lib",
+      "--target",
+      "aarch64-unknown-none-softfloat",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/library.rs",
+      "--emit=metadata",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/aarch64-unknown-none-softfloat.rmeta"
+    ],
+    [
+      "/root/.rustup/toolchains/1.95.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--crate-type=lib",
+      "--target",
+      "loongarch64-unknown-none-softfloat",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/library.rs",
+      "--emit=metadata",
+      "-o",
+      "/root/codes/x-kernel-worktrees/ai-review-book/.build/alignment/2026-11-12-evaluation-alignment-replay-01/work/loongarch64-unknown-none-softfloat.rmeta"
+    ]
+  ],
+  "sources": {
+    "cpu": {
+      "path": "arch/kcpu_slot/src/dynamic.rs",
+      "start_line": 267,
+      "sha256": "3d061dc00ecc73b802554bc3725284a5b915d7b8606c2e99a08b3839dd84e352"
+    },
+    "boot": {
+      "path": "boot/kernel-elf-loader/src/lib.rs",
+      "start_line": 228,
+      "sha256": "959a83e57ed2a14679a8ce475e5ff4b614445a155e9751a4b3a9dc3943bf5d5e"
+    },
+    "host": {
+      "path": "xtask/xkmake/src/image_metadata.rs",
+      "start_line": 426,
+      "sha256": "593643be32c418407f66ec4f4fc58f46c4badfe87c29e3efc073fc69c9207763"
+    }
+  },
+  "kernel_integration": "not_run",
+  "performance": "not_measured",
+  "scope": "extracted arithmetic functions; visibility widened for harness access",
+  "core_source_sha256": "189d28513c634d88df6a365d3a509ec7aade0d7eeec5ddb3976f22e91ae6e572",
+  "target_metadata_compile": [
+    "x86_64-unknown-none",
+    "x86_64-unknown-uefi",
+    "riscv64gc-unknown-none-elf",
+    "aarch64-unknown-none-softfloat",
+    "loongarch64-unknown-none-softfloat"
+  ],
+  "artifacts_sha256": {
+    "aarch64-unknown-none-softfloat.log": "a21527f0d0aa0bed9a98bf5ba11f7052fdbfcd503fb5952f8612d44162378cae",
+    "alignment-core-tests.rs.in": "ffba50df3990a8a32bd963e708bb36248214d8fc9833f1ab43d81e721ee1000a",
+    "boot-candidate.rs": "b1e0c2c4a361cddd12044d274b69c8a771e5497f8abaed90e487aee2c387bef0",
+    "boot-original.rs": "adbaa0022c788e19f68866e7bbc554675bc56a5f69f5f015c7fdb755b20e891b",
+    "boot-source.rs": "959a83e57ed2a14679a8ce475e5ff4b614445a155e9751a4b3a9dc3943bf5d5e",
+    "candidate.patch": "291d765bf1f4b9dbb87292512ba9fdb83414e10d9c3cd0e3e45e415b992ab838",
+    "cpu-candidate.rs": "36c9ee310093c3142888e3e0afe62062b7559cc3b42fbfd81cbdefff34127243",
+    "cpu-original.rs": "e9d9f1d1a8ff8283086089773917f9567526c1f79f079efb228355af7b7090a2",
+    "cpu-source.rs": "3d061dc00ecc73b802554bc3725284a5b915d7b8606c2e99a08b3839dd84e352",
+    "debug-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "debug-tests.log": "8c7774b737d2a727e88c085f704e4f767a85d254f83482fb4cbd22a94b958cb6",
+    "host-candidate.rs": "42a0daa0c1ce5f5229483607a026c23137eecb941c3d425fe2dd5259512fa4c7",
+    "host-original.rs": "8e2cbebd656c9aceb2e196fed4374120ec577d2b639341e369a897b3e7adf360",
+    "host-source.rs": "593643be32c418407f66ec4f4fc58f46c4badfe87c29e3efc073fc69c9207763",
+    "loongarch64-unknown-none-softfloat.log": "a21527f0d0aa0bed9a98bf5ba11f7052fdbfcd503fb5952f8612d44162378cae",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "probe.rs": "1c879f4fa62eb964a0ee8f3d96507af6196fb5e789f497c3737587e0ecde261f",
+    "release-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-tests.log": "d62ecca9de5022d4ec971f5b1f762e0682cb15b55a182ef64686eb664d3f9746",
+    "riscv64gc-unknown-none-elf.log": "a21527f0d0aa0bed9a98bf5ba11f7052fdbfcd503fb5952f8612d44162378cae",
+    "runner.py": "57119f24903dce2e744d88dbeb3cc119dda680e2a4fa334b88d2a67b7d3acb86",
+    "rust-toolchain.toml": "f4d12f2e595a8514e99ee099c6421159e5ce4ff74209f58f3d68e29763a53794",
+    "rustc.txt": "4fdff2578428e9c5c08ddd7a0d3079c1a106b1cdaa46e73e46f7cd32b0fb9cad",
+    "uint_macros.rs": "189d28513c634d88df6a365d3a509ec7aade0d7eeec5ddb3976f22e91ae6e572",
+    "x86_64-unknown-none.log": "a21527f0d0aa0bed9a98bf5ba11f7052fdbfcd503fb5952f8612d44162378cae",
+    "x86_64-unknown-uefi.log": "a21527f0d0aa0bed9a98bf5ba11f7052fdbfcd503fb5952f8612d44162378cae"
+  }
+}

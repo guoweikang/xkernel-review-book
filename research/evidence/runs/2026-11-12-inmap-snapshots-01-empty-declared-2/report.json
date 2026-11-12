@@ -1,0 +1,55 @@
+{
+  "scope": "fixed accepted snapshot IR scoring; no selector or iterative feedback",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 0,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-snapshots-01-empty-declared-2/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-snapshots-01-empty-declared-2/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapSnapshotProbe declared-method-input.tsv"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, 1024 - filteredModuleDescriptionList.size() - numOfModuleClasses, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "8fee50eb7295c8e1f348ee96693f71a8e0e847091c73d3cad6af0b2a9333e0db"
+    }
+  ],
+  "method_feedback": "declared-top-level",
+  "selector_variant": "original",
+  "selector_change": null,
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "snapshot-input.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "declared-method-input.tsv": "cb01442959a18d6e2929ccce9d775afa3db0ee6804463e6916bd16d90b8696a8",
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapSnapshotProbe.java": "ea2942783dbc2b83f31fb35a1b5cc5e396f5f35fdbe81670bdfa764cc279820b",
+    "runner.py": "64c80894fa38ebc700de8e01fa922cc6e669f8b6b72d0646db79794ab38ad93c",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "12c011cbd0971b499812b70a3f7d867205ff047f581ec015da697a2f53a1840a",
+    "stderr.txt": "be26a820ce646710b131ea2e9283ca042d7e68d66aeff1c629e8ebbe12df58b4",
+    "filtered-classes.txt": "b85f95157a0729a7454d464bcafdd3ce1b71009069a306128a32449e5572cddd",
+    "initial-ir-scores.tsv": "709545e68973d51eb53c2f3e6cdd28a5f313444fb1e76a1df03dfd60edbfb842",
+    "trace-pages.tsv": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "trace-queries.tsv": "ff3a148934a76bae782f76258aa7cdafded3a2ef4e2d778c58fe8c811c4a77dc"
+  }
+}

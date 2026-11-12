@@ -1,0 +1,192 @@
+{
+  "id": "DEV-CFG-SPINLOCK",
+  "family": "spinlock_configuration",
+  "selector": {
+    "doc_rank": 1
+  },
+  "question": "Does identical documentation conceal mutually exclusive implementations?",
+  "configuration_scope": "stats/not(stats) attributes observed; smp also appears in a body; no feature matrix compiled",
+  "challenge": {
+    "status": "static_source_observation",
+    "claim_to_challenge": "Both new constructors coexist in the same selected configuration",
+    "observation_needed": "Feature-resolved membership; do not infer that cross-configuration reuse is impossible"
+  },
+  "evidence": [
+    "research/protocols/doc-tfidf-review-v1.json"
+  ],
+  "next": "Freeze stats x smp build context and distinguish source alternatives from compiled coexistence",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "origin_group": "xkernel-7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "relation_label": "unknown",
+  "reuse_preconditions": "stats/not(stats) attributes observed; smp also appears in a body; no feature matrix compiled",
+  "optimization_benefit": "unverified",
+  "independent_adjudication": "not_available",
+  "members": [
+    {
+      "id": "05fa648d6d96a0800a9e5f005cc8ec54852fe61075d924912a589e3375fb889d",
+      "path": "task/kspin/src/lock.rs",
+      "name": "new",
+      "start_line": 80,
+      "end_line": 87,
+      "range": [
+        2623,
+        2840
+      ],
+      "sha256": "1159c443a55db64381d2aeda5ca7b84e417d03a628c081bcd4316ddaee2ce2d9",
+      "source_sha256": "3ab1ca6bec64c9da8b3920d6d4aed22d09c8e452b32eb5509bf33d068125110e",
+      "attributes": [
+        {
+          "path": "doc",
+          "range": [
+            2531,
+            2557
+          ],
+          "source": "/// Create a new spinlock."
+        },
+        {
+          "path": "inline",
+          "range": [
+            2562,
+            2579
+          ],
+          "source": "#[inline(always)]"
+        },
+        {
+          "path": "cfg",
+          "range": [
+            2584,
+            2614
+          ],
+          "source": "#[cfg(not(feature = \"stats\"))]"
+        }
+      ],
+      "ancestor_attributes": [
+        []
+      ],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            194
+          ],
+          "source": "//! Spinlock implementation with configurable guards."
+        },
+        {
+          "path": "doc",
+          "range": [
+            195,
+            198
+          ],
+          "source": "//!"
+        },
+        {
+          "path": "doc",
+          "range": [
+            199,
+            265
+          ],
+          "source": "//! This module provides a generic spinlock that can be configured"
+        },
+        {
+          "path": "doc",
+          "range": [
+            266,
+            334
+          ],
+          "source": "//! with different guard types to control preemption and interrupts."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "1-source.rs",
+      "unit_file": "1-unit.rs",
+      "doc_text": " Create a new spinlock.",
+      "doc_scope": "direct literal docs, truth not verified"
+    },
+    {
+      "id": "b8f490d93b1106f9d91c7ba01fdd022f2afd81aada52590565d435138067b901",
+      "path": "task/kspin/src/lock.rs",
+      "name": "new",
+      "start_line": 92,
+      "end_line": 94,
+      "range": [
+        2933,
+        3029
+      ],
+      "sha256": "e9743c1c538771cc505d1acff332b1bd4429cb78c3efa0d98da52de3d0b8e397",
+      "source_sha256": "3ab1ca6bec64c9da8b3920d6d4aed22d09c8e452b32eb5509bf33d068125110e",
+      "attributes": [
+        {
+          "path": "doc",
+          "range": [
+            2846,
+            2872
+          ],
+          "source": "/// Create a new spinlock."
+        },
+        {
+          "path": "inline",
+          "range": [
+            2877,
+            2894
+          ],
+          "source": "#[inline(always)]"
+        },
+        {
+          "path": "cfg",
+          "range": [
+            2899,
+            2924
+          ],
+          "source": "#[cfg(feature = \"stats\")]"
+        }
+      ],
+      "ancestor_attributes": [
+        []
+      ],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            194
+          ],
+          "source": "//! Spinlock implementation with configurable guards."
+        },
+        {
+          "path": "doc",
+          "range": [
+            195,
+            198
+          ],
+          "source": "//!"
+        },
+        {
+          "path": "doc",
+          "range": [
+            199,
+            265
+          ],
+          "source": "//! This module provides a generic spinlock that can be configured"
+        },
+        {
+          "path": "doc",
+          "range": [
+            266,
+            334
+          ],
+          "source": "//! with different guard types to control preemption and interrupts."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "2-source.rs",
+      "unit_file": "2-unit.rs",
+      "doc_text": " Create a new spinlock.",
+      "doc_scope": "direct literal docs, truth not verified"
+    }
+  ],
+  "evidence_sha256": {
+    "research/protocols/doc-tfidf-review-v1.json": "d15c974fd92bedccfbef7dfe0f0364d33041d2d765be0f9c8216a6c6309e15de"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "scope": "explicit missing-method-feedback control; not full paper reproduction",
+  "revision": "cae17d87f8c17d8108d21abd41e0520b6ca65d7c",
+  "returncode": 0,
+  "command": [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--net",
+    "--ipc",
+    "--uts",
+    "bash",
+    "/root/codes/x-kernel-worktrees/ai-review-book/scripts/scc_namespace.sh",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-u0-1/root",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.build/inmap-runs/2026-11-12-inmap-factorial-02-u0-1/work",
+    "/root/codes/x-kernel-worktrees/ai-review-book/.tools/scc-smoke",
+    "/bin/bash",
+    "-c",
+    "cd /work && java -version && mkdir classes && javac -cp \"jars/*:$JAVA_HOME/lib/tools.jar\" -d classes @sources.txt && java -cp \"classes:jars/*:$JAVA_HOME/lib/tools.jar\" InMapLoopProbe"
+  ],
+  "original_sources_modified": true,
+  "observation_changes": [
+    {
+      "path": "src/recommender/AutoMap.java",
+      "anchor": "System.out.print( pageNumber + \".\" );",
+      "insertion": "recommender.InMapTrace.begin(pageNumber, acceptedMappings);\n            if (pageNumber > 200) throw new IllegalStateException(\"Page budget exceeded\");",
+      "before_sha256": "01015f28a9e64e08545239fc3bdcc0f075ad75553cef30f7185d413cc1efdb08",
+      "after_sha256": "0c1cbc04a1a0e9f067ed21ec1664588cc8d7a7d97433a263f2391b0f5dc86f22"
+    },
+    {
+      "path": "src/recommender/ir/IRAnalysis.java",
+      "anchor": "Query query = parser.parse( moduleSearchKeywords );",
+      "insertion": "recommender.InMapTrace.query(module, numOfModuleClasses, 1024 - filteredModuleDescriptionList.size() - numOfModuleClasses, methodCountMap, moduleSearchKeywords, query);",
+      "before_sha256": "27abe716ee3027239a2e6c90402fb436b150bc60a62aa876fd5e468e4e36dea2",
+      "after_sha256": "8fee50eb7295c8e1f348ee96693f71a8e0e847091c73d3cad6af0b2a9333e0db"
+    }
+  ],
+  "method_feedback": "none",
+  "selector_variant": "unique-maximum-only",
+  "selector_change": {
+    "method": "pickHighestClassScore",
+    "before_sha256": "43d2bd4fc4bad4b9cd0b83ca0af53a1aedae209466b1aa3565ab6e1eefb9bd4c",
+    "after_sha256": "01015f28a9e64e08545239fc3bdcc0f075ad75553cef30f7185d413cc1efdb08",
+    "removed_method": "\tprivate void pickHighestClassScore() \n\t{\t\n\t\t// TODO: remove for dependency analysis\n\t\tclassModule_AffinityScores.clear();\n\t\tclassModule_AffinityScores.putAll( classModuleSimilarity_AffinityScores );\n\t\t\n\t\t// get the highest affinity score of a class to a module and store it, discard all lower scores\n\t\thighestClassScoreMappings.clear();\n\t\tretrieveUnMappedClasses();\n\t\t\n\t\tMap<Map<String, String>, Double> similarScoreMappings = new HashMap<>();\n\t\t\n\t\tfor( String unMappedClass : unMappedClasses )\n\t\t{\t\n\t\t\tMap<String, String> oldMap = new HashMap<>();\n\t\t\t// TODO: Figure out oldhighscore value to use for dependency analysis...an extreme negative score?\n\t\t\tdouble oldHighScore = -1.0f;\n\t\t\t\n\t\t\tfor( int i = 0; i < moduleNames.length; i++ )\n\t\t\t{\n\t\t\t\tString module = moduleNames[ i ];\n\t\t\t\tMap<String, String> newMap = new HashMap<>();\n\t\t\t\tnewMap.put( unMappedClass, module );\n\t\t\t\t\n\t\t\t\tif( classModule_AffinityScores.get( newMap ) != null )\n\t\t\t\t{\n\t\t\t\t\tdouble newHighScore = classModule_AffinityScores.get( newMap );\n\t\t\t\t\t\n\t\t\t\t\t// store mapping with similar score\n\t\t\t\t\tif( newHighScore == oldHighScore )\n\t\t\t\t\t{\n\t\t\t\t\t\tsimilarScoreMappings.put( oldMap, oldHighScore );\n\t\t\t\t\t}\n\t\t\t\t\telse if( newHighScore > oldHighScore )\n\t\t\t\t\t{\n\t\t\t\t\t\thighestClassScoreMappings.remove( oldMap, oldHighScore );\n\t\t\t\t\t\thighestClassScoreMappings.put( newMap, newHighScore );\n\t\t\t\t\t\toldMap.putAll( newMap );\n\t\t\t\t\t\toldHighScore = newHighScore;\n\t\t\t\t\t}\n\t\t\t\t}\t\n\t\t\t}\n\t\t}\n\t\t\n\t\t// remove mappings with similar scores\n\t\tfor( Map<String, String> map : similarScoreMappings.keySet() )\n\t\t{\n\t\t\thighestClassScoreMappings.remove( map );\n\t\t}\n\t}\n\t\n"
+  },
+  "retrieval_limit_override": null,
+  "source_files_compiled": 49,
+  "artifact_sha256": {
+    "InMapUniqueMaximum.txt": "09fe7c6b32de35bf5f785916025a20d4aef5e71454810027faa913fccdebebc5",
+    "dependencies.json": "04503fa8057e7290d0d93c1008f5e326d908cc4454db26345dc1053c06f67e67",
+    "config-single.txt": "1f09c288fc179212d76b917fced14d0f5cb5da145765321c62763b39eba7f782",
+    "InMapLoopProbe.java": "88dcdbafeac4d6137ded5da63b00628fed4ec608782e2a348f536f37a3736e42",
+    "runner.py": "290b871b86c8510ba0fb52b5ba001f818bae3a8cf6e3cf129273cba3ae16cf1d",
+    "namespace.sh": "a6e9cc5cd01001cb060bc6f7fa93d753f1eb21cbfcbeb66541a3231d68b90d7b",
+    "InMapTrace.java": "251b03ebeb15de2399689fd7810c6d491b4701e1df63ad8713c105ebfb25d289",
+    "stdout.txt": "0bfbd1e3395637c969373ab3ec8bf5ed93ba3e258a88be432ec1f9a0894429b3",
+    "stderr.txt": "be26a820ce646710b131ea2e9283ca042d7e68d66aeff1c629e8ebbe12df58b4",
+    "filtered-classes.txt": "b85f95157a0729a7454d464bcafdd3ce1b71009069a306128a32449e5572cddd",
+    "oracle.tsv": "67bab78329f36e6ec361ef8715da53f5a7e83a6a78134f33a9ed0eac206f8487",
+    "pages.tsv": "a86db123ec02693e3c7cf74e87d61ff13602d41f5b42d7eb58050bf9beb27fd3",
+    "acceptedMappings.tsv": "68b607361f119b7cd0d8e3213b7b5b7df854d5864da710f8d857b2714c877c8a",
+    "rejectedMappings.tsv": "2cf46c2f536d4d58e7fc84b73dd93dfdca2bd35b38de0da05a4d3fdb3e0eaaa0",
+    "terminal-classModuleSimilarity_AffinityScores.tsv": "587185e561a075efa02e4cbbe1ac507d55971978b16ca96d2ffd256e6fdac2b2",
+    "terminal-classModule_AffinityScores.tsv": "587185e561a075efa02e4cbbe1ac507d55971978b16ca96d2ffd256e6fdac2b2",
+    "terminal-highestClassScoreMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-recommendedMappings.tsv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "terminal-state.tsv": "d1312c164a67cfb11c34170117441f5ab61d4d753f7fe057c9f52fd0ecc27c17",
+    "terminal-selection-controls.tsv": "0b26e57931044f13385dadffb4da58172c7d3f607ad5b19892958681e40bd08b",
+    "trace-pages.tsv": "db87cde5545d4851aec8c30a9d1e347cc22b562d31b5ece93e37493d797f47ca",
+    "trace-queries.tsv": "9515a2d9ac423daf84f780d27ddf1aabeed846f8b3c419f63f715bbc58ab60fa",
+    "trace-accepted.tsv": "5214b243e47a91ad505233747428790713d325a78f66cdac561cee751d528074"
+  }
+}

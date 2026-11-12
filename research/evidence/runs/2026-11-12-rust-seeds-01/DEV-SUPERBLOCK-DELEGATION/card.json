@@ -1,0 +1,235 @@
+{
+  "id": "DEV-SUPERBLOCK-DELEGATION",
+  "family": "superblock_constructor",
+  "selector": {
+    "scc_pair": [
+      1348,
+      1349
+    ]
+  },
+  "question": "Do similar constructors instantiate separate mechanisms or adapt an existing common constructor?",
+  "configuration_scope": "Source call spelling and generic context; no resolved call graph or runtime constructor tracing",
+  "challenge": {
+    "status": "static_source_observation",
+    "claim_to_challenge": "Two long similar constructors imply two independent implementations",
+    "observation_needed": "Verify target identity and type adaptation; existing delegation is not absence of all possible cleanup"
+  },
+  "evidence": [
+    "research/notes/2026-11-05-scc-first-review.md"
+  ],
+  "next": "Collect resolved callee/type evidence only if independent-mechanism claim remains disputed",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "origin_group": "xkernel-7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "relation_label": "unknown",
+  "reuse_preconditions": "Source call spelling and generic context; no resolved call graph or runtime constructor tracing",
+  "optimization_benefit": "unverified",
+  "independent_adjudication": "not_available",
+  "members": [
+    {
+      "id": "c8a049addf7accbf2c3e1c9e31d03ab22e8e9c5ba1ea276ed297d2ffe5ed7ea2",
+      "path": "fs/kvfs/src/super_block.rs",
+      "name": "new_with_flags_and_private",
+      "start_line": 705,
+      "end_line": 729,
+      "range": [
+        26326,
+        27094
+      ],
+      "sha256": "106d9f702893210666e26c3664f126e1681f986a040affa77f189620f5151d44",
+      "source_sha256": "7e5edfffdcd7ad1f2a109f811d7940cffd02913f854acc69853ecb5d4a1d5e5b",
+      "attributes": [
+        {
+          "path": "doc",
+          "range": [
+            25977,
+            26061
+          ],
+          "source": "/// Creates a superblock with distinct shared operations and prepared private state."
+        },
+        {
+          "path": "doc",
+          "range": [
+            26066,
+            26069
+          ],
+          "source": "///"
+        },
+        {
+          "path": "doc",
+          "range": [
+            26074,
+            26149
+          ],
+          "source": "/// The caller allocates the private owner with a policy appropriate to its"
+        },
+        {
+          "path": "doc",
+          "range": [
+            26154,
+            26228
+          ],
+          "source": "/// context before entering this function. This function does not allocate"
+        },
+        {
+          "path": "doc",
+          "range": [
+            26233,
+            26317
+          ],
+          "source": "/// another private owner. Root initialization retains its own context requirements."
+        }
+      ],
+      "ancestor_attributes": [
+        []
+      ],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            188
+          ],
+          "source": "//! Superblock state and filesystem statistics."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "1-source.rs",
+      "unit_file": "1-unit.rs",
+      "doc_text": " Creates a superblock with distinct shared operations and prepared private state.\n\n The caller allocates the private owner with a policy appropriate to its\n context before entering this function. This function does not allocate\n another private owner. Root initialization retains its own context requirements.",
+      "doc_scope": "direct literal docs, truth not verified"
+    },
+    {
+      "id": "f681af8f9ff99d6d4d260f995fb99124961a946219e66d30cd0d9066f7b33042",
+      "path": "fs/kvfs/src/super_block.rs",
+      "name": "try_new_with_flags_and_private",
+      "start_line": 743,
+      "end_line": 766,
+      "range": [
+        27729,
+        28508
+      ],
+      "sha256": "2836a669f9c37e834f8baca394bafd4a68b1fe9a3789c383811b54d9c158ec82",
+      "source_sha256": "7e5edfffdcd7ad1f2a109f811d7940cffd02913f854acc69853ecb5d4a1d5e5b",
+      "attributes": [
+        {
+          "path": "doc",
+          "range": [
+            27100,
+            27179
+          ],
+          "source": "/// Creates a superblock with distinct filesystem operations and private state."
+        },
+        {
+          "path": "doc",
+          "range": [
+            27184,
+            27187
+          ],
+          "source": "///"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27192,
+            27267
+          ],
+          "source": "/// This is the object-model counterpart of Linux `fill_super()` installing"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27272,
+            27346
+          ],
+          "source": "/// static `s_op`, filesystem-owned `s_fs_info`, and generic `s_blocksize`"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27351,
+            27428
+          ],
+          "source": "/// and `s_maxbytes` fields on the same nascent superblock. Private ownership"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27433,
+            27507
+          ],
+          "source": "/// must be prepared using the caller's permitted allocation policy, as in"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27512,
+            27591
+          ],
+          "source": "/// [`Self::new_with_flags_and_private`]; this function does not reallocate it."
+        },
+        {
+          "path": "doc",
+          "range": [
+            27596,
+            27599
+          ],
+          "source": "///"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27604,
+            27616
+          ],
+          "source": "/// # Errors"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27621,
+            27624
+          ],
+          "source": "///"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27629,
+            27700
+          ],
+          "source": "/// Returns the root initializer's error without publishing the nascent"
+        },
+        {
+          "path": "doc",
+          "range": [
+            27705,
+            27720
+          ],
+          "source": "/// superblock."
+        }
+      ],
+      "ancestor_attributes": [
+        []
+      ],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            188
+          ],
+          "source": "//! Superblock state and filesystem statistics."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "2-source.rs",
+      "unit_file": "2-unit.rs",
+      "doc_text": " Creates a superblock with distinct filesystem operations and private state.\n\n This is the object-model counterpart of Linux `fill_super()` installing\n static `s_op`, filesystem-owned `s_fs_info`, and generic `s_blocksize`\n and `s_maxbytes` fields on the same nascent superblock. Private ownership\n must be prepared using the caller's permitted allocation policy, as in\n [`Self::new_with_flags_and_private`]; this function does not reallocate it.\n\n # Errors\n\n Returns the root initializer's error without publishing the nascent\n superblock.",
+      "doc_scope": "direct literal docs, truth not verified"
+    }
+  ],
+  "evidence_sha256": {
+    "research/notes/2026-11-05-scc-first-review.md": "9c4394310ec6f6c378334812d8c777c6bb25c7886a834d1b7ef02d2f6e870e0e"
+  }
+}
