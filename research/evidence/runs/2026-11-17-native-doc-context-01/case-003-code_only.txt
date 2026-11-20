@@ -1,0 +1,147 @@
+你是Rust代码研究提案助手。这是一个独立文本任务，不要使用任何工具，不读取文件或其他会话，只使用本消息材料。不要修改代码。不能从函数名推定未展示实现的语义。允许证据不足而不提出抽取。请用不超过900汉字（代码标识符除外）给出一次回答，分列：共享机制或弃权理由、必须保留的差异、已有委托、最小接口草案、约束及其来源(code/doc/unknown)、一条可反驳提案的验证义务、缺失上下文。文档只能作为声明，不能自动当作实现事实。不要报告置信度分数或宣称已经测试。
+
+left: fs/kvfs/src/xattr.rs:239
+```rust
+fn set_xattr(
+        &self,
+        name: &XattrName,
+        value: &[u8],
+        flags: XattrSetFlags,
+        cred: &Cred,
+    ) -> VfsResult<()> {
+        self.check_writable_mount()?;
+        let inode = self.inode();
+        check_xattr_permission(&inode, name, XattrAccess::Write, cred)?;
+        let _data_guard = inode.lock_data();
+        inode.set_xattr(self.dentry(), name, value, flags)
+    }
+```
+
+right: fs/kvfs/src/xattr.rs:257
+```rust
+fn remove_xattr(&self, name: &XattrName, cred: &Cred) -> VfsResult<()> {
+        self.check_writable_mount()?;
+        let inode = self.inode();
+        check_xattr_permission(&inode, name, XattrAccess::Write, cred)?;
+        let _data_guard = inode.lock_data();
+        inode.remove_xattr(self.dentry(), name)
+    }
+```
+
+以下为相同源码快照中的直接项目被调实现；这里只提供一跳函数体，未展示的更深层实现仍未知。
+
+fs/kvfs/src/mount.rs:916 (inode)
+```rust
+fn inode(&self) -> Arc<VfsInode> {
+        self.dentry.vfs_inode()
+    }
+```
+
+fs/kvfs/src/mount.rs:961 (dentry)
+```rust
+fn dentry(&self) -> &Dentry {
+        &self.dentry
+    }
+```
+
+fs/kvfs/src/mount.rs:1112 (check_writable_mount)
+```rust
+fn check_writable_mount(&self) -> VfsResult<()> {
+        if self.is_effectively_readonly() {
+            return Err(VfsError::ReadOnlyFilesystem);
+        }
+        Ok(())
+    }
+```
+
+fs/kvfs/src/xattr.rs:153 (check_xattr_permission)
+```rust
+fn check_xattr_permission(
+    inode: &VfsInode,
+    name: &XattrName,
+    access: XattrAccess,
+    cred: &Cred,
+) -> VfsResult<()> {
+    if matches!(access, XattrAccess::Write)
+        && inode
+            .flags()
+            .intersects(crate::NodeFlags::IMMUTABLE | crate::NodeFlags::APPEND_ONLY)
+    {
+        return Err(VfsError::OperationNotPermitted);
+    }
+
+    let name = name.as_bytes();
+
+
+
+
+    if name.starts_with(SECURITY_PREFIX) {
+        return if matches!(access, XattrAccess::Write) && !cred.has_sys_admin() {
+            Err(VfsError::OperationNotPermitted)
+        } else {
+            Ok(())
+        };
+    }
+
+
+
+    if name.starts_with(SYSTEM_PREFIX) {
+        return Ok(());
+    }
+
+    if name.starts_with(TRUSTED_PREFIX) {
+        return if cred.has_sys_admin() {
+            Ok(())
+        } else {
+            Err(access.namespace_error())
+        };
+    }
+
+    if name.starts_with(USER_PREFIX) {
+        match inode.node_type() {
+            NodeType::RegularFile | NodeType::Socket => {}
+            NodeType::Directory => {
+                let metadata = inode.metadata();
+                if matches!(access, XattrAccess::Write)
+                    && metadata.mode.permission().contains(NodePermission::STICKY)
+                    && cred.fsuid() != metadata.uid
+                    && !cred.has_cap(kcred::CAP_FOWNER)
+                {
+                    return Err(VfsError::OperationNotPermitted);
+                }
+            }
+            _ => return Err(access.namespace_error()),
+        }
+    }
+
+    inode.permission(access.permission(), cred)
+}
+```
+
+fs/kvfs/src/node/inode.rs:1991 (lock_data)
+```rust
+fn lock_data(&self) -> RwLockWriteGuard<'_, ()> {
+        self.data_lock.write()
+    }
+```
+
+fs/kvfs/src/node/inode.rs:2074 (set_xattr)
+```rust
+fn set_xattr(
+        &self,
+        dentry: &Dentry,
+        name: &XattrName,
+        value: &[u8],
+        flags: XattrSetFlags,
+    ) -> VfsResult<()> {
+        self.inode_operations
+            .set_xattr(dentry, self, name, value, flags)
+    }
+```
+
+fs/kvfs/src/node/inode.rs:2085 (remove_xattr)
+```rust
+fn remove_xattr(&self, dentry: &Dentry, name: &XattrName) -> VfsResult<()> {
+        self.inode_operations.remove_xattr(dentry, self, name)
+    }
+```

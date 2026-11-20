@@ -1,0 +1,448 @@
+[
+  {
+    "id": "role",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": true
+  },
+  {
+    "id": "command",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "gt",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 4096
+        }
+      ],
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": true
+  },
+  {
+    "id": "missing_conditions",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "missing_action",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "gt",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 4096
+        }
+      ],
+      "effect": {
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "unknown_entity",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "unregistered",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "wrong_revision",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "0000000000000000000000000000000000000000",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "wrong_source_hash",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "overlap_roles",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "permission_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "invalid_operator",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "execute",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 4096
+        }
+      ],
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "boolean_count",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "gt",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 4096
+        }
+      ],
+      "effect": {
+        "target": "self.write",
+        "count": true,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": false
+  },
+  {
+    "id": "invented_confirmation",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      },
+      "confirmed": true
+    },
+    "accept": false
+  },
+  {
+    "id": "well_formed_role_swap",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "file_type_bits"
+        ],
+        "preserve": [
+          "permission_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "accept": true
+  },
+  {
+    "id": "well_formed_wrong_limit",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "gt",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 8192
+        }
+      ],
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": true
+  },
+  {
+    "id": "well_formed_omitted_conditions",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [],
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "accept": true
+  }
+]

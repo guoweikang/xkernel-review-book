@@ -1,0 +1,18 @@
+{
+  "schema":"pagecache-budget-factorial/1",
+  "revision":"7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "parent":"2026-11-16-pagecache-disk-01",
+  "question":"Does a contract-directed rejected-handoff budget assertion detect a debit-on-acceptance mutation missed by the original suite?",
+  "conditions":["original-old","original-observed","accepted-observed","accepted-old"],
+  "focal_test":"rejected_submission_redirties_its_batch_without_ending_prior_io",
+  "implementation_path":"mm/pagecache/src/writeback.rs",
+  "test_path":"mm/pagecache/ut-tests/writeback_unittest.rs",
+  "original_body":"                *budget -= batch.completion.folios.len();\n                submit(batch)",
+  "mutant_body":"                let submitted_folios = batch.completion.folios.len();\n                submit(batch)?;\n                *budget -= submitted_folios;\n                Ok(())",
+  "test_changes":[["    let mut pending = None;","    let mut pending = None;\n    let mut budget = 2;"],["            &mut 2,","            &mut budget,"],["    cache.wait_on_writeback_range(0..u64::MAX).unwrap();","    cache.wait_on_writeback_range(0..u64::MAX).unwrap();\n    assert_eq!(budget, 0);"]],
+  "predictions":{"original-old":"all pass","original-observed":"all pass; remaining budget 0","accepted-observed":"focal budget assertion fails with remaining 1; other failures retained","accepted-old":"hypothesis: original assertions pass; if not, added-observation unique benefit unsupported"},
+  "execution":"Four original kernel-suite runs in declared order, one each; same private copied source/config and reset disk bytes before each run. Manual application of frozen source edits is checked byte-for-byte against archived original sources. No production changes. Added assertion follows original cleanup to avoid aborting before pending release.",
+  "limits":{"seconds_per_condition":600,"cargo_jobs":4,"retries":0},
+  "command":"make unittest UNITTEST_CRATE=pagecache ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g DISK_IMG=<source>/research-root.ext4",
+  "interpretation":"Mechanism development and one targeted mutation, not independent accuracy, original-paper reproduction, mutation-score estimate or refactoring benefit. Contract and assertion mapping are researcher authored; error debit semantics differ intentionally. Failure before test execution is not mutation detection."
+}

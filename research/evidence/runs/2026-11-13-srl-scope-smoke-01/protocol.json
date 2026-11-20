@@ -1,0 +1,32 @@
+{
+  "scope": "Development ablation of cross-frame containment and local modifiers; textual entailment proxy only, never verified implementation behavior",
+  "input": "research/evidence/runs/2026-11-13-srl-scope-inputs-01/cases.json",
+  "inference_protocol": "hanlp-srl-smoke-v1.json; same assets/environment, CPU4threads, two passes, input batches4, offline weights-only, exact unused NER buffer exception",
+  "selection": "All newly authored controls. Freeze rules before parser outputs; same researcher authors rules and references, not independent or blind test data.",
+  "target_matching": "Use explicit query predicate surface forms, casefolded exact PRED text; no gold or sentence-ID access. Exactly one matching frame required, otherwise abstain. Query identifies only action, not actor/object; all predicates in each case intentionally use a single target entity pair. Not a general capability matcher.",
+  "flat": "One target frame -> negative if direct ARGM-NEG present, otherwise positive. No claim this naive baseline is SOTA.",
+  "containment_gate": "Abstain if target PRED span is contained by any non-PRED argument span of another frame; no predicate-word exceptions or frame-order assumptions",
+  "modifier_gate": "Abstain if target frame contains any ARGM-ADV, ARGM-MOD or ARGM-CND. Deliberately broad; manner and other assertive modifiers may lose coverage",
+  "arms": [
+    "flat",
+    "containment_only",
+    "modifier_only",
+    "both",
+    "any_multiframe",
+    "all_abstain"
+  ],
+  "controls": "any_multiframe abstains whenever sentence has >1 frame; all_abstain is floor. All arms share same model outputs and target matching. No tuning after observed scores.",
+  "references": "positive=unconditional positive target proposition supported by stated developer interpretation; negative=unconditional negative; unknown=neither. Statements in corpus are premises for a text-only test, not source truth. Missing output is abstention, not negative evidence. Preserve reference rationale and disputed cases.",
+  "metrics": "Per arm and family: answered/total coverage, correct/answered selective accuracy, wrong/answered error, correct/total unconditional accuracy, positive predictions on unknown (promotion), abstained positive cases (lost positives), no-match/ambiguous target. No accuracy awarded for abstention; all-abstain accuracy undefined. Pairwise newly withheld correct/wrong/unknown decisions. No risk improvement claim without noting coverage; no equal-coverage or statistical superiority claim.",
+  "checks": [
+    "source hashes",
+    "same raw outputs across arms",
+    "two-pass outcome repeat",
+    "gate arms never add answers to flat",
+    "synthetic spanning/nonspanning frames",
+    "unknown not conflated with false",
+    "all-abstain denominator",
+    "all IDs retained"
+  ],
+  "stop": "Complete all frozen conditions; record counterexamples, no rule repair using new results. Next work selected from observed failures, not automatic promotion to production."
+}

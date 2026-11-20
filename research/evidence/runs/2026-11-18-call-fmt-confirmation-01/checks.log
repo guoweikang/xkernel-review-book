@@ -1,0 +1,51 @@
+2026-11-18 bounded case-006 confirmation. Logs are retained command/result records; no compilation or behavioral execution occurred.
+
+Instruction/input discovery:
+- pwd: /root/codes/x-kernel-worktrees
+- Checked ancestor AGENTS.md through ai-review-book; read book AGENTS.md and .agents/skills/research-execution/SKILL.md.
+- Checked research, research/evidence, research/evidence/runs and new run directory for AGENTS.md: none found.
+- Listed book root. rg --files -g AGENTS.md -g '*source*.zip' -g '*protocol*' research .agents returned filenames (including unrelated protocol names); their contents were not opened.
+- rg --files --hidden -g source.zip -g sources.zip -g AGENTS.md against prior reviewer run and .build returned four .build AGENTS.md paths, no archive; those instruction files were not opened because their subtrees were not used. This filename search was slower than needed but completed, exit 0. Listed /root/codes/x-kernel and worktree .git paths, without reading their histories.
+- git -C /root/codes/x-kernel cat-file -t 7e3ac94431a0dbb376d2fc8d85098deeff1bba09: commit.
+- ls -ld target run: absent (exit 2 for the combined discovery command). New run then created by apply_patch; no old run overwritten.
+- Read complete frozen case-006 left-source.rs and right-source.rs with cat. The later identity check also read cases.json and the two case-006 snippets, not other cases' sources.
+- protocol.txt created with apply_patch BEFORE the source identity/LOC measurement below or any decision to execute a fixture.
+
+Pinned crate retrieval (read-only):
+git -C /root/codes/x-kernel ls-tree -r --name-only 7e3ac94431a0dbb376d2fc8d85098deeff1bba09 -- util/klazy
+  util/klazy/Cargo.toml
+  util/klazy/docs/design.md
+  util/klazy/docs/security.md
+  util/klazy/src/lazy.rs
+  util/klazy/src/lazy_static.rs
+  util/klazy/src/lib.rs
+  util/klazy/src/once.rs
+  util/klazy/tests/host/lazy_static_host.rs
+  util/klazy/tests/host/once_host.rs
+  util/klazy/ut-tests/once_unittest.rs
+git ls-tree revision util/klazy: tree 9cc92aa93a4f1e456c1064b46fc78ec6b8888fa8
+git show revision:util/klazy/src/lib.rs, :util/klazy/Cargo.toml and :util/klazy/src/lazy_static.rs: full contents inspected, exit 0. Complete Lazy/Once pinned blobs read by identity check. All four production Rust files are accounted for; no test/doc contents opened. No archive extraction needed.
+
+Measurement command: Python standard-library stdin script, no output files. Parsed only case-006 from cases.json; read both frozen sources/snippets; subprocess git show and git rev-parse for each pinned source. Asserted revision, SHA256 metadata matches, source byte equality with pinned blobs, and source[range] == snippet. Counted nonblank lines excluding lines whose lstrip starts with // over Lazy lines 71–84 and Once lines 61–72. Body operation metric excludes fn signature, closing brace, comments, blanks and standalone }/};, but counts match arms as operation lines. For proposed.txt, split three blocks at blank lines and count the same nonblank/noncomment metric. Asserted exactly two textual .get() calls and unchanged unconstrained-F impl header; rejected force(/poll(/wait(/unsafe/FnOnce/F: tokens. These are static shape checks, not semantic proof.
+
+Captured measurement output (exit 0):
+REVISION 7e3ac94431a0dbb376d2fc8d85098deeff1bba09
+SOURCE util/klazy/src/lazy.rs sha256 6709d4ee455c2998b1d31ce6ba20d26f7e6f5001b64f0ff96e0e8806a537b759 git_blob 34464668c5bcb53b34a62070352f2458413c91ee identity=PASS
+BASELINE impl_lines (71, 84) nonblank_noncomment 10 body_operation_lines 5
+SOURCE util/klazy/src/once.rs sha256 dc8ffed2e906bd585b55827cf0b08cee59f6565342abf0ea547a95c522502cae git_blob 7818fd75f271897d2ef51fab045a9887288ccfd9 identity=PASS
+BASELINE impl_lines (61, 72) nonblank_noncomment 10 body_operation_lines 5
+CONTEXT util/klazy/Cargo.toml lines 18 sha256 0c336b904dd9d0968859721328c698a07289b3747463259733749a430cbdec0b git_blob 18551add5f70d34778b2da52faf5927db2618b78
+CONTEXT util/klazy/src/lib.rs lines 30 sha256 2305a1edc14d103f1d68f6bdf605486e07f35057ebb39ea09e6f2b97c3f4e110 git_blob f447d5e8a1e3582b4907b1ad85c70736ac8fb2f2
+CONTEXT util/klazy/src/lazy_static.rs lines 135 sha256 f9acd381187b0db8c141bb97a9100eccb72eecbcb405ab4c9c06f9624c78af1b git_blob 50b2be96f98c7e697ecae05120cec1aa67f8677b
+PROPOSAL sha256 a5e3f5ab9e4419ede0e1ee5ac215303901dfd7ad5fddf1c4b587b0221055ea6f
+PROPOSAL helper,left_impl,right_impl nonblank_noncomment [11, 6, 6]
+PROPOSAL total_nonblank_noncomment 23
+PROPOSAL helper body_operation_lines 4
+PROPOSAL each caller body_operation_lines=2; added imports=0; helper parameters=3; new helper symbols=1; new public API=0
+STATIC shape_checks=PASS; compiler=NOT_RUN; runtime_equivalence=NOT_TESTED
+PROTOCOL sha256 47bb31d1454c9ea597970b071bed61ff80cdd96ce6b777b4cde1adbc4683767d
+
+Gate outcome: REJECT_EXTRACTION_NOT_SIMPLER. Conditional Stage B not entered. No Rust fixture, compiler invocation, cargo invocation, dependencies, binaries, benchmark, synchronization modification or production edit. Only text artifacts created with apply_patch under this run. No new Markdown and no catalog/progress edits. Book validation deliberately not run: no book content changed and output scope is restricted to this run.
+
+Final artifact consistency check (Python stdin, exit 0): compared original.txt byte-for-text to frozen Lazy lines 71–84 plus Once lines 61–72 with one separating blank line; asserted protocol/proposal SHA256 values above remained unchanged; asserted directory contains exactly checks.log, original.txt, proposed.txt, protocol.txt, verdict.txt.
+PASS: original.txt exactly reproduces pinned/frozen impl spans; protocol and proposal hashes unchanged; exactly five text artifacts and no fixture/build outputs.

@@ -1,0 +1,1132 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Composable asynchronous iteration.",
+      "path": "doc",
+      "range": [
+        0,
+        38
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        39,
+        42
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If you've found yourself with an asynchronous collection of some kind,",
+      "path": "doc",
+      "range": [
+        43,
+        117
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and needed to perform an operation on the elements of said collection,",
+      "path": "doc",
+      "range": [
+        118,
+        192
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " you'll quickly run into 'async iterators'. Async Iterators are heavily used in",
+      "path": "doc",
+      "range": [
+        193,
+        275
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " idiomatic asynchronous Rust code, so it's worth becoming familiar with them.",
+      "path": "doc",
+      "range": [
+        276,
+        356
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        357,
+        360
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Before explaining more, let's talk about how this module is structured:",
+      "path": "doc",
+      "range": [
+        361,
+        436
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        437,
+        440
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Organization",
+      "path": "doc",
+      "range": [
+        441,
+        459
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        460,
+        463
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module is largely organized by type:",
+      "path": "doc",
+      "range": [
+        464,
+        509
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        510,
+        513
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * [Traits] are the core portion: these traits define what kind of async iterators",
+      "path": "doc",
+      "range": [
+        514,
+        599
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   exist and what you can do with them. The methods of these traits are worth",
+      "path": "doc",
+      "range": [
+        600,
+        680
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   putting some extra study time into.",
+      "path": "doc",
+      "range": [
+        681,
+        722
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * Functions provide some helpful ways to create some basic async iterators.",
+      "path": "doc",
+      "range": [
+        723,
+        802
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * Structs are often the return types of the various methods on this",
+      "path": "doc",
+      "range": [
+        803,
+        874
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   module's traits. You'll usually want to look at the method that creates",
+      "path": "doc",
+      "range": [
+        875,
+        952
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   the `struct`, rather than the `struct` itself. For more detail about why,",
+      "path": "doc",
+      "range": [
+        953,
+        1032
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   see '[Implementing Async Iterator](#implementing-async-iterator)'.",
+      "path": "doc",
+      "range": [
+        1033,
+        1105
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1106,
+        1109
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Traits]: #traits",
+      "path": "doc",
+      "range": [
+        1110,
+        1131
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1132,
+        1135
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " That's it! Let's dig into async iterators.",
+      "path": "doc",
+      "range": [
+        1136,
+        1182
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1183,
+        1186
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Async Iterators",
+      "path": "doc",
+      "range": [
+        1187,
+        1208
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1209,
+        1212
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The heart and soul of this module is the [`AsyncIterator`] trait. The core of",
+      "path": "doc",
+      "range": [
+        1213,
+        1294
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`AsyncIterator`] looks like this:",
+      "path": "doc",
+      "range": [
+        1295,
+        1333
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1334,
+        1337
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1338,
+        1345
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use core::task::{Context, Poll};",
+      "path": "doc",
+      "range": [
+        1346,
+        1384
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use core::pin::Pin;",
+      "path": "doc",
+      "range": [
+        1385,
+        1410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " trait AsyncIterator {",
+      "path": "doc",
+      "range": [
+        1411,
+        1436
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Item;",
+      "path": "doc",
+      "range": [
+        1437,
+        1455
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;",
+      "path": "doc",
+      "range": [
+        1456,
+        1549
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1550,
+        1555
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1556,
+        1563
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1564,
+        1567
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Unlike `Iterator`, `AsyncIterator` makes a distinction between the [`poll_next`]",
+      "path": "doc",
+      "range": [
+        1568,
+        1652
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " method which is used when implementing an `AsyncIterator`, and a (to-be-implemented)",
+      "path": "doc",
+      "range": [
+        1653,
+        1741
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `next` method which is used when consuming an async iterator. Consumers of `AsyncIterator`",
+      "path": "doc",
+      "range": [
+        1742,
+        1836
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " only need to consider `next`, which when called, returns a future which",
+      "path": "doc",
+      "range": [
+        1837,
+        1912
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " yields `Option<AsyncIterator::Item>`.",
+      "path": "doc",
+      "range": [
+        1913,
+        1954
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1955,
+        1958
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The future returned by `next` will yield `Some(Item)` as long as there are",
+      "path": "doc",
+      "range": [
+        1959,
+        2037
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " elements, and once they've all been exhausted, will yield `None` to indicate",
+      "path": "doc",
+      "range": [
+        2038,
+        2118
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " that iteration is finished. If we're waiting on something asynchronous to",
+      "path": "doc",
+      "range": [
+        2119,
+        2196
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " resolve, the future will wait until the async iterator is ready to yield again.",
+      "path": "doc",
+      "range": [
+        2197,
+        2280
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2281,
+        2284
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Individual async iterators may choose to resume iteration, and so calling `next`",
+      "path": "doc",
+      "range": [
+        2285,
+        2369
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " again may or may not eventually yield `Some(Item)` again at some point.",
+      "path": "doc",
+      "range": [
+        2370,
+        2445
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2446,
+        2449
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`AsyncIterator`]'s full definition includes a number of other methods as well,",
+      "path": "doc",
+      "range": [
+        2450,
+        2533
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " but they are default methods, built on top of [`poll_next`], and so you get",
+      "path": "doc",
+      "range": [
+        2534,
+        2613
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " them for free.",
+      "path": "doc",
+      "range": [
+        2614,
+        2632
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2633,
+        2636
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Poll`]: super::task::Poll",
+      "path": "doc",
+      "range": [
+        2637,
+        2668
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`poll_next`]: AsyncIterator::poll_next",
+      "path": "doc",
+      "range": [
+        2669,
+        2712
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2713,
+        2716
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Implementing Async Iterator",
+      "path": "doc",
+      "range": [
+        2717,
+        2750
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2751,
+        2754
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Creating an async iterator of your own involves two steps: creating a `struct` to",
+      "path": "doc",
+      "range": [
+        2755,
+        2840
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " hold the async iterator's state, and then implementing [`AsyncIterator`] for that",
+      "path": "doc",
+      "range": [
+        2841,
+        2926
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `struct`.",
+      "path": "doc",
+      "range": [
+        2927,
+        2940
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2941,
+        2944
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Let's make an async iterator named `Counter` which counts from `1` to `5`:",
+      "path": "doc",
+      "range": [
+        2945,
+        3023
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3024,
+        3027
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```no_run",
+      "path": "doc",
+      "range": [
+        3028,
+        3041
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(async_iterator)]",
+      "path": "doc",
+      "range": [
+        3042,
+        3073
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use core::async_iter::AsyncIterator;",
+      "path": "doc",
+      "range": [
+        3074,
+        3116
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use core::task::{Context, Poll};",
+      "path": "doc",
+      "range": [
+        3117,
+        3155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use core::pin::Pin;",
+      "path": "doc",
+      "range": [
+        3156,
+        3181
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3182,
+        3185
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // First, the struct:",
+      "path": "doc",
+      "range": [
+        3186,
+        3211
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3212,
+        3215
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " /// An async iterator which counts from one to five",
+      "path": "doc",
+      "range": [
+        3216,
+        3271
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Counter {",
+      "path": "doc",
+      "range": [
+        3272,
+        3292
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     count: usize,",
+      "path": "doc",
+      "range": [
+        3293,
+        3314
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3315,
+        3320
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3321,
+        3324
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // we want our count to start at one, so let's add a new() method to help.",
+      "path": "doc",
+      "range": [
+        3325,
+        3403
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // This isn't strictly necessary, but is convenient. Note that we start",
+      "path": "doc",
+      "range": [
+        3404,
+        3479
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // `count` at zero, we'll see why in `poll_next()`'s implementation below.",
+      "path": "doc",
+      "range": [
+        3480,
+        3558
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Counter {",
+      "path": "doc",
+      "range": [
+        3559,
+        3577
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn new() -> Counter {",
+      "path": "doc",
+      "range": [
+        3578,
+        3607
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Counter { count: 0 }",
+      "path": "doc",
+      "range": [
+        3608,
+        3640
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        3641,
+        3650
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3651,
+        3656
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3657,
+        3660
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Then, we implement `AsyncIterator` for our `Counter`:",
+      "path": "doc",
+      "range": [
+        3661,
+        3721
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3722,
+        3725
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl AsyncIterator for Counter {",
+      "path": "doc",
+      "range": [
+        3726,
+        3762
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // we will be counting with usize",
+      "path": "doc",
+      "range": [
+        3763,
+        3804
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Item = usize;",
+      "path": "doc",
+      "range": [
+        3805,
+        3831
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3832,
+        3835
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // poll_next() is the only required method",
+      "path": "doc",
+      "range": [
+        3836,
+        3886
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {",
+      "path": "doc",
+      "range": [
+        3887,
+        3985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Increment our count. This is why we started at zero.",
+      "path": "doc",
+      "range": [
+        3986,
+        4053
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         self.count += 1;",
+      "path": "doc",
+      "range": [
+        4054,
+        4082
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4083,
+        4086
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Check to see if we've finished counting or not.",
+      "path": "doc",
+      "range": [
+        4087,
+        4149
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         if self.count < 6 {",
+      "path": "doc",
+      "range": [
+        4150,
+        4181
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Poll::Ready(Some(self.count))",
+      "path": "doc",
+      "range": [
+        4182,
+        4227
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         } else {",
+      "path": "doc",
+      "range": [
+        4228,
+        4248
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Poll::Ready(None)",
+      "path": "doc",
+      "range": [
+        4249,
+        4282
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4283,
+        4296
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        4297,
+        4306
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4307,
+        4312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4313,
+        4320
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4321,
+        4324
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Laziness",
+      "path": "doc",
+      "range": [
+        4325,
+        4339
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4340,
+        4343
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Async iterators are *lazy*. This means that just creating an async iterator doesn't",
+      "path": "doc",
+      "range": [
+        4344,
+        4431
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " _do_ a whole lot. Nothing really happens until you call `poll_next`. This is",
+      "path": "doc",
+      "range": [
+        4432,
+        4512
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " sometimes a source of confusion when creating an async iterator solely for its side",
+      "path": "doc",
+      "range": [
+        4513,
+        4600
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " effects. The compiler will warn us about this kind of behavior:",
+      "path": "doc",
+      "range": [
+        4601,
+        4668
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4669,
+        4672
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        4673,
+        4684
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " warning: unused result that must be used: async iterators do nothing unless polled",
+      "path": "doc",
+      "range": [
+        4685,
+        4771
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4772,
+        4779
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "async_iter",
+      "path_overrides": [],
+      "range": [
+        4781,
+        4796
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "from_iter",
+      "path_overrides": [],
+      "range": [
+        4797,
+        4811
+      ]
+    }
+  ],
+  "source_sha256": "af77d0d10e6ea00fbba6701136bf0fabe94f26eb17097ee84050f0a373ecd2a0"
+}

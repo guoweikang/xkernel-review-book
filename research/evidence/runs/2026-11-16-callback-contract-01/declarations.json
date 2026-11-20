@@ -1,0 +1,70 @@
+{
+  "once": {
+    "schema": "crate-contract/0",
+    "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "configuration": {
+      "status": "unknown",
+      "expression": null
+    },
+    "responsibility": {
+      "owner": "kvfs",
+      "basis": "declared"
+    },
+    "kind": "callback",
+    "conditions": [
+      {
+        "subject": "input_length",
+        "operator": "gt",
+        "value": 0
+      },
+      {
+        "subject": "input_length",
+        "operator": "le",
+        "value": 4096
+      }
+    ],
+    "effect": {
+      "target": "self.write",
+      "count": 1,
+      "payload": "whole",
+      "after": "whole_collection",
+      "on_collection_failure": "no_callback"
+    }
+  },
+  "twice": {
+    "schema": "crate-contract/0",
+    "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "configuration": {
+      "status": "unknown",
+      "expression": null
+    },
+    "responsibility": {
+      "owner": "kvfs",
+      "basis": "declared"
+    },
+    "kind": "callback",
+    "conditions": [
+      {
+        "subject": "input_length",
+        "operator": "gt",
+        "value": 0
+      },
+      {
+        "subject": "input_length",
+        "operator": "le",
+        "value": 4096
+      }
+    ],
+    "effect": {
+      "target": "self.write",
+      "count": 2,
+      "payload": "whole",
+      "after": "whole_collection",
+      "on_collection_failure": "no_callback"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+## purpose
+Deliver an accepted iterator payload to the command write callback as one complete command.
+
+## input_preconditions
+Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.
+
+## effects_and_callback_boundary
+Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.
+
+## errors_and_partial_completion
+Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.
+
+## execution_context
+The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.
+
+## configuration
+Unknown: resolved build configuration not collected.
+
+## delegation
+Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.

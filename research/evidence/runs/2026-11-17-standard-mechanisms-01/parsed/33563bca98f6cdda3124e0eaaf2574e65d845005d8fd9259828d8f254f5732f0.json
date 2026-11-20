@@ -1,0 +1,5345 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " [`CStr`] and its related types.",
+      "path": "doc",
+      "range": [
+        0,
+        35
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A dynamically-sized view of a C string.",
+          "path": "doc",
+          "range": [
+            671,
+            714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            715,
+            718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The type `&CStr` represents a reference to a borrowed nul-terminated",
+          "path": "doc",
+          "range": [
+            719,
+            791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " array of bytes. It can be constructed safely from a <code>&[[u8]]</code>",
+          "path": "doc",
+          "range": [
+            792,
+            868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " slice, or unsafely from a raw `*const c_char`. It can be expressed as a",
+          "path": "doc",
+          "range": [
+            869,
+            944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " literal in the form `c\"Hello world\"`.",
+          "path": "doc",
+          "range": [
+            945,
+            986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            987,
+            990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `&CStr` can then be converted to a Rust <code>&[str]</code> by performing",
+          "path": "doc",
+          "range": [
+            991,
+            1072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " UTF-8 validation, or into an owned `CString`.",
+          "path": "doc",
+          "range": [
+            1073,
+            1122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1123,
+            1126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `&CStr` is to `CString` as <code>&[str]</code> is to `String`: the former",
+          "path": "doc",
+          "range": [
+            1127,
+            1204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in each pair are borrowing references; the latter are owned",
+          "path": "doc",
+          "range": [
+            1205,
+            1268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " strings.",
+          "path": "doc",
+          "range": [
+            1269,
+            1281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1282,
+            1285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this structure does **not** have a guaranteed layout (the `repr(transparent)`",
+          "path": "doc",
+          "range": [
+            1286,
+            1377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " notwithstanding) and should not be placed in the signatures of FFI functions.",
+          "path": "doc",
+          "range": [
+            1378,
+            1459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Instead, safe wrappers of FFI functions may leverage [`CStr::as_ptr`] and the unsafe",
+          "path": "doc",
+          "range": [
+            1460,
+            1548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`CStr::from_ptr`] constructor to provide a safe interface to other consumers.",
+          "path": "doc",
+          "range": [
+            1549,
+            1631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1632,
+            1635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1636,
+            1650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1651,
+            1654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Inspecting a foreign C string:",
+          "path": "doc",
+          "range": [
+            1655,
+            1689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1690,
+            1693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1694,
+            1701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            1702,
+            1725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::os::raw::c_char;",
+          "path": "doc",
+          "range": [
+            1726,
+            1755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1756,
+            1759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # /* Extern functions are awkward in doc comments - fake it instead",
+          "path": "doc",
+          "range": [
+            1760,
+            1831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " extern \"C\" { fn my_string() -> *const c_char; }",
+          "path": "doc",
+          "range": [
+            1832,
+            1883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # */ unsafe extern \"C\" fn my_string() -> *const c_char { c\"hello\".as_ptr() }",
+          "path": "doc",
+          "range": [
+            1884,
+            1964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1965,
+            1968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            1969,
+            1981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let slice = CStr::from_ptr(my_string());",
+          "path": "doc",
+          "range": [
+            1982,
+            2030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"string buffer size without nul terminator: {}\", slice.to_bytes().len());",
+          "path": "doc",
+          "range": [
+            2031,
+            2121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2122,
+            2127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2128,
+            2135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2136,
+            2139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a Rust-originating C string:",
+          "path": "doc",
+          "range": [
+            2140,
+            2180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2181,
+            2184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2185,
+            2192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            2193,
+            2216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::os::raw::c_char;",
+          "path": "doc",
+          "range": [
+            2217,
+            2246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2247,
+            2250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn work(data: &CStr) {",
+          "path": "doc",
+          "range": [
+            2251,
+            2277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe extern \"C\" fn work_with(s: *const c_char) {}",
+          "path": "doc",
+          "range": [
+            2278,
+            2337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe { work_with(data.as_ptr()) }",
+          "path": "doc",
+          "range": [
+            2338,
+            2381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2382,
+            2387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2388,
+            2391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = c\"Hello world!\";",
+          "path": "doc",
+          "range": [
+            2392,
+            2420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " work(&s);",
+          "path": "doc",
+          "range": [
+            2421,
+            2434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2435,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2443,
+            2446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Converting a foreign C string into a Rust `String`:",
+          "path": "doc",
+          "range": [
+            2447,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2503,
+            2506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2507,
+            2514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            2515,
+            2538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::os::raw::c_char;",
+          "path": "doc",
+          "range": [
+            2539,
+            2568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2569,
+            2572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # /* Extern functions are awkward in doc comments - fake it instead",
+          "path": "doc",
+          "range": [
+            2573,
+            2644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " extern \"C\" { fn my_string() -> *const c_char; }",
+          "path": "doc",
+          "range": [
+            2645,
+            2696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # */ unsafe extern \"C\" fn my_string() -> *const c_char { c\"hello\".as_ptr() }",
+          "path": "doc",
+          "range": [
+            2697,
+            2777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2778,
+            2781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn my_string_safe() -> String {",
+          "path": "doc",
+          "range": [
+            2782,
+            2817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let cstr = unsafe { CStr::from_ptr(my_string()) };",
+          "path": "doc",
+          "range": [
+            2818,
+            2876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Get a copy-on-write Cow<'_, str>, then extract the",
+          "path": "doc",
+          "range": [
+            2877,
+            2938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // allocated String (or allocate a fresh one if needed).",
+          "path": "doc",
+          "range": [
+            2939,
+            3003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     cstr.to_string_lossy().into_owned()",
+          "path": "doc",
+          "range": [
+            3004,
+            3047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3048,
+            3053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3054,
+            3057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"string: {}\", my_string_safe());",
+          "path": "doc",
+          "range": [
+            3058,
+            3103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3104,
+            3111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3112,
+            3115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [str]: prim@str \"str\"",
+          "path": "doc",
+          "range": [
+            3116,
+            3141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            3142,
+            3172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3173,
+            3224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            3225,
+            3263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_has_incoherent_inherent_impls",
+          "range": [
+            3264,
+            3302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            3303,
+            3319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            3708,
+            3728
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CStr",
+      "range": [
+        671,
+        4076
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An error indicating that a nul byte was not in the expected position.",
+          "path": "doc",
+          "range": [
+            4078,
+            4151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4152,
+            4155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The slice used to create a [`CStr`] must have one and only one nul byte,",
+          "path": "doc",
+          "range": [
+            4156,
+            4232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " positioned at the end.",
+          "path": "doc",
+          "range": [
+            4233,
+            4259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4260,
+            4263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This error is created by the [`CStr::from_bytes_with_nul`] method.",
+          "path": "doc",
+          "range": [
+            4264,
+            4334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See its documentation for more.",
+          "path": "doc",
+          "range": [
+            4335,
+            4370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4371,
+            4374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4375,
+            4389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4390,
+            4393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4394,
+            4401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{CStr, FromBytesWithNulError};",
+          "path": "doc",
+          "range": [
+            4402,
+            4450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4451,
+            4454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _: FromBytesWithNulError = CStr::from_bytes_with_nul(b\"f\\0oo\").unwrap_err();",
+          "path": "doc",
+          "range": [
+            4455,
+            4539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4540,
+            4547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            4548,
+            4592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4593,
+            4644
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "FromBytesWithNulError",
+      "range": [
+        4078,
+        4919
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4921,
+            4989
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4921,
+        5388
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        5097,
+        5386
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        5040,
+        5386
+      ],
+      "signature_range": [
+        5040,
+        5096
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5184,
+        5268
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5321,
+        5369
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5390,
+            5458
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5390,
+        5498
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An error indicating that no nul byte was present.",
+          "path": "doc",
+          "range": [
+            5500,
+            5553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5554,
+            5557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A slice used to create a [`CStr`] must contain a nul byte somewhere",
+          "path": "doc",
+          "range": [
+            5558,
+            5629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " within the slice.",
+          "path": "doc",
+          "range": [
+            5630,
+            5651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5652,
+            5655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This error is created by the [`CStr::from_bytes_until_nul`] method.",
+          "path": "doc",
+          "range": [
+            5656,
+            5727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            5728,
+            5766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5767,
+            5833
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "FromBytesUntilNulError",
+      "range": [
+        5500,
+        5872
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5874,
+            5940
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5874,
+        6116
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "body_range": [
+        6049,
+        6114
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        5992,
+        6114
+      ],
+      "signature_range": [
+        5992,
+        6048
+      ]
+    },
+    {
+      "ancestors": [
+        8,
+        9
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6059,
+        6108
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Shows the underlying bytes as a normal string, with invalid UTF-8",
+          "path": "doc",
+          "range": [
+            6118,
+            6187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " presented as hex escape sequences.",
+          "path": "doc",
+          "range": [
+            6188,
+            6226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6227,
+            6277
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6118,
+        6453
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "body_range": [
+        6366,
+        6451
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        6309,
+        6451
+      ],
+      "signature_range": [
+        6309,
+        6365
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6455,
+            6508
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6455,
+        6594
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6538,
+            6547
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6573,
+        6592
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        6538,
+        6592
+      ],
+      "signature_range": [
+        6552,
+        6572
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6596,
+        25704
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wraps a raw C string with a safe C string wrapper.",
+          "path": "doc",
+          "range": [
+            6612,
+            6666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6671,
+            6674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will wrap the provided `ptr` with a `CStr` wrapper, which",
+          "path": "doc",
+          "range": [
+            6679,
+            6754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allows inspection and interoperation of non-owned C strings. The total",
+          "path": "doc",
+          "range": [
+            6759,
+            6833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " size of the terminated buffer must be smaller than [`isize::MAX`] **bytes**",
+          "path": "doc",
+          "range": [
+            6838,
+            6917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in memory (a restriction from [`slice::from_raw_parts`]).",
+          "path": "doc",
+          "range": [
+            6922,
+            6983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6988,
+            6991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            6996,
+            7008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7013,
+            7016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory pointed to by `ptr` must contain a valid nul terminator at the",
+          "path": "doc",
+          "range": [
+            7021,
+            7100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   end of the string.",
+          "path": "doc",
+          "range": [
+            7105,
+            7129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7134,
+            7137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `ptr` must be [valid] for reads of bytes up to and including the nul terminator.",
+          "path": "doc",
+          "range": [
+            7142,
+            7228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   This means in particular:",
+          "path": "doc",
+          "range": [
+            7233,
+            7264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7269,
+            7272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * The entire memory range of this `CStr` must be contained within a single allocation!",
+          "path": "doc",
+          "range": [
+            7277,
+            7371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * `ptr` must be non-null even for a zero-length cstr.",
+          "path": "doc",
+          "range": [
+            7376,
+            7437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7442,
+            7445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory referenced by the returned `CStr` must not be mutated for",
+          "path": "doc",
+          "range": [
+            7450,
+            7524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the duration of lifetime `'a`.",
+          "path": "doc",
+          "range": [
+            7529,
+            7565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7570,
+            7573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The nul terminator must be within `isize::MAX` from `ptr`",
+          "path": "doc",
+          "range": [
+            7578,
+            7641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7646,
+            7649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > **Note**: This operation is intended to be a 0-cost cast but it is",
+          "path": "doc",
+          "range": [
+            7654,
+            7726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > currently implemented with an up-front calculation of the length of",
+          "path": "doc",
+          "range": [
+            7731,
+            7804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > the string. This is not guaranteed to always be the case.",
+          "path": "doc",
+          "range": [
+            7809,
+            7872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7877,
+            7880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Caveat",
+          "path": "doc",
+          "range": [
+            7885,
+            7897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7902,
+            7905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime for the returned slice is inferred from its usage. To prevent accidental misuse,",
+          "path": "doc",
+          "range": [
+            7910,
+            8007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it's suggested to tie the lifetime to whichever source lifetime is safe in the context,",
+          "path": "doc",
+          "range": [
+            8012,
+            8103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such as by providing a helper function taking the lifetime of a host value for the slice,",
+          "path": "doc",
+          "range": [
+            8108,
+            8201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or by explicit annotation.",
+          "path": "doc",
+          "range": [
+            8206,
+            8236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8241,
+            8244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            8249,
+            8263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8268,
+            8271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8276,
+            8283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{c_char, CStr};",
+          "path": "doc",
+          "range": [
+            8288,
+            8321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8326,
+            8329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn my_string() -> *const c_char {",
+          "path": "doc",
+          "range": [
+            8334,
+            8371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     c\"hello\".as_ptr()",
+          "path": "doc",
+          "range": [
+            8376,
+            8401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            8406,
+            8411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8416,
+            8419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            8424,
+            8436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let slice = CStr::from_ptr(my_string());",
+          "path": "doc",
+          "range": [
+            8441,
+            8489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(slice.to_str().unwrap(), \"hello\");",
+          "path": "doc",
+          "range": [
+            8494,
+            8547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            8552,
+            8557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8562,
+            8569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8574,
+            8577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8582,
+            8589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{c_char, CStr};",
+          "path": "doc",
+          "range": [
+            8594,
+            8627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8632,
+            8635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " const HELLO_PTR: *const c_char = {",
+          "path": "doc",
+          "range": [
+            8640,
+            8678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     const BYTES: &[u8] = b\"Hello, world!\\0\";",
+          "path": "doc",
+          "range": [
+            8683,
+            8731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     BYTES.as_ptr().cast()",
+          "path": "doc",
+          "range": [
+            8736,
+            8765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            8770,
+            8776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " const HELLO: &CStr = unsafe { CStr::from_ptr(HELLO_PTR) };",
+          "path": "doc",
+          "range": [
+            8781,
+            8843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8848,
+            8851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"Hello, world!\", HELLO);",
+          "path": "doc",
+          "range": [
+            8856,
+            8896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8901,
+            8908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8913,
+            8916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: core::ptr#safety",
+          "path": "doc",
+          "range": [
+            8921,
+            8950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8955,
+            8964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            9019,
+            9030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9035,
+            9080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            9085,
+            9157
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9227,
+        9931
+      ],
+      "kind": "impl_fn",
+      "name": "from_ptr",
+      "range": [
+        6612,
+        9931
+      ],
+      "signature_range": [
+        9166,
+        9226
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a C string wrapper from a byte slice with any number of nuls.",
+          "path": "doc",
+          "range": [
+            9937,
+            10010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10015,
+            10018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method will create a `CStr` from any byte slice that contains at",
+          "path": "doc",
+          "range": [
+            10023,
+            10096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " least one nul byte. Unlike with [`CStr::from_bytes_with_nul`], the caller",
+          "path": "doc",
+          "range": [
+            10101,
+            10178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " does not need to know where the nul byte is located.",
+          "path": "doc",
+          "range": [
+            10183,
+            10239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10244,
+            10247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the first byte is a nul character, this method will return an",
+          "path": "doc",
+          "range": [
+            10252,
+            10320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " empty `CStr`. If multiple nul characters are present, the `CStr` will",
+          "path": "doc",
+          "range": [
+            10325,
+            10398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " end at the first one.",
+          "path": "doc",
+          "range": [
+            10403,
+            10428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10433,
+            10436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the slice only has a single nul byte at the end, this method is",
+          "path": "doc",
+          "range": [
+            10441,
+            10511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " equivalent to [`CStr::from_bytes_with_nul`].",
+          "path": "doc",
+          "range": [
+            10516,
+            10564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10569,
+            10572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10577,
+            10591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10596,
+            10603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            10608,
+            10631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10636,
+            10639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut buffer = [0u8; 16];",
+          "path": "doc",
+          "range": [
+            10644,
+            10675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            10680,
+            10692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Here we might call an unsafe C function that writes a string",
+          "path": "doc",
+          "range": [
+            10697,
+            10768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // into the buffer.",
+          "path": "doc",
+          "range": [
+            10773,
+            10800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let buf_ptr = buffer.as_mut_ptr();",
+          "path": "doc",
+          "range": [
+            10805,
+            10847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     buf_ptr.write_bytes(b'A', 8);",
+          "path": "doc",
+          "range": [
+            10852,
+            10889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10894,
+            10899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Attempt to extract a C nul-terminated string from the buffer.",
+          "path": "doc",
+          "range": [
+            10904,
+            10972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let c_str = CStr::from_bytes_until_nul(&buffer[..]).unwrap();",
+          "path": "doc",
+          "range": [
+            10977,
+            11042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c_str.to_str().unwrap(), \"AAAAAAAA\");",
+          "path": "doc",
+          "range": [
+            11047,
+            11099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11104,
+            11111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11116,
+            11119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11124,
+            11190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            11195,
+            11273
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11367,
+        12000
+      ],
+      "kind": "impl_fn",
+      "name": "from_bytes_until_nul",
+      "range": [
+        9937,
+        12000
+      ],
+      "signature_range": [
+        11282,
+        11366
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a C string wrapper from a byte slice with exactly one nul",
+          "path": "doc",
+          "range": [
+            12006,
+            12075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " terminator.",
+          "path": "doc",
+          "range": [
+            12080,
+            12095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12100,
+            12103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will cast the provided `bytes` to a `CStr`",
+          "path": "doc",
+          "range": [
+            12108,
+            12168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " wrapper after ensuring that the byte slice is nul-terminated",
+          "path": "doc",
+          "range": [
+            12173,
+            12237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and does not contain any interior nul bytes.",
+          "path": "doc",
+          "range": [
+            12242,
+            12290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12295,
+            12298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the nul byte may not be at the end,",
+          "path": "doc",
+          "range": [
+            12303,
+            12345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`CStr::from_bytes_until_nul`] can be used instead.",
+          "path": "doc",
+          "range": [
+            12350,
+            12405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12410,
+            12413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12418,
+            12432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12437,
+            12440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12445,
+            12452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            12457,
+            12480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12485,
+            12488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cstr = CStr::from_bytes_with_nul(b\"hello\\0\");",
+          "path": "doc",
+          "range": [
+            12493,
+            12546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cstr, Ok(c\"hello\"));",
+          "path": "doc",
+          "range": [
+            12551,
+            12586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12591,
+            12598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12603,
+            12606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Creating a `CStr` without a trailing nul terminator is an error:",
+          "path": "doc",
+          "range": [
+            12611,
+            12679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12684,
+            12687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12692,
+            12699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{CStr, FromBytesWithNulError};",
+          "path": "doc",
+          "range": [
+            12704,
+            12752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12757,
+            12760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cstr = CStr::from_bytes_with_nul(b\"hello\");",
+          "path": "doc",
+          "range": [
+            12765,
+            12816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cstr, Err(FromBytesWithNulError::NotNulTerminated));",
+          "path": "doc",
+          "range": [
+            12821,
+            12888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12893,
+            12900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12905,
+            12908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Creating a `CStr` with an interior nul byte is an error:",
+          "path": "doc",
+          "range": [
+            12913,
+            12973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12978,
+            12981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12986,
+            12993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{CStr, FromBytesWithNulError};",
+          "path": "doc",
+          "range": [
+            12998,
+            13046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13051,
+            13054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cstr = CStr::from_bytes_with_nul(b\"he\\0llo\\0\");",
+          "path": "doc",
+          "range": [
+            13059,
+            13114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cstr, Err(FromBytesWithNulError::InteriorNul { position: 2 }));",
+          "path": "doc",
+          "range": [
+            13119,
+            13197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13202,
+            13209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13214,
+            13270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            13275,
+            13346
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13438,
+        13938
+      ],
+      "kind": "impl_fn",
+      "name": "from_bytes_with_nul",
+      "range": [
+        12006,
+        13938
+      ],
+      "signature_range": [
+        13355,
+        13437
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unsafely creates a C string wrapper from a byte slice.",
+          "path": "doc",
+          "range": [
+            13944,
+            14002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14007,
+            14010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will cast the provided `bytes` to a `CStr` wrapper without",
+          "path": "doc",
+          "range": [
+            14015,
+            14091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " performing any sanity checks.",
+          "path": "doc",
+          "range": [
+            14096,
+            14129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14134,
+            14137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            14142,
+            14154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The provided slice **must** be nul-terminated and not contain any interior",
+          "path": "doc",
+          "range": [
+            14159,
+            14237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " nul bytes.",
+          "path": "doc",
+          "range": [
+            14242,
+            14256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14261,
+            14264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14269,
+            14283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14288,
+            14291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14296,
+            14303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::CStr;",
+          "path": "doc",
+          "range": [
+            14308,
+            14331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14336,
+            14339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let bytes = b\"Hello world!\\0\";",
+          "path": "doc",
+          "range": [
+            14344,
+            14378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14383,
+            14386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cstr = unsafe { CStr::from_bytes_with_nul_unchecked(bytes) };",
+          "path": "doc",
+          "range": [
+            14391,
+            14460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cstr.to_bytes_with_nul(), bytes);",
+          "path": "doc",
+          "range": [
+            14465,
+            14513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14518,
+            14525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14530,
+            14539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            14544,
+            14555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            14560,
+            14616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            14621,
+            14694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            14699,
+            14750
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14828,
+        16255
+      ],
+      "kind": "impl_fn",
+      "name": "from_bytes_with_nul_unchecked",
+      "range": [
+        13944,
+        16255
+      ],
+      "signature_range": [
+        14759,
+        14827
+      ]
+    },
+    {
+      "ancestors": [
+        15,
+        19
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14838,
+        16249
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the inner pointer to this C string.",
+          "path": "doc",
+          "range": [
+            16261,
+            16308
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16313,
+            16316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned pointer will be valid for as long as `self` is, and points",
+          "path": "doc",
+          "range": [
+            16321,
+            16396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to a contiguous region of memory terminated with a 0 byte to represent",
+          "path": "doc",
+          "range": [
+            16401,
+            16475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the end of the string.",
+          "path": "doc",
+          "range": [
+            16480,
+            16506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16511,
+            16514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The type of the returned pointer is",
+          "path": "doc",
+          "range": [
+            16519,
+            16558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`*const c_char`][crate::ffi::c_char], and whether it's",
+          "path": "doc",
+          "range": [
+            16563,
+            16622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " an alias for `*const i8` or `*const u8` is platform-specific.",
+          "path": "doc",
+          "range": [
+            16627,
+            16692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16697,
+            16700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **WARNING**",
+          "path": "doc",
+          "range": [
+            16705,
+            16720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16725,
+            16728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned pointer is read-only; writing to it (including passing it",
+          "path": "doc",
+          "range": [
+            16733,
+            16807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to C code that writes to it) causes undefined behavior.",
+          "path": "doc",
+          "range": [
+            16812,
+            16871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16876,
+            16879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is your responsibility to make sure that the underlying memory is not",
+          "path": "doc",
+          "range": [
+            16884,
+            16960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " freed too early. For example, the following code will cause undefined",
+          "path": "doc",
+          "range": [
+            16965,
+            17038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior when `ptr` is used inside the `unsafe` block:",
+          "path": "doc",
+          "range": [
+            17043,
+            17101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17106,
+            17109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            17114,
+            17127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![expect(dangling_pointers_from_temporaries)]",
+          "path": "doc",
+          "range": [
+            17132,
+            17184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{CStr, CString};",
+          "path": "doc",
+          "range": [
+            17189,
+            17223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17228,
+            17231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 The meaning of this entire program is undefined,",
+          "path": "doc",
+          "range": [
+            17236,
+            17296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 and nothing about its behavior is guaranteed,",
+          "path": "doc",
+          "range": [
+            17301,
+            17358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 not even that its behavior resembles the code as written,",
+          "path": "doc",
+          "range": [
+            17363,
+            17432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 just because it contains a single instance of undefined behavior!",
+          "path": "doc",
+          "range": [
+            17437,
+            17514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17519,
+            17522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 🚨 creates a dangling pointer to a temporary `CString`",
+          "path": "doc",
+          "range": [
+            17527,
+            17590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 🚨 that is deallocated at the end of the statement",
+          "path": "doc",
+          "range": [
+            17595,
+            17654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = CString::new(\"Hi!\".to_uppercase()).unwrap().as_ptr();",
+          "path": "doc",
+          "range": [
+            17659,
+            17726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17731,
+            17734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // without undefined behavior, you would expect that `ptr` equals:",
+          "path": "doc",
+          "range": [
+            17739,
+            17809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dbg!(CStr::from_bytes_with_nul(b\"HI!\\0\").unwrap());",
+          "path": "doc",
+          "range": [
+            17814,
+            17869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17874,
+            17877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 🙏 Possibly the program behaved as expected so far,",
+          "path": "doc",
+          "range": [
+            17882,
+            17942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 🙏 and this just shows `ptr` is now garbage..., but",
+          "path": "doc",
+          "range": [
+            17947,
+            18007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 this violates `CStr::from_ptr`'s safety contract",
+          "path": "doc",
+          "range": [
+            18012,
+            18072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 leading to a dereference of a dangling pointer,",
+          "path": "doc",
+          "range": [
+            18077,
+            18136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 which is immediate undefined behavior.",
+          "path": "doc",
+          "range": [
+            18141,
+            18191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // 💀 *BOOM*, you're dead, your entire program has no meaning.",
+          "path": "doc",
+          "range": [
+            18196,
+            18264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dbg!(unsafe { CStr::from_ptr(ptr) });",
+          "path": "doc",
+          "range": [
+            18269,
+            18310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18315,
+            18322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18327,
+            18330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This happens because, the pointer returned by `as_ptr` does not carry any",
+          "path": "doc",
+          "range": [
+            18335,
+            18412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " lifetime information, and the `CString` is deallocated immediately after",
+          "path": "doc",
+          "range": [
+            18417,
+            18493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the expression that it is part of has been evaluated.",
+          "path": "doc",
+          "range": [
+            18498,
+            18555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To fix the problem, bind the `CString` to a local variable:",
+          "path": "doc",
+          "range": [
+            18560,
+            18623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18628,
+            18631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18636,
+            18643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ffi::{CStr, CString};",
+          "path": "doc",
+          "range": [
+            18648,
+            18682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18687,
+            18690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let c_str = CString::new(\"Hi!\".to_uppercase()).unwrap();",
+          "path": "doc",
+          "range": [
+            18695,
+            18755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = c_str.as_ptr();",
+          "path": "doc",
+          "range": [
+            18760,
+            18789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18794,
+            18797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(unsafe { CStr::from_ptr(ptr) }, c\"HI!\");",
+          "path": "doc",
+          "range": [
+            18802,
+            18857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18862,
+            18869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18874,
+            18883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            18888,
+            18899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18904,
+            18949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            18954,
+            19023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_as_ptr",
+          "range": [
+            19028,
+            19043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_never_returns_null_ptr",
+          "range": [
+            19048,
+            19079
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19128,
+        19163
+      ],
+      "kind": "impl_fn",
+      "name": "as_ptr",
+      "range": [
+        16261,
+        19163
+      ],
+      "signature_range": [
+        19088,
+        19127
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " We could eventually expose this publicly, if we wanted.",
+          "path": "doc",
+          "range": [
+            19169,
+            19228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19233,
+            19242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            19247,
+            19258
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19314,
+        19552
+      ],
+      "kind": "impl_fn",
+      "name": "as_non_null_ptr",
+      "range": [
+        19169,
+        19552
+      ],
+      "signature_range": [
+        19263,
+        19313
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the length of `self`. Like C's `strlen`, this does not include the nul terminator.",
+          "path": "doc",
+          "range": [
+            19558,
+            19652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19657,
+            19660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > **Note**: This method is currently implemented as a constant-time",
+          "path": "doc",
+          "range": [
+            19665,
+            19736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > cast, but it is planned to alter its definition in the future to",
+          "path": "doc",
+          "range": [
+            19741,
+            19811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > perform the length calculation whenever this method is called.",
+          "path": "doc",
+          "range": [
+            19816,
+            19884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19889,
+            19892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            19897,
+            19911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19916,
+            19919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19924,
+            19931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"foo\".count_bytes(), 3);",
+          "path": "doc",
+          "range": [
+            19936,
+            19976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"\".count_bytes(), 0);",
+          "path": "doc",
+          "range": [
+            19981,
+            20018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20023,
+            20030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20035,
+            20044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            20049,
+            20060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            20065,
+            20095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20100,
+            20157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            20162,
+            20234
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20280,
+        20316
+      ],
+      "kind": "impl_fn",
+      "name": "count_bytes",
+      "range": [
+        19558,
+        20316
+      ],
+      "signature_range": [
+        20243,
+        20279
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if `self.to_bytes()` has a length of 0.",
+          "path": "doc",
+          "range": [
+            20322,
+            20380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20385,
+            20388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20393,
+            20407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20412,
+            20415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20420,
+            20427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!c\"foo\".is_empty());",
+          "path": "doc",
+          "range": [
+            20432,
+            20464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(c\"\".is_empty());",
+          "path": "doc",
+          "range": [
+            20469,
+            20497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20502,
+            20509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20514,
+            20523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20528,
+            20582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            20587,
+            20653
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20695,
+        20905
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        20322,
+        20905
+      ],
+      "signature_range": [
+        20662,
+        20694
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts this C string to a byte slice.",
+          "path": "doc",
+          "range": [
+            20911,
+            20954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20959,
+            20962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned slice will **not** contain the trailing nul terminator that this C",
+          "path": "doc",
+          "range": [
+            20967,
+            21050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " string has.",
+          "path": "doc",
+          "range": [
+            21055,
+            21070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21075,
+            21078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > **Note**: This method is currently implemented as a constant-time",
+          "path": "doc",
+          "range": [
+            21083,
+            21154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > cast, but it is planned to alter its definition in the future to",
+          "path": "doc",
+          "range": [
+            21159,
+            21229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > perform the length calculation whenever this method is called.",
+          "path": "doc",
+          "range": [
+            21234,
+            21302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21307,
+            21310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21315,
+            21329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21334,
+            21337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21342,
+            21349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"foo\".to_bytes(), b\"foo\");",
+          "path": "doc",
+          "range": [
+            21354,
+            21396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21401,
+            21408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21413,
+            21422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            21427,
+            21535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21540,
+            21585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            21590,
+            21661
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21704,
+        21959
+      ],
+      "kind": "impl_fn",
+      "name": "to_bytes",
+      "range": [
+        20911,
+        21959
+      ],
+      "signature_range": [
+        21670,
+        21703
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts this C string to a byte slice containing the trailing 0 byte.",
+          "path": "doc",
+          "range": [
+            21965,
+            22039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22044,
+            22047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is the equivalent of [`CStr::to_bytes`] except that it",
+          "path": "doc",
+          "range": [
+            22052,
+            22124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will retain the trailing nul terminator instead of chopping it off.",
+          "path": "doc",
+          "range": [
+            22129,
+            22200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22205,
+            22208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > **Note**: This method is currently implemented as a 0-cost cast, but",
+          "path": "doc",
+          "range": [
+            22213,
+            22287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > it is planned to alter its definition in the future to perform the",
+          "path": "doc",
+          "range": [
+            22292,
+            22364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " > length calculation whenever this method is called.",
+          "path": "doc",
+          "range": [
+            22369,
+            22425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22430,
+            22433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            22438,
+            22452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22457,
+            22460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22465,
+            22472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"foo\".to_bytes_with_nul(), b\"foo\\0\");",
+          "path": "doc",
+          "range": [
+            22477,
+            22530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22535,
+            22542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22547,
+            22556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            22561,
+            22669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            22674,
+            22719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            22724,
+            22795
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22847,
+        23033
+      ],
+      "kind": "impl_fn",
+      "name": "to_bytes_with_nul",
+      "range": [
+        21965,
+        23033
+      ],
+      "signature_range": [
+        22804,
+        22846
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Iterates over the bytes in this C string.",
+          "path": "doc",
+          "range": [
+            23039,
+            23084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23089,
+            23092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned iterator will **not** contain the trailing nul terminator",
+          "path": "doc",
+          "range": [
+            23097,
+            23171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that this C string has.",
+          "path": "doc",
+          "range": [
+            23176,
+            23203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23208,
+            23211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23216,
+            23230
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23235,
+            23238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23243,
+            23250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(cstr_bytes)]",
+          "path": "doc",
+          "range": [
+            23255,
+            23282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23287,
+            23290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(c\"foo\".bytes().eq(*b\"foo\"));",
+          "path": "doc",
+          "range": [
+            23295,
+            23335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23340,
+            23347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23352,
+            23361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            23366,
+            23419
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23457,
+        23489
+      ],
+      "kind": "impl_fn",
+      "name": "bytes",
+      "range": [
+        23039,
+        23489
+      ],
+      "signature_range": [
+        23428,
+        23456
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Yields a <code>&[str]</code> slice if the `CStr` contains valid UTF-8.",
+          "path": "doc",
+          "range": [
+            23495,
+            23569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23574,
+            23577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the contents of the `CStr` are valid UTF-8 data, this",
+          "path": "doc",
+          "range": [
+            23582,
+            23642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function will return the corresponding <code>&[str]</code> slice. Otherwise,",
+          "path": "doc",
+          "range": [
+            23647,
+            23727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will return an error with details of where UTF-8 validation failed.",
+          "path": "doc",
+          "range": [
+            23732,
+            23806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23811,
+            23814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [str]: prim@str \"str\"",
+          "path": "doc",
+          "range": [
+            23819,
+            23844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23849,
+            23852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23857,
+            23871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23876,
+            23879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23884,
+            23891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(c\"foo\".to_str(), Ok(\"foo\"));",
+          "path": "doc",
+          "range": [
+            23896,
+            23939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23944,
+            23951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23956,
+            24007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            24012,
+            24083
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24147,
+        24485
+      ],
+      "kind": "impl_fn",
+      "name": "to_str",
+      "range": [
+        23495,
+        24485
+      ],
+      "signature_range": [
+        24092,
+        24146
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns an object that implements [`Display`] for safely printing a [`CStr`] that may",
+          "path": "doc",
+          "range": [
+            24491,
+            24580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " contain non-Unicode data.",
+          "path": "doc",
+          "range": [
+            24585,
+            24614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24619,
+            24622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behaves as if `self` were first lossily converted to a `str`, with invalid UTF-8 presented",
+          "path": "doc",
+          "range": [
+            24627,
+            24721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as the Unicode replacement character: �.",
+          "path": "doc",
+          "range": [
+            24726,
+            24772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24777,
+            24780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Display`]: fmt::Display",
+          "path": "doc",
+          "range": [
+            24785,
+            24814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24819,
+            24822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            24827,
+            24841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24846,
+            24849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24854,
+            24861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(cstr_display)]",
+          "path": "doc",
+          "range": [
+            24866,
+            24895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24900,
+            24903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cstr = c\"Hello, world!\";",
+          "path": "doc",
+          "range": [
+            24908,
+            24940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{}\", cstr.display());",
+          "path": "doc",
+          "range": [
+            24945,
+            24980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24985,
+            24992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            24997,
+            25052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            25057,
+            25169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25174,
+            25183
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25231,
+        25296
+      ],
+      "kind": "impl_fn",
+      "name": "display",
+      "range": [
+        24491,
+        25296
+      ],
+      "signature_range": [
+        25192,
+        25230
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the same string as a string slice `&CStr`.",
+          "path": "doc",
+          "range": [
+            25302,
+            25356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25361,
+            25364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is redundant when used directly on `&CStr`, but",
+          "path": "doc",
+          "range": [
+            25369,
+            25432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it helps dereferencing other string-like types to string slices,",
+          "path": "doc",
+          "range": [
+            25437,
+            25505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for example references to `Box<CStr>` or `Arc<CStr>`.",
+          "path": "doc",
+          "range": [
+            25510,
+            25567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25572,
+            25581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            25586,
+            25639
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25682,
+        25702
+      ],
+      "kind": "impl_fn",
+      "name": "as_c_str",
+      "range": [
+        25302,
+        25702
+      ],
+      "signature_range": [
+        25648,
+        25681
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25706,
+            25764
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25706,
+        25974
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25802,
+            25811
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25852,
+        25884
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        25802,
+        25884
+      ],
+      "signature_range": [
+        25816,
+        25851
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25890,
+            25899
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25940,
+        25972
+      ],
+      "kind": "impl_fn",
+      "name": "ne",
+      "range": [
+        25890,
+        25972
+      ],
+      "signature_range": [
+        25904,
+        25939
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26175,
+            26220
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26175,
+        26386
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26252,
+            26261
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26322,
+        26384
+      ],
+      "kind": "impl_fn",
+      "name": "partial_cmp",
+      "range": [
+        26252,
+        26384
+      ],
+      "signature_range": [
+        26266,
+        26321
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26388,
+            26433
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26388,
+        26568
+      ]
+    },
+    {
+      "ancestors": [
+        36
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26458,
+            26467
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26512,
+        26566
+      ],
+      "kind": "impl_fn",
+      "name": "cmp",
+      "range": [
+        26458,
+        26566
+      ],
+      "signature_range": [
+        26472,
+        26511
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26570,
+            26626
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26570,
+        27406
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26706,
+            26715
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26775,
+        27404
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        26706,
+        27404
+      ],
+      "signature_range": [
+        26720,
+        26774
+      ]
+    },
+    {
+      "ancestors": [
+        38,
+        39
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27235,
+        27387
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        27408,
+        27631
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Calculate the length of a nul-terminated string. Defers to C's `strlen` when possible.",
+          "path": "doc",
+          "range": [
+            27633,
+            27723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27724,
+            27727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            27728,
+            27740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27741,
+            27744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The pointer must point to a valid buffer that contains a NUL terminator. The NUL must be",
+          "path": "doc",
+          "range": [
+            27745,
+            27837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " located within `isize::MAX` from `ptr`.",
+          "path": "doc",
+          "range": [
+            27838,
+            27881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            27882,
+            27891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            27892,
+            27947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            27948,
+            27999
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28052,
+        28673
+      ],
+      "kind": "fn",
+      "name": "strlen",
+      "range": [
+        27633,
+        28673
+      ],
+      "signature_range": [
+        28000,
+        28051
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        28058,
+        28671
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator over the bytes of a [`CStr`], without the nul terminator.",
+          "path": "doc",
+          "range": [
+            28675,
+            28748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28749,
+            28752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This struct is created by the [`bytes`] method on [`CStr`].",
+          "path": "doc",
+          "range": [
+            28753,
+            28816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See its documentation for more.",
+          "path": "doc",
+          "range": [
+            28817,
+            28852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28853,
+            28856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`bytes`]: CStr::bytes",
+          "path": "doc",
+          "range": [
+            28857,
+            28883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            28884,
+            28949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28950,
+            29003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            29004,
+            29027
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Bytes",
+      "range": [
+        28675,
+        29190
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29192,
+            29245
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29192,
+        29279
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29281,
+            29334
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29281,
+        29368
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29370,
+        29799
+      ]
+    },
+    {
+      "ancestors": [
+        47
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29395,
+            29404
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29437,
+        29515
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        29395,
+        29515
+      ],
+      "signature_range": [
+        29409,
+        29436
+      ]
+    },
+    {
+      "ancestors": [
+        47
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29521,
+            29530
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29562,
+        29797
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        29521,
+        29797
+      ],
+      "signature_range": [
+        29535,
+        29561
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29801,
+            29854
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29801,
+        30896
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29910,
+            29919
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29957,
+        30591
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        29910,
+        30591
+      ],
+      "signature_range": [
+        29924,
+        29956
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30597,
+            30606
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30657,
+        30727
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        30597,
+        30727
+      ],
+      "signature_range": [
+        30611,
+        30656
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30733,
+            30742
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30771,
+        30894
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        30733,
+        30894
+      ],
+      "signature_range": [
+        30747,
+        30770
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            30898,
+            30951
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30898,
+        30987
+      ]
+    }
+  ],
+  "source_sha256": "197b26777bc0b16f6b4728d3ff833f52feffff7127ef726659f53c095b518c3a"
+}

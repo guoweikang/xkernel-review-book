@@ -1,0 +1,212 @@
+{
+  "scope": "local file integrity and read-only navigation validation; not a candidate experiment",
+  "source_verification": {
+    "command": "python3 - <<'PY'\nimport json,hashlib\nfrom pathlib import Path\nbase=Path('research/evidence/runs/2026-11-17-next-document-candidates-01')\nentries=json.loads((base/'sources.json').read_text())['sources']\nrecords=[]\nfor entry in entries:\n    data=Path(entry['path']).read_bytes()\n    records.append({'id':entry['id'],'hash_matches':hashlib.sha256(data).hexdigest()==entry['sha256']})\nfirmroot=Path('research/evidence/runs/2026-11-11-firmware-boundary-01')\nfirm=json.loads((firmroot/'report.json').read_text())['snapshots']['before']['files']\nbpfroot=Path('research/evidence/runs/2026-11-05-bpf-history-01')\nbpf=json.loads((bpfroot/'manifest.json').read_text())['files']\nexpected={str(firmroot/'before'/item['path']):item['sha256'] for item in firm}\nexpected.update({str(bpfroot/item['path']):item['sha256'] for item in bpf})\ncfroot=Path('research/evidence/runs/2026-11-12-cfg-membership-01')\nexpected.update({str(cfroot/path):digest for path,digest in json.loads((cfroot/'report.json').read_text())['artifact_sha256'].items()})\nbcroot=Path('research/evidence/runs/2026-11-05-bpf-conformance-01')\nbcreport=json.loads((bcroot/'report.json').read_text())['source_sha256']\nfor original in bcreport:\n    expected[str(bcroot/Path(original).name)]=bcreport[original]\nprior=[{'id':entry['id'],'matches_prior_record':entry['sha256']==expected[entry['path']]} for entry in entries if entry['path'] in expected]\nold_dtb=firmroot/'before/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs'\nsame_dtb=Path(next(item['path'] for item in entries if item['id']=='F3'))\nprint(json.dumps({'source_checks':records,'prior_record_checks':prior,'F3_equals_archived_before_dtb':old_dtb.read_bytes()==same_dtb.read_bytes(),'experiments_run':0,'models_dispatched':0,'network_requests':0},ensure_ascii=False))\nassert all(item['hash_matches'] for item in records)\nassert all(item['matches_prior_record'] for item in prior)\nassert old_dtb.read_bytes()==same_dtb.read_bytes()\nPY",
+    "exit_code": 0,
+    "result": {
+      "source_checks": [
+        {
+          "id": "F1",
+          "hash_matches": true
+        },
+        {
+          "id": "F2",
+          "hash_matches": true
+        },
+        {
+          "id": "F3",
+          "hash_matches": true
+        },
+        {
+          "id": "F4",
+          "hash_matches": true
+        },
+        {
+          "id": "F5",
+          "hash_matches": true
+        },
+        {
+          "id": "F6",
+          "hash_matches": true
+        },
+        {
+          "id": "B1",
+          "hash_matches": true
+        },
+        {
+          "id": "B2",
+          "hash_matches": true
+        },
+        {
+          "id": "B3",
+          "hash_matches": true
+        },
+        {
+          "id": "B4",
+          "hash_matches": true
+        },
+        {
+          "id": "B5",
+          "hash_matches": true
+        },
+        {
+          "id": "B6",
+          "hash_matches": true
+        },
+        {
+          "id": "B7",
+          "hash_matches": true
+        },
+        {
+          "id": "B8",
+          "hash_matches": true
+        },
+        {
+          "id": "B9",
+          "hash_matches": true
+        },
+        {
+          "id": "B10",
+          "hash_matches": true
+        },
+        {
+          "id": "C1",
+          "hash_matches": true
+        },
+        {
+          "id": "C2",
+          "hash_matches": true
+        },
+        {
+          "id": "C3",
+          "hash_matches": true
+        },
+        {
+          "id": "C4",
+          "hash_matches": true
+        },
+        {
+          "id": "C5",
+          "hash_matches": true
+        },
+        {
+          "id": "C6",
+          "hash_matches": true
+        },
+        {
+          "id": "N1",
+          "hash_matches": true
+        },
+        {
+          "id": "N2",
+          "hash_matches": true
+        },
+        {
+          "id": "N3",
+          "hash_matches": true
+        },
+        {
+          "id": "N4",
+          "hash_matches": true
+        },
+        {
+          "id": "N5",
+          "hash_matches": true
+        },
+        {
+          "id": "N6",
+          "hash_matches": true
+        },
+        {
+          "id": "N7",
+          "hash_matches": true
+        },
+        {
+          "id": "N8",
+          "hash_matches": true
+        },
+        {
+          "id": "N9",
+          "hash_matches": true
+        },
+        {
+          "id": "N10",
+          "hash_matches": true
+        }
+      ],
+      "prior_record_checks": [
+        {
+          "id": "F1",
+          "matches_prior_record": true
+        },
+        {
+          "id": "F2",
+          "matches_prior_record": true
+        },
+        {
+          "id": "B1",
+          "matches_prior_record": true
+        },
+        {
+          "id": "B2",
+          "matches_prior_record": true
+        },
+        {
+          "id": "B4",
+          "matches_prior_record": true
+        },
+        {
+          "id": "B5",
+          "matches_prior_record": true
+        },
+        {
+          "id": "B6",
+          "matches_prior_record": true
+        },
+        {
+          "id": "C1",
+          "matches_prior_record": true
+        },
+        {
+          "id": "C2",
+          "matches_prior_record": true
+        },
+        {
+          "id": "C3",
+          "matches_prior_record": true
+        },
+        {
+          "id": "C4",
+          "matches_prior_record": true
+        }
+      ],
+      "F3_equals_archived_before_dtb": true,
+      "experiments_run": 0,
+      "models_dispatched": 0,
+      "network_requests": 0
+    }
+  },
+  "catalog": {
+    "command": "python3 scripts/check_research_catalog.py",
+    "exit_code": 0,
+    "output": "PASS: 234 documents, 10 topics; five negative controls\n"
+  },
+  "book_build_and_link_validation": {
+    "status": "not_run",
+    "reason": "Only txt/json evidence-run files added, no book/catalog input changed. scripts/build.py writes shared .build/src and dist; avoided to respect independent-directory-only scope."
+  },
+  "failure_notes": [
+    "Guessed firmware-authority note path absent; resolved to F5/N9.",
+    "Guessed firmware conditional report.json paths absent; directory listing resolved to conditional-location-01/audit.json (F6).",
+    "Optional missing note/Makefile locator commands produced nonzero compound command exits; research_lookup JSON results preserved."
+  ],
+  "boundary": {
+    "experiments": 0,
+    "model_dispatches": 0,
+    "network_requests": 0,
+    "production_changes": 0,
+    "shared_note_changes": 0,
+    "commit_or_push": false,
+    "awaiting": "principal route review"
+  }
+}

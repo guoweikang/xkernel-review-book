@@ -1,0 +1,17 @@
+{
+  "question": "Does fixed rank fusion change the exclusion of zero-document candidates, and how dependent is that result on list and tie conventions?",
+  "parent": "2026-11-17-doc-binding-permutation-01",
+  "population": "Same sorted 812 units and 329266 unordered pairs; reuse hash-verified native code/document matrices and vectors",
+  "k": 60,
+  "budget": 20,
+  "input_scores": "Python round to 12 decimals, same as original ranking; descending score, canonical pair IDs ascending",
+  "methods": ["code", "documentation", "mean", "rrf_complete", "rrf_positive", "rrf_complete_reverse_ties"],
+  "rrf_complete": "Both lists contain all pairs, including zero-document scores; each rank is 1-based ordinal position",
+  "rrf_positive": "Only strictly positive rounded scores contribute 1/(60+rank); absent contribution is zero. Adaptation, not literal complete-permutation formulation",
+  "rrf_complete_reverse_ties": "Sensitivity control: reverse pair ID order inside equal-score groups in BOTH component lists; same final ascending-ID tie break",
+  "output_scores": "RRF uses float64 reciprocal sums without decimal rounding; mean uses raw matrices then Python round12 as parent; output order descending then canonical IDs",
+  "measurements": ["full rank arrays and top100", "top20 nonzero-document endpoint coverage", "top20 overlaps", "cutoff ties", "ranks of pre-existing development queue entries 7,11,27 only as diagnostics"],
+  "checks": ["parent artifact hashes", "single-method and mean top100 match original", "independent scalar rank arithmetic and full ordering", "all 329266 pairs accounted for", "rerun identity", "zero-score contribution and reversed-tie controls"],
+  "limits": ["Zero vector is not necessarily missing text; report original text availability separately", "No relevance labels, precision, recall, quality gain or novelty conclusion", "Known three cases are development anchors, never tuning or test labels", "No k or budget search", "No author TREC/LETOR performance reproduction"],
+  "stop": "One frozen batch plus exact rerun and checker; no new candidate implementation; next select independent evaluation protocol"
+}

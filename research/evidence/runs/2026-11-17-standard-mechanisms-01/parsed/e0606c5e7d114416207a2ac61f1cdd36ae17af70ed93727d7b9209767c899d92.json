@@ -1,0 +1,4227 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        294,
+        478
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        479,
+        590
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Objects that have a notion of *successor* and *predecessor* operations.",
+          "path": "doc",
+          "range": [
+            593,
+            668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            669,
+            672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The *successor* operation moves towards values that compare greater.",
+          "path": "doc",
+          "range": [
+            673,
+            745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The *predecessor* operation moves towards values that compare lesser.",
+          "path": "doc",
+          "range": [
+            746,
+            819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            820,
+            859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_on_unimplemented",
+          "range": [
+            860,
+            1224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1225,
+            1277
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Step",
+      "range": [
+        593,
+        8243
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the bounds on the number of *successor* steps required to get from `start` to `end`",
+          "path": "doc",
+          "range": [
+            1327,
+            1422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " like [`Iterator::size_hint()`][Iterator::size_hint()].",
+          "path": "doc",
+          "range": [
+            1427,
+            1485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1490,
+            1493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `(usize::MAX, None)` if the number of steps would overflow `usize`, or is infinite.",
+          "path": "doc",
+          "range": [
+            1498,
+            1593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1598,
+            1601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            1606,
+            1622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1627,
+            1630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`, `b`, and `n`:",
+          "path": "doc",
+          "range": [
+            1635,
+            1665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1670,
+            1673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `steps_between(&a, &b) == (n, Some(n))` if and only if `Step::forward_checked(&a, n) == Some(b)`",
+          "path": "doc",
+          "range": [
+            1678,
+            1780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `steps_between(&a, &b) == (n, Some(n))` if and only if `Step::backward_checked(&b, n) == Some(a)`",
+          "path": "doc",
+          "range": [
+            1785,
+            1888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `steps_between(&a, &b) == (n, Some(n))` only if `a <= b`",
+          "path": "doc",
+          "range": [
+            1893,
+            1955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `steps_between(&a, &b) == (0, Some(0))` if and only if `a == b`",
+          "path": "doc",
+          "range": [
+            1960,
+            2042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `steps_between(&a, &b) == (0, None)` if `a > b`",
+          "path": "doc",
+          "range": [
+            2047,
+            2100
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "steps_between",
+      "range": [
+        1327,
+        2174
+      ],
+      "signature_range": [
+        2105,
+        2173
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *successor*",
+          "path": "doc",
+          "range": [
+            2180,
+            2250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            2255,
+            2283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2288,
+            2291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this would overflow the range of values supported by `Self`, returns `None`.",
+          "path": "doc",
+          "range": [
+            2296,
+            2379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2384,
+            2387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            2392,
+            2408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2413,
+            2416
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`, `n`, and `m`:",
+          "path": "doc",
+          "range": [
+            2421,
+            2451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2456,
+            2459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward_checked(a, n).and_then(|x| Step::forward_checked(x, m)) == Step::forward_checked(a, m).and_then(|x| Step::forward_checked(x, n))`",
+          "path": "doc",
+          "range": [
+            2464,
+            2614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward_checked(a, n).and_then(|x| Step::forward_checked(x, m)) == try { Step::forward_checked(a, n.checked_add(m)) }`",
+          "path": "doc",
+          "range": [
+            2619,
+            2750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2755,
+            2758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`:",
+          "path": "doc",
+          "range": [
+            2763,
+            2787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2792,
+            2795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward_checked(a, n) == (0..n).try_fold(a, |x, _| Step::forward_checked(&x, 1))`",
+          "path": "doc",
+          "range": [
+            2800,
+            2894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::forward_checked(a, 0) == Some(a)`",
+          "path": "doc",
+          "range": [
+            2899,
+            2958
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "forward_checked",
+      "range": [
+        2180,
+        3025
+      ],
+      "signature_range": [
+        2963,
+        3024
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *successor*",
+          "path": "doc",
+          "range": [
+            3031,
+            3101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            3106,
+            3134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3139,
+            3142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this would overflow the range of values supported by `Self`,",
+          "path": "doc",
+          "range": [
+            3147,
+            3214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this function is allowed to panic, wrap, or saturate.",
+          "path": "doc",
+          "range": [
+            3219,
+            3276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The suggested behavior is to panic when debug assertions are enabled,",
+          "path": "doc",
+          "range": [
+            3281,
+            3354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and to wrap or saturate otherwise.",
+          "path": "doc",
+          "range": [
+            3359,
+            3397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3402,
+            3405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unsafe code should not rely on the correctness of behavior after overflow.",
+          "path": "doc",
+          "range": [
+            3410,
+            3488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3493,
+            3496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            3501,
+            3517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3522,
+            3525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`, `n`, and `m`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            3530,
+            3586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3591,
+            3594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward(Step::forward(a, n), m) == Step::forward(a, n + m)`",
+          "path": "doc",
+          "range": [
+            3599,
+            3671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3676,
+            3679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            3684,
+            3734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3739,
+            3742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward_checked(a, n) == Some(Step::forward(a, n))`",
+          "path": "doc",
+          "range": [
+            3747,
+            3811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward(a, n) == (0..n).fold(a, |x, _| Step::forward(x, 1))`",
+          "path": "doc",
+          "range": [
+            3816,
+            3889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::forward(a, 0) == a`",
+          "path": "doc",
+          "range": [
+            3894,
+            3939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward(a, n) >= a`",
+          "path": "doc",
+          "range": [
+            3944,
+            3976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward(Step::forward(a, n), n) == a`",
+          "path": "doc",
+          "range": [
+            3981,
+            4032
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4083,
+        4172
+      ],
+      "kind": "trait_fn",
+      "name": "forward",
+      "range": [
+        3031,
+        4172
+      ],
+      "signature_range": [
+        4037,
+        4082
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *successor*",
+          "path": "doc",
+          "range": [
+            4178,
+            4248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            4253,
+            4281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4286,
+            4289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            4294,
+            4306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4311,
+            4314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is undefined behavior for this operation to overflow the",
+          "path": "doc",
+          "range": [
+            4319,
+            4382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " range of values supported by `Self`. If you cannot guarantee that this",
+          "path": "doc",
+          "range": [
+            4387,
+            4461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will not overflow, use `forward` or `forward_checked` instead.",
+          "path": "doc",
+          "range": [
+            4466,
+            4532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4537,
+            4540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            4545,
+            4561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4566,
+            4569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`:",
+          "path": "doc",
+          "range": [
+            4574,
+            4590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4595,
+            4598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * if there exists `b` such that `b > a`, it is safe to call `Step::forward_unchecked(a, 1)`",
+          "path": "doc",
+          "range": [
+            4603,
+            4698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * if there exists `b`, `n` such that `steps_between(&a, &b) == Some(n)`,",
+          "path": "doc",
+          "range": [
+            4703,
+            4779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   it is safe to call `Step::forward_unchecked(a, m)` for any `m <= n`.",
+          "path": "doc",
+          "range": [
+            4784,
+            4858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::forward_unchecked(a, 0)` is always safe.",
+          "path": "doc",
+          "range": [
+            4863,
+            4929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4934,
+            4937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            4942,
+            4992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4997,
+            5000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward_unchecked(a, n)` is equivalent to `Step::forward(a, n)`",
+          "path": "doc",
+          "range": [
+            5005,
+            5081
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5149,
+        5192
+      ],
+      "kind": "trait_fn",
+      "name": "forward_unchecked",
+      "range": [
+        4178,
+        5192
+      ],
+      "signature_range": [
+        5086,
+        5148
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *predecessor*",
+          "path": "doc",
+          "range": [
+            5198,
+            5270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            5275,
+            5303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5308,
+            5311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this would overflow the range of values supported by `Self`, returns `None`.",
+          "path": "doc",
+          "range": [
+            5316,
+            5399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5404,
+            5407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            5412,
+            5428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5433,
+            5436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`, `n`, and `m`:",
+          "path": "doc",
+          "range": [
+            5441,
+            5471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5476,
+            5479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward_checked(a, n).and_then(|x| Step::backward_checked(x, m)) == n.checked_add(m).and_then(|x| Step::backward_checked(a, x))`",
+          "path": "doc",
+          "range": [
+            5484,
+            5626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward_checked(a, n).and_then(|x| Step::backward_checked(x, m)) == try { Step::backward_checked(a, n.checked_add(m)?) }`",
+          "path": "doc",
+          "range": [
+            5631,
+            5766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5771,
+            5774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`:",
+          "path": "doc",
+          "range": [
+            5779,
+            5803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5808,
+            5811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward_checked(a, n) == (0..n).try_fold(a, |x, _| Step::backward_checked(x, 1))`",
+          "path": "doc",
+          "range": [
+            5816,
+            5911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::backward_checked(a, 0) == Some(a)`",
+          "path": "doc",
+          "range": [
+            5916,
+            5976
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "backward_checked",
+      "range": [
+        5198,
+        6044
+      ],
+      "signature_range": [
+        5981,
+        6043
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *predecessor*",
+          "path": "doc",
+          "range": [
+            6050,
+            6122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            6127,
+            6155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6160,
+            6163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this would overflow the range of values supported by `Self`,",
+          "path": "doc",
+          "range": [
+            6168,
+            6235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this function is allowed to panic, wrap, or saturate.",
+          "path": "doc",
+          "range": [
+            6240,
+            6297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The suggested behavior is to panic when debug assertions are enabled,",
+          "path": "doc",
+          "range": [
+            6302,
+            6375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and to wrap or saturate otherwise.",
+          "path": "doc",
+          "range": [
+            6380,
+            6418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6423,
+            6426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unsafe code should not rely on the correctness of behavior after overflow.",
+          "path": "doc",
+          "range": [
+            6431,
+            6509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6514,
+            6517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            6522,
+            6538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6543,
+            6546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`, `n`, and `m`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            6551,
+            6607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6612,
+            6615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward(Step::backward(a, n), m) == Step::backward(a, n + m)`",
+          "path": "doc",
+          "range": [
+            6620,
+            6695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6700,
+            6703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            6708,
+            6758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6763,
+            6766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward_checked(a, n) == Some(Step::backward(a, n))`",
+          "path": "doc",
+          "range": [
+            6771,
+            6837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward(a, n) == (0..n).fold(a, |x, _| Step::backward(x, 1))`",
+          "path": "doc",
+          "range": [
+            6842,
+            6917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::backward(a, 0) == a`",
+          "path": "doc",
+          "range": [
+            6922,
+            6968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward(a, n) <= a`",
+          "path": "doc",
+          "range": [
+            6973,
+            7006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::forward(Step::backward(a, n), n) == a`",
+          "path": "doc",
+          "range": [
+            7011,
+            7062
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7114,
+        7205
+      ],
+      "kind": "trait_fn",
+      "name": "backward",
+      "range": [
+        6050,
+        7205
+      ],
+      "signature_range": [
+        7067,
+        7113
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the value that would be obtained by taking the *predecessor*",
+          "path": "doc",
+          "range": [
+            7211,
+            7283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `self` `count` times.",
+          "path": "doc",
+          "range": [
+            7288,
+            7316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7321,
+            7324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            7329,
+            7341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7346,
+            7349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is undefined behavior for this operation to overflow the",
+          "path": "doc",
+          "range": [
+            7354,
+            7417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " range of values supported by `Self`. If you cannot guarantee that this",
+          "path": "doc",
+          "range": [
+            7422,
+            7496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will not overflow, use `backward` or `backward_checked` instead.",
+          "path": "doc",
+          "range": [
+            7501,
+            7569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7574,
+            7577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Invariants",
+          "path": "doc",
+          "range": [
+            7582,
+            7598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7603,
+            7606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a`:",
+          "path": "doc",
+          "range": [
+            7611,
+            7627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7632,
+            7635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * if there exists `b` such that `b < a`, it is safe to call `Step::backward_unchecked(a, 1)`",
+          "path": "doc",
+          "range": [
+            7640,
+            7736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * if there exists `b`, `n` such that `steps_between(&b, &a) == (n, Some(n))`,",
+          "path": "doc",
+          "range": [
+            7741,
+            7822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   it is safe to call `Step::backward_unchecked(a, m)` for any `m <= n`.",
+          "path": "doc",
+          "range": [
+            7827,
+            7902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   * Corollary: `Step::backward_unchecked(a, 0)` is always safe.",
+          "path": "doc",
+          "range": [
+            7907,
+            7974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7979,
+            7982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For any `a` and `n`, where no overflow occurs:",
+          "path": "doc",
+          "range": [
+            7987,
+            8037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8042,
+            8045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Step::backward_unchecked(a, n)` is equivalent to `Step::backward(a, n)`",
+          "path": "doc",
+          "range": [
+            8050,
+            8128
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8197,
+        8241
+      ],
+      "kind": "trait_fn",
+      "name": "backward_unchecked",
+      "range": [
+        7211,
+        8241
+      ],
+      "signature_range": [
+        8133,
+        8196
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8431,
+        9037
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        9039,
+        9572
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        9666,
+        10767
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10769,
+        17997
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18035,
+        18192
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18230,
+        18387
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18425,
+        18582
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18584,
+            18636
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18584,
+        21831
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18662,
+            18671
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18747,
+        19388
+      ],
+      "kind": "impl_fn",
+      "name": "steps_between",
+      "range": [
+        18662,
+        19388
+      ],
+      "signature_range": [
+        18676,
+        18746
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19394,
+            19403
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19470,
+        19931
+      ],
+      "kind": "impl_fn",
+      "name": "forward_checked",
+      "range": [
+        19394,
+        19931
+      ],
+      "signature_range": [
+        19408,
+        19469
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19937,
+            19946
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20014,
+        20384
+      ],
+      "kind": "impl_fn",
+      "name": "backward_checked",
+      "range": [
+        19937,
+        20384
+      ],
+      "signature_range": [
+        19951,
+        20013
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20390,
+            20399
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20467,
+        21105
+      ],
+      "kind": "impl_fn",
+      "name": "forward_unchecked",
+      "range": [
+        20390,
+        21105
+      ],
+      "signature_range": [
+        20404,
+        20466
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21111,
+            21120
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21189,
+        21829
+      ],
+      "kind": "impl_fn",
+      "name": "backward_unchecked",
+      "range": [
+        21111,
+        21829
+      ],
+      "signature_range": [
+        21125,
+        21188
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            21833,
+            21885
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        21833,
+        23427
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21916,
+            21925
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22011,
+        22076
+      ],
+      "kind": "impl_fn",
+      "name": "steps_between",
+      "range": [
+        21916,
+        22076
+      ],
+      "signature_range": [
+        21930,
+        22010
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22082,
+            22091
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22168,
+        22271
+      ],
+      "kind": "impl_fn",
+      "name": "forward_checked",
+      "range": [
+        22082,
+        22271
+      ],
+      "signature_range": [
+        22096,
+        22167
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22277,
+            22286
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22364,
+        22581
+      ],
+      "kind": "impl_fn",
+      "name": "backward_checked",
+      "range": [
+        22277,
+        22581
+      ],
+      "signature_range": [
+        22291,
+        22363
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22587,
+            22596
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22674,
+        23002
+      ],
+      "kind": "impl_fn",
+      "name": "forward_unchecked",
+      "range": [
+        22587,
+        23002
+      ],
+      "signature_range": [
+        22601,
+        22673
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23008,
+            23017
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23096,
+        23425
+      ],
+      "kind": "impl_fn",
+      "name": "backward_unchecked",
+      "range": [
+        23008,
+        23425
+      ],
+      "signature_range": [
+        23022,
+        23095
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            23429,
+            23481
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        23429,
+        24636
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23511,
+            23520
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23604,
+        23672
+      ],
+      "kind": "impl_fn",
+      "name": "steps_between",
+      "range": [
+        23511,
+        23672
+      ],
+      "signature_range": [
+        23525,
+        23603
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23678,
+            23687
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23762,
+        23847
+      ],
+      "kind": "impl_fn",
+      "name": "forward_checked",
+      "range": [
+        23678,
+        23847
+      ],
+      "signature_range": [
+        23692,
+        23761
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23853,
+            23862
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23938,
+        24024
+      ],
+      "kind": "impl_fn",
+      "name": "backward_checked",
+      "range": [
+        23853,
+        24024
+      ],
+      "signature_range": [
+        23867,
+        23937
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24030,
+            24039
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24115,
+        24328
+      ],
+      "kind": "impl_fn",
+      "name": "forward_unchecked",
+      "range": [
+        24030,
+        24328
+      ],
+      "signature_range": [
+        24044,
+        24114
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24334,
+            24343
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24420,
+        24634
+      ],
+      "kind": "impl_fn",
+      "name": "backward_unchecked",
+      "range": [
+        24334,
+        24634
+      ],
+      "signature_range": [
+        24348,
+        24419
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            24638,
+            24690
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24638,
+        25854
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24720,
+            24729
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24813,
+        24882
+      ],
+      "kind": "impl_fn",
+      "name": "steps_between",
+      "range": [
+        24720,
+        24882
+      ],
+      "signature_range": [
+        24734,
+        24812
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24888,
+            24897
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24972,
+        25058
+      ],
+      "kind": "impl_fn",
+      "name": "forward_checked",
+      "range": [
+        24888,
+        25058
+      ],
+      "signature_range": [
+        24902,
+        24971
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25064,
+            25073
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25149,
+        25236
+      ],
+      "kind": "impl_fn",
+      "name": "backward_checked",
+      "range": [
+        25064,
+        25236
+      ],
+      "signature_range": [
+        25078,
+        25148
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25242,
+            25251
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25327,
+        25543
+      ],
+      "kind": "impl_fn",
+      "name": "forward_unchecked",
+      "range": [
+        25242,
+        25543
+      ],
+      "signature_range": [
+        25256,
+        25326
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25549,
+            25558
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25635,
+        25852
+      ],
+      "kind": "impl_fn",
+      "name": "backward_unchecked",
+      "range": [
+        25549,
+        25852
+      ],
+      "signature_range": [
+        25563,
+        25634
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        25856,
+        26033
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        26202,
+        26673
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        26675,
+        26877
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Specialization implementations for `Range`.",
+          "path": "doc",
+          "range": [
+            26879,
+            26926
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "RangeIteratorImpl",
+      "range": [
+        26879,
+        27401
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_next",
+      "range": [
+        26989,
+        27035
+      ],
+      "signature_range": [
+        26989,
+        27034
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_nth",
+      "range": [
+        27040,
+        27095
+      ],
+      "signature_range": [
+        27040,
+        27094
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_advance_by",
+      "range": [
+        27100,
+        27170
+      ],
+      "signature_range": [
+        27100,
+        27169
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_next_back",
+      "range": [
+        27203,
+        27254
+      ],
+      "signature_range": [
+        27203,
+        27253
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_nth_back",
+      "range": [
+        27259,
+        27319
+      ],
+      "signature_range": [
+        27259,
+        27318
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_advance_back_by",
+      "range": [
+        27324,
+        27399
+      ],
+      "signature_range": [
+        27324,
+        27398
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27403,
+        29872
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            27479,
+            27488
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27538,
+        27796
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next",
+      "range": [
+        27479,
+        27796
+      ],
+      "signature_range": [
+        27501,
+        27537
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            27802,
+            27811
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27870,
+        28233
+      ],
+      "kind": "impl_fn",
+      "name": "spec_nth",
+      "range": [
+        27802,
+        28233
+      ],
+      "signature_range": [
+        27824,
+        27869
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28239,
+            28248
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28331,
+        28670
+      ],
+      "kind": "impl_fn",
+      "name": "spec_advance_by",
+      "range": [
+        28239,
+        28670
+      ],
+      "signature_range": [
+        28261,
+        28330
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28676,
+            28685
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28740,
+        28984
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next_back",
+      "range": [
+        28676,
+        28984
+      ],
+      "signature_range": [
+        28698,
+        28739
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28990,
+            28999
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29063,
+        29431
+      ],
+      "kind": "impl_fn",
+      "name": "spec_nth_back",
+      "range": [
+        28990,
+        29431
+      ],
+      "signature_range": [
+        29012,
+        29062
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29437,
+            29446
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29534,
+        29870
+      ],
+      "kind": "impl_fn",
+      "name": "spec_advance_back_by",
+      "range": [
+        29437,
+        29870
+      ],
+      "signature_range": [
+        29459,
+        29533
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29874,
+        32543
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29937,
+            29946
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29988,
+        30248
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next",
+      "range": [
+        29937,
+        30248
+      ],
+      "signature_range": [
+        29951,
+        29987
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30254,
+            30263
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30314,
+        30660
+      ],
+      "kind": "impl_fn",
+      "name": "spec_nth",
+      "range": [
+        30254,
+        30660
+      ],
+      "signature_range": [
+        30268,
+        30313
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30666,
+            30675
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30750,
+        31373
+      ],
+      "kind": "impl_fn",
+      "name": "spec_advance_by",
+      "range": [
+        30666,
+        31373
+      ],
+      "signature_range": [
+        30680,
+        30749
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31379,
+            31388
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31435,
+        31670
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next_back",
+      "range": [
+        31379,
+        31670
+      ],
+      "signature_range": [
+        31393,
+        31434
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31676,
+            31685
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31741,
+        32092
+      ],
+      "kind": "impl_fn",
+      "name": "spec_nth_back",
+      "range": [
+        31676,
+        32092
+      ],
+      "signature_range": [
+        31690,
+        31740
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32098,
+            32107
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32187,
+        32541
+      ],
+      "kind": "impl_fn",
+      "name": "spec_advance_back_by",
+      "range": [
+        32098,
+        32541
+      ],
+      "signature_range": [
+        32112,
+        32186
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            32545,
+            32590
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32545,
+        34266
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32658,
+            32667
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32704,
+        32736
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        32658,
+        32736
+      ],
+      "signature_range": [
+        32672,
+        32703
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32742,
+            32751
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32802,
+        32952
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        32742,
+        32952
+      ],
+      "signature_range": [
+        32756,
+        32801
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32958,
+            32967
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32996,
+        33170
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        32958,
+        33170
+      ],
+      "signature_range": [
+        32972,
+        32995
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33176,
+            33185
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33231,
+        33263
+      ],
+      "kind": "impl_fn",
+      "name": "nth",
+      "range": [
+        33176,
+        33263
+      ],
+      "signature_range": [
+        33190,
+        33230
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33269,
+            33278
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33314,
+        33346
+      ],
+      "kind": "impl_fn",
+      "name": "last",
+      "range": [
+        33269,
+        33346
+      ],
+      "signature_range": [
+        33283,
+        33313
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33352,
+            33361
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33426,
+        33453
+      ],
+      "kind": "impl_fn",
+      "name": "min",
+      "range": [
+        33352,
+        33453
+      ],
+      "signature_range": [
+        33366,
+        33421
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33459,
+            33468
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33533,
+        33565
+      ],
+      "kind": "impl_fn",
+      "name": "max",
+      "range": [
+        33459,
+        33565
+      ],
+      "signature_range": [
+        33473,
+        33528
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33571,
+            33580
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33612,
+        33632
+      ],
+      "kind": "impl_fn",
+      "name": "is_sorted",
+      "range": [
+        33571,
+        33632
+      ],
+      "signature_range": [
+        33585,
+        33611
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33638,
+            33647
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33717,
+        33756
+      ],
+      "kind": "impl_fn",
+      "name": "advance_by",
+      "range": [
+        33638,
+        33756
+      ],
+      "signature_range": [
+        33652,
+        33716
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33762,
+            33771
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33905,
+        34264
+      ],
+      "kind": "impl_fn",
+      "name": "__iterator_get_unchecked",
+      "range": [
+        33762,
+        34264
+      ],
+      "signature_range": [
+        33776,
+        33900
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        34750,
+        35125
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        35127,
+        35205
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        35243,
+        35299
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        35337,
+        35405
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        35407,
+        35767
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            35769,
+            35814
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        35769,
+        36200
+      ]
+    },
+    {
+      "ancestors": [
+        81
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35873,
+            35882
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35924,
+        35961
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        35873,
+        35961
+      ],
+      "signature_range": [
+        35887,
+        35923
+      ]
+    },
+    {
+      "ancestors": [
+        81
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35967,
+            35976
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36027,
+        36064
+      ],
+      "kind": "impl_fn",
+      "name": "nth_back",
+      "range": [
+        35967,
+        36064
+      ],
+      "signature_range": [
+        35981,
+        36026
+      ]
+    },
+    {
+      "ancestors": [
+        81
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36070,
+            36079
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36154,
+        36198
+      ],
+      "kind": "impl_fn",
+      "name": "advance_back_by",
+      "range": [
+        36070,
+        36198
+      ],
+      "signature_range": [
+        36084,
+        36153
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            37116,
+            37169
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37116,
+        37229
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37231,
+            37277
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37231,
+        37326
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37328,
+            37373
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37328,
+        37904
+      ]
+    },
+    {
+      "ancestors": [
+        87
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37445,
+            37454
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37491,
+        37599
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        37445,
+        37599
+      ],
+      "signature_range": [
+        37459,
+        37490
+      ]
+    },
+    {
+      "ancestors": [
+        87
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37605,
+            37614
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37665,
+        37699
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        37605,
+        37699
+      ],
+      "signature_range": [
+        37619,
+        37664
+      ]
+    },
+    {
+      "ancestors": [
+        87
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37705,
+            37714
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37760,
+        37902
+      ],
+      "kind": "impl_fn",
+      "name": "nth",
+      "range": [
+        37705,
+        37902
+      ],
+      "signature_range": [
+        37719,
+        37759
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            37962,
+            38015
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37962,
+        38079
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            38081,
+            38127
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38081,
+        38180
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "trait",
+      "name": "RangeInclusiveIteratorImpl",
+      "range": [
+        38182,
+        38702
+      ]
+    },
+    {
+      "ancestors": [
+        93
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_next",
+      "range": [
+        38253,
+        38299
+      ],
+      "signature_range": [
+        38253,
+        38298
+      ]
+    },
+    {
+      "ancestors": [
+        93
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_try_fold",
+      "range": [
+        38304,
+        38457
+      ],
+      "signature_range": [
+        38304,
+        38456
+      ]
+    },
+    {
+      "ancestors": [
+        93
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_next_back",
+      "range": [
+        38490,
+        38541
+      ],
+      "signature_range": [
+        38490,
+        38540
+      ]
+    },
+    {
+      "ancestors": [
+        93
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        38546,
+        38700
+      ],
+      "signature_range": [
+        38546,
+        38699
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38704,
+        41150
+      ]
+    },
+    {
+      "ancestors": [
+        98
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38798,
+            38807
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38857,
+        39269
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next",
+      "range": [
+        38798,
+        39269
+      ],
+      "signature_range": [
+        38820,
+        38856
+      ]
+    },
+    {
+      "ancestors": [
+        98
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            39275,
+            39284
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39450,
+        39971
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_fold",
+      "range": [
+        39275,
+        39971
+      ],
+      "signature_range": [
+        39297,
+        39445
+      ]
+    },
+    {
+      "ancestors": [
+        98
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            39977,
+            39986
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        40041,
+        40448
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next_back",
+      "range": [
+        39977,
+        40448
+      ],
+      "signature_range": [
+        39999,
+        40040
+      ]
+    },
+    {
+      "ancestors": [
+        98
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            40454,
+            40463
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        40630,
+        41148
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        40454,
+        41148
+      ],
+      "signature_range": [
+        40476,
+        40625
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        41152,
+        43517
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            41233,
+            41242
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        41284,
+        41687
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next",
+      "range": [
+        41233,
+        41687
+      ],
+      "signature_range": [
+        41247,
+        41283
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            41693,
+            41702
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        41860,
+        42372
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_fold",
+      "range": [
+        41693,
+        42372
+      ],
+      "signature_range": [
+        41707,
+        41855
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            42378,
+            42387
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        42434,
+        42832
+      ],
+      "kind": "impl_fn",
+      "name": "spec_next_back",
+      "range": [
+        42378,
+        42832
+      ],
+      "signature_range": [
+        42392,
+        42433
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            42838,
+            42847
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        43006,
+        43515
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        42838,
+        43515
+      ],
+      "signature_range": [
+        42852,
+        43001
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            43519,
+            43575
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        43519,
+        45713
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            43652,
+            43661
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        43698,
+        43730
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        43652,
+        43730
+      ],
+      "signature_range": [
+        43666,
+        43697
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            43736,
+            43745
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        43796,
+        44022
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        43736,
+        44022
+      ],
+      "signature_range": [
+        43750,
+        43795
+      ]
+    },
+    {
+      "ancestors": [
+        108,
+        110
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        43986,
+        44014
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            44028,
+            44037
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        44066,
+        44300
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        44028,
+        44300
+      ],
+      "signature_range": [
+        44042,
+        44065
+      ]
+    },
+    {
+      "ancestors": [
+        108,
+        112
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        44219,
+        44247
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            44306,
+            44315
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        44361,
+        45076
+      ],
+      "kind": "impl_fn",
+      "name": "nth",
+      "range": [
+        44306,
+        45076
+      ],
+      "signature_range": [
+        44320,
+        44360
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45082,
+            45091
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45249,
+        45292
+      ],
+      "kind": "impl_fn",
+      "name": "try_fold",
+      "range": [
+        45082,
+        45292
+      ],
+      "signature_range": [
+        45096,
+        45244
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        45298,
+        45342
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45348,
+            45357
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45393,
+        45425
+      ],
+      "kind": "impl_fn",
+      "name": "last",
+      "range": [
+        45348,
+        45425
+      ],
+      "signature_range": [
+        45362,
+        45392
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45431,
+            45440
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45505,
+        45532
+      ],
+      "kind": "impl_fn",
+      "name": "min",
+      "range": [
+        45431,
+        45532
+      ],
+      "signature_range": [
+        45445,
+        45500
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45538,
+            45547
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45612,
+        45644
+      ],
+      "kind": "impl_fn",
+      "name": "max",
+      "range": [
+        45538,
+        45644
+      ],
+      "signature_range": [
+        45552,
+        45607
+      ]
+    },
+    {
+      "ancestors": [
+        108
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45650,
+            45659
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45691,
+        45711
+      ],
+      "kind": "impl_fn",
+      "name": "is_sorted",
+      "range": [
+        45650,
+        45711
+      ],
+      "signature_range": [
+        45664,
+        45690
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            45715,
+            45771
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        45715,
+        46987
+      ]
+    },
+    {
+      "ancestors": [
+        121
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45839,
+            45848
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45890,
+        45927
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        45839,
+        45927
+      ],
+      "signature_range": [
+        45853,
+        45889
+      ]
+    },
+    {
+      "ancestors": [
+        121
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            45933,
+            45942
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45993,
+        46715
+      ],
+      "kind": "impl_fn",
+      "name": "nth_back",
+      "range": [
+        45933,
+        46715
+      ],
+      "signature_range": [
+        45947,
+        45992
+      ]
+    },
+    {
+      "ancestors": [
+        121
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            46721,
+            46730
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        46889,
+        46933
+      ],
+      "kind": "impl_fn",
+      "name": "try_rfold",
+      "range": [
+        46721,
+        46933
+      ],
+      "signature_range": [
+        46735,
+        46884
+      ]
+    },
+    {
+      "ancestors": [
+        121
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        46939,
+        46985
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            47045,
+            47098
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        47045,
+        47167
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            47169,
+            47215
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        47169,
+        47273
+      ]
+    }
+  ],
+  "source_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9"
+}

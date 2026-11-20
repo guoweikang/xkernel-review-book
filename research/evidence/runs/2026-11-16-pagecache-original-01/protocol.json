@@ -1,0 +1,13 @@
+{
+  "schema": "original-kernel-tests/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "question": "Can the original pagecache tests execute under the fixed kernel's original QEMU harness before extending completion-contract checks?",
+  "source": "git archive of fixed revision, extracted outside all existing repositories",
+  "config": "platforms/kplat-x86_64/qemu_defconfig copied unchanged to isolated .config; make defconfig expands it",
+  "environment": {"RUSTUP_TOOLCHAIN":"1.95.0", "CARGO_NET_OFFLINE":"true", "CARGO_BUILD_JOBS":"4"},
+  "commands": ["make defconfig", "make unittest UNITTEST_CRATE=pagecache ACCEL=n NET=n BLK=n VSOCK=n SMP=2 MEM=1g"],
+  "limits": {"configuration_timeout_seconds":180,"build_and_run_timeout_seconds":600,"retries":0},
+  "classification": "Configuration/build failure or timeout is not a test failure. Exit zero alone is not proof of tests executed: inspect named tests, selected count and summary in serial output. No pagecache cases means not exercised.",
+  "controls": "No source patches, shared root config changes, dependency downloads or lockfile acceptance. Archive command logs and input/output lock hashes. Preserve unsuccessful attempt.",
+  "scope": "Original tests only; no new rejected-budget assertion yet; no device durability or performance claims. Offline dependency failure triggers a separately recorded dependency diagnosis, not unrecorded environment repair."
+}

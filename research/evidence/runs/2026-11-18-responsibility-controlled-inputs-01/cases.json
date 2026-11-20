@@ -1,0 +1,708 @@
+{
+  "schema": "responsibility-controlled-inputs/1",
+  "run_id": "2026-11-18-responsibility-controlled-inputs-01",
+  "status": "draft_pending_independent_review",
+  "provenance": {
+    "norms": "researcher_stipulated_synthetic",
+    "behaviors": "explicitly_stipulated_synthetic_facts_not_code_extraction",
+    "labels": "researcher_reference_for_norm_applicability_only",
+    "real_project_labels": false,
+    "label_role": "derived_display_only_from_reference_axes",
+    "interpretation_limit": "显式给定事实加简单规则可能只构成规则应用控制；不支持文档理解、行为抽取或工程定位效能的结论。",
+    "independent_review": "pending",
+    "adoption": "undecided_may_be_rejected",
+    "source_code_used": false,
+    "model_runs": 0,
+    "rust_execution_runs": 0
+  },
+  "input_contract": {
+    "purpose": "仅判断研究者规定的合成职责规范是否适用于显式给定行为。不是 xkernel 标签，不推断最优架构、拆分收益、性能、真实实现正确性或代码抽取质量。",
+    "scope": "每个案例是独立的假设世界。R 是本题完整的职责规范，F 是题目直接规定的行为事实，E 是显式例外，C 是例外适用条件的已知状态。无需外查或猜测其他行为、能力缺口或额外例外；C 的 unknown 必须保留。全部仅对题内成立。",
+    "identifiers": "单元名是无语义的标识符；职责必须由 R 读取，行为必须由 F 读取，不能由名字、路径或依赖边猜测结论。证据 ID 只在各自案例内解析；如需跨例引用，用 case_id#evidence_id。",
+    "classification": {
+      "conforming": "已知行为满足通常职责规范，无需借助例外许可。",
+      "divergent": "已知行为违背通常职责规范，且给定例外不适用。",
+      "exception": "已知行为偏离通常职责归属，但被明确适用的例外许可覆盖。",
+      "unknown": "给定证据不足以在其余标签中唯一判定；必须指出未定条件与各条件分支，不能默认不许可或默认许可。"
+    },
+    "output_requirements": [
+      "reference.base_rule: allowed | forbidden | unknown",
+      "reference.exception: applies | not_applicable | unknown | no_clause",
+      "reference.real_project_violation: not_evaluated",
+      "label",
+      "rationale",
+      "required_evidence_ids",
+      "conditional_branches_if_unknown"
+    ],
+    "evidence_reference_semantics": "required_evidence_ids 指应支撑判定的本题声明，不是外部真实性证据；unknown 的 C 条目记录已知的信息缺口，不表示已知其布尔值。",
+    "reference_semantics": "base_rule 仅按通常职责规则评价 F2/F3，不用例外改写通常归属；exception 独立评价 E 是否适用，no_clause 仅表示没有例外条款，不等于条件未知。真实项目违规永远不在本题评价范围。",
+    "derived_display_rule": "本批标签仅作分轴结论的派生显示：base_rule=allowed 时 conforming；base_rule=forbidden 且 exception=applies 时 exception；base_rule=forbidden 且 exception=not_applicable 或 no_clause 时 divergent；base_rule=unknown 或 base_rule=forbidden 且 exception=unknown 时 unknown。合成规范中仅有这些规则和例外，没有规则冲突等其他状态；真实项目违规不得从派生标签推断。"
+  },
+  "families": [
+    {
+      "family_id": "family-01",
+      "mechanism_family": "资源描述解释与驱动策略"
+    },
+    {
+      "family_id": "family-02",
+      "mechanism_family": "缓冲区管理与调用方策略"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "case-01",
+      "family_id": "family-01",
+      "input": {
+        "subject": "U28",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U28 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，资源描述的格式解释职责属于 U17：它实现字段宽度、字节序、缺省值与区间边界规则，将原始资源描述转换为中立的地址区间。除 E1 外，U28 不得自行实现这组解释规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "驱动策略职责属于 U28：它根据设备工作模式，在已经解释出的中立地址区间中选择启用区间。U28 可以调用 U17 并直接使用返回值；发起调用、传递原始描述或使用返回值，不算 U28 自行实现描述解释。反之，U28 自己执行字段宽度、字节序、缺省值与区间边界判断，才算 U28 实现解释职责，不能因还调用了 U17 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U17 的可调用入口实际实现字段宽度、字节序、缺省值与区间边界规则，并返回中立地址区间；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U28 根据设备工作模式，从取得的中立地址区间中选择本次启用的区间。这是本题唯一给定的驱动策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U28 把原始资源描述原样交给 U17，直接使用其返回的中立地址区间；U28 不执行字段宽度、字节序、缺省值或区间边界的解释判断。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U28 为接口迁移临时自行实现 R1 所列的同一组资源描述解释规则；这仅覆盖 F3 的解释行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-02",
+      "family_id": "family-01",
+      "input": {
+        "subject": "U28",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U28 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，资源描述的格式解释职责属于 U17：它实现字段宽度、字节序、缺省值与区间边界规则，将原始资源描述转换为中立的地址区间。除 E1 外，U28 不得自行实现这组解释规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "驱动策略职责属于 U28：它根据设备工作模式，在已经解释出的中立地址区间中选择启用区间。U28 可以调用 U17 并直接使用返回值；发起调用、传递原始描述或使用返回值，不算 U28 自行实现描述解释。反之，U28 自己执行字段宽度、字节序、缺省值与区间边界判断，才算 U28 实现解释职责，不能因还调用了 U17 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U17 的可调用入口实际实现字段宽度、字节序、缺省值与区间边界规则，并返回中立地址区间；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U28 根据设备工作模式，从取得的中立地址区间中选择本次启用的区间。这是本题唯一给定的驱动策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U28 自己执行字段宽度、字节序、缺省值与区间边界的解释判断，生成中立地址区间；本条路径不调用 U17。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U28 为接口迁移临时自行实现 R1 所列的同一组资源描述解释规则；这仅覆盖 F3 的解释行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-03",
+      "family_id": "family-01",
+      "input": {
+        "subject": "U28",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U28 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，资源描述的格式解释职责属于 U17：它实现字段宽度、字节序、缺省值与区间边界规则，将原始资源描述转换为中立的地址区间。除 E1 外，U28 不得自行实现这组解释规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "驱动策略职责属于 U28：它根据设备工作模式，在已经解释出的中立地址区间中选择启用区间。U28 可以调用 U17 并直接使用返回值；发起调用、传递原始描述或使用返回值，不算 U28 自行实现描述解释。反之，U28 自己执行字段宽度、字节序、缺省值与区间边界判断，才算 U28 实现解释职责，不能因还调用了 U17 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U17 的可调用入口实际实现字段宽度、字节序、缺省值与区间边界规则，并返回中立地址区间；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U28 根据设备工作模式，从取得的中立地址区间中选择本次启用的区间。这是本题唯一给定的驱动策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U28 自己执行字段宽度、字节序、缺省值与区间边界的解释判断，生成中立地址区间；本条路径不调用 U17。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U28 为接口迁移临时自行实现 R1 所列的同一组资源描述解释规则；这仅覆盖 F3 的解释行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "true"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-04",
+      "family_id": "family-01",
+      "input": {
+        "subject": "U28",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U28 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，资源描述的格式解释职责属于 U17：它实现字段宽度、字节序、缺省值与区间边界规则，将原始资源描述转换为中立的地址区间。除 E1 外，U28 不得自行实现这组解释规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "驱动策略职责属于 U28：它根据设备工作模式，在已经解释出的中立地址区间中选择启用区间。U28 可以调用 U17 并直接使用返回值；发起调用、传递原始描述或使用返回值，不算 U28 自行实现描述解释。反之，U28 自己执行字段宽度、字节序、缺省值与区间边界判断，才算 U28 实现解释职责，不能因还调用了 U17 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U17 的可调用入口实际实现字段宽度、字节序、缺省值与区间边界规则，并返回中立地址区间；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U28 根据设备工作模式，从取得的中立地址区间中选择本次启用的区间。这是本题唯一给定的驱动策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U28 自己执行字段宽度、字节序、缺省值与区间边界的解释判断，生成中立地址区间；本条路径不调用 U17。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U28 为接口迁移临时自行实现 R1 所列的同一组资源描述解释规则；这仅覆盖 F3 的解释行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "unknown"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-05",
+      "family_id": "family-02",
+      "input": {
+        "subject": "U56",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U56 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，缓冲区管理职责属于 U43：它实现空闲块表维护、块分配与归还、占用计数更新，并维持已分配块不在空闲表中的不变量。除 E1 外，U56 不得自行实现这组管理规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "调用方策略职责属于 U56：它根据请求优先级选择本次批量上限，并在资源不足时决定等待还是拒绝请求。U56 可以调用 U43 申请或归还块并使用返回值；发起申请、传递批量上限或决定等待，不算 U56 自行实现缓冲区管理。反之，U56 自己维护空闲块表、执行分配归还及占用计数更新，才算 U56 实现管理职责，不能因还调用了 U43 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U43 的可调用入口实际维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U56 根据请求优先级选择本次批量上限，在资源不足时决定等待还是拒绝请求。这是本题唯一给定的调用方策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U56 把申请数量及待归还块交给 U43，直接使用其返回结果；U56 不维护空闲块表，不自行执行块分配归还或占用计数更新。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U56 为接口迁移临时自行实现 R1 所列的同一组缓冲区管理规则；这仅覆盖 F3 的管理行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-06",
+      "family_id": "family-02",
+      "input": {
+        "subject": "U56",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U56 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，缓冲区管理职责属于 U43：它实现空闲块表维护、块分配与归还、占用计数更新，并维持已分配块不在空闲表中的不变量。除 E1 外，U56 不得自行实现这组管理规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "调用方策略职责属于 U56：它根据请求优先级选择本次批量上限，并在资源不足时决定等待还是拒绝请求。U56 可以调用 U43 申请或归还块并使用返回值；发起申请、传递批量上限或决定等待，不算 U56 自行实现缓冲区管理。反之，U56 自己维护空闲块表、执行分配归还及占用计数更新，才算 U56 实现管理职责，不能因还调用了 U43 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U43 的可调用入口实际维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U56 根据请求优先级选择本次批量上限，在资源不足时决定等待还是拒绝请求。这是本题唯一给定的调用方策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U56 自己维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；本条路径不调用 U43。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U56 为接口迁移临时自行实现 R1 所列的同一组缓冲区管理规则；这仅覆盖 F3 的管理行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "false"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-07",
+      "family_id": "family-02",
+      "input": {
+        "subject": "U56",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U56 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，缓冲区管理职责属于 U43：它实现空闲块表维护、块分配与归还、占用计数更新，并维持已分配块不在空闲表中的不变量。除 E1 外，U56 不得自行实现这组管理规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "调用方策略职责属于 U56：它根据请求优先级选择本次批量上限，并在资源不足时决定等待还是拒绝请求。U56 可以调用 U43 申请或归还块并使用返回值；发起申请、传递批量上限或决定等待，不算 U56 自行实现缓冲区管理。反之，U56 自己维护空闲块表、执行分配归还及占用计数更新，才算 U56 实现管理职责，不能因还调用了 U43 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U43 的可调用入口实际维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U56 根据请求优先级选择本次批量上限，在资源不足时决定等待还是拒绝请求。这是本题唯一给定的调用方策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U56 自己维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；本条路径不调用 U43。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U56 为接口迁移临时自行实现 R1 所列的同一组缓冲区管理规则；这仅覆盖 F3 的管理行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "true"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-08",
+      "family_id": "family-02",
+      "input": {
+        "subject": "U56",
+        "question": "仅就以下给定规范、事实、例外及条件，判断 U56 的 F2 与 F3 是否符合职责约定；说明实现与调用/委托的区别，引用本例证据 ID。若不能唯一判定，保留条件分支并指出需补充的条件事实。",
+        "evidence": [
+          {
+            "id": "R1",
+            "kind": "R",
+            "text": "在本题给定范围内，缓冲区管理职责属于 U43：它实现空闲块表维护、块分配与归还、占用计数更新，并维持已分配块不在空闲表中的不变量。除 E1 外，U56 不得自行实现这组管理规则。"
+          },
+          {
+            "id": "R2",
+            "kind": "R",
+            "text": "调用方策略职责属于 U56：它根据请求优先级选择本次批量上限，并在资源不足时决定等待还是拒绝请求。U56 可以调用 U43 申请或归还块并使用返回值；发起申请、传递批量上限或决定等待，不算 U56 自行实现缓冲区管理。反之，U56 自己维护空闲块表、执行分配归还及占用计数更新，才算 U56 实现管理职责，不能因还调用了 U43 而豁免。"
+          },
+          {
+            "id": "F1",
+            "kind": "F",
+            "text": "U43 的可调用入口实际维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；该入口在本题场景可用。"
+          },
+          {
+            "id": "F2",
+            "kind": "F",
+            "text": "U56 根据请求优先级选择本次批量上限，在资源不足时决定等待还是拒绝请求。这是本题唯一给定的调用方策略行为。"
+          },
+          {
+            "id": "F3",
+            "kind": "F",
+            "text": "U56 自己维护空闲块表、执行块分配与归还、更新占用计数，并维持已分配块不在空闲表中的不变量；本条路径不调用 U43。"
+          },
+          {
+            "id": "E1",
+            "kind": "E",
+            "text": "本合成规范显式设定一项迁移许可：在迁移窗口开放时，允许 U56 为接口迁移临时自行实现 R1 所列的同一组缓冲区管理规则；这仅覆盖 F3 的管理行为，不转移长期职责，也不改变 R2。窗口关闭时，此许可不适用。许可的对象、行为范围和授权效力在本题均已确定，唯一尚可能未知的适用条件是 C1。没有其他例外。",
+            "condition_evidence_id": "C1",
+            "qualifies_rule_ids": [
+              "R1"
+            ]
+          },
+          {
+            "id": "C1",
+            "kind": "C",
+            "text": "本题行为发生时，E1 所说的迁移窗口是否开放。value=true 表示已知开放，false 表示已知关闭，unknown 表示未提供足以确定窗口状态的事实；unknown 不是 false。",
+            "value": "unknown"
+          }
+        ]
+      }
+    }
+  ],
+  "evaluation_answers": [
+    {
+      "case_id": "case-01",
+      "label": "conforming",
+      "reference": {
+        "base_rule": "allowed",
+        "exception": "not_applicable",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 是把解释工作委托给 R1 指定的 U17，F1 确认由 U17 实现；F2 是 R2 明确允许的驱动策略，调用或使用结果不等于自行实现解释，因此无需迁移许可即可符合。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-02",
+      "label": "divergent",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "not_applicable",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 明确是 U28 自行实现 R1 保留给 U17 的解释规则；F2 的合法策略职责不能豁免 F3。E1 的唯一适用条件 C1 为 false，所以按给定规范越界。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-03",
+      "label": "exception",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "applies",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 仍由 U28 自行实现 R1 所属解释职责，并未因迁移改为委托；但 E1 明确覆盖该行为且 C1 为 true，属于显式迁移例外，而非无条件符合或长期职责转移。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-04",
+      "label": "unknown",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "unknown",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 的实现者与 R1 所规定者不同，但 E1 明确允许条件性迁移，C1 的真假未知。不能把窗口状态缺失当成许可失效，也不能据可能迁移断言已获适用豁免。需要确定 C1 后才可在 exception 与 divergent 之间裁决。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [
+        {
+          "condition_evidence_id": "C1",
+          "when_value": "true",
+          "label": "exception",
+          "reference": {
+            "base_rule": "forbidden",
+            "exception": "applies",
+            "real_project_violation": "not_evaluated"
+          },
+          "rationale": "若窗口开放，E1 覆盖 F3 的临时实现，适用迁移例外。",
+          "required_evidence_ids": [
+            "R1",
+            "F3",
+            "E1",
+            "C1"
+          ]
+        },
+        {
+          "condition_evidence_id": "C1",
+          "when_value": "false",
+          "label": "divergent",
+          "reference": {
+            "base_rule": "forbidden",
+            "exception": "not_applicable",
+            "real_project_violation": "not_evaluated"
+          },
+          "rationale": "若窗口关闭，E1 不适用，F3 违反 R1 的实现归属限制。",
+          "required_evidence_ids": [
+            "R1",
+            "F3",
+            "E1",
+            "C1"
+          ]
+        }
+      ],
+      "missing_evidence_ids": [
+        "C1"
+      ]
+    },
+    {
+      "case_id": "case-05",
+      "label": "conforming",
+      "reference": {
+        "base_rule": "allowed",
+        "exception": "not_applicable",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 是把管理工作委托给 R1 指定的 U43，F1 确认由 U43 实现；F2 是 R2 明确允许的调用方策略，申请、归还请求与等待决策不等于自行实现管理，因此无需迁移许可即可符合。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-06",
+      "label": "divergent",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "not_applicable",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 明确是 U56 自行实现 R1 保留给 U43 的管理规则；F2 的合法策略职责不能豁免 F3。E1 的唯一适用条件 C1 为 false，所以按给定规范越界。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-07",
+      "label": "exception",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "applies",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 仍由 U56 自行实现 R1 所属管理职责，并未因迁移改为委托；但 E1 明确覆盖该行为且 C1 为 true，属于显式迁移例外，而非无条件符合或长期职责转移。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [],
+      "missing_evidence_ids": []
+    },
+    {
+      "case_id": "case-08",
+      "label": "unknown",
+      "reference": {
+        "base_rule": "forbidden",
+        "exception": "unknown",
+        "real_project_violation": "not_evaluated"
+      },
+      "rationale": "F3 的实现者与 R1 所规定者不同，但 E1 明确允许条件性迁移，C1 的真假未知。不能把窗口状态缺失当成许可失效，也不能据可能迁移断言已获适用豁免。需要确定 C1 后才可在 exception 与 divergent 之间裁决。",
+      "required_evidence_ids": [
+        "R1",
+        "R2",
+        "F1",
+        "F2",
+        "F3",
+        "E1",
+        "C1"
+      ],
+      "conditional_branches": [
+        {
+          "condition_evidence_id": "C1",
+          "when_value": "true",
+          "label": "exception",
+          "reference": {
+            "base_rule": "forbidden",
+            "exception": "applies",
+            "real_project_violation": "not_evaluated"
+          },
+          "rationale": "若窗口开放，E1 覆盖 F3 的临时实现，适用迁移例外。",
+          "required_evidence_ids": [
+            "R1",
+            "F3",
+            "E1",
+            "C1"
+          ]
+        },
+        {
+          "condition_evidence_id": "C1",
+          "when_value": "false",
+          "label": "divergent",
+          "reference": {
+            "base_rule": "forbidden",
+            "exception": "not_applicable",
+            "real_project_violation": "not_evaluated"
+          },
+          "rationale": "若窗口关闭，E1 不适用，F3 违反 R1 的实现归属限制。",
+          "required_evidence_ids": [
+            "R1",
+            "F3",
+            "E1",
+            "C1"
+          ]
+        }
+      ],
+      "missing_evidence_ids": [
+        "C1"
+      ]
+    }
+  ],
+  "packaging_contract": {
+    "never_send_to_model": [
+      "evaluation_answers",
+      "families",
+      "provenance",
+      "status",
+      "packaging_contract",
+      "report.txt"
+    ],
+    "allowlist_for_future_single_case_packet": [
+      "input_contract",
+      "cases[selected].input"
+    ],
+    "note": "本文件是带答案的研究者开发归档，不是可直接派发的模型输入。后续打包必须从允许字段重建，不得整文件发送；标签、rationale、required_evidence_ids、条件分支答案及主线程评价材料都留评价侧。主线程设计 baseline、隔离、重编码案例 ID 和顺序；本次不实现打包或派发。允许字段中的标签释义是共同任务定义，不含逐例答案。"
+  }
+}

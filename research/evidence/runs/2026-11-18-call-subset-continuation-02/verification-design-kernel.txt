@@ -1,0 +1,84 @@
+Real-kernel fixture feasibility: candidate002, fixed slot order, not005
+
+This supersedes the execution recommendation in verification-design.txt. That
+host128 draft remains unchanged and UNADOPTED; no host model or mock transaction
+is authorized. The operative protocol is research/protocols/cache-transaction-
+fixture-v1.json, frozen by Main. This document and fixture construction are not
+test results or a refactoring recommendation, nor retrospective review admission.
+Source revision: 7e3ac94431a0dbb376d2fc8d85098deeff1bba09.
+
+Privacy and registration
+fs/kvfs/src/node/dentry.rs:1657 registers tests_dentry from
+../../ut-tests/node_dentry.rs. That module imports super::Dentry (:13), accesses
+Dentry.0 (:1021), and directly invokes private cache_lookup_candidate,
+begin_parallel_lookup and uncache_lookup_candidate (:1147-1160).
+Private DentryInner.children and flags (:158-167) are accessible from this child
+module; Main has confirmed the actual registration/access arrangement. They
+would not be accessible from an external integration-test crate. No visibility
+changes, production accessor, extra helper, or lock instrumentation is needed.
+Existing crate-level SuperBlock::is_dentry_cached observations appear at test
+:1143 and :1211. No private SuperBlock field access is proposed.
+
+Use real Dentry/Arc/Weak and the existing make_dir_entry (:391-406),
+make_non_cacheable_dir (:1105-1124), and SuperBlock fixture pattern (:1014-1041).
+Existing filesystem mock operations back real kernel objects, not a substitute
+transaction model. Dentry::new_negative (:483-489) provides distinct identities
+without directory aliasing, and inherits parent superblock binding (:179-184).
+Use positive directory parents; a negative parent has no inode for policy reads.
+
+Six appended def_test entries, no new helper or imports required:
+1. Normal live winner: both wrappers return identical W and preserve raw Weak W.
+2. PAR live winner: same identity/slot assertions, plus flag preservation.
+   Capture observations, clear PAR and remove raw slot before assertions so the
+   designated mutation failure does not leave flags set or introduce waits.
+3. Absent/expired: both wrappers return None and insert Weak C. Establish expired
+   by raw insertion and final owner drop; never use filtering lookup_cache_entry.
+4. Parent policy: non-cacheable parent rejects owned insertion, borrowed candidate
+   still inserts. Inspect raw map after each, without public cache filtering.
+5. Child policy: neither flag, DONTCACHE only, PERSISTENT only, and both; owned
+   insertion rejects only DONTCACHE-without-PERSISTENT, borrowed always inserts.
+6. Retention: both wrappers, SB present/absent; caller drops leave C alive only
+   with SB. Existing uncache_lookup_candidate evicts; drop observer before proving
+   expiration. Bind empty root before creating children and hold SB strongly.
+Use fresh fixtures, explicit strong owners, same-content owned/borrowed names,
+raw weak pointer equality and a sentinel key. Avoid guards across wrapper calls.
+
+State oracle for admitted insertion: absent/expired -> None, Weak C;
+live normal/live PAR -> Some(W), unchanged Weak W. Owned gate is parent eligible
+AND (!DONTCACHE OR PERSISTENT); borrowed insertion bypasses this gate. Rejected
+owned insertion returns None without inserting. None alone is not an insertion
+oracle. Object identity, not inode/name equality, determines the winner.
+
+Single wrong control belongs to Main's isolated execution copy: filter PAR winners
+out of cache_lookup_candidate's upgraded live branch (:833-837). The explicit
+assert!(par_winner_identity) in the new live-PAR test must fail for borrowed mode.
+No unwrap/timeout/compile failure counts as mutation detection. A retention-under-
+lock mutation is NOT executed: it is a static counterexample these state tests
+cannot distinguish. Original plus one mutant are the only execution cells.
+
+Remaining static obligations: preserve consumed String/Dentry versus borrowed
+inputs; borrowed to_owned only on insertion (:839), no added candidate clones,
+owned retention move (:945) versus borrowed retention clone (:842), and explicit
+children unlock before retention (:840-842/:943-945). Map growth/key cleanup are
+not name-copy budgets. Final state does not prove allocations, clones or timing.
+Factoring can change RAII scopes, guard-bearing returns, unused closure-capture
+destruction, early-return argument drops and replaced Weak/key destruction.
+No blanket all-drops-outside-lock rule is valid. Concurrency linearization,
+lookup waiting, callback errors, destructor behavior and panic/OOM remain unknown.
+
+Runner readiness is Main's work: Main reports all 3634 archive files and config
+unchanged and tools available. I did not inventory or execute the runner. The
+existing unittest macros, cfg(unittest), kernel Mutex/Arc, filesystem initialization
+and dependencies must work in that actual build; no standalone cargo/host fallback.
+Protocol stop rules and one compile-integration correction remain binding. Fixture
+must be hash-frozen by Main before either execution cell. A pass plus designated
+mutation rejection establishes limited fixture sensitivity only.
+
+Read scope: prior review-a.txt; supplied case002 source and its directly registered
+archived node_dentry tests; steering.txt; frozen fixture protocol. Relevant supplied
+source ranges: 1-85,158-205,475-535,588-640,770-781,790-950,1060-1136,1648-1658,
+plus targeted field/accessor search and both source hashes. Archived test ranges:
+1-52,195-245,276-290,376-449,1013-1043,1105-1213. After authorization, reread
+/tmp/xkernel-pagecache-n1y2__y3/fs/kvfs/ut-tests/node_dentry.rs:1010-1042,1105-1214.
+No runner search, builds, tests, temp-kernel edits or production edits. The failed
+attempt to replace the host draft made no changes; that draft remains unadopted.

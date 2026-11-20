@@ -1,0 +1,22 @@
+{
+  "kind": "source-responsibility-audit",
+  "source_commit": "59807616e1fa2540724bfbac14d7976d7e4a3860",
+  "source_path": "library/core/src/clone/uninit.rs",
+  "local_file": "core-clone-uninit.rs",
+  "sha256": "98aa23a7472366f8cb5e23eaaeea0b7b35a5beee8d13d15582c0959d5137a6da",
+  "verification": "Installed 1.95.0 rust-src file matches the same member of archived core-alloc.zip byte hash",
+  "archive": "research/evidence/originals/2026-11-17-rust-standard-inventory-01/core-alloc.zip",
+  "observations": [
+    "Non-TrivialClone slice initialization tracks the initialized prefix with InitializingSlice",
+    "On unwind that guard drops initialized components, not the borrowed allocation",
+    "On normal completion mem::forget disarms the component guard",
+    "Rc and Arc allocation guards separately deallocate on unwind and transfer ownership on success"
+  ],
+  "execution_count": 0,
+  "not_established": ["shared abstraction validity", "allocator runtime counts", "Arc concurrency correctness", "document effectiveness"],
+  "lookup": ["CloneToUninit", "UniqueRcUninit", "ownership"],
+  "inspection_correction": "Initial guessed alloc/src/clone.rs path absent; literal source search located core/src/clone/uninit.rs",
+  "reviewer": "Goodall",
+  "review_adopted": "Finish responsibility and existing-test coverage maps, then freeze one shared-boundary evaluation question; do not expand into general memory safety or retry Kani",
+  "next_question": "Does completed factual documentation help proposals distinguish component cleanup, allocation cleanup and ownership commit while leaving Rc/Arc reference-count protocols outside the shared boundary?"
+}

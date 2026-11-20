@@ -1,0 +1,25 @@
+pub(super) fn fmt_value<T: fmt::Debug>(
+    mut tuple: fmt::DebugTuple<'_, '_>,
+    value: Option<&T>,
+    empty: &str,
+) -> fmt::Result {
+    match value {
+        Some(value) => tuple.field(&value),
+        None => tuple.field(&format_args!("{empty}")),
+    };
+    tuple.finish()
+}
+
+impl<T: fmt::Debug, F> fmt::Debug for Lazy<T, F> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let tuple = f.debug_tuple("LazyValue");
+        crate::once::fmt_value(tuple, self.value_storage.get(), "<uninit>")
+    }
+}
+
+impl<T: fmt::Debug> fmt::Debug for Once<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let tuple = f.debug_tuple("OnceCell");
+        fmt_value(tuple, self.get(), "<not-ready>")
+    }
+}

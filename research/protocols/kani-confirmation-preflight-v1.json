@@ -1,0 +1,16 @@
+{
+  "schema": "confirmation-tool-preflight/1",
+  "version": "0.68.0",
+  "question": "Can an existing Rust verifier execute explicit behavior assertions in an isolated environment?",
+  "scope": "Installation and official minimal assertion controls, not shared-mechanism detection or document-effect evaluation",
+  "method": "Kani upstream installation guide, fixed release",
+  "controls": [
+    {"id": "false", "assertion": "1 == 2", "expected": "VERIFICATION:- FAILED"},
+    {"id": "true", "assertion": "1 == 1", "expected": "VERIFICATION:- SUCCESSFUL"}
+  ],
+  "budget": {"installer_seconds": 600, "setup_seconds": 600, "each_control_seconds": 120},
+  "isolation": "cargo install --root .build/kani-installer-0.68.0; KANI_HOME=.build/kani-home; no default toolchain switch or production changes",
+  "retention": "Preserve commands, raw logs, exit statuses, release metadata and downloaded source-document hashes; report failed setup as unavailable, never a verification result",
+  "completion": "Both controls attempted if setup succeeds; otherwise record blocker without silently switching method",
+  "limits": ["No equivalence result", "No automatic rustdoc interpretation", "No paper-result reproduction", "No held-out evaluation", "Installed matching toolchain may differ from archived Rust 1.95.0"]
+}

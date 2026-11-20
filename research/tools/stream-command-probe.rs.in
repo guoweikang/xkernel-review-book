@@ -1,0 +1,82 @@
+extern crate alloc;
+use std::{cell::RefCell, collections::VecDeque, marker::PhantomData, rc::Rc};
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum VfsError { BadAddress, FileTooLarge, InvalidData, WriteZero }
+type VfsResult<T> = Result<T, VfsError>;
+mod memaddr { pub const PAGE_SIZE_4K: usize = 4096; }
+struct VfsFile;
+struct Kiocb<'a> { position: u64, file: &'a VfsFile }
+impl Kiocb<'_> {
+    fn file(&self) -> &VfsFile { self.file }
+    fn ki_pos(&self) -> u64 { self.position }
+    fn advance(&mut self, amount: usize) { self.position += amount as u64; }
+}
+type Trace = Rc<RefCell<Vec<String>>>;
+struct IovIterSource<'a> {
+    payload: Vec<u8>, cursor: usize, plan: VecDeque<VfsResult<usize>>,
+    trace: Trace, marker: PhantomData<&'a ()>,
+}
+impl IovIterSource<'_> {
+    fn count(&self) -> usize { self.payload.len() - self.cursor }
+    fn copy_from_iter(&mut self, output: &mut [u8]) -> VfsResult<usize> {
+        let limit = output.len().min(self.count());
+        if limit == 0 { return Ok(0); }
+        match self.plan.pop_front().unwrap_or(Ok(limit)) {
+            Ok(requested) => {
+                let count = requested.min(limit);
+                output[..count].copy_from_slice(&self.payload[self.cursor..self.cursor + count]);
+                self.cursor += count;
+                self.trace.borrow_mut().push(format!("copy:{count}"));
+                Ok(count)
+            }
+            Err(error) => {
+                self.trace.borrow_mut().push("copy:BadAddress:no_cursor_effect".into());
+                Err(error)
+            }
+        }
+    }
+    fn revert(&mut self, count: usize) -> VfsResult<()> {
+        assert!(count <= self.cursor);
+        self.cursor -= count;
+        self.trace.borrow_mut().push(format!("rewind:{count}"));
+        Ok(())
+    }
+}
+
+@@SCALAR@@
+
+struct Command { trace: Trace, calls: RefCell<Vec<(Vec<u8>, u64)>>, fail: bool }
+impl Command {
+    fn write(&self, _: &VfsFile, payload: &[u8], offset: u64) -> VfsResult<usize> {
+        self.calls.borrow_mut().push((payload.to_vec(), offset));
+        self.trace.borrow_mut().push(format!("callback:{}:{offset}", payload.len()));
+        if self.fail { Err(VfsError::BadAddress) } else { Ok(payload.len()) }
+    }
+    @@COMMAND@@
+}
+
+fn main() {
+    for scenario in ["complete", "empty", "oversize", "short_success", "short_then_fault", "callback_fault"] {
+        for adapter in ["scalar", "command"] {
+            let length = match scenario { "empty" => 0, "oversize" => 4097, _ => 4 };
+            let payload: Vec<u8> = (0..length).map(|index| (index % 251) as u8).collect();
+            let plan = match scenario {
+                "short_success" => vec![Ok(2), Ok(2)],
+                "short_then_fault" => vec![Ok(2), Err(VfsError::BadAddress)],
+                _ => vec![],
+            };
+            let trace = Rc::new(RefCell::new(Vec::new()));
+            let mut iter = IovIterSource { payload, cursor: 0, plan: plan.into(), trace: trace.clone(), marker: PhantomData };
+            let receiver = Command { trace: trace.clone(), calls: RefCell::new(Vec::new()), fail: scenario == "callback_fault" };
+            let file = VfsFile;
+            let mut iocb = Kiocb { position: 100, file: &file };
+            let result = if adapter == "scalar" {
+                scalar_write_iter(&mut iocb, &mut iter, |file, data, offset| receiver.write(file, data, offset))
+            } else { receiver.write_iter(&mut iocb, &mut iter) };
+            let calls = receiver.calls.borrow();
+            let calls_json = calls.iter().map(|(data, offset)| format!("{{\"payload\":{data:?},\"offset\":{offset}}}")).collect::<Vec<_>>().join(",");
+            println!("{{\"scenario\":\"{scenario}\",\"adapter\":\"{adapter}\",\"result\":\"{result:?}\",\"remaining\":{},\"position\":{},\"calls\":[{}],\"trace\":{:?}}}", iter.count(), iocb.position, calls_json, trace.borrow());
+        }
+    }
+}

@@ -1,0 +1,579 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator with the provided closure",
+          "path": "doc",
+          "range": [
+            17,
+            66
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `F: FnMut() -> Option<T>` as its [`next`](Iterator::next) method.",
+          "path": "doc",
+          "range": [
+            67,
+            136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            137,
+            140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The iterator will yield the `T`s returned from the closure.",
+          "path": "doc",
+          "range": [
+            141,
+            204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            205,
+            208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This allows creating a custom iterator with any behavior",
+          "path": "doc",
+          "range": [
+            209,
+            269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without using the more verbose syntax of creating a dedicated type",
+          "path": "doc",
+          "range": [
+            270,
+            340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and implementing the [`Iterator`] trait for it.",
+          "path": "doc",
+          "range": [
+            341,
+            392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            393,
+            396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the `FromFn` iterator doesn’t make assumptions about the behavior of the closure,",
+          "path": "doc",
+          "range": [
+            397,
+            494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and therefore conservatively does not implement [`FusedIterator`],",
+          "path": "doc",
+          "range": [
+            495,
+            565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or override [`Iterator::size_hint()`] from its default `(0, None)`.",
+          "path": "doc",
+          "range": [
+            566,
+            637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            638,
+            641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The closure can use captures and its environment to track state across iterations. Depending on",
+          "path": "doc",
+          "range": [
+            642,
+            741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " how the iterator is used, this may require specifying the [`move`] keyword on the closure.",
+          "path": "doc",
+          "range": [
+            742,
+            836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            837,
+            840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`move`]: ../../std/keyword.move.html",
+          "path": "doc",
+          "range": [
+            841,
+            882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`FusedIterator`]: crate::iter::FusedIterator",
+          "path": "doc",
+          "range": [
+            883,
+            932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            933,
+            936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            937,
+            951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            952,
+            955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Let’s re-implement the counter iterator from [module-level documentation]:",
+          "path": "doc",
+          "range": [
+            956,
+            1036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1037,
+            1040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [module-level documentation]: crate::iter",
+          "path": "doc",
+          "range": [
+            1041,
+            1086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1087,
+            1090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1091,
+            1098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut count = 0;",
+          "path": "doc",
+          "range": [
+            1099,
+            1121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let counter = std::iter::from_fn(move || {",
+          "path": "doc",
+          "range": [
+            1122,
+            1168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Increment our count. This is why we started at zero.",
+          "path": "doc",
+          "range": [
+            1169,
+            1232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     count += 1;",
+          "path": "doc",
+          "range": [
+            1233,
+            1252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1253,
+            1256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Check to see if we've finished counting or not.",
+          "path": "doc",
+          "range": [
+            1257,
+            1315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if count < 6 {",
+          "path": "doc",
+          "range": [
+            1316,
+            1338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(count)",
+          "path": "doc",
+          "range": [
+            1339,
+            1362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            1363,
+            1379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         None",
+          "path": "doc",
+          "range": [
+            1380,
+            1396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1397,
+            1406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            1407,
+            1414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(counter.collect::<Vec<_>>(), &[1, 2, 3, 4, 5]);",
+          "path": "doc",
+          "range": [
+            1415,
+            1477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1478,
+            1485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1486,
+            1495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1496,
+            1549
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1625,
+        1642
+      ],
+      "kind": "fn",
+      "name": "from_fn",
+      "range": [
+        17,
+        1642
+      ],
+      "signature_range": [
+        1554,
+        1624
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator where each iteration calls the provided closure `F: FnMut() -> Option<T>`.",
+          "path": "doc",
+          "range": [
+            1644,
+            1734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1735,
+            1738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`iter::from_fn()`] function.",
+          "path": "doc",
+          "range": [
+            1739,
+            1804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See its documentation for more.",
+          "path": "doc",
+          "range": [
+            1805,
+            1840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1841,
+            1844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`iter::from_fn()`]: from_fn",
+          "path": "doc",
+          "range": [
+            1845,
+            1877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1878,
+            1894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1895,
+            1948
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "FromFn",
+      "range": [
+        1644,
+        1973
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1975,
+            2028
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1975,
+        2207
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2124,
+            2133
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2179,
+        2205
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        2124,
+        2205
+      ],
+      "signature_range": [
+        2138,
+        2178
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2209,
+            2262
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2209,
+        2410
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        2359,
+        2408
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2302,
+        2408
+      ],
+      "signature_range": [
+        2302,
+        2358
+      ]
+    }
+  ],
+  "source_sha256": "7ca418d2cb74375e541eca049d5108420e1583798a7793e254bb7de8a265f5b5"
+}

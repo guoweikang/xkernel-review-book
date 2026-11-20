@@ -1,0 +1,78 @@
+{
+  "schema": "governed-doc-packets/1",
+  "parent": "research/protocols/governed-docs-v1.json",
+  "status": "development_input_construction_not_detector_evaluation",
+  "provider": "researcher",
+  "review_status": "provider_validation_unavailable",
+  "author_exposure": "seen_cases_and_previous_results_not_blind",
+  "packets": [
+    {
+      "id": "permission-role",
+      "level": "item",
+      "task": "functional_overlap",
+      "seed": "DEV-DOC-PARAMETER-ROLE",
+      "member_index": 0,
+      "fields": {
+        "purpose": "Return a mode value with replacement permission bits.",
+        "input_preconditions": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+        "changed_and_preserved_state": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+        "effects_and_callback_boundary": "Compute and return a value; this function body performs no callback or external state mutation.",
+        "errors_and_partial_completion": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+        "execution_context": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+        "configuration": null,
+        "delegation": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper."
+      },
+      "assertion_kind": "observed_behavior",
+      "corruption_field": "changed_and_preserved_state",
+      "corruption": "Replace file-type bits and preserve the original permission bits selected by PERMISSION_MASK.",
+      "paraphrase_field": "purpose",
+      "paraphrase": "Produce a mode whose permission bits are replaced."
+    },
+    {
+      "id": "complete-command",
+      "level": "item",
+      "task": "functional_overlap",
+      "seed": "DEV-STREAM-COMMAND",
+      "member_index": 1,
+      "fields": {
+        "purpose": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+        "input_preconditions": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+        "changed_and_preserved_state": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+        "effects_and_callback_boundary": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+        "errors_and_partial_completion": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+        "execution_context": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+        "configuration": null,
+        "delegation": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract."
+      },
+      "assertion_kind": "observed_behavior",
+      "corruption_field": "effects_and_callback_boundary",
+      "corruption": "Invoke the write callback once per successful copied fragment, before collecting the entire accepted payload.",
+      "paraphrase_field": "purpose",
+      "paraphrase": "Pass the accepted iterator contents to the write handler as a single complete command."
+    },
+    {
+      "id": "firmware-ownership",
+      "level": "crate",
+      "task": "architecture_conformance",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "native_path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "entity": "rs_fdtree responsibility contract, stored in OF migration design",
+      "native_kind": "design_document_not_rustdoc",
+      "fields": {
+        "purpose": "Provide the device-tree backend's structural and property interpretation capabilities.",
+        "owned_capabilities": "Own structural access, property decoding, node status and device-tree address translation.",
+        "non_goals": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+        "invariants_and_resources": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+        "dependency_direction": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+        "delegation_interfaces": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+        "configuration": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+        "exceptions": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication."
+      },
+      "assertion_kind": "normative_responsibility",
+      "corruption_field": "non_goals",
+      "corruption": "Own kernel registration, IRQ mapping, MMIO mapping and DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+      "paraphrase_field": "purpose",
+      "paraphrase": "Supply structural access and property interpretation for the device-tree backend."
+    }
+  ]
+}

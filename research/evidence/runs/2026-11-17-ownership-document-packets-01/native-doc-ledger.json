@@ -1,0 +1,212 @@
+[
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 1330,
+    "end": 1341,
+    "sha256": "978dd313371f10e9a1572fcf0b8b729645ca502fae0ebae9de43727f3ee41c20",
+    "text": "    /// Constructs a new `Rc<T>` with a clone of `value` in the provided allocator.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// #![feature(clone_from_ref)]\n    /// #![feature(allocator_api)]\n    /// use std::rc::Rc;\n    /// use std::alloc::System;\n    ///\n    /// let hello: Rc<str, System> = Rc::clone_from_ref_in(\"hello\", System);\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 1360,
+    "end": 1372,
+    "sha256": "5a5198d0a484c56b59f4829a909c743807cea740c539ce0f0e31703dc4662f6d",
+    "text": "    /// Constructs a new `Rc<T>` with a clone of `value` in the provided allocator, returning an error if allocation fails\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// #![feature(clone_from_ref)]\n    /// #![feature(allocator_api)]\n    /// use std::rc::Rc;\n    /// use std::alloc::System;\n    ///\n    /// let hello: Rc<str, System> = Rc::try_clone_from_ref_in(\"hello\", System)?;\n    /// # Ok::<(), std::alloc::AllocError>(())\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 2013,
+    "end": 2062,
+    "sha256": "672b9518e8824053a93ef63243ec3da811345a3fc7432ce4b37999fcbc6d22cb",
+    "text": "    /// Makes a mutable reference into the given `Rc`.\n    ///\n    /// If there are other `Rc` pointers to the same allocation, then `make_mut` will\n    /// [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also\n    /// referred to as clone-on-write.\n    ///\n    /// However, if there are no other `Rc` pointers to this allocation, but some [`Weak`]\n    /// pointers, then the [`Weak`] pointers will be disassociated and the inner value will not\n    /// be cloned.\n    ///\n    /// See also [`get_mut`], which will fail rather than cloning the inner value\n    /// or disassociating [`Weak`] pointers.\n    ///\n    /// [`clone`]: Clone::clone\n    /// [`get_mut`]: Rc::get_mut\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use std::rc::Rc;\n    ///\n    /// let mut data = Rc::new(5);\n    ///\n    /// *Rc::make_mut(&mut data) += 1;         // Won't clone anything\n    /// let mut other_data = Rc::clone(&data); // Won't clone inner data\n    /// *Rc::make_mut(&mut data) += 1;         // Clones inner data\n    /// *Rc::make_mut(&mut data) += 1;         // Won't clone anything\n    /// *Rc::make_mut(&mut other_data) *= 2;   // Won't clone anything\n    ///\n    /// // Now `data` and `other_data` point to different allocations.\n    /// assert_eq!(*data, 8);\n    /// assert_eq!(*other_data, 12);\n    /// ```\n    ///\n    /// [`Weak`] pointers will be disassociated:\n    ///\n    /// ```\n    /// use std::rc::Rc;\n    ///\n    /// let mut data = Rc::new(75);\n    /// let weak = Rc::downgrade(&data);\n    ///\n    /// assert!(75 == *data);\n    /// assert!(75 == *weak.upgrade().unwrap());\n    ///\n    /// *Rc::make_mut(&mut data) += 1;\n    ///\n    /// assert!(76 == *data);\n    /// assert!(weak.upgrade().is_none());\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 4438,
+    "end": 4443,
+    "sha256": "8076287aa9edcc3885a991e251c36ae82ea6bfae5ad9d8f5ad862b810c697350",
+    "text": "/// A unique owning pointer to a [`RcInner`] **that does not imply the contents are initialized,**\n/// but will deallocate it (without dropping the value) when dropped.\n///\n/// This is a helper for [`Rc::make_mut()`] to ensure correct cleanup on panic.\n/// It is nearly a duplicate of `UniqueRc<MaybeUninit<T>, A>` except that it allows `T: !Sized`,\n/// which `MaybeUninit` does not.\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 4451,
+    "end": 4451,
+    "sha256": "474cba33b5ae2745b84985426bf3d27c6a2436cbc23c18abee64bd0fb8f5be2c",
+    "text": "    /// Allocates a RcInner with layout suitable to contain `for_value` or a clone of it.\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 4465,
+    "end": 4466,
+    "sha256": "21a46c09b2a1f900b8ddea08aeb6f82cc93399968ae067c2c6a6cdf7b2cfbef2",
+    "text": "    /// Allocates a RcInner with layout suitable to contain `for_value` or a clone of it,\n    /// returning an error if allocation fails.\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 4479,
+    "end": 4479,
+    "sha256": "2e284ab0eb170eb9dd516e644ab5b39f58cb2156144f1a266b51e8bc78da286d",
+    "text": "    /// Returns the pointer to be written into to initialize the [`Rc`].\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 4485,
+    "end": 4489,
+    "sha256": "94537f74f519fddacb3cf5f2faffd31cee0aca8bc68e4cbc7c26a87f41011c5a",
+    "text": "    /// Upgrade this into a normal [`Rc`].\n    ///\n    /// # Safety\n    ///\n    /// The data must have been initialized (by writing to [`Self::data_ptr()`]).\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 2210,
+    "end": 2214,
+    "sha256": "36ad0c20f50a1c916cd3398178fc30eaa4174da0543205babb259c195584257b",
+    "text": "    /// Allocates an `RcInner<T>` with sufficient space for\n    /// a possibly-unsized inner value where the value has the layout provided.\n    ///\n    /// The function `mem_to_rc_inner` is called with the data pointer\n    /// and must return back a (potentially fat)-pointer for the `RcInner<T>`.\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 2228,
+    "end": 2233,
+    "sha256": "616d1241fddc0a5f462ed5aa7d4268f1fc1a7db811933e8d2d52e7e14813d5f2",
+    "text": "    /// Allocates an `RcInner<T>` with sufficient space for\n    /// a possibly-unsized inner value where the value has the layout provided,\n    /// returning an error if allocation fails.\n    ///\n    /// The function `mem_to_rc_inner` is called with the data pointer\n    /// and must return back a (potentially fat)-pointer for the `RcInner<T>`.\n"
+  },
+  {
+    "path": "library/alloc/src/rc.rs",
+    "start": 291,
+    "end": 291,
+    "sha256": "d6033d16fc38ec619ea6d686346861dc82f3efe045c0073b1654f519e1858a31",
+    "text": "/// Calculate layout for `RcInner<T>` using the inner value's layout\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 1480,
+    "end": 1491,
+    "sha256": "ccbef807bec19e566bcbb5d248d5c3b3451d9f5118d028050e60a0ff80631278",
+    "text": "    /// Constructs a new `Arc<T>` with a clone of `value` in the provided allocator.\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// #![feature(clone_from_ref)]\n    /// #![feature(allocator_api)]\n    /// use std::sync::Arc;\n    /// use std::alloc::System;\n    ///\n    /// let hello: Arc<str, System> = Arc::clone_from_ref_in(\"hello\", System);\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 1510,
+    "end": 1522,
+    "sha256": "4cba10e8b6c843d7553969de07ae753e398025519df46d6ab6ab4d94327652ac",
+    "text": "    /// Constructs a new `Arc<T>` with a clone of `value` in the provided allocator, returning an error if allocation fails\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// #![feature(clone_from_ref)]\n    /// #![feature(allocator_api)]\n    /// use std::sync::Arc;\n    /// use std::alloc::System;\n    ///\n    /// let hello: Arc<str, System> = Arc::try_clone_from_ref_in(\"hello\", System)?;\n    /// # Ok::<(), std::alloc::AllocError>(())\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 2440,
+    "end": 2489,
+    "sha256": "e31af1b1562bfe52aec38c95eaaa3c20a3a9fa22cfddbaad1bff03b8aaed0e57",
+    "text": "    /// Makes a mutable reference into the given `Arc`.\n    ///\n    /// If there are other `Arc` pointers to the same allocation, then `make_mut` will\n    /// [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also\n    /// referred to as clone-on-write.\n    ///\n    /// However, if there are no other `Arc` pointers to this allocation, but some [`Weak`]\n    /// pointers, then the [`Weak`] pointers will be dissociated and the inner value will not\n    /// be cloned.\n    ///\n    /// See also [`get_mut`], which will fail rather than cloning the inner value\n    /// or dissociating [`Weak`] pointers.\n    ///\n    /// [`clone`]: Clone::clone\n    /// [`get_mut`]: Arc::get_mut\n    ///\n    /// # Examples\n    ///\n    /// ```\n    /// use std::sync::Arc;\n    ///\n    /// let mut data = Arc::new(5);\n    ///\n    /// *Arc::make_mut(&mut data) += 1;         // Won't clone anything\n    /// let mut other_data = Arc::clone(&data); // Won't clone inner data\n    /// *Arc::make_mut(&mut data) += 1;         // Clones inner data\n    /// *Arc::make_mut(&mut data) += 1;         // Won't clone anything\n    /// *Arc::make_mut(&mut other_data) *= 2;   // Won't clone anything\n    ///\n    /// // Now `data` and `other_data` point to different allocations.\n    /// assert_eq!(*data, 8);\n    /// assert_eq!(*other_data, 12);\n    /// ```\n    ///\n    /// [`Weak`] pointers will be dissociated:\n    ///\n    /// ```\n    /// use std::sync::Arc;\n    ///\n    /// let mut data = Arc::new(75);\n    /// let weak = Arc::downgrade(&data);\n    ///\n    /// assert!(75 == *data);\n    /// assert!(75 == *weak.upgrade().unwrap());\n    ///\n    /// *Arc::make_mut(&mut data) += 1;\n    ///\n    /// assert!(76 == *data);\n    /// assert!(weak.upgrade().is_none());\n    /// ```\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 4220,
+    "end": 4223,
+    "sha256": "25c04d9f200507cb27edf670d785a8462d5f23a8cc36ba34b75929379ed7ba01",
+    "text": "/// A unique owning pointer to an [`ArcInner`] **that does not imply the contents are initialized,**\n/// but will deallocate it (without dropping the value) when dropped.\n///\n/// This is a helper for [`Arc::make_mut()`] to ensure correct cleanup on panic.\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 4231,
+    "end": 4231,
+    "sha256": "479866b17d78df4af6e1cb4f8b9faae13cfc0e41d6302e40995ada41ffae334b",
+    "text": "    /// Allocates an ArcInner with layout suitable to contain `for_value` or a clone of it.\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 4245,
+    "end": 4246,
+    "sha256": "c7e30e4fad4c26119cb3cf803d0e4237a25ec2439e091d7122b3b461902b03ad",
+    "text": "    /// Allocates an ArcInner with layout suitable to contain `for_value` or a clone of it,\n    /// returning an error if allocation fails.\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 4259,
+    "end": 4259,
+    "sha256": "81891333fe74a7cc63371a82e9642383dd2ff1ac6bccbbb40b6d184115726751",
+    "text": "    /// Returns the pointer to be written into to initialize the [`Arc`].\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 4265,
+    "end": 4269,
+    "sha256": "df48ad819c904518ee7d01825cba80db880fcde0d481f39db5d522e9d75bb4ed",
+    "text": "    /// Upgrade this into a normal [`Arc`].\n    ///\n    /// # Safety\n    ///\n    /// The data must have been initialized (by writing to [`Self::data_ptr()`]).\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 2149,
+    "end": 2153,
+    "sha256": "0d190870e344ac295b6811037e06896c87bc315bc00eb96beb32d6c6ff2865fd",
+    "text": "    /// Allocates an `ArcInner<T>` with sufficient space for\n    /// a possibly-unsized inner value where the value has the layout provided.\n    ///\n    /// The function `mem_to_arcinner` is called with the data pointer\n    /// and must return back a (potentially fat)-pointer for the `ArcInner<T>`.\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 2167,
+    "end": 2172,
+    "sha256": "9cb9781eb48766ca53fac9a32b9ad80df2afb4efbbdaf40e7dae7fa0cf23a0d0",
+    "text": "    /// Allocates an `ArcInner<T>` with sufficient space for\n    /// a possibly-unsized inner value where the value has the layout provided,\n    /// returning an error if allocation fails.\n    ///\n    /// The function `mem_to_arcinner` is called with the data pointer\n    /// and must return back a (potentially fat)-pointer for the `ArcInner<T>`.\n"
+  },
+  {
+    "path": "library/alloc/src/sync.rs",
+    "start": 394,
+    "end": 394,
+    "sha256": "dae34e3fdf0f7b5bdc714a5b4874fce6670634107be31e61e4317f619df1d35c",
+    "text": "/// Calculate layout for `ArcInner<T>` using the inner value's layout\n"
+  },
+  {
+    "path": "library/core/src/clone.rs",
+    "start": 253,
+    "end": 265,
+    "sha256": "7ab7d3ea29b917372ff85738244b43230a89cd88ea13672d7910daba47530f76",
+    "text": "/// Indicates that the `Clone` implementation is identical to copying the value.\n///\n/// This is used for some optimizations in the standard library, which specializes\n/// on this trait to select faster implementations of functions such as\n/// [`clone_from_slice`](slice::clone_from_slice). It is automatically implemented\n/// when using `#[derive(Clone, Copy)]`.\n///\n/// Note that this trait does not imply that the type is `Copy`, because e.g.\n/// `core::ops::Range<i32>` could soundly implement this trait.\n///\n/// # Safety\n/// `Clone::clone` must be equivalent to copying the value, otherwise calling functions\n/// such as `slice::clone_from_slice` can have undefined behaviour.\n"
+  },
+  {
+    "path": "library/core/src/clone.rs",
+    "start": 371,
+    "end": 390,
+    "sha256": "8dc55cc2abc754057b9cec9568e1f6ec2633c834ee9fdb5d3251f7ae425823cc",
+    "text": "/// A generalization of [`Clone`] to [dynamically-sized types][DST] stored in arbitrary containers.\n///\n/// This trait is implemented for all types implementing [`Clone`], [slices](slice) of all\n/// such types, and other dynamically-sized types in the standard library.\n/// You may also implement this trait to enable cloning custom DSTs\n/// (structures containing dynamically-sized fields), or use it as a supertrait to enable\n/// cloning a [trait object].\n///\n/// This trait is normally used via operations on container types which support DSTs,\n/// so you should not typically need to call `.clone_to_uninit()` explicitly except when\n/// implementing such a container or otherwise performing explicit management of an allocation,\n/// or when implementing `CloneToUninit` itself.\n///\n/// # Safety\n///\n/// Implementations must ensure that when `.clone_to_uninit(dest)` returns normally rather than\n/// panicking, it always leaves `*dest` initialized as a valid value of type `Self`.\n///\n/// # Examples\n///\n"
+  },
+  {
+    "path": "library/core/src/clone.rs",
+    "start": 393,
+    "end": 505,
+    "sha256": "26f1e5f367b64559b14fbfbc3a872f68487a1ffb30df09c4ef87c25c1da28fa4",
+    "text": "///\n/// If you are defining a trait, you can add `CloneToUninit` as a supertrait to enable cloning of\n/// `dyn` values of your trait:\n///\n/// ```\n/// #![feature(clone_to_uninit)]\n/// use std::rc::Rc;\n///\n/// trait Foo: std::fmt::Debug + std::clone::CloneToUninit {\n///     fn modify(&mut self);\n///     fn value(&self) -> i32;\n/// }\n///\n/// impl Foo for i32 {\n///     fn modify(&mut self) {\n///         *self *= 10;\n///     }\n///     fn value(&self) -> i32 {\n///         *self\n///     }\n/// }\n///\n/// let first: Rc<dyn Foo> = Rc::new(1234);\n///\n/// let mut second = first.clone();\n/// Rc::make_mut(&mut second).modify(); // make_mut() will call clone_to_uninit()\n///\n/// assert_eq!(first.value(), 1234);\n/// assert_eq!(second.value(), 12340);\n/// ```\n///\n/// The following is an example of implementing `CloneToUninit` for a custom DST.\n/// (It is essentially a limited form of what `derive(CloneToUninit)` would do,\n/// if such a derive macro existed.)\n///\n/// ```\n/// #![feature(clone_to_uninit)]\n/// use std::clone::CloneToUninit;\n/// use std::mem::offset_of;\n/// use std::rc::Rc;\n///\n/// #[derive(PartialEq)]\n/// struct MyDst<T: ?Sized> {\n///     label: String,\n///     contents: T,\n/// }\n///\n/// unsafe impl<T: ?Sized + CloneToUninit> CloneToUninit for MyDst<T> {\n///     unsafe fn clone_to_uninit(&self, dest: *mut u8) {\n///         // The offset of `self.contents` is dynamic because it depends on the alignment of T\n///         // which can be dynamic (if `T = dyn SomeTrait`). Therefore, we have to obtain it\n///         // dynamically by examining `self`, rather than using `offset_of!`.\n///         //\n///         // SAFETY: `self` by definition points somewhere before `&self.contents` in the same\n///         // allocation.\n///         let offset_of_contents = unsafe {\n///             (&raw const self.contents).byte_offset_from_unsigned(self)\n///         };\n///\n///         // Clone the *sized* fields of `self` (just one, in this example).\n///         // (By cloning this first and storing it temporarily in a local variable, we avoid\n///         // leaking it in case of any panic, using the ordinary automatic cleanup of local\n///         // variables. Such a leak would be sound, but undesirable.)\n///         let label = self.label.clone();\n///\n///         // SAFETY: The caller must provide a `dest` such that these field offsets are valid\n///         // to write to.\n///         unsafe {\n///             // Clone the unsized field directly from `self` to `dest`.\n///             self.contents.clone_to_uninit(dest.add(offset_of_contents));\n///\n///             // Now write all the sized fields.\n///             //\n///             // Note that we only do this once all of the clone() and clone_to_uninit() calls\n///             // have completed, and therefore we know that there are no more possible panics;\n///             // this ensures no memory leaks in case of panic.\n///             dest.add(offset_of!(Self, label)).cast::<String>().write(label);\n///         }\n///         // All fields of the struct have been initialized; therefore, the struct is initialized,\n///         // and we have satisfied our `unsafe impl CloneToUninit` obligations.\n///     }\n/// }\n///\n/// fn main() {\n///     // Construct MyDst<[u8; 4]>, then coerce to MyDst<[u8]>.\n///     let first: Rc<MyDst<[u8]>> = Rc::new(MyDst {\n///         label: String::from(\"hello\"),\n///         contents: [1, 2, 3, 4],\n///     });\n///\n///     let mut second = first.clone();\n///     // make_mut() will call clone_to_uninit().\n///     for elem in Rc::make_mut(&mut second).contents.iter_mut() {\n///         *elem *= 10;\n///     }\n///\n///     assert_eq!(first.contents, [1, 2, 3, 4]);\n///     assert_eq!(second.contents, [10, 20, 30, 40]);\n///     assert_eq!(second.label, \"hello\");\n/// }\n/// ```\n///\n/// # See Also\n///\n/// * [`Clone::clone_from`] is a safe function which may be used instead when [`Self: Sized`](Sized)\n///   and the destination is already initialized; it may be able to reuse allocations owned by\n///   the destination, whereas `clone_to_uninit` cannot, since its destination is assumed to be\n///   uninitialized.\n/// * [`ToOwned`], which allocates a new destination container.\n///\n/// [`ToOwned`]: ../../std/borrow/trait.ToOwned.html\n/// [DST]: https://doc.rust-lang.org/reference/dynamically-sized-types.html\n/// [trait object]: https://doc.rust-lang.org/reference/types/trait-object.html\n"
+  },
+  {
+    "path": "library/core/src/clone.rs",
+    "start": 508,
+    "end": 542,
+    "sha256": "0cd0aee7f1367e5eae512c1151403594a714b2f0b588a40a531fa0b8978cdb78",
+    "text": "    /// Performs copy-assignment from `self` to `dest`.\n    ///\n    /// This is analogous to `std::ptr::write(dest.cast(), self.clone())`,\n    /// except that `Self` may be a dynamically-sized type ([`!Sized`](Sized)).\n    ///\n    /// Before this function is called, `dest` may point to uninitialized memory.\n    /// After this function is called, `dest` will point to initialized memory; it will be\n    /// sound to create a `&Self` reference from the pointer with the [pointer metadata]\n    /// from `self`.\n    ///\n    /// # Safety\n    ///\n    /// Behavior is undefined if any of the following conditions are violated:\n    ///\n    /// * `dest` must be [valid] for writes for `size_of_val(self)` bytes.\n    /// * `dest` must be properly aligned to `align_of_val(self)`.\n    ///\n    /// [valid]: crate::ptr#safety\n    /// [pointer metadata]: crate::ptr::metadata()\n    ///\n    /// # Panics\n    ///\n    /// This function may panic. (For example, it might panic if memory allocation for a clone\n    /// of a value owned by `self` fails.)\n    /// If the call panics, then `*dest` should be treated as uninitialized memory; it must not be\n    /// read or dropped, because even if it was previously valid, it may have been partially\n    /// overwritten.\n    ///\n    /// The caller may wish to take care to deallocate the allocation pointed to by `dest`,\n    /// if applicable, to avoid a memory leak (but this is not a requirement).\n    ///\n    /// Implementors should avoid leaking values by, upon unwinding, dropping all component values\n    /// that might have already been created. (For example, if a `[Foo]` of length 3 is being\n    /// cloned, and the second of the three calls to `Foo::clone()` unwinds, then the first `Foo`\n    /// cloned should be dropped.)\n"
+  },
+  {
+    "path": "library/core/src/clone/uninit.rs",
+    "start": 5,
+    "end": 6,
+    "sha256": "4e4740fcc5f2b39eaf2b1382b5be9831b091e396cc8f66b9cdb9e6aaf9e7972b",
+    "text": "/// Private specialization trait used by CloneToUninit, as per\n/// [the dev guide](https://std-dev-guide.rust-lang.org/policy/specialization.html).\n"
+  },
+  {
+    "path": "library/core/src/clone/uninit.rs",
+    "start": 84,
+    "end": 89,
+    "sha256": "fb0bfcaf52e2198c925ab51e5342151d3ddd431920befb555fb2228be0b7696f",
+    "text": "/// Ownership of a collection of values stored in a non-owned `[MaybeUninit<T>]`, some of which\n/// are not yet initialized. This is sort of like a `Vec` that doesn't own its allocation.\n/// Its responsibility is to provide cleanup on unwind by dropping the values that *are*\n/// initialized, unless disarmed by forgetting.\n///\n/// This is a helper for `impl<T: Clone> CloneToUninit for [T]`.\n"
+  },
+  {
+    "path": "library/core/src/clone/uninit.rs",
+    "start": 92,
+    "end": 92,
+    "sha256": "31f1bf24e64127e243151982db6cc9a5b127cf2969da7e0d1379a2b08d77377e",
+    "text": "    /// Number of elements of `*self.data` that are initialized.\n"
+  },
+  {
+    "path": "library/core/src/clone/uninit.rs",
+    "start": 102,
+    "end": 106,
+    "sha256": "fe2d9674bf47f763633ea88ec0e0e2e4a5d12cc26fcc2e63bd0414363fcfde07",
+    "text": "    /// Push a value onto the end of the initialized part of the slice.\n    ///\n    /// # Panics\n    ///\n    /// Panics if the slice is already fully initialized.\n"
+  }
+]

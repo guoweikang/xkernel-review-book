@@ -1,0 +1,13 @@
+{
+  "schema":"event-accounting-study/1",
+  "revision":"7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "selection":"Exploratory source-guided selection, not held-out: pagecache is known regression; Ethernet RX chosen because existing tests distinguish consumed work from deliverable packets and driver receive from successful poll return. Semaphore release is an explicit unsupported credit boundary. RCU considered by source reviewer but not selected for this batch.",
+  "sources":{"pagecache.rs":"mm/pagecache/src/writeback.rs","router.rs":"net/knet/src/stack/router.rs","device.rs":"net/knet/src/device/mod.rs","ethernet.rs":"net/knet/src/device/ethernet.rs","rx-tests.rs":"net/knet/ut-tests/ethernet_rx_budget.rs","semaphore.rs":"task/ksync/src/semaphore.rs","semaphore-tests.rs":"task/ksync/ut-tests/lib_unittest.rs"},
+  "fields":["entity/revision/source identity","unit","charge event with exact API phase binding","counter representation: remaining or spent","observation at call return on both success and error","scope: single call, exclusive accounting, no credits","recorder declaration of event completeness"],
+  "equation":"charged=sum(quantity of matching events); remaining=limit-charged or spent=charged; require charged<=limit. Other-phase events are not charged. No automatic source-to-event binding.",
+  "controls":["pagecache_handoff","pagecache_accept_mutant","rx_drop","rx_deliver","rx_recycle_error","rx_wrong_phase","missing_event_coverage","wrong_unit","duplicate_event_id","credit_scope","wrong_source","negative_quantity"],
+  "evidence":"Controls are researcher-transcribed synthetic records based on source/test assertions, not machine-recorded execution traces. Two repeats check determinism. Original Ethernet unittest execution is separate corroboration, not validation of fabricated event traces.",
+  "kernel_command":"make unittest UNITTEST_CRATE=knet::device::ethernet::rx_budget_tests ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g DISK_IMG=<source>/research-root.ext4",
+  "kernel_limit_seconds":600,
+  "limits":"No new mutation or kernel instrumentation. Existing tests and source must be archived; unsupported credits/concurrency/incomplete records yield unknown, malformed identities/units are rejected. No automatic reuse decision, correctness label or novelty claim."
+}

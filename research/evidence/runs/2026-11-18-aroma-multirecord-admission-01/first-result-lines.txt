@@ -1,0 +1,20 @@
+        db.beginTransaction();
+        SQLiteStatement stmt = db.compileStatement(
+                "INSERT OR REPLACE INTO tbl_users (" + COLUMN_NAMES + ") VALUES (?1,?2,?3,?4,?5,?6,?7)");
+        try {
+            for (ReaderUser user : users) {
+                stmt.bindLong(1, user.userId);
+                stmt.bindLong(2, user.blogId);
+                stmt.bindString(3, user.getUserName());
+                stmt.bindString(4, user.getDisplayName());
+                stmt.bindString(5, user.getUrl());
+                stmt.bindString(6, user.getProfileUrl());
+                stmt.bindString(7, user.getAvatarUrl());
+                stmt.execute();
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            SqlUtils.closeStatement(stmt);
+        }

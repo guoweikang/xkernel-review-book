@@ -1,0 +1,11 @@
+{
+  "scope": "Author evaluator execution and deterministic controls, NOT trained-model reproduction",
+  "revision": "7299f6f657089ce06a0f98e7e81f8d0f5b7741ce",
+  "data": "research/evidence/originals/2026-11-13-relation-benchmarks-01/hans-data.tsv",
+  "evaluator": "research/evidence/originals/2026-11-13-hans-evaluator-01/evaluate_heur_output.py",
+  "conditions": ["always_entailment", "always_nonentailment", "token_subset", "gold_plumbing_only", "inverted_gold_plumbing_only"],
+  "token_subset": "lowercase ASCII alphabetic tokens, hypothesis token SET subset of premise token SET => entailment, otherwise non-entailment; no label or parse access",
+  "repeats": 2,
+  "checks": ["strict binary label and exact pair-ID set before author evaluation", "independent overall, heuristic x gold label, subcase and template counts", "all author output groups agree with independent counts", "byte-identical repeated stdout", "reject duplicate, missing and invalid-label inputs"],
+  "boundary": "Gold and inverted gold are synthetic evaluator controls, not predictor accuracy. Neutral is not contradiction. No Rust duplicate labels or benefit claims. Author script remains unchanged."
+}

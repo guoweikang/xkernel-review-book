@@ -1,0 +1,68 @@
+有界批次完成：2026-11-17-ownership-upstream-tests-01
+
+结果
+debug：12 passed / 0 failed / 0 ignored / 0 filtered out。
+release：12 passed / 0 failed / 0 ignored / 0 filtered out。
+共12个不同测试、24次测试执行。每配置编译一次、运行一次，--test-threads=1；没有重试或新增见证。
+两组各含2个原 #[should_panic] 测试，其预期panic均被libtest判定通过；不是意外失败。
+四个命令exit均0，没有超时。编译上限60秒、执行上限30秒，TERM后最多5秒KILL宽限。
+原始bootstrap harness执行0；这是安装std上的既有测试抽取适配运行，不是重建固定源码。
+
+输入与适配
+固定Rust提交59807616e1fa2540724bfbac14d7976d7e4a3860，rustc +1.95.0，
+edition2024，panic=unwind；具体compiler/host/cfg见environment-and-context.txt。
+来源为上一审计目录official原件，文件hash、函数行范围和函数hash在manifest.json。
+manifest先于源代码创建及运行写入；preflight.json记录冻结摘要，结果校验确认未变。
+12个函数体连同 #[test]/#[should_panic] 属性逐字保留；嵌套类型、Clone及断言未修改。
+original-functions/{rc,sync,arc}.rs保存原函数片段；
+upstream_tests.rs仅增加extern crate alloc、rc_tests/arc_tests模块与Rc/Arc导入。
+因此Arc unsized函数内use alloc::sync::Arc也保持原样，无函数体适配。
+adaptation.diff以rc.rs、sync.rs、arc.rs片段依次拼接为基线，展示全部包装差异。
+原有单字母变量与注释均属保留上游原文，不是新增实验逻辑。
+
+覆盖清单（源路径相对rust-lang/rust）
+library/alloctests/tests/rc.rs：
+  test_cowrc_clone_make_unique、test_cowrc_clone_unique2：正常make_mut值分离。
+  test_cowrc_clone_weak：Weak失效和值变化。
+  test_cowrc_unsized：[i32]正常unsized make_mut。
+  test_clone_from_slice、test_clone_from_slice_panic：From<&[T]>正常/第三元素clone panic。
+library/alloctests/tests/sync.rs：
+  test_cowarc_clone_make_mut、test_cowarc_clone_unique2：正常make_mut值分离。
+  test_cowarc_clone_weak：Weak失效和值变化。
+  test_clone_from_slice、test_clone_from_slice_panic：From<&[T]>正常/第三元素clone panic。
+library/alloctests/tests/arc.rs：
+  make_mut_unsized：[i32]正常unsized make_mut。
+
+解释边界
+1.正常make_mut断言通过，仅证明这些输入上的既有值结果；不是引用计数/并发正确性穷尽验证。
+2.Weak测试使用整数，断言旧Weak升级失败，没有clone次数或Clone必panic探针；
+  不能由本次成功声称动态观测了“未clone”。
+3.unsized正常用例为i32，其TrivialClone路径不能覆盖非平凡clone失败的前缀Drop。
+4.clone_from_slice_panic是Rc/Arc::from(slice)，源码绑定为from_iter_exact::Guard，
+  不是make_mut→clone_from_ref_in→InitializingSlice与Unique*Uninit的双层分工。
+5.#[should_panic]原测试没有指定panic消息、组件drop计数或allocation计数；
+  运行通过不构成无泄漏、无内存损坏或外层allocation guard deallocate的证明。
+6.没有抽取不稳定CloneToUninit直接测试，没有做B/C衍生组件清理或不clone见证，
+  没有allocator计数、Miri、sanitizer、并发研究或生产改动。
+7.两种编译配置各一次，不是同配置重复性测量；也不代表整个Rust测试套件通过。
+
+过程与检查
+retrieval.json保留按make_mut、既有失败测试函数和前批run ID的历史检索原输出，
+其截断/覆盖字段应保留解读；历史检索只是导航，不作为本批执行成绩。
+environment-and-context.txt同时保留主线程当前PROGRESS顶部/confirmation专题的只读上下文。
+preflight核验12个原文件/函数hash、原片段及fixture包含关系；无测试函数体改动。
+results.json核验两次运行的全部限定测试ID与manifest完全相等，未仅依据exit0判通过。
+commands.json冻结argv/cwd，logs/*.json含实际argv、UTC时间、时长、stdout、stderr、exit。
+debug-tests/release-tests已按用户要求移至/tmp，研究目录不保留可复建二进制。
+binary-locations.json记录原执行路径、当前临时路径、字节数与迁移前后核验的SHA-256；
+临时文件可能被清理，可按commands.json重建并把-o改为临时路径。
+冻结manifest及实际执行命令/日志保留不变，binary-locations.json仅更新执行后的二进制保留策略。
+repository-checks.json保留catalog与既有站点只读检查；不重建共享.build/dist，
+因为本任务限定独立目录输出。未新增Markdown，无需修改catalog。
+FILELIST.txt列全部产物，checksums.json覆盖除自身外的所有文件。
+
+下一步
+A已完成并在预定边界停止。主线程可引用“12个原函数的安装std适配在debug/release各12通过”。
+组件drop和外层分配释放的联合动态证据仍未知；Weak-only不clone动态控制仍未知。
+若另开B/C，需独立冻结新增输入/观测；不得把这24次通过计入这些未执行条件。
+没有修改共享笔记/进度/生产，没有commit或push。

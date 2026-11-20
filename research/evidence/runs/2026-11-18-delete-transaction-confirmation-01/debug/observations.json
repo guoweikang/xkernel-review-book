@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "observations": [
+    {
+      "condition": "type_mismatch",
+      "variant": "original",
+      "outcome": "WrongType",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "victim_unlock",
+        "parent_unlock",
+        "may_drop"
+      ],
+      "matches_frozen": true
+    },
+    {
+      "condition": "type_mismatch",
+      "variant": "naive",
+      "outcome": "WrongType",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "may_drop",
+        "victim_unlock",
+        "parent_unlock"
+      ],
+      "matches_frozen": true
+    },
+    {
+      "condition": "callback_error",
+      "variant": "original",
+      "outcome": "PermissionDenied",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "may_call",
+        "may_drop",
+        "victim_unlock",
+        "parent_unlock"
+      ],
+      "matches_frozen": true
+    },
+    {
+      "condition": "callback_error",
+      "variant": "naive",
+      "outcome": "PermissionDenied",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "may_call",
+        "may_drop",
+        "victim_unlock",
+        "parent_unlock"
+      ],
+      "matches_frozen": true
+    },
+    {
+      "condition": "success",
+      "variant": "original",
+      "outcome": "Ok",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "may_call",
+        "may_drop",
+        "backend",
+        "mark",
+        "forget",
+        "victim_unlock",
+        "parent_unlock"
+      ],
+      "matches_frozen": true
+    },
+    {
+      "condition": "success",
+      "variant": "naive",
+      "outcome": "Ok",
+      "events": [
+        "parent_lock",
+        "victim_lock",
+        "type_check",
+        "may_call",
+        "may_drop",
+        "backend",
+        "mark",
+        "forget",
+        "victim_unlock",
+        "parent_unlock"
+      ],
+      "matches_frozen": true
+    }
+  ],
+  "binary_sha256": "74a9b88aa4ad77b19e8671214a3abcc97d701b35dc0f66c61f97e9b5dc075ea2"
+}

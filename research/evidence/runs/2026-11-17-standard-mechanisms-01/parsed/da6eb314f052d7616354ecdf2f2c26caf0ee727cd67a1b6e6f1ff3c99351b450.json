@@ -1,0 +1,1165 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that maps the values of `iter` with `f`.",
+          "path": "doc",
+          "range": [
+            301,
+            357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            358,
+            361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`map`] method on [`Iterator`]. See its",
+          "path": "doc",
+          "range": [
+            362,
+            437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " documentation for more.",
+          "path": "doc",
+          "range": [
+            438,
+            465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            466,
+            469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`map`]: Iterator::map",
+          "path": "doc",
+          "range": [
+            470,
+            496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Iterator`]: trait.Iterator.html",
+          "path": "doc",
+          "range": [
+            497,
+            534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            535,
+            538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Notes about side effects",
+          "path": "doc",
+          "range": [
+            539,
+            569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            570,
+            573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The [`map`] iterator implements [`DoubleEndedIterator`], meaning that",
+          "path": "doc",
+          "range": [
+            574,
+            647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " you can also [`map`] backwards:",
+          "path": "doc",
+          "range": [
+            648,
+            683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            684,
+            687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            688,
+            699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v: Vec<i32> = [1, 2, 3].into_iter().map(|x| x + 1).rev().collect();",
+          "path": "doc",
+          "range": [
+            700,
+            775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            776,
+            779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [4, 3, 2]);",
+          "path": "doc",
+          "range": [
+            780,
+            809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            810,
+            817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            818,
+            821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`DoubleEndedIterator`]: trait.DoubleEndedIterator.html",
+          "path": "doc",
+          "range": [
+            822,
+            881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            882,
+            885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " But if your closure has state, iterating backwards may act in a way you do",
+          "path": "doc",
+          "range": [
+            886,
+            964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not expect. Let's go through an example. First, in the forward direction:",
+          "path": "doc",
+          "range": [
+            965,
+            1042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1043,
+            1046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1047,
+            1058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut c = 0;",
+          "path": "doc",
+          "range": [
+            1059,
+            1077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1078,
+            1081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for pair in ['a', 'b', 'c'].into_iter()",
+          "path": "doc",
+          "range": [
+            1082,
+            1125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                                .map(|letter| { c += 1; (letter, c) }) {",
+          "path": "doc",
+          "range": [
+            1126,
+            1201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"{pair:?}\");",
+          "path": "doc",
+          "range": [
+            1202,
+            1231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1232,
+            1237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1238,
+            1245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1246,
+            1249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This will print `('a', 1), ('b', 2), ('c', 3)`.",
+          "path": "doc",
+          "range": [
+            1250,
+            1301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1302,
+            1305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Now consider this twist where we add a call to `rev`. This version will",
+          "path": "doc",
+          "range": [
+            1306,
+            1381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print `('c', 1), ('b', 2), ('a', 3)`. Note that the letters are reversed,",
+          "path": "doc",
+          "range": [
+            1382,
+            1459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but the values of the counter still go in order. This is because `map()` is",
+          "path": "doc",
+          "range": [
+            1460,
+            1539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " still being called lazily on each item, but we are popping items off the",
+          "path": "doc",
+          "range": [
+            1540,
+            1616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " back of the vector now, instead of shifting them from the front.",
+          "path": "doc",
+          "range": [
+            1617,
+            1685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1686,
+            1689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1690,
+            1701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut c = 0;",
+          "path": "doc",
+          "range": [
+            1702,
+            1720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1721,
+            1724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for pair in ['a', 'b', 'c'].into_iter()",
+          "path": "doc",
+          "range": [
+            1725,
+            1768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                                .map(|letter| { c += 1; (letter, c) })",
+          "path": "doc",
+          "range": [
+            1769,
+            1842
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                                .rev() {",
+          "path": "doc",
+          "range": [
+            1843,
+            1886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"{pair:?}\");",
+          "path": "doc",
+          "range": [
+            1887,
+            1916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1917,
+            1922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1923,
+            1930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            1931,
+            1996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1997,
+            2042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2043,
+            2059
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Map",
+      "range": [
+        301,
+        2196
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2198,
+        2380
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        2280,
+        2311
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        2225,
+        2311
+      ],
+      "signature_range": [
+        2245,
+        2279
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        2353,
+        2378
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        2317,
+        2378
+      ],
+      "signature_range": [
+        2328,
+        2352
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2382,
+            2437
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2382,
+        2623
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        2549,
+        2621
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2492,
+        2621
+      ],
+      "signature_range": [
+        2492,
+        2548
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        2749,
+        2787
+      ],
+      "kind": "fn",
+      "name": "map_fold",
+      "range": [
+        2625,
+        2787
+      ],
+      "signature_range": [
+        2625,
+        2748
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2755,
+        2785
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        2934,
+        2972
+      ],
+      "kind": "fn",
+      "name": "map_try_fold",
+      "range": [
+        2789,
+        2972
+      ],
+      "signature_range": [
+        2789,
+        2933
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2940,
+        2970
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2974,
+            3019
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2974,
+        4052
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3127,
+            3136
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3173,
+        3222
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        3127,
+        3222
+      ],
+      "signature_range": [
+        3141,
+        3172
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3228,
+            3237
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3288,
+        3325
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        3228,
+        3325
+      ],
+      "signature_range": [
+        3242,
+        3287
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        3492,
+        3562
+      ],
+      "kind": "impl_fn",
+      "name": "try_fold",
+      "range": [
+        3331,
+        3562
+      ],
+      "signature_range": [
+        3331,
+        3487
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        3670,
+        3727
+      ],
+      "kind": "impl_fn",
+      "name": "fold",
+      "range": [
+        3568,
+        3727
+      ],
+      "signature_range": [
+        3568,
+        3665
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3733,
+            3742
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3867,
+        4050
+      ],
+      "kind": "impl_fn",
+      "name": "__iterator_get_unchecked",
+      "range": [
+        3733,
+        4050
+      ],
+      "signature_range": [
+        3747,
+        3862
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4054,
+            4099
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4054,
+        4722
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4209,
+            4218
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4260,
+        4314
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        4209,
+        4314
+      ],
+      "signature_range": [
+        4223,
+        4259
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [],
+      "body_range": [
+        4482,
+        4553
+      ],
+      "kind": "impl_fn",
+      "name": "try_rfold",
+      "range": [
+        4320,
+        4553
+      ],
+      "signature_range": [
+        4320,
+        4477
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [],
+      "body_range": [
+        4662,
+        4720
+      ],
+      "kind": "impl_fn",
+      "name": "rfold",
+      "range": [
+        4559,
+        4720
+      ],
+      "signature_range": [
+        4559,
+        4657
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4724,
+            4769
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4724,
+        5000
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "body_range": [
+        4898,
+        4929
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        4875,
+        4929
+      ],
+      "signature_range": [
+        4875,
+        4897
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "body_range": [
+        4962,
+        4998
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        4935,
+        4998
+      ],
+      "signature_range": [
+        4935,
+        4961
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5002,
+            5048
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5002,
+        5137
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5139,
+            5193
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5139,
+        5255
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5257,
+            5310
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5257,
+        5413
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5415,
+        5814
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [],
+      "body_range": [
+        5568,
+        5812
+      ],
+      "kind": "impl_fn",
+      "name": "next_unchecked",
+      "range": [
+        5527,
+        5812
+      ],
+      "signature_range": [
+        5527,
+        5567
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            5816,
+            5830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5831,
+            5893
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5816,
+        5977
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            5979,
+            5993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5994,
+            6056
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5979,
+        6207
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6209,
+            6267
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6209,
+        6591
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6372,
+            6381
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6434,
+        6589
+      ],
+      "kind": "impl_fn",
+      "name": "as_inner",
+      "range": [
+        6372,
+        6589
+      ],
+      "signature_range": [
+        6386,
+        6433
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6593,
+            6651
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6593,
+        6838
+      ]
+    }
+  ],
+  "source_sha256": "2a9cb86b5110b292f271ec1cd8904a9bad27f8d553af0141837f41e753fe83d3"
+}

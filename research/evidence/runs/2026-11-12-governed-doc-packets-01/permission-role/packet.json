@@ -1,0 +1,476 @@
+{
+  "id": "permission-role",
+  "task": "functional_overlap",
+  "level": "item",
+  "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "entity_identity": {
+    "path": "fs/kvfs/src/types.rs",
+    "name": "with_permission",
+    "lines": [
+      146,
+      148
+    ]
+  },
+  "native_kind": "direct_literal_rustdoc",
+  "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+  "provider": "researcher",
+  "review_status": "provider_validation_unavailable",
+  "author_exposure": "seen_cases_and_previous_results_not_blind",
+  "evaluation_eligible": false,
+  "split": "development",
+  "native_text": " Returns this mode with new permission bits and the same file type.",
+  "arms": {
+    "D0": {
+      "text": ""
+    },
+    "D1": {
+      "text": " Returns this mode with new permission bits and the same file type."
+    },
+    "D2_candidate": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "D3": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace file-type bits and preserve the original permission bits selected by PERMISSION_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "paraphrase": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Produce a mode whose permission bits are replaced.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_purpose": {
+      "fields": {
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_input_preconditions": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_changed_and_preserved_state": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_effects_and_callback_boundary": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_errors_and_partial_completion": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_execution_context": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_configuration": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_delegation": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Return a mode value with replacement permission bits.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    }
+  },
+  "corruption_field": "changed_and_preserved_state",
+  "paraphrase_field": "purpose"
+}

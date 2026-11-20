@@ -1,0 +1,15 @@
+{
+  "schema": "cfg-membership/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "question": "Do the two known SpinLock new constructors coexist under stats/smp assignments?",
+  "source": "task/kspin/src/lock.rs",
+  "toolchain": "1.95.0",
+  "assignments": [[], ["smp"], ["stats"], ["stats", "smp"]],
+  "variants": ["original", "both_enabled", "both_disabled"],
+  "repeats": 2,
+  "expectations": {"original": "compile and constructor field assertions pass", "both_enabled": "E0592 duplicate definitions", "both_disabled": "E0599 no new constructor"},
+  "extraction": "Exact SpinLock struct and complete first impl; local BaseGuard and klockstat type stubs only; no lock operations or production dependency graph",
+  "budget": "24 rustc invocations, each at most 30 seconds; eight original executable runs",
+  "exclusions": ["valid Kconfig configurations", "full crate/kernel build", "lock safety", "performance", "no cross-config abstraction opportunity", "detection accuracy"],
+  "stop": "Report all assignments and expected failures; no optimization patch or feature-search after results"
+}

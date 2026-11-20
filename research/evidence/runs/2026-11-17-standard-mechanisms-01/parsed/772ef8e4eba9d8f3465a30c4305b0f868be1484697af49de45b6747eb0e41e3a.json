@@ -1,0 +1,349 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Code for efficiently counting the number of `char`s in a UTF-8 encoded",
+      "path": "doc",
+      "range": [
+        0,
+        74
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " string.",
+      "path": "doc",
+      "range": [
+        75,
+        86
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        87,
+        90
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Broadly, UTF-8 encodes `char`s as a \"leading\" byte which begins the `char`,",
+      "path": "doc",
+      "range": [
+        91,
+        170
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " followed by some number (possibly 0) of continuation bytes.",
+      "path": "doc",
+      "range": [
+        171,
+        234
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        235,
+        238
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The leading byte can have a number of bit-patterns (with the specific",
+      "path": "doc",
+      "range": [
+        239,
+        312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " pattern indicating how many continuation bytes follow), but the continuation",
+      "path": "doc",
+      "range": [
+        313,
+        393
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " bytes are always in the format `0b10XX_XXXX` (where the `X`s can take any",
+      "path": "doc",
+      "range": [
+        394,
+        471
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " value). That is, the most significant bit is set, and the second most",
+      "path": "doc",
+      "range": [
+        472,
+        545
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " significant bit is unset.",
+      "path": "doc",
+      "range": [
+        546,
+        575
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        576,
+        579
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " To count the number of characters, we can just count the number of bytes in",
+      "path": "doc",
+      "range": [
+        580,
+        659
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the string which are not continuation bytes, which can be done many bytes at",
+      "path": "doc",
+      "range": [
+        660,
+        740
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " a time fairly easily.",
+      "path": "doc",
+      "range": [
+        741,
+        766
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        767,
+        770
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Note: Because the term \"leading byte\" can sometimes be ambiguous (for",
+      "path": "doc",
+      "range": [
+        771,
+        844
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " example, it could also refer to the first byte of a slice), we'll often use",
+      "path": "doc",
+      "range": [
+        845,
+        924
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the term \"non-continuation byte\" to refer to these bytes in the code.",
+      "path": "doc",
+      "range": [
+        925,
+        998
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1111,
+            1120
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1165,
+        1640
+      ],
+      "kind": "fn",
+      "name": "count_chars",
+      "range": [
+        1111,
+        1640
+      ],
+      "signature_range": [
+        1132,
+        1164
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1174,
+        1209
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        1678,
+        4776
+      ],
+      "kind": "fn",
+      "name": "do_count_chars",
+      "range": [
+        1642,
+        4776
+      ],
+      "signature_range": [
+        1642,
+        1677
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2332,
+        2357
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2377,
+        2425
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5021,
+            5030
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5084,
+        5167
+      ],
+      "kind": "fn",
+      "name": "contains_non_continuation_byte",
+      "range": [
+        5021,
+        5167
+      ],
+      "signature_range": [
+        5031,
+        5083
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5268,
+            5277
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5324,
+        5586
+      ],
+      "kind": "fn",
+      "name": "sum_bytes_in_usize",
+      "range": [
+        5268,
+        5586
+      ],
+      "signature_range": [
+        5278,
+        5323
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        5903,
+        5989
+      ],
+      "kind": "fn",
+      "name": "char_count_general_case",
+      "range": [
+        5857,
+        5989
+      ],
+      "signature_range": [
+        5857,
+        5902
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        5925,
+        5978
+      ]
+    }
+  ],
+  "source_sha256": "d5514441d5ddeac011631f3400f7eb0a5650725106eca8fd2bed9f634fea7342"
+}

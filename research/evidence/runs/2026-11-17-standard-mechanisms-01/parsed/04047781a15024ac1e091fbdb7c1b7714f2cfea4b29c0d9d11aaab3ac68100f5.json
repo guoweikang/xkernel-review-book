@@ -1,0 +1,1981 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        0,
+        64
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A borrowed byte buffer which is incrementally filled and initialized.",
+          "path": "doc",
+          "range": [
+            169,
+            242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            243,
+            246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type is a sort of \"double cursor\". It tracks three regions in the buffer: a region at the beginning of the",
+          "path": "doc",
+          "range": [
+            247,
+            362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " buffer that has been logically filled with data, a region that has been initialized at some point but not yet",
+          "path": "doc",
+          "range": [
+            363,
+            476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " logically filled, and a region at the end that is fully uninitialized. The filled region is guaranteed to be a",
+          "path": "doc",
+          "range": [
+            477,
+            591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " subset of the initialized region.",
+          "path": "doc",
+          "range": [
+            592,
+            629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            630,
+            633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In summary, the contents of the buffer can be visualized as:",
+          "path": "doc",
+          "range": [
+            634,
+            698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```not_rust",
+          "path": "doc",
+          "range": [
+            699,
+            714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [             capacity              ]",
+          "path": "doc",
+          "range": [
+            715,
+            756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [ filled |         unfilled         ]",
+          "path": "doc",
+          "range": [
+            757,
+            798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [    initialized    | uninitialized ]",
+          "path": "doc",
+          "range": [
+            799,
+            840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            841,
+            848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            849,
+            852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `BorrowedBuf` is created around some existing data (or capacity for data) via a unique reference",
+          "path": "doc",
+          "range": [
+            853,
+            955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (`&mut`). The `BorrowedBuf` can be configured (e.g., using `clear` or `set_init`), but cannot be",
+          "path": "doc",
+          "range": [
+            956,
+            1056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " directly written. To write into the buffer, use `unfilled` to create a `BorrowedCursor`. The cursor",
+          "path": "doc",
+          "range": [
+            1057,
+            1160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " has write-only access to the unfilled portion of the buffer (you can think of it as a",
+          "path": "doc",
+          "range": [
+            1161,
+            1250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " write-only iterator).",
+          "path": "doc",
+          "range": [
+            1251,
+            1276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1277,
+            1280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime `'data` is a bound on the lifetime of the underlying data.",
+          "path": "doc",
+          "range": [
+            1281,
+            1356
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "BorrowedBuf",
+      "range": [
+        169,
+        1632
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1634,
+        1923
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        1723,
+        1921
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        1671,
+        1921
+      ],
+      "signature_range": [
+        1671,
+        1722
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `BorrowedBuf` from a fully initialized slice.",
+          "path": "doc",
+          "range": [
+            1925,
+            1988
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1925,
+        2420
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2052,
+            2061
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2120,
+        2418
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        2052,
+        2418
+      ],
+      "signature_range": [
+        2066,
+        2119
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `BorrowedBuf` from an uninitialized buffer.",
+          "path": "doc",
+          "range": [
+            2422,
+            2483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2484,
+            2487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Use `set_init` if part of the buffer is known to be already initialized.",
+          "path": "doc",
+          "range": [
+            2488,
+            2564
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2422,
+        2777
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2641,
+            2650
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2720,
+        2775
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        2641,
+        2775
+      ],
+      "signature_range": [
+        2655,
+        2719
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `BorrowedBuf` from a cursor.",
+          "path": "doc",
+          "range": [
+            2779,
+            2825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2826,
+            2829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Use `BorrowedCursor::with_unfilled_buf` instead for a safer alternative.",
+          "path": "doc",
+          "range": [
+            2830,
+            2906
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2779,
+        3365
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2976,
+            2985
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3052,
+        3363
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        2976,
+        3363
+      ],
+      "signature_range": [
+        2990,
+        3051
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3367,
+        6540
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the total capacity of the buffer.",
+          "path": "doc",
+          "range": [
+            3404,
+            3449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3454,
+            3463
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3500,
+        3530
+      ],
+      "kind": "impl_fn",
+      "name": "capacity",
+      "range": [
+        3404,
+        3530
+      ],
+      "signature_range": [
+        3472,
+        3499
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the length of the filled part of the buffer.",
+          "path": "doc",
+          "range": [
+            3536,
+            3592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3597,
+            3606
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3638,
+        3665
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        3536,
+        3665
+      ],
+      "signature_range": [
+        3615,
+        3637
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the length of the initialized part of the buffer.",
+          "path": "doc",
+          "range": [
+            3671,
+            3732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3737,
+            3746
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3783,
+        3808
+      ],
+      "kind": "impl_fn",
+      "name": "init_len",
+      "range": [
+        3671,
+        3808
+      ],
+      "signature_range": [
+        3755,
+        3782
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a shared reference to the filled portion of the buffer.",
+          "path": "doc",
+          "range": [
+            3814,
+            3881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3886,
+            3895
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3930,
+        4145
+      ],
+      "kind": "impl_fn",
+      "name": "filled",
+      "range": [
+        3814,
+        4145
+      ],
+      "signature_range": [
+        3904,
+        3929
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the filled portion of the buffer.",
+          "path": "doc",
+          "range": [
+            4151,
+            4219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4224,
+            4233
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4280,
+        4499
+      ],
+      "kind": "impl_fn",
+      "name": "filled_mut",
+      "range": [
+        4151,
+        4499
+      ],
+      "signature_range": [
+        4242,
+        4279
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a shared reference to the filled portion of the buffer with its original lifetime.",
+          "path": "doc",
+          "range": [
+            4505,
+            4599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4604,
+            4613
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4658,
+        4873
+      ],
+      "kind": "impl_fn",
+      "name": "into_filled",
+      "range": [
+        4505,
+        4873
+      ],
+      "signature_range": [
+        4622,
+        4657
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the filled portion of the buffer with its original lifetime.",
+          "path": "doc",
+          "range": [
+            4879,
+            4974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4979,
+            4988
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5041,
+        5260
+      ],
+      "kind": "impl_fn",
+      "name": "into_filled_mut",
+      "range": [
+        4879,
+        5260
+      ],
+      "signature_range": [
+        4997,
+        5040
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a cursor over the unfilled part of the buffer.",
+          "path": "doc",
+          "range": [
+            5266,
+            5324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5329,
+            5338
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5408,
+        5720
+      ],
+      "kind": "impl_fn",
+      "name": "unfilled",
+      "range": [
+        5266,
+        5720
+      ],
+      "signature_range": [
+        5347,
+        5407
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Clears the buffer, resetting the filled region to empty.",
+          "path": "doc",
+          "range": [
+            5726,
+            5786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5791,
+            5794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The number of initialized bytes is not changed, and the contents of the buffer are not modified.",
+          "path": "doc",
+          "range": [
+            5799,
+            5899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5904,
+            5913
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5955,
+        6000
+      ],
+      "kind": "impl_fn",
+      "name": "clear",
+      "range": [
+        5726,
+        6000
+      ],
+      "signature_range": [
+        5922,
+        5954
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " Asserts that the first `n` bytes of the buffer are initialized.",
+          "path": "doc",
+          "range": [
+            6006,
+            6073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6078,
+            6081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `BorrowedBuf` assumes that bytes are never de-initialized, so this method does nothing when called with fewer",
+          "path": "doc",
+          "range": [
+            6086,
+            6199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bytes than are already known to be initialized.",
+          "path": "doc",
+          "range": [
+            6204,
+            6255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6260,
+            6263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            6268,
+            6280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6285,
+            6288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure that the first `n` unfilled bytes of the buffer have already been initialized.",
+          "path": "doc",
+          "range": [
+            6293,
+            6398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6403,
+            6412
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6474,
+        6538
+      ],
+      "kind": "impl_fn",
+      "name": "set_init",
+      "range": [
+        6006,
+        6538
+      ],
+      "signature_range": [
+        6421,
+        6473
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A writeable view of the unfilled portion of a [`BorrowedBuf`].",
+          "path": "doc",
+          "range": [
+            6542,
+            6608
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6609,
+            6612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The unfilled portion consists of an initialized and an uninitialized part; see [`BorrowedBuf`]",
+          "path": "doc",
+          "range": [
+            6613,
+            6711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for details.",
+          "path": "doc",
+          "range": [
+            6712,
+            6728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6729,
+            6732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Data can be written directly to the cursor by using [`append`](BorrowedCursor::append) or",
+          "path": "doc",
+          "range": [
+            6733,
+            6826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " indirectly by getting a slice of part or all of the cursor and writing into the slice. In the",
+          "path": "doc",
+          "range": [
+            6827,
+            6924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " indirect case, the caller must call [`advance`](BorrowedCursor::advance) after writing to inform",
+          "path": "doc",
+          "range": [
+            6925,
+            7025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the cursor how many bytes have been written.",
+          "path": "doc",
+          "range": [
+            7026,
+            7074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7075,
+            7078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once data is written to the cursor, it becomes part of the filled portion of the underlying",
+          "path": "doc",
+          "range": [
+            7079,
+            7174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `BorrowedBuf` and can no longer be accessed or re-written by the cursor. I.e., the cursor tracks",
+          "path": "doc",
+          "range": [
+            7175,
+            7275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the unfilled part of the underlying `BorrowedBuf`.",
+          "path": "doc",
+          "range": [
+            7276,
+            7330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7331,
+            7334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime `'a` is a bound on the lifetime of the underlying buffer (which means it is a bound",
+          "path": "doc",
+          "range": [
+            7335,
+            7435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on the data in that buffer by transitivity).",
+          "path": "doc",
+          "range": [
+            7436,
+            7484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            7485,
+            7501
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "BorrowedCursor",
+      "range": [
+        6542,
+        7829
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7831,
+        14391
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Reborrows this cursor by cloning it with a smaller lifetime.",
+          "path": "doc",
+          "range": [
+            7865,
+            7929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7934,
+            7937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Since a cursor maintains unique access to its underlying buffer, the borrowed cursor is",
+          "path": "doc",
+          "range": [
+            7942,
+            8033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not accessible while the new cursor exists.",
+          "path": "doc",
+          "range": [
+            8038,
+            8085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8090,
+            8099
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8169,
+        8521
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow",
+      "range": [
+        7865,
+        8521
+      ],
+      "signature_range": [
+        8108,
+        8168
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the available space in the cursor.",
+          "path": "doc",
+          "range": [
+            8527,
+            8573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8578,
+            8587
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8624,
+        8677
+      ],
+      "kind": "impl_fn",
+      "name": "capacity",
+      "range": [
+        8527,
+        8677
+      ],
+      "signature_range": [
+        8596,
+        8623
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the number of bytes written to the `BorrowedBuf` this cursor was created from.",
+          "path": "doc",
+          "range": [
+            8683,
+            8773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8778,
+            8781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In particular, the count returned is shared by all reborrows of the cursor.",
+          "path": "doc",
+          "range": [
+            8786,
+            8865
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8870,
+            8879
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8915,
+        8946
+      ],
+      "kind": "impl_fn",
+      "name": "written",
+      "range": [
+        8683,
+        8946
+      ],
+      "signature_range": [
+        8888,
+        8914
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the initialized portion of the cursor.",
+          "path": "doc",
+          "range": [
+            8952,
+            9025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9030,
+            9039
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9084,
+        9329
+      ],
+      "kind": "impl_fn",
+      "name": "init_mut",
+      "range": [
+        8952,
+        9329
+      ],
+      "signature_range": [
+        9048,
+        9083
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the whole cursor.",
+          "path": "doc",
+          "range": [
+            9335,
+            9387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9392,
+            9395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            9400,
+            9412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9417,
+            9420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must not uninitialize any bytes in the initialized portion of the cursor.",
+          "path": "doc",
+          "range": [
+            9425,
+            9513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9518,
+            9527
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9590,
+        9702
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut",
+      "range": [
+        9335,
+        9702
+      ],
+      "signature_range": [
+        9536,
+        9589
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Advances the cursor by asserting that `n` bytes have been filled.",
+          "path": "doc",
+          "range": [
+            9708,
+            9777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9782,
+            9785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " After advancing, the `n` bytes are no longer accessible via the cursor and can only be",
+          "path": "doc",
+          "range": [
+            9790,
+            9880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accessed via the underlying buffer. I.e., the buffer's filled portion grows by `n` elements",
+          "path": "doc",
+          "range": [
+            9885,
+            9980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and its unfilled portion (and the capacity of this cursor) shrinks by `n` elements.",
+          "path": "doc",
+          "range": [
+            9985,
+            10072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10077,
+            10080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If less than `n` bytes initialized (by the cursor's point of view), `set_init` should be",
+          "path": "doc",
+          "range": [
+            10085,
+            10177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " called first.",
+          "path": "doc",
+          "range": [
+            10182,
+            10199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10204,
+            10207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            10212,
+            10224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10229,
+            10232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if there are less than `n` bytes initialized.",
+          "path": "doc",
+          "range": [
+            10237,
+            10293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10298,
+            10307
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10361,
+        10538
+      ],
+      "kind": "impl_fn",
+      "name": "advance",
+      "range": [
+        9708,
+        10538
+      ],
+      "signature_range": [
+        10316,
+        10360
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        27
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10442,
+        10487
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Advances the cursor by asserting that `n` bytes have been filled.",
+          "path": "doc",
+          "range": [
+            10544,
+            10613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10618,
+            10621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " After advancing, the `n` bytes are no longer accessible via the cursor and can only be",
+          "path": "doc",
+          "range": [
+            10626,
+            10716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accessed via the underlying buffer. I.e., the buffer's filled portion grows by `n` elements",
+          "path": "doc",
+          "range": [
+            10721,
+            10816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and its unfilled portion (and the capacity of this cursor) shrinks by `n` elements.",
+          "path": "doc",
+          "range": [
+            10821,
+            10908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10913,
+            10916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            10921,
+            10933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10938,
+            10941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure that the first `n` bytes of the cursor have been properly",
+          "path": "doc",
+          "range": [
+            10946,
+            11030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " initialised.",
+          "path": "doc",
+          "range": [
+            11035,
+            11051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11056,
+            11065
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11136,
+        11252
+      ],
+      "kind": "impl_fn",
+      "name": "advance_unchecked",
+      "range": [
+        10544,
+        11252
+      ],
+      "signature_range": [
+        11074,
+        11135
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Initializes all bytes in the cursor.",
+          "path": "doc",
+          "range": [
+            11258,
+            11298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11303,
+            11312
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11360,
+        11827
+      ],
+      "kind": "impl_fn",
+      "name": "ensure_init",
+      "range": [
+        11258,
+        11827
+      ],
+      "signature_range": [
+        11321,
+        11359
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Asserts that the first `n` unfilled bytes of the cursor are initialized.",
+          "path": "doc",
+          "range": [
+            11833,
+            11909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11914,
+            11917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `BorrowedBuf` assumes that bytes are never de-initialized, so this method does nothing when",
+          "path": "doc",
+          "range": [
+            11922,
+            12017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " called with fewer bytes than are already known to be initialized.",
+          "path": "doc",
+          "range": [
+            12022,
+            12091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12096,
+            12099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            12104,
+            12116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12121,
+            12124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure that the first `n` bytes of the buffer have already been initialized.",
+          "path": "doc",
+          "range": [
+            12129,
+            12225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12230,
+            12239
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12301,
+        12391
+      ],
+      "kind": "impl_fn",
+      "name": "set_init",
+      "range": [
+        11833,
+        12391
+      ],
+      "signature_range": [
+        12248,
+        12300
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Appends data to the cursor, advancing position within its buffer.",
+          "path": "doc",
+          "range": [
+            12397,
+            12466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12471,
+            12474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            12479,
+            12491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12496,
+            12499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if `self.capacity()` is less than `buf.len()`.",
+          "path": "doc",
+          "range": [
+            12504,
+            12561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12566,
+            12575
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12617,
+        13027
+      ],
+      "kind": "impl_fn",
+      "name": "append",
+      "range": [
+        12397,
+        13027
+      ],
+      "signature_range": [
+        12584,
+        12616
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        32
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12627,
+        12664
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": " Runs the given closure with a `BorrowedBuf` containing the unfilled part",
+          "path": "doc",
+          "range": [
+            13033,
+            13109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the cursor.",
+          "path": "doc",
+          "range": [
+            13114,
+            13132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13137,
+            13140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This enables inspecting what was written to the cursor.",
+          "path": "doc",
+          "range": [
+            13145,
+            13204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13209,
+            13212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            13217,
+            13229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13234,
+            13237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if the `BorrowedBuf` given to the closure is replaced by another",
+          "path": "doc",
+          "range": [
+            13242,
+            13317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " one.",
+          "path": "doc",
+          "range": [
+            13322,
+            13330
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13422,
+        14389
+      ],
+      "kind": "impl_fn",
+      "name": "with_unfilled_buf",
+      "range": [
+        13033,
+        14389
+      ],
+      "signature_range": [
+        13339,
+        13421
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        34
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13801,
+        13847
+      ]
+    }
+  ],
+  "source_sha256": "783ffd62b170a1fae8481471969bf938170a5a9cb9f7a165b314f794bc66e03c"
+}

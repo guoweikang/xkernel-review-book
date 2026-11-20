@@ -1,0 +1,39 @@
+{
+  "schema": "completion-responsibility-study/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "sources": {
+    "wrapper.rs": "fs/kvfs/src/address_space/writeback.rs",
+    "pagecache.rs": "mm/pagecache/src/writeback.rs",
+    "existing-tests.rs": "mm/pagecache/ut-tests/writeback_unittest.rs"
+  },
+  "question": "Which responsibility and completion-phase declarations are necessary before comparing synchronous writeback and batch handoff?",
+  "phase_vocabulary": ["handoff_to_callback", "callback_accepted", "io_ended", "completion_accounted", "durability_established"],
+  "phase_rules": [
+    "Handoff may be rejected; phases are not a universal success-only linear pipeline.",
+    "Callback acceptance and helper return do not establish I/O end or completion accounting.",
+    "Completion accounting is not a durability barrier.",
+    "Dropping completion performs unsuccessful zero-prefix accounting, not waiting for I/O."
+  ],
+  "required_provider_fields": [
+    "entity/revision/configuration and declaration authority",
+    "return-value guarantee phase, including empty/no-work cases",
+    "budget event and unit, including rejected submissions",
+    "ownership transfer event and receiver",
+    "completion obligation carrier, split and drop behavior",
+    "drain owner and required exit boundaries",
+    "error categories and deferred-error reporting owner",
+    "lifetime protection object and required duration",
+    "sleepable context and lock constraints",
+    "explicit non-guarantees, especially persistence/durability"
+  ],
+  "propositions": [
+    {"id":"handoff_not_completion","claim":"submit_cache_pages can return with an outstanding batch","evidence_target":"submitted_snapshot_outlives_scan_and_preserves_redirty_and_failed_tail","measurement":"helper return, pending batch count, folio writeback state, later completion"},
+    {"id":"rejected_handoff_budget","claim":"handoff budget includes rejected batches","evidence_target":"submit_cache_pages body before submit callback","measurement":"budget before callback, callback rejection, budget after; need explicit assertion if existing tests omit it"},
+    {"id":"earlier_io_survives_error","claim":"later rejected batch does not end prior retained I/O","evidence_target":"rejected_submission_redirties_its_batch_without_ending_prior_io","measurement":"first retained batch state, second rejection/redirty, later first-batch completion or drop after I/O end"},
+    {"id":"completion_not_durability","claim":"WritebackCompletion::complete is not a durability proof","evidence_target":"type documentation and body","measurement":"declared non-guarantee; no device persistence or crash test in this batch"}
+  ],
+  "first_batch": "Archive fixed primary sources and audit existing test assertions; do not invent another toy simulator before checking reuse feasibility.",
+  "planned_execution": "Next preflight the original test harness and dependencies; distinguish original-test execution, extracted logic and modeled replacements. No production/config mutation implied.",
+  "limits": "All declarations researcher-transcribed, no provider approval; source review is not executed evidence; shared downstream helper does not prove selected wrappers interchangeable; no ownership-design correctness or novelty claim.",
+  "stop": "Complete all four proposition evidence mappings, retain unexecuted and missing assertions, no new performance score."
+}

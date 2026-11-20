@@ -1,0 +1,1856 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Panic support for core",
+      "path": "doc",
+      "range": [
+        0,
+        26
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        27,
+        30
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In core, panicking is always done with a message, resulting in a `core::panic::PanicInfo`",
+      "path": "doc",
+      "range": [
+        31,
+        124
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " containing a `fmt::Arguments`. In std, however, panicking can be done with panic_any, which",
+      "path": "doc",
+      "range": [
+        125,
+        220
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " throws a `Box<dyn Any>` containing any type of value. Because of this,",
+      "path": "doc",
+      "range": [
+        221,
+        295
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `std::panic::PanicHookInfo` is a different type, which contains a `&dyn Any` instead of a",
+      "path": "doc",
+      "range": [
+        296,
+        389
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `fmt::Arguments`. std's panic handler will convert the `fmt::Arguments` to a `&dyn Any`",
+      "path": "doc",
+      "range": [
+        390,
+        481
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " containing either a `&'static str` or `String` containing the formatted message.",
+      "path": "doc",
+      "range": [
+        482,
+        566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        567,
+        570
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The core library cannot define any panic handler, but it can invoke it.",
+      "path": "doc",
+      "range": [
+        571,
+        646
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This means that the functions inside of core are allowed to panic, but to be",
+      "path": "doc",
+      "range": [
+        647,
+        727
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " useful an upstream crate must define panicking for core to use. The current",
+      "path": "doc",
+      "range": [
+        728,
+        807
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " interface for panicking is:",
+      "path": "doc",
+      "range": [
+        808,
+        839
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        840,
+        843
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        844,
+        851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn panic_impl(pi: &core::panic::PanicInfo<'_>) -> !",
+      "path": "doc",
+      "range": [
+        852,
+        907
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # { loop {} }",
+      "path": "doc",
+      "range": [
+        908,
+        925
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        926,
+        933
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        934,
+        937
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module contains a few other panicking functions, but these are just the",
+      "path": "doc",
+      "range": [
+        938,
+        1018
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " necessary lang items for the compiler. All panics are funneled through this",
+      "path": "doc",
+      "range": [
+        1019,
+        1098
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " one function. The actual symbol is declared through the `#[panic_handler]` attribute.",
+      "path": "doc",
+      "range": [
+        1099,
+        1188
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        1190,
+        1224
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        1225,
+        1382
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1526,
+        1821
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The entry point for panicking with a formatted message.",
+          "path": "doc",
+          "range": [
+            1968,
+            2027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2028,
+            2031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is designed to reduce the amount of code required at the call",
+          "path": "doc",
+          "range": [
+            2032,
+            2102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " site as much as possible (so that `panic!()` has as low an impact",
+          "path": "doc",
+          "range": [
+            2103,
+            2172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on (e.g.) the inlining of other functions as possible), by moving",
+          "path": "doc",
+          "range": [
+            2173,
+            2242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the actual formatting into this shared place.",
+          "path": "doc",
+          "range": [
+            2243,
+            2292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            2401,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            2466,
+            2512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            2513,
+            2528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            2529,
+            2550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_do_not_const_check",
+          "range": [
+            2588,
+            2615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            2640,
+            2670
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2788,
+        3396
+      ],
+      "kind": "fn",
+      "name": "panic_fmt",
+      "range": [
+        1968,
+        3396
+      ],
+      "signature_range": [
+        2739,
+        2787
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2797,
+        2828
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Like `panic_fmt`, but for non-unwinding panics.",
+          "path": "doc",
+          "range": [
+            3398,
+            3449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3450,
+            3453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Has to be a separate function so that it can carry the `rustc_nounwind` attribute.",
+          "path": "doc",
+          "range": [
+            3454,
+            3540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            3541,
+            3605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            3606,
+            3652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            3653,
+            3668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            3901,
+            3918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            3919,
+            3949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            4014,
+            4065
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4154,
+        5275
+      ],
+      "kind": "fn",
+      "name": "panic_nounwind_fmt",
+      "range": [
+        3398,
+        5275
+      ],
+      "signature_range": [
+        4070,
+        4153
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4160,
+        5273
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The underlying implementation of core's `panic!` macro when no formatting is used.",
+          "path": "doc",
+          "range": [
+            5385,
+            5471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            5579,
+            5643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            5644,
+            5690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            5691,
+            5706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            5707,
+            5737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            5802,
+            5819
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5901,
+        6791
+      ],
+      "kind": "fn",
+      "name": "panic",
+      "range": [
+        5385,
+        6791
+      ],
+      "signature_range": [
+        5861,
+        5900
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7245,
+        8117
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": true,
+      "kind": "mod",
+      "name": "panic_const",
+      "path_overrides": [],
+      "range": [
+        8471,
+        10481
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8515,
+        9978
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10126,
+        10479
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Like `panic`, but without unwinding and track_caller to reduce the impact on codesize on the caller.",
+          "path": "doc",
+          "range": [
+            10483,
+            10587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you want `#[track_caller]` for nicer errors, call `panic_nounwind_fmt` directly.",
+          "path": "doc",
+          "range": [
+            10588,
+            10675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            10676,
+            10740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            10741,
+            10787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            10788,
+            10814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            10861,
+            10878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            10879,
+            10909
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11027,
+        11118
+      ],
+      "kind": "fn",
+      "name": "panic_nounwind",
+      "range": [
+        10483,
+        11118
+      ],
+      "signature_range": [
+        10978,
+        11026
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Like `panic_nounwind`, but also inhibits showing a backtrace.",
+          "path": "doc",
+          "range": [
+            11120,
+            11185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            11186,
+            11250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            11251,
+            11297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            11298,
+            11315
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11375,
+        11465
+      ],
+      "kind": "fn",
+      "name": "panic_nounwind_nobacktrace",
+      "range": [
+        11120,
+        11465
+      ],
+      "signature_range": [
+        11320,
+        11374
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11467,
+            11476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            11477,
+            11492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            11493,
+            11541
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11634,
+        11718
+      ],
+      "kind": "fn",
+      "name": "unreachable_display",
+      "range": [
+        11467,
+        11718
+      ],
+      "signature_range": [
+        11582,
+        11633
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11650,
+        11714
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " This exists solely for the 2015 edition `panic!` macro to trigger",
+          "path": "doc",
+          "range": [
+            11720,
+            11789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a lint on `panic!(my_str_variable);`.",
+          "path": "doc",
+          "range": [
+            11790,
+            11831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11832,
+            11841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            11842,
+            11857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            11858,
+            11901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            11902,
+            11932
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12042,
+        12071
+      ],
+      "kind": "fn",
+      "name": "panic_str_2015",
+      "range": [
+        11720,
+        12071
+      ],
+      "signature_range": [
+        12001,
+        12041
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12073,
+            12082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            12083,
+            12098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            12099,
+            12124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_do_not_const_check",
+          "range": [
+            12162,
+            12189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            12214,
+            12244
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12365,
+        12407
+      ],
+      "kind": "fn",
+      "name": "panic_display",
+      "range": [
+        12073,
+        12407
+      ],
+      "signature_range": [
+        12313,
+        12364
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12381,
+        12403
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12409,
+            12489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12490,
+            12536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            12537,
+            12552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            12553,
+            12583
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12694,
+        12857
+      ],
+      "kind": "fn",
+      "name": "panic_bounds_check",
+      "range": [
+        12409,
+        12857
+      ],
+      "signature_range": [
+        12641,
+        12693
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12703,
+        12734
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12783,
+        12855
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12859,
+            12939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12940,
+            12986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            12987,
+            13002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            13003,
+            13051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            13111,
+            13128
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13273,
+        13570
+      ],
+      "kind": "fn",
+      "name": "panic_misaligned_pointer_dereference",
+      "range": [
+        12859,
+        13570
+      ],
+      "signature_range": [
+        13197,
+        13272
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13282,
+        13313
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13390,
+        13521
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            13572,
+            13652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            13653,
+            13699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            13700,
+            13715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            13716,
+            13758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            13812,
+            13829
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13934,
+        14149
+      ],
+      "kind": "fn",
+      "name": "panic_null_pointer_dereference",
+      "range": [
+        13572,
+        14149
+      ],
+      "signature_range": [
+        13893,
+        13933
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13943,
+        13974
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14051,
+        14100
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            14151,
+            14231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            14232,
+            14278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            14279,
+            14294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            14295,
+            14338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            14400,
+            14417
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14536,
+        14779
+      ],
+      "kind": "fn",
+      "name": "panic_invalid_enum_construction",
+      "range": [
+        14151,
+        14779
+      ],
+      "signature_range": [
+        14482,
+        14535
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14545,
+        14576
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14653,
+        14730
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Panics because we cannot unwind out of a function.",
+          "path": "doc",
+          "range": [
+            14781,
+            14835
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14836,
+            14839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a separate function to avoid the codesize impact of each crate containing the string to",
+          "path": "doc",
+          "range": [
+            14840,
+            14939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pass to `panic_nounwind`.",
+          "path": "doc",
+          "range": [
+            14940,
+            14969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14970,
+            14973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is called directly by the codegen backend, and must not have",
+          "path": "doc",
+          "range": [
+            14974,
+            15052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any extra arguments (including those synthesized by track_caller).",
+          "path": "doc",
+          "range": [
+            15053,
+            15123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15124,
+            15204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15205,
+            15251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            15252,
+            15283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            15336,
+            15353
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15384,
+        15533
+      ],
+      "kind": "fn",
+      "name": "panic_cannot_unwind",
+      "range": [
+        14781,
+        15533
+      ],
+      "signature_range": [
+        15354,
+        15383
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Panics because we are unwinding out of a destructor during cleanup.",
+          "path": "doc",
+          "range": [
+            15535,
+            15606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15607,
+            15610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a separate function to avoid the codesize impact of each crate containing the string to",
+          "path": "doc",
+          "range": [
+            15611,
+            15710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pass to `panic_nounwind`.",
+          "path": "doc",
+          "range": [
+            15711,
+            15740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15741,
+            15744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is called directly by the codegen backend, and must not have",
+          "path": "doc",
+          "range": [
+            15745,
+            15823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any extra arguments (including those synthesized by track_caller).",
+          "path": "doc",
+          "range": [
+            15824,
+            15894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15895,
+            15975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15976,
+            16022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            16023,
+            16051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            16104,
+            16121
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16149,
+        16308
+      ],
+      "kind": "fn",
+      "name": "panic_in_cleanup",
+      "range": [
+        15535,
+        16308
+      ],
+      "signature_range": [
+        16122,
+        16148
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " This function is used instead of panic_fmt in const eval.",
+          "path": "doc",
+          "range": [
+            16310,
+            16371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            16372,
+            16399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            16474,
+            16504
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16628,
+        17006
+      ],
+      "kind": "fn",
+      "name": "const_panic_fmt",
+      "range": [
+        16310,
+        17006
+      ],
+      "signature_range": [
+        16573,
+        16627
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            17008,
+            17024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            17025,
+            17039
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "AssertKind",
+      "range": [
+        17008,
+        17090
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Internal function for `assert_eq!` and `assert_ne!` macros",
+          "path": "doc",
+          "range": [
+            17092,
+            17154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            17155,
+            17235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            17236,
+            17282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            17283,
+            17298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            17299,
+            17313
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17500,
+        17554
+      ],
+      "kind": "fn",
+      "name": "assert_failed",
+      "range": [
+        17092,
+        17554
+      ],
+      "signature_range": [
+        17318,
+        17499
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Internal function for `assert_match!`",
+          "path": "doc",
+          "range": [
+            17556,
+            17597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            17598,
+            17678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            17679,
+            17725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            17726,
+            17741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            17742,
+            17756
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17887,
+        18214
+      ],
+      "kind": "fn",
+      "name": "assert_matches_failed",
+      "range": [
+        17556,
+        18214
+      ],
+      "signature_range": [
+        17761,
+        17886
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "Pattern",
+      "range": [
+        17957,
+        17985
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17990,
+        18138
+      ]
+    },
+    {
+      "ancestors": [
+        34,
+        36
+      ],
+      "attributes": [],
+      "body_range": [
+        18089,
+        18132
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        18032,
+        18132
+      ],
+      "signature_range": [
+        18032,
+        18088
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Non-generic version of the above functions, to avoid code bloat.",
+          "path": "doc",
+          "range": [
+            18216,
+            18284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            18285,
+            18365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            18366,
+            18412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            18413,
+            18428
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18575,
+        18997
+      ],
+      "kind": "fn",
+      "name": "assert_failed_inner",
+      "range": [
+        18216,
+        18997
+      ],
+      "signature_range": [
+        18429,
+        18574
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18754,
+        18866
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18884,
+        18988
+      ]
+    }
+  ],
+  "source_sha256": "805a33d479ebcdf2c640f43fb01b7a6707038bc248b4830d15f30a8a60d40303"
+}

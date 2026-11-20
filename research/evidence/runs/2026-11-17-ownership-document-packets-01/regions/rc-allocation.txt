@@ -1,0 +1,48 @@
+impl<T: ?Sized> Rc<T> {
+    /// Allocates an `RcInner<T>` with sufficient space for
+    /// a possibly-unsized inner value where the value has the layout provided.
+    ///
+    /// The function `mem_to_rc_inner` is called with the data pointer
+    /// and must return back a (potentially fat)-pointer for the `RcInner<T>`.
+    #[cfg(not(no_global_oom_handling))]
+    unsafe fn allocate_for_layout(
+        value_layout: Layout,
+        allocate: impl FnOnce(Layout) -> Result<NonNull<[u8]>, AllocError>,
+        mem_to_rc_inner: impl FnOnce(*mut u8) -> *mut RcInner<T>,
+    ) -> *mut RcInner<T> {
+        let layout = rc_inner_layout_for_value_layout(value_layout);
+        unsafe {
+            Rc::try_allocate_for_layout(value_layout, allocate, mem_to_rc_inner)
+                .unwrap_or_else(|_| handle_alloc_error(layout))
+        }
+    }
+
+    /// Allocates an `RcInner<T>` with sufficient space for
+    /// a possibly-unsized inner value where the value has the layout provided,
+    /// returning an error if allocation fails.
+    ///
+    /// The function `mem_to_rc_inner` is called with the data pointer
+    /// and must return back a (potentially fat)-pointer for the `RcInner<T>`.
+    #[inline]
+    unsafe fn try_allocate_for_layout(
+        value_layout: Layout,
+        allocate: impl FnOnce(Layout) -> Result<NonNull<[u8]>, AllocError>,
+        mem_to_rc_inner: impl FnOnce(*mut u8) -> *mut RcInner<T>,
+    ) -> Result<*mut RcInner<T>, AllocError> {
+        let layout = rc_inner_layout_for_value_layout(value_layout);
+
+        // Allocate for the layout.
+        let ptr = allocate(layout)?;
+
+        // Initialize the RcInner
+        let inner = mem_to_rc_inner(ptr.as_non_null_ptr().as_ptr());
+        unsafe {
+            debug_assert_eq!(Layout::for_value_raw(inner), layout);
+
+            (&raw mut (*inner).strong).write(Cell::new(1));
+            (&raw mut (*inner).weak).write(Cell::new(1));
+        }
+
+        Ok(inner)
+    }
+}

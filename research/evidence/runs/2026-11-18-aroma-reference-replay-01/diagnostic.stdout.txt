@@ -1,0 +1,35 @@
+Query features: 
+StringBuffer StringBuffer ##1>StringBuffer #;1>StringBuffer #VAR #VAR #VAR #VAR #VAR #=#1>#VAR #=#1>#VAR ##2>#VAR ##2>#VAR ##2>#VAR #;1>#VAR #;1>#VAR #;1>#VAR StringBuffer>>#VAR StringBuffer>>#VAR #()1>StringBuffer new#2>StringBuffer #=#3>StringBuffer #VAR>>StringBuffer #VAR>>StringBuffer Iterator ##1>Iterator #;1>Iterator StringBuffer>>Iterator StringBuffer>>Iterator Iterator>>#VAR Iterator>>#VAR #.#1>#VAR #.#1>#VAR #.#1>#VAR #=#3>#VAR #VAR>>#VAR #VAR>>#VAR iterator #()1>iterator #.#3>iterator #=#3>iterator #VAR>>iterator #VAR>>iterator while##2>#VAR #=#1>>>hasNext #=#1>>>hasNext iterator>>#VAR iterator>>#VAR hasNext #()1>hasNext #.#3>hasNext while##2>hasNext #VAR>>hasNext #VAR>>hasNext while##3>#VAR hasNext>>>next hasNext>>>next #=#1>>>next #=#1>>>next hasNext>>#VAR hasNext>>#VAR next #()1>next #.#3>next #;1>next #VAR>>next #VAR>>next
+Failed to match original method.
+################ query code ################ index = -1
+ {
+
+        StringBuffer strBuf = new StringBuffer();
+        Iterator itr = list.iterator();
+        while (itr.hasNext()) {
+            itr.next();
+        }
+    }
+
+idx = 0:------------------- similar code ------------------ index = 0, score = 42.0
+ {
+
+        StringBuffer strBuf = new StringBuffer();
+        Iterator itr = list.iterator();
+        while (itr.hasNext()) {
+            itr.next();
+        }
+    }
+
+------------------- similar code (pruned) ------------------ score = 1.0
+ {
+
+        StringBuffer strBuf = new StringBuffer();
+        Iterator itr = list.iterator();
+        while (itr.hasNext()) {
+            itr.next();
+        }
+    }
+
+
+FEATURE_CHECK_JSON={"actual": ["StringBuffer", "##1>StringBuffer", "#;1>StringBuffer", "#VAR", "#=#1>#VAR", "##2>#VAR", "#;1>#VAR", "StringBuffer>>#VAR", "StringBuffer>>#VAR", "StringBuffer", "#()1>StringBuffer", "new#2>StringBuffer", "#=#3>StringBuffer", "#VAR>>StringBuffer", "#VAR>>StringBuffer", "Iterator", "##1>Iterator", "#;1>Iterator", "StringBuffer>>Iterator", "StringBuffer>>Iterator", "#VAR", "#=#1>#VAR", "##2>#VAR", "#;1>#VAR", "Iterator>>#VAR", "Iterator>>#VAR", "#VAR", "#.#1>#VAR", "#=#3>#VAR", "##2>#VAR", "#VAR>>#VAR", "#VAR>>#VAR", "iterator", "#()1>iterator", "#.#3>iterator", "#=#3>iterator", "#VAR>>iterator", "#VAR>>iterator", "#VAR", "#.#1>#VAR", "while##2>#VAR", "#=#1>>>hasNext", "#=#1>>>hasNext", "iterator>>#VAR", "iterator>>#VAR", "hasNext", "#()1>hasNext", "#.#3>hasNext", "while##2>hasNext", "#VAR>>hasNext", "#VAR>>hasNext", "#VAR", "#.#1>#VAR", "#;1>#VAR", "while##3>#VAR", "hasNext>>>next", "hasNext>>>next", "#=#1>>>next", "#=#1>>>next", "hasNext>>#VAR", "hasNext>>#VAR", "next", "#()1>next", "#.#3>next", "#;1>next", "#VAR>>next", "#VAR>>next"], "decoded_types": {"str": 67}, "expected": ["StringBuffer", "StringBuffer", "#;1>StringBuffer", "#;1>StringBuffer", "#VAR", "#VAR", "#VAR", "#VAR", "#VAR", "#=#1>#VAR", "#=#1>#VAR", "#;1>#VAR", "#;1>#VAR", "#;1>#VAR", "#;1>#VAR", "StringBuffer>>#VAR", "StringBuffer>>#VAR", "new#2>StringBuffer", "#=#3>StringBuffer", "#VAR>>StringBuffer", "StringBuffer>>StringBuffer", "Iterator", "#;1>Iterator", "StringBuffer>>Iterator", "#VAR>>Iterator", "Iterator>>#VAR", "Iterator>>#VAR", "#.#1>#VAR", "#.#1>#VAR", "#.#1>#VAR", "#=#3>#VAR", "#VAR>>#VAR", "#VAR>>#VAR", "#VAR>>#VAR", "iterator", "#.#3>iterator", "#=#3>iterator", "#;1>iterator", "#VAR>>iterator", "#VAR>>iterator", "while##2>#VAR", "iterator>>#VAR", "hasNext", "#.#3>hasNext", "while##2>hasNext", "#VAR>>hasNext", "iterator>>hasNext", "while##3>#VAR", "hasNext>>#VAR", "next", "#.#3>next", "#;1>next", "while##3>next", "#VAR>>next", "hasNext>>next"], "expected_blank_lines": 0, "expected_lines": 55, "expected_unique": 38, "extra": {"##1>Iterator": 1, "##1>StringBuffer": 1, "##2>#VAR": 3, "#()1>StringBuffer": 1, "#()1>hasNext": 1, "#()1>iterator": 1, "#()1>next": 1, "#=#1>>>hasNext": 2, "#=#1>>>next": 2, "#VAR>>StringBuffer": 1, "#VAR>>hasNext": 1, "#VAR>>next": 1, "StringBuffer>>Iterator": 1, "hasNext>>#VAR": 1, "hasNext>>>next": 2, "iterator>>#VAR": 1}, "feature_id_types": {"int": 67}, "feature_occurrences": 67, "missing": {"#;1>#VAR": 1, "#;1>StringBuffer": 1, "#;1>iterator": 1, "#VAR>>#VAR": 1, "#VAR>>Iterator": 1, "StringBuffer>>StringBuffer": 1, "hasNext>>next": 1, "iterator>>hasNext": 1, "while##3>next": 1}, "multiset_equal": false, "ordered_equal": false, "records": 1, "unique_features": 42}

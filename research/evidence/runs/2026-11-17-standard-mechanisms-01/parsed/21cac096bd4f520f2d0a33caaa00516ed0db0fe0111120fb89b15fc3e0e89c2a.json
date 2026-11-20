@@ -1,0 +1,8170 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        0,
+        34
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        35,
+        90
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        9,
+        33
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `Error` is a trait representing the basic expectations for error values,",
+          "path": "doc",
+          "range": [
+            168,
+            244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " i.e., values of type `E` in [`Result<T, E>`].",
+          "path": "doc",
+          "range": [
+            245,
+            294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            295,
+            298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Errors must describe themselves through the [`Display`] and [`Debug`]",
+          "path": "doc",
+          "range": [
+            299,
+            372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " traits. Error messages are typically concise lowercase sentences without",
+          "path": "doc",
+          "range": [
+            373,
+            449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trailing punctuation:",
+          "path": "doc",
+          "range": [
+            450,
+            475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            476,
+            479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            480,
+            487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let err = \"NaN\".parse::<u32>().unwrap_err();",
+          "path": "doc",
+          "range": [
+            488,
+            536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(err.to_string(), \"invalid digit found in string\");",
+          "path": "doc",
+          "range": [
+            537,
+            602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            603,
+            610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            611,
+            614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Error source",
+          "path": "doc",
+          "range": [
+            615,
+            633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            634,
+            637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Errors may provide cause information. [`Error::source()`] is generally",
+          "path": "doc",
+          "range": [
+            638,
+            712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " used when errors cross \"abstraction boundaries\". If one module must report",
+          "path": "doc",
+          "range": [
+            713,
+            791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " an error that is caused by an error from a lower-level module, it can allow",
+          "path": "doc",
+          "range": [
+            792,
+            871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accessing that error via `Error::source()`. This makes it possible for the",
+          "path": "doc",
+          "range": [
+            872,
+            950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " high-level module to provide its own errors while also revealing some of the",
+          "path": "doc",
+          "range": [
+            951,
+            1031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation for debugging.",
+          "path": "doc",
+          "range": [
+            1032,
+            1065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1066,
+            1069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In error types that wrap an underlying error, the underlying error",
+          "path": "doc",
+          "range": [
+            1070,
+            1140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should be either returned by the outer error's `Error::source()`, or rendered",
+          "path": "doc",
+          "range": [
+            1141,
+            1222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by the outer error's `Display` implementation, but not both.",
+          "path": "doc",
+          "range": [
+            1223,
+            1287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1288,
+            1291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            1292,
+            1305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1306,
+            1309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementing the `Error` trait only requires that `Debug` and `Display` are implemented too.",
+          "path": "doc",
+          "range": [
+            1310,
+            1406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1407,
+            1410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1411,
+            1418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            1419,
+            1445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            1446,
+            1463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::path::PathBuf;",
+          "path": "doc",
+          "range": [
+            1464,
+            1491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1492,
+            1495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            1496,
+            1516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct ReadConfigError {",
+          "path": "doc",
+          "range": [
+            1517,
+            1545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     path: PathBuf",
+          "path": "doc",
+          "range": [
+            1546,
+            1567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1568,
+            1573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1574,
+            1577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for ReadConfigError {",
+          "path": "doc",
+          "range": [
+            1578,
+            1621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            1622,
+            1688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let path = self.path.display();",
+          "path": "doc",
+          "range": [
+            1689,
+            1732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"unable to read configuration at {path}\")",
+          "path": "doc",
+          "range": [
+            1733,
+            1796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1797,
+            1806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1807,
+            1812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1813,
+            1816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for ReadConfigError {}",
+          "path": "doc",
+          "range": [
+            1817,
+            1854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1855,
+            1862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1863,
+            1908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            1909,
+            1943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_has_incoherent_inherent_impls",
+          "range": [
+            1944,
+            1982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            1983,
+            2023
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Error",
+      "range": [
+        168,
+        8383
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the lower-level source of this error, if any.",
+          "path": "doc",
+          "range": [
+            2063,
+            2120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2125,
+            2128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2133,
+            2147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2152,
+            2155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2160,
+            2167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            2172,
+            2198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            2203,
+            2220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2225,
+            2228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            2233,
+            2253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SuperError {",
+          "path": "doc",
+          "range": [
+            2258,
+            2281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     source: SuperErrorSideKick,",
+          "path": "doc",
+          "range": [
+            2286,
+            2321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2326,
+            2331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2336,
+            2339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for SuperError {",
+          "path": "doc",
+          "range": [
+            2344,
+            2382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            2387,
+            2453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"SuperError is here!\")",
+          "path": "doc",
+          "range": [
+            2458,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2507,
+            2516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2521,
+            2526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2531,
+            2534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for SuperError {",
+          "path": "doc",
+          "range": [
+            2539,
+            2570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn source(&self) -> Option<&(dyn Error + 'static)> {",
+          "path": "doc",
+          "range": [
+            2575,
+            2635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(&self.source)",
+          "path": "doc",
+          "range": [
+            2640,
+            2670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2675,
+            2684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2689,
+            2694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2699,
+            2702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            2707,
+            2727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SuperErrorSideKick;",
+          "path": "doc",
+          "range": [
+            2732,
+            2762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2767,
+            2770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for SuperErrorSideKick {",
+          "path": "doc",
+          "range": [
+            2775,
+            2821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            2826,
+            2892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"SuperErrorSideKick is here!\")",
+          "path": "doc",
+          "range": [
+            2897,
+            2949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2954,
+            2963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2968,
+            2973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2978,
+            2981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for SuperErrorSideKick {}",
+          "path": "doc",
+          "range": [
+            2986,
+            3026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3031,
+            3034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn get_super_error() -> Result<(), SuperError> {",
+          "path": "doc",
+          "range": [
+            3039,
+            3091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Err(SuperError { source: SuperErrorSideKick })",
+          "path": "doc",
+          "range": [
+            3096,
+            3150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3155,
+            3160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3165,
+            3168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            3173,
+            3188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match get_super_error() {",
+          "path": "doc",
+          "range": [
+            3193,
+            3226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Err(e) => {",
+          "path": "doc",
+          "range": [
+            3231,
+            3254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             println!(\"Error: {e}\");",
+          "path": "doc",
+          "range": [
+            3259,
+            3298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             println!(\"Caused by: {}\", e.source().unwrap());",
+          "path": "doc",
+          "range": [
+            3303,
+            3366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            3371,
+            3384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         _ => println!(\"No error\"),",
+          "path": "doc",
+          "range": [
+            3389,
+            3427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            3432,
+            3441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3446,
+            3451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3456,
+            3463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3468,
+            3521
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3577,
+        3597
+      ],
+      "kind": "trait_fn",
+      "name": "source",
+      "range": [
+        2063,
+        3597
+      ],
+      "signature_range": [
+        3526,
+        3576
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `TypeId` of `self`.",
+          "path": "doc",
+          "range": [
+            3603,
+            3635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            3640,
+            3654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3659,
+            3803
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3895,
+        3931
+      ],
+      "kind": "trait_fn",
+      "name": "type_id",
+      "range": [
+        3603,
+        3931
+      ],
+      "signature_range": [
+        3808,
+        3890
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3937,
+            3944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if let Err(e) = \"xc\".parse::<u32>() {",
+          "path": "doc",
+          "range": [
+            3949,
+            3990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Print `e` itself, no need for description().",
+          "path": "doc",
+          "range": [
+            3995,
+            4050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     eprintln!(\"Error: {e}\");",
+          "path": "doc",
+          "range": [
+            4055,
+            4087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4092,
+            4097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4102,
+            4109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4114,
+            4159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "deprecated",
+          "range": [
+            4164,
+            4241
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4276,
+        4334
+      ],
+      "kind": "trait_fn",
+      "name": "description",
+      "range": [
+        3937,
+        4334
+      ],
+      "signature_range": [
+        4246,
+        4275
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4340,
+            4385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "deprecated",
+          "range": [
+            4390,
+            4510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            4515,
+            4537
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4580,
+        4609
+      ],
+      "kind": "trait_fn",
+      "name": "cause",
+      "range": [
+        4340,
+        4609
+      ],
+      "signature_range": [
+        4542,
+        4579
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides type-based access to context intended for error reports.",
+          "path": "doc",
+          "range": [
+            4615,
+            4684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4689,
+            4692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Used in conjunction with [`Request::provide_value`] and [`Request::provide_ref`] to extract",
+          "path": "doc",
+          "range": [
+            4697,
+            4792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " references to member variables from `dyn Error` trait objects.",
+          "path": "doc",
+          "range": [
+            4797,
+            4863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4868,
+            4871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            4876,
+            4889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4894,
+            4897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            4902,
+            4913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            4918,
+            4962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::fmt;",
+          "path": "doc",
+          "range": [
+            4967,
+            4985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::{request_ref, Request};",
+          "path": "doc",
+          "range": [
+            4990,
+            5034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5039,
+            5042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            5047,
+            5067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " enum MyLittleTeaPot {",
+          "path": "doc",
+          "range": [
+            5072,
+            5097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Empty,",
+          "path": "doc",
+          "range": [
+            5102,
+            5116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5121,
+            5126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5131,
+            5134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            5139,
+            5159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct MyBacktrace {",
+          "path": "doc",
+          "range": [
+            5164,
+            5188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // ...",
+          "path": "doc",
+          "range": [
+            5193,
+            5207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5212,
+            5217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5222,
+            5225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl MyBacktrace {",
+          "path": "doc",
+          "range": [
+            5230,
+            5252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn new() -> MyBacktrace {",
+          "path": "doc",
+          "range": [
+            5257,
+            5290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // ...",
+          "path": "doc",
+          "range": [
+            5295,
+            5313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         # MyBacktrace {}",
+          "path": "doc",
+          "range": [
+            5318,
+            5346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            5351,
+            5360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5365,
+            5370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5375,
+            5378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            5383,
+            5403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Error {",
+          "path": "doc",
+          "range": [
+            5408,
+            5426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     backtrace: MyBacktrace,",
+          "path": "doc",
+          "range": [
+            5431,
+            5462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5467,
+            5472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5477,
+            5480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for Error {",
+          "path": "doc",
+          "range": [
+            5485,
+            5518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            5523,
+            5589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"Example Error\")",
+          "path": "doc",
+          "range": [
+            5594,
+            5632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            5637,
+            5646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5651,
+            5656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5661,
+            5664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Error {",
+          "path": "doc",
+          "range": [
+            5669,
+            5707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            5712,
+            5773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request",
+          "path": "doc",
+          "range": [
+            5778,
+            5797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .provide_ref::<MyBacktrace>(&self.backtrace);",
+          "path": "doc",
+          "range": [
+            5802,
+            5863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            5868,
+            5877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5882,
+            5887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5892,
+            5895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            5900,
+            5915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let backtrace = MyBacktrace::new();",
+          "path": "doc",
+          "range": [
+            5920,
+            5963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let error = Error { backtrace };",
+          "path": "doc",
+          "range": [
+            5968,
+            6008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let dyn_error = &error as &dyn std::error::Error;",
+          "path": "doc",
+          "range": [
+            6013,
+            6070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let backtrace_ref = request_ref::<MyBacktrace>(dyn_error).unwrap();",
+          "path": "doc",
+          "range": [
+            6075,
+            6150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6155,
+            6158
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert!(core::ptr::eq(&error.backtrace, backtrace_ref));",
+          "path": "doc",
+          "range": [
+            6163,
+            6227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert!(request_ref::<MyLittleTeaPot>(dyn_error).is_none());",
+          "path": "doc",
+          "range": [
+            6232,
+            6300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            6305,
+            6310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6315,
+            6322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6327,
+            6330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Delegating Impls",
+          "path": "doc",
+          "range": [
+            6335,
+            6357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6362,
+            6365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <div class=\"warning\">",
+          "path": "doc",
+          "range": [
+            6370,
+            6395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6400,
+            6403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **Warning**: We recommend implementors avoid delegating implementations of `provide` to",
+          "path": "doc",
+          "range": [
+            6408,
+            6499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " source error implementations.",
+          "path": "doc",
+          "range": [
+            6504,
+            6537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6542,
+            6545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " </div>",
+          "path": "doc",
+          "range": [
+            6550,
+            6560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6565,
+            6568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method should expose context from the current piece of the source chain only, not from",
+          "path": "doc",
+          "range": [
+            6573,
+            6668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sources that are exposed in the chain of sources. Delegating `provide` implementations cause",
+          "path": "doc",
+          "range": [
+            6673,
+            6769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the same context to be provided by multiple errors in the chain of sources which can cause",
+          "path": "doc",
+          "range": [
+            6774,
+            6868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unintended duplication of information in error reports or require heuristics to deduplicate.",
+          "path": "doc",
+          "range": [
+            6873,
+            6969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6974,
+            6977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In other words, the following implementation pattern for `provide` is discouraged and should",
+          "path": "doc",
+          "range": [
+            6982,
+            7078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not be used for [`Error`] types exposed in public APIs to third parties.",
+          "path": "doc",
+          "range": [
+            7083,
+            7159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7164,
+            7167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            7172,
+            7183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            7188,
+            7234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use core::fmt;",
+          "path": "doc",
+          "range": [
+            7239,
+            7259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use core::error::Request;",
+          "path": "doc",
+          "range": [
+            7264,
+            7295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            7300,
+            7322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct MyError {",
+          "path": "doc",
+          "range": [
+            7327,
+            7347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     source: Error,",
+          "path": "doc",
+          "range": [
+            7352,
+            7374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            7379,
+            7384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            7389,
+            7411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct Error;",
+          "path": "doc",
+          "range": [
+            7416,
+            7435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl fmt::Display for Error {",
+          "path": "doc",
+          "range": [
+            7440,
+            7475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            7480,
+            7548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         write!(f, \"Example Source Error\")",
+          "path": "doc",
+          "range": [
+            7553,
+            7600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     }",
+          "path": "doc",
+          "range": [
+            7605,
+            7616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            7621,
+            7628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl fmt::Display for MyError {",
+          "path": "doc",
+          "range": [
+            7633,
+            7670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            7675,
+            7743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         write!(f, \"Example Error\")",
+          "path": "doc",
+          "range": [
+            7748,
+            7788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     }",
+          "path": "doc",
+          "range": [
+            7793,
+            7804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            7809,
+            7816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl std::error::Error for Error { }",
+          "path": "doc",
+          "range": [
+            7821,
+            7863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7868,
+            7871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for MyError {",
+          "path": "doc",
+          "range": [
+            7876,
+            7916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {",
+          "path": "doc",
+          "range": [
+            7921,
+            7993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(&self.source)",
+          "path": "doc",
+          "range": [
+            7998,
+            8028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8033,
+            8042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8047,
+            8050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            8055,
+            8116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.source.provide(request) // <--- Discouraged",
+          "path": "doc",
+          "range": [
+            8121,
+            8181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8186,
+            8195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            8200,
+            8205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8210,
+            8217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8222,
+            8291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            8296,
+            8322
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8379,
+        8381
+      ],
+      "kind": "trait_fn",
+      "name": "provide",
+      "range": [
+        4615,
+        8381
+      ],
+      "signature_range": [
+        8327,
+        8378
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": true,
+      "kind": "mod",
+      "name": "private",
+      "path_overrides": [],
+      "range": [
+        8385,
+        8649
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8546,
+            8601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            8606,
+            8622
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Internal",
+      "range": [
+        8546,
+        8647
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8651,
+            8703
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8651,
+        8723
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8750,
+        10193
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if the inner type is the same as `T`.",
+          "path": "doc",
+          "range": [
+            8781,
+            8837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8842,
+            8896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8901,
+            8910
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8960,
+        9267
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        8781,
+        9267
+      ],
+      "signature_range": [
+        8919,
+        8959
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some reference to the inner value if it is of type `T`, or",
+          "path": "doc",
+          "range": [
+            9273,
+            9343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `None` if it isn't.",
+          "path": "doc",
+          "range": [
+            9348,
+            9371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9376,
+            9430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9435,
+            9444
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9510,
+        9721
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        9273,
+        9721
+      ],
+      "signature_range": [
+        9453,
+        9509
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some mutable reference to the inner value if it is of type `T`, or",
+          "path": "doc",
+          "range": [
+            9727,
+            9805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `None` if it isn't.",
+          "path": "doc",
+          "range": [
+            9810,
+            9833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9838,
+            9892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9897,
+            9906
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9980,
+        10191
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        9727,
+        10191
+      ],
+      "signature_range": [
+        9915,
+        9979
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10195,
+        11009
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            10233,
+            10292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10297,
+            10351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10356,
+            10365
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10415,
+        10467
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        10233,
+        10467
+      ],
+      "signature_range": [
+        10374,
+        10414
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            10473,
+            10532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10537,
+            10591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10596,
+            10605
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10671,
+        10733
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        10473,
+        10733
+      ],
+      "signature_range": [
+        10614,
+        10670
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            10739,
+            10798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10803,
+            10857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10862,
+            10871
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10945,
+        11007
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        10739,
+        11007
+      ],
+      "signature_range": [
+        10880,
+        10944
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11011,
+        11832
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            11056,
+            11115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11120,
+            11174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11179,
+            11188
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11238,
+        11290
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        11056,
+        11290
+      ],
+      "signature_range": [
+        11197,
+        11237
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            11296,
+            11355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11360,
+            11414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11419,
+            11428
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11494,
+        11556
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        11296,
+        11556
+      ],
+      "signature_range": [
+        11437,
+        11493
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Error`.",
+          "path": "doc",
+          "range": [
+            11562,
+            11621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11626,
+            11680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11685,
+            11694
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11768,
+        11830
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        11562,
+        11830
+      ],
+      "signature_range": [
+        11703,
+        11767
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11834,
+        14495
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns an iterator starting with the current error and continuing with",
+          "path": "doc",
+          "range": [
+            11855,
+            11930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " recursively calling [`Error::source`].",
+          "path": "doc",
+          "range": [
+            11935,
+            11977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11982,
+            11985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you want to omit the current error and only use its sources,",
+          "path": "doc",
+          "range": [
+            11990,
+            12057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use `skip(1)`.",
+          "path": "doc",
+          "range": [
+            12062,
+            12080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12085,
+            12088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12093,
+            12107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12112,
+            12115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12120,
+            12127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_iter)]",
+          "path": "doc",
+          "range": [
+            12132,
+            12159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            12164,
+            12190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            12195,
+            12212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12217,
+            12220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            12225,
+            12245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct A;",
+          "path": "doc",
+          "range": [
+            12250,
+            12263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12268,
+            12271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            12276,
+            12296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct B(Option<Box<dyn Error + 'static>>);",
+          "path": "doc",
+          "range": [
+            12301,
+            12348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12353,
+            12356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for A {",
+          "path": "doc",
+          "range": [
+            12361,
+            12390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            12395,
+            12461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"A\")",
+          "path": "doc",
+          "range": [
+            12466,
+            12492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12497,
+            12506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12511,
+            12516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12521,
+            12524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for B {",
+          "path": "doc",
+          "range": [
+            12529,
+            12558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            12563,
+            12629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"B\")",
+          "path": "doc",
+          "range": [
+            12634,
+            12660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12665,
+            12674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12679,
+            12684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12689,
+            12692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for A {}",
+          "path": "doc",
+          "range": [
+            12697,
+            12720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12725,
+            12728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for B {",
+          "path": "doc",
+          "range": [
+            12733,
+            12755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn source(&self) -> Option<&(dyn Error + 'static)> {",
+          "path": "doc",
+          "range": [
+            12760,
+            12820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.0.as_ref().map(|e| e.as_ref())",
+          "path": "doc",
+          "range": [
+            12825,
+            12872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12877,
+            12886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12891,
+            12896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12901,
+            12904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = B(Some(Box::new(A)));",
+          "path": "doc",
+          "range": [
+            12909,
+            12942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12947,
+            12950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // let err : Box<Error> = b.into(); // or",
+          "path": "doc",
+          "range": [
+            12955,
+            13000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let err = &b as &dyn Error;",
+          "path": "doc",
+          "range": [
+            13005,
+            13036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13041,
+            13044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = err.sources();",
+          "path": "doc",
+          "range": [
+            13049,
+            13082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13087,
+            13090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"B\".to_string(), iter.next().unwrap().to_string());",
+          "path": "doc",
+          "range": [
+            13095,
+            13161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"A\".to_string(), iter.next().unwrap().to_string());",
+          "path": "doc",
+          "range": [
+            13166,
+            13232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(iter.next().is_none());",
+          "path": "doc",
+          "range": [
+            13237,
+            13272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(iter.next().is_none());",
+          "path": "doc",
+          "range": [
+            13277,
+            13312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13317,
+            13324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13329,
+            13381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13386,
+            13395
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13436,
+        14493
+      ],
+      "kind": "impl_fn",
+      "name": "sources",
+      "range": [
+        11855,
+        14493
+      ],
+      "signature_range": [
+        13404,
+        13435
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Requests a value of type `T` from the given `impl Error`.",
+          "path": "doc",
+          "range": [
+            14497,
+            14558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14559,
+            14562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14563,
+            14577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14578,
+            14581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Get a string value from an error.",
+          "path": "doc",
+          "range": [
+            14582,
+            14619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14620,
+            14623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            14624,
+            14635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            14636,
+            14680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            14681,
+            14707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::request_value;",
+          "path": "doc",
+          "range": [
+            14708,
+            14743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14744,
+            14747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn get_string(err: &impl Error) -> String {",
+          "path": "doc",
+          "range": [
+            14748,
+            14795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     request_value::<String>(err).unwrap()",
+          "path": "doc",
+          "range": [
+            14796,
+            14841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            14842,
+            14847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14848,
+            14855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14856,
+            14925
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15021,
+        15075
+      ],
+      "kind": "fn",
+      "name": "request_value",
+      "range": [
+        14497,
+        15075
+      ],
+      "signature_range": [
+        14930,
+        15020
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Requests a reference of type `T` from the given `impl Error`.",
+          "path": "doc",
+          "range": [
+            15077,
+            15142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15143,
+            15146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            15147,
+            15161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15162,
+            15165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Get a string reference from an error.",
+          "path": "doc",
+          "range": [
+            15166,
+            15207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15208,
+            15211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            15212,
+            15223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            15224,
+            15268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Error;",
+          "path": "doc",
+          "range": [
+            15269,
+            15296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::request_ref;",
+          "path": "doc",
+          "range": [
+            15297,
+            15330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15331,
+            15334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn get_str(err: &impl Error) -> &str {",
+          "path": "doc",
+          "range": [
+            15335,
+            15377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     request_ref::<str>(err).unwrap()",
+          "path": "doc",
+          "range": [
+            15378,
+            15418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15419,
+            15424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15425,
+            15432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15433,
+            15502
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15609,
+        15684
+      ],
+      "kind": "fn",
+      "name": "request_ref",
+      "range": [
+        15077,
+        15684
+      ],
+      "signature_range": [
+        15507,
+        15608
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Request a specific value by tag from the `Error`.",
+          "path": "doc",
+          "range": [
+            15686,
+            15739
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15853,
+        16008
+      ],
+      "kind": "fn",
+      "name": "request_by_type_tag",
+      "range": [
+        15686,
+        16008
+      ],
+      "signature_range": [
+        15740,
+        15852
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `Request` supports generic, type-driven access to data. Its use is currently restricted to the",
+          "path": "doc",
+          "range": [
+            16198,
+            16296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " standard library in cases where trait authors wish to allow trait implementors to share generic",
+          "path": "doc",
+          "range": [
+            16297,
+            16396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " information across trait boundaries. The motivating and prototypical use case is",
+          "path": "doc",
+          "range": [
+            16397,
+            16481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `core::error::Error` which would otherwise require a method per concrete type (eg.",
+          "path": "doc",
+          "range": [
+            16482,
+            16568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `std::backtrace::Backtrace` instance that implementors want to expose to users).",
+          "path": "doc",
+          "range": [
+            16569,
+            16653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16654,
+            16657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Data flow",
+          "path": "doc",
+          "range": [
+            16658,
+            16673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16674,
+            16677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To describe the intended data flow for Request objects, let's consider two conceptual users",
+          "path": "doc",
+          "range": [
+            16678,
+            16773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " separated by API boundaries:",
+          "path": "doc",
+          "range": [
+            16774,
+            16806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16807,
+            16810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * Consumer - the consumer requests objects using a Request instance; eg a crate that offers",
+          "path": "doc",
+          "range": [
+            16811,
+            16906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   fancy `Error`/`Result` reporting to users wants to request a Backtrace from a given `dyn Error`.",
+          "path": "doc",
+          "range": [
+            16907,
+            17009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17010,
+            17013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * Producer - the producer provides objects when requested via Request; eg. a library with an",
+          "path": "doc",
+          "range": [
+            17014,
+            17110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   an `Error` implementation that automatically captures backtraces at the time instances are",
+          "path": "doc",
+          "range": [
+            17111,
+            17207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   created.",
+          "path": "doc",
+          "range": [
+            17208,
+            17222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17223,
+            17226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The consumer only needs to know where to submit their request and are expected to handle the",
+          "path": "doc",
+          "range": [
+            17227,
+            17323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " request not being fulfilled by the use of `Option<T>` in the responses offered by the producer.",
+          "path": "doc",
+          "range": [
+            17324,
+            17423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17424,
+            17427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * A Producer initializes the value of one of its fields of a specific type. (or is otherwise",
+          "path": "doc",
+          "range": [
+            17428,
+            17524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   prepared to generate a value requested). eg, `backtrace::Backtrace` or",
+          "path": "doc",
+          "range": [
+            17525,
+            17601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `std::backtrace::Backtrace`",
+          "path": "doc",
+          "range": [
+            17602,
+            17635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * A Consumer requests an object of a specific type (say `std::backtrace::Backtrace`). In the",
+          "path": "doc",
+          "range": [
+            17636,
+            17732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   case of a `dyn Error` trait object (the Producer), there are functions called `request_ref` and",
+          "path": "doc",
+          "range": [
+            17733,
+            17834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `request_value` to simplify obtaining an `Option<T>` for a given type.",
+          "path": "doc",
+          "range": [
+            17835,
+            17911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The Producer, when requested, populates the given Request object which is given as a mutable",
+          "path": "doc",
+          "range": [
+            17912,
+            18010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   reference.",
+          "path": "doc",
+          "range": [
+            18011,
+            18027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The Consumer extracts a value or reference to the requested type from the `Request` object",
+          "path": "doc",
+          "range": [
+            18028,
+            18124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   wrapped in an `Option<T>`; in the case of `dyn Error` the aforementioned `request_ref` and `",
+          "path": "doc",
+          "range": [
+            18125,
+            18223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   request_value` methods mean that `dyn Error` users don't have to deal with the `Request` type at",
+          "path": "doc",
+          "range": [
+            18224,
+            18326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   all (but `Error` implementors do). The `None` case of the `Option` suggests only that the",
+          "path": "doc",
+          "range": [
+            18327,
+            18422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Producer cannot currently offer an instance of the requested type, not it can't or never will.",
+          "path": "doc",
+          "range": [
+            18423,
+            18523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18524,
+            18527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            18528,
+            18542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18543,
+            18546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The best way to demonstrate this is using an example implementation of `Error`'s `provide` trait",
+          "path": "doc",
+          "range": [
+            18547,
+            18647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " method:",
+          "path": "doc",
+          "range": [
+            18648,
+            18659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18660,
+            18663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18664,
+            18671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            18672,
+            18716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::fmt;",
+          "path": "doc",
+          "range": [
+            18717,
+            18735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            18736,
+            18765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::request_ref;",
+          "path": "doc",
+          "range": [
+            18766,
+            18799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18800,
+            18803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            18804,
+            18824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " enum MyLittleTeaPot {",
+          "path": "doc",
+          "range": [
+            18825,
+            18850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Empty,",
+          "path": "doc",
+          "range": [
+            18851,
+            18865
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            18866,
+            18871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18872,
+            18875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            18876,
+            18896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct MyBacktrace {",
+          "path": "doc",
+          "range": [
+            18897,
+            18921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // ...",
+          "path": "doc",
+          "range": [
+            18922,
+            18936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            18937,
+            18942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18943,
+            18946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl MyBacktrace {",
+          "path": "doc",
+          "range": [
+            18947,
+            18969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn new() -> MyBacktrace {",
+          "path": "doc",
+          "range": [
+            18970,
+            19003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // ...",
+          "path": "doc",
+          "range": [
+            19004,
+            19022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         # MyBacktrace {}",
+          "path": "doc",
+          "range": [
+            19023,
+            19051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            19052,
+            19061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19062,
+            19067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19068,
+            19071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            19072,
+            19092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Error {",
+          "path": "doc",
+          "range": [
+            19093,
+            19111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     backtrace: MyBacktrace,",
+          "path": "doc",
+          "range": [
+            19112,
+            19143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19144,
+            19149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19150,
+            19153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for Error {",
+          "path": "doc",
+          "range": [
+            19154,
+            19187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            19188,
+            19254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"Example Error\")",
+          "path": "doc",
+          "range": [
+            19255,
+            19293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            19294,
+            19303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19304,
+            19309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19310,
+            19313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Error {",
+          "path": "doc",
+          "range": [
+            19314,
+            19352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            19353,
+            19414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request",
+          "path": "doc",
+          "range": [
+            19415,
+            19434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .provide_ref::<MyBacktrace>(&self.backtrace);",
+          "path": "doc",
+          "range": [
+            19435,
+            19496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            19497,
+            19506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19507,
+            19512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19513,
+            19516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            19517,
+            19532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let backtrace = MyBacktrace::new();",
+          "path": "doc",
+          "range": [
+            19533,
+            19576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let error = Error { backtrace };",
+          "path": "doc",
+          "range": [
+            19577,
+            19617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let dyn_error = &error as &dyn std::error::Error;",
+          "path": "doc",
+          "range": [
+            19618,
+            19675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let backtrace_ref = request_ref::<MyBacktrace>(dyn_error).unwrap();",
+          "path": "doc",
+          "range": [
+            19676,
+            19751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19752,
+            19755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert!(core::ptr::eq(&error.backtrace, backtrace_ref));",
+          "path": "doc",
+          "range": [
+            19756,
+            19820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert!(request_ref::<MyLittleTeaPot>(dyn_error).is_none());",
+          "path": "doc",
+          "range": [
+            19821,
+            19889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19890,
+            19895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19896,
+            19903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19904,
+            19907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            19908,
+            19977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            19978,
+            19998
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Request",
+      "range": [
+        16198,
+        20051
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        20053,
+        31457
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a value or other type with only static lifetimes.",
+          "path": "doc",
+          "range": [
+            20080,
+            20142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20147,
+            20150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20155,
+            20169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20174,
+            20177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Provides an `u8`.",
+          "path": "doc",
+          "range": [
+            20182,
+            20203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20208,
+            20211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            20216,
+            20227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            20232,
+            20276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20281,
+            20284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            20289,
+            20318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20323,
+            20326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            20331,
+            20351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SomeConcreteType { field: u8 }",
+          "path": "doc",
+          "range": [
+            20356,
+            20397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20402,
+            20405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            20410,
+            20459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            20464,
+            20540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"{} failed\", self.field)",
+          "path": "doc",
+          "range": [
+            20545,
+            20591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            20596,
+            20605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            20610,
+            20615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20620,
+            20623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            20628,
+            20677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            20682,
+            20743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request.provide_value::<u8>(self.field);",
+          "path": "doc",
+          "range": [
+            20748,
+            20800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            20805,
+            20814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            20819,
+            20824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20829,
+            20836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            20841,
+            20910
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21007,
+        21060
+      ],
+      "kind": "impl_fn",
+      "name": "provide_value",
+      "range": [
+        20080,
+        21060
+      ],
+      "signature_range": [
+        20919,
+        21002
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a value or other type with only static lifetimes computed using a closure.",
+          "path": "doc",
+          "range": [
+            21066,
+            21153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21158,
+            21161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21166,
+            21180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21185,
+            21188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Provides a `String` by cloning.",
+          "path": "doc",
+          "range": [
+            21193,
+            21228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21233,
+            21236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            21241,
+            21252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            21257,
+            21301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21306,
+            21309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            21314,
+            21343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21348,
+            21351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            21356,
+            21376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SomeConcreteType { field: String }",
+          "path": "doc",
+          "range": [
+            21381,
+            21426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21431,
+            21434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            21439,
+            21488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            21493,
+            21569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"{} failed\", self.field)",
+          "path": "doc",
+          "range": [
+            21574,
+            21620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            21625,
+            21634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            21639,
+            21644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21649,
+            21652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            21657,
+            21706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            21711,
+            21772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request.provide_value_with::<String>(|| self.field.clone());",
+          "path": "doc",
+          "range": [
+            21777,
+            21849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            21854,
+            21863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            21868,
+            21873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21878,
+            21885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            21890,
+            21959
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22079,
+        22138
+      ],
+      "kind": "impl_fn",
+      "name": "provide_value_with",
+      "range": [
+        21066,
+        22138
+      ],
+      "signature_range": [
+        21968,
+        22074
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a reference. The referee type must be bounded by `'static`,",
+          "path": "doc",
+          "range": [
+            22144,
+            22216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but may be unsized.",
+          "path": "doc",
+          "range": [
+            22221,
+            22244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22249,
+            22252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            22257,
+            22271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22276,
+            22279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Provides a reference to a field as a `&str`.",
+          "path": "doc",
+          "range": [
+            22284,
+            22332
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22337,
+            22340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            22345,
+            22356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            22361,
+            22405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22410,
+            22413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            22418,
+            22447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22452,
+            22455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            22460,
+            22480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SomeConcreteType { field: String }",
+          "path": "doc",
+          "range": [
+            22485,
+            22530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22535,
+            22538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            22543,
+            22592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            22597,
+            22673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"{} failed\", self.field)",
+          "path": "doc",
+          "range": [
+            22678,
+            22724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            22729,
+            22738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            22743,
+            22748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22753,
+            22756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            22761,
+            22810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            22815,
+            22876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request.provide_ref::<str>(&self.field);",
+          "path": "doc",
+          "range": [
+            22881,
+            22933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            22938,
+            22947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            22952,
+            22957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22962,
+            22969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            22974,
+            23043
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23126,
+        23200
+      ],
+      "kind": "impl_fn",
+      "name": "provide_ref",
+      "range": [
+        22144,
+        23200
+      ],
+      "signature_range": [
+        23052,
+        23125
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a reference computed using a closure. The referee type",
+          "path": "doc",
+          "range": [
+            23206,
+            23273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " must be bounded by `'static`, but may be unsized.",
+          "path": "doc",
+          "range": [
+            23278,
+            23331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23336,
+            23339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23344,
+            23358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23363,
+            23366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Provides a reference to a field as a `&str`.",
+          "path": "doc",
+          "range": [
+            23371,
+            23419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23424,
+            23427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            23432,
+            23443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            23448,
+            23492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23497,
+            23500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            23505,
+            23534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23539,
+            23542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            23547,
+            23567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SomeConcreteType { business: String, party: String }",
+          "path": "doc",
+          "range": [
+            23572,
+            23635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn today_is_a_weekday() -> bool { true }",
+          "path": "doc",
+          "range": [
+            23640,
+            23684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23689,
+            23692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            23697,
+            23746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            23751,
+            23827
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"{} failed\", self.business)",
+          "path": "doc",
+          "range": [
+            23832,
+            23881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            23886,
+            23895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            23900,
+            23905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23910,
+            23913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for SomeConcreteType {",
+          "path": "doc",
+          "range": [
+            23918,
+            23967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            23972,
+            24033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         request.provide_ref_with::<str>(|| {",
+          "path": "doc",
+          "range": [
+            24038,
+            24086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             if today_is_a_weekday() {",
+          "path": "doc",
+          "range": [
+            24091,
+            24132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 &self.business",
+          "path": "doc",
+          "range": [
+            24137,
+            24171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             } else {",
+          "path": "doc",
+          "range": [
+            24176,
+            24200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 &self.party",
+          "path": "doc",
+          "range": [
+            24205,
+            24236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            24241,
+            24258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         });",
+          "path": "doc",
+          "range": [
+            24263,
+            24278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            24283,
+            24292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            24297,
+            24302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24307,
+            24314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            24319,
+            24388
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24517,
+        24597
+      ],
+      "kind": "impl_fn",
+      "name": "provide_ref_with",
+      "range": [
+        23206,
+        24597
+      ],
+      "signature_range": [
+        24397,
+        24516
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a value with the given `Type` tag.",
+          "path": "doc",
+          "range": [
+            24603,
+            24650
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24753,
+        24893
+      ],
+      "kind": "impl_fn",
+      "name": "provide",
+      "range": [
+        24603,
+        24893
+      ],
+      "signature_range": [
+        24655,
+        24748
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides a value with the given `Type` tag, using a closure to prevent unnecessary work.",
+          "path": "doc",
+          "range": [
+            24899,
+            24991
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25117,
+        25260
+      ],
+      "kind": "impl_fn",
+      "name": "provide_with",
+      "range": [
+        24899,
+        25260
+      ],
+      "signature_range": [
+        24996,
+        25112
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the `Request` would be satisfied if provided with a",
+          "path": "doc",
+          "range": [
+            25266,
+            25331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " value of the specified type. If the type does not match or has",
+          "path": "doc",
+          "range": [
+            25336,
+            25402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " already been provided, returns false.",
+          "path": "doc",
+          "range": [
+            25407,
+            25448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25453,
+            25456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            25461,
+            25475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25480,
+            25483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Checks if a `u8` still needs to be provided and then provides",
+          "path": "doc",
+          "range": [
+            25488,
+            25553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it.",
+          "path": "doc",
+          "range": [
+            25558,
+            25565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25570,
+            25573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            25578,
+            25589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            25594,
+            25638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25643,
+            25646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            25651,
+            25680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::request_value;",
+          "path": "doc",
+          "range": [
+            25685,
+            25720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25725,
+            25728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            25733,
+            25753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Parent(Option<u8>);",
+          "path": "doc",
+          "range": [
+            25758,
+            25788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25793,
+            25796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for Parent {",
+          "path": "doc",
+          "range": [
+            25801,
+            25840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            25845,
+            25921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"a parent failed\")",
+          "path": "doc",
+          "range": [
+            25926,
+            25966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            25971,
+            25980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            25985,
+            25990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25995,
+            25998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Parent {",
+          "path": "doc",
+          "range": [
+            26003,
+            26042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            26047,
+            26108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(v) = self.0 {",
+          "path": "doc",
+          "range": [
+            26113,
+            26150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             request.provide_value::<u8>(v);",
+          "path": "doc",
+          "range": [
+            26155,
+            26202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            26207,
+            26220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26225,
+            26234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26239,
+            26244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26249,
+            26252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            26257,
+            26277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Child {",
+          "path": "doc",
+          "range": [
+            26282,
+            26300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     parent: Parent,",
+          "path": "doc",
+          "range": [
+            26305,
+            26328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26333,
+            26338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26343,
+            26346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Child {",
+          "path": "doc",
+          "range": [
+            26351,
+            26367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Pretend that this takes a lot of resources to evaluate.",
+          "path": "doc",
+          "range": [
+            26372,
+            26438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn an_expensive_computation(&self) -> Option<u8> {",
+          "path": "doc",
+          "range": [
+            26443,
+            26501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(99)",
+          "path": "doc",
+          "range": [
+            26506,
+            26526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26531,
+            26540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26545,
+            26550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26555,
+            26558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for Child {",
+          "path": "doc",
+          "range": [
+            26563,
+            26601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            26606,
+            26682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"child failed: \\n  because of parent: {}\", self.parent)",
+          "path": "doc",
+          "range": [
+            26687,
+            26764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26769,
+            26778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26783,
+            26788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26793,
+            26796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Child {",
+          "path": "doc",
+          "range": [
+            26801,
+            26839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            26844,
+            26905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // In general, we don't know if this call will provide",
+          "path": "doc",
+          "range": [
+            26910,
+            26976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // an `u8` value or not...",
+          "path": "doc",
+          "range": [
+            26981,
+            27019
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.parent.provide(request);",
+          "path": "doc",
+          "range": [
+            27024,
+            27065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27070,
+            27073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // ...so we check to see if the `u8` is needed before",
+          "path": "doc",
+          "range": [
+            27078,
+            27143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // we run our expensive computation.",
+          "path": "doc",
+          "range": [
+            27148,
+            27196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if request.would_be_satisfied_by_value_of::<u8>() {",
+          "path": "doc",
+          "range": [
+            27201,
+            27264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             if let Some(v) = self.an_expensive_computation() {",
+          "path": "doc",
+          "range": [
+            27269,
+            27335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 request.provide_value::<u8>(v);",
+          "path": "doc",
+          "range": [
+            27340,
+            27391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            27396,
+            27413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            27418,
+            27431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27436,
+            27439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // The request will be satisfied now, regardless of if",
+          "path": "doc",
+          "range": [
+            27444,
+            27510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // the parent provided the value or we did.",
+          "path": "doc",
+          "range": [
+            27515,
+            27570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         assert!(!request.would_be_satisfied_by_value_of::<u8>());",
+          "path": "doc",
+          "range": [
+            27575,
+            27644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            27649,
+            27658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            27663,
+            27668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27673,
+            27676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let parent = Parent(Some(42));",
+          "path": "doc",
+          "range": [
+            27681,
+            27715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let child = Child { parent };",
+          "path": "doc",
+          "range": [
+            27720,
+            27753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(42), request_value::<u8>(&child));",
+          "path": "doc",
+          "range": [
+            27758,
+            27812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27817,
+            27820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let parent = Parent(None);",
+          "path": "doc",
+          "range": [
+            27825,
+            27855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let child = Child { parent };",
+          "path": "doc",
+          "range": [
+            27860,
+            27893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(99), request_value::<u8>(&child));",
+          "path": "doc",
+          "range": [
+            27898,
+            27952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27957,
+            27960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27965,
+            27972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            27977,
+            28046
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28141,
+        28203
+      ],
+      "kind": "impl_fn",
+      "name": "would_be_satisfied_by_value_of",
+      "range": [
+        25266,
+        28203
+      ],
+      "signature_range": [
+        28055,
+        28136
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the `Request` would be satisfied if provided with a",
+          "path": "doc",
+          "range": [
+            28209,
+            28274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reference to a value of the specified type.",
+          "path": "doc",
+          "range": [
+            28279,
+            28326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28331,
+            28334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the type does not match or has already been provided, returns false.",
+          "path": "doc",
+          "range": [
+            28339,
+            28414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28419,
+            28422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            28427,
+            28441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28446,
+            28449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Checks if a `&str` still needs to be provided and then provides",
+          "path": "doc",
+          "range": [
+            28454,
+            28521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it.",
+          "path": "doc",
+          "range": [
+            28526,
+            28533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28538,
+            28541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            28546,
+            28557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(error_generic_member_access)]",
+          "path": "doc",
+          "range": [
+            28562,
+            28606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28611,
+            28614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::Request;",
+          "path": "doc",
+          "range": [
+            28619,
+            28648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::error::request_ref;",
+          "path": "doc",
+          "range": [
+            28653,
+            28686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28691,
+            28694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            28699,
+            28719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Parent(Option<String>);",
+          "path": "doc",
+          "range": [
+            28724,
+            28758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28763,
+            28766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for Parent {",
+          "path": "doc",
+          "range": [
+            28771,
+            28810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            28815,
+            28891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"a parent failed\")",
+          "path": "doc",
+          "range": [
+            28896,
+            28936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            28941,
+            28950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28955,
+            28960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28965,
+            28968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Parent {",
+          "path": "doc",
+          "range": [
+            28973,
+            29012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            29017,
+            29078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(v) = &self.0 {",
+          "path": "doc",
+          "range": [
+            29083,
+            29121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             request.provide_ref::<str>(v);",
+          "path": "doc",
+          "range": [
+            29126,
+            29172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            29177,
+            29190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            29195,
+            29204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29209,
+            29214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29219,
+            29222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            29227,
+            29247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Child {",
+          "path": "doc",
+          "range": [
+            29252,
+            29270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     parent: Parent,",
+          "path": "doc",
+          "range": [
+            29275,
+            29298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     name: String,",
+          "path": "doc",
+          "range": [
+            29303,
+            29324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29329,
+            29334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29339,
+            29342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Child {",
+          "path": "doc",
+          "range": [
+            29347,
+            29363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Pretend that this takes a lot of resources to evaluate.",
+          "path": "doc",
+          "range": [
+            29368,
+            29434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn an_expensive_computation(&self) -> Option<&str> {",
+          "path": "doc",
+          "range": [
+            29439,
+            29499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(&self.name)",
+          "path": "doc",
+          "range": [
+            29504,
+            29532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            29537,
+            29546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29551,
+            29556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29561,
+            29564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::fmt::Display for Child {",
+          "path": "doc",
+          "range": [
+            29569,
+            29607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {",
+          "path": "doc",
+          "range": [
+            29612,
+            29688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"{} failed: \\n  {}\", self.name, self.parent)",
+          "path": "doc",
+          "range": [
+            29693,
+            29759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            29764,
+            29773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29778,
+            29783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29788,
+            29791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::error::Error for Child {",
+          "path": "doc",
+          "range": [
+            29796,
+            29834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn provide<'a>(&'a self, request: &mut Request<'a>) {",
+          "path": "doc",
+          "range": [
+            29839,
+            29900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // In general, we don't know if this call will provide",
+          "path": "doc",
+          "range": [
+            29905,
+            29971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // a `str` reference or not...",
+          "path": "doc",
+          "range": [
+            29976,
+            30018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.parent.provide(request);",
+          "path": "doc",
+          "range": [
+            30023,
+            30064
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30069,
+            30072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // ...so we check to see if the `&str` is needed before",
+          "path": "doc",
+          "range": [
+            30077,
+            30144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // we run our expensive computation.",
+          "path": "doc",
+          "range": [
+            30149,
+            30197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if request.would_be_satisfied_by_ref_of::<str>() {",
+          "path": "doc",
+          "range": [
+            30202,
+            30264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             if let Some(v) = self.an_expensive_computation() {",
+          "path": "doc",
+          "range": [
+            30269,
+            30335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 request.provide_ref::<str>(v);",
+          "path": "doc",
+          "range": [
+            30340,
+            30390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            30395,
+            30412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            30417,
+            30430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30435,
+            30438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // The request will be satisfied now, regardless of if",
+          "path": "doc",
+          "range": [
+            30443,
+            30509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // the parent provided the reference or we did.",
+          "path": "doc",
+          "range": [
+            30514,
+            30573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         assert!(!request.would_be_satisfied_by_ref_of::<str>());",
+          "path": "doc",
+          "range": [
+            30578,
+            30646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            30651,
+            30660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            30665,
+            30670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30675,
+            30678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let parent = Parent(Some(\"parent\".into()));",
+          "path": "doc",
+          "range": [
+            30683,
+            30730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let child = Child { parent, name: \"child\".into() };",
+          "path": "doc",
+          "range": [
+            30735,
+            30790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(\"parent\"), request_ref::<str>(&child));",
+          "path": "doc",
+          "range": [
+            30795,
+            30854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30859,
+            30862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let parent = Parent(None);",
+          "path": "doc",
+          "range": [
+            30867,
+            30897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let child = Child { parent, name: \"child\".into() };",
+          "path": "doc",
+          "range": [
+            30902,
+            30957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(\"child\"), request_ref::<str>(&child));",
+          "path": "doc",
+          "range": [
+            30962,
+            31020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            31025,
+            31032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            31037,
+            31106
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31208,
+        31291
+      ],
+      "kind": "impl_fn",
+      "name": "would_be_satisfied_by_ref_of",
+      "range": [
+        28209,
+        31291
+      ],
+      "signature_range": [
+        31115,
+        31203
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [],
+      "body_range": [
+        31381,
+        31455
+      ],
+      "kind": "impl_fn",
+      "name": "would_be_satisfied_by",
+      "range": [
+        31297,
+        31455
+      ],
+      "signature_range": [
+        31297,
+        31376
+      ]
+    },
+    {
+      "ancestors": [
+        28,
+        37
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31391,
+        31449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            31459,
+            31528
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31459,
+        31685
+      ]
+    },
+    {
+      "ancestors": [
+        39
+      ],
+      "attributes": [],
+      "body_range": [
+        31618,
+        31683
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        31566,
+        31683
+      ],
+      "signature_range": [
+        31566,
+        31617
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Type tags are used to identify a type using a separate value. This module includes type tags",
+          "path": "doc",
+          "range": [
+            31887,
+            31983
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " for some very common types.",
+          "path": "doc",
+          "range": [
+            31988,
+            32019
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32024,
+            32027
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Currently type tags are not exposed to the user. But in the future, if you want to use the",
+          "path": "doc",
+          "range": [
+            32032,
+            32126
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " Request API with more complex types (typically those including lifetime parameters), you",
+          "path": "doc",
+          "range": [
+            32131,
+            32223
+          ],
+          "style": "inner"
+        },
+        {
+          "doc_text": " will need to write your own tags.",
+          "path": "doc",
+          "range": [
+            32228,
+            32265
+          ],
+          "style": "inner"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "tags",
+      "path_overrides": [],
+      "range": [
+        31861,
+        34028
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [
+        {
+          "doc_text": " This trait is implemented by specific tag types in order to allow",
+          "path": "doc",
+          "range": [
+            32308,
+            32377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " describing a type which can be requested for a given lifetime `'a`.",
+          "path": "doc",
+          "range": [
+            32382,
+            32453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32458,
+            32461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A few example implementations for type-driven tags can be found in this",
+          "path": "doc",
+          "range": [
+            32466,
+            32541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " module, although crates may also implement their own tags for more",
+          "path": "doc",
+          "range": [
+            32546,
+            32616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " complex types with internal lifetimes.",
+          "path": "doc",
+          "range": [
+            32621,
+            32663
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Type",
+      "range": [
+        32308,
+        32843
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [
+        {
+          "doc_text": " Similar to the [`Type`] trait, but represents a type which may be unsized (i.e., has a",
+          "path": "doc",
+          "range": [
+            32849,
+            32939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `?Sized` bound). E.g., `str`.",
+          "path": "doc",
+          "range": [
+            32944,
+            32977
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "MaybeSizedType",
+      "range": [
+        32849,
+        33077
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33083,
+        33172
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [
+        {
+          "doc_text": " Type-based tag for types bounded by `'static`, i.e., with no borrowed elements.",
+          "path": "doc",
+          "range": [
+            33178,
+            33261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            33266,
+            33282
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Value",
+      "range": [
+        33178,
+        33339
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33345,
+        33421
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [
+        {
+          "doc_text": " Type-based tag similar to [`Value`] but which may be unsized (i.e., has a `?Sized` bound).",
+          "path": "doc",
+          "range": [
+            33427,
+            33521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            33526,
+            33542
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "MaybeSizedValue",
+      "range": [
+        33427,
+        33618
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33624,
+        33729
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [
+        {
+          "doc_text": " Type-based tag for reference types (`&'a T`, where T is represented by",
+          "path": "doc",
+          "range": [
+            33735,
+            33809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `<I as MaybeSizedType<'a>>::Reified`.",
+          "path": "doc",
+          "range": [
+            33814,
+            33855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            33860,
+            33876
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Ref",
+      "range": [
+        33735,
+        33922
+      ]
+    },
+    {
+      "ancestors": [
+        41
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33928,
+        34026
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An `Option` with a type tag `I`.",
+          "path": "doc",
+          "range": [
+            34030,
+            34066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34067,
+            34070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Since this struct implements `Erased`, the type can be erased to make a dynamically typed",
+          "path": "doc",
+          "range": [
+            34071,
+            34164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " option. The type can be checked dynamically using `Tagged::tag_id` and since this is statically",
+          "path": "doc",
+          "range": [
+            34165,
+            34264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " checked for the concrete type, there is some degree of type safety.",
+          "path": "doc",
+          "range": [
+            34265,
+            34336
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            34337,
+            34357
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "TaggedOption",
+      "range": [
+        34030,
+        34436
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34438,
+        34858
+      ]
+    },
+    {
+      "ancestors": [
+        52
+      ],
+      "attributes": [],
+      "body_range": [
+        34556,
+        34856
+      ],
+      "kind": "impl_fn",
+      "name": "as_request",
+      "range": [
+        34500,
+        34856
+      ],
+      "signature_range": [
+        34511,
+        34555
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Represents a type-erased but identifiable object.",
+          "path": "doc",
+          "range": [
+            34860,
+            34913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34914,
+            34917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait is exclusively implemented by the `TaggedOption` type.",
+          "path": "doc",
+          "range": [
+            34918,
+            34987
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Erased",
+      "range": [
+        34860,
+        35018
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        35020,
+        35092
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "struct",
+      "name": "Tagged",
+      "range": [
+        35094,
+        35156
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        35158,
+        36249
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some reference to the dynamic value if it is tagged with `I`,",
+          "path": "doc",
+          "range": [
+            35201,
+            35274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or `None` otherwise.",
+          "path": "doc",
+          "range": [
+            35279,
+            35303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35308,
+            35317
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35417,
+        35680
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        35201,
+        35680
+      ],
+      "signature_range": [
+        35322,
+        35412
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some mutable reference to the dynamic value if it is tagged with `I`,",
+          "path": "doc",
+          "range": [
+            35686,
+            35767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or `None` otherwise.",
+          "path": "doc",
+          "range": [
+            35772,
+            35796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35801,
+            35810
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35922,
+        36247
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        35686,
+        36247
+      ],
+      "signature_range": [
+        35815,
+        35917
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator over an [`Error`] and its sources.",
+          "path": "doc",
+          "range": [
+            36251,
+            36301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36302,
+            36305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you want to omit the initial error and only process",
+          "path": "doc",
+          "range": [
+            36306,
+            36364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " its sources, use `skip(1)`.",
+          "path": "doc",
+          "range": [
+            36365,
+            36396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36397,
+            36449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            36450,
+            36473
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Source",
+      "range": [
+        36251,
+        36547
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36549,
+            36601
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        36549,
+        36977
+      ]
+    },
+    {
+      "ancestors": [
+        61
+      ],
+      "attributes": [],
+      "body_range": [
+        36726,
+        36846
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        36685,
+        36846
+      ],
+      "signature_range": [
+        36685,
+        36725
+      ]
+    },
+    {
+      "ancestors": [
+        61
+      ],
+      "attributes": [],
+      "body_range": [
+        36898,
+        36975
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        36852,
+        36975
+      ],
+      "signature_range": [
+        36852,
+        36897
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36979,
+            37031
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        36979,
+        37085
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37087,
+            37140
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37087,
+        37495
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            37191,
+            37211
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37254,
+        37291
+      ],
+      "kind": "impl_fn",
+      "name": "cause",
+      "range": [
+        37191,
+        37291
+      ],
+      "signature_range": [
+        37216,
+        37253
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [],
+      "body_range": [
+        37348,
+        37386
+      ],
+      "kind": "impl_fn",
+      "name": "source",
+      "range": [
+        37297,
+        37386
+      ],
+      "signature_range": [
+        37297,
+        37347
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [],
+      "body_range": [
+        37444,
+        37493
+      ],
+      "kind": "impl_fn",
+      "name": "provide",
+      "range": [
+        37392,
+        37493
+      ],
+      "signature_range": [
+        37392,
+        37443
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37497,
+            37547
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37497,
+        37583
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37585,
+            37636
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37585,
+        37679
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37681,
+            37732
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37681,
+        37778
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37780,
+            37829
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37780,
+        37877
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37879,
+            37942
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37879,
+        37995
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            37997,
+            38063
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37997,
+        38116
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            38118,
+            38171
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38118,
+        38223
+      ]
+    }
+  ],
+  "source_sha256": "563f6020633356191df9f6c0c4c0c68328bedafa112d322b129eb1d0c1e70295"
+}

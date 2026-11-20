@@ -1,0 +1,669 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Operations related to UTF-8 validation.",
+      "path": "doc",
+      "range": [
+        0,
+        43
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the initial codepoint accumulator for the first byte.",
+          "path": "doc",
+          "range": [
+            110,
+            175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The first byte is special, only want bottom 5 bits for width 2, 4 bits",
+          "path": "doc",
+          "range": [
+            176,
+            250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for width 3, and 3 bits for width 4.",
+          "path": "doc",
+          "range": [
+            251,
+            291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            292,
+            301
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        356,
+        395
+      ],
+      "kind": "fn",
+      "name": "utf8_first_byte",
+      "range": [
+        110,
+        395
+      ],
+      "signature_range": [
+        302,
+        355
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the value of `ch` updated with continuation byte `byte`.",
+          "path": "doc",
+          "range": [
+            397,
+            465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            466,
+            475
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        530,
+        575
+      ],
+      "kind": "fn",
+      "name": "utf8_acc_cont_byte",
+      "range": [
+        397,
+        575
+      ],
+      "signature_range": [
+        476,
+        529
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the byte is a UTF-8 continuation byte (i.e., starts with the",
+          "path": "doc",
+          "range": [
+            577,
+            656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bits `10`).",
+          "path": "doc",
+          "range": [
+            657,
+            672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            673,
+            682
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        739,
+        765
+      ],
+      "kind": "fn",
+      "name": "utf8_is_cont_byte",
+      "range": [
+        577,
+        765
+      ],
+      "signature_range": [
+        694,
+        738
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Reads the next code point out of a byte iterator (assuming a",
+          "path": "doc",
+          "range": [
+            767,
+            831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " UTF-8-like encoding).",
+          "path": "doc",
+          "range": [
+            832,
+            857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            858,
+            861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            862,
+            874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            875,
+            878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `bytes` must produce a valid UTF-8-like (UTF-8 or WTF-8) string",
+          "path": "doc",
+          "range": [
+            879,
+            946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            947,
+            1001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1002,
+            1011
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1104,
+        2389
+      ],
+      "kind": "fn",
+      "name": "next_code_point",
+      "range": [
+        767,
+        2389
+      ],
+      "signature_range": [
+        1016,
+        1103
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Reads the last code point out of a byte iterator (assuming a",
+          "path": "doc",
+          "range": [
+            2391,
+            2455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " UTF-8-like encoding).",
+          "path": "doc",
+          "range": [
+            2456,
+            2481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2482,
+            2485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2486,
+            2498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2499,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `bytes` must produce a valid UTF-8-like (UTF-8 or WTF-8) string",
+          "path": "doc",
+          "range": [
+            2503,
+            2570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2571,
+            2580
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2712,
+        3848
+      ],
+      "kind": "fn",
+      "name": "next_code_point_reverse",
+      "range": [
+        2391,
+        3848
+      ],
+      "signature_range": [
+        2592,
+        2711
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if any byte in the word `x` is nonascii (>= 128).",
+          "path": "doc",
+          "range": [
+            3904,
+            3972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3973,
+            3982
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4028,
+        4060
+      ],
+      "kind": "fn",
+      "name": "contains_nonascii",
+      "range": [
+        3904,
+        4060
+      ],
+      "signature_range": [
+        3983,
+        4027
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Walks through `v` checking that it's a valid UTF-8 sequence,",
+          "path": "doc",
+          "range": [
+            4062,
+            4126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returning `Ok(())` in that case, or, if it is invalid, `Err(err)`.",
+          "path": "doc",
+          "range": [
+            4127,
+            4197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4198,
+            4215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            4216,
+            4267
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4378,
+        9202
+      ],
+      "kind": "fn",
+      "name": "run_utf8_validation",
+      "range": [
+        4062,
+        9202
+      ],
+      "signature_range": [
+        4314,
+        4377
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4790,
+        4973
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5040,
+        5208
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5218,
+        5482
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6676,
+        6683
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6723,
+        6736
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6834,
+        6841
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7076,
+        7089
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7136,
+        7143
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7183,
+        7196
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7294,
+        7301
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7435,
+        7448
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7495,
+        7502
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7542,
+        7555
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7601,
+        7608
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7648,
+        7661
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7723,
+        7736
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Given a first byte, determines how many bytes are in this UTF-8 character.",
+          "path": "doc",
+          "range": [
+            10249,
+            10327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10328,
+            10382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10383,
+            10394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10395,
+            10404
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10450,
+        10494
+      ],
+      "kind": "fn",
+      "name": "utf8_char_width",
+      "range": [
+        10249,
+        10494
+      ],
+      "signature_range": [
+        10409,
+        10449
+      ]
+    }
+  ],
+  "source_sha256": "932abb6839ebd86e67ddd2377549ffbb4d91a3fa8ae441181392b2b158b4fa6b"
+}

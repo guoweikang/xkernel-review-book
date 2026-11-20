@@ -1,0 +1,7 @@
+- **共享机制或弃权理由**：两入口均克隆一次 `Arc<T>`，分别转换为 `Arc<dyn Any + Send + Sync>` 与 `Arc<dyn InodeOperations>`，再调用同一构造入口。可消除这段重复，无需新增抽象。
+- **必须保留的差异**：`new_dir` 固定传入 `NodeFlags::empty()`；`new_dir_with_flags` 原样传递调用方提供的 `flags`。保留两个入口及其泛型约束、参数和返回类型。
+- **已有委托**：两者已委托给 `new_dir_with_inode_operations`。其展示实现计算目录类型条件并执行 `debug_assert!`，随后组装 `InodeParts`，设置 `file_operations: None`，调用 `empty_address_space_operations()`，再交给 `from_parts`。不能由名称推断后两者的深层行为。
+- **最小接口草案**：不新增接口，仅将 `new_dir` 函数体改为 `Self::new_dir_with_flags(node, NodeFlags::empty(), init)`；带标志入口保持现状。这只是提案，不修改代码。
+- **约束及其来源(code/doc/unknown)**：`code`：两种 trait 对象来自同一个 `Arc<T>`；保留一次克隆、一次所有权转移、原样传递 `init` 及标志选择；目录断言是 `debug_assert!`，不能表述为始终执行的校验。`doc`：未提供。`unknown`：`from_parts`、空地址空间操作构造及相关方法的更深行为；是否要求调用栈形状不变。
+- **一条可反驳提案的验证义务**：验证改为委托后，传入共同构造入口的两个 trait 对象仍指向原分配，引用计数效果、`flags` 与 `init` 均与原路径一致；任一不一致即否定提案。尚未执行验证。
+- **缺失上下文**：外围条件编译与属性、调用点、相关类型和方法实现、测试及对调用栈或调试行为的约定；这些可能限制上述局部改写。

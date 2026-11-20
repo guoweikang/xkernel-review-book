@@ -1,0 +1,32 @@
+{
+  "schema": "delete-drop-witness/1",
+  "frozen_before": "host witness implementation, compilation and execution",
+  "candidate": "Existing case004 only; native production sources unchanged",
+  "scope": "ONLY host original-vs-naive FnOnce capture Drop-order witness; no Option redesign, kernel preparation, QEMU or dependency installation",
+  "shapes": {
+    "original": "Wrapper owns F parameter; parent then victim instrumented RAII guards; type check before F invocation; F error propagates; backend then mark/forget on success",
+    "naive": "Wrapper moves F into operation FnOnce closure; helper owns parent/victim guards; operation performs type check then F then backend; helper performs success cleanup"
+  },
+  "conditions": ["type_mismatch", "callback_error", "success"],
+  "variants": ["original", "naive"],
+  "builds": ["debug: rustc --edition=2024 -C opt-level=0", "opt: rustc --edition=2024 -C opt-level=3"],
+  "expected": {
+    "type_mismatch": {
+      "error": "WrongType",
+      "original": ["parent_lock", "victim_lock", "type_check", "victim_unlock", "parent_unlock", "may_drop"],
+      "naive": ["parent_lock", "victim_lock", "type_check", "may_drop", "victim_unlock", "parent_unlock"]
+    },
+    "callback_error": {
+      "error": "PermissionDenied",
+      "both": ["parent_lock", "victim_lock", "type_check", "may_call", "may_drop", "victim_unlock", "parent_unlock"]
+    },
+    "success": {
+      "error": "Ok",
+      "both": ["parent_lock", "victim_lock", "type_check", "may_call", "may_drop", "backend", "mark", "forget", "victim_unlock", "parent_unlock"]
+    }
+  },
+  "observations": "Exact returned error and ordered callback/capture-drop/guard events for all six combinations at each optimization level; no explicit drop of may in either algorithm",
+  "limits": {"integration_repairs": 1, "compile_timeout_seconds_each": 30, "execution_timeout_seconds_each": 5, "builds": 2, "executions": 2},
+  "inference": "Instrumented RAII guards are NOT kernel locks. Difference refutes unconditional equivalence of the naive ownership shape for Drop-bearing F; equality of other scenarios is only this witness. No production bug, compiler binding, concurrency, performance or refactoring benefit claim",
+  "stop": "After debug/opt or budget exhaustion record outcomes and stop. Preserve every failure. No QEMU or replacement candidate"
+}

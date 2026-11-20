@@ -1,0 +1,220 @@
+{
+  "schema": "research-lookup/1",
+  "query": {
+    "terms": [
+      "make_mut",
+      "clone panic"
+    ],
+    "require_all": false,
+    "topic": "",
+    "kind": "",
+    "limit": 5,
+    "inventory": false
+  },
+  "assets": 5347,
+  "coverage": {
+    "text": 4047,
+    "metadata-only-format": 1284,
+    "metadata-only-size": 13,
+    "no-local-path": 3
+  },
+  "navigation_gaps": {
+    "run_ids_not_mentioned_in_documents": [
+      "2026-11-05-alignment-codegen-01",
+      "2026-11-05-alignment-codegen-02",
+      "2026-11-05-arceos-reading-scope-01",
+      "2026-11-05-metadata-fixture-patch-01",
+      "2026-11-12-governed-doc-packets-02",
+      "2026-11-12-inmap-factorial-01-o0-1",
+      "2026-11-12-inmap-factorial-01-o0-2",
+      "2026-11-12-inmap-factorial-01-od-1",
+      "2026-11-12-inmap-factorial-01-od-2",
+      "2026-11-12-inmap-factorial-01-u0-1",
+      "2026-11-12-inmap-factorial-01-u0-2",
+      "2026-11-12-inmap-factorial-01-ud-1",
+      "2026-11-12-inmap-factorial-01-ud-2",
+      "2026-11-12-inmap-factorial-02-o0-1",
+      "2026-11-12-inmap-factorial-02-o0-2",
+      "2026-11-12-inmap-factorial-02-od-1",
+      "2026-11-12-inmap-factorial-02-od-2",
+      "2026-11-12-inmap-factorial-02-u0-1",
+      "2026-11-12-inmap-factorial-02-u0-2",
+      "2026-11-12-inmap-factorial-02-ud-1",
+      "2026-11-12-inmap-factorial-02-ud-2",
+      "2026-11-12-inmap-retrieval-01-declared-842-1",
+      "2026-11-12-inmap-retrieval-01-declared-842-2",
+      "2026-11-12-inmap-retrieval-01-declared-843-1",
+      "2026-11-12-inmap-retrieval-01-declared-843-2",
+      "2026-11-12-inmap-retrieval-01-zero-842-1",
+      "2026-11-12-inmap-retrieval-01-zero-842-2",
+      "2026-11-12-inmap-retrieval-01-zero-843-1",
+      "2026-11-12-inmap-retrieval-01-zero-843-2",
+      "2026-11-12-inmap-snapshots-01-empty-declared-1",
+      "2026-11-12-inmap-snapshots-01-empty-declared-2",
+      "2026-11-12-inmap-snapshots-01-empty-zero-1",
+      "2026-11-12-inmap-snapshots-01-empty-zero-2",
+      "2026-11-12-inmap-snapshots-01-first-declared-1",
+      "2026-11-12-inmap-snapshots-01-first-declared-2",
+      "2026-11-12-inmap-snapshots-01-first-zero-1",
+      "2026-11-12-inmap-snapshots-01-first-zero-2",
+      "2026-11-12-inmap-snapshots-01-last-declared-1",
+      "2026-11-12-inmap-snapshots-01-last-declared-2",
+      "2026-11-12-inmap-snapshots-01-last-zero-1",
+      "2026-11-12-inmap-snapshots-01-last-zero-2",
+      "2026-11-13-contract-extraction-boundary-02",
+      "2026-11-13-hanlp-assets-02",
+      "2026-11-16-pagecache-budget-accepted-observed",
+      "2026-11-16-pagecache-budget-accepted-old",
+      "2026-11-16-pagecache-budget-original-observed",
+      "2026-11-16-pagecache-budget-original-old",
+      "2026-11-17-path-scanner-03",
+      "2026-11-17-rank-fusion-repeat-01",
+      "2026-11-17-rank-fusion-review-01"
+    ],
+    "tool_names_not_mentioned_in_documents": [
+      "scripts/fetch_hanlp_range_assets.py",
+      "scripts/fetch_inmap_smoke_inputs.py",
+      "scripts/fetch_nli_preflight.py",
+      "scripts/probe_existing_delegation.py",
+      "scripts/repair_hanlp_asset_tail.py",
+      "scripts/run_pagecache_disk_control.py",
+      "scripts/run_pagecache_original_tests.py",
+      "scripts/scc_namespace.sh",
+      "scripts/screen_relation_sources.py",
+      "scripts/screen_standard_mechanisms.py"
+    ]
+  },
+  "limits": [
+    "Literal retrieval, not semantic recall or scientific verification.",
+    "Topics apply only to catalog documents, not inferred run/source topics.",
+    "Originals only enumerated via evidence/manifest.json; PDFs are metadata-only.",
+    ".build, .tools, dist, external repos and unregistered originals are excluded.",
+    "No cache; current files are read each invocation, not an atomic snapshot.",
+    "Manifest hashes/statuses are declarations, not reverified by this command."
+  ],
+  "total_hits": 25,
+  "returned": 5,
+  "omitted_hits": 20,
+  "hits": [
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-admission-01/source-excerpts.json",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "make_mut",
+        "clone panic"
+      ],
+      "excerpts": [
+        {
+          "line": 10,
+          "text": "ialize with clone of value.\\n        let initialized_clone = unsafe {\\n            // Clone. If the clone panics, `in_progress` will be dropped and clean up.\\n            value.clone_to_uninit(in_progress.data_ptr().cast());\\n            // Cast type of pointer, now that it is initialized.\\n            in_progress.into_rc()\\n        };\\n\\n        initialized"
+        },
+        {
+          "line": 18,
+          "text": "to the given `Rc`.\\n    ///\\n    /// If there are other `Rc` pointers to the same allocation, then `make_mut` will\\n    /// [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also\\n    /// referred to as clone-on-write.\\n    ///\\n    /// However, if there are no other `Rc` pointers to this allocation, but some [`Weak`]\\n    //"
+        },
+        {
+          "line": 26,
+          "text": " will deallocate it (without dropping the value) when dropped.\\n///\\n/// This is a helper for [`Rc::make_mut()`] to ensure correct cleanup on panic.\\n/// It is nearly a duplicate of `UniqueRc<MaybeUninit<T>, A>` except that it allows `T: !Sized`,\\n/// which `MaybeUninit` does not.\\nstruct UniqueRcUninit<T: ?Sized, A: Allocator> {\\n    ptr: NonNull<RcInner<T>"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/lookup-question.json",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "make_mut",
+        "clone panic"
+      ],
+      "excerpts": [
+        {
+          "line": 5,
+          "text": "      \"make_mut\","
+        },
+        {
+          "line": 6,
+          "text": "      \"clone panic\","
+        },
+        {
+          "line": 106,
+          "text": "        \"make_mut\","
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "make_mut",
+        "clone panic"
+      ],
+      "excerpts": [
+        {
+          "line": 1351,
+          "text": "            // Clone. If the clone panics, `in_progress` will be dropped and clean up."
+        },
+        {
+          "line": 1381,
+          "text": "            // Clone. If the clone panics, `in_progress` will be dropped and clean up."
+        },
+        {
+          "line": 1897,
+          "text": "    /// See also [`make_mut`][make_mut], which will [`clone`][clone]"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "make_mut",
+        "clone panic"
+      ],
+      "excerpts": [
+        {
+          "line": 95,
+          "text": "/// 2. Use clone-on-write semantics with [`Arc::make_mut`] which provides efficient mutation"
+        },
+        {
+          "line": 109,
+          "text": "/// Arc::make_mut(&mut data).push(4);"
+        },
+        {
+          "line": 388,
+          "text": "    // to avoid races in `make_mut` and `get_mut`."
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/report.txt",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "make_mut",
+        "clone panic"
+      ],
+      "excerpts": [
+        {
+          "line": 20,
+          "text": "   library/alloctests/tests/sync.rs:245 test_cowarc_clone_make_mut、:269 test_cowarc_clone_unique2。"
+        },
+        {
+          "line": 21,
+          "text": "   多强引用的正常 make_mut，验证值分离。比较的是值，不是 ptr_eq，不是 clone 次数。"
+        },
+        {
+          "line": 23,
+          "text": "   library/alloctests/tests/arc.rs:250 make_mut_unsized。"
+        }
+      ]
+    }
+  ]
+}

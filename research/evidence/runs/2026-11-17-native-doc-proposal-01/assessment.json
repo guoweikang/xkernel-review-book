@@ -1,0 +1,27 @@
+{
+  "task": "development proposal feasibility, not clone detection accuracy",
+  "adjudication": "main researcher source binding; read-only Goodall review, not independent human labels",
+  "cases": [
+    {
+      "case_id": "case-003",
+      "same_mechanism_across_arms": "Both propose a private closure-based helper for the common check/inode/guard prefix while retaining distinct set/remove calls.",
+      "documentation_added_statement": "security.* mutations require effective CAP_SYS_ADMIN until an LSM authorization hook exists",
+      "source_support": ["xattr.rs:172-178 rejects Write without has_sys_admin for SECURITY_PREFIX", "credentials/model.rs:415-417 calls has_cap(CAP_SYS_ADMIN)", "credentials/model.rs:360-362 uses capabilities.has_effective", "credentials/caps.rs:284-286 tests effective set"],
+      "limits": "The until-LSM language is a design explanation, not a runtime hook-existence check. No execution or new patch was tested.",
+      "new_document_specific_obligation": "not observed; both responses ask about ordering, early errors, operation call and guard lifetime",
+      "proposal_readiness": "uncompiled interface sketch with unresolved concrete types and borrowing"
+    },
+    {
+      "case_id": "case-004",
+      "same_mechanism_across_arms": "Both propose new_dir delegating to existing new_dir_with_flags with empty flags, not a new shared abstraction.",
+      "documentation_added_statement": "directory inode without directory file operations",
+      "source_support": ["node/inode.rs:1796-1811 private constructor passes file_operations: None"],
+      "limits": "Initializer also has a directory-type debug_assert absent from supplied pair snippets; no claim of complete invariant inventory.",
+      "new_document_specific_obligation": "not observed; treatment flags-evaluation-order concern comes from code, not native documentation",
+      "proposal_readiness": "uncompiled one-line delegation suggestion, no behavior or benefit result"
+    }
+  ],
+  "supported_conclusion": "Native docs supplied source-checkable statements outside the restricted method snippets, but neither pair yielded a different shared-mechanism proposal or clearly document-derived falsification obligation in these four outputs.",
+  "forbidden_inferences": ["documentation has no value", "complete compliant documentation cannot improve results", "model accuracy or correctness improvement", "independent sample inference", "causal equal-budget effect", "safe production refactoring"],
+  "next_discriminating_factor": "restricted code context versus identical one-hop callee context, frozen independently of doc-specific branches; separate batch only, no prompt repair in this batch"
+}

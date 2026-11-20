@@ -1,0 +1,17 @@
+{
+  "question": "Holding each output/purpose and implementation fixed, how does input/effects wording influence finite-equivalence retrieval?",
+  "scope": "Eight previously exposed synthetic development functions; not new independent cases",
+  "styles": {
+    "A": {"input": "Unsigned value from zero through 255.", "effects": "Pure calculation without allocation or external state."},
+    "B": {"input": "An integer value in the inclusive interval 0 to 255.", "effects": "No allocation and no externally visible state changes; only a return value."}
+  },
+  "intervention": "Replace input and effects only; purpose/output stay byte-identical. Fixed block-size behavior remains in purpose/output; this is wording of common domain/effects, not all prose style.",
+  "assignments": "All 256 binary assignments to sorted eight IDs, no selected best assignment",
+  "methods": ["concatenated", "field_mean", "output_only"],
+  "fit": "Each representation fits union of A and B versions before scoring; transductive controlled vocabulary. Fields fit separately for field_mean; equal four-field weights.",
+  "ranking": "Descending positive cosine rounded to 12 decimals; lexical unordered pair breaks ties; top3",
+  "measurements": "Distribution of finite-equivalent hits@3; for each fixed pair mean same-style minus different-style similarity; whole ranking and all pairs retained",
+  "repeats": 2,
+  "negative_control": "output_only scores and rankings must be identical across assignments",
+  "limits": "Exact finite behavior labels replayed from prior traces; no refactoring benefit or shared-mechanism negatives. Two-field wording intervention, not general stylistic causality. No code baseline rerun or parameter tuning."
+}

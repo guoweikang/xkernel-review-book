@@ -1,0 +1,29 @@
+{
+  "schema": "governed-docs/1",
+  "status": "design_not_executed",
+  "purpose": "Measure discovery and ownership checks under explicitly governed documentation, separately from native-doc robustness",
+  "levels": {
+    "crate": ["purpose", "owned_capabilities", "non_goals", "invariants_and_resources", "dependency_direction", "delegation_interfaces", "configuration", "exceptions"],
+    "module": ["purpose", "parent_responsibility", "owned_mechanism", "delegation_interfaces", "configuration", "exceptions"],
+    "item": ["purpose", "input_preconditions", "changed_and_preserved_state", "effects_and_callback_boundary", "errors_and_partial_completion", "execution_context", "configuration", "delegation"]
+  },
+  "provenance_required": ["source_revision", "entity_identity", "provider", "review_status", "evidence_links", "assertion_kind", "applicability"],
+  "assertion_kinds": ["observed_behavior", "normative_responsibility", "planned_capability"],
+  "applicability": "Each field is content, not_applicable with reason, or unknown; empty headings do not pass completeness",
+  "arms": {
+    "D0": "No document input, fixed code/structure baseline",
+    "D1": "Unmodified native documentation at frozen source revision",
+    "D2": "Reviewed contract-complete documentation prepared without detector ranks or target-pair hints",
+    "D3": "One controlled semantic corruption per D2 document, preserving unrelated fields and approximate wording"
+  },
+  "ablations": "Leave one field group out of D2; field groups and corruption sites fixed before detector outcomes; paraphrase-only control separates lexical sensitivity",
+  "controls": ["same entities and configurations", "same candidate pool and review budget", "fixed retrieval parameters", "native/better-doc input availability reported separately", "authoring and review effort recorded"],
+  "tasks": {
+    "functional_overlap": "Compare ranking against independently scoped shared-behavior labels, not direct interchangeability",
+    "ownership_inference": "Rank plausible owning crates from capability contracts; hide explicit target-owner labels from implementation descriptions",
+    "architecture_conformance": "When owner is explicitly declared, evaluate code-to-contract mismatch, not owner prediction accuracy"
+  },
+  "ownership_outcomes": ["existing capability can be delegated to", "owner has a capability gap", "reasonable specialization or policy glue", "conflicting contracts", "insufficient_evidence"],
+  "gates": ["provider accountability does not substitute for independent reference labels", "researcher-authored D2 is controlled upper-bound input, not provider-validated production data", "no post-refactor documentation as pre-refactor input", "no target-pair answers embedded in enriched docs", "no experiment effectiveness claim until labels and parameters frozen"],
+  "next_batch": "Build development documentation packets for parameter roles, stream/command and firmware boundaries; audit completeness/provenance before any detector comparison"
+}

@@ -1,0 +1,160 @@
+Aroma feature provenance and control eligibility audit
+2026-11-18 — static audit only; no new upstream/config/control execution
+
+Scope and decision
+Only already archived official source, official JSON/expected features and previous replay outputs were read. Local JSON traversal/counting inspected archived data, not executed Aroma feature code. No network, new parser, source fix, feature/config tuning, Rust adaptation or benchmark.
+Eligible: narrowly defined representation controls using original collect_features_as_list on deepcopy of supplied JSON, with explicit symbol-vocabulary handling and unchanged default Config. Not eligible: calling the var marker a binding ID, treating control sensitivity as dataflow correctness, or interpreting official expected mismatch as a solved provenance issue.
+Main freezes/executes any controls; Huygens owns separate Rust frontend work. This audit neither schedules nor runs those batches.
+
+1. Fixed source identities and precise entry points
+All paths below relative to research/evidence/runs/.
+Executed original Python:
+  2026-11-18-aroma-reference-replay-01/official-similar.py
+  SHA256 7203c86b1fca6cf21373cca2d9fc2f0a23a1685cc559887b02dbc52b9f411065
+Byte-identical archived execution source:
+  2026-11-18-structural-discovery-sources-01/aroma-similar.py.txt
+Official fixture:
+  2026-11-18-aroma-reference-replay-01/example_query.json
+  SHA256 b4351fa7bbe20545728676d7ffe784bb59eee4a38dbf334db3f3a375cb684f70
+Official expected:
+  2026-11-18-aroma-reference-replay-01/example_features.txt
+  SHA256 d635f7ab16d662bf4f5f26169775e8026c1149193d7df723937e0515c9c87711
+Previous measured actual/expected:
+  2026-11-18-aroma-reference-replay-01/feature-comparison.json
+  SHA256 4805240bfd43bf526ccf213c48da2bd1bb385edd4c16e19cf9cad7aaccae60b1
+Converter:
+  2026-11-18-structural-discovery-sources-01/aroma-ConvertJava.java.txt
+  SHA256 823b3a6274de6ec85e90ad77ddb7f8c94b409a06a33bd0d84308b2eabc863890
+Same official commit e8d8beeb99255d8929874c156fd65aac74d21508; fixture/source acquisition URLs are already recorded in replay-01/acquisition.jsonl. No new origin/version assumed.
+
+Python source line numbers:
+- Config 80–107; Vocab 110 onward (get_word, add_and_get_index, get_index).
+- featurize_records_file 193–203: JSONL -> original collect_features_as_list(ast,True,False), index assigned.
+- append_feature_index 206–216; append_feature_pair 219–233.
+- get_leftmost_leaf 236–243; get_var_context 246–250.
+- collect_features_aux 253–344; collect_features_as_list 940–959.
+- read_and_featurize_record_file 962–968: first JSONL record, existing vocab, index=-1.
+- distance 533–534: Counter Jaccard, not vector cosine.
+- setup 1017–1039; top-level parse_args/setup/load_all 1042 onward: module import is NOT inert.
+Default feature context: IGNORE_VAR_NAMES=True; IGNORE_SIBLING_FEATURES=False; IGNORE_VAR_SIBLING_FEATURES=False; N_PARENTS=3, N_SIBLINGS=1, N_VAR_SIBLINGS=2. Parent traversal omits exact "(#)" and brace-only labels matching ^\{#*\}$, NOT all call wrappers. No change to these defaults is proposed.
+
+2. What can directly explain actual67 versus supplied55
+Observed replay counts remain observations from replay-01, not a rerun. Categorizing these specific feature strings by >>> first, then >>, then >:
+                     actual       supplied expected
+leaf-token              11                11
+parent                   30                25
+ordinary sibling         20                19
+same-spelling context     6                 0
+total                    67                55
+Thus the net difference12 is +5 parent,+1 sibling,+6 same-spelling context. It is NOT solely six extra variable-context features. Counts do not mean shared entries within each category are identical (missing9/extra21 occurrence differences remain).
+
+Direct code/input correspondence:
+a. JSON has11 leaf nodes. Five lowercase var-marked occurrences: strBuf (declaration line4), itr (declaration line5), list (receiver line5), itr (receiver line6), itr (receiver line7). Class/type and method leaves are unmarked.
+b. Ordinary sibling logic retains a traversal-wide list (not immediate AST siblings only), takes the most recent leaf at default N_SIBLINGS=1 and emits its pair twice through append_feature_pair. With11 leaves,10 adjacent pairs produce20 occurrence entries. Duplication is explicit endpoint-weighting behavior of this representation, not evidence the runner accidentally ran twice.
+   The supplied expected has19 ordinary sibling entries, including pairs such as StringBuffer>>StringBuffer and iterator>>hasNext that skip intervening normalized variable leaves under this JSON traversal. That cannot be the identical current default ordinary-sibling output on this AST. Whether expected came from a different extractor, configuration, representation or earlier implementation is UNKNOWN.
+c. var_siblings is keyed by original raw token spelling; the itr occurrence contexts in this JSON are:
+   line5 declaration -> "#=#1";
+   line6 receiver -> "hasNext";
+   line7 receiver -> "next".
+   At default lookback2, current source pairs #=#1>>>hasNext, hasNext>>>next, #=#1>>>next, each twice:6 occurrences. strBuf/list appear only once and cannot produce same-spelling pairs here. The official expected file contains no >>> entries. This is an attributable present-code difference, NOT proof expected was intentionally generated with that option disabled.
+d. JSON parent nodes include ## and #(). Both are retained by present parent filter. Example: first StringBuffer has immediate ## child1 and ancestor #; child1, yielding ##1>StringBuffer and #;1>StringBuffer. Constructor StringBuffer encounters #() child1, new# child2, #=# child3 as its first three retained ancestors; the enclosing #; is beyond that limit. Similar #() wrappers appear around iterator/hasNext/next.
+   Those concrete paths explain why current output has wrapper-parent entries absent from expected and why some farther-ancestor entries differ. They do not identify how expected was generated. No wrapper removal or parent-limit tuning is permitted by this audit.
+e. Supplied expected also orders entries differently; the mismatch is not just ordering, since multiset comparison failed. JSON->JSONL in prior replay preserves parsed AST deep equality; no evidence it changed these feature values. Numeric vocabulary IDs were decoded with originating Vocab.get_word before comparison.
+UNKNOWN: expected file's producer run/config/code revision, whether Java converter would reproduce this AST today, intended reference-output status, and correctness of either version. No claim of tool repair, exact feature reproduction, or causal blame.
+
+3. Does var mean binding? No: a syntactic marker and spelling heuristic
+Java ConvertJava.localVarContexts (42–44) lists variableDeclaratorId, primary, catchClause, lambdaParameters. In getSerializedTree (about251–260), an identifier/literal-classified token receives var=true when its parser rule is in that list. No declaration-resolution object or lexical scope ID is stored in the provided JSON.
+Python collect_features_aux checks presence of "var", not boolean truth of its value, and checks not token[0].isupper(). Consequently even {"var":false} would still pass that presence test; a control must preserve marker presence/value rather than assume false disables it.
+For eligible leaves, normalized token is #VAR but the same-use dictionary key is the original token string. Its lifetime is one collect_features_as_list traversal, not a lexical block; shadowed same-spelling entities can be conflated, aliases are not resolved. Unbound fixture list is nevertheless marked var: marking is not a declaration proof.
+get_var_context special-cases #.# by looking at the subtree two positions after the receiver and returning its leftmost raw leaf token. On this fixture those are method names iterator/hasNext/next. Else it uses the immediate parent label plus child index.
+Therefore this mechanism can distinguish allocation of spelling-equal occurrences to local contexts; it does NOT establish binding identity, reaching definitions, ownership, execution order or valid API receiver types.
+
+4. Eligible original API paths for a future frozen control
+Preferred narrow original-function entry:
+  collect_features_as_list(deepcopy(record["ast"]), is_init=True, is_counter=False)
+  -> (list[int] feature occurrence IDs, None)
+  then original vocab.get_word(id) -> list[str].
+It initializes fresh traversal stacks, same-spelling dictionary and leaf_idx=0 each call. A surrounding driver must provide the original function's module-global config=Config() and vocab=Vocab(); do not implement substitute feature rules.
+
+Vocabulary discipline is essential:
+- Fresh Vocab per variant plus immediate decoding with THAT vocabulary allows comparing string lists/Counters. Do not compare independently allocated integer IDs.
+- Or grow one shared Vocab with is_init=True for every variant, recording the input order and comparing decoded strings. This is a controlled feature study, not train/held-out retrieval.
+- Query path is_init=False with a vocab built only on baseline maps newly introduced context features to NUM_FEATURE_MIN (10)/#UNK. That can hide differences. append_feature_index and append_feature_pair also compare integer n with str(NUM_FEATURE_MIN), so that guard does not reliably remove that integer unknown value. Do not patch it here; avoid this confound in raw-feature controls by the declared is_init=True route.
+- If specifically testing fixed-index query behavior later, is_init=False is legitimate but report unknown counts/identity collapse separately; it is a different question.
+- is_counter=True returns (list[Counter], dict) for per-leaf aggregation, NOT the same flat-list type. append_feature_pair increments counters at both endpoints. In the inspected code leaf_pair_features is initialized and passed but not populated by append_feature_pair; do not advertise a ready-made pair-to-source provenance map from that dict. The flat list route is the minimal eligible interface.
+- distance(Counter(decodedA),Counter(decodedB)) is available for nonempty inputs, but exact normalized list/Counter equality and differences are the direct control measures; no retrieval ranking needed.
+
+Loading boundary:
+Original module has unguarded CLI execution. Prior runpy driver executes its entire CLI before returning globals; if reused, its command/caches must be accounted as upstream execution. For helper calls, assignments to state must affect collect_features_as_list.__globals__ (do not assume modifying a detached runpy namespace updates function state).
+An alternative definition-only loader would be researcher orchestration and a distinct admission issue, not an untouched CLI replay; this audit does not implement or approve one. No new helper/parser is delivered.
+Original featurize_records_file offers a full original path from declared JSONL variants, but writes features and uses shared vocabulary; read_and_featurize_record_file reads only the first line and uses query vocabulary, so it is not a drop-in multi-variant control iterator. Main selects and freezes an explicit path rather than accidentally mixing these semantics.
+
+5. Control eligibility, not results
+A. Consistent lowercase var renaming on a deepcopy of this fixture
+Permitted transformation: a bijection on the fixture's selected raw lowercase variable spellings, applied consistently to all and only corresponding var-marked leaf tokens. Preserve tree/label/leaf/var/line/leading/trailing fields, method/type tokens and occurrence equality partition; avoid empty names, uppercase starts, name merging or collisions with unaffected variables.
+Static expectation under the stated default and THIS fixture: normalized token/parent/sibling features unchanged; same-spelling partition unchanged; member-context names remain unchanged, so decoded feature occurrences should be invariant. This is an expected property to test, not a reported run.
+Limit: for arbitrary JSON, get_leftmost_leaf may return another renamed raw token in a context position; invariance is not universal without examining those contexts. Consistent spelling rename is not proof of capture-avoiding alpha-renaming in a real compiler. Shadowing and externally bound identifiers remain outside this fixture control.
+
+B. Reassigned variable uses with identical invocation/token multiset
+A global bijection like A merely renames spellings; it is NOT reassignment. For a discriminating representation control, keep declaration spellings fixed and permute selected receiver-use tokens, preserving raw token multiplicities, all unmarked API invocation tokens, tree structure and the locations/markers of the variable leaves. Then normalized token/parent/ordinary-sibling features can remain the same while the same-spelling context histories change.
+The official fixture has only one itr chain, one list receiver and unused strBuf. Swapping the two different-spelling use positions (list at iterator receiver and itr at next receiver) is structurally expressible without inventing AST nodes and preserves their token multiset; swapping the two itr receiver tokens is a no-op. BUT the different-spelling swap can introduce an uninitialized/self-referential itr use and incompatible list.next receiver. It is ONLY a symbolic representation control, not a valid Java behavior control or kernel example. This is a candidate transformation for main's decision, not executed or mandated.
+If the intended question demands two semantically valid independent iterator receivers, this supplied fixture cannot establish that; additional authorized original data/type evidence is required. Do not fabricate an AST to fill the gap or call symbolic sensitivity semantic correctness.
+Required invariants to freeze before any run: exact changed leaf positions; equal all-token and unmarked-invocation Counters; preserved AST topology/labels/metadata; variable occurrence partition genuinely changed; default Config unchanged; output type and vocabulary policy fixed. Only then compare decoded feature family differences. No expectation that every reassignment is detectable: identical local contexts, limited two-use history and bag collisions can erase distinctions.
+
+6. Scope of useful obligations
+A successful A/B control would only support that this official spelling-context mechanism is insensitive to a declared renaming and sensitive to particular receiver-use redistribution beyond same-API coincidence. It would not establish actual local binding/dataflow, extractability, absence of existing delegation, Rust compatibility, useful ranking or refactoring gain.
+Static mismatch provenance is only partly resolved: current code/input explain current family counts and examples; official55 origin remains unknown. Stop here; no source/config/control runs or fourth source needed.
+
+7. Independent actual-output audit appended after main's frozen controls (2026-11-18)
+This section supersedes only the earlier absence of control outcomes: controls were executed by main, not rerun here. Independently inspected existing runs 2026-11-18-aroma-representation-controls-01 and -02. No new condition, upstream/config execution, parser or source fix.
+Read conditions/protocol/freeze/runner/command/status, full controls.jsonl, cache/features.json, actual locally generated cache/vocab.pkl, decoded features.json and report.json. Used a read-only restricted unpickler allowing collections.OrderedDict only (all other global class loads rejected), not executing an untrusted downloaded pickle. Did NOT load tfidf.pkl, only checked its recorded hash.
+
+Vocabulary mapping independently validated — PASS
+For EACH run inverted actual vocabulary entries word -> [count,id] into id -> word, then decoded every produced feature ID through that reverse map rather than relying on the driver's words[id-11].
+There are76 vocabulary entries with unique IDs11..86. Every actual feature ID is in that mapping; unknown IDs=0. Separately checked words[id-11]==reverse_map[id] for ALL76 entries. Thus driver's offset11 is correct for the actual vocab and unchanged NUM_FEATURE_MIN10, not merely an assumed constant.
+Every independently decoded list equals archived features.json in both runs, including ordering and duplicates. Outputs' index values match record positions0..5. Produced records, excluding added features/index, equal input records in all remaining metadata/AST fields.
+
+Actual intervention diffs independently validated — PASS
+A recursive structural diff compared every full record with the official original fixture, enforcing equal dictionary keys, container types and list lengths. No unlisted tree-label/topology/metadata changes found.
+- original:0 changed values.
+- lowercase_rename:5 token values only, all original var=true leaves; strBuf->buffer_local, itr->cursor_local (3 occurrences), list->source_local.
+- uppercase_rename:5 analogous token values only; BufferLocal, CursorLocal, SourceLocal.
+- receiver_reassignment:exactly2 token-value differences at AST index paths [3,1,2,3,1].token list->itr and [4,3,2,1,1].token itr->list. No declaration change, var-marker change or invocation spelling change.
+- method_spelling:exactly1 token change hasNext->hasRemaining, the existing unmarked invocation leaf.
+- whitespace:32 actually changed leading/trailing values only; all leaf-dictionary leading/trailing fields are empty afterwards. Existing empty strings do not count as changed values.
+Input raw token bags and non-var leaf sequences recomputed independently; receiver and whitespace preserve both, lowercase/uppercase preserve the non-var leaf sequence but not raw token spelling multiset. Method spelling preserves neither. These are syntactic facts, not Java validity results.
+
+All report fields independently recomputed — PASS
+                           occurrences unique binary-set Jaccard vs original
+original                         67       42       1
+lowercase_rename                 67       42       1
+uppercase_rename                 61       46       0.3333333333333333
+receiver_reassignment            67       42       0.9090909090909091
+method_spelling                  67       42       0.68
+whitespace                       67       42       1
+Lowercase and whitespace equal baseline both as ordered lists and multisets. Other three do not. Recomputed occurrences, unique count, ordering/multiset equality, raw-token bag equality, nonvar sequence equality, binary Jaccard, missing/extra Counters agree with EVERY field of both report.json files.
+Important metric boundary: report binary_jaccard is set overlap, NOT original distance(Counter,Counter) weighted/multiset Jaccard or retrieval cosine. Receiver's40 common unique features /44 union=10/11; uppercase22/66=1/3. Do not relabel those reported numbers.
+
+Receiver difference restriction — PASS
+Relative to baseline:
+  missing #=#1>>>next :2
+  missing hasNext>>>next :2
+  extra   #=#1>>>iterator :2
+  extra   iterator>>>hasNext :2
+No other feature occurrence changes. All changed feature strings use >>>, the original same-spelling usage-context channel. Token, parent and ordinary >> features remain identical as occurrence Counters. Total features remain67:4 removed occurrences replaced by4 added occurrences.
+This isolates actual sensitivity to the frozen redistribution within the tool's spelling-context mechanism, beyond equal raw token bag and equal unmarked invocation sequence. It does not promote var to binding or prove actual execution dataflow.
+Uppercase lost all6 baseline >>> occurrences because original isupper guard prevents is_var for uppercase tokens; unchanged Config also exposes uppercase spellings in token/parent/ordinary-sibling features. This is observed default-feature sensitivity, not a new tuned condition.
+
+Two-run identity/status and freeze checks — PASS
+Both statuses record exit_code0, timeout=false; inspected argv are original-script -c indexing with60s timeout, not helper-generated feature approximations. This audit checks retained status/log identity, not a new run.
+Recomputed source/fixture/protocol/runner/controls hashes against each freeze; all passed. Recomputed every cache-hashes.json entry against on-disk files; all passed. controls.jsonl, features.json, report.json, protocol.json, runner.py and freeze.json are byte-identical across01/02. No favorable-run selection.
+Shared hashes for both runs:
+  controls.jsonl e758f182a3142fc1329f4d1c50a0295ae9bcdf6114cf9e1d901e8f68e21eb743
+  features.json c4dbc4d53913d682fa6a569acfeb4f42d30d92a7852ee0a0aa3d3920bb178ac2
+  report.json 154ef8ee3af7109b88717ae45f14df7fb9d5ea6d7017ca17f8f9f4ce238114f9
+  freeze.json 80bf6c6f116bcd2e2750c7249fc73eec73d4f87cb27141daf5f53df9f7e10161
+  protocol.json 6d9beb8bda28ff0ec7a867f0ed13aaed59ed6a220cd9f3738a86be0ac8538a2a
+  runner.py 2b65f3f93feb710e3b1d389a5e269bebc5793fafa6138a16fd141f6ac8edb814
+
+Bounded verdict
+No blocking discrepancy found in the requested decoded-ID mapping, intervention-only invariants or receiver-only >>> difference checks. Evidence supports repeatable frozen representation controls on this one official JSON-derived mechanism case. It does not resolve the old official55 expected-feature provenance mismatch, establish Java type/runtime validity (especially reassigned receiver), validate Rust parsing/binding, or measure discovery/refactoring benefit. No new run or condition was added; audit ends here.

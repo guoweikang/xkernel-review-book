@@ -1,0 +1,2767 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Free functions to create `&[T]` and `&mut [T]`.",
+      "path": "doc",
+      "range": [
+        0,
+        51
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Forms a slice from a pointer and a length.",
+          "path": "doc",
+          "range": [
+            113,
+            159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            160,
+            163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `len` argument is the number of **elements**, not the number of bytes.",
+          "path": "doc",
+          "range": [
+            164,
+            242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            243,
+            246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            247,
+            259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            260,
+            263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behavior is undefined if any of the following conditions are violated:",
+          "path": "doc",
+          "range": [
+            264,
+            338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            339,
+            342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `data` must be non-null, [valid] for reads for `len * size_of::<T>()` many bytes,",
+          "path": "doc",
+          "range": [
+            343,
+            430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and it must be properly aligned. This means in particular:",
+          "path": "doc",
+          "range": [
+            431,
+            495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            496,
+            499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * The entire memory range of this slice must be contained within a single allocation!",
+          "path": "doc",
+          "range": [
+            500,
+            593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       Slices can never span across multiple allocations. See [below](#incorrect-usage)",
+          "path": "doc",
+          "range": [
+            594,
+            684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       for an example incorrectly not taking this into account.",
+          "path": "doc",
+          "range": [
+            685,
+            751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * `data` must be non-null and aligned even for zero-length slices or slices of ZSTs. One",
+          "path": "doc",
+          "range": [
+            752,
+            848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       reason for this is that enum layout optimizations may rely on references",
+          "path": "doc",
+          "range": [
+            849,
+            931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       (including slices of any length) being aligned and non-null to distinguish",
+          "path": "doc",
+          "range": [
+            932,
+            1016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       them from other data. You can obtain a pointer that is usable as `data`",
+          "path": "doc",
+          "range": [
+            1017,
+            1098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       for zero-length slices using [`NonNull::dangling()`].",
+          "path": "doc",
+          "range": [
+            1099,
+            1162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1163,
+            1166
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `data` must point to `len` consecutive properly initialized values of type `T`.",
+          "path": "doc",
+          "range": [
+            1167,
+            1252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1253,
+            1256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory referenced by the returned slice must not be mutated for the duration",
+          "path": "doc",
+          "range": [
+            1257,
+            1343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   of lifetime `'a`, except inside an `UnsafeCell`.",
+          "path": "doc",
+          "range": [
+            1344,
+            1398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1399,
+            1402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The total size `len * size_of::<T>()` of the slice must be no larger than `isize::MAX`,",
+          "path": "doc",
+          "range": [
+            1403,
+            1496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and adding that size to `data` must not \"wrap around\" the address space.",
+          "path": "doc",
+          "range": [
+            1497,
+            1575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   See the safety documentation of [`pointer::offset`].",
+          "path": "doc",
+          "range": [
+            1576,
+            1634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1635,
+            1638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Caveat",
+          "path": "doc",
+          "range": [
+            1639,
+            1651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1652,
+            1655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime for the returned slice is inferred from its usage. To",
+          "path": "doc",
+          "range": [
+            1656,
+            1726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " prevent accidental misuse, it's suggested to tie the lifetime to whichever",
+          "path": "doc",
+          "range": [
+            1727,
+            1805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " source lifetime is safe in the context, such as by providing a helper",
+          "path": "doc",
+          "range": [
+            1806,
+            1879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function taking the lifetime of a host value for the slice, or by explicit",
+          "path": "doc",
+          "range": [
+            1880,
+            1958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " annotation.",
+          "path": "doc",
+          "range": [
+            1959,
+            1974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1975,
+            1978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1979,
+            1993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1994,
+            1997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1998,
+            2005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::slice;",
+          "path": "doc",
+          "range": [
+            2006,
+            2025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2026,
+            2029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // manifest a slice for a single element",
+          "path": "doc",
+          "range": [
+            2030,
+            2074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = 42;",
+          "path": "doc",
+          "range": [
+            2075,
+            2090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = &x as *const _;",
+          "path": "doc",
+          "range": [
+            2091,
+            2120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let slice = unsafe { slice::from_raw_parts(ptr, 1) };",
+          "path": "doc",
+          "range": [
+            2121,
+            2178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(slice[0], 42);",
+          "path": "doc",
+          "range": [
+            2179,
+            2208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2209,
+            2216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2217,
+            2220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ### Incorrect usage",
+          "path": "doc",
+          "range": [
+            2221,
+            2244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2245,
+            2248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The following `join_slices` function is **unsound** ⚠️",
+          "path": "doc",
+          "range": [
+            2249,
+            2311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2312,
+            2315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust,no_run",
+          "path": "doc",
+          "range": [
+            2316,
+            2334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::slice;",
+          "path": "doc",
+          "range": [
+            2335,
+            2354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2355,
+            2358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn join_slices<'a, T>(fst: &'a [T], snd: &'a [T]) -> &'a [T] {",
+          "path": "doc",
+          "range": [
+            2359,
+            2425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let fst_end = fst.as_ptr().wrapping_add(fst.len());",
+          "path": "doc",
+          "range": [
+            2426,
+            2485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let snd_start = snd.as_ptr();",
+          "path": "doc",
+          "range": [
+            2486,
+            2523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(fst_end, snd_start, \"Slices must be contiguous!\");",
+          "path": "doc",
+          "range": [
+            2524,
+            2593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe {",
+          "path": "doc",
+          "range": [
+            2594,
+            2610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // The assertion above ensures `fst` and `snd` are contiguous, but they might",
+          "path": "doc",
+          "range": [
+            2611,
+            2700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // still be contained within _different allocations_, in which case",
+          "path": "doc",
+          "range": [
+            2701,
+            2780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // creating this slice is undefined behavior.",
+          "path": "doc",
+          "range": [
+            2781,
+            2838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         slice::from_raw_parts(fst.as_ptr(), fst.len() + snd.len())",
+          "path": "doc",
+          "range": [
+            2839,
+            2909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2910,
+            2919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2920,
+            2925
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2926,
+            2929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            2930,
+            2945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // `a` and `b` are different allocations...",
+          "path": "doc",
+          "range": [
+            2946,
+            2997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let a = 42;",
+          "path": "doc",
+          "range": [
+            2998,
+            3017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let b = 27;",
+          "path": "doc",
+          "range": [
+            3018,
+            3037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // ... which may nevertheless be laid out contiguously in memory: | a | b |",
+          "path": "doc",
+          "range": [
+            3038,
+            3121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let _ = join_slices(slice::from_ref(&a), slice::from_ref(&b)); // UB",
+          "path": "doc",
+          "range": [
+            3122,
+            3198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3199,
+            3204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3205,
+            3212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3213,
+            3216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ### FFI: Handling null pointers",
+          "path": "doc",
+          "range": [
+            3217,
+            3252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3253,
+            3256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In languages such as C++, pointers to empty collections are not guaranteed to be non-null.",
+          "path": "doc",
+          "range": [
+            3257,
+            3351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When accepting such pointers, they have to be checked for null-ness to avoid undefined",
+          "path": "doc",
+          "range": [
+            3352,
+            3442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior.",
+          "path": "doc",
+          "range": [
+            3443,
+            3456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3457,
+            3460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3461,
+            3468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::slice;",
+          "path": "doc",
+          "range": [
+            3469,
+            3488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3489,
+            3492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Sum the elements of an FFI slice.",
+          "path": "doc",
+          "range": [
+            3493,
+            3534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            3535,
+            3542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// # Safety",
+          "path": "doc",
+          "range": [
+            3543,
+            3559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            3560,
+            3567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// If ptr is not NULL, it must be correctly aligned and",
+          "path": "doc",
+          "range": [
+            3568,
+            3628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// point to `len` initialized items of type `f32`.",
+          "path": "doc",
+          "range": [
+            3629,
+            3684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe extern \"C\" fn sum_slice(ptr: *const f32, len: usize) -> f32 {",
+          "path": "doc",
+          "range": [
+            3685,
+            3757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let data = if ptr.is_null() {",
+          "path": "doc",
+          "range": [
+            3758,
+            3795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // `len` is assumed to be 0.",
+          "path": "doc",
+          "range": [
+            3796,
+            3836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         &[]",
+          "path": "doc",
+          "range": [
+            3837,
+            3852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            3853,
+            3869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // SAFETY: see function docstring.",
+          "path": "doc",
+          "range": [
+            3870,
+            3916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         unsafe { slice::from_raw_parts(ptr, len) }",
+          "path": "doc",
+          "range": [
+            3917,
+            3971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     };",
+          "path": "doc",
+          "range": [
+            3972,
+            3982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     data.into_iter().sum()",
+          "path": "doc",
+          "range": [
+            3983,
+            4013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4014,
+            4019
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4020,
+            4023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // This could be the result of C++'s std::vector::data():",
+          "path": "doc",
+          "range": [
+            4024,
+            4085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = std::ptr::null();",
+          "path": "doc",
+          "range": [
+            4086,
+            4117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // And this could be std::vector::size():",
+          "path": "doc",
+          "range": [
+            4118,
+            4163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let len = 0;",
+          "path": "doc",
+          "range": [
+            4164,
+            4180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(unsafe { sum_slice(ptr, len) }, 0.0);",
+          "path": "doc",
+          "range": [
+            4181,
+            4233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4234,
+            4241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4242,
+            4245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: ptr#safety",
+          "path": "doc",
+          "range": [
+            4246,
+            4269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`NonNull::dangling()`]: ptr::NonNull::dangling",
+          "path": "doc",
+          "range": [
+            4270,
+            4321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4322,
+            4331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4332,
+            4377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            4378,
+            4457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4458,
+            4469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            4470,
+            4519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            4520,
+            4535
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4617,
+        5348
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts",
+      "range": [
+        113,
+        5348
+      ],
+      "signature_range": [
+        4540,
+        4616
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4720,
+        5292
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Performs the same functionality as [`from_raw_parts`], except that a",
+          "path": "doc",
+          "range": [
+            5350,
+            5422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutable slice is returned.",
+          "path": "doc",
+          "range": [
+            5423,
+            5453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5454,
+            5457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            5458,
+            5470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5471,
+            5474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behavior is undefined if any of the following conditions are violated:",
+          "path": "doc",
+          "range": [
+            5475,
+            5549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5550,
+            5553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `data` must be non-null, [valid] for both reads and writes for `len * size_of::<T>()` many bytes,",
+          "path": "doc",
+          "range": [
+            5554,
+            5657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and it must be properly aligned. This means in particular:",
+          "path": "doc",
+          "range": [
+            5658,
+            5722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5723,
+            5726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * The entire memory range of this slice must be contained within a single allocation!",
+          "path": "doc",
+          "range": [
+            5727,
+            5820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       Slices can never span across multiple allocations.",
+          "path": "doc",
+          "range": [
+            5821,
+            5881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     * `data` must be non-null and aligned even for zero-length slices or slices of ZSTs. One",
+          "path": "doc",
+          "range": [
+            5882,
+            5978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       reason for this is that enum layout optimizations may rely on references",
+          "path": "doc",
+          "range": [
+            5979,
+            6061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       (including slices of any length) being aligned and non-null to distinguish",
+          "path": "doc",
+          "range": [
+            6062,
+            6146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       them from other data. You can obtain a pointer that is usable as `data`",
+          "path": "doc",
+          "range": [
+            6147,
+            6228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       for zero-length slices using [`NonNull::dangling()`].",
+          "path": "doc",
+          "range": [
+            6229,
+            6292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6293,
+            6296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `data` must point to `len` consecutive properly initialized values of type `T`.",
+          "path": "doc",
+          "range": [
+            6297,
+            6382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6383,
+            6386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory referenced by the returned slice must not be accessed through any other pointer",
+          "path": "doc",
+          "range": [
+            6387,
+            6483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   (not derived from the return value) for the duration of lifetime `'a`.",
+          "path": "doc",
+          "range": [
+            6484,
+            6560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Both read and write accesses are forbidden.",
+          "path": "doc",
+          "range": [
+            6561,
+            6610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6611,
+            6614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The total size `len * size_of::<T>()` of the slice must be no larger than `isize::MAX`,",
+          "path": "doc",
+          "range": [
+            6615,
+            6708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and adding that size to `data` must not \"wrap around\" the address space.",
+          "path": "doc",
+          "range": [
+            6709,
+            6787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   See the safety documentation of [`pointer::offset`].",
+          "path": "doc",
+          "range": [
+            6788,
+            6846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6847,
+            6850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: ptr#safety",
+          "path": "doc",
+          "range": [
+            6851,
+            6874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`NonNull::dangling()`]: ptr::NonNull::dangling",
+          "path": "doc",
+          "range": [
+            6875,
+            6926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6927,
+            6936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6937,
+            6982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            6983,
+            7066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7067,
+            7078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            7079,
+            7132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            7133,
+            7148
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7236,
+        7983
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts_mut",
+      "range": [
+        5350,
+        7983
+      ],
+      "signature_range": [
+        7153,
+        7235
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7343,
+        7919
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a reference to T into a slice of length 1 (without copying).",
+          "path": "doc",
+          "range": [
+            7985,
+            8058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8059,
+            8108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8109,
+            8189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            8190,
+            8233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8234,
+            8245
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8286,
+        8312
+      ],
+      "kind": "fn",
+      "name": "from_ref",
+      "range": [
+        7985,
+        8312
+      ],
+      "signature_range": [
+        8250,
+        8285
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a reference to T into a slice of length 1 (without copying).",
+          "path": "doc",
+          "range": [
+            8314,
+            8387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8388,
+            8437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8438,
+            8511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8512,
+            8523
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8572,
+        8598
+      ],
+      "kind": "fn",
+      "name": "from_mut",
+      "range": [
+        8314,
+        8598
+      ],
+      "signature_range": [
+        8528,
+        8571
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Forms a slice from a pointer range.",
+          "path": "doc",
+          "range": [
+            8600,
+            8639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8640,
+            8643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is useful for interacting with foreign interfaces which",
+          "path": "doc",
+          "range": [
+            8644,
+            8717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use two pointers to refer to a range of elements in memory, as is",
+          "path": "doc",
+          "range": [
+            8718,
+            8787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " common in C++.",
+          "path": "doc",
+          "range": [
+            8788,
+            8806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8807,
+            8810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            8811,
+            8823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8824,
+            8827
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behavior is undefined if any of the following conditions are violated:",
+          "path": "doc",
+          "range": [
+            8828,
+            8902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8903,
+            8906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The `start` pointer of the range must be a non-null, [valid] and properly aligned pointer",
+          "path": "doc",
+          "range": [
+            8907,
+            9002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   to the first element of a slice.",
+          "path": "doc",
+          "range": [
+            9003,
+            9041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9042,
+            9045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The `end` pointer must be a [valid] and properly aligned pointer to *one past*",
+          "path": "doc",
+          "range": [
+            9046,
+            9130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the last element, such that the offset from the end to the start pointer is",
+          "path": "doc",
+          "range": [
+            9131,
+            9212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the length of the slice.",
+          "path": "doc",
+          "range": [
+            9213,
+            9243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9244,
+            9247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The entire memory range of this slice must be contained within a single allocation!",
+          "path": "doc",
+          "range": [
+            9248,
+            9337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Slices can never span across multiple allocations.",
+          "path": "doc",
+          "range": [
+            9338,
+            9394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9395,
+            9398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The range must contain `N` consecutive properly initialized values of type `T`.",
+          "path": "doc",
+          "range": [
+            9399,
+            9484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9485,
+            9488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory referenced by the returned slice must not be mutated for the duration",
+          "path": "doc",
+          "range": [
+            9489,
+            9575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   of lifetime `'a`, except inside an `UnsafeCell`.",
+          "path": "doc",
+          "range": [
+            9576,
+            9630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9631,
+            9634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The total length of the range must be no larger than `isize::MAX`,",
+          "path": "doc",
+          "range": [
+            9635,
+            9707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and adding that size to `start` must not \"wrap around\" the address space.",
+          "path": "doc",
+          "range": [
+            9708,
+            9787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   See the safety documentation of [`pointer::offset`].",
+          "path": "doc",
+          "range": [
+            9788,
+            9846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9847,
+            9850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that a range created from [`slice::as_ptr_range`] fulfills these requirements.",
+          "path": "doc",
+          "range": [
+            9851,
+            9938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9939,
+            9942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            9943,
+            9955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9956,
+            9959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function panics if `T` is a Zero-Sized Type (“ZST”).",
+          "path": "doc",
+          "range": [
+            9960,
+            10025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10026,
+            10029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Caveat",
+          "path": "doc",
+          "range": [
+            10030,
+            10042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10043,
+            10046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime for the returned slice is inferred from its usage. To",
+          "path": "doc",
+          "range": [
+            10047,
+            10117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " prevent accidental misuse, it's suggested to tie the lifetime to whichever",
+          "path": "doc",
+          "range": [
+            10118,
+            10196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " source lifetime is safe in the context, such as by providing a helper",
+          "path": "doc",
+          "range": [
+            10197,
+            10270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function taking the lifetime of a host value for the slice, or by explicit",
+          "path": "doc",
+          "range": [
+            10271,
+            10349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " annotation.",
+          "path": "doc",
+          "range": [
+            10350,
+            10365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10366,
+            10369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10370,
+            10384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10385,
+            10388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10389,
+            10396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(slice_from_ptr_range)]",
+          "path": "doc",
+          "range": [
+            10397,
+            10434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10435,
+            10438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::slice;",
+          "path": "doc",
+          "range": [
+            10439,
+            10459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10460,
+            10463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            10464,
+            10486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let range = x.as_ptr_range();",
+          "path": "doc",
+          "range": [
+            10487,
+            10520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10521,
+            10524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            10525,
+            10537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(slice::from_ptr_range(range), &x);",
+          "path": "doc",
+          "range": [
+            10538,
+            10591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10592,
+            10597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10598,
+            10605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10606,
+            10609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: ptr#safety",
+          "path": "doc",
+          "range": [
+            10610,
+            10633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10634,
+            10696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            10697,
+            10777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            10778,
+            10793
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10871,
+        11042
+      ],
+      "kind": "fn",
+      "name": "from_ptr_range",
+      "range": [
+        8600,
+        11042
+      ],
+      "signature_range": [
+        10798,
+        10870
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Forms a mutable slice from a pointer range.",
+          "path": "doc",
+          "range": [
+            11044,
+            11091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11092,
+            11095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is the same functionality as [`from_ptr_range`], except that a",
+          "path": "doc",
+          "range": [
+            11096,
+            11167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutable slice is returned.",
+          "path": "doc",
+          "range": [
+            11168,
+            11198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11199,
+            11202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is useful for interacting with foreign interfaces which",
+          "path": "doc",
+          "range": [
+            11203,
+            11276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use two pointers to refer to a range of elements in memory, as is",
+          "path": "doc",
+          "range": [
+            11277,
+            11346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " common in C++.",
+          "path": "doc",
+          "range": [
+            11347,
+            11365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11366,
+            11369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            11370,
+            11382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11383,
+            11386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behavior is undefined if any of the following conditions are violated:",
+          "path": "doc",
+          "range": [
+            11387,
+            11461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11462,
+            11465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The `start` pointer of the range must be a non-null, [valid] and properly aligned pointer",
+          "path": "doc",
+          "range": [
+            11466,
+            11561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   to the first element of a slice.",
+          "path": "doc",
+          "range": [
+            11562,
+            11600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11601,
+            11604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The `end` pointer must be a [valid] and properly aligned pointer to *one past*",
+          "path": "doc",
+          "range": [
+            11605,
+            11689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the last element, such that the offset from the end to the start pointer is",
+          "path": "doc",
+          "range": [
+            11690,
+            11771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the length of the slice.",
+          "path": "doc",
+          "range": [
+            11772,
+            11802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11803,
+            11806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The entire memory range of this slice must be contained within a single allocation!",
+          "path": "doc",
+          "range": [
+            11807,
+            11896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Slices can never span across multiple allocations.",
+          "path": "doc",
+          "range": [
+            11897,
+            11953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11954,
+            11957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The range must contain `N` consecutive properly initialized values of type `T`.",
+          "path": "doc",
+          "range": [
+            11958,
+            12043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12044,
+            12047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory referenced by the returned slice must not be accessed through any other pointer",
+          "path": "doc",
+          "range": [
+            12048,
+            12144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   (not derived from the return value) for the duration of lifetime `'a`.",
+          "path": "doc",
+          "range": [
+            12145,
+            12221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Both read and write accesses are forbidden.",
+          "path": "doc",
+          "range": [
+            12222,
+            12271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12272,
+            12275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The total length of the range must be no larger than `isize::MAX`,",
+          "path": "doc",
+          "range": [
+            12276,
+            12348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and adding that size to `start` must not \"wrap around\" the address space.",
+          "path": "doc",
+          "range": [
+            12349,
+            12428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   See the safety documentation of [`pointer::offset`].",
+          "path": "doc",
+          "range": [
+            12429,
+            12487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12488,
+            12491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that a range created from [`slice::as_mut_ptr_range`] fulfills these requirements.",
+          "path": "doc",
+          "range": [
+            12492,
+            12583
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12584,
+            12587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            12588,
+            12600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12601,
+            12604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function panics if `T` is a Zero-Sized Type (“ZST”).",
+          "path": "doc",
+          "range": [
+            12605,
+            12670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12671,
+            12674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Caveat",
+          "path": "doc",
+          "range": [
+            12675,
+            12687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12688,
+            12691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The lifetime for the returned slice is inferred from its usage. To",
+          "path": "doc",
+          "range": [
+            12692,
+            12762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " prevent accidental misuse, it's suggested to tie the lifetime to whichever",
+          "path": "doc",
+          "range": [
+            12763,
+            12841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " source lifetime is safe in the context, such as by providing a helper",
+          "path": "doc",
+          "range": [
+            12842,
+            12915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function taking the lifetime of a host value for the slice, or by explicit",
+          "path": "doc",
+          "range": [
+            12916,
+            12994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " annotation.",
+          "path": "doc",
+          "range": [
+            12995,
+            13010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13011,
+            13014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13015,
+            13029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13030,
+            13033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13034,
+            13041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(slice_from_ptr_range)]",
+          "path": "doc",
+          "range": [
+            13042,
+            13079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13080,
+            13083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::slice;",
+          "path": "doc",
+          "range": [
+            13084,
+            13104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13105,
+            13108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            13109,
+            13135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let range = x.as_mut_ptr_range();",
+          "path": "doc",
+          "range": [
+            13136,
+            13173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13174,
+            13177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            13178,
+            13190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(slice::from_mut_ptr_range(range), &mut [1, 2, 3]);",
+          "path": "doc",
+          "range": [
+            13191,
+            13260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            13261,
+            13266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13267,
+            13274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13275,
+            13278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: ptr#safety",
+          "path": "doc",
+          "range": [
+            13279,
+            13302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13303,
+            13365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            13366,
+            13450
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13534,
+        13713
+      ],
+      "kind": "fn",
+      "name": "from_mut_ptr_range",
+      "range": [
+        11044,
+        13713
+      ],
+      "signature_range": [
+        13455,
+        13533
+      ]
+    }
+  ],
+  "source_sha256": "0914968067f7e2bc798680c1edd72bcb032a9fd44ebb2b6fbc082a3a2b16941f"
+}

@@ -1,0 +1,15 @@
+{
+  "status": "frozen-before-review-responses",
+  "authority": "Researcher source-derived bounded expectations; not independently labeled real violations",
+  "obligations": [
+    {"id":"O1","name":"Authorization stays in syscall helper","both":"set_wall_time checks CAP_SYS_TIME before the timekeeper call; do not move authorization ownership to ktime by assumption.","source":"core/ksyscall/src/time/queries.rs:59-62"},
+    {"id":"O2","name":"Locate range validation from function bodies","original":"Private Timekeeper method validates; public wrapper calls it with a sample obtained while holding TIMEKEEPER write lock.","candidate":"Syscall helper prechecks bounds before the timekeeper call. Private Timekeeper method now writes correlation without those checks; public wrapper still obtains a fresh sample under lock.","source":"core/ktime/src/lib.rs private/public setters; core/ksyscall/src/time/queries.rs helper"},
+    {"id":"O3","name":"Preserve delegation and state ownership","both":"State remains in Timekeeper; syscall does not own the correlation merely because it calls the setter or performs checks.","source":"core/ktime/src/lib.rs Timekeeper and public setter"},
+    {"id":"O4","name":"Do not substitute documentation for current implementation","original":"The bounded validation-placement statement matches the shown setter code; this is not blanket verification of all documentation.","candidate":"Unchanged claims that range validation is atomic inside the timekeeper conflict with the modified bodies; cannot repeat those claims as implementation facts.","source":"queries.rs old range-check comment and ktime setter rustdoc"},
+    {"id":"O5","name":"Keep no-op and runtime limits","both":"NULL timeval no-op returns before helper authorization; do not infer a bypass. Code inspection does not establish compile success, executed race, complete caller coverage or optimal architecture.","source":"queries.rs sys_settimeofday; dependencies and full runtime not supplied"}
+  ],
+  "ratings": ["source_supported", "contradicted", "omitted", "insufficient_evidence"],
+  "additional_claims": "Audit material extra claims separately; do not mark the entire answer correct from selected quotes",
+  "counts": "Only obligation-level observations for this single paired development diagnostic; no population precision, recall or causal document benefit",
+  "stop": "No revisions or second attempts after responses"
+}

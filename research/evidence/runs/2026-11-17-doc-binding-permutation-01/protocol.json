@@ -1,0 +1,16 @@
+{
+  "question": "Does ranking depend on the actual documentation-to-function binding when document availability and the multiset of vectors are preserved?",
+  "parent": "2026-11-16-common-budget-01",
+  "population": "Same sorted 812 code-eligible IDs; exactly 200 nonzero-document positions and 612 zero positions retained",
+  "arms": ["native", "seed-17", "seed-43", "seed-91"],
+  "seeds": [17, 43, 91],
+  "permutation": "Python Random(seed).shuffle repeated on a copy of the sorted 200 nonzero positions until there is no fixed point, bounded to 10000 attempts; record destination-to-source map. Empty positions stay identical. Distinct IDs may still have identical vectors; report this separately.",
+  "representation": "Fit original TF-IDF configuration on original sorted 2180 documents once in this batch; verify native ranking matches the parent. Reuse its vectors, vocabulary and IDF unchanged across arms; never refit per permutation.",
+  "code": "Recompute frozen multiset-intersection/max-length matrix once; native code top100 must equal parent",
+  "fusion": "Unchanged arithmetic mean of code and document cosine; missing document remains zero",
+  "ranking": "Positive pairs only, Python round to 12 decimal places, descending score then lexicographic canonical ID pair; budget20",
+  "measurements": ["full compressed rankings", "top20 and cutoff ties", "native overlap and exact replaced pair IDs", "effective changed vectors", "two post-hoc selected development anchors ranks, descriptive only"],
+  "checks": ["frozen input hashes", "all 812 positions are a bijection", "no fixed points among 200 nonzero positions", "612 zero positions unchanged", "native top100 exact reproduction", "document pair score multiset preserved by permutation", "independent ranking and fusion arithmetic check"],
+  "stop": "Run all four arms once, retain all mappings and results; do not refit, choose seeds, inspect new source candidates or change budget afterwards",
+  "limits": ["Measures binding sensitivity, not semantic correctness or ranking quality", "Permutation also destroys domain/topic correspondence", "No role-understanding causal claim", "Not a held-out test of refactoring effectiveness", "No p-value, precision or patent novelty claim"]
+}

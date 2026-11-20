@@ -1,0 +1,5641 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Utilities for formatting and printing `String`s.",
+      "path": "doc",
+      "range": [
+        0,
+        52
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        53,
+        56
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module contains the runtime support for the [`format!`] syntax extension.",
+      "path": "doc",
+      "range": [
+        57,
+        139
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This macro is implemented in the compiler to emit calls to this module in",
+      "path": "doc",
+      "range": [
+        140,
+        217
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " order to format arguments at runtime into strings.",
+      "path": "doc",
+      "range": [
+        218,
+        272
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        273,
+        276
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Usage",
+      "path": "doc",
+      "range": [
+        277,
+        288
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        289,
+        292
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`format!`] macro is intended to be familiar to those coming from C's",
+      "path": "doc",
+      "range": [
+        293,
+        370
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `printf`/`fprintf` functions or Python's `str.format` function.",
+      "path": "doc",
+      "range": [
+        371,
+        438
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        439,
+        442
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Some examples of the [`format!`] extension are:",
+      "path": "doc",
+      "range": [
+        443,
+        494
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        495,
+        498
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        499,
+        506
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        507,
+        539
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"Hello\");                 // => \"Hello\"",
+      "path": "doc",
+      "range": [
+        540,
+        591
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"Hello, {}!\", \"world\");   // => \"Hello, world!\"",
+      "path": "doc",
+      "range": [
+        592,
+        651
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"The number is {}\", 1);   // => \"The number is 1\"",
+      "path": "doc",
+      "range": [
+        652,
+        713
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{:?}\", (3, 4));          // => \"(3, 4)\"",
+      "path": "doc",
+      "range": [
+        714,
+        766
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{value}\", value=4);      // => \"4\"",
+      "path": "doc",
+      "range": [
+        767,
+        814
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let people = \"Rustaceans\";",
+      "path": "doc",
+      "range": [
+        815,
+        845
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"Hello {people}!\");       // => \"Hello Rustaceans!\"",
+      "path": "doc",
+      "range": [
+        846,
+        909
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{} {}\", 1, 2);           // => \"1 2\"",
+      "path": "doc",
+      "range": [
+        910,
+        959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{:04}\", 42);             // => \"0042\" with leading zeros",
+      "path": "doc",
+      "range": [
+        960,
+        1029
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{:#?}\", (100, 200));     // => \"(",
+      "path": "doc",
+      "range": [
+        1030,
+        1076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                                   //       100,",
+      "path": "doc",
+      "range": [
+        1077,
+        1128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                                   //       200,",
+      "path": "doc",
+      "range": [
+        1129,
+        1180
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                                   //     )\"",
+      "path": "doc",
+      "range": [
+        1181,
+        1228
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1229,
+        1236
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1237,
+        1240
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " From these, you can see that the first argument is a format string. It is",
+      "path": "doc",
+      "range": [
+        1241,
+        1318
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " required by the compiler for this to be a string literal; it cannot be a",
+      "path": "doc",
+      "range": [
+        1319,
+        1395
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " variable passed in (in order to perform validity checking). The compiler",
+      "path": "doc",
+      "range": [
+        1396,
+        1472
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " will then parse the format string and determine if the list of arguments",
+      "path": "doc",
+      "range": [
+        1473,
+        1549
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provided is suitable to pass to this format string.",
+      "path": "doc",
+      "range": [
+        1550,
+        1605
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1606,
+        1609
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " To convert a single value to a string, use the [`to_string`] method. This",
+      "path": "doc",
+      "range": [
+        1610,
+        1687
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " will use the [`Display`] formatting trait.",
+      "path": "doc",
+      "range": [
+        1688,
+        1734
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1735,
+        1738
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Positional parameters",
+      "path": "doc",
+      "range": [
+        1739,
+        1767
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1768,
+        1771
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Each formatting argument is allowed to specify which value argument it's",
+      "path": "doc",
+      "range": [
+        1772,
+        1848
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " referencing, and if omitted it is assumed to be \"the next argument\". For",
+      "path": "doc",
+      "range": [
+        1849,
+        1925
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " example, the format string `{} {} {}` would take three parameters, and they",
+      "path": "doc",
+      "range": [
+        1926,
+        2005
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " would be formatted in the same order as they're given. The format string",
+      "path": "doc",
+      "range": [
+        2006,
+        2082
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `{2} {1} {0}`, however, would format arguments in reverse order.",
+      "path": "doc",
+      "range": [
+        2083,
+        2151
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2152,
+        2155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Things can get a little tricky once you start intermingling the two types of",
+      "path": "doc",
+      "range": [
+        2156,
+        2236
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " positional specifiers. The \"next argument\" specifier can be thought of as an",
+      "path": "doc",
+      "range": [
+        2237,
+        2317
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " iterator over the argument. Each time a \"next argument\" specifier is seen,",
+      "path": "doc",
+      "range": [
+        2318,
+        2396
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the iterator advances. This leads to behavior like this:",
+      "path": "doc",
+      "range": [
+        2397,
+        2457
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2458,
+        2461
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        2462,
+        2469
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        2470,
+        2502
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{1} {} {0} {}\", 1, 2); // => \"2 1 1 2\"",
+      "path": "doc",
+      "range": [
+        2503,
+        2554
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        2555,
+        2562
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2563,
+        2566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The internal iterator over the argument has not been advanced by the time",
+      "path": "doc",
+      "range": [
+        2567,
+        2644
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the first `{}` is seen, so it prints the first argument. Then upon reaching",
+      "path": "doc",
+      "range": [
+        2645,
+        2724
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the second `{}`, the iterator has advanced forward to the second argument.",
+      "path": "doc",
+      "range": [
+        2725,
+        2803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Essentially, parameters that explicitly name their argument do not affect",
+      "path": "doc",
+      "range": [
+        2804,
+        2881
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " parameters that do not name an argument in terms of positional specifiers.",
+      "path": "doc",
+      "range": [
+        2882,
+        2960
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2961,
+        2964
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " A format string is required to use all of its arguments, otherwise it is a",
+      "path": "doc",
+      "range": [
+        2965,
+        3043
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " compile-time error. You may refer to the same argument more than once in the",
+      "path": "doc",
+      "range": [
+        3044,
+        3124
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format string.",
+      "path": "doc",
+      "range": [
+        3125,
+        3143
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3144,
+        3147
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Named parameters",
+      "path": "doc",
+      "range": [
+        3148,
+        3171
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3172,
+        3175
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust itself does not have a Python-like equivalent of named parameters to a",
+      "path": "doc",
+      "range": [
+        3176,
+        3255
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " function, but the [`format!`] macro is a syntax extension that allows it to",
+      "path": "doc",
+      "range": [
+        3256,
+        3335
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " leverage named parameters. Named parameters are listed at the end of the",
+      "path": "doc",
+      "range": [
+        3336,
+        3412
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " argument list and have the syntax:",
+      "path": "doc",
+      "range": [
+        3413,
+        3451
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3452,
+        3455
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        3456,
+        3467
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " identifier '=' expression",
+      "path": "doc",
+      "range": [
+        3468,
+        3497
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3498,
+        3505
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3506,
+        3509
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For example, the following [`format!`] expressions all use named arguments:",
+      "path": "doc",
+      "range": [
+        3510,
+        3589
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3590,
+        3593
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3594,
+        3601
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        3602,
+        3634
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{argument}\", argument = \"test\");   // => \"test\"",
+      "path": "doc",
+      "range": [
+        3635,
+        3695
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{name} {}\", 1, name = 2);          // => \"2 1\"",
+      "path": "doc",
+      "range": [
+        3696,
+        3755
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{a} {c} {b}\", a=\"a\", b='b', c=3);  // => \"a 3 b\"",
+      "path": "doc",
+      "range": [
+        3756,
+        3817
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3818,
+        3825
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3826,
+        3829
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If a named parameter does not appear in the argument list, `format!` will",
+      "path": "doc",
+      "range": [
+        3830,
+        3907
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " reference a variable with that name in the current scope.",
+      "path": "doc",
+      "range": [
+        3908,
+        3969
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3970,
+        3973
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3974,
+        3981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        3982,
+        4014
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let argument = 2 + 2;",
+      "path": "doc",
+      "range": [
+        4015,
+        4040
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!(\"{argument}\");   // => \"4\"",
+      "path": "doc",
+      "range": [
+        4041,
+        4079
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4080,
+        4083
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn make_string(a: u32, b: &str) -> String {",
+      "path": "doc",
+      "range": [
+        4084,
+        4131
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     format!(\"{b} {a}\")",
+      "path": "doc",
+      "range": [
+        4132,
+        4158
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4159,
+        4164
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " make_string(927, \"label\"); // => \"label 927\"",
+      "path": "doc",
+      "range": [
+        4165,
+        4213
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4214,
+        4221
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4222,
+        4225
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " It is not valid to put positional parameters (those without names) after",
+      "path": "doc",
+      "range": [
+        4226,
+        4302
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " arguments that have names. Like with positional parameters, it is not",
+      "path": "doc",
+      "range": [
+        4303,
+        4376
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " valid to provide named parameters that are unused by the format string.",
+      "path": "doc",
+      "range": [
+        4377,
+        4452
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4453,
+        4456
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Formatting Parameters",
+      "path": "doc",
+      "range": [
+        4457,
+        4484
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4485,
+        4488
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Each argument being formatted can be transformed by a number of formatting",
+      "path": "doc",
+      "range": [
+        4489,
+        4567
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " parameters (corresponding to `format_spec` in [the syntax](#syntax)). These",
+      "path": "doc",
+      "range": [
+        4568,
+        4647
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " parameters affect the string representation of what's being formatted.",
+      "path": "doc",
+      "range": [
+        4648,
+        4722
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4723,
+        4726
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The colon `:` in format syntax divides identifier of the input data and",
+      "path": "doc",
+      "range": [
+        4727,
+        4802
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the formatting options, the colon itself does not change anything, only",
+      "path": "doc",
+      "range": [
+        4803,
+        4878
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " introduces the options.",
+      "path": "doc",
+      "range": [
+        4879,
+        4906
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4907,
+        4910
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4911,
+        4918
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let a = 5;",
+      "path": "doc",
+      "range": [
+        4919,
+        4933
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let b = &a;",
+      "path": "doc",
+      "range": [
+        4934,
+        4949
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"{a:e} {b:p}\"); // => 5e0 0x7ffe37b7273c",
+      "path": "doc",
+      "range": [
+        4950,
+        5003
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5004,
+        5011
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5012,
+        5015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Width",
+      "path": "doc",
+      "range": [
+        5016,
+        5028
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5029,
+        5032
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5033,
+        5040
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // All of these print \"Hello x    !\"",
+      "path": "doc",
+      "range": [
+        5041,
+        5081
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {:5}!\", \"x\");",
+      "path": "doc",
+      "range": [
+        5082,
+        5115
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {:1$}!\", \"x\", 5);",
+      "path": "doc",
+      "range": [
+        5116,
+        5153
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {1:0$}!\", 5, \"x\");",
+      "path": "doc",
+      "range": [
+        5154,
+        5192
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {:width$}!\", \"x\", width = 5);",
+      "path": "doc",
+      "range": [
+        5193,
+        5242
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let width = 5;",
+      "path": "doc",
+      "range": [
+        5243,
+        5261
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {:width$}!\", \"x\");",
+      "path": "doc",
+      "range": [
+        5262,
+        5300
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5301,
+        5308
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5309,
+        5312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This is a parameter for the \"minimum width\" that the format should take up.",
+      "path": "doc",
+      "range": [
+        5313,
+        5392
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If the value's string does not fill up this many characters, then the",
+      "path": "doc",
+      "range": [
+        5393,
+        5466
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " padding specified by fill/alignment will be used to take up the required",
+      "path": "doc",
+      "range": [
+        5467,
+        5543
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " space (see below).",
+      "path": "doc",
+      "range": [
+        5544,
+        5566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5567,
+        5570
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The width can also be provided dynamically by referencing another argument",
+      "path": "doc",
+      "range": [
+        5571,
+        5649
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " with a `$` suffix. Use `{:N$}` to reference the Nth positional argument",
+      "path": "doc",
+      "range": [
+        5650,
+        5725
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " (where N is an integer), or `{:name$}` to reference a named argument. The",
+      "path": "doc",
+      "range": [
+        5726,
+        5803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " referenced argument must be of type [`usize`].",
+      "path": "doc",
+      "range": [
+        5804,
+        5854
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5855,
+        5858
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Referring to an argument with the dollar syntax does not affect the \"next",
+      "path": "doc",
+      "range": [
+        5859,
+        5936
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " argument\" counter, so it's usually a good idea to refer to arguments by",
+      "path": "doc",
+      "range": [
+        5937,
+        6012
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " position, or use named arguments.",
+      "path": "doc",
+      "range": [
+        6013,
+        6050
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6051,
+        6054
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Fill/Alignment",
+      "path": "doc",
+      "range": [
+        6055,
+        6076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6077,
+        6080
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        6081,
+        6088
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:<5}!\", \"x\"),  \"Hello x    !\");",
+      "path": "doc",
+      "range": [
+        6089,
+        6151
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:-<5}!\", \"x\"), \"Hello x----!\");",
+      "path": "doc",
+      "range": [
+        6152,
+        6214
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:^5}!\", \"x\"),  \"Hello   x  !\");",
+      "path": "doc",
+      "range": [
+        6215,
+        6277
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:>5}!\", \"x\"),  \"Hello     x!\");",
+      "path": "doc",
+      "range": [
+        6278,
+        6340
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        6341,
+        6348
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6349,
+        6352
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The optional fill character and alignment is provided normally in conjunction with the",
+      "path": "doc",
+      "range": [
+        6353,
+        6443
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`width`](#width) parameter. It must be defined before `width`, right after the `:`.",
+      "path": "doc",
+      "range": [
+        6444,
+        6532
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This indicates that if the value being formatted is smaller than",
+      "path": "doc",
+      "range": [
+        6533,
+        6601
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `width` some extra characters will be printed around it.",
+      "path": "doc",
+      "range": [
+        6602,
+        6662
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Filling comes in the following variants for different alignments:",
+      "path": "doc",
+      "range": [
+        6663,
+        6732
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6733,
+        6736
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `[fill]<` - the argument is left-aligned in `width` columns",
+      "path": "doc",
+      "range": [
+        6737,
+        6802
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `[fill]^` - the argument is center-aligned in `width` columns",
+      "path": "doc",
+      "range": [
+        6803,
+        6870
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `[fill]>` - the argument is right-aligned in `width` columns",
+      "path": "doc",
+      "range": [
+        6871,
+        6937
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6938,
+        6941
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The default [fill/alignment](#fillalignment) for non-numerics is a space and",
+      "path": "doc",
+      "range": [
+        6942,
+        7022
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " left-aligned. The",
+      "path": "doc",
+      "range": [
+        7023,
+        7044
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " default for numeric formatters is also a space character but with right-alignment. If",
+      "path": "doc",
+      "range": [
+        7045,
+        7134
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the `0` flag (see below) is specified for numerics, then the implicit fill character is",
+      "path": "doc",
+      "range": [
+        7135,
+        7226
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `0`.",
+      "path": "doc",
+      "range": [
+        7227,
+        7235
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7236,
+        7239
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Note that alignment might not be implemented by some types. In particular, it",
+      "path": "doc",
+      "range": [
+        7240,
+        7321
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is not generally implemented for the `Debug` trait.  A good way to ensure",
+      "path": "doc",
+      "range": [
+        7322,
+        7399
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " padding is applied is to format your input, then pad this resulting string",
+      "path": "doc",
+      "range": [
+        7400,
+        7478
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " to obtain your output:",
+      "path": "doc",
+      "range": [
+        7479,
+        7505
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7506,
+        7509
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7510,
+        7517
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {:^15}!\", format!(\"{:?}\", Some(\"hi\"))); // => \"Hello   Some(\"hi\")   !\"",
+      "path": "doc",
+      "range": [
+        7518,
+        7608
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7609,
+        7616
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7617,
+        7620
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Sign/`#`/`0`",
+      "path": "doc",
+      "range": [
+        7621,
+        7640
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7641,
+        7644
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7645,
+        7652
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:+}!\", 5), \"Hello +5!\");",
+      "path": "doc",
+      "range": [
+        7653,
+        7708
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{:#x}!\", 27), \"0x1b!\");",
+      "path": "doc",
+      "range": [
+        7709,
+        7756
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:05}!\", 5),  \"Hello 00005!\");",
+      "path": "doc",
+      "range": [
+        7757,
+        7817
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {:05}!\", -5), \"Hello -0005!\");",
+      "path": "doc",
+      "range": [
+        7818,
+        7878
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{:#010x}!\", 27), \"0x0000001b!\");",
+      "path": "doc",
+      "range": [
+        7879,
+        7935
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7936,
+        7943
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7944,
+        7947
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " These are all flags altering the behavior of the formatter.",
+      "path": "doc",
+      "range": [
+        7948,
+        8011
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8012,
+        8015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `+` - This is intended for numeric types and indicates that the sign",
+      "path": "doc",
+      "range": [
+        8016,
+        8090
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         should always be printed. By default only the negative sign of signed values",
+      "path": "doc",
+      "range": [
+        8091,
+        8179
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         is printed, and the sign of positive or unsigned values is omitted.",
+      "path": "doc",
+      "range": [
+        8180,
+        8259
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         This flag indicates that the correct sign (`+` or `-`) should always be printed.",
+      "path": "doc",
+      "range": [
+        8260,
+        8352
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `-` - Currently not used",
+      "path": "doc",
+      "range": [
+        8353,
+        8383
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `#` - This flag indicates that the \"alternate\" form of printing should",
+      "path": "doc",
+      "range": [
+        8384,
+        8460
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         be used. The alternate forms are:",
+      "path": "doc",
+      "range": [
+        8461,
+        8506
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     * `#?` - pretty-print the [`Debug`] formatting (adds linebreaks and indentation)",
+      "path": "doc",
+      "range": [
+        8507,
+        8595
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     * `#x` - precedes the argument with a `0x`",
+      "path": "doc",
+      "range": [
+        8596,
+        8646
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     * `#X` - precedes the argument with a `0x`",
+      "path": "doc",
+      "range": [
+        8647,
+        8697
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     * `#b` - precedes the argument with a `0b`",
+      "path": "doc",
+      "range": [
+        8698,
+        8748
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     * `#o` - precedes the argument with a `0o`",
+      "path": "doc",
+      "range": [
+        8749,
+        8799
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8800,
+        8803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   See [Formatting traits](#formatting-traits) for a description of what the `?`, `x`, `X`,",
+      "path": "doc",
+      "range": [
+        8804,
+        8898
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   `b`, and `o` flags do.",
+      "path": "doc",
+      "range": [
+        8899,
+        8927
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8928,
+        8931
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `0` - This is used to indicate for integer formats that the padding to `width` should",
+      "path": "doc",
+      "range": [
+        8932,
+        9023
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         both be done with a `0` character as well as be sign-aware. A format",
+      "path": "doc",
+      "range": [
+        9024,
+        9104
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         like `{:08}` would yield `00000001` for the integer `1`, while the",
+      "path": "doc",
+      "range": [
+        9105,
+        9183
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         same format would yield `-0000001` for the integer `-1`. Notice that",
+      "path": "doc",
+      "range": [
+        9184,
+        9264
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         the negative version has one fewer zero than the positive version.",
+      "path": "doc",
+      "range": [
+        9265,
+        9343
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Note that padding zeros are always placed after the sign (if any)",
+      "path": "doc",
+      "range": [
+        9344,
+        9421
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         and before the digits. When used together with the `#` flag, a similar",
+      "path": "doc",
+      "range": [
+        9422,
+        9504
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         rule applies: padding zeros are inserted after the prefix but before",
+      "path": "doc",
+      "range": [
+        9505,
+        9585
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         the digits. The prefix is included in the total width.",
+      "path": "doc",
+      "range": [
+        9586,
+        9652
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         This flag overrides the [fill character and alignment flag](#fillalignment).",
+      "path": "doc",
+      "range": [
+        9653,
+        9741
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9742,
+        9745
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Precision",
+      "path": "doc",
+      "range": [
+        9746,
+        9762
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9763,
+        9766
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For non-numeric types, this can be considered a \"maximum width\". If the resulting string is",
+      "path": "doc",
+      "range": [
+        9767,
+        9862
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " longer than this width, then it is truncated down to this many characters and that truncated",
+      "path": "doc",
+      "range": [
+        9863,
+        9959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " value is emitted with proper `fill`, `alignment` and `width` if those parameters are set.",
+      "path": "doc",
+      "range": [
+        9960,
+        10053
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10054,
+        10057
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For integral types, this is ignored.",
+      "path": "doc",
+      "range": [
+        10058,
+        10098
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10099,
+        10102
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For floating-point types, this indicates how many digits after the decimal point should be",
+      "path": "doc",
+      "range": [
+        10103,
+        10197
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " printed.",
+      "path": "doc",
+      "range": [
+        10198,
+        10210
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10211,
+        10214
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " There are three possible ways to specify the desired `precision`:",
+      "path": "doc",
+      "range": [
+        10215,
+        10284
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10285,
+        10288
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 1. An integer `.N`:",
+      "path": "doc",
+      "range": [
+        10289,
+        10312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10313,
+        10316
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    the integer `N` itself is the precision.",
+      "path": "doc",
+      "range": [
+        10317,
+        10364
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10365,
+        10368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 2. An integer or name followed by dollar sign `.N$`:",
+      "path": "doc",
+      "range": [
+        10369,
+        10425
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10426,
+        10429
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    use the value of format *argument* `N` (which must be a `usize`) as the precision.",
+      "path": "doc",
+      "range": [
+        10430,
+        10519
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    An integer refers to a positional argument, and a name refers to a named argument.",
+      "path": "doc",
+      "range": [
+        10520,
+        10609
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10610,
+        10613
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 3. An asterisk `.*`:",
+      "path": "doc",
+      "range": [
+        10614,
+        10638
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10639,
+        10642
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    `.*` means that this `{...}` is associated with *two* format inputs rather than one:",
+      "path": "doc",
+      "range": [
+        10643,
+        10734
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    - If a format string in the fashion of `{:<spec>.*}` is used, then the first input holds",
+      "path": "doc",
+      "range": [
+        10735,
+        10830
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "      the `usize` precision, and the second holds the value to print.",
+      "path": "doc",
+      "range": [
+        10831,
+        10903
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    - If a format string in the fashion of `{<arg>:<spec>.*}` is used, then the `<arg>` part",
+      "path": "doc",
+      "range": [
+        10904,
+        10999
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "      refers to the value to print, and the `precision` is taken like it was specified with an",
+      "path": "doc",
+      "range": [
+        11000,
+        11097
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "      omitted positional parameter (`{}` instead of `{<arg>:}`).",
+      "path": "doc",
+      "range": [
+        11098,
+        11165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11166,
+        11169
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For example, the following calls all print the same thing `Hello x is 0.01000`:",
+      "path": "doc",
+      "range": [
+        11170,
+        11253
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11254,
+        11257
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        11258,
+        11265
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {arg 0 (\"x\")} is {arg 1 (0.01) with precision specified inline (5)}",
+      "path": "doc",
+      "range": [
+        11266,
+        11346
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {0} is {1:.5}\", \"x\", 0.01);",
+      "path": "doc",
+      "range": [
+        11347,
+        11394
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11395,
+        11398
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {arg 1 (\"x\")} is {arg 2 (0.01) with precision specified in arg 0 (5)}",
+      "path": "doc",
+      "range": [
+        11399,
+        11481
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {1} is {2:.0$}\", 5, \"x\", 0.01);",
+      "path": "doc",
+      "range": [
+        11482,
+        11533
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11534,
+        11537
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {arg 0 (\"x\")} is {arg 2 (0.01) with precision specified in arg 1 (5)}",
+      "path": "doc",
+      "range": [
+        11538,
+        11620
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {0} is {2:.1$}\", \"x\", 5, 0.01);",
+      "path": "doc",
+      "range": [
+        11621,
+        11672
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11673,
+        11676
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {next arg -> arg 0 (\"x\")} is {second of next two args -> arg 2 (0.01) with precision",
+      "path": "doc",
+      "range": [
+        11677,
+        11774
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " //                          specified in first of next two args -> arg 1 (5)}",
+      "path": "doc",
+      "range": [
+        11775,
+        11856
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {} is {:.*}\",    \"x\", 5, 0.01);",
+      "path": "doc",
+      "range": [
+        11857,
+        11908
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11909,
+        11912
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {arg 1 (\"x\")} is {arg 2 (0.01) with precision",
+      "path": "doc",
+      "range": [
+        11913,
+        11971
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " //                          specified in next arg -> arg 0 (5)}",
+      "path": "doc",
+      "range": [
+        11972,
+        12039
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {1} is {2:.*}\",  5, \"x\", 0.01);",
+      "path": "doc",
+      "range": [
+        12040,
+        12091
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12092,
+        12095
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {next arg -> arg 0 (\"x\")} is {arg 2 (0.01) with precision",
+      "path": "doc",
+      "range": [
+        12096,
+        12166
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " //                          specified in next arg -> arg 1 (5)}",
+      "path": "doc",
+      "range": [
+        12167,
+        12234
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {} is {2:.*}\",   \"x\", 5, 0.01);",
+      "path": "doc",
+      "range": [
+        12235,
+        12286
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12287,
+        12290
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Hello {next arg -> arg 0 (\"x\")} is {arg \"number\" (0.01) with precision specified",
+      "path": "doc",
+      "range": [
+        12291,
+        12378
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " //                          in arg \"prec\" (5)}",
+      "path": "doc",
+      "range": [
+        12379,
+        12429
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"Hello {} is {number:.prec$}\", \"x\", prec = 5, number = 0.01);",
+      "path": "doc",
+      "range": [
+        12430,
+        12504
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        12505,
+        12512
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12513,
+        12516
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " While these:",
+      "path": "doc",
+      "range": [
+        12517,
+        12533
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12534,
+        12537
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        12538,
+        12545
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"{}, `{name:.*}` has 3 fractional digits\", \"Hello\", 3, name=1234.56);",
+      "path": "doc",
+      "range": [
+        12546,
+        12628
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"{}, `{name:.*}` has 3 characters\", \"Hello\", 3, name=\"1234.56\");",
+      "path": "doc",
+      "range": [
+        12629,
+        12706
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"{}, `{name:>8.*}` has 3 right-aligned characters\", \"Hello\", 3, name=\"1234.56\");",
+      "path": "doc",
+      "range": [
+        12707,
+        12800
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        12801,
+        12808
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12809,
+        12812
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " print three significantly different things:",
+      "path": "doc",
+      "range": [
+        12813,
+        12860
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        12861,
+        12864
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        12865,
+        12876
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hello, `1234.560` has 3 fractional digits",
+      "path": "doc",
+      "range": [
+        12877,
+        12922
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hello, `123` has 3 characters",
+      "path": "doc",
+      "range": [
+        12923,
+        12956
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hello, `     123` has 3 right-aligned characters",
+      "path": "doc",
+      "range": [
+        12957,
+        13009
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13010,
+        13017
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13018,
+        13021
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " When truncating these values, Rust uses [round half-to-even](https://en.wikipedia.org/wiki/Rounding#Rounding_half_to_even),",
+      "path": "doc",
+      "range": [
+        13022,
+        13149
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " which is the default rounding mode in IEEE 754.",
+      "path": "doc",
+      "range": [
+        13150,
+        13201
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For example,",
+      "path": "doc",
+      "range": [
+        13202,
+        13218
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13219,
+        13222
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13223,
+        13230
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " print!(\"{0:.1$e}\", 12345, 3);",
+      "path": "doc",
+      "range": [
+        13231,
+        13264
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " print!(\"{0:.1$e}\", 12355, 3);",
+      "path": "doc",
+      "range": [
+        13265,
+        13298
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13299,
+        13306
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13307,
+        13310
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Would return:",
+      "path": "doc",
+      "range": [
+        13311,
+        13328
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13329,
+        13332
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        13333,
+        13344
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 1.234e4",
+      "path": "doc",
+      "range": [
+        13345,
+        13356
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 1.236e4",
+      "path": "doc",
+      "range": [
+        13357,
+        13368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13369,
+        13376
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13377,
+        13380
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Localization",
+      "path": "doc",
+      "range": [
+        13381,
+        13400
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13401,
+        13404
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In some programming languages, the behavior of string formatting functions",
+      "path": "doc",
+      "range": [
+        13405,
+        13483
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " depends on the operating system's locale setting. The format functions",
+      "path": "doc",
+      "range": [
+        13484,
+        13558
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provided by Rust's standard library do not have any concept of locale and",
+      "path": "doc",
+      "range": [
+        13559,
+        13636
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " will produce the same results on all systems regardless of user",
+      "path": "doc",
+      "range": [
+        13637,
+        13704
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " configuration.",
+      "path": "doc",
+      "range": [
+        13705,
+        13723
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13724,
+        13727
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For example, the following code will always print `1.5` even if the system",
+      "path": "doc",
+      "range": [
+        13728,
+        13806
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " locale uses a decimal separator other than a dot.",
+      "path": "doc",
+      "range": [
+        13807,
+        13860
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13861,
+        13864
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13865,
+        13872
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"The value is {}\", 1.5);",
+      "path": "doc",
+      "range": [
+        13873,
+        13910
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        13911,
+        13918
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13919,
+        13922
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Escaping",
+      "path": "doc",
+      "range": [
+        13923,
+        13937
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        13938,
+        13941
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The literal characters `{` and `}` may be included in a string by preceding",
+      "path": "doc",
+      "range": [
+        13942,
+        14021
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " them with the same character. For example, the `{` character is escaped with",
+      "path": "doc",
+      "range": [
+        14022,
+        14102
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `{{` and the `}` character is escaped with `}}`.",
+      "path": "doc",
+      "range": [
+        14103,
+        14155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        14156,
+        14159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        14160,
+        14167
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"Hello {{}}\"), \"Hello {}\");",
+      "path": "doc",
+      "range": [
+        14168,
+        14218
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{{ Hello\"), \"{ Hello\");",
+      "path": "doc",
+      "range": [
+        14219,
+        14266
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        14267,
+        14274
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        14275,
+        14278
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Syntax",
+      "path": "doc",
+      "range": [
+        14279,
+        14291
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        14292,
+        14295
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " To summarize, here you can find the full grammar of format strings.",
+      "path": "doc",
+      "range": [
+        14296,
+        14367
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The syntax for the formatting language used is drawn from other languages,",
+      "path": "doc",
+      "range": [
+        14368,
+        14446
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " so it should not be too alien. Arguments are formatted with Python-like",
+      "path": "doc",
+      "range": [
+        14447,
+        14522
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " syntax, meaning that arguments are surrounded by `{}` instead of the C-like",
+      "path": "doc",
+      "range": [
+        14523,
+        14602
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `%`. The actual grammar for the formatting syntax is:",
+      "path": "doc",
+      "range": [
+        14603,
+        14660
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        14661,
+        14664
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        14665,
+        14676
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format_string := text [ maybe_format text ] *",
+      "path": "doc",
+      "range": [
+        14677,
+        14726
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " maybe_format := '{' '{' | '}' '}' | format",
+      "path": "doc",
+      "range": [
+        14727,
+        14773
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format := '{' [ argument ] [ ':' format_spec ] [ ws ] * '}'",
+      "path": "doc",
+      "range": [
+        14774,
+        14837
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " argument := integer | identifier",
+      "path": "doc",
+      "range": [
+        14838,
+        14874
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        14875,
+        14878
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format_spec := [[fill]align][sign]['#']['0'][width]['.' precision][type]",
+      "path": "doc",
+      "range": [
+        14879,
+        14955
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fill := character",
+      "path": "doc",
+      "range": [
+        14956,
+        14977
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " align := '<' | '^' | '>'",
+      "path": "doc",
+      "range": [
+        14978,
+        15006
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " sign := '+' | '-'",
+      "path": "doc",
+      "range": [
+        15007,
+        15028
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " width := count",
+      "path": "doc",
+      "range": [
+        15029,
+        15047
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " precision := count | '*'",
+      "path": "doc",
+      "range": [
+        15048,
+        15076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " type := '?' | 'x?' | 'X?' | 'o' | 'x' | 'X' | 'p' | 'b' | 'e' | 'E'",
+      "path": "doc",
+      "range": [
+        15077,
+        15148
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " count := parameter | integer",
+      "path": "doc",
+      "range": [
+        15149,
+        15181
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " parameter := argument '$'",
+      "path": "doc",
+      "range": [
+        15182,
+        15211
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        15212,
+        15219
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In the above grammar,",
+      "path": "doc",
+      "range": [
+        15220,
+        15245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - `text` must not contain any `'{'` or `'}'` characters,",
+      "path": "doc",
+      "range": [
+        15246,
+        15306
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - `ws` is any character for which [`char::is_whitespace`] returns `true`, has no semantic",
+      "path": "doc",
+      "range": [
+        15307,
+        15400
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   meaning and is completely optional,",
+      "path": "doc",
+      "range": [
+        15401,
+        15442
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - `integer` is a decimal integer that may contain leading zeroes and must fit into an `usize` and",
+      "path": "doc",
+      "range": [
+        15443,
+        15544
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - `identifier` is an `IDENTIFIER_OR_KEYWORD` (not an `IDENTIFIER`) as",
+      "path": "doc",
+      "range": [
+        15545,
+        15618
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   defined by the [Rust language",
+      "path": "doc",
+      "range": [
+        15619,
+        15654
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   reference](https://doc.rust-lang.org/reference/identifiers.html), except",
+      "path": "doc",
+      "range": [
+        15655,
+        15733
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   for a bare `_`.",
+      "path": "doc",
+      "range": [
+        15734,
+        15755
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        15756,
+        15759
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Formatting traits",
+      "path": "doc",
+      "range": [
+        15760,
+        15783
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        15784,
+        15787
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " When requesting that an argument be formatted with a particular type, you",
+      "path": "doc",
+      "range": [
+        15788,
+        15865
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " are actually requesting that an argument ascribes to a particular trait.",
+      "path": "doc",
+      "range": [
+        15866,
+        15942
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This allows multiple actual types to be formatted via `{:x}` (like [`i8`] as",
+      "path": "doc",
+      "range": [
+        15943,
+        16023
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " well as [`isize`]). The current mapping of types to traits is:",
+      "path": "doc",
+      "range": [
+        16024,
+        16090
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        16091,
+        16094
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * *nothing* ⇒ [`Display`]",
+      "path": "doc",
+      "range": [
+        16095,
+        16126
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `?` ⇒ [`Debug`]",
+      "path": "doc",
+      "range": [
+        16127,
+        16150
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `x?` ⇒ [`Debug`] with lower-case hexadecimal integers",
+      "path": "doc",
+      "range": [
+        16151,
+        16212
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `X?` ⇒ [`Debug`] with upper-case hexadecimal integers",
+      "path": "doc",
+      "range": [
+        16213,
+        16274
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `o` ⇒ [`Octal`]",
+      "path": "doc",
+      "range": [
+        16275,
+        16298
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `x` ⇒ [`LowerHex`]",
+      "path": "doc",
+      "range": [
+        16299,
+        16325
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `X` ⇒ [`UpperHex`]",
+      "path": "doc",
+      "range": [
+        16326,
+        16352
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `p` ⇒ [`Pointer`]",
+      "path": "doc",
+      "range": [
+        16353,
+        16378
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `b` ⇒ [`Binary`]",
+      "path": "doc",
+      "range": [
+        16379,
+        16403
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `e` ⇒ [`LowerExp`]",
+      "path": "doc",
+      "range": [
+        16404,
+        16430
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `E` ⇒ [`UpperExp`]",
+      "path": "doc",
+      "range": [
+        16431,
+        16457
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        16458,
+        16461
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " What this means is that any type of argument which implements the",
+      "path": "doc",
+      "range": [
+        16462,
+        16531
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`fmt::Binary`][`Binary`] trait can then be formatted with `{:b}`. Implementations",
+      "path": "doc",
+      "range": [
+        16532,
+        16618
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " are provided for these traits for a number of primitive types by the",
+      "path": "doc",
+      "range": [
+        16619,
+        16691
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " standard library as well. If no format is specified (as in `{}` or `{:6}`),",
+      "path": "doc",
+      "range": [
+        16692,
+        16771
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " then the format trait used is the [`Display`] trait.",
+      "path": "doc",
+      "range": [
+        16772,
+        16828
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        16829,
+        16832
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " When implementing a format trait for your own type, you will have to",
+      "path": "doc",
+      "range": [
+        16833,
+        16905
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " implement a method of the signature:",
+      "path": "doc",
+      "range": [
+        16906,
+        16946
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        16947,
+        16950
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        16951,
+        16958
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(dead_code)]",
+      "path": "doc",
+      "range": [
+        16959,
+        16985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # use std::fmt;",
+      "path": "doc",
+      "range": [
+        16986,
+        17005
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # struct Foo; // our custom type",
+      "path": "doc",
+      "range": [
+        17006,
+        17042
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # impl fmt::Display for Foo {",
+      "path": "doc",
+      "range": [
+        17043,
+        17076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+      "path": "doc",
+      "range": [
+        17077,
+        17139
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # write!(f, \"testing, testing\")",
+      "path": "doc",
+      "range": [
+        17140,
+        17175
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # } }",
+      "path": "doc",
+      "range": [
+        17176,
+        17185
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        17186,
+        17193
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        17194,
+        17197
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Your type will be passed as `self` by-reference, and then the function",
+      "path": "doc",
+      "range": [
+        17198,
+        17272
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " should emit output into the Formatter `f` which implements `fmt::Write`. It is up to each",
+      "path": "doc",
+      "range": [
+        17273,
+        17366
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format trait implementation to correctly adhere to the requested formatting parameters.",
+      "path": "doc",
+      "range": [
+        17367,
+        17458
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The values of these parameters can be accessed with methods of the",
+      "path": "doc",
+      "range": [
+        17459,
+        17529
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Formatter`] struct. In order to help with this, the [`Formatter`] struct also",
+      "path": "doc",
+      "range": [
+        17530,
+        17613
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provides some helper methods.",
+      "path": "doc",
+      "range": [
+        17614,
+        17647
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        17648,
+        17651
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Additionally, the return value of this function is [`fmt::Result`] which is a",
+      "path": "doc",
+      "range": [
+        17652,
+        17733
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " type alias of <code>[Result]<(), [std::fmt::Error]></code>. Formatting implementations",
+      "path": "doc",
+      "range": [
+        17734,
+        17824
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " should ensure that they propagate errors from the [`Formatter`] (e.g., when",
+      "path": "doc",
+      "range": [
+        17825,
+        17904
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " calling [`write!`]). However, they should never return errors spuriously. That",
+      "path": "doc",
+      "range": [
+        17905,
+        17987
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is, a formatting implementation must and may only return an error if the",
+      "path": "doc",
+      "range": [
+        17988,
+        18064
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " passed-in [`Formatter`] returns an error. This is because, contrary to what",
+      "path": "doc",
+      "range": [
+        18065,
+        18144
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the function signature might suggest, string formatting is an infallible",
+      "path": "doc",
+      "range": [
+        18145,
+        18221
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " operation. This function only returns a [`Result`] because writing to the",
+      "path": "doc",
+      "range": [
+        18222,
+        18299
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " underlying stream might fail and it must provide a way to propagate the fact",
+      "path": "doc",
+      "range": [
+        18300,
+        18380
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " that an error has occurred back up the stack.",
+      "path": "doc",
+      "range": [
+        18381,
+        18430
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        18431,
+        18434
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " An example of implementing the formatting traits would look",
+      "path": "doc",
+      "range": [
+        18435,
+        18498
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " like:",
+      "path": "doc",
+      "range": [
+        18499,
+        18508
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        18509,
+        18512
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        18513,
+        18520
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::fmt;",
+      "path": "doc",
+      "range": [
+        18521,
+        18538
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        18539,
+        18542
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[derive(Debug)]",
+      "path": "doc",
+      "range": [
+        18543,
+        18563
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Vector2D {",
+      "path": "doc",
+      "range": [
+        18564,
+        18585
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     x: isize,",
+      "path": "doc",
+      "range": [
+        18586,
+        18603
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     y: isize,",
+      "path": "doc",
+      "range": [
+        18604,
+        18621
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        18622,
+        18627
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        18628,
+        18631
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl fmt::Display for Vector2D {",
+      "path": "doc",
+      "range": [
+        18632,
+        18668
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+      "path": "doc",
+      "range": [
+        18669,
+        18735
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // The `f` value implements the `Write` trait, which is what the",
+      "path": "doc",
+      "range": [
+        18736,
+        18812
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // write! macro is expecting. Note that this formatting ignores the",
+      "path": "doc",
+      "range": [
+        18813,
+        18892
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // various flags provided to format strings.",
+      "path": "doc",
+      "range": [
+        18893,
+        18949
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         write!(f, \"({}, {})\", self.x, self.y)",
+      "path": "doc",
+      "range": [
+        18950,
+        18999
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        19000,
+        19009
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        19010,
+        19015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        19016,
+        19019
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Different traits allow different forms of output of a type. The meaning",
+      "path": "doc",
+      "range": [
+        19020,
+        19098
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // of this format is to print the magnitude of a vector.",
+      "path": "doc",
+      "range": [
+        19099,
+        19159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl fmt::Binary for Vector2D {",
+      "path": "doc",
+      "range": [
+        19160,
+        19195
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+      "path": "doc",
+      "range": [
+        19196,
+        19262
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let magnitude = (self.x * self.x + self.y * self.y) as f64;",
+      "path": "doc",
+      "range": [
+        19263,
+        19334
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let magnitude = magnitude.sqrt();",
+      "path": "doc",
+      "range": [
+        19335,
+        19380
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        19381,
+        19384
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Respect the formatting flags by using the helper method",
+      "path": "doc",
+      "range": [
+        19385,
+        19455
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // `pad_integral` on the Formatter object. See the method",
+      "path": "doc",
+      "range": [
+        19456,
+        19525
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // documentation for details, and the function `pad` can be used",
+      "path": "doc",
+      "range": [
+        19526,
+        19602
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // to pad strings.",
+      "path": "doc",
+      "range": [
+        19603,
+        19633
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let decimals = f.precision().unwrap_or(3);",
+      "path": "doc",
+      "range": [
+        19634,
+        19688
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let string = format!(\"{magnitude:.decimals$}\");",
+      "path": "doc",
+      "range": [
+        19689,
+        19748
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         f.pad_integral(true, \"\", &string)",
+      "path": "doc",
+      "range": [
+        19749,
+        19794
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        19795,
+        19804
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        19805,
+        19810
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        19811,
+        19814
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn main() {",
+      "path": "doc",
+      "range": [
+        19815,
+        19830
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let myvector = Vector2D { x: 3, y: 4 };",
+      "path": "doc",
+      "range": [
+        19831,
+        19878
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        19879,
+        19882
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{myvector}\");       // => \"(3, 4)\"",
+      "path": "doc",
+      "range": [
+        19883,
+        19935
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{myvector:?}\");     // => \"Vector2D {x: 3, y:4}\"",
+      "path": "doc",
+      "range": [
+        19936,
+        20002
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{myvector:10.3b}\"); // => \"     5.000\"",
+      "path": "doc",
+      "range": [
+        20003,
+        20059
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        20060,
+        20065
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        20066,
+        20073
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20074,
+        20077
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ### `fmt::Display` vs `fmt::Debug`",
+      "path": "doc",
+      "range": [
+        20078,
+        20116
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20117,
+        20120
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " These two formatting traits have distinct purposes:",
+      "path": "doc",
+      "range": [
+        20121,
+        20176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20177,
+        20180
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - [`fmt::Display`][`Display`] implementations assert that the type can be faithfully",
+      "path": "doc",
+      "range": [
+        20181,
+        20269
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   represented as a UTF-8 string at all times. It is **not** expected that",
+      "path": "doc",
+      "range": [
+        20270,
+        20347
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   all types implement the [`Display`] trait.",
+      "path": "doc",
+      "range": [
+        20348,
+        20396
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " - [`fmt::Debug`][`Debug`] implementations should be implemented for **all** public types.",
+      "path": "doc",
+      "range": [
+        20397,
+        20490
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   Output will typically represent the internal state as faithfully as possible.",
+      "path": "doc",
+      "range": [
+        20491,
+        20574
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   The purpose of the [`Debug`] trait is to facilitate debugging Rust code. In",
+      "path": "doc",
+      "range": [
+        20575,
+        20656
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   most cases, using `#[derive(Debug)]` is sufficient and recommended.",
+      "path": "doc",
+      "range": [
+        20657,
+        20730
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20731,
+        20734
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Some examples of the output from both traits:",
+      "path": "doc",
+      "range": [
+        20735,
+        20784
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20785,
+        20788
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        20789,
+        20796
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{} {:?}\", 3, 4), \"3 4\");",
+      "path": "doc",
+      "range": [
+        20797,
+        20845
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{} {:?}\", 'a', 'b'), \"a 'b'\");",
+      "path": "doc",
+      "range": [
+        20846,
+        20900
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(format!(\"{} {:?}\", \"foo\\n\", \"bar\\n\"), \"foo\\n \\\"bar\\\\n\\\"\");",
+      "path": "doc",
+      "range": [
+        20901,
+        20974
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        20975,
+        20982
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        20983,
+        20986
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Related macros",
+      "path": "doc",
+      "range": [
+        20987,
+        21007
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        21008,
+        21011
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " There are a number of related macros in the [`format!`] family. The ones that",
+      "path": "doc",
+      "range": [
+        21012,
+        21093
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " are currently implemented are:",
+      "path": "doc",
+      "range": [
+        21094,
+        21128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        21129,
+        21132
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```ignore (only-for-syntax-highlight)",
+      "path": "doc",
+      "range": [
+        21133,
+        21174
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format!      // described above",
+      "path": "doc",
+      "range": [
+        21175,
+        21210
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " write!       // first argument is either a &mut io::Write or a &mut fmt::Write, the destination",
+      "path": "doc",
+      "range": [
+        21211,
+        21310
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " writeln!     // same as write but appends a newline",
+      "path": "doc",
+      "range": [
+        21311,
+        21366
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " print!       // the format string is printed to the standard output",
+      "path": "doc",
+      "range": [
+        21367,
+        21438
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!     // same as print but appends a newline",
+      "path": "doc",
+      "range": [
+        21439,
+        21494
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " eprint!      // the format string is printed to the standard error",
+      "path": "doc",
+      "range": [
+        21495,
+        21565
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " eprintln!    // same as eprint but appends a newline",
+      "path": "doc",
+      "range": [
+        21566,
+        21622
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format_args! // described below.",
+      "path": "doc",
+      "range": [
+        21623,
+        21659
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        21660,
+        21667
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        21668,
+        21671
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ### `write!`",
+      "path": "doc",
+      "range": [
+        21672,
+        21688
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        21689,
+        21692
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`write!`] and [`writeln!`] are two macros which are used to emit the format string",
+      "path": "doc",
+      "range": [
+        21693,
+        21780
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " to a specified stream. This is used to prevent intermediate allocations of",
+      "path": "doc",
+      "range": [
+        21781,
+        21859
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " format strings and instead directly write the output. Under the hood, this",
+      "path": "doc",
+      "range": [
+        21860,
+        21938
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " function is actually invoking the [`write_fmt`] function defined on the",
+      "path": "doc",
+      "range": [
+        21939,
+        22014
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`std::io::Write`] and the [`std::fmt::Write`] trait. Example usage is:",
+      "path": "doc",
+      "range": [
+        22015,
+        22090
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22091,
+        22094
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        22095,
+        22102
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        22103,
+        22135
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::io::Write;",
+      "path": "doc",
+      "range": [
+        22136,
+        22159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut w = Vec::new();",
+      "path": "doc",
+      "range": [
+        22160,
+        22187
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " write!(&mut w, \"Hello {}!\", \"world\");",
+      "path": "doc",
+      "range": [
+        22188,
+        22229
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        22230,
+        22237
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22238,
+        22241
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ### `print!`",
+      "path": "doc",
+      "range": [
+        22242,
+        22258
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22259,
+        22262
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This and [`println!`] emit their output to stdout. Similarly to the [`write!`]",
+      "path": "doc",
+      "range": [
+        22263,
+        22345
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " macro, the goal of these macros is to avoid intermediate allocations when",
+      "path": "doc",
+      "range": [
+        22346,
+        22423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " printing output. Example usage is:",
+      "path": "doc",
+      "range": [
+        22424,
+        22462
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22463,
+        22466
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        22467,
+        22474
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " print!(\"Hello {}!\", \"world\");",
+      "path": "doc",
+      "range": [
+        22475,
+        22508
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"I have a newline {}\", \"character at the end\");",
+      "path": "doc",
+      "range": [
+        22509,
+        22569
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        22570,
+        22577
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ### `eprint!`",
+      "path": "doc",
+      "range": [
+        22578,
+        22595
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22596,
+        22599
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`eprint!`] and [`eprintln!`] macros are identical to",
+      "path": "doc",
+      "range": [
+        22600,
+        22661
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`print!`] and [`println!`], respectively, except they emit their",
+      "path": "doc",
+      "range": [
+        22662,
+        22731
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " output to stderr.",
+      "path": "doc",
+      "range": [
+        22732,
+        22753
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22754,
+        22757
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ### `format_args!`",
+      "path": "doc",
+      "range": [
+        22758,
+        22780
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        22781,
+        22784
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`format_args!`] is a curious macro used to safely pass around",
+      "path": "doc",
+      "range": [
+        22785,
+        22851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " an opaque object describing the format string. This object",
+      "path": "doc",
+      "range": [
+        22852,
+        22914
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " does not require any heap allocations to create, and it only",
+      "path": "doc",
+      "range": [
+        22915,
+        22979
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " references information on the stack. Under the hood, all of",
+      "path": "doc",
+      "range": [
+        22980,
+        23043
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the related macros are implemented in terms of this. First",
+      "path": "doc",
+      "range": [
+        23044,
+        23106
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " off, some example usage is:",
+      "path": "doc",
+      "range": [
+        23107,
+        23138
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        23139,
+        23142
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        23143,
+        23150
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        23151,
+        23183
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::fmt;",
+      "path": "doc",
+      "range": [
+        23184,
+        23201
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::io::{self, Write};",
+      "path": "doc",
+      "range": [
+        23202,
+        23233
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        23234,
+        23237
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut some_writer = io::stdout();",
+      "path": "doc",
+      "range": [
+        23238,
+        23277
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " write!(&mut some_writer, \"{}\", format_args!(\"print with a {}\", \"macro\"));",
+      "path": "doc",
+      "range": [
+        23278,
+        23355
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        23356,
+        23359
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn my_fmt_fn(args: fmt::Arguments<'_>) {",
+      "path": "doc",
+      "range": [
+        23360,
+        23404
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     write!(&mut io::stdout(), \"{args}\");",
+      "path": "doc",
+      "range": [
+        23405,
+        23449
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        23450,
+        23455
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " my_fmt_fn(format_args!(\", or a {} too\", \"function\"));",
+      "path": "doc",
+      "range": [
+        23456,
+        23513
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        23514,
+        23521
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        23522,
+        23525
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The result of the [`format_args!`] macro is a value of type [`fmt::Arguments`].",
+      "path": "doc",
+      "range": [
+        23526,
+        23609
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This structure can then be passed to the [`write`] and [`format`] functions",
+      "path": "doc",
+      "range": [
+        23610,
+        23689
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " inside this module in order to process the format string.",
+      "path": "doc",
+      "range": [
+        23690,
+        23751
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The goal of this macro is to even further prevent intermediate allocations",
+      "path": "doc",
+      "range": [
+        23752,
+        23830
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " when dealing with formatting strings.",
+      "path": "doc",
+      "range": [
+        23831,
+        23872
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        23873,
+        23876
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For example, a logging library could use the standard formatting syntax, but",
+      "path": "doc",
+      "range": [
+        23877,
+        23957
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " it would internally pass around this structure until it has been determined",
+      "path": "doc",
+      "range": [
+        23958,
+        24037
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " where output should go to.",
+      "path": "doc",
+      "range": [
+        24038,
+        24068
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        24069,
+        24072
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`fmt::Result`]: Result \"fmt::Result\"",
+      "path": "doc",
+      "range": [
+        24073,
+        24114
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Result]: core::result::Result \"std::result::Result\"",
+      "path": "doc",
+      "range": [
+        24115,
+        24171
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [std::fmt::Error]: Error \"fmt::Error\"",
+      "path": "doc",
+      "range": [
+        24172,
+        24213
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`write`]: write() \"fmt::write\"",
+      "path": "doc",
+      "range": [
+        24214,
+        24249
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`to_string`]: crate::string::ToString::to_string \"ToString::to_string\"",
+      "path": "doc",
+      "range": [
+        24250,
+        24325
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`write_fmt`]: ../../std/io/trait.Write.html#method.write_fmt",
+      "path": "doc",
+      "range": [
+        24326,
+        24391
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`std::io::Write`]: ../../std/io/trait.Write.html",
+      "path": "doc",
+      "range": [
+        24392,
+        24445
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`std::fmt::Write`]: ../../std/fmt/trait.Write.html",
+      "path": "doc",
+      "range": [
+        24446,
+        24501
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`print!`]: ../../std/macro.print.html \"print!\"",
+      "path": "doc",
+      "range": [
+        24502,
+        24553
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`println!`]: ../../std/macro.println.html \"println!\"",
+      "path": "doc",
+      "range": [
+        24554,
+        24611
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`eprint!`]: ../../std/macro.eprint.html \"eprint!\"",
+      "path": "doc",
+      "range": [
+        24612,
+        24666
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`eprintln!`]: ../../std/macro.eprintln.html \"eprintln!\"",
+      "path": "doc",
+      "range": [
+        24667,
+        24727
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`format_args!`]: ../../std/macro.format_args.html \"format_args!\"",
+      "path": "doc",
+      "range": [
+        24728,
+        24797
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`fmt::Arguments`]: Arguments \"fmt::Arguments\"",
+      "path": "doc",
+      "range": [
+        24798,
+        24848
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`format`]: format() \"fmt::format\"",
+      "path": "doc",
+      "range": [
+        24849,
+        24887
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        24889,
+        24935
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Takes an [`Arguments`] struct and returns the resulting formatted string.",
+          "path": "doc",
+          "range": [
+            26013,
+            26090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26091,
+            26094
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The [`Arguments`] instance can be created with the [`format_args!`] macro.",
+          "path": "doc",
+          "range": [
+            26095,
+            26173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26174,
+            26177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            26178,
+            26192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26193,
+            26196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            26197,
+            26213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26214,
+            26217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26218,
+            26225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            26226,
+            26243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26244,
+            26247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = fmt::format(format_args!(\"Hello, {}!\", \"world\"));",
+          "path": "doc",
+          "range": [
+            26248,
+            26309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(s, \"Hello, world!\");",
+          "path": "doc",
+          "range": [
+            26310,
+            26345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26346,
+            26353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26354,
+            26357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Please note that using [`format!`] might be preferable.",
+          "path": "doc",
+          "range": [
+            26358,
+            26417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Example:",
+          "path": "doc",
+          "range": [
+            26418,
+            26430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26431,
+            26434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26435,
+            26442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = format!(\"Hello, {}!\", \"world\");",
+          "path": "doc",
+          "range": [
+            26443,
+            26486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(s, \"Hello, world!\");",
+          "path": "doc",
+          "range": [
+            26487,
+            26522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26523,
+            26530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26531,
+            26534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`format_args!`]: core::format_args",
+          "path": "doc",
+          "range": [
+            26535,
+            26574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`format!`]: crate::format",
+          "path": "doc",
+          "range": [
+            26575,
+            26605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            26606,
+            26641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            26642,
+            26653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26654,
+            26699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26700,
+            26709
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26763,
+        27207
+      ],
+      "kind": "fn",
+      "name": "format",
+      "range": [
+        26013,
+        27207
+      ],
+      "signature_range": [
+        26714,
+        26762
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "body_range": [
+        26824,
+        27117
+      ],
+      "kind": "fn",
+      "name": "format_inner",
+      "range": [
+        26769,
+        27117
+      ],
+      "signature_range": [
+        26769,
+        26823
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        27149,
+        27170
+      ]
+    }
+  ],
+  "source_sha256": "5787ee1ac366050193db15b5ac46d74fde2bdcc0ce096e9962b2bf39c5d49510"
+}

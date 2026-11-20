@@ -1,0 +1,13 @@
+- **共享机制或弃权理由**：可考虑抽取共同控制流程：依次调用 `check_writable_mount`、`self.inode()`、`check_xattr_permission(..., XattrAccess::Write, cred)`、`lock_data()`，再执行各自末尾调用。依据是展示代码的结构相同，不是函数名暗示的行为。
+
+- **必须保留的差异**：末尾分别调用 `inode.set_xattr(self.dentry(), name, value, flags)` 与 `inode.remove_xattr(self.dentry(), name)`；仅前者传入 `value`、`flags`。应保留 `self.dentry()` 的求值位置、参数传递及末尾结果直接返回。
+
+- **已有委托**：两者已将检查、获取 inode、获取 guard 及末尾操作交给其他方法或函数。其内部实现均未展示；抽取仅合并调用编排，不应复制这些被调用项的逻辑。
+
+- **最小接口草案**：私有方法 `with_xattr_write(name, cred, op) -> VfsResult<()>`，执行共同前缀，在 `_data_guard` 仍处作用域内调用一次 `op(inode)`。调用方用闭包承载原末尾表达式。闭包宜为 `FnOnce`；inode 参数的确切类型及借用方式待上下文确认。
+
+- **约束及其来源(code/doc/unknown)**：code：两处 `?` 保留顺序与提前返回，guard 的词法作用域覆盖末尾调用。doc：分别声明创建或替换、删除属性；两份文档均声明修改 `security.*` 需要有效 `CAP_SYS_ADMIN`，直至具备 LSM 授权钩子。unknown：这些声明如何落实、检查错误种类、guard 的同步与析构行为。
+
+- **一条可反驳提案的验证义务**：证明抽取前后调用轨迹等价，包括任一检查返回错误时后续调用不发生、成功路径末尾操作恰调用一次、guard 相对该操作的释放时机一致；任一反例即可否定此草案。
+
+- **缺失上下文**：所属类型与实现块、inode 和 guard 的具体类型及生命周期、被调用项实现、相关测试，以及项目是否允许此类闭包辅助方法。

@@ -1,0 +1,7071 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Generic hashing support.",
+      "path": "doc",
+      "range": [
+        0,
+        28
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        29,
+        32
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module provides a generic way to compute the [hash] of a value.",
+      "path": "doc",
+      "range": [
+        33,
+        105
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hashes are most commonly used with [`HashMap`] and [`HashSet`].",
+      "path": "doc",
+      "range": [
+        106,
+        173
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        174,
+        177
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [hash]: https://en.wikipedia.org/wiki/Hash_function",
+      "path": "doc",
+      "range": [
+        178,
+        233
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`HashMap`]: ../../std/collections/struct.HashMap.html",
+      "path": "doc",
+      "range": [
+        234,
+        292
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`HashSet`]: ../../std/collections/struct.HashSet.html",
+      "path": "doc",
+      "range": [
+        293,
+        351
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        352,
+        355
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The simplest way to make a type hashable is to use `#[derive(Hash)]`:",
+      "path": "doc",
+      "range": [
+        356,
+        429
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        430,
+        433
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Examples",
+      "path": "doc",
+      "range": [
+        434,
+        448
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        449,
+        452
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        453,
+        464
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::hash::{DefaultHasher, Hash, Hasher};",
+      "path": "doc",
+      "range": [
+        465,
+        514
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        515,
+        518
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[derive(Hash)]",
+      "path": "doc",
+      "range": [
+        519,
+        538
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Person {",
+      "path": "doc",
+      "range": [
+        539,
+        558
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: u32,",
+      "path": "doc",
+      "range": [
+        559,
+        575
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: String,",
+      "path": "doc",
+      "range": [
+        576,
+        597
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: u64,",
+      "path": "doc",
+      "range": [
+        598,
+        617
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        618,
+        623
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        624,
+        627
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let person1 = Person {",
+      "path": "doc",
+      "range": [
+        628,
+        654
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: 5,",
+      "path": "doc",
+      "range": [
+        655,
+        669
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: \"Janet\".to_string(),",
+      "path": "doc",
+      "range": [
+        670,
+        704
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: 555_666_7777,",
+      "path": "doc",
+      "range": [
+        705,
+        733
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " };",
+      "path": "doc",
+      "range": [
+        734,
+        740
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let person2 = Person {",
+      "path": "doc",
+      "range": [
+        741,
+        767
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: 5,",
+      "path": "doc",
+      "range": [
+        768,
+        782
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: \"Bob\".to_string(),",
+      "path": "doc",
+      "range": [
+        783,
+        815
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: 555_666_7777,",
+      "path": "doc",
+      "range": [
+        816,
+        844
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " };",
+      "path": "doc",
+      "range": [
+        845,
+        851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        852,
+        855
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert!(calculate_hash(&person1) != calculate_hash(&person2));",
+      "path": "doc",
+      "range": [
+        856,
+        922
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        923,
+        926
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn calculate_hash<T: Hash>(t: &T) -> u64 {",
+      "path": "doc",
+      "range": [
+        927,
+        973
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let mut s = DefaultHasher::new();",
+      "path": "doc",
+      "range": [
+        974,
+        1015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     t.hash(&mut s);",
+      "path": "doc",
+      "range": [
+        1016,
+        1039
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     s.finish()",
+      "path": "doc",
+      "range": [
+        1040,
+        1058
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1059,
+        1064
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1065,
+        1072
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1073,
+        1076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If you need more control over how a value is hashed, you need to implement",
+      "path": "doc",
+      "range": [
+        1077,
+        1155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the [`Hash`] trait:",
+      "path": "doc",
+      "range": [
+        1156,
+        1179
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1180,
+        1183
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        1184,
+        1195
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::hash::{DefaultHasher, Hash, Hasher};",
+      "path": "doc",
+      "range": [
+        1196,
+        1245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1246,
+        1249
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Person {",
+      "path": "doc",
+      "range": [
+        1250,
+        1269
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: u32,",
+      "path": "doc",
+      "range": [
+        1270,
+        1286
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     # #[allow(dead_code)]",
+      "path": "doc",
+      "range": [
+        1287,
+        1316
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: String,",
+      "path": "doc",
+      "range": [
+        1317,
+        1338
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: u64,",
+      "path": "doc",
+      "range": [
+        1339,
+        1358
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1359,
+        1364
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1365,
+        1368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Hash for Person {",
+      "path": "doc",
+      "range": [
+        1369,
+        1395
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn hash<H: Hasher>(&self, state: &mut H) {",
+      "path": "doc",
+      "range": [
+        1396,
+        1446
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         self.id.hash(state);",
+      "path": "doc",
+      "range": [
+        1447,
+        1479
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         self.phone.hash(state);",
+      "path": "doc",
+      "range": [
+        1480,
+        1515
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        1516,
+        1525
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1526,
+        1531
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1532,
+        1535
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let person1 = Person {",
+      "path": "doc",
+      "range": [
+        1536,
+        1562
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: 5,",
+      "path": "doc",
+      "range": [
+        1563,
+        1577
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: \"Janet\".to_string(),",
+      "path": "doc",
+      "range": [
+        1578,
+        1612
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: 555_666_7777,",
+      "path": "doc",
+      "range": [
+        1613,
+        1641
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " };",
+      "path": "doc",
+      "range": [
+        1642,
+        1648
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let person2 = Person {",
+      "path": "doc",
+      "range": [
+        1649,
+        1675
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     id: 5,",
+      "path": "doc",
+      "range": [
+        1676,
+        1690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     name: \"Bob\".to_string(),",
+      "path": "doc",
+      "range": [
+        1691,
+        1723
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     phone: 555_666_7777,",
+      "path": "doc",
+      "range": [
+        1724,
+        1752
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " };",
+      "path": "doc",
+      "range": [
+        1753,
+        1759
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1760,
+        1763
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(calculate_hash(&person1), calculate_hash(&person2));",
+      "path": "doc",
+      "range": [
+        1764,
+        1831
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1832,
+        1835
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn calculate_hash<T: Hash>(t: &T) -> u64 {",
+      "path": "doc",
+      "range": [
+        1836,
+        1882
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let mut s = DefaultHasher::new();",
+      "path": "doc",
+      "range": [
+        1883,
+        1924
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     t.hash(&mut s);",
+      "path": "doc",
+      "range": [
+        1925,
+        1948
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     s.finish()",
+      "path": "doc",
+      "range": [
+        1949,
+        1967
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1968,
+        1973
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1974,
+        1981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        1983,
+        2029
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "sip",
+      "path_overrides": [],
+      "range": [
+        2261,
+        2269
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A hashable type.",
+          "path": "doc",
+          "range": [
+            2271,
+            2291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2292,
+            2295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types implementing `Hash` are able to be [`hash`]ed with an instance of",
+          "path": "doc",
+          "range": [
+            2296,
+            2371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher`].",
+          "path": "doc",
+          "range": [
+            2372,
+            2387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2388,
+            2391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Implementing `Hash`",
+          "path": "doc",
+          "range": [
+            2392,
+            2418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2419,
+            2422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You can derive `Hash` with `#[derive(Hash)]` if all fields implement `Hash`.",
+          "path": "doc",
+          "range": [
+            2423,
+            2503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The resulting hash will be the combination of the values from calling",
+          "path": "doc",
+          "range": [
+            2504,
+            2577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`hash`] on each field.",
+          "path": "doc",
+          "range": [
+            2578,
+            2605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2606,
+            2609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2610,
+            2617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Hash)]",
+          "path": "doc",
+          "range": [
+            2618,
+            2637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Rustacean {",
+          "path": "doc",
+          "range": [
+            2638,
+            2660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     name: String,",
+          "path": "doc",
+          "range": [
+            2661,
+            2682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     country: String,",
+          "path": "doc",
+          "range": [
+            2683,
+            2707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2708,
+            2713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2714,
+            2721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2722,
+            2725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you need more control over how a value is hashed, you can of course",
+          "path": "doc",
+          "range": [
+            2726,
+            2800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement the `Hash` trait yourself:",
+          "path": "doc",
+          "range": [
+            2801,
+            2841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2842,
+            2845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2846,
+            2853
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{Hash, Hasher};",
+          "path": "doc",
+          "range": [
+            2854,
+            2888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2889,
+            2892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Person {",
+          "path": "doc",
+          "range": [
+            2893,
+            2912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     id: u32,",
+          "path": "doc",
+          "range": [
+            2913,
+            2929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     name: String,",
+          "path": "doc",
+          "range": [
+            2930,
+            2951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     phone: u64,",
+          "path": "doc",
+          "range": [
+            2952,
+            2971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2972,
+            2977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2978,
+            2981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Hash for Person {",
+          "path": "doc",
+          "range": [
+            2982,
+            3008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn hash<H: Hasher>(&self, state: &mut H) {",
+          "path": "doc",
+          "range": [
+            3009,
+            3059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.id.hash(state);",
+          "path": "doc",
+          "range": [
+            3060,
+            3092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.phone.hash(state);",
+          "path": "doc",
+          "range": [
+            3093,
+            3128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            3129,
+            3138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3139,
+            3144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3145,
+            3152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3153,
+            3156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## `Hash` and `Eq`",
+          "path": "doc",
+          "range": [
+            3157,
+            3179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3180,
+            3183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When implementing both `Hash` and [`Eq`], it is important that the following",
+          "path": "doc",
+          "range": [
+            3184,
+            3264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " property holds:",
+          "path": "doc",
+          "range": [
+            3265,
+            3284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3285,
+            3288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```text",
+          "path": "doc",
+          "range": [
+            3289,
+            3300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " k1 == k2 -> hash(k1) == hash(k2)",
+          "path": "doc",
+          "range": [
+            3301,
+            3337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3338,
+            3345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3346,
+            3349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In other words, if two keys are equal, their hashes must also be equal.",
+          "path": "doc",
+          "range": [
+            3350,
+            3425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashMap`] and [`HashSet`] both rely on this behavior.",
+          "path": "doc",
+          "range": [
+            3426,
+            3485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3486,
+            3489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Thankfully, you won't need to worry about upholding this property when",
+          "path": "doc",
+          "range": [
+            3490,
+            3564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " deriving both [`Eq`] and `Hash` with `#[derive(PartialEq, Eq, Hash)]`.",
+          "path": "doc",
+          "range": [
+            3565,
+            3639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3640,
+            3643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Violating this property is a logic error. The behavior resulting from a logic error is not",
+          "path": "doc",
+          "range": [
+            3644,
+            3738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " specified, but users of the trait must ensure that such logic errors do *not* result in",
+          "path": "doc",
+          "range": [
+            3739,
+            3830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " undefined behavior. This means that `unsafe` code **must not** rely on the correctness of these",
+          "path": "doc",
+          "range": [
+            3831,
+            3930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " methods.",
+          "path": "doc",
+          "range": [
+            3931,
+            3943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3944,
+            3947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Prefix collisions",
+          "path": "doc",
+          "range": [
+            3948,
+            3972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3973,
+            3976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementations of `hash` should ensure that the data they",
+          "path": "doc",
+          "range": [
+            3977,
+            4039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pass to the `Hasher` are prefix-free. That is,",
+          "path": "doc",
+          "range": [
+            4040,
+            4090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " values which are not equal should cause two different sequences of values to be written,",
+          "path": "doc",
+          "range": [
+            4091,
+            4183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and neither of the two sequences should be a prefix of the other.",
+          "path": "doc",
+          "range": [
+            4184,
+            4253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4254,
+            4257
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, the standard implementation of [`Hash` for `&str`][impl] passes an extra",
+          "path": "doc",
+          "range": [
+            4258,
+            4347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `0xFF` byte to the `Hasher` so that the values `(\"ab\", \"c\")` and `(\"a\",",
+          "path": "doc",
+          "range": [
+            4348,
+            4423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " \"bc\")` hash differently.",
+          "path": "doc",
+          "range": [
+            4424,
+            4452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4453,
+            4456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Portability",
+          "path": "doc",
+          "range": [
+            4457,
+            4475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4476,
+            4479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Due to differences in endianness and type sizes, data fed by `Hash` to a `Hasher`",
+          "path": "doc",
+          "range": [
+            4480,
+            4565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should not be considered portable across platforms. Additionally the data passed by most",
+          "path": "doc",
+          "range": [
+            4566,
+            4658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " standard library types should not be considered stable between compiler versions.",
+          "path": "doc",
+          "range": [
+            4659,
+            4744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4745,
+            4748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This means tests shouldn't probe hard-coded hash values or data fed to a `Hasher` and",
+          "path": "doc",
+          "range": [
+            4749,
+            4838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instead should check consistency with `Eq`.",
+          "path": "doc",
+          "range": [
+            4839,
+            4886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4887,
+            4890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Serialization formats intended to be portable between platforms or compiler versions should",
+          "path": "doc",
+          "range": [
+            4891,
+            4986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " either avoid encoding hashes or only rely on `Hash` and `Hasher` implementations that",
+          "path": "doc",
+          "range": [
+            4987,
+            5076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " provide additional guarantees.",
+          "path": "doc",
+          "range": [
+            5077,
+            5111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5112,
+            5115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashMap`]: ../../std/collections/struct.HashMap.html",
+          "path": "doc",
+          "range": [
+            5116,
+            5174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashSet`]: ../../std/collections/struct.HashSet.html",
+          "path": "doc",
+          "range": [
+            5175,
+            5233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`hash`]: Hash::hash",
+          "path": "doc",
+          "range": [
+            5234,
+            5258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [impl]: ../../std/primitive.str.html#impl-Hash-for-str",
+          "path": "doc",
+          "range": [
+            5259,
+            5317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5318,
+            5363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            5364,
+            5397
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Hash",
+      "range": [
+        2271,
+        7572
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Feeds this value into the given [`Hasher`].",
+          "path": "doc",
+          "range": [
+            5441,
+            5488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5493,
+            5496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5501,
+            5515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5520,
+            5523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5528,
+            5535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{DefaultHasher, Hash, Hasher};",
+          "path": "doc",
+          "range": [
+            5540,
+            5589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5594,
+            5597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher = DefaultHasher::new();",
+          "path": "doc",
+          "range": [
+            5602,
+            5644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 7920.hash(&mut hasher);",
+          "path": "doc",
+          "range": [
+            5649,
+            5676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"Hash is {:x}!\", hasher.finish());",
+          "path": "doc",
+          "range": [
+            5681,
+            5728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5733,
+            5740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5745,
+            5790
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "hash",
+      "range": [
+        5441,
+        5836
+      ],
+      "signature_range": [
+        5795,
+        5835
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Feeds a slice of this type into the given [`Hasher`].",
+          "path": "doc",
+          "range": [
+            5842,
+            5899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5904,
+            5907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is meant as a convenience, but its implementation is",
+          "path": "doc",
+          "range": [
+            5912,
+            5980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " also explicitly left unspecified. It isn't guaranteed to be",
+          "path": "doc",
+          "range": [
+            5985,
+            6048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " equivalent to repeated calls of [`hash`] and implementations of",
+          "path": "doc",
+          "range": [
+            6053,
+            6120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hash`] should keep that in mind and call [`hash`] themselves",
+          "path": "doc",
+          "range": [
+            6125,
+            6191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if the slice isn't treated as a whole unit in the [`PartialEq`]",
+          "path": "doc",
+          "range": [
+            6196,
+            6263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation.",
+          "path": "doc",
+          "range": [
+            6268,
+            6287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6292,
+            6295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, a [`VecDeque`] implementation might naïvely call",
+          "path": "doc",
+          "range": [
+            6300,
+            6366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`as_slices`] and then [`hash_slice`] on each slice, but this",
+          "path": "doc",
+          "range": [
+            6371,
+            6436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is wrong since the two slices can change with a call to",
+          "path": "doc",
+          "range": [
+            6441,
+            6500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_contiguous`] without affecting the [`PartialEq`]",
+          "path": "doc",
+          "range": [
+            6505,
+            6564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " result. Since these slices aren't treated as singular",
+          "path": "doc",
+          "range": [
+            6569,
+            6626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " units, and instead part of a larger deque, this method cannot",
+          "path": "doc",
+          "range": [
+            6631,
+            6696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be used.",
+          "path": "doc",
+          "range": [
+            6701,
+            6713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6718,
+            6721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6726,
+            6740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6745,
+            6748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6753,
+            6760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{DefaultHasher, Hash, Hasher};",
+          "path": "doc",
+          "range": [
+            6765,
+            6814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6819,
+            6822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher = DefaultHasher::new();",
+          "path": "doc",
+          "range": [
+            6827,
+            6869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let numbers = [6, 28, 496, 8128];",
+          "path": "doc",
+          "range": [
+            6874,
+            6911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Hash::hash_slice(&numbers, &mut hasher);",
+          "path": "doc",
+          "range": [
+            6916,
+            6960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"Hash is {:x}!\", hasher.finish());",
+          "path": "doc",
+          "range": [
+            6965,
+            7012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7017,
+            7024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7029,
+            7032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`VecDeque`]: ../../std/collections/struct.VecDeque.html",
+          "path": "doc",
+          "range": [
+            7037,
+            7097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`as_slices`]: ../../std/collections/struct.VecDeque.html#method.as_slices",
+          "path": "doc",
+          "range": [
+            7102,
+            7180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_contiguous`]: ../../std/collections/struct.VecDeque.html#method.make_contiguous",
+          "path": "doc",
+          "range": [
+            7185,
+            7275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`hash`]: Hash::hash",
+          "path": "doc",
+          "range": [
+            7280,
+            7304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`hash_slice`]: Hash::hash_slice",
+          "path": "doc",
+          "range": [
+            7309,
+            7345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7350,
+            7400
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7495,
+        7570
+      ],
+      "kind": "trait_fn",
+      "name": "hash_slice",
+      "range": [
+        5842,
+        7570
+      ],
+      "signature_range": [
+        7405,
+        7490
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": true,
+      "kind": "mod",
+      "name": "macros",
+      "path_overrides": [],
+      "range": [
+        7661,
+        7960
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7689,
+        7958
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A trait for hashing an arbitrary stream of bytes.",
+          "path": "doc",
+          "range": [
+            8062,
+            8115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8116,
+            8119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Instances of `Hasher` usually represent state that is changed while hashing",
+          "path": "doc",
+          "range": [
+            8120,
+            8199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " data.",
+          "path": "doc",
+          "range": [
+            8200,
+            8209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8210,
+            8213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Hasher` provides a fairly basic interface for retrieving the generated hash",
+          "path": "doc",
+          "range": [
+            8214,
+            8294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (with [`finish`]), and writing integers as well as slices of bytes into an",
+          "path": "doc",
+          "range": [
+            8295,
+            8373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instance (with [`write`] and [`write_u8`] etc.). Most of the time, `Hasher`",
+          "path": "doc",
+          "range": [
+            8374,
+            8453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instances are used in conjunction with the [`Hash`] trait.",
+          "path": "doc",
+          "range": [
+            8454,
+            8516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8517,
+            8520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait provides no guarantees about how the various `write_*` methods are",
+          "path": "doc",
+          "range": [
+            8521,
+            8602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " defined and implementations of [`Hash`] should not assume that they work one",
+          "path": "doc",
+          "range": [
+            8603,
+            8683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " way or another. You cannot assume, for example, that a [`write_u32`] call is",
+          "path": "doc",
+          "range": [
+            8684,
+            8764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " equivalent to four calls of [`write_u8`].  Nor can you assume that adjacent",
+          "path": "doc",
+          "range": [
+            8765,
+            8844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `write` calls are merged, so it's possible, for example, that",
+          "path": "doc",
+          "range": [
+            8845,
+            8910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8911,
+            8918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn foo(hasher: &mut impl std::hash::Hasher) {",
+          "path": "doc",
+          "range": [
+            8919,
+            8970
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(&[1, 2]);",
+          "path": "doc",
+          "range": [
+            8971,
+            8997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(&[3, 4, 5, 6]);",
+          "path": "doc",
+          "range": [
+            8998,
+            9030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            9031,
+            9038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9039,
+            9046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and",
+          "path": "doc",
+          "range": [
+            9047,
+            9054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9055,
+            9062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn foo(hasher: &mut impl std::hash::Hasher) {",
+          "path": "doc",
+          "range": [
+            9063,
+            9114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(&[1, 2, 3, 4]);",
+          "path": "doc",
+          "range": [
+            9115,
+            9147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(&[5, 6]);",
+          "path": "doc",
+          "range": [
+            9148,
+            9174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            9175,
+            9182
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9183,
+            9190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " end up producing different hashes.",
+          "path": "doc",
+          "range": [
+            9191,
+            9229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9230,
+            9233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Thus to produce the same hash value, [`Hash`] implementations must ensure",
+          "path": "doc",
+          "range": [
+            9234,
+            9311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for equivalent items that exactly the same sequence of calls is made -- the",
+          "path": "doc",
+          "range": [
+            9312,
+            9391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " same methods with the same parameters in the same order.",
+          "path": "doc",
+          "range": [
+            9392,
+            9452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9453,
+            9456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9457,
+            9471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9472,
+            9475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9476,
+            9483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{DefaultHasher, Hasher};",
+          "path": "doc",
+          "range": [
+            9484,
+            9527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9528,
+            9531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher = DefaultHasher::new();",
+          "path": "doc",
+          "range": [
+            9532,
+            9574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9575,
+            9578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write_u32(1989);",
+          "path": "doc",
+          "range": [
+            9579,
+            9606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write_u8(11);",
+          "path": "doc",
+          "range": [
+            9607,
+            9631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write_u8(9);",
+          "path": "doc",
+          "range": [
+            9632,
+            9655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(b\"Huh?\");",
+          "path": "doc",
+          "range": [
+            9656,
+            9682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9683,
+            9686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"Hash is {:x}!\", hasher.finish());",
+          "path": "doc",
+          "range": [
+            9687,
+            9734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9735,
+            9742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9743,
+            9746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`finish`]: Hasher::finish",
+          "path": "doc",
+          "range": [
+            9747,
+            9777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`write`]: Hasher::write",
+          "path": "doc",
+          "range": [
+            9778,
+            9806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`write_u8`]: Hasher::write_u8",
+          "path": "doc",
+          "range": [
+            9807,
+            9841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`write_u32`]: Hasher::write_u32",
+          "path": "doc",
+          "range": [
+            9842,
+            9878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9879,
+            9924
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Hasher",
+      "range": [
+        8062,
+        18616
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the hash value for the values written so far.",
+          "path": "doc",
+          "range": [
+            9948,
+            10005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10010,
+            10013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Despite its name, the method does not reset the hasher’s internal",
+          "path": "doc",
+          "range": [
+            10018,
+            10089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " state. Additional [`write`]s will continue from the current value.",
+          "path": "doc",
+          "range": [
+            10094,
+            10164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you need to start a fresh hash value, you will have to create",
+          "path": "doc",
+          "range": [
+            10169,
+            10237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a new hasher.",
+          "path": "doc",
+          "range": [
+            10242,
+            10259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10264,
+            10267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10272,
+            10286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10291,
+            10294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10299,
+            10306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{DefaultHasher, Hasher};",
+          "path": "doc",
+          "range": [
+            10311,
+            10354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10359,
+            10362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher = DefaultHasher::new();",
+          "path": "doc",
+          "range": [
+            10367,
+            10409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(b\"Cool!\");",
+          "path": "doc",
+          "range": [
+            10414,
+            10441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10446,
+            10449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"Hash is {:x}!\", hasher.finish());",
+          "path": "doc",
+          "range": [
+            10454,
+            10501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10506,
+            10513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10518,
+            10521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`write`]: Hasher::write",
+          "path": "doc",
+          "range": [
+            10526,
+            10554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10559,
+            10604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10609,
+            10620
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "finish",
+      "range": [
+        9948,
+        10649
+      ],
+      "signature_range": [
+        10625,
+        10648
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes some data into this `Hasher`.",
+          "path": "doc",
+          "range": [
+            10655,
+            10695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10700,
+            10703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10708,
+            10722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10727,
+            10730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10735,
+            10742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{DefaultHasher, Hasher};",
+          "path": "doc",
+          "range": [
+            10747,
+            10790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10795,
+            10798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher = DefaultHasher::new();",
+          "path": "doc",
+          "range": [
+            10803,
+            10845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let data = [0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef];",
+          "path": "doc",
+          "range": [
+            10850,
+            10914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10919,
+            10922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher.write(&data);",
+          "path": "doc",
+          "range": [
+            10927,
+            10951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10956,
+            10959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"Hash is {:x}!\", hasher.finish());",
+          "path": "doc",
+          "range": [
+            10964,
+            11011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11016,
+            11023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11028,
+            11031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note to Implementers",
+          "path": "doc",
+          "range": [
+            11036,
+            11062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11067,
+            11070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You generally should not do length-prefixing as part of implementing",
+          "path": "doc",
+          "range": [
+            11075,
+            11147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this method.  It's up to the [`Hash`] implementation to call",
+          "path": "doc",
+          "range": [
+            11152,
+            11216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher::write_length_prefix`] before sequences that need it.",
+          "path": "doc",
+          "range": [
+            11221,
+            11287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11292,
+            11337
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "write",
+      "range": [
+        10655,
+        11376
+      ],
+      "signature_range": [
+        11342,
+        11375
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `u8` into this hasher.",
+          "path": "doc",
+          "range": [
+            11382,
+            11424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11429,
+            11438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11443,
+            11495
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11530,
+        11562
+      ],
+      "kind": "trait_fn",
+      "name": "write_u8",
+      "range": [
+        11382,
+        11562
+      ],
+      "signature_range": [
+        11500,
+        11529
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `u16` into this hasher.",
+          "path": "doc",
+          "range": [
+            11567,
+            11610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11615,
+            11624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11629,
+            11681
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11718,
+        11762
+      ],
+      "kind": "trait_fn",
+      "name": "write_u16",
+      "range": [
+        11567,
+        11762
+      ],
+      "signature_range": [
+        11686,
+        11717
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `u32` into this hasher.",
+          "path": "doc",
+          "range": [
+            11767,
+            11810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11815,
+            11824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11829,
+            11881
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11918,
+        11962
+      ],
+      "kind": "trait_fn",
+      "name": "write_u32",
+      "range": [
+        11767,
+        11962
+      ],
+      "signature_range": [
+        11886,
+        11917
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `u64` into this hasher.",
+          "path": "doc",
+          "range": [
+            11967,
+            12010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12015,
+            12024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12029,
+            12081
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12118,
+        12162
+      ],
+      "kind": "trait_fn",
+      "name": "write_u64",
+      "range": [
+        11967,
+        12162
+      ],
+      "signature_range": [
+        12086,
+        12117
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `u128` into this hasher.",
+          "path": "doc",
+          "range": [
+            12167,
+            12211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12216,
+            12225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12230,
+            12275
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12314,
+        12358
+      ],
+      "kind": "trait_fn",
+      "name": "write_u128",
+      "range": [
+        12167,
+        12358
+      ],
+      "signature_range": [
+        12280,
+        12313
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `usize` into this hasher.",
+          "path": "doc",
+          "range": [
+            12363,
+            12408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12413,
+            12422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12427,
+            12479
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12520,
+        12564
+      ],
+      "kind": "trait_fn",
+      "name": "write_usize",
+      "range": [
+        12363,
+        12564
+      ],
+      "signature_range": [
+        12484,
+        12519
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `i8` into this hasher.",
+          "path": "doc",
+          "range": [
+            12570,
+            12612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12617,
+            12626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12631,
+            12683
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12718,
+        12756
+      ],
+      "kind": "trait_fn",
+      "name": "write_i8",
+      "range": [
+        12570,
+        12756
+      ],
+      "signature_range": [
+        12688,
+        12717
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `i16` into this hasher.",
+          "path": "doc",
+          "range": [
+            12761,
+            12804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12809,
+            12818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12823,
+            12875
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12912,
+        12952
+      ],
+      "kind": "trait_fn",
+      "name": "write_i16",
+      "range": [
+        12761,
+        12952
+      ],
+      "signature_range": [
+        12880,
+        12911
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `i32` into this hasher.",
+          "path": "doc",
+          "range": [
+            12957,
+            13000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13005,
+            13014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13019,
+            13071
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13108,
+        13148
+      ],
+      "kind": "trait_fn",
+      "name": "write_i32",
+      "range": [
+        12957,
+        13148
+      ],
+      "signature_range": [
+        13076,
+        13107
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `i64` into this hasher.",
+          "path": "doc",
+          "range": [
+            13153,
+            13196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13201,
+            13210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13215,
+            13267
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13304,
+        13344
+      ],
+      "kind": "trait_fn",
+      "name": "write_i64",
+      "range": [
+        13153,
+        13344
+      ],
+      "signature_range": [
+        13272,
+        13303
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `i128` into this hasher.",
+          "path": "doc",
+          "range": [
+            13349,
+            13393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13398,
+            13407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13412,
+            13457
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13496,
+        13538
+      ],
+      "kind": "trait_fn",
+      "name": "write_i128",
+      "range": [
+        13349,
+        13538
+      ],
+      "signature_range": [
+        13462,
+        13495
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `isize` into this hasher.",
+          "path": "doc",
+          "range": [
+            13543,
+            13588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13593,
+            13602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13607,
+            13659
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13700,
+        13744
+      ],
+      "kind": "trait_fn",
+      "name": "write_isize",
+      "range": [
+        13543,
+        13744
+      ],
+      "signature_range": [
+        13664,
+        13699
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a length prefix into this hasher, as part of being prefix-free.",
+          "path": "doc",
+          "range": [
+            13750,
+            13824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13829,
+            13832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you're implementing [`Hash`] for a custom collection, call this before",
+          "path": "doc",
+          "range": [
+            13837,
+            13914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " writing its contents to this `Hasher`.  That way",
+          "path": "doc",
+          "range": [
+            13919,
+            13971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `(collection![1, 2, 3], collection![4, 5])` and",
+          "path": "doc",
+          "range": [
+            13976,
+            14027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `(collection![1, 2], collection![3, 4, 5])` will provide different",
+          "path": "doc",
+          "range": [
+            14032,
+            14102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sequences of values to the `Hasher`",
+          "path": "doc",
+          "range": [
+            14107,
+            14146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14151,
+            14154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `impl<T> Hash for [T]` includes a call to this method, so if you're",
+          "path": "doc",
+          "range": [
+            14159,
+            14234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hashing a slice (or array or vector) via its `Hash::hash` method,",
+          "path": "doc",
+          "range": [
+            14239,
+            14308
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " you should **not** call this yourself.",
+          "path": "doc",
+          "range": [
+            14313,
+            14355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14360,
+            14363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is only for providing domain separation.  If you want to",
+          "path": "doc",
+          "range": [
+            14368,
+            14440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hash a `usize` that represents part of the *data*, then it's important",
+          "path": "doc",
+          "range": [
+            14445,
+            14519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that you pass it to [`Hasher::write_usize`] instead of to this method.",
+          "path": "doc",
+          "range": [
+            14524,
+            14598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14603,
+            14606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14611,
+            14625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14630,
+            14633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14638,
+            14645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(hasher_prefixfree_extras)]",
+          "path": "doc",
+          "range": [
+            14650,
+            14691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # // Stubs to make the `impl` below pass the compiler",
+          "path": "doc",
+          "range": [
+            14696,
+            14753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![allow(non_local_definitions)]",
+          "path": "doc",
+          "range": [
+            14758,
+            14796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct MyCollection<T>(Option<T>);",
+          "path": "doc",
+          "range": [
+            14801,
+            14841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl<T> MyCollection<T> {",
+          "path": "doc",
+          "range": [
+            14846,
+            14877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn len(&self) -> usize { todo!() }",
+          "path": "doc",
+          "range": [
+            14882,
+            14926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            14931,
+            14938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl<'a, T> IntoIterator for &'a MyCollection<T> {",
+          "path": "doc",
+          "range": [
+            14943,
+            14999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     type Item = T;",
+          "path": "doc",
+          "range": [
+            15004,
+            15028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     type IntoIter = std::iter::Empty<T>;",
+          "path": "doc",
+          "range": [
+            15033,
+            15079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn into_iter(self) -> Self::IntoIter { todo!() }",
+          "path": "doc",
+          "range": [
+            15084,
+            15142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            15147,
+            15154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15159,
+            15162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{Hash, Hasher};",
+          "path": "doc",
+          "range": [
+            15167,
+            15201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T: Hash> Hash for MyCollection<T> {",
+          "path": "doc",
+          "range": [
+            15206,
+            15250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn hash<H: Hasher>(&self, state: &mut H) {",
+          "path": "doc",
+          "range": [
+            15255,
+            15305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         state.write_length_prefix(self.len());",
+          "path": "doc",
+          "range": [
+            15310,
+            15360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         for elt in self {",
+          "path": "doc",
+          "range": [
+            15365,
+            15394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             elt.hash(state);",
+          "path": "doc",
+          "range": [
+            15399,
+            15431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            15436,
+            15449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            15454,
+            15463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15468,
+            15473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15478,
+            15485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15490,
+            15493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note to Implementers",
+          "path": "doc",
+          "range": [
+            15498,
+            15524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15529,
+            15532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you've decided that your `Hasher` is willing to be susceptible to",
+          "path": "doc",
+          "range": [
+            15537,
+            15609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Hash-DoS attacks, then you might consider skipping hashing some or all",
+          "path": "doc",
+          "range": [
+            15614,
+            15688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the `len` provided in the name of increased performance.",
+          "path": "doc",
+          "range": [
+            15693,
+            15756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15761,
+            15770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15775,
+            15841
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15892,
+        15930
+      ],
+      "kind": "trait_fn",
+      "name": "write_length_prefix",
+      "range": [
+        13750,
+        15930
+      ],
+      "signature_range": [
+        15846,
+        15891
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Writes a single `str` into this hasher.",
+          "path": "doc",
+          "range": [
+            15936,
+            15979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15984,
+            15987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you're implementing [`Hash`], you generally do not need to call this,",
+          "path": "doc",
+          "range": [
+            15992,
+            16068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as the `impl Hash for str` does, so you should prefer that instead.",
+          "path": "doc",
+          "range": [
+            16073,
+            16144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16149,
+            16152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This includes the domain separator for prefix-freedom, so you should",
+          "path": "doc",
+          "range": [
+            16157,
+            16229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **not** call `Self::write_length_prefix` before calling this.",
+          "path": "doc",
+          "range": [
+            16234,
+            16299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16304,
+            16307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note to Implementers",
+          "path": "doc",
+          "range": [
+            16312,
+            16338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16343,
+            16346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There are at least two reasonable default ways to implement this.",
+          "path": "doc",
+          "range": [
+            16351,
+            16420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Which one will be the default is not yet decided, so for now",
+          "path": "doc",
+          "range": [
+            16425,
+            16489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " you probably want to override it specifically.",
+          "path": "doc",
+          "range": [
+            16494,
+            16544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16549,
+            16552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## The general answer",
+          "path": "doc",
+          "range": [
+            16557,
+            16582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16587,
+            16590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It's always correct to implement this with a length prefix:",
+          "path": "doc",
+          "range": [
+            16595,
+            16658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16663,
+            16666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16671,
+            16678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![feature(hasher_prefixfree_extras)]",
+          "path": "doc",
+          "range": [
+            16683,
+            16726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct Foo;",
+          "path": "doc",
+          "range": [
+            16731,
+            16748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl std::hash::Hasher for Foo {",
+          "path": "doc",
+          "range": [
+            16753,
+            16791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn finish(&self) -> u64 { unimplemented!() }",
+          "path": "doc",
+          "range": [
+            16796,
+            16846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn write(&mut self, _bytes: &[u8]) { unimplemented!() }",
+          "path": "doc",
+          "range": [
+            16851,
+            16912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn write_str(&mut self, s: &str) {",
+          "path": "doc",
+          "range": [
+            16917,
+            16955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     self.write_length_prefix(s.len());",
+          "path": "doc",
+          "range": [
+            16960,
+            17002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     self.write(s.as_bytes());",
+          "path": "doc",
+          "range": [
+            17007,
+            17040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            17045,
+            17050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            17055,
+            17062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17067,
+            17074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17079,
+            17082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " And, if your `Hasher` works in `usize` chunks, this is likely a very",
+          "path": "doc",
+          "range": [
+            17087,
+            17159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " efficient way to do it, as anything more complicated may well end up",
+          "path": "doc",
+          "range": [
+            17164,
+            17236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " slower than just running the round with the length.",
+          "path": "doc",
+          "range": [
+            17241,
+            17296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17301,
+            17304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## If your `Hasher` works byte-wise",
+          "path": "doc",
+          "range": [
+            17309,
+            17348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17353,
+            17356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " One nice thing about `str` being UTF-8 is that the `b'\\xFF'` byte",
+          "path": "doc",
+          "range": [
+            17361,
+            17430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " never happens.  That means that you can append that to the byte stream",
+          "path": "doc",
+          "range": [
+            17435,
+            17509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " being hashed and maintain prefix-freedom:",
+          "path": "doc",
+          "range": [
+            17514,
+            17559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17564,
+            17567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17572,
+            17579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![feature(hasher_prefixfree_extras)]",
+          "path": "doc",
+          "range": [
+            17584,
+            17627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct Foo;",
+          "path": "doc",
+          "range": [
+            17632,
+            17649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl std::hash::Hasher for Foo {",
+          "path": "doc",
+          "range": [
+            17654,
+            17692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn finish(&self) -> u64 { unimplemented!() }",
+          "path": "doc",
+          "range": [
+            17697,
+            17747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn write(&mut self, _bytes: &[u8]) { unimplemented!() }",
+          "path": "doc",
+          "range": [
+            17752,
+            17813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn write_str(&mut self, s: &str) {",
+          "path": "doc",
+          "range": [
+            17818,
+            17856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     self.write(s.as_bytes());",
+          "path": "doc",
+          "range": [
+            17861,
+            17894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     self.write_u8(0xff);",
+          "path": "doc",
+          "range": [
+            17899,
+            17927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            17932,
+            17937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            17942,
+            17949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17954,
+            17961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17966,
+            17969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This does require that your implementation not add extra padding, and",
+          "path": "doc",
+          "range": [
+            17974,
+            18047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thus generally requires that you maintain a buffer, running a round",
+          "path": "doc",
+          "range": [
+            18052,
+            18123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " only once that buffer is full (or `finish` is called).",
+          "path": "doc",
+          "range": [
+            18128,
+            18186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18191,
+            18194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " That's because if `write` pads data out to a fixed chunk size, it's",
+          "path": "doc",
+          "range": [
+            18199,
+            18270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " likely that it does it in such a way that `\"a\"` and `\"a\\x00\"` would",
+          "path": "doc",
+          "range": [
+            18275,
+            18346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " end up hashing the same sequence of things, introducing conflicts.",
+          "path": "doc",
+          "range": [
+            18351,
+            18421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18426,
+            18435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18440,
+            18506
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18544,
+        18614
+      ],
+      "kind": "trait_fn",
+      "name": "write_str",
+      "range": [
+        15936,
+        18614
+      ],
+      "signature_range": [
+        18511,
+        18543
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18618,
+            18679
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18618,
+        19939
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        18753,
+        18786
+      ],
+      "kind": "impl_fn",
+      "name": "finish",
+      "range": [
+        18729,
+        18786
+      ],
+      "signature_range": [
+        18729,
+        18752
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        18825,
+        18862
+      ],
+      "kind": "impl_fn",
+      "name": "write",
+      "range": [
+        18791,
+        18862
+      ],
+      "signature_range": [
+        18791,
+        18824
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        18897,
+        18933
+      ],
+      "kind": "impl_fn",
+      "name": "write_u8",
+      "range": [
+        18867,
+        18933
+      ],
+      "signature_range": [
+        18867,
+        18896
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        18970,
+        19007
+      ],
+      "kind": "impl_fn",
+      "name": "write_u16",
+      "range": [
+        18938,
+        19007
+      ],
+      "signature_range": [
+        18938,
+        18969
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19044,
+        19081
+      ],
+      "kind": "impl_fn",
+      "name": "write_u32",
+      "range": [
+        19012,
+        19081
+      ],
+      "signature_range": [
+        19012,
+        19043
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19118,
+        19155
+      ],
+      "kind": "impl_fn",
+      "name": "write_u64",
+      "range": [
+        19086,
+        19155
+      ],
+      "signature_range": [
+        19086,
+        19117
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19194,
+        19232
+      ],
+      "kind": "impl_fn",
+      "name": "write_u128",
+      "range": [
+        19160,
+        19232
+      ],
+      "signature_range": [
+        19160,
+        19193
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19273,
+        19312
+      ],
+      "kind": "impl_fn",
+      "name": "write_usize",
+      "range": [
+        19237,
+        19312
+      ],
+      "signature_range": [
+        19237,
+        19272
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19347,
+        19383
+      ],
+      "kind": "impl_fn",
+      "name": "write_i8",
+      "range": [
+        19317,
+        19383
+      ],
+      "signature_range": [
+        19317,
+        19346
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19420,
+        19457
+      ],
+      "kind": "impl_fn",
+      "name": "write_i16",
+      "range": [
+        19388,
+        19457
+      ],
+      "signature_range": [
+        19388,
+        19419
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19494,
+        19531
+      ],
+      "kind": "impl_fn",
+      "name": "write_i32",
+      "range": [
+        19462,
+        19531
+      ],
+      "signature_range": [
+        19462,
+        19493
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19568,
+        19605
+      ],
+      "kind": "impl_fn",
+      "name": "write_i64",
+      "range": [
+        19536,
+        19605
+      ],
+      "signature_range": [
+        19536,
+        19567
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19644,
+        19682
+      ],
+      "kind": "impl_fn",
+      "name": "write_i128",
+      "range": [
+        19610,
+        19682
+      ],
+      "signature_range": [
+        19610,
+        19643
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19723,
+        19762
+      ],
+      "kind": "impl_fn",
+      "name": "write_isize",
+      "range": [
+        19687,
+        19762
+      ],
+      "signature_range": [
+        19687,
+        19722
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19813,
+        19862
+      ],
+      "kind": "impl_fn",
+      "name": "write_length_prefix",
+      "range": [
+        19767,
+        19862
+      ],
+      "signature_range": [
+        19767,
+        19812
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        19900,
+        19937
+      ],
+      "kind": "impl_fn",
+      "name": "write_str",
+      "range": [
+        19867,
+        19937
+      ],
+      "signature_range": [
+        19867,
+        19899
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A trait for creating instances of [`Hasher`].",
+          "path": "doc",
+          "range": [
+            19941,
+            19990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19991,
+            19994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `BuildHasher` is typically used (e.g., by [`HashMap`]) to create",
+          "path": "doc",
+          "range": [
+            19995,
+            20065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher`]s for each key such that they are hashed independently of one",
+          "path": "doc",
+          "range": [
+            20066,
+            20141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " another, since [`Hasher`]s contain state.",
+          "path": "doc",
+          "range": [
+            20142,
+            20187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20188,
+            20191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For each instance of `BuildHasher`, the [`Hasher`]s created by",
+          "path": "doc",
+          "range": [
+            20192,
+            20258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`build_hasher`] should be identical. That is, if the same stream of bytes",
+          "path": "doc",
+          "range": [
+            20259,
+            20337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is fed into each hasher, the same output will also be generated.",
+          "path": "doc",
+          "range": [
+            20338,
+            20406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20407,
+            20410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20411,
+            20425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20426,
+            20429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20430,
+            20437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{BuildHasher, Hasher, RandomState};",
+          "path": "doc",
+          "range": [
+            20438,
+            20492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20493,
+            20496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = RandomState::new();",
+          "path": "doc",
+          "range": [
+            20497,
+            20528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher_1 = s.build_hasher();",
+          "path": "doc",
+          "range": [
+            20529,
+            20569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hasher_2 = s.build_hasher();",
+          "path": "doc",
+          "range": [
+            20570,
+            20610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20611,
+            20614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher_1.write_u32(8128);",
+          "path": "doc",
+          "range": [
+            20615,
+            20644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hasher_2.write_u32(8128);",
+          "path": "doc",
+          "range": [
+            20645,
+            20674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20675,
+            20678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(hasher_1.finish(), hasher_2.finish());",
+          "path": "doc",
+          "range": [
+            20679,
+            20732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20733,
+            20740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20741,
+            20744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`build_hasher`]: BuildHasher::build_hasher",
+          "path": "doc",
+          "range": [
+            20745,
+            20792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashMap`]: ../../std/collections/struct.HashMap.html",
+          "path": "doc",
+          "range": [
+            20793,
+            20851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            20852,
+            20913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20914,
+            20966
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "BuildHasher",
+      "range": [
+        19941,
+        23273
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new hasher.",
+          "path": "doc",
+          "range": [
+            21127,
+            21152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21157,
+            21160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Each call to `build_hasher` on the same instance should produce identical",
+          "path": "doc",
+          "range": [
+            21165,
+            21242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher`]s.",
+          "path": "doc",
+          "range": [
+            21247,
+            21263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21268,
+            21271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21276,
+            21290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21295,
+            21298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21303,
+            21310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{BuildHasher, RandomState};",
+          "path": "doc",
+          "range": [
+            21315,
+            21361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21366,
+            21369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = RandomState::new();",
+          "path": "doc",
+          "range": [
+            21374,
+            21405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let new_s = s.build_hasher();",
+          "path": "doc",
+          "range": [
+            21410,
+            21443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21448,
+            21455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21460,
+            21512
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "build_hasher",
+      "range": [
+        21127,
+        21556
+      ],
+      "signature_range": [
+        21517,
+        21555
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [
+        {
+          "doc_text": " Calculates the hash of a single value.",
+          "path": "doc",
+          "range": [
+            21562,
+            21604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21609,
+            21612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is intended as a convenience for code which *consumes* hashes, such",
+          "path": "doc",
+          "range": [
+            21617,
+            21693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as the implementation of a hash table or in unit tests that check",
+          "path": "doc",
+          "range": [
+            21698,
+            21767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " whether a custom [`Hash`] implementation behaves as expected.",
+          "path": "doc",
+          "range": [
+            21772,
+            21837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21842,
+            21845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This must not be used in any code which *creates* hashes, such as in an",
+          "path": "doc",
+          "range": [
+            21850,
+            21925
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation of [`Hash`].  The way to create a combined hash of",
+          "path": "doc",
+          "range": [
+            21930,
+            21999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " multiple values is to call [`Hash::hash`] multiple times using the same",
+          "path": "doc",
+          "range": [
+            22004,
+            22079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher`], not to call this method repeatedly and combine the results.",
+          "path": "doc",
+          "range": [
+            22084,
+            22159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22164,
+            22167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            22172,
+            22185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22190,
+            22193
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22198,
+            22205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cmp::{max, min};",
+          "path": "doc",
+          "range": [
+            22210,
+            22239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{BuildHasher, Hash, Hasher};",
+          "path": "doc",
+          "range": [
+            22244,
+            22291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct OrderAmbivalentPair<T: Ord>(T, T);",
+          "path": "doc",
+          "range": [
+            22296,
+            22341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T: Ord + Hash> Hash for OrderAmbivalentPair<T> {",
+          "path": "doc",
+          "range": [
+            22346,
+            22403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn hash<H: Hasher>(&self, hasher: &mut H) {",
+          "path": "doc",
+          "range": [
+            22408,
+            22459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         min(&self.0, &self.1).hash(hasher);",
+          "path": "doc",
+          "range": [
+            22464,
+            22511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         max(&self.0, &self.1).hash(hasher);",
+          "path": "doc",
+          "range": [
+            22516,
+            22563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            22568,
+            22577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            22582,
+            22587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22592,
+            22595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Then later, in a `#[test]` for the type...",
+          "path": "doc",
+          "range": [
+            22600,
+            22649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let bh = std::hash::RandomState::new();",
+          "path": "doc",
+          "range": [
+            22654,
+            22697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            22702,
+            22717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     bh.hash_one(OrderAmbivalentPair(1, 2)),",
+          "path": "doc",
+          "range": [
+            22722,
+            22769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     bh.hash_one(OrderAmbivalentPair(2, 1))",
+          "path": "doc",
+          "range": [
+            22774,
+            22820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            22825,
+            22831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            22836,
+            22851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     bh.hash_one(OrderAmbivalentPair(10, 2)),",
+          "path": "doc",
+          "range": [
+            22856,
+            22904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     bh.hash_one(&OrderAmbivalentPair(2, 10))",
+          "path": "doc",
+          "range": [
+            22909,
+            22957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            22962,
+            22968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22973,
+            22980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            22985,
+            23054
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23165,
+        23271
+      ],
+      "kind": "trait_fn",
+      "name": "hash_one",
+      "range": [
+        21562,
+        23271
+      ],
+      "signature_range": [
+        23059,
+        23160
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Used to create a default [`BuildHasher`] instance for types that implement",
+          "path": "doc",
+          "range": [
+            23275,
+            23353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Hasher`] and [`Default`].",
+          "path": "doc",
+          "range": [
+            23354,
+            23385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23386,
+            23389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `BuildHasherDefault<H>` can be used when a type `H` implements [`Hasher`] and",
+          "path": "doc",
+          "range": [
+            23390,
+            23471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Default`], and you need a corresponding [`BuildHasher`] instance, but none is",
+          "path": "doc",
+          "range": [
+            23472,
+            23555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " defined.",
+          "path": "doc",
+          "range": [
+            23556,
+            23568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23569,
+            23572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Any `BuildHasherDefault` is [zero-sized]. It can be created with",
+          "path": "doc",
+          "range": [
+            23573,
+            23641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`default`][method.default]. When using `BuildHasherDefault` with [`HashMap`] or",
+          "path": "doc",
+          "range": [
+            23642,
+            23726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashSet`], this doesn't need to be done, since they implement appropriate",
+          "path": "doc",
+          "range": [
+            23727,
+            23806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Default`] instances themselves.",
+          "path": "doc",
+          "range": [
+            23807,
+            23844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23845,
+            23848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23849,
+            23863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23864,
+            23867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Using `BuildHasherDefault` to specify a custom [`BuildHasher`] for",
+          "path": "doc",
+          "range": [
+            23868,
+            23938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashMap`]:",
+          "path": "doc",
+          "range": [
+            23939,
+            23955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23956,
+            23959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23960,
+            23967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::collections::HashMap;",
+          "path": "doc",
+          "range": [
+            23968,
+            24002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::{BuildHasherDefault, Hasher};",
+          "path": "doc",
+          "range": [
+            24003,
+            24051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24052,
+            24055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Default)]",
+          "path": "doc",
+          "range": [
+            24056,
+            24078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct MyHasher;",
+          "path": "doc",
+          "range": [
+            24079,
+            24099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24100,
+            24103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Hasher for MyHasher {",
+          "path": "doc",
+          "range": [
+            24104,
+            24134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn write(&mut self, bytes: &[u8]) {",
+          "path": "doc",
+          "range": [
+            24135,
+            24178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Your hashing algorithm goes here!",
+          "path": "doc",
+          "range": [
+            24179,
+            24227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "        unimplemented!()",
+          "path": "doc",
+          "range": [
+            24228,
+            24255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            24256,
+            24265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24266,
+            24269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn finish(&self) -> u64 {",
+          "path": "doc",
+          "range": [
+            24270,
+            24303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Your hashing algorithm goes here!",
+          "path": "doc",
+          "range": [
+            24304,
+            24352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         unimplemented!()",
+          "path": "doc",
+          "range": [
+            24353,
+            24381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            24382,
+            24391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            24392,
+            24397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24398,
+            24401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type MyBuildHasher = BuildHasherDefault<MyHasher>;",
+          "path": "doc",
+          "range": [
+            24402,
+            24456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24457,
+            24460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let hash_map = HashMap::<u32, u32, MyBuildHasher>::default();",
+          "path": "doc",
+          "range": [
+            24461,
+            24526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24527,
+            24534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24535,
+            24538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [method.default]: BuildHasherDefault::default",
+          "path": "doc",
+          "range": [
+            24539,
+            24588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashMap`]: ../../std/collections/struct.HashMap.html",
+          "path": "doc",
+          "range": [
+            24589,
+            24647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`HashSet`]: ../../std/collections/struct.HashSet.html",
+          "path": "doc",
+          "range": [
+            24648,
+            24706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [zero-sized]: https://doc.rust-lang.org/nomicon/exotic-sizes.html#zero-sized-types-zsts",
+          "path": "doc",
+          "range": [
+            24707,
+            24798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24799,
+            24851
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "BuildHasherDefault",
+      "range": [
+        23275,
+        24917
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24919,
+        25260
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new BuildHasherDefault for Hasher `H`.",
+          "path": "doc",
+          "range": [
+            24955,
+            25007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25012,
+            25083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            25088,
+            25171
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25203,
+        25258
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        24955,
+        25258
+      ],
+      "signature_range": [
+        25180,
+        25202
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25262,
+            25317
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25262,
+        25489
+      ]
+    },
+    {
+      "ancestors": [
+        46
+      ],
+      "attributes": [],
+      "body_range": [
+        25426,
+        25487
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        25369,
+        25487
+      ],
+      "signature_range": [
+        25369,
+        25425
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25491,
+            25543
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25491,
+        25694
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [],
+      "body_range": [
+        25664,
+        25692
+      ],
+      "kind": "impl_fn",
+      "name": "build_hasher",
+      "range": [
+        25636,
+        25692
+      ],
+      "signature_range": [
+        25636,
+        25663
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25696,
+            25748
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25696,
+        25893
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [],
+      "body_range": [
+        25836,
+        25891
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        25795,
+        25891
+      ],
+      "signature_range": [
+        25795,
+        25835
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        25895,
+        26138
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26140,
+            26196
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26140,
+        26322
+      ]
+    },
+    {
+      "ancestors": [
+        53
+      ],
+      "attributes": [],
+      "body_range": [
+        26300,
+        26320
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        26247,
+        26320
+      ],
+      "signature_range": [
+        26247,
+        26299
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26324,
+            26380
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26324,
+        26420
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": true,
+      "kind": "mod",
+      "name": "impls",
+      "path_overrides": [],
+      "range": [
+        26422,
+        31674
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        26479,
+        27471
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27477,
+        27816
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            27822,
+            27867
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27822,
+        28017
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        59
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            27901,
+            27910
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27960,
+        28011
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        27901,
+        28011
+      ],
+      "signature_range": [
+        27919,
+        27959
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            28023,
+            28068
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        28023,
+        28220
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        61
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28102,
+            28111
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28161,
+        28214
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        28102,
+        28214
+      ],
+      "signature_range": [
+        28120,
+        28160
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            28226,
+            28271
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        28226,
+        28415
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        63
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28304,
+            28313
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28363,
+        28409
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        28304,
+        28409
+      ],
+      "signature_range": [
+        28322,
+        28362
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            28421,
+            28472
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        28421,
+        28593
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28503,
+            28512
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28558,
+        28587
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        28503,
+        28587
+      ],
+      "signature_range": [
+        28521,
+        28557
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        28599,
+        29373
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29379,
+        29781
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29787,
+        29806
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29811,
+        29833
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29838,
+        29862
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29867,
+        29893
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29898,
+        29926
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29931,
+        29961
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29966,
+        29998
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30003,
+        30037
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30042,
+        30078
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30083,
+        30121
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30126,
+        30166
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30171,
+        30213
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30218,
+        30262
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            30268,
+            30313
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30268,
+        30524
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        82
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30355,
+            30364
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30414,
+        30518
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        30355,
+        30518
+      ],
+      "signature_range": [
+        30373,
+        30413
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            30530,
+            30575
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30530,
+        30758
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        84
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30648,
+            30657
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30707,
+        30752
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        30648,
+        30752
+      ],
+      "signature_range": [
+        30666,
+        30706
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            30764,
+            30809
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30764,
+        30996
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        86
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30886,
+            30895
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30945,
+        30990
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        30886,
+        30990
+      ],
+      "signature_range": [
+        30904,
+        30944
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            31002,
+            31047
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31002,
+        31335
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        88
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31119,
+            31128
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31178,
+        31329
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        31119,
+        31329
+      ],
+      "signature_range": [
+        31137,
+        31177
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            31341,
+            31386
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31341,
+        31672
+      ]
+    },
+    {
+      "ancestors": [
+        56,
+        90
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31456,
+            31465
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31515,
+        31666
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        31456,
+        31666
+      ],
+      "signature_range": [
+        31474,
+        31514
+      ]
+    }
+  ],
+  "source_sha256": "3933785a52fe51baa926f922cc9d06d0871d4e9ec3e2438c52ea9a06482935be"
+}

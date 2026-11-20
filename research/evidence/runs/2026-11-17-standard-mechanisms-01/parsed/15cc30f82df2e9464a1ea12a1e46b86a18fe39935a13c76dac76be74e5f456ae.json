@@ -1,0 +1,376 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Platform-specific, assembly instructions to avoid",
+      "path": "doc",
+      "range": [
+        0,
+        53
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " intermediate rounding on architectures with FPUs.",
+      "path": "doc",
+      "range": [
+        54,
+        107
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            1467,
+            1529
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "fpu_precision",
+      "path_overrides": [],
+      "range": [
+        1467,
+        4180
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " A structure used to preserve the original value of the FPU control word, so that it can be",
+          "path": "doc",
+          "range": [
+            1580,
+            1674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " restored when the structure is dropped.",
+          "path": "doc",
+          "range": [
+            1679,
+            1722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1727,
+            1730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The x87 FPU is a 16-bits register whose fields are as follows:",
+          "path": "doc",
+          "range": [
+            1735,
+            1801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1806,
+            1809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | 12-15 | 10-11 | 8-9 | 6-7 |  5 |  4 |  3 |  2 |  1 |  0 |",
+          "path": "doc",
+          "range": [
+            1814,
+            1877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " |------:|------:|----:|----:|---:|---:|---:|---:|---:|---:|",
+          "path": "doc",
+          "range": [
+            1882,
+            1945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " |       | RC    | PC  |     | PM | UM | OM | ZM | DM | IM |",
+          "path": "doc",
+          "range": [
+            1950,
+            2013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2018,
+            2021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The documentation for all of the fields is available in the IA-32 Architectures Software",
+          "path": "doc",
+          "range": [
+            2026,
+            2118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Developer's Manual (Volume 1).",
+          "path": "doc",
+          "range": [
+            2123,
+            2157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2162,
+            2165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The only field which is relevant for the following code is PC, Precision Control. This",
+          "path": "doc",
+          "range": [
+            2170,
+            2260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " field determines the precision of the operations performed by the FPU. It can be set to:",
+          "path": "doc",
+          "range": [
+            2265,
+            2357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - 0b00, single precision i.e., 32-bits",
+          "path": "doc",
+          "range": [
+            2362,
+            2405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - 0b10, double precision i.e., 64-bits",
+          "path": "doc",
+          "range": [
+            2410,
+            2453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - 0b11, double extended precision i.e., 80-bits (default state)",
+          "path": "doc",
+          "range": [
+            2458,
+            2526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The 0b01 value is reserved and should not be used.",
+          "path": "doc",
+          "range": [
+            2531,
+            2585
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "FPUControlWord",
+      "range": [
+        1580,
+        2628
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "body_range": [
+        2653,
+        2936
+      ],
+      "kind": "fn",
+      "name": "set_cw",
+      "range": [
+        2634,
+        2936
+      ],
+      "signature_range": [
+        2634,
+        2652
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        2
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2799,
+        2920
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sets the precision field of the FPU to `T` and returns a `FPUControlWord`.",
+          "path": "doc",
+          "range": [
+            2942,
+            3020
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3076,
+        4070
+      ],
+      "kind": "fn",
+      "name": "set_precision",
+      "range": [
+        2942,
+        4070
+      ],
+      "signature_range": [
+        3036,
+        3075
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        4
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        3654,
+        3780
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4076,
+        4178
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6
+      ],
+      "attributes": [],
+      "body_range": [
+        4134,
+        4172
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        4115,
+        4172
+      ],
+      "signature_range": [
+        4115,
+        4133
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            4347,
+            4409
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "fpu_precision",
+      "path_overrides": [],
+      "range": [
+        4347,
+        4471
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "body_range": [
+        4467,
+        4469
+      ],
+      "kind": "fn",
+      "name": "set_precision",
+      "range": [
+        4434,
+        4469
+      ],
+      "signature_range": [
+        4445,
+        4466
+      ]
+    }
+  ],
+  "source_sha256": "16cf9ec154d477ab3d4184a01fb4b9ed7c59f0228cc55589d393c40a61b19d8f"
+}

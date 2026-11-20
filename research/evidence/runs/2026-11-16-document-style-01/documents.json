@@ -1,0 +1,114 @@
+{
+  "unit_01": {
+    "A": {
+      "purpose": "Limit a numeric reading to a ceiling.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "The smaller of value and 63; large readings saturate at 63.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Limit a numeric reading to a ceiling.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "The smaller of value and 63; large readings saturate at 63.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_02": {
+    "A": {
+      "purpose": "Bound a sample in a fixed numeric range.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "Returns value unchanged up to 63, and saturates to 63 above that ceiling.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Bound a sample in a fixed numeric range.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "Returns value unchanged up to 63, and saturates to 63 above that ceiling.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_03": {
+    "A": {
+      "purpose": "Locate a byte within a fixed size block.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "Remainder after division of value by 16, an offset in 0 through 15.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Locate a byte within a fixed size block.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "Remainder after division of value by 16, an offset in 0 through 15.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_04": {
+    "A": {
+      "purpose": "Calculate the intra block displacement of an address.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "The offset left after removing complete blocks, equal to value modulo 16.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Calculate the intra block displacement of an address.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "The offset left after removing complete blocks, equal to value modulo 16.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_05": {
+    "A": {
+      "purpose": "Locate the block containing a byte position.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "Quotient after division of value by 16, a block number in 0 through 15.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Locate the block containing a byte position.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "Quotient after division of value by 16, a block number in 0 through 15.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_06": {
+    "A": {
+      "purpose": "Calculate the block index of an address.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "The count of complete blocks before the address, equal to value divided by 16.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Calculate the block index of an address.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "The count of complete blocks before the address, equal to value divided by 16.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_07": {
+    "A": {
+      "purpose": "Find the beginning of the block containing an address.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "The largest multiple of 16 not exceeding value, a byte address rather than a block number.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Find the beginning of the block containing an address.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "The largest multiple of 16 not exceeding value, a byte address rather than a block number.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  },
+  "unit_08": {
+    "A": {
+      "purpose": "Test whether an address lies beyond the first block.",
+      "input": "Unsigned value from zero through 255.",
+      "output": "Returns one when value is at least 16, otherwise zero; not an offset or block number.",
+      "effects": "Pure calculation without allocation or external state."
+    },
+    "B": {
+      "purpose": "Test whether an address lies beyond the first block.",
+      "input": "An integer value in the inclusive interval 0 to 255.",
+      "output": "Returns one when value is at least 16, otherwise zero; not an offset or block number.",
+      "effects": "No allocation and no externally visible state changes; only a return value."
+    }
+  }
+}

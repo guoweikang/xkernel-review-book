@@ -1,0 +1,39 @@
+[
+  {
+    "id": "DQ1",
+    "claim": "On an empty deque the predicate is not called and result is None",
+    "basis": [
+      "original method documentation",
+      "original method source",
+      "12-condition runtime witness"
+    ],
+    "scope": "source/doc claim plus observed i32 fixture"
+  },
+  {
+    "id": "DQ2",
+    "claim": "A predicate may mutate the inspected element even when it returns false; observed mutation remains",
+    "basis": [
+      "mutable predicate parameter and call before branch",
+      "four nonempty false runtime witnesses"
+    ],
+    "scope": "existential witness, not all predicate effects or panic semantics"
+  },
+  {
+    "id": "DQ3",
+    "claim": "Returning None implies the deque elements are unchanged",
+    "basis": [
+      "deliberately constructed corrupted claim"
+    ],
+    "status": "refuted_by_DQ2",
+    "scope": "not a claim attributed to standard-library docs"
+  },
+  {
+    "id": "DQ4",
+    "claim": "Front and back target different endpoints; accepted mutated element is returned",
+    "basis": [
+      "original endpoint-specific calls",
+      "nonempty true runtime witnesses"
+    ],
+    "scope": "observed lengths1and3; no general equivalence or extraction label"
+  }
+]

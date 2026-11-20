@@ -1,0 +1,25 @@
+429子集与六槽队列：独立机械核验（2026-11-18）
+
+结论 PASS：两次run的母集、选择谓词、冻结排除集合及3+3队列符合call-subset-ranking-v1.json。可继续准备隐藏方法源码包；实际派发仍需包与六个固定pair身份核验。本核验不评价候选相关性，不证明分数算法正确、生产身份或方法效果。
+
+实际范围
+读取协议、call-subset-ranking-01/02的protocol.json、units.json、subset-selection.json、exclusions.json、code/call_set-top20.json、review-queue.json，以及协议引用的原始scope/units、SCC ledger、旧doc队列、原六对队列。编写一次独立只读内存校验，未调用排名器或其选择函数，未改排名/协议；未读取候选snippet或full source，不作源码处置。主线程独立重算91806对数值属于另项工作，本报告不代替该检查。
+
+实测通过项
+1. 协议inputs下10份文件实际SHA256匹配登记值；01/02存档协议JSON与当前冻结协议内容一致。本检查未重新核对source_freeze_checks全部条目，也未检查完整Git树。
+2. 从原scope中code_eligible构造并排序812 ID；从原corpus units独立应用test_path_hint==false且nested_in_function==false，恰得429。两run的单位数组逐对象等于原corpus对应记录；812行选择记录及选择/排除布尔值全部一致，383未入选。没有按调用数、cfg或最后分数增删实体。
+3. 独立从review_status=reviewed的SCC ledger、旧doc队列全部pair、原六对全部pair构造规范化pair及理由，去重并集44。两run exclusions.json的pair和理由集合完全一致，不把unknown审阅状态当负标签。
+4. 两法top20均为20个正分pair，ID规范顺序且端点均在429中；表内排序符合分数降序/ID升序。本核验未从全分数数组重取top20，故不独立证明其全局名次或截止并列总量。
+5. 在排除历史暴露前独立计算top20互斥集合，再排除44对：code可供槽位12对，call_set10对。按冻结call_set/code交替六槽，01/02均精确得到以下原方法rank：
+   slot1 call_set rank6
+   slot2 code rank5
+   slot3 call_set rank7
+   slot4 code rank7
+   slot5 call_set rank8
+   slot6 code rank8
+   逐条pair、score、slot、方法及成员元数据均匹配review-queue；没有补位、降到top20外、人工换对或由另一方法填空。此次无空槽；协议的耗尽控制存在不等于本实测覆盖了真实耗尽情况。
+
+限定与后续
+44对仅是预注册排除集合，不是全历史暴露全集；新pair可能共享旧端点、文件或机制。429仅路径提示及非nested筛选，cfg未求值、resolved_edges=0；不得称独立生产样本。六槽是受限互斥队列审阅，不覆盖两法top20全部质量。排序并列的全局影响留给分数检查及报告，不因本选择检查PASS而消失。
+主线程告知旧fmt候选静态结构20→23并拒绝抽取、运行0；本核验未独立复核该结构计数，因此仅记录为旧候选处置通知，不把它用作此次六对的排除标签、评分依据或预判。无需返回旧fmt再做运行见证。
+保持既定停止：数值与包身份检查后最多六对同预算源审，按源码证据决定有界确认或关闭调用拼写路线；不调排除表/并列规则来追求有利结果。本次唯一持久写入为此审计报告。

@@ -1,0 +1,991 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A trait for dealing with asynchronous iterators.",
+          "path": "doc",
+          "range": [
+            82,
+            134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135,
+            138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is the main async iterator trait. For more about the concept of async iterators",
+          "path": "doc",
+          "range": [
+            139,
+            227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " generally, please see the [module-level documentation]. In particular, you",
+          "path": "doc",
+          "range": [
+            228,
+            306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may want to know how to [implement `AsyncIterator`][impl].",
+          "path": "doc",
+          "range": [
+            307,
+            369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            370,
+            373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [module-level documentation]: index.html",
+          "path": "doc",
+          "range": [
+            374,
+            418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [impl]: index.html#implementing-async-iterator",
+          "path": "doc",
+          "range": [
+            419,
+            469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            470,
+            526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            527,
+            583
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            584,
+            608
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            609,
+            635
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "AsyncIterator",
+      "range": [
+        82,
+        3802
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to pull out the next value of this async iterator, registering the",
+          "path": "doc",
+          "range": [
+            739,
+            818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " current task for wakeup if the value is not yet available, and returning",
+          "path": "doc",
+          "range": [
+            823,
+            899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `None` if the async iterator is exhausted.",
+          "path": "doc",
+          "range": [
+            904,
+            950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            955,
+            958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Return value",
+          "path": "doc",
+          "range": [
+            963,
+            981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            986,
+            989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There are several possible return values, each indicating a distinct",
+          "path": "doc",
+          "range": [
+            994,
+            1066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async iterator state:",
+          "path": "doc",
+          "range": [
+            1071,
+            1096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1101,
+            1104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Poll::Pending` means that this async iterator's next value is not ready",
+          "path": "doc",
+          "range": [
+            1109,
+            1187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   yet. Implementations will ensure that the current task will be notified",
+          "path": "doc",
+          "range": [
+            1192,
+            1269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   when the next value may be ready.",
+          "path": "doc",
+          "range": [
+            1274,
+            1313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1318,
+            1321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Poll::Ready(Some(val))` means that the async iterator has successfully",
+          "path": "doc",
+          "range": [
+            1326,
+            1403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   produced a value, `val`, and may produce further values on subsequent",
+          "path": "doc",
+          "range": [
+            1408,
+            1483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `poll_next` calls.",
+          "path": "doc",
+          "range": [
+            1488,
+            1512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1517,
+            1520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Poll::Ready(None)` means that the async iterator has terminated, and",
+          "path": "doc",
+          "range": [
+            1525,
+            1600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `poll_next` should not be invoked again.",
+          "path": "doc",
+          "range": [
+            1605,
+            1651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1656,
+            1659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            1664,
+            1676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1681,
+            1684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once an async iterator has finished (returned `Ready(None)` from `poll_next`), calling its",
+          "path": "doc",
+          "range": [
+            1689,
+            1783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `poll_next` method again may panic, block forever, or cause other kinds of",
+          "path": "doc",
+          "range": [
+            1788,
+            1866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " problems; the `AsyncIterator` trait places no requirements on the effects of",
+          "path": "doc",
+          "range": [
+            1871,
+            1951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such a call. However, as the `poll_next` method is not marked `unsafe`,",
+          "path": "doc",
+          "range": [
+            1956,
+            2031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Rust's usual rules apply: calls must never cause undefined behavior",
+          "path": "doc",
+          "range": [
+            2036,
+            2107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (memory corruption, incorrect use of `unsafe` functions, or the like),",
+          "path": "doc",
+          "range": [
+            2112,
+            2186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " regardless of the async iterator's state.",
+          "path": "doc",
+          "range": [
+            2191,
+            2236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            2241,
+            2277
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "poll_next",
+      "range": [
+        739,
+        2367
+      ],
+      "signature_range": [
+        2282,
+        2366
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the bounds on the remaining length of the async iterator.",
+          "path": "doc",
+          "range": [
+            2373,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2447,
+            2450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Specifically, `size_hint()` returns a tuple where the first element",
+          "path": "doc",
+          "range": [
+            2455,
+            2526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is the lower bound, and the second element is the upper bound.",
+          "path": "doc",
+          "range": [
+            2531,
+            2597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2602,
+            2605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The second half of the tuple that is returned is an <code>[Option]<[usize]></code>.",
+          "path": "doc",
+          "range": [
+            2610,
+            2697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A [`None`] here means that either there is no known upper bound, or the",
+          "path": "doc",
+          "range": [
+            2702,
+            2777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " upper bound is larger than [`usize`].",
+          "path": "doc",
+          "range": [
+            2782,
+            2823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2828,
+            2831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Implementation notes",
+          "path": "doc",
+          "range": [
+            2836,
+            2862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2867,
+            2870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is not enforced that an async iterator implementation yields the declared",
+          "path": "doc",
+          "range": [
+            2875,
+            2955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " number of elements. A buggy async iterator may yield less than the lower bound",
+          "path": "doc",
+          "range": [
+            2960,
+            3042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or more than the upper bound of elements.",
+          "path": "doc",
+          "range": [
+            3047,
+            3092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3097,
+            3100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `size_hint()` is primarily intended to be used for optimizations such as",
+          "path": "doc",
+          "range": [
+            3105,
+            3181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reserving space for the elements of the async iterator, but must not be",
+          "path": "doc",
+          "range": [
+            3186,
+            3261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trusted to e.g., omit bounds checks in unsafe code. An incorrect",
+          "path": "doc",
+          "range": [
+            3266,
+            3334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation of `size_hint()` should not lead to memory safety",
+          "path": "doc",
+          "range": [
+            3339,
+            3407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " violations.",
+          "path": "doc",
+          "range": [
+            3412,
+            3427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3432,
+            3435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " That said, the implementation should provide a correct estimation,",
+          "path": "doc",
+          "range": [
+            3440,
+            3510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " because otherwise it would be a violation of the trait's protocol.",
+          "path": "doc",
+          "range": [
+            3515,
+            3585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3590,
+            3593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The default implementation returns <code>(0, [None])</code> which is correct for any",
+          "path": "doc",
+          "range": [
+            3598,
+            3686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async iterator.",
+          "path": "doc",
+          "range": [
+            3691,
+            3710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3715,
+            3724
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3775,
+        3800
+      ],
+      "kind": "trait_fn",
+      "name": "size_hint",
+      "range": [
+        2373,
+        3800
+      ],
+      "signature_range": [
+        3729,
+        3774
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3804,
+            3860
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3804,
+        4192
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        4047,
+        4102
+      ],
+      "kind": "impl_fn",
+      "name": "poll_next",
+      "range": [
+        3958,
+        4102
+      ],
+      "signature_range": [
+        3958,
+        4046
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        4154,
+        4190
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        4108,
+        4190
+      ],
+      "signature_range": [
+        4108,
+        4153
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4194,
+            4250
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4194,
+        4651
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "body_range": [
+        4481,
+        4561
+      ],
+      "kind": "impl_fn",
+      "name": "poll_next",
+      "range": [
+        4396,
+        4561
+      ],
+      "signature_range": [
+        4396,
+        4480
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "body_range": [
+        4613,
+        4649
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        4567,
+        4649
+      ],
+      "signature_range": [
+        4567,
+        4612
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4653,
+            4713
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4653,
+        5767
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": " A helper function for internal desugaring -- produces `Ready(Some(t))`,",
+          "path": "doc",
+          "range": [
+            4744,
+            4819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which corresponds to the async iterator yielding a value.",
+          "path": "doc",
+          "range": [
+            4824,
+            4885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            4890,
+            4904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4909,
+            4969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            4974,
+            4999
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5041,
+        5077
+      ],
+      "kind": "impl_fn",
+      "name": "async_gen_ready",
+      "range": [
+        4744,
+        5077
+      ],
+      "signature_range": [
+        5008,
+        5040
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts something into an async iterator",
+          "path": "doc",
+          "range": [
+            5769,
+            5814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5815,
+            5871
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "IntoAsyncIterator",
+      "range": [
+        5769,
+        6215
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts `self` into an async iterator",
+          "path": "doc",
+          "range": [
+            6076,
+            6118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            6123,
+            6160
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "into_async_iter",
+      "range": [
+        6076,
+        6213
+      ],
+      "signature_range": [
+        6165,
+        6212
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6217,
+            6273
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6217,
+        6451
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [],
+      "body_range": [
+        6429,
+        6449
+      ],
+      "kind": "impl_fn",
+      "name": "into_async_iter",
+      "range": [
+        6381,
+        6449
+      ],
+      "signature_range": [
+        6381,
+        6428
+      ]
+    }
+  ],
+  "source_sha256": "90d7c43c1335f58e4db6d016db2638a5d14406caf34d12714f626b71d4690e9a"
+}

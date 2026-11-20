@@ -1,0 +1,21 @@
+{
+  "status": "frozen-before-new-ranking",
+  "question": "Do syntax-level call spellings and lexical adjacency surface useful shared-mechanism candidates beyond the existing token-bag ranking in the same fixed corpus?",
+  "identity": "Researcher-composed retrieval baseline using established TF-IDF/cosine, not Aroma replication, resolved API similarity or a new algorithm claim",
+  "population": "All 812 common-scope code-eligible unit IDs; rejected or empty call records remain zero rows",
+  "extraction": "Existing rust-call-probe, no Rust frontend changes; unresolved call_expression and method_expression names only, closures and nested items retain deferred_depth",
+  "representations": {
+    "call_set": "Binary features [kind,deferred_depth,name] for named call and method expressions; opaque macros excluded but counted",
+    "call_order": "Same binary unigram features plus adjacent pairs of retained sites only if adjacent in the full source-ordered site list and equal deferred_depth; lexical order, not execution order or control/dataflow"
+  },
+  "weighting": "sklearn TfidfVectorizer with identity analyzer, binary=True, use_idf=True, smooth_idf=True, sublinear_tf=False, norm=l2; idf fit over all 812 IDs, zero rows retained; cosine",
+  "ranking": "Round to 12 decimal places, positive scores descending, canonical ID pair lexicographic ties; all unordered pairs including same-file and test paths",
+  "budget": {"top_pairs_per_method":20,"blind_development_review_new_pairs":6,"method_repeats":2},
+  "comparison": "Existing common-budget code top20 and full SCC 0.8 pair set; also report previous documentation top20 overlap; no new weighted fusion",
+  "diagnostics": ["zero and rejected rows", "opaque and deferred-site coverage", "cutoff ties", "top20 shared feature counts and singleton fingerprints", "same-source and test-path overlap", "known reviewed-candidate overlap"],
+  "review_selection": "Round-robin new unique pairs by rank from call_set then call_order, excluding code top20 and previously reviewed ledger pairs, until six or exhaustion; no manual cherry picking",
+  "review": "Hide method, score and prior disposition; provide original complete files plus selected ranges/config hints; independent agent proposes only source-supported mechanism/independence/unknown, not human gold labels. All reviewed outcomes retained.",
+  "controls": "Formula matches independent binary smoothed-IDF/cosine; identical/disjoint/empty vectors; order-sensitive pair; macro barrier; unchanged repeated outputs",
+  "limits": ["Only four-package historical corpus, not all xkernel", "Common method spellings collide across types", "No callee resolution, cfg execution or macro expansion", "Code-eligible population excludes small functions", "Development exposure and candidate dependence", "No recall without independent opportunity inventory"],
+  "stop": "One fixed two-representation batch and up to six candidate inspections; no weight, threshold, stopword or family tuning after seeing ranks. Decide whether any actual new mechanism merits confirmation; otherwise preserve negative results and revisit method choice."
+}

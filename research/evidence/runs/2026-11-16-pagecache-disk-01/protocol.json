@@ -1,0 +1,12 @@
+{
+  "schema":"original-kernel-disk-control/1",
+  "parent_run":"2026-11-16-pagecache-original-01",
+  "revision":"7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "reason":"Original attempt compiled and booted but failed before test discovery: fs_boot::select_root_block requires a root block device in unchanged default config.",
+  "change":"Provide a new private 128 MiB ext4 disk and set BLK=y; same source/configuration and original test harness. This is environment repair, not method optimization.",
+  "setup":["truncate -s 128M <isolated-source>/research-root.ext4", "mkfs.ext4 -F -O ^metadata_csum,^64bit <isolated-source>/research-root.ext4"],
+  "command":"make unittest UNITTEST_CRATE=pagecache ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g DISK_IMG=<isolated-source>/research-root.ext4",
+  "limits":{"timeout_seconds":300,"attempts":1},
+  "measurement":"Archive setup/run logs, disk SHA256 before and after, parent report identity, all archive-member source hashes after execution, nonzero per-test result counts and summary. Separate guest tests from coverage export and process exit.",
+  "stop":"One bounded run; retain failure without claiming pagecache behavior observed. No source patches, production changes, external disk image or rootfs downloads."
+}

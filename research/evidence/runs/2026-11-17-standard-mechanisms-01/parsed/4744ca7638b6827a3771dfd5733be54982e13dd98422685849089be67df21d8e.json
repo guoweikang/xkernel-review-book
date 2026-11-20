@@ -1,0 +1,1827 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Defines [`Exclusive`].",
+      "path": "doc",
+      "range": [
+        0,
+        26
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `Exclusive` provides _mutable_ access, also referred to as _exclusive_",
+          "path": "doc",
+          "range": [
+            303,
+            377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " access to the underlying value. However, it only permits _immutable_, or _shared_",
+          "path": "doc",
+          "range": [
+            378,
+            463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " access to the underlying value when that value is [`Sync`].",
+          "path": "doc",
+          "range": [
+            464,
+            527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            528,
+            531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While this may seem not very useful, it allows `Exclusive` to _unconditionally_",
+          "path": "doc",
+          "range": [
+            532,
+            615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement `Sync`. Indeed, the safety requirements of `Sync` state that for `Exclusive`",
+          "path": "doc",
+          "range": [
+            616,
+            706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to be `Sync`, it must be sound to _share_ across threads, that is, it must be sound",
+          "path": "doc",
+          "range": [
+            707,
+            794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for `&Exclusive` to cross thread boundaries. By design, a `&Exclusive<T>` for non-`Sync` T",
+          "path": "doc",
+          "range": [
+            795,
+            889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " has no API whatsoever, making it useless, thus harmless, thus memory safe.",
+          "path": "doc",
+          "range": [
+            890,
+            968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            969,
+            972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Certain constructs like [`Future`]s can only be used with _exclusive_ access,",
+          "path": "doc",
+          "range": [
+            973,
+            1054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and are often `Send` but not `Sync`, so `Exclusive` can be used as hint to the",
+          "path": "doc",
+          "range": [
+            1055,
+            1137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Rust compiler that something is `Sync` in practice.",
+          "path": "doc",
+          "range": [
+            1138,
+            1193
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1194,
+            1197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Examples",
+          "path": "doc",
+          "range": [
+            1198,
+            1213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1214,
+            1217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Using a non-`Sync` future prevents the wrapping struct from being `Sync`:",
+          "path": "doc",
+          "range": [
+            1218,
+            1295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1296,
+            1299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```compile_fail",
+          "path": "doc",
+          "range": [
+            1300,
+            1319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::cell::Cell;",
+          "path": "doc",
+          "range": [
+            1320,
+            1345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1346,
+            1349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async fn other() {}",
+          "path": "doc",
+          "range": [
+            1350,
+            1373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn assert_sync<T: Sync>(t: T) {}",
+          "path": "doc",
+          "range": [
+            1374,
+            1410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct State<F> {",
+          "path": "doc",
+          "range": [
+            1411,
+            1432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     future: F",
+          "path": "doc",
+          "range": [
+            1433,
+            1450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1451,
+            1456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1457,
+            1460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_sync(State {",
+          "path": "doc",
+          "range": [
+            1461,
+            1484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     future: async {",
+          "path": "doc",
+          "range": [
+            1485,
+            1508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let cell = Cell::new(1);",
+          "path": "doc",
+          "range": [
+            1509,
+            1545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let cell_ref = &cell;",
+          "path": "doc",
+          "range": [
+            1546,
+            1579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         other().await;",
+          "path": "doc",
+          "range": [
+            1580,
+            1606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let value = cell_ref.get();",
+          "path": "doc",
+          "range": [
+            1607,
+            1646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1647,
+            1656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            1657,
+            1664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1665,
+            1672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1673,
+            1676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Exclusive` ensures the struct is `Sync` without stripping the future of its",
+          "path": "doc",
+          "range": [
+            1677,
+            1757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " functionality:",
+          "path": "doc",
+          "range": [
+            1758,
+            1776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1777,
+            1780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1781,
+            1788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(exclusive_wrapper)]",
+          "path": "doc",
+          "range": [
+            1789,
+            1823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::cell::Cell;",
+          "path": "doc",
+          "range": [
+            1824,
+            1849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::sync::Exclusive;",
+          "path": "doc",
+          "range": [
+            1850,
+            1880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1881,
+            1884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async fn other() {}",
+          "path": "doc",
+          "range": [
+            1885,
+            1908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn assert_sync<T: Sync>(t: T) {}",
+          "path": "doc",
+          "range": [
+            1909,
+            1945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct State<F> {",
+          "path": "doc",
+          "range": [
+            1946,
+            1967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     future: Exclusive<F>",
+          "path": "doc",
+          "range": [
+            1968,
+            1996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1997,
+            2002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2003,
+            2006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_sync(State {",
+          "path": "doc",
+          "range": [
+            2007,
+            2030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     future: Exclusive::new(async {",
+          "path": "doc",
+          "range": [
+            2031,
+            2069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let cell = Cell::new(1);",
+          "path": "doc",
+          "range": [
+            2070,
+            2106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let cell_ref = &cell;",
+          "path": "doc",
+          "range": [
+            2107,
+            2140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         other().await;",
+          "path": "doc",
+          "range": [
+            2141,
+            2167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let value = cell_ref.get();",
+          "path": "doc",
+          "range": [
+            2168,
+            2207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            2208,
+            2218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            2219,
+            2226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2227,
+            2234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2235,
+            2238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Parallels with a mutex",
+          "path": "doc",
+          "range": [
+            2239,
+            2268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2269,
+            2272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In some sense, `Exclusive` can be thought of as a _compile-time_ version of",
+          "path": "doc",
+          "range": [
+            2273,
+            2352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a mutex, as the borrow-checker guarantees that only one `&mut` can exist",
+          "path": "doc",
+          "range": [
+            2353,
+            2429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for any value. This is a parallel with the fact that",
+          "path": "doc",
+          "range": [
+            2430,
+            2486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `&` and `&mut` references together can be thought of as a _compile-time_",
+          "path": "doc",
+          "range": [
+            2487,
+            2563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " version of a read-write lock.",
+          "path": "doc",
+          "range": [
+            2564,
+            2597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2598,
+            2657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            2658,
+            2687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            2688,
+            2714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            2715,
+            2739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2912,
+            2930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            2931,
+            2951
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Exclusive",
+      "range": [
+        303,
+        3001
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3048,
+            3107
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3048,
+        3155
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3157,
+            3216
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3157,
+        3404
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        3335,
+        3402
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        3267,
+        3402
+      ],
+      "signature_range": [
+        3267,
+        3334
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3406,
+        3930
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wrap a value in an `Exclusive`",
+          "path": "doc",
+          "range": [
+            3440,
+            3474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3479,
+            3538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3543,
+            3554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3559,
+            3568
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3604,
+        3637
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        3440,
+        3637
+      ],
+      "signature_range": [
+        3577,
+        3603
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unwrap the value contained in the `Exclusive`",
+          "path": "doc",
+          "range": [
+            3643,
+            3692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3697,
+            3756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            3761,
+            3832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3837,
+            3848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3853,
+            3862
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3902,
+        3928
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        3643,
+        3928
+      ],
+      "signature_range": [
+        3871,
+        3901
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3932,
+        6080
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets exclusive access to the underlying value.",
+          "path": "doc",
+          "range": [
+            3967,
+            4017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4022,
+            4081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4086,
+            4097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4102,
+            4111
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4158,
+        4189
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut",
+      "range": [
+        3967,
+        4189
+      ],
+      "signature_range": [
+        4120,
+        4157
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets pinned exclusive access to the underlying value.",
+          "path": "doc",
+          "range": [
+            4195,
+            4252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4257,
+            4260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Exclusive` is considered to _structurally pin_ the underlying",
+          "path": "doc",
+          "range": [
+            4265,
+            4331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " value, which means _unpinned_ `Exclusive`s can produce _unpinned_",
+          "path": "doc",
+          "range": [
+            4336,
+            4405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " access to the underlying value, but _pinned_ `Exclusive`s only",
+          "path": "doc",
+          "range": [
+            4410,
+            4476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " produce _pinned_ access to the underlying value.",
+          "path": "doc",
+          "range": [
+            4481,
+            4533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4538,
+            4597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4602,
+            4613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4618,
+            4627
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4694,
+        4939
+      ],
+      "kind": "impl_fn",
+      "name": "get_pin_mut",
+      "range": [
+        4195,
+        4939
+      ],
+      "signature_range": [
+        4636,
+        4693
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": " Build a _mutable_ reference to an `Exclusive<T>` from",
+          "path": "doc",
+          "range": [
+            4945,
+            5002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a _mutable_ reference to a `T`. This allows you to skip",
+          "path": "doc",
+          "range": [
+            5007,
+            5066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " building an `Exclusive` with [`Exclusive::new`].",
+          "path": "doc",
+          "range": [
+            5071,
+            5123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5128,
+            5187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5192,
+            5203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5208,
+            5217
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5282,
+        5460
+      ],
+      "kind": "impl_fn",
+      "name": "from_mut",
+      "range": [
+        4945,
+        5460
+      ],
+      "signature_range": [
+        5226,
+        5281
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": " Build a _pinned mutable_ reference to an `Exclusive<T>` from",
+          "path": "doc",
+          "range": [
+            5466,
+            5530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a _pinned mutable_ reference to a `T`. This allows you to skip",
+          "path": "doc",
+          "range": [
+            5535,
+            5601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " building an `Exclusive` with [`Exclusive::new`].",
+          "path": "doc",
+          "range": [
+            5606,
+            5658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5663,
+            5722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5727,
+            5738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5743,
+            5752
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5831,
+        6078
+      ],
+      "kind": "impl_fn",
+      "name": "from_pin_mut",
+      "range": [
+        5466,
+        6078
+      ],
+      "signature_range": [
+        5761,
+        5830
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6082,
+        6322
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6324,
+            6383
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6324,
+        6625
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [],
+      "body_range": [
+        6574,
+        6623
+      ],
+      "kind": "impl_fn",
+      "name": "call_once",
+      "range": [
+        6508,
+        6623
+      ],
+      "signature_range": [
+        6508,
+        6573
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6627,
+            6686
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6627,
+        6896
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [],
+      "body_range": [
+        6849,
+        6894
+      ],
+      "kind": "impl_fn",
+      "name": "call_mut",
+      "range": [
+        6779,
+        6894
+      ],
+      "signature_range": [
+        6779,
+        6848
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6898,
+            6957
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6898,
+        7155
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        7113,
+        7153
+      ],
+      "kind": "impl_fn",
+      "name": "call",
+      "range": [
+        7051,
+        7153
+      ],
+      "signature_range": [
+        7051,
+        7112
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7157,
+            7216
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7157,
+        7448
+      ]
+    },
+    {
+      "ancestors": [
+        19
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7315,
+            7324
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7403,
+        7446
+      ],
+      "kind": "impl_fn",
+      "name": "poll",
+      "range": [
+        7315,
+        7446
+      ],
+      "signature_range": [
+        7329,
+        7402
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7450,
+            7507
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7450,
+        7814
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7663,
+            7672
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7762,
+        7812
+      ],
+      "kind": "impl_fn",
+      "name": "resume",
+      "range": [
+        7663,
+        7812
+      ],
+      "signature_range": [
+        7677,
+        7761
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7816,
+            7875
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7816,
+        8010
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7944,
+            7953
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7981,
+        8008
+      ],
+      "kind": "impl_fn",
+      "name": "as_ref",
+      "range": [
+        7944,
+        8008
+      ],
+      "signature_range": [
+        7958,
+        7980
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8012,
+            8071
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8012,
+        8226
+      ]
+    },
+    {
+      "ancestors": [
+        25
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8136,
+            8145
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8174,
+        8224
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        8136,
+        8224
+      ],
+      "signature_range": [
+        8150,
+        8173
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            8228,
+            8242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8243,
+            8297
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8228,
+        8374
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8376,
+            8435
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8376,
+        8489
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8491,
+            8550
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8491,
+        8774
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8674,
+            8683
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8731,
+        8772
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        8674,
+        8772
+      ],
+      "signature_range": [
+        8688,
+        8730
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8776,
+            8835
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8776,
+        8928
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8930,
+            8989
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8930,
+        9048
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9050,
+            9109
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9050,
+        9284
+      ]
+    },
+    {
+      "ancestors": [
+        33
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9181,
+            9190
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9236,
+        9282
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        9181,
+        9282
+      ],
+      "signature_range": [
+        9195,
+        9235
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9286,
+            9345
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9286,
+        9603
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9471,
+            9480
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9549,
+        9601
+      ],
+      "kind": "impl_fn",
+      "name": "partial_cmp",
+      "range": [
+        9471,
+        9601
+      ],
+      "signature_range": [
+        9485,
+        9548
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9605,
+            9664
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9605,
+        9834
+      ]
+    },
+    {
+      "ancestors": [
+        37
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9734,
+            9743
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9788,
+        9832
+      ],
+      "kind": "impl_fn",
+      "name": "cmp",
+      "range": [
+        9734,
+        9832
+      ],
+      "signature_range": [
+        9748,
+        9787
+      ]
+    }
+  ],
+  "source_sha256": "2695b2bf0ce030e33fe3f8e533045fe9b11cae391e3e826719d231ab8a2efdcd"
+}

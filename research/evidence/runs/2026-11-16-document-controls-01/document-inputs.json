@@ -1,0 +1,42 @@
+{
+  "complete": {
+    "unit_01": "Limit a numeric reading to a ceiling.\nUnsigned value from zero through 255.\nThe smaller of value and 63; large readings saturate at 63.\nPure calculation without allocation or external state.",
+    "unit_02": "Bound a sample in a fixed numeric range.\nAn integer value in the inclusive interval 0 to 255.\nReturns value unchanged up to 63, and saturates to 63 above that ceiling.\nNo observable effects other than the return value.",
+    "unit_03": "Locate a byte within a fixed size block.\nUnsigned byte position from zero through 255; block size is 16.\nRemainder after division of value by 16, an offset in 0 through 15.\nPure calculation without allocation or external state.",
+    "unit_04": "Calculate the intra block displacement of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nThe offset left after removing complete blocks, equal to value modulo 16.\nNo observable effects other than the return value.",
+    "unit_05": "Locate the block containing a byte position.\nUnsigned byte position from zero through 255; block size is 16.\nQuotient after division of value by 16, a block number in 0 through 15.\nPure calculation without allocation or external state.",
+    "unit_06": "Calculate the block index of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nThe count of complete blocks before the address, equal to value divided by 16.\nNo observable effects other than the return value.",
+    "unit_07": "Find the beginning of the block containing an address.\nUnsigned byte position from zero through 255; block size is 16.\nThe largest multiple of 16 not exceeding value, a byte address rather than a block number.\nPure calculation without allocation or external state.",
+    "unit_08": "Test whether an address lies beyond the first block.\nA nonnegative address value at most 255, with sixteen bytes per block.\nReturns one when value is at least 16, otherwise zero; not an offset or block number.\nNo observable effects other than the return value."
+  },
+  "no_docs": {
+    "unit_01": "",
+    "unit_02": "",
+    "unit_03": "",
+    "unit_04": "",
+    "unit_05": "",
+    "unit_06": "",
+    "unit_07": "",
+    "unit_08": ""
+  },
+  "without_output": {
+    "unit_01": "Limit a numeric reading to a ceiling.\nUnsigned value from zero through 255.\nPure calculation without allocation or external state.",
+    "unit_02": "Bound a sample in a fixed numeric range.\nAn integer value in the inclusive interval 0 to 255.\nNo observable effects other than the return value.",
+    "unit_03": "Locate a byte within a fixed size block.\nUnsigned byte position from zero through 255; block size is 16.\nPure calculation without allocation or external state.",
+    "unit_04": "Calculate the intra block displacement of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nNo observable effects other than the return value.",
+    "unit_05": "Locate the block containing a byte position.\nUnsigned byte position from zero through 255; block size is 16.\nPure calculation without allocation or external state.",
+    "unit_06": "Calculate the block index of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nNo observable effects other than the return value.",
+    "unit_07": "Find the beginning of the block containing an address.\nUnsigned byte position from zero through 255; block size is 16.\nPure calculation without allocation or external state.",
+    "unit_08": "Test whether an address lies beyond the first block.\nA nonnegative address value at most 255, with sixteen bytes per block.\nNo observable effects other than the return value."
+  },
+  "wrong_output": {
+    "unit_01": "Limit a numeric reading to a ceiling.\nUnsigned value from zero through 255.\nThe larger of value and 63; small readings increase to 63.\nPure calculation without allocation or external state.",
+    "unit_02": "Bound a sample in a fixed numeric range.\nAn integer value in the inclusive interval 0 to 255.\nReturns 63 up to that ceiling, and value unchanged above it.\nNo observable effects other than the return value.",
+    "unit_03": "Locate a byte within a fixed size block.\nUnsigned byte position from zero through 255; block size is 16.\nQuotient after division of value by 16, a block number in 0 through 15.\nPure calculation without allocation or external state.",
+    "unit_04": "Calculate the intra block displacement of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nThe count of complete blocks before the address, equal to value divided by 16.\nNo observable effects other than the return value.",
+    "unit_05": "Locate the block containing a byte position.\nUnsigned byte position from zero through 255; block size is 16.\nRemainder after division of value by 16, an offset in 0 through 15.\nPure calculation without allocation or external state.",
+    "unit_06": "Calculate the block index of an address.\nA nonnegative address value at most 255, with sixteen bytes per block.\nThe offset left after removing complete blocks, equal to value modulo 16.\nNo observable effects other than the return value.",
+    "unit_07": "Find the beginning of the block containing an address.\nUnsigned byte position from zero through 255; block size is 16.\nThe smallest multiple of 16 not less than value.\nPure calculation without allocation or external state.",
+    "unit_08": "Test whether an address lies beyond the first block.\nA nonnegative address value at most 255, with sixteen bytes per block.\nReturns zero when value is at least 16, otherwise one.\nNo observable effects other than the return value."
+  }
+}

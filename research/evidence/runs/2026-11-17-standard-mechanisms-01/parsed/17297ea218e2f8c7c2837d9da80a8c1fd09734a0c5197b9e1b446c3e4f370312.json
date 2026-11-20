@@ -1,0 +1,1020 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Trait that indicates that this is a pointer or a wrapper for one,",
+          "path": "doc",
+          "range": [
+            44,
+            113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where unsizing can be performed on the pointee.",
+          "path": "doc",
+          "range": [
+            114,
+            165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            166,
+            169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the [DST coercion RFC][dst-coerce] and [the nomicon entry on coercion][nomicon-coerce]",
+          "path": "doc",
+          "range": [
+            170,
+            264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for more details.",
+          "path": "doc",
+          "range": [
+            265,
+            286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            287,
+            290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For builtin pointer types, pointers to `T` will coerce to pointers to `U` if `T: Unsize<U>`",
+          "path": "doc",
+          "range": [
+            291,
+            386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by converting from a thin pointer to a fat pointer.",
+          "path": "doc",
+          "range": [
+            387,
+            442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            443,
+            446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For custom types, the coercion here works by coercing `Foo<T>` to `Foo<U>`",
+          "path": "doc",
+          "range": [
+            447,
+            525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " provided an impl of `CoerceUnsized<Foo<U>> for Foo<T>` exists.",
+          "path": "doc",
+          "range": [
+            526,
+            592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Such an impl can only be written if `Foo<T>` has only a single non-phantomdata",
+          "path": "doc",
+          "range": [
+            593,
+            675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " field involving `T`. If the type of that field is `Bar<T>`, an implementation",
+          "path": "doc",
+          "range": [
+            676,
+            757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `CoerceUnsized<Bar<U>> for Bar<T>` must exist. The coercion will work by",
+          "path": "doc",
+          "range": [
+            758,
+            837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " coercing the `Bar<T>` field into `Bar<U>` and filling in the rest of the fields",
+          "path": "doc",
+          "range": [
+            838,
+            921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from `Foo<T>` to create a `Foo<U>`. This will effectively drill down to a pointer",
+          "path": "doc",
+          "range": [
+            922,
+            1007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " field and coerce that.",
+          "path": "doc",
+          "range": [
+            1008,
+            1034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1035,
+            1038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Generally, for smart pointers you will implement",
+          "path": "doc",
+          "range": [
+            1039,
+            1091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `CoerceUnsized<Ptr<U>> for Ptr<T> where T: Unsize<U>, U: ?Sized`, with an",
+          "path": "doc",
+          "range": [
+            1092,
+            1169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " optional `?Sized` bound on `T` itself. For wrapper types that directly embed `T`",
+          "path": "doc",
+          "range": [
+            1170,
+            1254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " like `Cell<T>` and `RefCell<T>`, you",
+          "path": "doc",
+          "range": [
+            1255,
+            1295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can directly implement `CoerceUnsized<Wrap<U>> for Wrap<T> where T: CoerceUnsized<U>`.",
+          "path": "doc",
+          "range": [
+            1296,
+            1386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This will let coercions of types like `Cell<Box<T>>` work.",
+          "path": "doc",
+          "range": [
+            1387,
+            1449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1450,
+            1453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Unsize`][unsize] is used to mark types which can be coerced to DSTs if behind",
+          "path": "doc",
+          "range": [
+            1454,
+            1537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointers. It is implemented automatically by the compiler.",
+          "path": "doc",
+          "range": [
+            1538,
+            1600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1601,
+            1604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [dst-coerce]: https://github.com/rust-lang/rfcs/blob/master/text/0982-dst-coercion.md",
+          "path": "doc",
+          "range": [
+            1605,
+            1694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [unsize]: crate::marker::Unsize",
+          "path": "doc",
+          "range": [
+            1695,
+            1730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [nomicon-coerce]: ../../nomicon/coercions.html",
+          "path": "doc",
+          "range": [
+            1731,
+            1781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1782,
+            1838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1839,
+            1865
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "CoerceUnsized",
+      "range": [
+        44,
+        1924
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1946,
+            2002
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1946,
+        2099
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2116,
+            2172
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2116,
+        2273
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2294,
+            2350
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2294,
+        2444
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2467,
+            2523
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2467,
+        2619
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2633,
+            2689
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2633,
+        2786
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2805,
+            2861
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2805,
+        2953
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2975,
+            3031
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2975,
+        3118
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3141,
+            3197
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3141,
+        3286
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3312,
+            3368
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3312,
+        3459
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `DispatchFromDyn` is used in the implementation of dyn-compatibility[^1] checks (specifically",
+          "path": "doc",
+          "range": [
+            3461,
+            3558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allowing arbitrary self types), to guarantee that a method's receiver type can be dispatched on.",
+          "path": "doc",
+          "range": [
+            3559,
+            3659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3660,
+            3663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note: `DispatchFromDyn` was briefly named `CoerceSized` (and had a slightly different",
+          "path": "doc",
+          "range": [
+            3664,
+            3753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " interpretation).",
+          "path": "doc",
+          "range": [
+            3754,
+            3774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3775,
+            3778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Imagine we have a trait object `t` with type `&dyn Tr`, where `Tr` is some trait with a method",
+          "path": "doc",
+          "range": [
+            3779,
+            3877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `m` defined as `fn m(&self);`. When calling `t.m()`, the receiver `t` is a wide pointer, but an",
+          "path": "doc",
+          "range": [
+            3878,
+            3977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation of `m` will expect a narrow pointer as `&self` (a reference to the concrete",
+          "path": "doc",
+          "range": [
+            3978,
+            4072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type). The compiler must generate an implicit conversion from the trait object/wide pointer to",
+          "path": "doc",
+          "range": [
+            4073,
+            4171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the concrete reference/narrow pointer. Implementing `DispatchFromDyn` indicates that that",
+          "path": "doc",
+          "range": [
+            4172,
+            4265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " conversion is allowed and thus that the type implementing `DispatchFromDyn` is safe to use as",
+          "path": "doc",
+          "range": [
+            4266,
+            4363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the self type in an dyn-compatible method. (in the above example, the compiler will require",
+          "path": "doc",
+          "range": [
+            4364,
+            4459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `DispatchFromDyn` is implemented for `&'a U`).",
+          "path": "doc",
+          "range": [
+            4460,
+            4510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4511,
+            4514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `DispatchFromDyn` does not specify the conversion from wide pointer to narrow pointer; the",
+          "path": "doc",
+          "range": [
+            4515,
+            4609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " conversion is hard-wired into the compiler. For the conversion to work, the following",
+          "path": "doc",
+          "range": [
+            4610,
+            4699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " properties must hold (i.e., it is only safe to implement `DispatchFromDyn` for types which have",
+          "path": "doc",
+          "range": [
+            4700,
+            4799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " these properties, these are also checked by the compiler):",
+          "path": "doc",
+          "range": [
+            4800,
+            4862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4863,
+            4866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * EITHER `Self` and `T` are either both references or both raw pointers; in either case, with",
+          "path": "doc",
+          "range": [
+            4867,
+            4964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the same mutability.",
+          "path": "doc",
+          "range": [
+            4965,
+            4991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * OR, all of the following hold",
+          "path": "doc",
+          "range": [
+            4992,
+            5027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   - `Self` and `T` must have the same type constructor, and only vary in a single type parameter",
+          "path": "doc",
+          "range": [
+            5028,
+            5128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     formal (the *coerced type*, e.g., `impl DispatchFromDyn<Rc<T>> for Rc<U>` is ok and the",
+          "path": "doc",
+          "range": [
+            5129,
+            5224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     single type parameter (instantiated with `T` or `U`) is the coerced type,",
+          "path": "doc",
+          "range": [
+            5225,
+            5306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     `impl DispatchFromDyn<Arc<T>> for Rc<U>` is not ok).",
+          "path": "doc",
+          "range": [
+            5307,
+            5367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   - The definition for `Self` must be a struct.",
+          "path": "doc",
+          "range": [
+            5368,
+            5419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   - The definition for `Self` must not be `#[repr(packed)]` or `#[repr(C)]`.",
+          "path": "doc",
+          "range": [
+            5420,
+            5500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   - Other than one-aligned, zero-sized fields, the definition for `Self` must have exactly one",
+          "path": "doc",
+          "range": [
+            5501,
+            5599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     field and that field's type must be the coerced type. Furthermore, `Self`'s field type must",
+          "path": "doc",
+          "range": [
+            5600,
+            5699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     implement `DispatchFromDyn<F>` where `F` is the type of `T`'s field type.",
+          "path": "doc",
+          "range": [
+            5700,
+            5781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5782,
+            5785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " An example implementation of the trait:",
+          "path": "doc",
+          "range": [
+            5786,
+            5829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5830,
+            5833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5834,
+            5841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![feature(dispatch_from_dyn, unsize)]",
+          "path": "doc",
+          "range": [
+            5842,
+            5886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::{ops::DispatchFromDyn, marker::Unsize};",
+          "path": "doc",
+          "range": [
+            5887,
+            5941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct Rc<T: ?Sized>(std::rc::Rc<T>);",
+          "path": "doc",
+          "range": [
+            5942,
+            5985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T: ?Sized, U: ?Sized> DispatchFromDyn<Rc<U>> for Rc<T>",
+          "path": "doc",
+          "range": [
+            5986,
+            6049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where",
+          "path": "doc",
+          "range": [
+            6050,
+            6059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     T: Unsize<U>,",
+          "path": "doc",
+          "range": [
+            6060,
+            6081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {}",
+          "path": "doc",
+          "range": [
+            6082,
+            6088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6089,
+            6096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6097,
+            6100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [^1]: Formerly known as *object safety*.",
+          "path": "doc",
+          "range": [
+            6101,
+            6145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6146,
+            6204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            6205,
+            6234
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "DispatchFromDyn",
+      "range": [
+        3461,
+        6281
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6295,
+            6353
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6295,
+        6444
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6465,
+            6523
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6465,
+        6622
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6647,
+            6705
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6647,
+        6798
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6819,
+            6877
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6819,
+        6966
+      ]
+    }
+  ],
+  "source_sha256": "ef57edeeff03a19b0590a7593fcfecc74ae9e89202a3f6e6540657d8942c58b8"
+}

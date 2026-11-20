@@ -1,0 +1,34 @@
+{
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "question": "Which existing kvfs tests execute in the original kernel harness before any removal-event refactoring?",
+  "command": [
+    "make",
+    "unittest",
+    "UNITTEST_CRATE=kvfs",
+    "ACCEL=n",
+    "NET=n",
+    "BLK=y",
+    "VSOCK=n",
+    "SMP=2",
+    "MEM=1g",
+    "DISK_IMG=/tmp/xkernel-pagecache-n1y2__y3/research-kvfs-root.ext4"
+  ],
+  "timeout_seconds": 300,
+  "attempts": 1,
+  "source": "/tmp/xkernel-pagecache-n1y2__y3",
+  "configuration_sha256": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+  "source_archive_sha256": "d58e1506a947d66d4385f45795e3a42325b7e5e6a89f6028c6a49faa5b5495f2",
+  "compiler": "1.95.0",
+  "test_status": "baseline only, no candidate or new assertions",
+  "measurement": "Retain all log output, per-test RESULT lines, summary, exit, source hashes; do not equate passing with event snapshot contract coverage.",
+  "files": {
+    "runner.py": "2bddc7dc136480a6d7e00931310493971e7dd71ce072aaf893f6c3c297bcac73",
+    "source-before.json": "3a7b9e4e3094bdedf9818fc2a8df27d1ffdc2eb1f2ac495110ad572154b88116",
+    "sources/fs/kvfs/src/mount.rs": "07f8982d385625a3b730c2329dc9cf983a6dfd75854f5bda85e3668af85f2cdd",
+    "sources/fs/kvfs/src/namei.rs": "8418f4738611edd07b7a0ff0987070ea1ff5832c29118742eaa0625925845074",
+    "sources/fs/kvfs/src/node/dentry.rs": "5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7",
+    "sources/fs/kvfs/src/types.rs": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "sources/fs/kvfs/ut-tests/node_dentry.rs": "c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b",
+    "sources/posix/fs/src/namei.rs": "e6b8fd2938ce3f3bc48f4f37f6dc0f315818ed99f0344c2e3b22982a8e36159d"
+  }
+}

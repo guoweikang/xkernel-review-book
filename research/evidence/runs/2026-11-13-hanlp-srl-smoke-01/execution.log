@@ -1,0 +1,28 @@
+{
+  "success": false,
+  "model_loaded": false,
+  "inference_passes": 0,
+  "field_accuracy_measured": false,
+  "network_attempts": [],
+  "weight_loads": [
+    "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/originals/2026-11-13-hanlp-assets-03/mtl/ud_ontonotes_tok_pos_lem_fea_ner_srl_dep_sdp_con_mMiniLMv2L6_no_space_20220731_161526/model.pt"
+  ],
+  "state_dict_loads": [
+    {
+      "class": "MultiTaskModel",
+      "missing": [
+        "decoders.ner.secondary_encoder.layers.0.self_attn.pos_embed.weights",
+        "decoders.ner.secondary_encoder.layers.1.self_attn.pos_embed.weights"
+      ],
+      "unexpected": []
+    }
+  ],
+  "failure": "Traceback (most recent call last):\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/scripts/run_hanlp_srl_smoke.py\", line 110, in main\n    component = hanlp.load(directories['mtl'], devices=-1, verbose=False, trust_remote_code=False)\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/.build/srl-preflight-env/lib/python3.13/site-packages/hanlp/__init__.py\", line 53, in load\n    return load_from_meta_file(save_dir, 'meta.json', verbose=verbose, **kwargs)\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/.build/srl-preflight-env/lib/python3.13/site-packages/hanlp/utils/component_util.py\", line 124, in load_from_meta_file\n    raise e from None\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/.build/srl-preflight-env/lib/python3.13/site-packages/hanlp/utils/component_util.py\", line 106, in load_from_meta_file\n    obj.load(save_dir, verbose=verbose, **kwargs)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/.build/srl-preflight-env/lib/python3.13/site-packages/hanlp/common/torch_component.py\", line 185, in load\n    self.load_weights(save_dir, **kwargs)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/.build/srl-preflight-env/lib/python3.13/site-packages/hanlp/common/torch_component.py\", line 101, in load_weights\n    self.model_.load_state_dict(torch.load(filename, map_location='cpu', weights_only=True), strict=False)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/codes/x-kernel-worktrees/ai-review-book/scripts/run_hanlp_srl_smoke.py\", line 98, in checked_state_load\n    raise ValueError('partial checkpoint loading rejected')\nValueError: partial checkpoint loading rejected\n",
+  "elapsed_seconds": 10.811463507357985,
+  "artifact_sha256": {
+    "inputs.json": "e693aee97ebfb378769946a17304e5bc5a0cc570a60db8e143266f689351000b",
+    "manifest.json": "50d892ee60b361d91ddccb7acc84be7e6122d09ce72cd68b956c4d575a52bac5",
+    "protocol.json": "ff72ae6b3b20a68044c5e00c9662857747b000ee85ade5f9dcc40b3d6b2a86cf",
+    "runner.py": "0b49a1ca21bae38e95ef3cbe5fc6449221d7a2148ea05b30a6a73d60009acfa4"
+  }
+}

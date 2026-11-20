@@ -1,0 +1,3263 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Composable external iteration.",
+      "path": "doc",
+      "range": [
+        0,
+        34
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        35,
+        38
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If you've found yourself with a collection of some kind, and needed to",
+      "path": "doc",
+      "range": [
+        39,
+        113
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " perform an operation on the elements of said collection, you'll quickly run",
+      "path": "doc",
+      "range": [
+        114,
+        193
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " into 'iterators'. Iterators are heavily used in idiomatic Rust code, so",
+      "path": "doc",
+      "range": [
+        194,
+        269
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " it's worth becoming familiar with them.",
+      "path": "doc",
+      "range": [
+        270,
+        313
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        314,
+        317
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Before explaining more, let's talk about how this module is structured:",
+      "path": "doc",
+      "range": [
+        318,
+        393
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        394,
+        397
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Organization",
+      "path": "doc",
+      "range": [
+        398,
+        416
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        417,
+        420
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module is largely organized by type:",
+      "path": "doc",
+      "range": [
+        421,
+        466
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        467,
+        470
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * [Traits] are the core portion: these traits define what kind of iterators",
+      "path": "doc",
+      "range": [
+        471,
+        550
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   exist and what you can do with them. The methods of these traits are worth",
+      "path": "doc",
+      "range": [
+        551,
+        631
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   putting some extra study time into.",
+      "path": "doc",
+      "range": [
+        632,
+        673
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * [Functions] provide some helpful ways to create some basic iterators.",
+      "path": "doc",
+      "range": [
+        674,
+        749
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * [Structs] are often the return types of the various methods on this",
+      "path": "doc",
+      "range": [
+        750,
+        823
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   module's traits. You'll usually want to look at the method that creates",
+      "path": "doc",
+      "range": [
+        824,
+        901
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   the `struct`, rather than the `struct` itself. For more detail about why,",
+      "path": "doc",
+      "range": [
+        902,
+        981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   see '[Implementing Iterator](#implementing-iterator)'.",
+      "path": "doc",
+      "range": [
+        982,
+        1042
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1043,
+        1046
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Traits]: #traits",
+      "path": "doc",
+      "range": [
+        1047,
+        1068
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Functions]: #functions",
+      "path": "doc",
+      "range": [
+        1069,
+        1096
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Structs]: #structs",
+      "path": "doc",
+      "range": [
+        1097,
+        1120
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1121,
+        1124
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " That's it! Let's dig into iterators.",
+      "path": "doc",
+      "range": [
+        1125,
+        1165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1166,
+        1169
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Iterator",
+      "path": "doc",
+      "range": [
+        1170,
+        1184
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1185,
+        1188
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The heart and soul of this module is the [`Iterator`] trait. The core of",
+      "path": "doc",
+      "range": [
+        1189,
+        1265
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Iterator`] looks like this:",
+      "path": "doc",
+      "range": [
+        1266,
+        1299
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1300,
+        1303
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1304,
+        1311
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " trait Iterator {",
+      "path": "doc",
+      "range": [
+        1312,
+        1332
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Item;",
+      "path": "doc",
+      "range": [
+        1333,
+        1351
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn next(&mut self) -> Option<Self::Item>;",
+      "path": "doc",
+      "range": [
+        1352,
+        1401
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1402,
+        1407
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1408,
+        1415
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1416,
+        1419
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " An iterator has a method, [`next`], which when called, returns an",
+      "path": "doc",
+      "range": [
+        1420,
+        1489
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " <code>[Option]\\<Item></code>. Calling [`next`] will return [`Some(Item)`] as long as there",
+      "path": "doc",
+      "range": [
+        1490,
+        1584
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " are elements, and once they've all been exhausted, will return `None` to",
+      "path": "doc",
+      "range": [
+        1585,
+        1661
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " indicate that iteration is finished. Individual iterators may choose to",
+      "path": "doc",
+      "range": [
+        1662,
+        1737
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " resume iteration, and so calling [`next`] again may or may not eventually",
+      "path": "doc",
+      "range": [
+        1738,
+        1815
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " start returning [`Some(Item)`] again at some point (for example, see [`TryIter`]).",
+      "path": "doc",
+      "range": [
+        1816,
+        1902
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1903,
+        1906
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Iterator`]'s full definition includes a number of other methods as well,",
+      "path": "doc",
+      "range": [
+        1907,
+        1985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " but they are default methods, built on top of [`next`], and so you get",
+      "path": "doc",
+      "range": [
+        1986,
+        2060
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " them for free.",
+      "path": "doc",
+      "range": [
+        2061,
+        2079
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2080,
+        2083
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Iterators are also composable, and it's common to chain them together to do",
+      "path": "doc",
+      "range": [
+        2084,
+        2163
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " more complex forms of processing. See the [Adapters](#adapters) section",
+      "path": "doc",
+      "range": [
+        2164,
+        2239
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " below for more details.",
+      "path": "doc",
+      "range": [
+        2240,
+        2267
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2268,
+        2271
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Some(Item)`]: Some",
+      "path": "doc",
+      "range": [
+        2272,
+        2296
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`next`]: Iterator::next",
+      "path": "doc",
+      "range": [
+        2297,
+        2325
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`TryIter`]: ../../std/sync/mpsc/struct.TryIter.html",
+      "path": "doc",
+      "range": [
+        2326,
+        2382
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2383,
+        2386
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # The three forms of iteration",
+      "path": "doc",
+      "range": [
+        2387,
+        2421
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2422,
+        2425
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " There are three common methods which can create iterators from a collection:",
+      "path": "doc",
+      "range": [
+        2426,
+        2506
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2507,
+        2510
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `iter()`, which iterates over `&T`.",
+      "path": "doc",
+      "range": [
+        2511,
+        2552
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `iter_mut()`, which iterates over `&mut T`.",
+      "path": "doc",
+      "range": [
+        2553,
+        2602
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * `into_iter()`, which iterates over `T`.",
+      "path": "doc",
+      "range": [
+        2603,
+        2648
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2649,
+        2652
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Various things in the standard library may implement one or more of the",
+      "path": "doc",
+      "range": [
+        2653,
+        2728
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " three, where appropriate.",
+      "path": "doc",
+      "range": [
+        2729,
+        2758
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2759,
+        2762
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Implementing Iterator",
+      "path": "doc",
+      "range": [
+        2763,
+        2790
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2791,
+        2794
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Creating an iterator of your own involves two steps: creating a `struct` to",
+      "path": "doc",
+      "range": [
+        2795,
+        2874
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " hold the iterator's state, and then implementing [`Iterator`] for that `struct`.",
+      "path": "doc",
+      "range": [
+        2875,
+        2959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This is why there are so many `struct`s in this module: there is one for",
+      "path": "doc",
+      "range": [
+        2960,
+        3036
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " each iterator and iterator adapter.",
+      "path": "doc",
+      "range": [
+        3037,
+        3076
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3077,
+        3080
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Let's make an iterator named `Counter` which counts from `1` to `5`:",
+      "path": "doc",
+      "range": [
+        3081,
+        3153
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3154,
+        3157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3158,
+        3165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // First, the struct:",
+      "path": "doc",
+      "range": [
+        3166,
+        3191
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3192,
+        3195
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " /// An iterator which counts from one to five",
+      "path": "doc",
+      "range": [
+        3196,
+        3245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Counter {",
+      "path": "doc",
+      "range": [
+        3246,
+        3266
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     count: usize,",
+      "path": "doc",
+      "range": [
+        3267,
+        3288
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3289,
+        3294
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3295,
+        3298
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // we want our count to start at one, so let's add a new() method to help.",
+      "path": "doc",
+      "range": [
+        3299,
+        3377
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // This isn't strictly necessary, but is convenient. Note that we start",
+      "path": "doc",
+      "range": [
+        3378,
+        3453
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // `count` at zero, we'll see why in `next()`'s implementation below.",
+      "path": "doc",
+      "range": [
+        3454,
+        3527
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Counter {",
+      "path": "doc",
+      "range": [
+        3528,
+        3546
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn new() -> Counter {",
+      "path": "doc",
+      "range": [
+        3547,
+        3576
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Counter { count: 0 }",
+      "path": "doc",
+      "range": [
+        3577,
+        3609
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        3610,
+        3619
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3620,
+        3625
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3626,
+        3629
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Then, we implement `Iterator` for our `Counter`:",
+      "path": "doc",
+      "range": [
+        3630,
+        3685
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3686,
+        3689
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Iterator for Counter {",
+      "path": "doc",
+      "range": [
+        3690,
+        3721
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // we will be counting with usize",
+      "path": "doc",
+      "range": [
+        3722,
+        3763
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Item = usize;",
+      "path": "doc",
+      "range": [
+        3764,
+        3790
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3791,
+        3794
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // next() is the only required method",
+      "path": "doc",
+      "range": [
+        3795,
+        3840
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn next(&mut self) -> Option<Self::Item> {",
+      "path": "doc",
+      "range": [
+        3841,
+        3891
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Increment our count. This is why we started at zero.",
+      "path": "doc",
+      "range": [
+        3892,
+        3959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         self.count += 1;",
+      "path": "doc",
+      "range": [
+        3960,
+        3988
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3989,
+        3992
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Check to see if we've finished counting or not.",
+      "path": "doc",
+      "range": [
+        3993,
+        4055
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         if self.count < 6 {",
+      "path": "doc",
+      "range": [
+        4056,
+        4087
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Some(self.count)",
+      "path": "doc",
+      "range": [
+        4088,
+        4120
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         } else {",
+      "path": "doc",
+      "range": [
+        4121,
+        4141
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             None",
+      "path": "doc",
+      "range": [
+        4142,
+        4162
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4163,
+        4176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        4177,
+        4186
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4187,
+        4192
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4193,
+        4196
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // And now we can use it!",
+      "path": "doc",
+      "range": [
+        4197,
+        4226
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4227,
+        4230
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut counter = Counter::new();",
+      "path": "doc",
+      "range": [
+        4231,
+        4268
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4269,
+        4272
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), Some(1));",
+      "path": "doc",
+      "range": [
+        4273,
+        4313
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), Some(2));",
+      "path": "doc",
+      "range": [
+        4314,
+        4354
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), Some(3));",
+      "path": "doc",
+      "range": [
+        4355,
+        4395
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), Some(4));",
+      "path": "doc",
+      "range": [
+        4396,
+        4436
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), Some(5));",
+      "path": "doc",
+      "range": [
+        4437,
+        4477
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(counter.next(), None);",
+      "path": "doc",
+      "range": [
+        4478,
+        4515
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4516,
+        4523
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4524,
+        4527
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Calling [`next`] this way gets repetitive. Rust has a construct which can",
+      "path": "doc",
+      "range": [
+        4528,
+        4605
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " call [`next`] on your iterator, until it reaches `None`. Let's go over that",
+      "path": "doc",
+      "range": [
+        4606,
+        4685
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " next.",
+      "path": "doc",
+      "range": [
+        4686,
+        4695
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4696,
+        4699
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Also note that `Iterator` provides a default implementation of methods such as `nth` and `fold`",
+      "path": "doc",
+      "range": [
+        4700,
+        4799
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " which call `next` internally. However, it is also possible to write a custom implementation of",
+      "path": "doc",
+      "range": [
+        4800,
+        4898
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " methods like `nth` and `fold` if an iterator can compute them more efficiently without calling",
+      "path": "doc",
+      "range": [
+        4899,
+        4997
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `next`.",
+      "path": "doc",
+      "range": [
+        4998,
+        5009
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5010,
+        5013
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # `for` loops and `IntoIterator`",
+      "path": "doc",
+      "range": [
+        5014,
+        5050
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5051,
+        5054
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust's `for` loop syntax is actually sugar for iterators. Here's a basic",
+      "path": "doc",
+      "range": [
+        5055,
+        5131
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " example of `for`:",
+      "path": "doc",
+      "range": [
+        5132,
+        5153
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5154,
+        5157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5158,
+        5165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let values = vec![1, 2, 3, 4, 5];",
+      "path": "doc",
+      "range": [
+        5166,
+        5203
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5204,
+        5207
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in values {",
+      "path": "doc",
+      "range": [
+        5208,
+        5229
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{x}\");",
+      "path": "doc",
+      "range": [
+        5230,
+        5254
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        5255,
+        5260
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5261,
+        5268
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5269,
+        5272
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This will print the numbers one through five, each on their own line. But",
+      "path": "doc",
+      "range": [
+        5273,
+        5350
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " you'll notice something here: we never called anything on our vector to",
+      "path": "doc",
+      "range": [
+        5351,
+        5426
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " produce an iterator. What gives?",
+      "path": "doc",
+      "range": [
+        5427,
+        5463
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5464,
+        5467
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " There's a trait in the standard library for converting something into an",
+      "path": "doc",
+      "range": [
+        5468,
+        5544
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " iterator: [`IntoIterator`]. This trait has one method, [`into_iter`],",
+      "path": "doc",
+      "range": [
+        5545,
+        5618
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " which converts the thing implementing [`IntoIterator`] into an iterator.",
+      "path": "doc",
+      "range": [
+        5619,
+        5695
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Let's take a look at that `for` loop again, and what the compiler converts",
+      "path": "doc",
+      "range": [
+        5696,
+        5774
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " it into:",
+      "path": "doc",
+      "range": [
+        5775,
+        5787
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5788,
+        5791
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`into_iter`]: IntoIterator::into_iter",
+      "path": "doc",
+      "range": [
+        5792,
+        5834
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5835,
+        5838
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5839,
+        5846
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let values = vec![1, 2, 3, 4, 5];",
+      "path": "doc",
+      "range": [
+        5847,
+        5884
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5885,
+        5888
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in values {",
+      "path": "doc",
+      "range": [
+        5889,
+        5910
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{x}\");",
+      "path": "doc",
+      "range": [
+        5911,
+        5935
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        5936,
+        5941
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5942,
+        5949
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5950,
+        5953
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust de-sugars this into:",
+      "path": "doc",
+      "range": [
+        5954,
+        5983
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5984,
+        5987
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5988,
+        5995
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let values = vec![1, 2, 3, 4, 5];",
+      "path": "doc",
+      "range": [
+        5996,
+        6033
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " {",
+      "path": "doc",
+      "range": [
+        6034,
+        6039
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let result = match IntoIterator::into_iter(values) {",
+      "path": "doc",
+      "range": [
+        6040,
+        6100
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         mut iter => loop {",
+      "path": "doc",
+      "range": [
+        6101,
+        6131
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             let next;",
+      "path": "doc",
+      "range": [
+        6132,
+        6157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             match iter.next() {",
+      "path": "doc",
+      "range": [
+        6158,
+        6193
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 Some(val) => next = val,",
+      "path": "doc",
+      "range": [
+        6194,
+        6238
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 None => break,",
+      "path": "doc",
+      "range": [
+        6239,
+        6273
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             };",
+      "path": "doc",
+      "range": [
+        6274,
+        6292
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             let x = next;",
+      "path": "doc",
+      "range": [
+        6293,
+        6322
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             let () = { println!(\"{x}\"); };",
+      "path": "doc",
+      "range": [
+        6323,
+        6369
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         },",
+      "path": "doc",
+      "range": [
+        6370,
+        6384
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     };",
+      "path": "doc",
+      "range": [
+        6385,
+        6395
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     result",
+      "path": "doc",
+      "range": [
+        6396,
+        6410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        6411,
+        6416
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        6417,
+        6424
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6425,
+        6428
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " First, we call `into_iter()` on the value. Then, we match on the iterator",
+      "path": "doc",
+      "range": [
+        6429,
+        6506
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " that returns, calling [`next`] over and over until we see a `None`. At",
+      "path": "doc",
+      "range": [
+        6507,
+        6581
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " that point, we `break` out of the loop, and we're done iterating.",
+      "path": "doc",
+      "range": [
+        6582,
+        6651
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6652,
+        6655
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " There's one more subtle bit here: the standard library contains an",
+      "path": "doc",
+      "range": [
+        6656,
+        6726
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " interesting implementation of [`IntoIterator`]:",
+      "path": "doc",
+      "range": [
+        6727,
+        6778
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6779,
+        6782
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```ignore (only-for-syntax-highlight)",
+      "path": "doc",
+      "range": [
+        6783,
+        6824
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl<I: Iterator> IntoIterator for I",
+      "path": "doc",
+      "range": [
+        6825,
+        6865
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        6866,
+        6873
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6874,
+        6877
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In other words, all [`Iterator`]s implement [`IntoIterator`], by just",
+      "path": "doc",
+      "range": [
+        6878,
+        6951
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " returning themselves. This means two things:",
+      "path": "doc",
+      "range": [
+        6952,
+        7000
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7001,
+        7004
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 1. If you're writing an [`Iterator`], you can use it with a `for` loop.",
+      "path": "doc",
+      "range": [
+        7005,
+        7080
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 2. If you're creating a collection, implementing [`IntoIterator`] for it",
+      "path": "doc",
+      "range": [
+        7081,
+        7157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    will allow your collection to be used with the `for` loop.",
+      "path": "doc",
+      "range": [
+        7158,
+        7223
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7224,
+        7227
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Iterating by reference",
+      "path": "doc",
+      "range": [
+        7228,
+        7256
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7257,
+        7260
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Since [`into_iter()`] takes `self` by value, using a `for` loop to iterate",
+      "path": "doc",
+      "range": [
+        7261,
+        7339
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " over a collection consumes that collection. Often, you may want to iterate",
+      "path": "doc",
+      "range": [
+        7340,
+        7418
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " over a collection without consuming it. Many collections offer methods that",
+      "path": "doc",
+      "range": [
+        7419,
+        7498
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provide iterators over references, conventionally called `iter()` and",
+      "path": "doc",
+      "range": [
+        7499,
+        7572
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `iter_mut()` respectively:",
+      "path": "doc",
+      "range": [
+        7573,
+        7603
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7604,
+        7607
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7608,
+        7615
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut values = vec![41];",
+      "path": "doc",
+      "range": [
+        7616,
+        7646
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in values.iter_mut() {",
+      "path": "doc",
+      "range": [
+        7647,
+        7679
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     *x += 1;",
+      "path": "doc",
+      "range": [
+        7680,
+        7696
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        7697,
+        7702
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in values.iter() {",
+      "path": "doc",
+      "range": [
+        7703,
+        7731
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     assert_eq!(*x, 42);",
+      "path": "doc",
+      "range": [
+        7732,
+        7759
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        7760,
+        7765
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(values.len(), 1); // `values` is still owned by this function.",
+      "path": "doc",
+      "range": [
+        7766,
+        7843
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        7844,
+        7851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7852,
+        7855
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If a collection type `C` provides `iter()`, it usually also implements",
+      "path": "doc",
+      "range": [
+        7856,
+        7930
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `IntoIterator` for `&C`, with an implementation that just calls `iter()`.",
+      "path": "doc",
+      "range": [
+        7931,
+        8008
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Likewise, a collection `C` that provides `iter_mut()` generally implements",
+      "path": "doc",
+      "range": [
+        8009,
+        8087
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `IntoIterator` for `&mut C` by delegating to `iter_mut()`. This enables a",
+      "path": "doc",
+      "range": [
+        8088,
+        8165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " convenient shorthand:",
+      "path": "doc",
+      "range": [
+        8166,
+        8191
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8192,
+        8195
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        8196,
+        8203
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut values = vec![41];",
+      "path": "doc",
+      "range": [
+        8204,
+        8234
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in &mut values {",
+      "path": "doc",
+      "range": [
+        8235,
+        8261
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     //   ^ same as `values.iter_mut()`",
+      "path": "doc",
+      "range": [
+        8262,
+        8304
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     *x += 1;",
+      "path": "doc",
+      "range": [
+        8305,
+        8321
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        8322,
+        8327
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in &values {",
+      "path": "doc",
+      "range": [
+        8328,
+        8350
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     //   ^ same as `values.iter()`",
+      "path": "doc",
+      "range": [
+        8351,
+        8389
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     assert_eq!(*x, 42);",
+      "path": "doc",
+      "range": [
+        8390,
+        8417
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        8418,
+        8423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(values.len(), 1);",
+      "path": "doc",
+      "range": [
+        8424,
+        8456
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        8457,
+        8464
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8465,
+        8468
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " While many collections offer `iter()`, not all offer `iter_mut()`. For",
+      "path": "doc",
+      "range": [
+        8469,
+        8543
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " example, mutating the keys of a [`HashSet<T>`] could put the collection",
+      "path": "doc",
+      "range": [
+        8544,
+        8619
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " into an inconsistent state if the key hashes change, so this collection",
+      "path": "doc",
+      "range": [
+        8620,
+        8695
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " only offers `iter()`.",
+      "path": "doc",
+      "range": [
+        8696,
+        8721
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8722,
+        8725
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`into_iter()`]: IntoIterator::into_iter",
+      "path": "doc",
+      "range": [
+        8726,
+        8770
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`HashSet<T>`]: ../../std/collections/struct.HashSet.html",
+      "path": "doc",
+      "range": [
+        8771,
+        8832
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8833,
+        8836
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Adapters",
+      "path": "doc",
+      "range": [
+        8837,
+        8851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8852,
+        8855
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Functions which take an [`Iterator`] and return another [`Iterator`] are",
+      "path": "doc",
+      "range": [
+        8856,
+        8932
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " often called 'iterator adapters', as they're a form of the 'adapter",
+      "path": "doc",
+      "range": [
+        8933,
+        9004
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " pattern'.",
+      "path": "doc",
+      "range": [
+        9005,
+        9018
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9019,
+        9022
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Common iterator adapters include [`map`], [`take`], and [`filter`].",
+      "path": "doc",
+      "range": [
+        9023,
+        9094
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For more, see their documentation.",
+      "path": "doc",
+      "range": [
+        9095,
+        9133
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9134,
+        9137
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If an iterator adapter panics, the iterator will be in an unspecified (but",
+      "path": "doc",
+      "range": [
+        9138,
+        9216
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " memory safe) state.  This state is also not guaranteed to stay the same",
+      "path": "doc",
+      "range": [
+        9217,
+        9292
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " across versions of Rust, so you should avoid relying on the exact values",
+      "path": "doc",
+      "range": [
+        9293,
+        9369
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " returned by an iterator which panicked.",
+      "path": "doc",
+      "range": [
+        9370,
+        9413
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9414,
+        9417
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`map`]: Iterator::map",
+      "path": "doc",
+      "range": [
+        9418,
+        9444
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`take`]: Iterator::take",
+      "path": "doc",
+      "range": [
+        9445,
+        9473
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`filter`]: Iterator::filter",
+      "path": "doc",
+      "range": [
+        9474,
+        9506
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9507,
+        9510
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Laziness",
+      "path": "doc",
+      "range": [
+        9511,
+        9525
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9526,
+        9529
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Iterators (and iterator [adapters](#adapters)) are *lazy*. This means that",
+      "path": "doc",
+      "range": [
+        9530,
+        9608
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " just creating an iterator doesn't _do_ a whole lot. Nothing really happens",
+      "path": "doc",
+      "range": [
+        9609,
+        9687
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " until you call [`next`]. This is sometimes a source of confusion when",
+      "path": "doc",
+      "range": [
+        9688,
+        9761
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " creating an iterator solely for its side effects. For example, the [`map`]",
+      "path": "doc",
+      "range": [
+        9762,
+        9840
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " method calls a closure on each element it iterates over:",
+      "path": "doc",
+      "range": [
+        9841,
+        9901
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9902,
+        9905
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        9906,
+        9913
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(unused_must_use)]",
+      "path": "doc",
+      "range": [
+        9914,
+        9946
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # #![allow(map_unit_fn)]",
+      "path": "doc",
+      "range": [
+        9947,
+        9975
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let v = vec![1, 2, 3, 4, 5];",
+      "path": "doc",
+      "range": [
+        9976,
+        10008
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " v.iter().map(|x| println!(\"{x}\"));",
+      "path": "doc",
+      "range": [
+        10009,
+        10047
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        10048,
+        10055
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10056,
+        10059
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This will not print any values, as we only created an iterator, rather than",
+      "path": "doc",
+      "range": [
+        10060,
+        10139
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " using it. The compiler will warn us about this kind of behavior:",
+      "path": "doc",
+      "range": [
+        10140,
+        10208
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10209,
+        10212
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        10213,
+        10224
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " warning: unused result that must be used: iterators are lazy and",
+      "path": "doc",
+      "range": [
+        10225,
+        10293
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " do nothing unless consumed",
+      "path": "doc",
+      "range": [
+        10294,
+        10324
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        10325,
+        10332
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10333,
+        10336
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The idiomatic way to write a [`map`] for its side effects is to use a",
+      "path": "doc",
+      "range": [
+        10337,
+        10410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `for` loop or call the [`for_each`] method:",
+      "path": "doc",
+      "range": [
+        10411,
+        10458
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10459,
+        10462
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        10463,
+        10470
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let v = vec![1, 2, 3, 4, 5];",
+      "path": "doc",
+      "range": [
+        10471,
+        10503
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10504,
+        10507
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " v.iter().for_each(|x| println!(\"{x}\"));",
+      "path": "doc",
+      "range": [
+        10508,
+        10551
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // or",
+      "path": "doc",
+      "range": [
+        10552,
+        10561
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for x in &v {",
+      "path": "doc",
+      "range": [
+        10562,
+        10579
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{x}\");",
+      "path": "doc",
+      "range": [
+        10580,
+        10604
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        10605,
+        10610
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        10611,
+        10618
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10619,
+        10622
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`map`]: Iterator::map",
+      "path": "doc",
+      "range": [
+        10623,
+        10649
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`for_each`]: Iterator::for_each",
+      "path": "doc",
+      "range": [
+        10650,
+        10686
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10687,
+        10690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Another common way to evaluate an iterator is to use the [`collect`]",
+      "path": "doc",
+      "range": [
+        10691,
+        10763
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " method to produce a new collection.",
+      "path": "doc",
+      "range": [
+        10764,
+        10803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10804,
+        10807
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`collect`]: Iterator::collect",
+      "path": "doc",
+      "range": [
+        10808,
+        10842
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10843,
+        10846
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Infinity",
+      "path": "doc",
+      "range": [
+        10847,
+        10861
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10862,
+        10865
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Iterators do not have to be finite. As an example, an open-ended range is",
+      "path": "doc",
+      "range": [
+        10866,
+        10943
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " an infinite iterator:",
+      "path": "doc",
+      "range": [
+        10944,
+        10969
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        10970,
+        10973
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        10974,
+        10981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let numbers = 0..;",
+      "path": "doc",
+      "range": [
+        10982,
+        11004
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        11005,
+        11012
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11013,
+        11016
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " It is common to use the [`take`] iterator adapter to turn an infinite",
+      "path": "doc",
+      "range": [
+        11017,
+        11090
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " iterator into a finite one:",
+      "path": "doc",
+      "range": [
+        11091,
+        11122
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11123,
+        11126
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        11127,
+        11134
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let numbers = 0..;",
+      "path": "doc",
+      "range": [
+        11135,
+        11157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let five_numbers = numbers.take(5);",
+      "path": "doc",
+      "range": [
+        11158,
+        11197
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11198,
+        11201
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for number in five_numbers {",
+      "path": "doc",
+      "range": [
+        11202,
+        11234
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"{number}\");",
+      "path": "doc",
+      "range": [
+        11235,
+        11264
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        11265,
+        11270
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        11271,
+        11278
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11279,
+        11282
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This will print the numbers `0` through `4`, each on their own line.",
+      "path": "doc",
+      "range": [
+        11283,
+        11355
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11356,
+        11359
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Bear in mind that methods on infinite iterators, even those for which a",
+      "path": "doc",
+      "range": [
+        11360,
+        11435
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " result can be determined mathematically in finite time, might not terminate.",
+      "path": "doc",
+      "range": [
+        11436,
+        11516
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Specifically, methods such as [`min`], which in the general case require",
+      "path": "doc",
+      "range": [
+        11517,
+        11593
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " traversing every element in the iterator, are likely not to return",
+      "path": "doc",
+      "range": [
+        11594,
+        11664
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " successfully for any infinite iterators.",
+      "path": "doc",
+      "range": [
+        11665,
+        11709
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11710,
+        11713
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```no_run",
+      "path": "doc",
+      "range": [
+        11714,
+        11727
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let ones = std::iter::repeat(1);",
+      "path": "doc",
+      "range": [
+        11728,
+        11764
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let least = ones.min().unwrap(); // Oh no! An infinite loop!",
+      "path": "doc",
+      "range": [
+        11765,
+        11829
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // `ones.min()` causes an infinite loop, so we won't reach this point!",
+      "path": "doc",
+      "range": [
+        11830,
+        11904
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " println!(\"The smallest number one is {least}.\");",
+      "path": "doc",
+      "range": [
+        11905,
+        11957
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        11958,
+        11965
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        11966,
+        11969
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`take`]: Iterator::take",
+      "path": "doc",
+      "range": [
+        11970,
+        11998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`min`]: Iterator::min",
+      "path": "doc",
+      "range": [
+        11999,
+        12025
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        12027,
+        12073
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12146,
+        12970
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "adapters",
+      "path_overrides": [],
+      "range": [
+        16515,
+        16528
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "range",
+      "path_overrides": [],
+      "range": [
+        16529,
+        16539
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "sources",
+      "path_overrides": [],
+      "range": [
+        16540,
+        16552
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "traits",
+      "path_overrides": [],
+      "range": [
+        16553,
+        16564
+      ]
+    }
+  ],
+  "source_sha256": "4627179a1070416db5b4c10a72b14aa06f3e6296807274c42efd5367fac5331f"
+}

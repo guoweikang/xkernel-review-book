@@ -1,0 +1,84 @@
+ownership-document-packets-01：准备完成，待Goodall审阅；模型dispatch=0
+
+输入与范围
+协议：research/protocols/ownership-document-pilot-v1.json，固定commit
+59807616e1fa2540724bfbac14d7976d7e4a3860。protocol.snapshot.json为审计侧结构化快照，
+manifest.protocol_sha256绑定原协议文件字节，不把协议/rubric快照交给作答模型。
+17个区域取自4份已核验官方源码，完整原文件仍在相邻ownership-test-audit-01/original；
+manifest记录原文件SHA、精确起止行、区域SHA及选择理由，regions/保存区域原文。
+
+完整边界策略
+Rc与Arc各保留clone_from_ref_in所在完整impl（含try版本），完整make_mut impl，
+Unique*Uninit的完整struct/方法impl/Drop（含try_new及所有cfg），
+完整分配辅助impl（含失败处理，Arc含initialize_arcinner），内部表示/layout/offset函数，
+以及from_inner_in/from_ptr_in两个完整关联函数。关联函数的父impl类型在manifest说明。
+core保留TrivialClone整个声明/契约、CloneToUninit整个trait文档及trait、
+sized与slice完整impl，以及clone/uninit.rs整个文件，包含默认及特化分支。
+未删去成功、失败、Weak-only或TrivialClone分支。没有按预期答案截取某条有利路径。
+这不是完整可编译crate，也不是全依赖闭包；通用库原语、完整Rc/Arc/Weak类型及其余
+计数操作未递归纳入。统一task明示信息缺口。无对这些省略项的正确性判断。
+原文件区域按manifest固定顺序展现；每一原始区域内部保持原源码顺序。
+
+三个可交付模型包（仅这些文件可供后续作答模型读取）
+packets/code_only.txt
+packets/code_native_doc.txt
+packets/code_completed_doc.txt
+
+三个包task与生产代码区域逐字相同，shared code SHA-256：
+6223a54f0def0945706268a515513570d0164674dc0de4e178e9d9a2e9c19eb9。
+完整packet hash、bytes、characters见packet-hashes.json。
+code_only 25768 bytes，native 43665 bytes，completed 46522 bytes。
+回答上限均为1200汉字；没有模型运行、输出、评分或调参。
+
+注释和文档处理
+所有///与//!行从共享代码移除，所有普通注释/内部SAFETY注释/属性原样保留。
+本次选区无块式rustdoc或#[doc]属性；rebuilder对未处理形式显式拒绝。
+native附上30段被移除的连续rustdoc原文，不改写、不只摘选Panics句；每段有路径行范围。
+completed包含完全相同的native文档，再追加12条逐单端实现事实。
+没有重新发布must/should/may规范；新增文字全部标为源码实现事实，在ledger中分辨
+哪些内容原文已经说过、哪些是将代码中的布局/元数据/提交/计数细节显式外部化。
+completed是事实补齐与显式化干预，不是纯格式、等长或同信息表示实验。
+facts-ledger.json和fact-source-excerpts.json属于审计侧，不能附入模型包。
+新增事实按Rc入口/守卫、Arc入口/守卫、core单一类型或实现分别叙述，
+没有公共/差异答案表、应该共享建议、运行结果或评分项目。
+
+泄露风险与不能夸大的门槛
+1.普通内部注释已经含panic清理和成功forget说明，代码臂不是无文档baseline。
+  原生内部比较提示也保留，例如ArcInner注释提及RcInner；这是固定源的既有内容，
+  不是新增成对答案，但会降低本实验区分文档贡献的能力。
+2.native真实doc也可能暗示候选关系，例如UniqueRcUninit称近似UniqueRc<MaybeUninit<T>,A>。
+  不为盲化而删改原文；必须视为原生文档信号，不能当独立发现。
+3.native保留完整doc中的Rust示例，因此“相同代码”严格指共享生产源码区域。
+  示例作为外部文档随native/completed增加，会提供额外调用语境；这是已知档位差异，
+  不是声称三臂所有代码样式字符串都一样。
+4.completed事实由已读源码/责任分析的同一研究者准备，存在选择与强调偏差；
+  单端措辞、全定义取材和来源绑定只能降低显式答案泄露，不能证明盲化。
+5.completed比native更长，重复和强调本身也可能影响回答；
+  不能把结果自动归因为全新事实，ledger对已知native事实的重述已明确标注。
+6.没有把test报告、责任表、rubric、Goodall结论或expected answer放入包。
+  自动禁词检查仅查了部分明确标识；不是语义无泄露证明，仍须Goodall逐包审阅。
+7.所有外部文档引号/英语原文保持原文；completed新增中文，存在语言/显著性混杂。
+8.未来作答模型只能获得一个packet，不能给予目录读取权、协议、脚本或审计附件，
+  应使用全新非fork上下文。当前会话已暴露预期责任分析，不能作为作答样本。
+
+复建与核验
+rebuild_packets.py只读冻结源/manifest/task/ledger，用--emit-patch向stdout生成apply_patch，
+不直接写文件；用--check重新计算并逐字核对27件派生产物。
+本批经apply_patch落盘，重建检查通过。validation.txt另核查三包CODE段逐字一致、
+completed以前缀包含native、所有native段与原文相等、区域完整字节相等和有限排除词。
+region-index.json给原始/去doc代码字节数和SHA。没有新增通用验证平台。
+共享catalog和现有站点只读检查见repository-checks.json；没有重建共享.build/dist。
+没有修改共享笔记、进度、生产、catalog；没有commit/push。
+
+准备成本
+第一条可核实UTC时间07:27:16；包生成及独立检查完成07:32:27，
+至此墙钟311秒，含协议/源码阅读、检索、边界选择、单端事实编写、脚本与校验。
+不把它当纯人工分钟或API计费时间；收尾及总墙钟另见preparation-cost.json。
+未测模型token数，UTF-8 bytes/Unicode字符数不冒充token数。
+
+交接
+Goodall-review-request.txt给出只读复核入口与风险清单。本会话没有spawn/send_input类
+子代理工具；可见HAPI目录未找到可确认的Goodall会话。一次只读核对发现同研究标题
+的旧会话实际已归档且最近任务无关，因此未唤醒、未发送材料给无关会话。
+不能声称Goodall已收到或已通过；交主线程转交既有Goodall代理。
+本批仅完成输入准备，禁止从此报告推导dispatch授权或已dispatch状态。

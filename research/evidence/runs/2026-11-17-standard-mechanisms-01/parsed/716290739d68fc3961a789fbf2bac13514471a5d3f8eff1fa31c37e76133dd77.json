@@ -1,0 +1,495 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " This module contains an unstable quicksort and two partition implementations.",
+      "path": "doc",
+      "range": [
+        0,
+        81
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Sorts `v` recursively.",
+          "path": "doc",
+          "range": [
+            511,
+            537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            538,
+            541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the slice had a predecessor in the original array, it is specified as `ancestor_pivot`.",
+          "path": "doc",
+          "range": [
+            542,
+            636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            637,
+            640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `limit` is the number of allowed imbalanced partitions before switching to `heapsort`. If zero,",
+          "path": "doc",
+          "range": [
+            641,
+            740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this function will immediately switch to heapsort.",
+          "path": "doc",
+          "range": [
+            741,
+            795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            796,
+            838
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1016,
+        3017
+      ],
+      "kind": "fn",
+      "name": "quicksort",
+      "range": [
+        511,
+        3017
+      ],
+      "signature_range": [
+        850,
+        1015
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        1967,
+        1988
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Takes the input slice `v` and re-arranges elements such that when the call returns normally",
+          "path": "doc",
+          "range": [
+            3019,
+            3114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all elements that compare true for `is_less(elem, pivot)` where `pivot == v[pivot_pos]` are",
+          "path": "doc",
+          "range": [
+            3115,
+            3210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on the left side of `v` followed by the other elements, notionally considered greater or",
+          "path": "doc",
+          "range": [
+            3211,
+            3303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " equal to `pivot`.",
+          "path": "doc",
+          "range": [
+            3304,
+            3325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3326,
+            3329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the number of elements that are compared true for `is_less(elem, pivot)`.",
+          "path": "doc",
+          "range": [
+            3330,
+            3415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3416,
+            3419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `is_less` does not implement a total order the resulting order and return value are",
+          "path": "doc",
+          "range": [
+            3420,
+            3510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unspecified. All original elements will remain in `v` and any possible modifications via",
+          "path": "doc",
+          "range": [
+            3511,
+            3603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " interior mutability will be observable. Same is true if `is_less` panics or `v.len()`",
+          "path": "doc",
+          "range": [
+            3604,
+            3693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exceeds `scratch.len()`.",
+          "path": "doc",
+          "range": [
+            3694,
+            3722
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3842,
+        5210
+      ],
+      "kind": "fn",
+      "name": "partition",
+      "range": [
+        3019,
+        5210
+      ],
+      "signature_range": [
+        3734,
+        3841
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        5304,
+        5881
+      ],
+      "kind": "fn",
+      "name": "inst_partition",
+      "range": [
+        5212,
+        5881
+      ],
+      "signature_range": [
+        5212,
+        5303
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5578,
+        5813
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " See [`partition`].",
+          "path": "doc",
+          "range": [
+            5883,
+            5905
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6032,
+        9136
+      ],
+      "kind": "fn",
+      "name": "partition_hoare_branchy_cyclic",
+      "range": [
+        5883,
+        9136
+      ],
+      "signature_range": [
+        5906,
+        6031
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9138,
+            9180
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "PartitionState",
+      "range": [
+        9138,
+        9562
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9564,
+            9606
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9737,
+        13748
+      ],
+      "kind": "fn",
+      "name": "partition_lomuto_branchless_cyclic",
+      "range": [
+        9564,
+        13748
+      ],
+      "signature_range": [
+        9607,
+        9736
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        11557,
+        11957
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            13750,
+            13787
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13920,
+        14325
+      ],
+      "kind": "fn",
+      "name": "partition_lomuto_branchless_simple",
+      "range": [
+        13750,
+        14325
+      ],
+      "signature_range": [
+        13788,
+        13919
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "struct",
+      "name": "GapGuard",
+      "range": [
+        14327,
+        14394
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14396,
+        14673
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "body_range": [
+        14450,
+        14671
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        14431,
+        14671
+      ],
+      "signature_range": [
+        14431,
+        14449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Ideally this wouldn't be needed and we could just use the regular GapGuard.",
+          "path": "doc",
+          "range": [
+            14675,
+            14754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See comment in [`partition_lomuto_branchless_cyclic`].",
+          "path": "doc",
+          "range": [
+            14755,
+            14813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            14814,
+            14856
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "GapGuardRaw",
+      "range": [
+        14675,
+        14918
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            14920,
+            14962
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14920,
+        15241
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [],
+      "body_range": [
+        15020,
+        15239
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        15001,
+        15239
+      ],
+      "signature_range": [
+        15001,
+        15019
+      ]
+    }
+  ],
+  "source_sha256": "8fc55e114a3715dafb6b6d336b9450534ce7d45314d71faa9bd79a0c7d3e8a13"
+}

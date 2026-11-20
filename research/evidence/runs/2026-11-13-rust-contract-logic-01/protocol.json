@@ -1,0 +1,32 @@
+{
+  "scope": "Researcher-authored Rust-inspired propositional controls, NOT extracted code contracts or independent labels",
+  "semantics": "Enumerate every Boolean assignment; restrict to premise-satisfying worlds. All hypothesis true => entailment; all false => contradiction; mixed => neutral. Reject unsatisfiable premise.",
+  "inference": "Use previous pinned local NLI model and CPU settings, two passes, no text changes after measurement; 3-way argmax and binary collapse both reported. Formula/labels never sent to model.",
+  "limits": "English-to-formula alignment is a human review assumption, not proven by truth-table enumeration. Variables refer to one specified invocation or one specified module, not temporal logic. No complete Rust semantics or production claim.",
+  "families": [
+    {"id":"condition", "variables":{"H":"handler is called for this request","C":"payload collection succeeds for this request"}, "premise":"For this request, the handler is called only if payload collection succeeds.", "formula":["implies","H","C"], "hypotheses":[
+      {"id":"preserved","text":"If the handler is called for this request, payload collection succeeds.","formula":["implies","H","C"]},
+      {"id":"converse","text":"If payload collection succeeds for this request, the handler is called.","formula":["implies","C","H"]},
+      {"id":"unconditional","text":"The handler is called for this request.","formula":"H"},
+      {"id":"contrapositive","text":"If payload collection does not succeed for this request, the handler is not called.","formula":["implies",["not","C"],["not","H"]]}
+    ]},
+    {"id":"field_role", "variables":{"P":"permission bits change in this invocation","T":"file-type bits change in this invocation"}, "premise":"In this invocation, the permission bits change and the file-type bits do not change.", "formula":["and","P",["not","T"]], "hypotheses":[
+      {"id":"changed","text":"In this invocation, the permission bits change.","formula":"P"},
+      {"id":"preserved","text":"In this invocation, the file-type bits remain unchanged.","formula":["not","T"]},
+      {"id":"swapped","text":"In this invocation, the file-type bits change.","formula":"T"},
+      {"id":"denied","text":"In this invocation, the permission bits do not change.","formula":["not","P"]}
+    ]},
+    {"id":"document_report", "variables":{"D":"documentation states that the module supports IRQ lookup","A":"module actually supports IRQ lookup"}, "premise":"The documentation states that the module supports IRQ lookup.", "formula":"D", "hypotheses":[
+      {"id":"report_preserved","text":"According to the documentation, IRQ lookup is supported by the module.","formula":"D"},
+      {"id":"actual_promoted","text":"The module actually supports IRQ lookup.","formula":"A"},
+      {"id":"actual_denied","text":"The module does not actually support IRQ lookup.","formula":["not","A"]},
+      {"id":"report_denied","text":"The documentation does not state that the module supports IRQ lookup.","formula":["not","D"]}
+    ]},
+    {"id":"norm_vs_actual", "variables":{"N":"architecture requires the firmware crate to decode node properties","A":"firmware crate actually decodes node properties"}, "premise":"The architecture requires the firmware crate to decode node properties.", "formula":"N", "hypotheses":[
+      {"id":"norm_preserved","text":"Decoding node properties is required of the firmware crate by the architecture.","formula":"N"},
+      {"id":"actual_promoted","text":"The firmware crate actually decodes node properties.","formula":"A"},
+      {"id":"actual_denied","text":"The firmware crate does not actually decode node properties.","formula":["not","A"]},
+      {"id":"norm_denied","text":"The architecture does not require the firmware crate to decode node properties.","formula":["not","N"]}
+    ]}
+  ]
+}

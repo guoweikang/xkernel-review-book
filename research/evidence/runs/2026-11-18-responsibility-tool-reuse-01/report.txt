@@ -1,0 +1,105 @@
+职责证据流程：既有工具复用审计
+run: 2026-11-18-responsibility-tool-reuse-01
+结论：可复用“身份/摘录校验 + 分层claim ledger + 人工规范/例外确认”，不能直接拼成自动职责检测器。
+六卡prompt实验已结束。本批仅审读5个既有工作流入口，未运行它们、未新造框架、未模型调用、未重复toy/CPU实验。
+配套check_governed_claims_v2.py作为第2入口的已有核验器证据阅读，不另列新工作流。所有脚本只归档原文，不改写。
+
+一、五个入口的真实输入输出、测试和缺口
+
+T1 scripts/build_governed_doc_packets.py:22,43（schema/packet）
+输入：--run-id、--repo；固定governed-doc-packets-v1.json及parent governed-docs-v1.json；旧seed card或Git revision:path。
+输出：source.txt、source-card（如有）、packet.json、D0/D1/D2_candidate/D3/paraphrase/without_*文本、manifest/report和源码副本。
+可用字段：entity_identity(path/name/lines可选)、source_revision/hash、provider/review_status、按crate/module/item组织的文本字段。
+schema的crate/module含exceptions；item无单独exceptions字段，可在契约文本表达但不被独立检查。
+行为/规范是研究者已写的fields，不是工具抽取；未知用status标注；D1字节不改、干预单字段约束可机械检查。
+关键不足：governed-docs-v1的provenance_required还列evidence_links/applicability，但validator未逐一强制这些字段。
+validate只检查部分状态、必填字段集合/非空、D0/D1及干预形状；并非完整JSON Schema验证，更不证明例外齐备。
+没有逐字段证据区间/蕴含/语义等价验证。provider只允许researcher，不能作为真正维护者签署系统。
+已有证据：governed-doc-packets-02/report.json为3包39变体、6项拒绝控制；01/02现存51文件本批只读比对全相同。
+这不是39次模型实验，provider_validated和detector_runs均0。
+六卡用途：借用字段目录检查遗漏；不重跑旧干预，不把“字段齐全”称完整职责文档。
+判定：格式/校验思路可复用；旧CLI固定协议与干预任务，不能无需适配直接接受六卡ledger。
+
+T2 scripts/build_governed_claims_v2.py:18,42（原子claim）；配套check_governed_claims_v2.py
+输入：固定governed-doc-claims-v2.json、parent packet、same-revision源码；--run-id。
+输出：claims.json（id、packet、kind、text、revision、evidence[path/hash/medium/lines/excerpt]、provider_validated、independent_label）、
+manifest、单条干预输入、report。
+validate核对kind、来源hash、revision一致、行区间/摘录；禁止design_document冒充source_observation、
+禁止provider/独立标签升级。unknown要求无虚构evidence，但不是unknown语义判定。
+五类source_observation/normative_responsibility/document_report/planned_capability/unknown表示依据/模态，不是真值等级。
+配套checker读两个旧run，比较文件清单与字节、已登记hash，再git show复核全文/摘录；输出semantic_truth_validated=false。
+行为与规范均由plan里的自然语言给定；kind是否合理（除粗粒度medium限制）、摘录是否支持主张仍须人工。
+一个claim只有一个evidence对象；跨文档冲突、多个规范的条件优先级、例外适用关系、type/mod/crate归属并非强类型字段。
+packet只给间接实体关系；没有自动把实体行为与规范相连的能力。提供者真确认也不是当前validator可接受的状态。
+已有证据：claims-v2-01/report.json记录15条含2 unknown、3项拒绝控制、detector_runs=0；两个旧run11文件逐字节相同。
+当前builder与归档builder同hash。旧配套checker源码确有Git核查逻辑；本批没有重跑checker，不把旧文档报告的5源核验算本批测试。
+六卡用途：R06的“文档称Unsupported”和“当前代码irq_spec查询”分成两条不同kind，保留冲突，不推导真实违规。
+判定：五类claim及固定出处最适合复用；现有生成CLI仍绑定旧3包及backend/manifest路径，不能当通用六卡导入器。
+
+T3 scripts/run_reflexion_contract.py:9 — project(high_edges, source_edges, rules, mode)
+真实API输入：显式高层边、显式源码边、source→targets映射，mode只能first/all。
+输出：convergence/divergence/absence/unmapped及每条高层边的源码贡献边。
+函数可直接对已经确认且同型的关系集合做纯投影；CLI --output只运行内置控制，不是任意项目导入接口。
+它不读源码、不抽行为、不读文档、不核hash、没有规范版本/例外适用/证据原文字段。
+允许边是输入前提，不是自动发现的职责真值；未映射边保留但映射正确性不验证；first顺序影响结果。
+已有证据：reflexion-contract-01/report.json保存6个手定fixture和非法mode拒绝；声明非原RMTool运行/非原实验复现/非语义准确率。
+firmware-projection-01/report.json头部声明resolved_edges=0、analyst_hypotheses、actual_violation_labels=null：
+历史语法拼写投影不能当已解析调用图。
+六卡用途：若未来有提供者确认的关系模型，机械保留贡献路径；当前六卡不是完整边集，无需强行转换运行。
+判定：可复用纯project函数，但只作可选结构层；不是此次最小组合必需品。
+
+T4 scripts/run_inmap_input_probe.py:15（InMap输入流水线）
+输入：固定cae17d...源码/cache、下载清单逐文件hash、JabRef3.7源、原单配置、依赖/JDK、namespace harness；
+可选retrieval-limit、missing-method-loop、declared-method输入、snapshot、parse-only方法抽取等参数。
+输出：filtered-classes、indexed-paths、initial-ir-scores.tsv、commands/stdout/stderr/dependency+artifact hash；
+按模式还可能输出oracle/推荐/接受/拒绝/方法词/trace。
+它可固定Java实体集合/名字和检索分数；不可把Java类名定位当Rust type/mod/crate定位，更不能生成规范/例外/文档出处链。
+当前入口硬编码旧项目缓存，某些依赖缺失时会联网；本批不启动。
+代码中的方法抽取模式仅source-declared inventory，不是原调用图；缺图循环是显式替代条件。
+已有证据：inmap-input-03 report returncode0、49源编译，stdout报告842 filtered、843 indexed/oracle、5052配对、graph不存在。
+02曾失败于“评分实体均属filtered”的独立断言：MacAdapter反例及三个不完整评分行原文保留。
+02/03现存三份主输出逐字节相同（842/843/5052行）；这是身份/重跑稳定性，不是职责正确率。
+注意：当前runner hash不同于03历史runner，旧成功不覆盖所有后来模式。未查验当前安装环境，也未重跑Java。
+六卡用途：不纳入最小组合；六卡已有稳定Rust身份，不值得为名字检索引入Java管线或伪造调用图。
+判定：借鉴输入冻结和集合边界审计，不直接复用为本职责任务实现。
+
+T5 scripts/audit_conditional_location.py:29（已有代码定位/条件追溯）
+输入：--output；固定firmware-conditional-location-v1.json的before commit、path/function/site、calls.json；
+从本地Git取源码和完整规范文档。
+输出：freeze/protocol/auditor/audit.json，含精确函数与site字节区间、行号、hash、norm_excerpt、显式条件/未知状态。
+核验已有定位记录是否对应真实字节，不重新抽取行为、不解析目标、cfg/执行均未建立。
+conditional_status只对DT/OF与absent/unknown/established枚举传播研究者输入的前提；
+actual_violation=unknown、provider_approval=unverified、semantic_role_mapping未解决均显式保留。
+已有证据：conditional-location-01/audit.json记录同一CPU源码点×3前提；源码有unknown不被升级、established和非法owner断言。
+本批只读旧记录，不重跑CPU单点；当前auditor与历史副本同hash。
+六卡用途：参考其字节区间→源码行→同版文档区间的核查方式，R04保留例外条件证据，不能把其DT/OF硬编码结果套六卡。
+判定：机械身份核验可借用，CLI当前锁定旧单点；条件规则不是新真值、不推荐扩成规则引擎。
+
+二、最小可复用组合（无需新框架）
+1. 继续以六卡既有inputs.json/源码原件/完整文档/hash为身份底座，不重新抽候选。
+2. 采用T2现有claim分类和出处表达；复用当前六卡evaluator-ledger中的claim/condition/implementation_evidence/allowed_conclusion。
+   T1的crate/module职责字段仅作人工完整性清单；T5的范围核查模式用于追溯。保留两种材料，不强求旧schema互相兼容。
+3. 人工并列核对实体→行为描述→规范摘录→例外/条件→出处；机械检查仅确认字节、字段、版本、关联ID，
+   不将“规范出处存在”当作“规范适用于此行为”。现阶段可直接复用的是档案/表结构与有限函数，不是现成end-to-end CLI。
+4. 不调用旧build入口制造新的corrupted输入；不重开prompt实验。T3仅在明确关系输入已具来源时可选，T4不加入。
+这不是新的工具流水线实现或承诺全部自动接通；无需为六卡再写框架。
+
+三、职责分工及关键缺口
+工具：机械身份/结构——版本、hash、范围、字段存在、集合投影与来源引用完整性。
+模型：语义提案——描述行为、提出规范绑定和可能例外、指出冲突/缺证据；输出仍是待核主张，不授权它选规范owner或造标签。
+提供者/维护者：确认规范权威、适用版本与边界、迁移授权和例外范围；确认设计意图不等于独立效果标签或最佳架构证明。
+研究者/独立审阅者：核对来源支持与限定，不把自己写的schema、条件表、allowed_conclusion升级为provider确认。
+唯一关键缺口：把具体行为可靠绑定到“当前有权威的规范及其例外适用范围”。
+hash、schema、Reflexion甚至代码运行都不能自动解决这个语义/授权缺口；目前无可用自动确认入口。
+R03的util/实际目录冲突仍需规范优先级确认；R04“until migrated”是否覆盖该初始化单元需适用性确认；
+R06能力状态冲突不代表所有权禁止或真实违规。R01/R02/R05也不能由当前所在位置反向生成规范。
+主线程报告R03/04/06理由/例外变化仅作为已完成pilot背景；本批不重新评分，不声称准确率提升。
+
+四、证据与审计边界
+sources.json登记18份实际打开并逐字节归档的源码/协议/原报告，opened/保留全文；不执行归档脚本。
+lookup.json是定向research_lookup原输出；首次宽查询输出被工具截断，仅导航，不作完整覆盖证据。
+首次猜测notes/2026-11-11-firmware-projection.md不存在；改读真实firmware-projection-01/report.json头部，
+不声称全文审过大型投影结果。该头部仅用于限定历史resolved_edges/authority状态。
+readonly-validation.log记录现存归档重复性及当前/历史工具身份；测试数量均为历史报告或源码断言审读，不是本批新测试。
+未做网络检索、模型实验、生产修改、共享进度修改、commit或push。
+下一步交主线程决定是否仅进行提供者规范/例外确认；不建议再调六卡prompt或重复旧预算/CPU见证。

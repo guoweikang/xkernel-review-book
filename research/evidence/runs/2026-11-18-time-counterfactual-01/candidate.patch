@@ -1,0 +1,32 @@
+--- a/core/ktime/src/lib.rs
++++ b/core/ktime/src/lib.rs
+@@ -123,12 +123,6 @@
+         sample: SystemTime,
+         monotonic: MonotonicInstant,
+     ) -> Result<(), RealtimeOutOfRange> {
+-        let min_allowed = SystemTime::UNIX_EPOCH
+-            .checked_add(monotonic.span_since_origin())
+-            .ok_or(RealtimeOutOfRange)?;
+-        if sample < min_allowed || sample.unix_seconds() >= MAX_SETTABLE_UNIX_SECONDS {
+-            return Err(RealtimeOutOfRange);
+-        }
+         self.correlation = ClockCorrelation::new(monotonic, sample);
+         Ok(())
+     }
+--- a/core/ksyscall/src/time/queries.rs
++++ b/core/ksyscall/src/time/queries.rs
+@@ -63,6 +63,14 @@
+     // Range validation (the Linux rule that the wall clock may not move before
+     // CLOCK_MONOTONIC, plus an upper bound keeping the clock able to advance)
+     // is enforced atomically inside the timekeeper under a single write lock.
++    const MAX_SETTABLE_UNIX_SECONDS: i64 = i64::MAX / ktime_types::NANOS_PER_SEC as i64;
++    let monotonic = monotonic_time();
++    let min_allowed = SystemTime::UNIX_EPOCH
++        .checked_add(monotonic.span_since_origin())
++        .ok_or(KError::InvalidInput)?;
++    if value < min_allowed || value.unix_seconds() >= MAX_SETTABLE_UNIX_SECONDS {
++        return Err(KError::InvalidInput);
++    }
+     ktime::set_realtime_checked(value).map_err(|_| KError::InvalidInput)?;
+     Ok(0)
+ }

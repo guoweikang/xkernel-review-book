@@ -1,0 +1,832 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a new iterator that repeats elements of type `A` endlessly by",
+          "path": "doc",
+          "range": [
+            84,
+            157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " applying the provided closure, the repeater, `F: FnMut() -> A`.",
+          "path": "doc",
+          "range": [
+            158,
+            225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            226,
+            229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `repeat_with()` function calls the repeater over and over again.",
+          "path": "doc",
+          "range": [
+            230,
+            302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            303,
+            306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Infinite iterators like `repeat_with()` are often used with adapters like",
+          "path": "doc",
+          "range": [
+            307,
+            384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Iterator::take()`], in order to make them finite.",
+          "path": "doc",
+          "range": [
+            385,
+            440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            441,
+            444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the element type of the iterator you need implements [`Clone`], and",
+          "path": "doc",
+          "range": [
+            445,
+            519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it is OK to keep the source element in memory, you should instead use",
+          "path": "doc",
+          "range": [
+            520,
+            593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the [`repeat()`] function.",
+          "path": "doc",
+          "range": [
+            594,
+            624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            625,
+            628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " An iterator produced by `repeat_with()` is not a [`DoubleEndedIterator`].",
+          "path": "doc",
+          "range": [
+            629,
+            706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you need `repeat_with()` to return a [`DoubleEndedIterator`],",
+          "path": "doc",
+          "range": [
+            707,
+            775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " please open a GitHub issue explaining your use case.",
+          "path": "doc",
+          "range": [
+            776,
+            832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            833,
+            836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`repeat()`]: crate::iter::repeat",
+          "path": "doc",
+          "range": [
+            837,
+            874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            875,
+            878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            879,
+            893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            894,
+            897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            898,
+            914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            915,
+            918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            919,
+            926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::iter;",
+          "path": "doc",
+          "range": [
+            927,
+            945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            946,
+            949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // let's assume we have some value of a type that is not `Clone`",
+          "path": "doc",
+          "range": [
+            950,
+            1018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // or which we don't want to have in memory just yet because it is expensive:",
+          "path": "doc",
+          "range": [
+            1019,
+            1100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(PartialEq, Debug)]",
+          "path": "doc",
+          "range": [
+            1101,
+            1132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Expensive;",
+          "path": "doc",
+          "range": [
+            1133,
+            1154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1155,
+            1158
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // a particular value forever:",
+          "path": "doc",
+          "range": [
+            1159,
+            1193
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut things = iter::repeat_with(|| Expensive);",
+          "path": "doc",
+          "range": [
+            1194,
+            1247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1248,
+            1251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(Expensive), things.next());",
+          "path": "doc",
+          "range": [
+            1252,
+            1299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(Expensive), things.next());",
+          "path": "doc",
+          "range": [
+            1300,
+            1347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(Expensive), things.next());",
+          "path": "doc",
+          "range": [
+            1348,
+            1395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(Expensive), things.next());",
+          "path": "doc",
+          "range": [
+            1396,
+            1443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(Expensive), things.next());",
+          "path": "doc",
+          "range": [
+            1444,
+            1491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1492,
+            1499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1500,
+            1503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Using mutation and going finite:",
+          "path": "doc",
+          "range": [
+            1504,
+            1540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1541,
+            1544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1545,
+            1556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::iter;",
+          "path": "doc",
+          "range": [
+            1557,
+            1575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1576,
+            1579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // From the zeroth to the third power of two:",
+          "path": "doc",
+          "range": [
+            1580,
+            1629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut curr = 1;",
+          "path": "doc",
+          "range": [
+            1630,
+            1651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut pow2 = iter::repeat_with(|| { let tmp = curr; curr *= 2; tmp })",
+          "path": "doc",
+          "range": [
+            1652,
+            1727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                     .take(4);",
+          "path": "doc",
+          "range": [
+            1728,
+            1761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1762,
+            1765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(1), pow2.next());",
+          "path": "doc",
+          "range": [
+            1766,
+            1803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(2), pow2.next());",
+          "path": "doc",
+          "range": [
+            1804,
+            1841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(4), pow2.next());",
+          "path": "doc",
+          "range": [
+            1842,
+            1879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(8), pow2.next());",
+          "path": "doc",
+          "range": [
+            1880,
+            1917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1918,
+            1921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // ... and now we're done",
+          "path": "doc",
+          "range": [
+            1922,
+            1951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, pow2.next());",
+          "path": "doc",
+          "range": [
+            1952,
+            1986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1987,
+            1994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1995,
+            2004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2005,
+            2066
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2136,
+        2167
+      ],
+      "kind": "fn",
+      "name": "repeat_with",
+      "range": [
+        84,
+        2167
+      ],
+      "signature_range": [
+        2071,
+        2135
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that repeats elements of type `A` endlessly by",
+          "path": "doc",
+          "range": [
+            2169,
+            2231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " applying the provided closure `F: FnMut() -> A`.",
+          "path": "doc",
+          "range": [
+            2232,
+            2284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2285,
+            2288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`repeat_with()`] function.",
+          "path": "doc",
+          "range": [
+            2289,
+            2352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See its documentation for more.",
+          "path": "doc",
+          "range": [
+            2353,
+            2388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2389,
+            2411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2412,
+            2473
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RepeatWith",
+      "range": [
+        2169,
+        2519
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2521,
+            2588
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2521,
+        2759
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        2689,
+        2757
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2632,
+        2757
+      ],
+      "signature_range": [
+        2632,
+        2688
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2761,
+            2822
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2761,
+        3583
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2901,
+            2910
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2947,
+        2986
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        2901,
+        2986
+      ],
+      "signature_range": [
+        2915,
+        2946
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2992,
+            3001
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3052,
+        3086
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        2992,
+        3086
+      ],
+      "signature_range": [
+        3006,
+        3051
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3092,
+            3101
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3266,
+        3581
+      ],
+      "kind": "impl_fn",
+      "name": "try_fold",
+      "range": [
+        3092,
+        3581
+      ],
+      "signature_range": [
+        3106,
+        3261
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3585,
+            3646
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3585,
+        3706
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3708,
+            3761
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3708,
+        3825
+      ]
+    }
+  ],
+  "source_sha256": "65bd763485e4e167a7b8cc288ab9327b01bc33d4b08a96804ef9ec62901f9a25"
+}

@@ -1,0 +1,750 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator that yields an element exactly once.",
+          "path": "doc",
+          "range": [
+            47,
+            107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            108,
+            111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is commonly used to adapt a single value into a [`chain()`] of other",
+          "path": "doc",
+          "range": [
+            112,
+            189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " kinds of iteration. Maybe you have an iterator that covers almost",
+          "path": "doc",
+          "range": [
+            190,
+            259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " everything, but you need an extra special case. Maybe you have a function",
+          "path": "doc",
+          "range": [
+            260,
+            337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which works on iterators, but you only need to process one value.",
+          "path": "doc",
+          "range": [
+            338,
+            407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            408,
+            411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`chain()`]: Iterator::chain",
+          "path": "doc",
+          "range": [
+            412,
+            444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            445,
+            448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            449,
+            463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            464,
+            467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            468,
+            484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            485,
+            488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            489,
+            496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::iter;",
+          "path": "doc",
+          "range": [
+            497,
+            515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            516,
+            519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // one is the loneliest number",
+          "path": "doc",
+          "range": [
+            520,
+            554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut one = iter::once(1);",
+          "path": "doc",
+          "range": [
+            555,
+            587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            588,
+            591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(1), one.next());",
+          "path": "doc",
+          "range": [
+            592,
+            628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            629,
+            632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // just one, that's all we get",
+          "path": "doc",
+          "range": [
+            633,
+            667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, one.next());",
+          "path": "doc",
+          "range": [
+            668,
+            701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            702,
+            709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            710,
+            713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Chaining together with another iterator. Let's say that we want to iterate",
+          "path": "doc",
+          "range": [
+            714,
+            792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " over each file of the `.foo` directory, but also a configuration file,",
+          "path": "doc",
+          "range": [
+            793,
+            867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `.foorc`:",
+          "path": "doc",
+          "range": [
+            868,
+            881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            882,
+            885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            886,
+            899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::iter;",
+          "path": "doc",
+          "range": [
+            900,
+            918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fs;",
+          "path": "doc",
+          "range": [
+            919,
+            935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::path::PathBuf;",
+          "path": "doc",
+          "range": [
+            936,
+            963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            964,
+            967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let dirs = fs::read_dir(\".foo\")?;",
+          "path": "doc",
+          "range": [
+            968,
+            1005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1006,
+            1009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // we need to convert from an iterator of DirEntry-s to an iterator of",
+          "path": "doc",
+          "range": [
+            1010,
+            1084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // PathBufs, so we use map",
+          "path": "doc",
+          "range": [
+            1085,
+            1115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let dirs = dirs.map(|file| file.unwrap().path());",
+          "path": "doc",
+          "range": [
+            1116,
+            1169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1170,
+            1173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // now, our iterator just for our config file",
+          "path": "doc",
+          "range": [
+            1174,
+            1223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let config = iter::once(PathBuf::from(\".foorc\"));",
+          "path": "doc",
+          "range": [
+            1224,
+            1277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1278,
+            1281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // chain the two iterators together into one big iterator",
+          "path": "doc",
+          "range": [
+            1282,
+            1343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let files = dirs.chain(config);",
+          "path": "doc",
+          "range": [
+            1344,
+            1379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1380,
+            1383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // this will give us all of the files in .foo as well as .foorc",
+          "path": "doc",
+          "range": [
+            1384,
+            1451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for f in files {",
+          "path": "doc",
+          "range": [
+            1452,
+            1472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"{f:?}\");",
+          "path": "doc",
+          "range": [
+            1473,
+            1499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1500,
+            1505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # std::io::Result::Ok(())",
+          "path": "doc",
+          "range": [
+            1506,
+            1535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1536,
+            1543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1544,
+            1593
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1630,
+        1677
+      ],
+      "kind": "fn",
+      "name": "once",
+      "range": [
+        47,
+        1677
+      ],
+      "signature_range": [
+        1598,
+        1629
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that yields an element exactly once.",
+          "path": "doc",
+          "range": [
+            1679,
+            1731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1732,
+            1735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`once()`] function. See its documentation for more.",
+          "path": "doc",
+          "range": [
+            1736,
+            1824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1825,
+            1848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1849,
+            1898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            1899,
+            1936
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Once",
+      "range": [
+        1679,
+        1998
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2000,
+            2049
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2000,
+        2262
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        2137,
+        2170
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        2105,
+        2170
+      ],
+      "signature_range": [
+        2105,
+        2136
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        2222,
+        2260
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        2176,
+        2260
+      ],
+      "signature_range": [
+        2176,
+        2221
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2264,
+            2313
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2264,
+        2437
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "body_range": [
+        2397,
+        2435
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        2360,
+        2435
+      ],
+      "signature_range": [
+        2360,
+        2396
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2439,
+            2488
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2439,
+        2590
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "body_range": [
+        2556,
+        2588
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        2533,
+        2588
+      ],
+      "signature_range": [
+        2533,
+        2555
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2592,
+            2645
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2592,
+        2686
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2688,
+            2734
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2688,
+        2771
+      ]
+    }
+  ],
+  "source_sha256": "3a75684ba4bf7da8fc0db61a83f7a28012c537d0e7daadcdbbd8a7a9a9f4bc3c"
+}

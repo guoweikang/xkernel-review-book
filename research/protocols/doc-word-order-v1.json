@@ -1,0 +1,17 @@
+{
+  "schema": "doc-word-order/1",
+  "status": "development_mechanism_comparison",
+  "question": "Does local word order distinguish the known role-swapped documentation pair, and what else changes at fixed candidate budget?",
+  "base_protocol": "research/protocols/doc-tfidf-discovery-v1.json",
+  "conditions": {"unigram": [1, 1], "unigram_bigram": [1, 2]},
+  "repeats": 2,
+  "review_budget": 20,
+  "fit_population": "All fixed 2180 documentation bindings, including empty docs; no new filtering, labels or summaries",
+  "ranking": "Same positive rounded cosine and unit-ID tie rule as baseline; complete ranking evaluated, top100 archived",
+  "diagnostics": "All 20 prior review pairs, especially already-seen role pair rank6 and identical-config-doc pair rank1; not independent test cases",
+  "controls": ["independent tiny-corpus unigram/bigram TF-IDF formula", "identical documents", "role inversion", "paraphrase", "negation", "empty document", "word permutation"],
+  "metrics": ["nonzero documents", "feature count", "positive pair count", "top20 overlap", "prior-pair cosine and global rank", "repeat identity"],
+  "claims_excluded": ["semantic accuracy", "precision/recall without labels", "role comprehension", "novel method", "Rust generalization", "optimization benefit"],
+  "stop_rule": "Run four fits; report all conditions and diagnostics; no ngram/threshold search after outcomes. Return to labeling and config evidence before more representation variants",
+  "next_gates": ["If local-order control already changes collision, do not credit a future complex method for this elementary effect", "If identical or misleading docs remain unresolved, require code/config evidence rather than tune text alone"]
+}

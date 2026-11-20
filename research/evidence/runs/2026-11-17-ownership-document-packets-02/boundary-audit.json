@@ -1,0 +1,181 @@
+{
+  "reviewer_finding": "Goodall reported two missing outer cfg attributes; user supplied review finding",
+  "changes": [
+    {
+      "id": "rc-make-mut",
+      "path": "library/alloc/src/rc.rs",
+      "old_start": 2012,
+      "new_start": 2011,
+      "end": 2103,
+      "old_sha256": "b44eab733cd96e07cc7d9b1407a794ad20017ac1cfe56e4caf10dba18cf748f4",
+      "new_sha256": "fbffb3063b8668fc5d44e2c04e958ede9c079da95f01523a30badc7a10b514e6",
+      "added_line": "#[cfg(not(no_global_oom_handling))]\n"
+    },
+    {
+      "id": "arc-make-mut",
+      "path": "library/alloc/src/sync.rs",
+      "old_start": 2439,
+      "new_start": 2438,
+      "end": 2551,
+      "old_sha256": "67b8e3821ad2cd4fba091eca14b1a0670f527f4786ba9fcd44c19ddef156cc21",
+      "new_sha256": "340b9fd4d03c0f11c9051d10f92d77074a5a76c87cc63fd4bcc93839742aa72a",
+      "added_line": "#[cfg(not(no_global_oom_handling))]\n"
+    }
+  ],
+  "all_region_boundaries": [
+    {
+      "id": "rc-clone-entry",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 1329,
+      "preceding_context_first_line": 1323,
+      "preceding_context": "    //#[unstable(feature = \"allocator_api\", issue = \"32838\")]\n    pub fn try_clone_from_ref(value: &T) -> Result<Rc<T>, AllocError> {\n        Rc::try_clone_from_ref_in(value, Global)\n    }\n}\n\n",
+      "corrected_start": 1329,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "rc-make-mut",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 2012,
+      "preceding_context_first_line": 2006,
+      "preceding_context": "    pub fn ptr_eq(this: &Self, other: &Self) -> bool {\n        ptr::addr_eq(this.ptr.as_ptr(), other.ptr.as_ptr())\n    }\n}\n\n#[cfg(not(no_global_oom_handling))]\n",
+      "corrected_start": 2011,
+      "assessment": "missing adjacent cfg restored"
+    },
+    {
+      "id": "rc-guard",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 4438,
+      "preceding_context_first_line": 4432,
+      "preceding_context": "                self.alloc.deallocate(self.ptr.cast(), Layout::for_value_raw(self.ptr.as_ptr()));\n            }\n        }\n    }\n}\n\n",
+      "corrected_start": 4438,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "rc-allocation",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 2209,
+      "preceding_context_first_line": 2203,
+      "preceding_context": "            let (ptr, alloc) = Rc::into_inner_with_allocator(self);\n            Rc::from_inner_in(ptr.cast(), alloc)\n        }\n    }\n}\n\n",
+      "corrected_start": 2209,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "rc-layout",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 279,
+      "preceding_context_first_line": 273,
+      "preceding_context": "use crate::boxed::Box;\n#[cfg(not(no_global_oom_handling))]\nuse crate::string::String;\n#[cfg(not(no_global_oom_handling))]\nuse crate::vec::Vec;\n\n",
+      "corrected_start": 279,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "rc-offset",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 3853,
+      "preceding_context_first_line": 3847,
+      "preceding_context": "    // and extern types, the input safety requirement is currently enough to\n    // satisfy the requirements of Alignment::of_val_raw; this is an implementation\n    // detail of the language that must not be relied upon outside of std.\n    unsafe { data_offset_alignment(Alignment::of_val_raw(ptr)) }\n}\n\n",
+      "corrected_start": 3853,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "rc-commit-constructors",
+      "path": "library/alloc/src/rc.rs",
+      "original_start": 375,
+      "preceding_context_first_line": 369,
+      "preceding_context": "    #[inline]\n    fn into_inner_with_allocator(this: Self) -> (NonNull<RcInner<T>>, A) {\n        let this = mem::ManuallyDrop::new(this);\n        (this.ptr, unsafe { ptr::read(&this.alloc) })\n    }\n\n",
+      "corrected_start": 375,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-clone-entry",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 1479,
+      "preceding_context_first_line": 1473,
+      "preceding_context": "    //#[unstable(feature = \"allocator_api\", issue = \"32838\")]\n    pub fn try_clone_from_ref(value: &T) -> Result<Arc<T>, AllocError> {\n        Arc::try_clone_from_ref_in(value, Global)\n    }\n}\n\n",
+      "corrected_start": 1479,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-make-mut",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 2439,
+      "preceding_context_first_line": 2433,
+      "preceding_context": "unsafe impl<T: ?Sized, A: Allocator> DerefPure for Arc<T, A> {}\n\n#[unstable(feature = \"legacy_receiver_trait\", issue = \"none\")]\nimpl<T: ?Sized> LegacyReceiver for Arc<T> {}\n\n#[cfg(not(no_global_oom_handling))]\n",
+      "corrected_start": 2438,
+      "assessment": "missing adjacent cfg restored"
+    },
+    {
+      "id": "arc-guard",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 4220,
+      "preceding_context_first_line": 4214,
+      "preceding_context": "#[inline]\nfn data_offset_alignment(alignment: Alignment) -> usize {\n    let layout = Layout::new::<ArcInner<()>>();\n    layout.size() + layout.padding_needed_for(alignment)\n}\n\n",
+      "corrected_start": 4220,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-allocation",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 2148,
+      "preceding_context_first_line": 2142,
+      "preceding_context": "    #[stable(feature = \"ptr_eq\", since = \"1.17.0\")]\n    pub fn ptr_eq(this: &Self, other: &Self) -> bool {\n        ptr::addr_eq(this.ptr.as_ptr(), other.ptr.as_ptr())\n    }\n}\n\n",
+      "corrected_start": 2148,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-layout",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 377,
+      "preceding_context_first_line": 371,
+      "preceding_context": "impl<T: ?Sized, A: Allocator> fmt::Debug for Weak<T, A> {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {\n        write!(f, \"(Weak)\")\n    }\n}\n\n",
+      "corrected_start": 377,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-offset",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 4214,
+      "preceding_context_first_line": 4208,
+      "preceding_context": "    // and extern types, the input safety requirement is currently enough to\n    // satisfy the requirements of Alignment::of_val_raw; this is an implementation\n    // detail of the language that must not be relied upon outside of std.\n    unsafe { data_offset_alignment(Alignment::of_val_raw(ptr)) }\n}\n\n",
+      "corrected_start": 4214,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "arc-commit-constructors",
+      "path": "library/alloc/src/sync.rs",
+      "original_start": 308,
+      "preceding_context_first_line": 302,
+      "preceding_context": "    #[inline]\n    fn into_inner_with_allocator(this: Self) -> (NonNull<ArcInner<T>>, A) {\n        let this = mem::ManuallyDrop::new(this);\n        (this.ptr, unsafe { ptr::read(&this.alloc) })\n    }\n\n",
+      "corrected_start": 308,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "clone-trivial",
+      "path": "library/core/src/clone.rs",
+      "original_start": 253,
+      "preceding_context_first_line": 247,
+      "preceding_context": "        Self: [const] Destruct,\n    {\n        *self = source.clone()\n    }\n}\n\n",
+      "corrected_start": 253,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "clone-contract-and-impls",
+      "path": "library/core/src/clone.rs",
+      "original_start": 371,
+      "preceding_context_first_line": 365,
+      "preceding_context": "    issue = \"none\"\n)]\npub struct AssertParamIsCopy<T: Copy + PointeeSized> {\n    _field: crate::marker::PhantomData<T>,\n}\n\n",
+      "corrected_start": 371,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    },
+    {
+      "id": "clone-uninit",
+      "path": "library/core/src/clone/uninit.rs",
+      "original_start": 1,
+      "preceding_context_first_line": 1,
+      "preceding_context": "",
+      "corrected_start": 1,
+      "assessment": "no omitted adjacent outer attribute found; existing leading docs/comments/attributes retained"
+    }
+  ],
+  "baseline_01_checksums_verified": true
+}

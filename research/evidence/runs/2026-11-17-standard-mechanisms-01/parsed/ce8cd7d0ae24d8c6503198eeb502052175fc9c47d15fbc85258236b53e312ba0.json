@@ -1,0 +1,1001 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        0,
+        53
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A future represents an asynchronous computation, commonly obtained by use of",
+          "path": "doc",
+          "range": [
+            127,
+            207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`async`].",
+          "path": "doc",
+          "range": [
+            208,
+            222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            223,
+            226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A future is a value that might not have finished computing yet. This kind of",
+          "path": "doc",
+          "range": [
+            227,
+            307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " \"asynchronous value\" makes it possible for a thread to continue doing useful",
+          "path": "doc",
+          "range": [
+            308,
+            388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " work while it waits for the value to become available.",
+          "path": "doc",
+          "range": [
+            389,
+            447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            448,
+            451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # The `poll` method",
+          "path": "doc",
+          "range": [
+            452,
+            475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            476,
+            479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The core method of future, `poll`, *attempts* to resolve the future into a",
+          "path": "doc",
+          "range": [
+            480,
+            558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " final value. This method does not block if the value is not ready. Instead,",
+          "path": "doc",
+          "range": [
+            559,
+            638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the current task is scheduled to be woken up when it's possible to make",
+          "path": "doc",
+          "range": [
+            639,
+            714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " further progress by `poll`ing again. The `context` passed to the `poll`",
+          "path": "doc",
+          "range": [
+            715,
+            790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " method can provide a [`Waker`], which is a handle for waking up the current",
+          "path": "doc",
+          "range": [
+            791,
+            870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " task.",
+          "path": "doc",
+          "range": [
+            871,
+            880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            881,
+            884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When using a future, you generally won't call `poll` directly, but instead",
+          "path": "doc",
+          "range": [
+            885,
+            963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `.await` the value.",
+          "path": "doc",
+          "range": [
+            964,
+            987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            988,
+            991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`async`]: ../../std/keyword.async.html",
+          "path": "doc",
+          "range": [
+            992,
+            1035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Waker`]: crate::task::Waker",
+          "path": "doc",
+          "range": [
+            1036,
+            1069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            1070,
+            1091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            1092,
+            1112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            1113,
+            1180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1181,
+            1233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1234,
+            1258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "diagnostic::on_unimplemented",
+          "range": [
+            1259,
+            1374
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Future",
+      "range": [
+        127,
+        5294
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to resolve the future to a final value, registering",
+          "path": "doc",
+          "range": [
+            1553,
+            1617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the current task for wakeup if the value is not yet available.",
+          "path": "doc",
+          "range": [
+            1622,
+            1688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1693,
+            1696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Return value",
+          "path": "doc",
+          "range": [
+            1701,
+            1719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1724,
+            1727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function returns:",
+          "path": "doc",
+          "range": [
+            1732,
+            1758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1763,
+            1766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - [`Poll::Pending`] if the future is not ready yet",
+          "path": "doc",
+          "range": [
+            1771,
+            1825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - [`Poll::Ready(val)`] with the result `val` of this future if it",
+          "path": "doc",
+          "range": [
+            1830,
+            1899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   finished successfully.",
+          "path": "doc",
+          "range": [
+            1904,
+            1932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1937,
+            1940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once a future has finished, clients should not `poll` it again.",
+          "path": "doc",
+          "range": [
+            1945,
+            2012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2017,
+            2020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When a future is not ready yet, `poll` returns `Poll::Pending` and",
+          "path": "doc",
+          "range": [
+            2025,
+            2095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " stores a clone of the [`Waker`] copied from the current [`Context`].",
+          "path": "doc",
+          "range": [
+            2100,
+            2172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This [`Waker`] is then woken once the future can make progress.",
+          "path": "doc",
+          "range": [
+            2177,
+            2244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, a future waiting for a socket to become",
+          "path": "doc",
+          "range": [
+            2249,
+            2305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " readable would call `.clone()` on the [`Waker`] and store it.",
+          "path": "doc",
+          "range": [
+            2310,
+            2375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When a signal arrives elsewhere indicating that the socket is readable,",
+          "path": "doc",
+          "range": [
+            2380,
+            2455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Waker::wake`] is called and the socket future's task is awoken.",
+          "path": "doc",
+          "range": [
+            2460,
+            2529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once a task has been woken up, it should attempt to `poll` the future",
+          "path": "doc",
+          "range": [
+            2534,
+            2607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " again, which may or may not produce a final value.",
+          "path": "doc",
+          "range": [
+            2612,
+            2666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2671,
+            2674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that on multiple calls to `poll`, only the [`Waker`] from the",
+          "path": "doc",
+          "range": [
+            2679,
+            2749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Context`] passed to the most recent call should be scheduled to",
+          "path": "doc",
+          "range": [
+            2754,
+            2823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " receive a wakeup.",
+          "path": "doc",
+          "range": [
+            2828,
+            2849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2854,
+            2857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Runtime characteristics",
+          "path": "doc",
+          "range": [
+            2862,
+            2891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2896,
+            2899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Futures alone are *inert*; they must be *actively* `poll`ed for the",
+          "path": "doc",
+          "range": [
+            2904,
+            2975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " underlying computation to make progress, meaning that each time the",
+          "path": "doc",
+          "range": [
+            2980,
+            3051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " current task is woken up, it should actively re-`poll` pending futures",
+          "path": "doc",
+          "range": [
+            3056,
+            3130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that it still has an interest in.",
+          "path": "doc",
+          "range": [
+            3135,
+            3172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3177,
+            3180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Having said that, some Futures may represent a value that is being",
+          "path": "doc",
+          "range": [
+            3185,
+            3255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " computed in a different task. In this case, the future's underlying",
+          "path": "doc",
+          "range": [
+            3260,
+            3331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " computation is simply acting as a conduit for a value being computed",
+          "path": "doc",
+          "range": [
+            3336,
+            3408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by that other task, which will proceed independently of the Future.",
+          "path": "doc",
+          "range": [
+            3413,
+            3484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Futures of this kind are typically obtained when spawning a new task into an",
+          "path": "doc",
+          "range": [
+            3489,
+            3569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async runtime.",
+          "path": "doc",
+          "range": [
+            3574,
+            3592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3597,
+            3600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `poll` function should not be called repeatedly in a tight loop --",
+          "path": "doc",
+          "range": [
+            3605,
+            3679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instead, it should only be called when the future indicates that it is",
+          "path": "doc",
+          "range": [
+            3684,
+            3758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ready to make progress (by calling `wake()`). If you're familiar with the",
+          "path": "doc",
+          "range": [
+            3763,
+            3840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `poll(2)` or `select(2)` syscalls on Unix it's worth noting that futures",
+          "path": "doc",
+          "range": [
+            3845,
+            3921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " typically do *not* suffer the same problems of \"all wakeups must poll",
+          "path": "doc",
+          "range": [
+            3926,
+            3999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all events\"; they are more like `epoll(4)`.",
+          "path": "doc",
+          "range": [
+            4004,
+            4051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4056,
+            4059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " An implementation of `poll` should strive to return quickly, and should",
+          "path": "doc",
+          "range": [
+            4064,
+            4139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not block. Returning quickly prevents unnecessarily clogging up",
+          "path": "doc",
+          "range": [
+            4144,
+            4211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " threads or event loops. If it is known ahead of time that a call to",
+          "path": "doc",
+          "range": [
+            4216,
+            4287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `poll` may end up taking a while, the work should be offloaded to a",
+          "path": "doc",
+          "range": [
+            4292,
+            4363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thread pool (or something similar) to ensure that `poll` can return",
+          "path": "doc",
+          "range": [
+            4368,
+            4439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " quickly.",
+          "path": "doc",
+          "range": [
+            4444,
+            4456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4461,
+            4464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            4469,
+            4481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4486,
+            4489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once a future has completed (returned `Ready` from `poll`), calling its",
+          "path": "doc",
+          "range": [
+            4494,
+            4569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `poll` method again may panic, block forever, or cause other kinds of",
+          "path": "doc",
+          "range": [
+            4574,
+            4647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " problems; the `Future` trait places no requirements on the effects of",
+          "path": "doc",
+          "range": [
+            4652,
+            4725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such a call. However, as the `poll` method is not marked `unsafe`,",
+          "path": "doc",
+          "range": [
+            4730,
+            4800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Rust's usual rules apply: calls must never cause undefined behavior",
+          "path": "doc",
+          "range": [
+            4805,
+            4876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (memory corruption, incorrect use of `unsafe` functions, or the like),",
+          "path": "doc",
+          "range": [
+            4881,
+            4955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " regardless of the future's state.",
+          "path": "doc",
+          "range": [
+            4960,
+            4997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5002,
+            5005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Poll::Ready(val)`]: Poll::Ready",
+          "path": "doc",
+          "range": [
+            5010,
+            5047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Waker`]: crate::task::Waker",
+          "path": "doc",
+          "range": [
+            5052,
+            5085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Waker::wake`]: crate::task::Waker::wake",
+          "path": "doc",
+          "range": [
+            5090,
+            5135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            5140,
+            5156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5161,
+            5213
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "poll",
+      "range": [
+        1553,
+        5292
+      ],
+      "signature_range": [
+        5218,
+        5291
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5296,
+            5348
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5296,
+        5566
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        5514,
+        5564
+      ],
+      "kind": "impl_fn",
+      "name": "poll",
+      "range": [
+        5436,
+        5564
+      ],
+      "signature_range": [
+        5436,
+        5513
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5568,
+            5620
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5568,
+        5907
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        5837,
+        5905
+      ],
+      "kind": "impl_fn",
+      "name": "poll",
+      "range": [
+        5763,
+        5905
+      ],
+      "signature_range": [
+        5763,
+        5836
+      ]
+    }
+  ],
+  "source_sha256": "0220631d95ab45f4b769911df75da8d5542eae1eacb771aa9164c48ddb452bcf"
+}

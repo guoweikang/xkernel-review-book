@@ -1,0 +1,22 @@
+{
+  "schema": "stream-command-traces/1",
+  "seed": "research/evidence/runs/2026-11-12-rust-seeds-01/DEV-STREAM-COMMAND",
+  "toolchain": "1.95.0",
+  "question": "Does direct whole-adapter substitution preserve callback and completion observations?",
+  "extraction": "Insert both archived function snippets verbatim; surround command method with a test receiver; model IovIterSource and Kiocb explicitly",
+  "model": "Owned byte payload, scripted successful short copies and failure with no cursor effects, valid rewind always succeeds, callbacks either accept all bytes or fail without external effects, initial file position 100",
+  "scenarios": ["complete", "empty", "oversize", "short_success", "short_then_fault", "callback_fault"],
+  "build_modes": ["debug", "release"],
+  "repeats": 2,
+  "observations": ["return result", "callback payload and offset", "callback count", "copy/rewind trace", "remaining bytes", "final file position"],
+  "expected": {
+    "complete": "both Ok(4), one full callback, remaining 0, position 104",
+    "empty": "both Ok(0), no callback, remaining 0, position 100",
+    "oversize": "scalar Ok(4097), two callbacks; command FileTooLarge before copy/callback",
+    "short_success": "both Ok(4), but scalar has two callbacks of 2 bytes, command one of 4 bytes",
+    "short_then_fault": "scalar Ok(2) after one callback, remaining 2, position 102; command BadAddress with no callback, rewinds to remaining 4, position 100",
+    "callback_fault": "both BadAddress after one callback, rewind to remaining 4, position 100"
+  },
+  "limits": ["not actual iterator or callback implementation", "no cursor-changing copy failure or failed rewind", "no short callback result", "not kernel integration, performance or optimization benefit", "oversize counterexample alone does not refute a size-guard-preserving candidate"],
+  "stop": "Four binaries, each executes six scenarios for both adapters; compare repetitions and modes; no scenario tuning after outcomes"
+}

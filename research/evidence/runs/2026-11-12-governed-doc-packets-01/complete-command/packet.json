@@ -1,0 +1,476 @@
+{
+  "id": "complete-command",
+  "task": "functional_overlap",
+  "level": "item",
+  "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "entity_identity": {
+    "path": "fs/kvfs/src/simple_file.rs",
+    "name": "write_iter",
+    "lines": [
+      87,
+      129
+    ]
+  },
+  "native_kind": "direct_literal_rustdoc",
+  "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+  "provider": "researcher",
+  "review_status": "provider_validation_unavailable",
+  "author_exposure": "seen_cases_and_previous_results_not_blind",
+  "evaluation_eligible": false,
+  "split": "development",
+  "native_text": "",
+  "arms": {
+    "D0": {
+      "text": ""
+    },
+    "D1": {
+      "text": ""
+    },
+    "D2_candidate": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "D3": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Invoke the write callback once per successful copied fragment, before collecting the entire accepted payload.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "paraphrase": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Pass the accepted iterator contents to the write handler as a single complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_purpose": {
+      "fields": {
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_input_preconditions": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_changed_and_preserved_state": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_effects_and_callback_boundary": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_errors_and_partial_completion": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_execution_context": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_configuration": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "delegation": {
+          "status": "content",
+          "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    },
+    "without_delegation": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+          "assertion_kind": "observed_behavior"
+        },
+        "input_preconditions": {
+          "status": "content",
+          "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+          "assertion_kind": "observed_behavior"
+        },
+        "changed_and_preserved_state": {
+          "status": "content",
+          "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+          "assertion_kind": "observed_behavior"
+        },
+        "effects_and_callback_boundary": {
+          "status": "content",
+          "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+          "assertion_kind": "observed_behavior"
+        },
+        "errors_and_partial_completion": {
+          "status": "content",
+          "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+          "assertion_kind": "observed_behavior"
+        },
+        "execution_context": {
+          "status": "content",
+          "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+          "assertion_kind": "observed_behavior"
+        },
+        "configuration": {
+          "status": "unknown",
+          "text": "Unknown: resolved build configuration not collected.",
+          "assertion_kind": "observed_behavior"
+        }
+      }
+    }
+  },
+  "corruption_field": "effects_and_callback_boundary",
+  "paraphrase_field": "purpose"
+}

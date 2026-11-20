@@ -1,0 +1,16 @@
+- **共享机制或弃权理由**：两者均将 `node.clone()` 转为 `Arc<dyn Any + Send + Sync>`，将原 `node` 转为 `Arc<dyn InodeOperations>`，再传入同一构造入口。重复仅在包装层，适合让左侧复用右侧，无须新增抽取函数。
+
+- **必须保留的差异**：`new_dir` 使用 `NodeFlags::empty()`；`new_dir_with_flags` 原样传递调用者的 `flags`。保留两者签名、泛型约束、返回类型及 `init` 的传递方式。不能据名称推断标志或目录初始化的具体语义。
+
+- **已有委托**：两者已委托给 `Self::new_dir_with_inode_operations`；其内部行为未展示。拟议变化只是减少进入该入口前的重复转换。
+
+- **最小接口草案**：不增加接口；仅建议将左侧函数体替换为：
+  ```rust
+  Self::new_dir_with_flags(node, NodeFlags::empty(), init)
+  ```
+
+- **约束及其来源(code/doc/unknown)**：`code`：两侧要求相同的 `T: Any + Send + Sync + InodeOperations`；克隆与原值共享同一 `Arc` 分配，分别用于两个 trait 对象；原路径各克隆一次。`doc`：未提供。`unknown`：下游是否依赖调用位置、构造过程中的其他可观察行为。
+
+- **一条可反驳提案的验证义务**：证明改写前后进入既有构造入口时，两个 trait 对象仍指向同一原始分配，克隆次数及 `flags`、`init` 一致，且无新增可观察差异；任一反例即可否定该提案。
+
+- **缺失上下文**：外围 `impl`、条件编译或宏属性、被委托函数实现、调用方与测试；这些材料可能揭示额外约束。此处仅提出包装层复用，不断言整体构造行为等价。

@@ -1,0 +1,9 @@
+Empty input returns zero; requests exceeding 4096 bytes are rejected before copying or invoking the write handler.
+
+For nonempty input of at most 4096 bytes, invoke self.write after each successfully copied fragment rather than waiting for the whole payload; earlier handlers may have run before a later collection error.
+
+The concrete CommandFile::write method returns the entire supplied byte count if its handler succeeds; its handler does not return a short byte count.
+
+Advance file position only after write completion and successful rewind checks; a rewind error can return early and does not undo arbitrary handler side effects.
+
+The resolved build configuration and concrete iterator execution context have not been verified.

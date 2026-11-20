@@ -1,0 +1,1974 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " # The Rust core allocation and collections library",
+      "path": "doc",
+      "range": [
+        0,
+        54
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        55,
+        58
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This library provides smart pointers and collections for managing",
+      "path": "doc",
+      "range": [
+        59,
+        128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " heap-allocated values.",
+      "path": "doc",
+      "range": [
+        129,
+        155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        156,
+        159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This library, like core, normally doesn’t need to be used directly",
+      "path": "doc",
+      "range": [
+        160,
+        232
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " since its contents are re-exported in the [`std` crate](../std/index.html).",
+      "path": "doc",
+      "range": [
+        233,
+        312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Crates that use the `#![no_std]` attribute however will typically",
+      "path": "doc",
+      "range": [
+        313,
+        382
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " not depend on `std`, so they’d use this crate instead.",
+      "path": "doc",
+      "range": [
+        383,
+        443
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        444,
+        447
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Boxed values",
+      "path": "doc",
+      "range": [
+        448,
+        467
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        468,
+        471
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`Box`] type is a smart pointer type. There can only be one owner of a",
+      "path": "doc",
+      "range": [
+        472,
+        550
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Box`], and the owner can decide to mutate the contents, which live on the",
+      "path": "doc",
+      "range": [
+        551,
+        630
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " heap.",
+      "path": "doc",
+      "range": [
+        631,
+        640
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        641,
+        644
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This type can be sent among threads efficiently as the size of a `Box` value",
+      "path": "doc",
+      "range": [
+        645,
+        725
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is the same as that of a pointer. Tree-like data structures are often built",
+      "path": "doc",
+      "range": [
+        726,
+        805
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " with boxes because each node often has only one owner, the parent.",
+      "path": "doc",
+      "range": [
+        806,
+        876
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        877,
+        880
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Reference counted pointers",
+      "path": "doc",
+      "range": [
+        881,
+        914
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        915,
+        918
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`Rc`] type is a non-threadsafe reference-counted pointer type intended",
+      "path": "doc",
+      "range": [
+        919,
+        998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for sharing memory within a thread. An [`Rc`] pointer wraps a type, `T`, and",
+      "path": "doc",
+      "range": [
+        999,
+        1079
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " only allows access to `&T`, a shared reference.",
+      "path": "doc",
+      "range": [
+        1080,
+        1131
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1132,
+        1135
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This type is useful when inherited mutability (such as using [`Box`]) is too",
+      "path": "doc",
+      "range": [
+        1136,
+        1216
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " constraining for an application, and is often paired with the [`Cell`] or",
+      "path": "doc",
+      "range": [
+        1217,
+        1294
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`RefCell`] types in order to allow mutation.",
+      "path": "doc",
+      "range": [
+        1295,
+        1344
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1345,
+        1348
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Atomically reference counted pointers",
+      "path": "doc",
+      "range": [
+        1349,
+        1393
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1394,
+        1397
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`Arc`] type is the threadsafe equivalent of the [`Rc`] type. It",
+      "path": "doc",
+      "range": [
+        1398,
+        1470
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provides all the same functionality of [`Rc`], except it requires that the",
+      "path": "doc",
+      "range": [
+        1471,
+        1549
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " contained type `T` is shareable. Additionally, [`Arc<T>`][`Arc`] is itself",
+      "path": "doc",
+      "range": [
+        1550,
+        1628
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " sendable while [`Rc<T>`][`Rc`] is not.",
+      "path": "doc",
+      "range": [
+        1629,
+        1671
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1672,
+        1675
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This type allows for shared access to the contained data, and is often",
+      "path": "doc",
+      "range": [
+        1676,
+        1750
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " paired with synchronization primitives such as mutexes to allow mutation of",
+      "path": "doc",
+      "range": [
+        1751,
+        1830
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " shared resources.",
+      "path": "doc",
+      "range": [
+        1831,
+        1852
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1853,
+        1856
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Collections",
+      "path": "doc",
+      "range": [
+        1857,
+        1875
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1876,
+        1879
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Implementations of the most common general purpose data structures are",
+      "path": "doc",
+      "range": [
+        1880,
+        1954
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " defined in this library. They are re-exported through the",
+      "path": "doc",
+      "range": [
+        1955,
+        2016
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [standard collections library](../std/collections/index.html).",
+      "path": "doc",
+      "range": [
+        2017,
+        2083
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2084,
+        2087
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Heap interfaces",
+      "path": "doc",
+      "range": [
+        2088,
+        2110
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2111,
+        2114
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`alloc`](alloc/index.html) module defines the low-level interface to the",
+      "path": "doc",
+      "range": [
+        2115,
+        2196
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " default global allocator. It is not compatible with the libc allocator API.",
+      "path": "doc",
+      "range": [
+        2197,
+        2276
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2277,
+        2280
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Arc`]: sync",
+      "path": "doc",
+      "range": [
+        2281,
+        2298
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Box`]: boxed",
+      "path": "doc",
+      "range": [
+        2299,
+        2317
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Cell`]: core::cell",
+      "path": "doc",
+      "range": [
+        2318,
+        2342
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Rc`]: rc",
+      "path": "doc",
+      "range": [
+        2343,
+        2357
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`RefCell`]: core::cell",
+      "path": "doc",
+      "range": [
+        2358,
+        2385
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        2387,
+        2413
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        2414,
+        2444
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        2445,
+        2473
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        2474,
+        2521
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        2522,
+        2736
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        2737,
+        2827
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        2828,
+        2846
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        2847,
+        2877
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "no_std",
+      "range": [
+        2878,
+        2888
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "needs_allocator",
+      "range": [
+        2889,
+        2908
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "deny",
+      "range": [
+        2919,
+        2951
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "deny",
+      "range": [
+        2952,
+        2984
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        2985,
+        3015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        3016,
+        3055
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        3056,
+        3078
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        3079,
+        3120
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        3121,
+        3161
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        3162,
+        3190
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        3191,
+        3235
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        3236,
+        3274
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "deny",
+      "range": [
+        3275,
+        3301
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "warn",
+      "range": [
+        3302,
+        3327
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3379,
+        3405
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3406,
+        3447
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3448,
+        3471
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3472,
+        3499
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3500,
+        3528
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3529,
+        3556
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3557,
+        3574
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3575,
+        3602
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3603,
+        3633
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3634,
+        3662
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3663,
+        3690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3691,
+        3719
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3720,
+        3747
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3748,
+        3772
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3773,
+        3795
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3796,
+        3822
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3823,
+        3849
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3850,
+        3877
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3878,
+        3908
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3909,
+        3932
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3933,
+        3962
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3963,
+        3985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        3986,
+        4016
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4017,
+        4045
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4046,
+        4080
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4081,
+        4110
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4111,
+        4141
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4142,
+        4171
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4172,
+        4212
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4213,
+        4245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4246,
+        4269
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4270,
+        4303
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4304,
+        4339
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4340,
+        4366
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4367,
+        4389
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4390,
+        4421
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4422,
+        4441
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4442,
+        4469
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4470,
+        4507
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4508,
+        4538
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4539,
+        4567
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4568,
+        4596
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4597,
+        4624
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4625,
+        4659
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4660,
+        4688
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4689,
+        4713
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4714,
+        4762
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4763,
+        4791
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4792,
+        4812
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4813,
+        4850
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4851,
+        4882
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4883,
+        4909
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4910,
+        4935
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4936,
+        4963
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4964,
+        4990
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        4991,
+        5025
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5026,
+        5059
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5060,
+        5092
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5093,
+        5133
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5134,
+        5160
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5161,
+        5185
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5186,
+        5212
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5213,
+        5247
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5248,
+        5276
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5277,
+        5303
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5304,
+        5330
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5331,
+        5355
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5356,
+        5390
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5391,
+        5414
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5415,
+        5440
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5441,
+        5475
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5476,
+        5500
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5501,
+        5523
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5524,
+        5554
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5555,
+        5574
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5575,
+        5605
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5606,
+        5633
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5711,
+        5743
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5744,
+        5780
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5781,
+        5806
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5807,
+        5844
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5845,
+        5874
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5875,
+        5903
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5904,
+        5927
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5928,
+        5956
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5957,
+        5981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        5982,
+        6005
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6006,
+        6029
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6030,
+        6061
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6062,
+        6105
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6106,
+        6133
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6134,
+        6157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6158,
+        6189
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6190,
+        6214
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6215,
+        6243
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6244,
+        6267
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6268,
+        6301
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6302,
+        6338
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6339,
+        6368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6369,
+        6399
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6400,
+        6436
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "rustc_preserve_ub_checks",
+      "range": [
+        6437,
+        6465
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6515,
+        6535
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "feature",
+      "range": [
+        6929,
+        6960
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "macro_use",
+          "range": [
+            7060,
+            7072
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "macros",
+      "path_overrides": [],
+      "range": [
+        7060,
+        7084
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "raw_vec",
+      "path_overrides": [],
+      "range": [
+        7086,
+        7098
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "alloc",
+      "path_overrides": [],
+      "range": [
+        7154,
+        7168
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "borrow",
+      "path_overrides": [],
+      "range": [
+        7405,
+        7420
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "boxed",
+      "path_overrides": [],
+      "range": [
+        7421,
+        7435
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7436,
+            7483
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "bstr",
+      "path_overrides": [],
+      "range": [
+        7436,
+        7497
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "collections",
+      "path_overrides": [],
+      "range": [
+        7498,
+        7518
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            7519,
+            7585
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "ffi",
+      "path_overrides": [],
+      "range": [
+        7519,
+        7598
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "fmt",
+      "path_overrides": [],
+      "range": [
+        7599,
+        7611
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "intrinsics",
+      "path_overrides": [],
+      "range": [
+        7612,
+        7631
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            7632,
+            7650
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "rc",
+      "path_overrides": [],
+      "range": [
+        7632,
+        7662
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "slice",
+      "path_overrides": [],
+      "range": [
+        7663,
+        7677
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "str",
+      "path_overrides": [],
+      "range": [
+        7678,
+        7690
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "string",
+      "path_overrides": [],
+      "range": [
+        7691,
+        7706
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            7707,
+            7771
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "sync",
+      "path_overrides": [],
+      "range": [
+        7707,
+        7785
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            7786,
+            7852
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "task",
+      "path_overrides": [],
+      "range": [
+        7786,
+        7866
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "vec",
+      "path_overrides": [],
+      "range": [
+        7867,
+        7879
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            7880,
+            7946
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "wtf8",
+      "path_overrides": [],
+      "range": [
+        7880,
+        7960
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            7962,
+            7976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7977,
+            8070
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "__export",
+      "path_overrides": [],
+      "range": [
+        7962,
+        8156
+      ]
+    }
+  ],
+  "source_sha256": "2d7f4d01b356e20b4503bf1b471ff2940fc9d524b54939d5220ffff0ac99b629"
+}

@@ -1,0 +1,449 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " This module contains the implementation for `slice::select_nth_unstable`.",
+      "path": "doc",
+      "range": [
+        0,
+        77
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " It uses an introselect algorithm based on ipnsort by Lukas Bergdoll and Orson Peters,",
+      "path": "doc",
+      "range": [
+        78,
+        167
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " published at: <https://github.com/Voultapher/sort-research-rs/tree/main/ipnsort>",
+      "path": "doc",
+      "range": [
+        168,
+        252
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        253,
+        256
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The fallback algorithm used for introselect is Median of Medians using Tukey's Ninther",
+      "path": "doc",
+      "range": [
+        257,
+        347
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for pivot selection. Using this as a fallback ensures O(n) worst case running time with",
+      "path": "doc",
+      "range": [
+        348,
+        439
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " better performance than one would get using heapsort as fallback.",
+      "path": "doc",
+      "range": [
+        440,
+        509
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Reorders the slice such that the element at `index` is at its final sorted position.",
+          "path": "doc",
+          "range": [
+            802,
+            890
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1056,
+        2338
+      ],
+      "kind": "fn",
+      "name": "partition_at_index",
+      "range": [
+        802,
+        2338
+      ],
+      "signature_range": [
+        902,
+        1055
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1153,
+        1234
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1931,
+        2178
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            2578,
+            2620
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2803,
+        5396
+      ],
+      "kind": "fn",
+      "name": "partition_at_index_loop",
+      "range": [
+        2578,
+        5396
+      ],
+      "signature_range": [
+        2621,
+        2802
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        4230,
+        4251
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Helper function that returns the index of the minimum element in the slice using the given",
+          "path": "doc",
+          "range": [
+            5398,
+            5492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " comparator function",
+          "path": "doc",
+          "range": [
+            5493,
+            5516
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5606,
+        5749
+      ],
+      "kind": "fn",
+      "name": "min_index",
+      "range": [
+        5398,
+        5749
+      ],
+      "signature_range": [
+        5517,
+        5605
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        5671,
+        5721
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        5736,
+        5746
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Helper function that returns the index of the maximum element in the slice using the given",
+          "path": "doc",
+          "range": [
+            5751,
+            5845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " comparator function",
+          "path": "doc",
+          "range": [
+            5846,
+            5869
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5959,
+        6102
+      ],
+      "kind": "fn",
+      "name": "max_index",
+      "range": [
+        5751,
+        6102
+      ],
+      "signature_range": [
+        5870,
+        5958
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        6024,
+        6074
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        6089,
+        6099
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Selection algorithm to select the k-th element from the slice in guaranteed O(n) time.",
+          "path": "doc",
+          "range": [
+            6104,
+            6194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is essentially a quickselect that uses Tukey's Ninther for pivot selection",
+          "path": "doc",
+          "range": [
+            6195,
+            6278
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6377,
+        7989
+      ],
+      "kind": "fn",
+      "name": "median_of_medians",
+      "range": [
+        6104,
+        7989
+      ],
+      "signature_range": [
+        6279,
+        6376
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6479,
+        6505
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6583,
+        6608
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        8369,
+        9075
+      ],
+      "kind": "fn",
+      "name": "median_of_ninthers",
+      "range": [
+        8279,
+        9075
+      ],
+      "signature_range": [
+        8279,
+        8368
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Moves around the 9 elements at the indices a..i, such that",
+          "path": "doc",
+          "range": [
+            9077,
+            9139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `v[d]` contains the median of the 9 elements and the other",
+          "path": "doc",
+          "range": [
+            9140,
+            9202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements are partitioned around it.",
+          "path": "doc",
+          "range": [
+            9203,
+            9242
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9466,
+        10099
+      ],
+      "kind": "fn",
+      "name": "ninther",
+      "range": [
+        9077,
+        10099
+      ],
+      "signature_range": [
+        9243,
+        9465
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " returns the index pointing to the median of the 3",
+          "path": "doc",
+          "range": [
+            10101,
+            10154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements `v[a]`, `v[b]` and `v[c]`",
+          "path": "doc",
+          "range": [
+            10155,
+            10193
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10333,
+        10524
+      ],
+      "kind": "fn",
+      "name": "median_idx",
+      "range": [
+        10101,
+        10524
+      ],
+      "signature_range": [
+        10194,
+        10332
+      ]
+    }
+  ],
+  "source_sha256": "93b40c191cc4a5410bf070e80b27ad60dbba144f4628568fbb2f3a6608ff285f"
+}

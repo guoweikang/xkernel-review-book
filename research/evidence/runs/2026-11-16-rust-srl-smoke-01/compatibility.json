@@ -1,0 +1,6 @@
+{
+  "reason": "smoke-01 safely deserialized checkpoint but rejected two missing positional buffers in unused NER decoder, no predictions produced",
+  "allowed_missing": ["decoders.ner.secondary_encoder.layers.0.self_attn.pos_embed.weights", "decoders.ner.secondary_encoder.layers.1.self_attn.pos_embed.weights"],
+  "checks": "Exact missing set only, no unexpected keys, each missing object is a named buffer not parameter, owning type RelativeSinusoidalPositionalEmbedding, exact equality to freshly reconstructed deterministic sinusoid. Retain existing buffers, no weights edited. Runtime forward-pre-hook rejects any NER decoder invocation; resolved tasks must exclude ner.",
+  "limits": "One compatibility repair as permitted before smoke. No exception for learned parameters, SRL/encoder keys or unsafe deserialization. Record failed first run and source hash. Success is adapted-version smoke, not original training reproduction."
+}

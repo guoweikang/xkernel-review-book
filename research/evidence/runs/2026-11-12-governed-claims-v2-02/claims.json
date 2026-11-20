@@ -1,0 +1,347 @@
+[
+  {
+    "id": "role-change",
+    "packet": "permission-role",
+    "kind": "source_observation",
+    "text": "Return a mode with replacement permission bits while retaining original file-type bits; this does not establish that those bits denote a valid NodeType.",
+    "source": "packet",
+    "lines": [
+      145,
+      148
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "medium": "rust_source",
+      "lines": [
+        145,
+        148
+      ],
+      "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "role-effects",
+    "packet": "permission-role",
+    "kind": "source_observation",
+    "text": "This function body computes a value without allocation, locking or external callbacks; caller execution requirements are outside this observation.",
+    "source": "packet",
+    "lines": [
+      145,
+      148
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "medium": "rust_source",
+      "lines": [
+        145,
+        148
+      ],
+      "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "role-config",
+    "packet": "permission-role",
+    "kind": "unknown",
+    "text": "The resolved build configuration for this item has not been collected.",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": null,
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "command-entry",
+    "packet": "complete-command",
+    "kind": "source_observation",
+    "text": "Empty input returns zero; requests exceeding 4096 bytes are rejected before copying or invoking the write handler.",
+    "source": "packet",
+    "lines": [
+      87,
+      95
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "medium": "rust_source",
+      "lines": [
+        87,
+        95
+      ],
+      "excerpt": "    fn write_iter(&self, iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {\n        const MAX_COMMAND_SIZE: usize = 4096;\n        let count = iter.count();\n        if count == 0 {\n            return Ok(0);\n        }\n        if count > MAX_COMMAND_SIZE {\n            return Err(VfsError::FileTooLarge);\n        }\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "command-boundary",
+    "packet": "complete-command",
+    "kind": "source_observation",
+    "text": "For nonempty input of at most 4096 bytes, invoke self.write once only after the whole payload has been collected successfully; a collection error or zero progress invokes no handler.",
+    "source": "packet",
+    "lines": [
+      87,
+      118
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "medium": "rust_source",
+      "lines": [
+        87,
+        118
+      ],
+      "excerpt": "    fn write_iter(&self, iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {\n        const MAX_COMMAND_SIZE: usize = 4096;\n        let count = iter.count();\n        if count == 0 {\n            return Ok(0);\n        }\n        if count > MAX_COMMAND_SIZE {\n            return Err(VfsError::FileTooLarge);\n        }\n        let mut command = alloc::vec![0; count];\n        let mut copied = 0;\n        while copied < count {\n            let read = match iter.copy_from_iter(&mut command[copied..]) {\n                Ok(read) => read,\n                Err(error) => {\n                    iter.revert(copied)?;\n                    return Err(error);\n                }\n            };\n            if read == 0 {\n                iter.revert(copied)?;\n                return Err(VfsError::BadAddress);\n            }\n            copied += read;\n        }\n        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "command-result",
+    "packet": "complete-command",
+    "kind": "source_observation",
+    "text": "The concrete CommandFile::write method returns the entire supplied byte count if its handler succeeds; its handler does not return a short byte count.",
+    "source": "packet",
+    "lines": [
+      72,
+      85
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "medium": "rust_source",
+      "lines": [
+        72,
+        85
+      ],
+      "excerpt": "impl<F, R> SimpleFileOps for CommandFile<F>\nwhere\n    F: Fn(SimpleFileOperation) -> VfsResult<Option<R>> + Send + Sync + 'static,\n    R: Into<Vec<u8>>,\n{\n    fn read_all(&self) -> VfsResult<Cow<'_, [u8]>> {\n        let content = (self.0)(SimpleFileOperation::Read)?.ok_or(VfsError::InvalidData)?;\n        Ok(Cow::Owned(content.into()))\n    }\n\n    fn write(&self, file: &VfsFile, data: &[u8], _offset: u64) -> VfsResult<usize> {\n        (self.0)(SimpleFileOperation::Write { file, data })?;\n        Ok(data.len())\n    }\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "command-position",
+    "packet": "complete-command",
+    "kind": "source_observation",
+    "text": "Advance file position only after write completion and successful rewind checks; a rewind error can return early and does not undo arbitrary handler side effects.",
+    "source": "packet",
+    "lines": [
+      112,
+      128
+    ],
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "medium": "rust_source",
+      "lines": [
+        112,
+        128
+      ],
+      "excerpt": "        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n        if written > count {\n            iter.revert(count)?;\n            return Err(VfsError::InvalidData);\n        }\n        iter.revert(count - written)?;\n        if written == 0 {\n            return Err(VfsError::WriteZero);\n        }\n        iocb.advance(written);\n        Ok(written)\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "command-config",
+    "packet": "complete-command",
+    "kind": "unknown",
+    "text": "The resolved build configuration and concrete iterator execution context have not been verified.",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "evidence": null,
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-owner",
+    "packet": "firmware-ownership",
+    "kind": "normative_responsibility",
+    "text": "The device-tree backend owns structural access, property decoding, node status and device-tree address translation.",
+    "source": "packet",
+    "lines": [
+      5,
+      9
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+      "medium": "design_document",
+      "lines": [
+        5,
+        9
+      ],
+      "excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-exclusion",
+    "packet": "firmware-ownership",
+    "kind": "normative_responsibility",
+    "text": "Kernel registration, IRQ mapping, MMIO mapping and DMA allocation remain outside the device-tree library's responsibility.",
+    "source": "packet",
+    "lines": [
+      5,
+      9
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+      "medium": "design_document",
+      "lines": [
+        5,
+        9
+      ],
+      "excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-transition",
+    "packet": "firmware-ownership",
+    "kind": "normative_responsibility",
+    "text": "Keep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.",
+    "source": "packet",
+    "lines": [
+      18,
+      38
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+      "medium": "design_document",
+      "lines": [
+        18,
+        38
+      ],
+      "excerpt": "Existing OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\nReplace OF callers incrementally, then remove OF; do not rename the current\ncrate and claim that a generic node abstraction exists.\n\n## Current correction\n\nThe scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\ninclusive maximum-address bounds. GIC consumes these DT backend methods.\nIt still uses a DT-specific private discovery adapter; backend-independent\ndriver discovery is a later change, not an accomplished claim here.\n\nRemove the moved OF implementations and forwarding entry points together.\nNo duplicate interpreter or new fwnode wrapper is retained. Existing IRQ/PCI\nor boot helpers not included in this slice remain separately tracked debt.\nPR #1291 must contain only this DT capability move and its GIC consumer, not\nthe full firmware-node framework.\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-reported-gap",
+    "packet": "firmware-ownership",
+    "kind": "document_report",
+    "text": "The frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.",
+    "source": "packet",
+    "lines": [
+      92,
+      94
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+      "medium": "design_document",
+      "lines": [
+        92,
+        94
+      ],
+      "excerpt": "Not included in this slice: an ACPI fwnode backend, device-to-controller IRQ\nlookup through `FwIrqSpec` (still `Unsupported` in `DtBackend`), a dynamic\n`irq_domain`, and multi-region/custom-stride redistributor programming.\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-observed-path",
+    "packet": "firmware-ownership",
+    "kind": "source_observation",
+    "text": "In the same revision, DtBackend::irq_spec calls irq_spec_with and constructs FwIrqSpec for a returned specification; this is not proof that every IRQ form or runtime configuration works.",
+    "source": "backend",
+    "lines": [
+      217,
+      229
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-doc-field-evidence-01/same-revision/drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "1ce19da925ec332f70b36e2ca55507e25b715148914bf4bdc1bab85ccff4f382",
+      "medium": "rust_source",
+      "lines": [
+        217,
+        229
+      ],
+      "excerpt": "    fn irq_spec(&'s self, id: FwNodeId, index: usize) -> Result<Option<FwIrqSpec<'s>>, FwError> {\n        let node = self.node(id).ok_or(FwError::InvalidNode)?;\n        let Some(spec) = node\n            .irq_spec_with(self.index(), index)\n            .map_err(reference_error)?\n        else {\n            return Ok(None);\n        };\n        Ok(Some(FwIrqSpec {\n            controller: self.fwnode(spec.controller),\n            params: params(spec.params)?,\n        }))\n    }\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-feature",
+    "packet": "firmware-ownership",
+    "kind": "source_observation",
+    "text": "The manifest declares fwnode as including alloc and optional fwnode/lazyinit dependencies; actual project feature activation is not established.",
+    "source": "manifest",
+    "lines": [
+      16,
+      19
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-doc-field-evidence-01/same-revision/drivers/firmware/rs-fdtree/Cargo.toml",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "c0c01c3ca147014a62a89d18b90dfaafd8e28e9ec8e4ce549cf086a0a25750ba",
+      "medium": "cargo_manifest",
+      "lines": [
+        16,
+        19
+      ],
+      "excerpt": "[features]\ndefault = []\nalloc = []\nfwnode = [\"alloc\", \"dep:fwnode\", \"dep:lazyinit\"]\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  },
+  {
+    "id": "firmware-planned",
+    "packet": "firmware-ownership",
+    "kind": "planned_capability",
+    "text": "The design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.",
+    "source": "packet",
+    "lines": [
+      84,
+      90
+    ],
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "evidence": {
+      "path": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+      "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+      "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+      "medium": "design_document",
+      "lines": [
+        84,
+        90
+      ],
+      "excerpt": "The controller keeps its own common output rather than exposing firmware\ntypes. `GicConfig` now retains multiple GICv3 redistributor regions and\n`redistributor-stride`; `GicConfig::from_fwnode` is the DT producer, and\n`from_madt` (ACPI) and `from_static` (board table) are the planned peers that\nfeed the same `gic::init(config)`. The vendored GIC driver still supports only a\nsingle contiguous redistributor frame array with architectural stride, so\n`init` validates and rejects other layouts instead of misprogramming them.\n"
+    },
+    "provider_validated": false,
+    "independent_label": null
+  }
+]

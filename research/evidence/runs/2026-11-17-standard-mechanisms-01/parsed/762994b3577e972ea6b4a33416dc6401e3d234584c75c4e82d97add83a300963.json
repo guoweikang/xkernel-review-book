@@ -1,0 +1,1174 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a future that wraps a function returning [`Poll`].",
+          "path": "doc",
+          "range": [
+            99,
+            161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            162,
+            165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Polling the future delegates to the wrapped function. If the returned future is pinned, then the",
+          "path": "doc",
+          "range": [
+            166,
+            266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " captured environment of the wrapped function is also pinned in-place, so as long as the closure",
+          "path": "doc",
+          "range": [
+            267,
+            366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " does not move out of its captures it can soundly create pinned references to them.",
+          "path": "doc",
+          "range": [
+            367,
+            453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            454,
+            457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            458,
+            472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            473,
+            476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            477,
+            484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn run() {",
+          "path": "doc",
+          "range": [
+            485,
+            507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::future::poll_fn;",
+          "path": "doc",
+          "range": [
+            508,
+            538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{Context, Poll};",
+          "path": "doc",
+          "range": [
+            539,
+            574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            575,
+            578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn read_line(_cx: &mut Context<'_>) -> Poll<String> {",
+          "path": "doc",
+          "range": [
+            579,
+            636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Poll::Ready(\"Hello, World!\".into())",
+          "path": "doc",
+          "range": [
+            637,
+            680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            681,
+            686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            687,
+            690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let read_future = poll_fn(read_line);",
+          "path": "doc",
+          "range": [
+            691,
+            732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(read_future.await, \"Hello, World!\".to_owned());",
+          "path": "doc",
+          "range": [
+            733,
+            795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            796,
+            803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            804,
+            811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            812,
+            815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Capturing a pinned state",
+          "path": "doc",
+          "range": [
+            816,
+            847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            848,
+            851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Example of a closure wrapping inner futures:",
+          "path": "doc",
+          "range": [
+            852,
+            900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            901,
+            904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            905,
+            912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn run() {",
+          "path": "doc",
+          "range": [
+            913,
+            935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::future::{self, Future};",
+          "path": "doc",
+          "range": [
+            936,
+            973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::task::Poll;",
+          "path": "doc",
+          "range": [
+            974,
+            999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1000,
+            1003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Resolves to the first future that completes. In the event of a tie, `a` wins.",
+          "path": "doc",
+          "range": [
+            1004,
+            1089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn naive_select<T>(",
+          "path": "doc",
+          "range": [
+            1090,
+            1113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     a: impl Future<Output = T>,",
+          "path": "doc",
+          "range": [
+            1114,
+            1149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     b: impl Future<Output = T>,",
+          "path": "doc",
+          "range": [
+            1150,
+            1185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ) -> impl Future<Output = T>",
+          "path": "doc",
+          "range": [
+            1186,
+            1218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            1219,
+            1224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let (mut a, mut b) = (Box::pin(a), Box::pin(b));",
+          "path": "doc",
+          "range": [
+            1225,
+            1281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     future::poll_fn(move |cx| {",
+          "path": "doc",
+          "range": [
+            1282,
+            1317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Poll::Ready(r) = a.as_mut().poll(cx) {",
+          "path": "doc",
+          "range": [
+            1318,
+            1375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Poll::Ready(r)",
+          "path": "doc",
+          "range": [
+            1376,
+            1406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         } else if let Poll::Ready(r) = b.as_mut().poll(cx) {",
+          "path": "doc",
+          "range": [
+            1407,
+            1471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Poll::Ready(r)",
+          "path": "doc",
+          "range": [
+            1472,
+            1502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         } else {",
+          "path": "doc",
+          "range": [
+            1503,
+            1523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Poll::Pending",
+          "path": "doc",
+          "range": [
+            1524,
+            1553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1554,
+            1567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            1568,
+            1578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1579,
+            1584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1585,
+            1588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = async { 42 };",
+          "path": "doc",
+          "range": [
+            1589,
+            1614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = future::pending();",
+          "path": "doc",
+          "range": [
+            1615,
+            1645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = naive_select(a, b).await;",
+          "path": "doc",
+          "range": [
+            1646,
+            1683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, 42);",
+          "path": "doc",
+          "range": [
+            1684,
+            1706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1707,
+            1710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = future::pending();",
+          "path": "doc",
+          "range": [
+            1711,
+            1741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = async { 27 };",
+          "path": "doc",
+          "range": [
+            1742,
+            1767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = naive_select(a, b).await;",
+          "path": "doc",
+          "range": [
+            1768,
+            1805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, 27);",
+          "path": "doc",
+          "range": [
+            1806,
+            1828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1829,
+            1832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = async { 42 };",
+          "path": "doc",
+          "range": [
+            1833,
+            1858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = async { 27 };",
+          "path": "doc",
+          "range": [
+            1859,
+            1884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = naive_select(a, b).await;",
+          "path": "doc",
+          "range": [
+            1885,
+            1922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, 42); // biased towards `a` in case of tie!",
+          "path": "doc",
+          "range": [
+            1923,
+            1983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            1984,
+            1991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1992,
+            1999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2000,
+            2003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This time without [`Box::pin`]ning:",
+          "path": "doc",
+          "range": [
+            2004,
+            2043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2044,
+            2047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Box::pin`]: ../../std/boxed/struct.Box.html#method.pin",
+          "path": "doc",
+          "range": [
+            2048,
+            2108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2109,
+            2112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2113,
+            2120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn run() {",
+          "path": "doc",
+          "range": [
+            2121,
+            2143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::future::{self, Future};",
+          "path": "doc",
+          "range": [
+            2144,
+            2181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::pin::pin;",
+          "path": "doc",
+          "range": [
+            2182,
+            2205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::task::Poll;",
+          "path": "doc",
+          "range": [
+            2206,
+            2231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2232,
+            2235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Resolves to the first future that completes. In the event of a tie, `a` wins.",
+          "path": "doc",
+          "range": [
+            2236,
+            2321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn naive_select<T>(",
+          "path": "doc",
+          "range": [
+            2322,
+            2345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     a: impl Future<Output = T>,",
+          "path": "doc",
+          "range": [
+            2346,
+            2381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     b: impl Future<Output = T>,",
+          "path": "doc",
+          "range": [
+            2382,
+            2417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ) -> impl Future<Output = T>",
+          "path": "doc",
+          "range": [
+            2418,
+            2450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            2451,
+            2456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     async {",
+          "path": "doc",
+          "range": [
+            2457,
+            2472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let (mut a, mut b) = (pin!(a), pin!(b));",
+          "path": "doc",
+          "range": [
+            2473,
+            2525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         future::poll_fn(move |cx| {",
+          "path": "doc",
+          "range": [
+            2526,
+            2565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             if let Poll::Ready(r) = a.as_mut().poll(cx) {",
+          "path": "doc",
+          "range": [
+            2566,
+            2627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 Poll::Ready(r)",
+          "path": "doc",
+          "range": [
+            2628,
+            2662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             } else if let Poll::Ready(r) = b.as_mut().poll(cx) {",
+          "path": "doc",
+          "range": [
+            2663,
+            2731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 Poll::Ready(r)",
+          "path": "doc",
+          "range": [
+            2732,
+            2766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             } else {",
+          "path": "doc",
+          "range": [
+            2767,
+            2791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 Poll::Pending",
+          "path": "doc",
+          "range": [
+            2792,
+            2825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            2826,
+            2843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }).await",
+          "path": "doc",
+          "range": [
+            2844,
+            2864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2865,
+            2874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2875,
+            2880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2881,
+            2884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = async { 42 };",
+          "path": "doc",
+          "range": [
+            2885,
+            2910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = future::pending();",
+          "path": "doc",
+          "range": [
+            2911,
+            2941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = naive_select(a, b).await;",
+          "path": "doc",
+          "range": [
+            2942,
+            2979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, 42);",
+          "path": "doc",
+          "range": [
+            2980,
+            3002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            3003,
+            3010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3011,
+            3018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3019,
+            3022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   - Notice how, by virtue of being in an `async` context, we have been able to make the [`pin!`]",
+          "path": "doc",
+          "range": [
+            3023,
+            3123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     macro work, thereby avoiding any need for the `unsafe`",
+          "path": "doc",
+          "range": [
+            3124,
+            3186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     <code>[Pin::new_unchecked](&mut fut)</code> constructor.",
+          "path": "doc",
+          "range": [
+            3187,
+            3251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3252,
+            3255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`pin!`]: crate::pin::pin!",
+          "path": "doc",
+          "range": [
+            3256,
+            3286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3287,
+            3342
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3432,
+        3452
+      ],
+      "kind": "fn",
+      "name": "poll_fn",
+      "range": [
+        99,
+        3452
+      ],
+      "signature_range": [
+        3347,
+        3431
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A Future that wraps a function returning [`Poll`].",
+          "path": "doc",
+          "range": [
+            3454,
+            3508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3509,
+            3512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by [`poll_fn()`]. See its",
+          "path": "doc",
+          "range": [
+            3513,
+            3567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " documentation for more.",
+          "path": "doc",
+          "range": [
+            3568,
+            3595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3596,
+            3663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3664,
+            3719
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "PollFn",
+      "range": [
+        3454,
+        3754
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3756,
+            3811
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3756,
+        3849
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3851,
+            3906
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3851,
+        4054
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        4003,
+        4052
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        3946,
+        4052
+      ],
+      "signature_range": [
+        3946,
+        4002
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4056,
+            4111
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4056,
+        4412
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "body_range": [
+        4284,
+        4410
+      ],
+      "kind": "impl_fn",
+      "name": "poll",
+      "range": [
+        4221,
+        4410
+      ],
+      "signature_range": [
+        4221,
+        4283
+      ]
+    }
+  ],
+  "source_sha256": "7e09acbd5e0beda74df996f94328c3f1892a62b60901fced9d22367043a972d0"
+}

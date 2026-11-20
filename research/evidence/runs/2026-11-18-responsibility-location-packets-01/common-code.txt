@@ -1,0 +1,2929 @@
+
+=== drivers/firmware/fwnode/src/lib.rs:1-777 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Neutral firmware-node contract.
+//!
+//! Device description comes from different firmware interfaces: a flattened
+//! device tree, ACPI namespace objects (or MADT-derived nodes), and static
+//! board tables. This crate defines the small, allocation-free interface that
+//! those backends implement and that consumers such as interrupt-controller
+//! drivers use. It deliberately contains no firmware parser and no kernel
+//! mapping policy.
+//!
+//! A [`FwNode`] is a copyable handle: a backend-local [`FwNodeId`] plus a
+//! reference to the backend operations. Handles remain valid while the
+//! backend lives. Tree traversal is index-based so the trait stays
+//! object-safe; convenience iterators on [`FwNode`] build on that.
+//!
+//! The contract describes facts, not Linux `irq_domain` behavior. In
+//! particular, [`FwIrqSpec`] carries a controller handle and its raw cell
+//! arguments; interpretation and mapping belong to the controller driver.
+
+#![no_std]
+
+use core::fmt;
+
+/// Maximum number of cells carried by one parameter list.
+///
+/// This matches Linux's `IRQ_DOMAIN_IRQ_SPEC_PARAMS` so interrupt specifiers
+/// (and similarly sized reference arguments) can be consumed without a heap
+/// allocation.
+pub const FW_IRQ_SPEC_MAX_PARAMS: usize = 16;
+
+/// A backend-local node identity.
+///
+/// The value is opaque to consumers. It is only meaningful together with the
+/// [`FwNodeOps`] instance that produced it; in particular, a device-tree
+/// offset is not a firmware-global identity.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct FwNodeId(u32);
+
+impl FwNodeId {
+    /// Creates an identity encoded by a backend.
+    pub const fn new(raw: u32) -> Self {
+        Self(raw)
+    }
+
+    /// Returns the backend-local encoding.
+    ///
+    /// Consumers must not interpret the value; use it only for diagnostics or
+    /// to hand it back to the same backend.
+    pub const fn raw(self) -> u32 {
+        self.0
+    }
+}
+
+/// A firmware-description access failure.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FwError {
+    /// The handle does not identify a node in this backend.
+    InvalidNode,
+    /// A required property or resource is absent.
+    Missing,
+    /// The firmware value cannot be interpreted as requested.
+    InvalidValue,
+    /// The backend or the binding is not supported yet.
+    Unsupported,
+    /// A fixed-capacity destination is too small.
+    BufferTooSmall,
+}
+
+/// The firmware interface that produced a node description.
+///
+/// This is descriptive metadata, not another identity: the node is still
+/// identified by [`FwNode`] alone. Consumers use it for diagnostics and for
+/// selecting the correct resource provenance without matching compatible
+/// strings.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FwSource {
+    /// Flattened device tree.
+    DeviceTree,
+    /// ACPI namespace or ACPI-derived description.
+    Acpi,
+    /// Static board or platform table.
+    Static,
+    /// The backend does not report its provenance.
+    Unknown,
+}
+
+/// Operations implemented by one device-description backend.
+///
+/// Implementations are shared immutably. Methods return borrowed firmware
+/// data, so the backend must outlive every [`FwNode`] created from it.
+pub trait FwNodeOps<'a>: Sync + 'a {
+    /// Returns the firmware interface that produced this backend.
+    ///
+    /// The default keeps unrelated test backends source-agnostic; concrete
+    /// firmware backends should report their real provenance.
+    fn source(&self) -> FwSource {
+        FwSource::Unknown
+    }
+
+    /// Returns the node name, or `None` for an invalid handle.
+    fn name(&self, id: FwNodeId) -> Option<&'a str>;
+
+    /// Returns the structural parent, or `None` for the root or an invalid
+    /// handle.
+    fn parent(&self, id: FwNodeId) -> Option<FwNodeId>;
+
+    /// Returns the first direct child, or `None` when there is none.
+    fn first_child(&self, id: FwNodeId) -> Option<FwNodeId>;
+
+    /// Returns the next direct sibling, or `None` when there is none.
+    fn next_sibling(&self, id: FwNodeId) -> Option<FwNodeId>;
+
+    /// Returns whether the node is available to the OS.
+    ///
+    /// Backends must distinguish "available" from "cannot decide": a
+    /// malformed availability property is an error, not `false`.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle and
+    /// [`FwError::InvalidValue`] when the availability declaration is
+    /// malformed.
+    fn is_available(&self, id: FwNodeId) -> Result<bool, FwError>;
+
+    /// Returns whether firmware declares this node as an interrupt controller.
+    ///
+    /// The backend owns how its firmware represents this role; callers must
+    /// not test a device-tree property name themselves. A missing declaration
+    /// is `Ok(false)`, while a malformed declaration is an error.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle or a backend
+    /// error when the declaration cannot be interpreted.
+    fn is_interrupt_controller(&self, id: FwNodeId) -> Result<bool, FwError>;
+
+    /// Returns firmware identity string `index`, in firmware order.
+    ///
+    /// For device tree this is the `compatible` list; other backends return
+    /// their closest stable equivalent (for example `_HID`/`_CID`).
+    fn firmware_id(&self, id: FwNodeId, index: usize) -> Option<&'a str>;
+
+    /// Returns a named property.
+    ///
+    /// A missing property is `Ok(None)`. Values stay in firmware
+    /// representation; use [`FwProperty`] accessors to interpret them.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle, or a backend
+    /// error if the node's property stream is malformed.
+    fn property(&self, id: FwNodeId, name: &str) -> Result<Option<FwProperty<'a>>, FwError>;
+
+    /// Returns MMIO resource `index` in firmware order.
+    ///
+    /// An out-of-range index is `Ok(None)`, which lets callers enumerate
+    /// resources without a separate count.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle,
+    /// [`FwError::Unsupported`] for an address encoding this backend cannot
+    /// translate, or [`FwError::InvalidValue`] for malformed resources.
+    fn mmio_resource(
+        &self,
+        id: FwNodeId,
+        index: usize,
+    ) -> Result<Option<FwMmioResource<'a>>, FwError>;
+
+    /// Returns the node's local DMA range declaration.
+    ///
+    /// The declaration is local to this node's bus boundary. A backend must
+    /// keep missing and empty declarations distinct, and must not apply
+    /// ancestor translation, DMA masks, coherent defaults or platform policy.
+    /// Backends without DMA facts return [`FwError::Unsupported`].
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle,
+    /// [`FwError::Unsupported`] for an encoding this backend cannot interpret,
+    /// or [`FwError::InvalidValue`] for a malformed declaration.
+    fn dma_ranges(&self, id: FwNodeId) -> Result<FwDmaRanges, FwError> {
+        let _ = id;
+        Err(FwError::Unsupported)
+    }
+
+    /// Returns local DMA window `index`, or `None` when there is no such
+    /// window.
+    ///
+    /// Callers should use [`FwNodeOps::dma_ranges`] to distinguish absence,
+    /// identity and explicit windows. This accessor validates the complete
+    /// declaration, so a malformed later tuple cannot be hidden by reading an
+    /// earlier one.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle,
+    /// [`FwError::Unsupported`] for an encoding this backend cannot interpret,
+    /// or [`FwError::InvalidValue`] for a malformed declaration.
+    fn dma_range(&self, id: FwNodeId, index: usize) -> Result<Option<FwDmaRange>, FwError> {
+        let _ = (id, index);
+        Err(FwError::Unsupported)
+    }
+
+    /// Returns this node's local coherency declaration.
+    ///
+    /// `Some(true)` and `Some(false)` are explicit firmware declarations.
+    /// `None` means this node declares neither; it is not the platform default
+    /// and must not be interpreted as coherent. Backends without coherency
+    /// facts return [`FwError::Unsupported`].
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle or
+    /// [`FwError::InvalidValue`] when the declaration is malformed or
+    /// contradictory.
+    fn dma_coherency(&self, id: FwNodeId) -> Result<Option<bool>, FwError> {
+        let _ = id;
+        Err(FwError::Unsupported)
+    }
+
+    /// Resolves the device DMA window using this firmware's parent and
+    /// translation rules.
+    ///
+    /// The backend owns the firmware-specific algorithm: which ancestor
+    /// declares the DMA parent, how an empty or absent declaration is treated,
+    /// how the parent-side address is translated across ancestor boundaries,
+    /// and which firmware properties make a translation unsupported. The
+    /// result is already expressed in CPU physical addresses and remains a
+    /// firmware fact: it is neither a device mask nor a permission to DMA.
+    ///
+    /// `Ok(None)` means firmware describes no usable window, including the
+    /// case where no nonempty declaration exists on the device's DMA-parent
+    /// path. Absence is never an error; backends without DMA facts return
+    /// [`FwDmaError::Firmware`] wrapping [`FwError::Unsupported`].
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwDmaError`] for malformed declarations, unsupported topology
+    /// (multi-window, interconnect override, IOMMU) and untranslatable
+    /// windows. A backend must report these explicitly rather than selecting a
+    /// window, treating an absent declaration as identity, or turning absence
+    /// into an error.
+    fn dma_window(&self, id: FwNodeId) -> Result<Option<FwDmaWindow>, FwDmaError> {
+        let _ = id;
+        Err(FwDmaError::Firmware(FwError::Unsupported))
+    }
+
+    /// Resolves the effective coherency declaration by firmware inheritance.
+    ///
+    /// The backend applies this firmware's ancestry rule (for example, the
+    /// nearest explicit declaration on the device's parent chain) and returns
+    /// `Ok(None)` when no ancestor declares anything. No platform default is
+    /// applied here.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle or a backend
+    /// error when a declaration cannot be interpreted.
+    fn dma_effective_coherency(&self, id: FwNodeId) -> Result<Option<bool>, FwError> {
+        let _ = id;
+        Err(FwError::Unsupported)
+    }
+
+    /// Returns interrupt specifier `index` for this node.
+    ///
+    /// The returned controller handle and parameter cells are raw firmware
+    /// facts. A controller driver interprets them according to its binding.
+    /// The receiver is borrowed for `'a` so the controller handle can be
+    /// stored in the result.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle,
+    /// [`FwError::InvalidValue`] for a malformed specifier,
+    /// [`FwError::BufferTooSmall`] when the specifier does not fit
+    /// [`FW_IRQ_SPEC_MAX_PARAMS`], or [`FwError::Unsupported`] when this
+    /// backend cannot resolve it yet.
+    fn irq_spec(&'a self, id: FwNodeId, index: usize) -> Result<Option<FwIrqSpec<'a>>, FwError>;
+
+    /// Resolves reference `index` of `property`.
+    ///
+    /// A reference is a target node followed by `arg_cells` argument cells.
+    /// The argument count is defined by the referenced binding (for example
+    /// `#clock-cells`), not by this contract; pass zero for bare phandles.
+    /// An out-of-range index is `Ok(None)`.
+    ///
+    /// The receiver is borrowed for `'a` so the target handle can be stored
+    /// in the result.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidNode`] for an unknown handle,
+    /// [`FwError::InvalidValue`] for a malformed or unresolvable reference,
+    /// or [`FwError::BufferTooSmall`] when `arg_cells` exceeds
+    /// [`FW_IRQ_SPEC_MAX_PARAMS`].
+    fn reference(
+        &'a self,
+        id: FwNodeId,
+        property: &str,
+        index: usize,
+        arg_cells: usize,
+    ) -> Result<Option<FwReference<'a>>, FwError>;
+}
+
+/// A copyable handle to one firmware node.
+#[derive(Clone, Copy)]
+pub struct FwNode<'a> {
+    ops: &'a dyn FwNodeOps<'a>,
+    id: FwNodeId,
+}
+
+impl fmt::Debug for FwNode<'_> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("FwNode")
+            .field("id", &self.id)
+            .finish_non_exhaustive()
+    }
+}
+
+impl PartialEq for FwNode<'_> {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id && core::ptr::eq(self.ops, other.ops)
+    }
+}
+
+impl Eq for FwNode<'_> {}
+
+impl<'a> FwNode<'a> {
+    /// Creates a handle from a backend and its node identity.
+    pub const fn new(ops: &'a dyn FwNodeOps<'a>, id: FwNodeId) -> Self {
+        Self { ops, id }
+    }
+
+    /// Returns the backend-local identity.
+    pub const fn id(self) -> FwNodeId {
+        self.id
+    }
+
+    /// Returns the firmware interface that produced this node.
+    pub fn source(self) -> FwSource {
+        self.ops.source()
+    }
+
+    /// Returns the node name.
+    pub fn name(self) -> Option<&'a str> {
+        self.ops.name(self.id)
+    }
+
+    /// Returns the structural parent.
+    pub fn parent(self) -> Option<Self> {
+        self.ops.parent(self.id).map(|id| Self::new(self.ops, id))
+    }
+
+    /// Returns the first direct child.
+    pub fn first_child(self) -> Option<Self> {
+        self.ops
+            .first_child(self.id)
+            .map(|id| Self::new(self.ops, id))
+    }
+
+    /// Returns the next direct sibling.
+    pub fn next_sibling(self) -> Option<Self> {
+        self.ops
+            .next_sibling(self.id)
+            .map(|id| Self::new(self.ops, id))
+    }
+
+    /// Returns the next node in depth-first pre-order, or `None` at the end
+    /// of the subtree containing this node.
+    pub fn next_dfs(self) -> Option<Self> {
+        if let Some(child) = self.first_child() {
+            return Some(child);
+        }
+        let mut node = self;
+        loop {
+            if let Some(sibling) = node.next_sibling() {
+                return Some(sibling);
+            }
+            node = node.parent()?;
+        }
+    }
+
+    /// Iterates this node's direct children.
+    pub fn children(self) -> impl Iterator<Item = Self> + 'a {
+        let mut next = self.first_child();
+        core::iter::from_fn(move || {
+            let node = next?;
+            next = node.next_sibling();
+            Some(node)
+        })
+    }
+
+    /// Iterates this node and every descendant in depth-first pre-order.
+    pub fn descendants(self) -> impl Iterator<Item = Self> + 'a {
+        core::iter::successors(Some(self), |node| node.next_dfs())
+    }
+
+    /// Returns whether the node is available to the OS.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::is_available`].
+    pub fn is_available(self) -> Result<bool, FwError> {
+        self.ops.is_available(self.id)
+    }
+
+    /// Returns whether firmware declares this node as an interrupt controller.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::is_interrupt_controller`].
+    pub fn is_interrupt_controller(self) -> Result<bool, FwError> {
+        self.ops.is_interrupt_controller(self.id)
+    }
+
+    /// Iterates firmware identity strings in firmware order.
+    pub fn firmware_ids(self) -> impl Iterator<Item = &'a str> + 'a {
+        let mut index = 0usize;
+        core::iter::from_fn(move || {
+            let id = self.ops.firmware_id(self.id, index)?;
+            index += 1;
+            Some(id)
+        })
+    }
+
+    /// Returns a named property.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::property`].
+    pub fn property(self, name: &str) -> Result<Option<FwProperty<'a>>, FwError> {
+        self.ops.property(self.id, name)
+    }
+
+    /// Returns MMIO resource `index`.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::mmio_resource`].
+    pub fn mmio_resource(self, index: usize) -> Result<Option<FwMmioResource<'a>>, FwError> {
+        self.ops.mmio_resource(self.id, index)
+    }
+
+    /// Returns the node's local DMA range declaration.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::dma_ranges`].
+    pub fn dma_ranges(self) -> Result<FwDmaRanges, FwError> {
+        self.ops.dma_ranges(self.id)
+    }
+
+    /// Returns local DMA window `index`.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::dma_range`].
+    pub fn dma_range(self, index: usize) -> Result<Option<FwDmaRange>, FwError> {
+        self.ops.dma_range(self.id, index)
+    }
+
+    /// Returns the node's local coherency declaration.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::dma_coherency`].
+    pub fn dma_coherency(self) -> Result<Option<bool>, FwError> {
+        self.ops.dma_coherency(self.id)
+    }
+
+    /// Resolves the device DMA window through firmware's own rules.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::dma_window`].
+    pub fn dma_window(self) -> Result<Option<FwDmaWindow>, FwDmaError> {
+        self.ops.dma_window(self.id)
+    }
+
+    /// Resolves the effective coherency declaration through firmware's own
+    /// inheritance rule.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::dma_effective_coherency`].
+    pub fn dma_effective_coherency(self) -> Result<Option<bool>, FwError> {
+        self.ops.dma_effective_coherency(self.id)
+    }
+
+    /// Returns interrupt specifier `index`.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::irq_spec`].
+    pub fn irq_spec(self, index: usize) -> Result<Option<FwIrqSpec<'a>>, FwError> {
+        self.ops.irq_spec(self.id, index)
+    }
+
+    /// Resolves reference `index` of `property`.
+    ///
+    /// # Errors
+    ///
+    /// See [`FwNodeOps::reference`].
+    pub fn reference(
+        self,
+        property: &str,
+        index: usize,
+        arg_cells: usize,
+    ) -> Result<Option<FwReference<'a>>, FwError> {
+        self.ops.reference(self.id, property, index, arg_cells)
+    }
+}
+
+/// One firmware property value in its natural representation.
+///
+/// Backends that can synthesize typed values use the matching variant;
+/// device-tree properties normally use [`FwPropertyValue::Bytes`] and are
+/// interpreted on demand.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FwPropertyValue<'a> {
+    /// A flag property with no payload (for example `interrupt-controller`).
+    Empty,
+    /// Raw firmware bytes, for example a device-tree property payload.
+    Bytes(&'a [u8]),
+    /// A 32-bit integer supplied by a non-device-tree backend.
+    U32(u32),
+    /// A 64-bit integer supplied by a non-device-tree backend.
+    U64(u64),
+    /// A boolean supplied by a non-device-tree backend.
+    Bool(bool),
+    /// A string supplied by a non-device-tree backend.
+    Str(&'a str),
+}
+
+/// A named firmware property.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwProperty<'a> {
+    /// Property name.
+    pub name: &'a str,
+    /// Property value.
+    pub value: FwPropertyValue<'a>,
+}
+
+impl<'a> FwProperty<'a> {
+    /// Interprets the value as a big-endian 32-bit integer.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidValue`] unless the value is a `U32` or a
+    /// four-byte firmware cell.
+    pub fn as_u32(self) -> Result<u32, FwError> {
+        match self.value {
+            FwPropertyValue::U32(value) => Ok(value),
+            FwPropertyValue::Bytes(bytes) if bytes.len() == 4 => {
+                Ok(u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]))
+            }
+            _ => Err(FwError::InvalidValue),
+        }
+    }
+
+    /// Interprets the value as a big-endian 64-bit integer.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidValue`] unless the value is a `U64`, a `U32`,
+    /// or an eight-byte firmware cell.
+    pub fn as_u64(self) -> Result<u64, FwError> {
+        match self.value {
+            FwPropertyValue::U64(value) => Ok(value),
+            FwPropertyValue::U32(value) => Ok(u64::from(value)),
+            FwPropertyValue::Bytes(bytes) if bytes.len() == 8 => {
+                let mut value = [0u8; 8];
+                value.copy_from_slice(bytes);
+                Ok(u64::from_be_bytes(value))
+            }
+            _ => Err(FwError::InvalidValue),
+        }
+    }
+
+    /// Interprets the value as a string.
+    ///
+    /// Firmware byte strings are terminated by the first NUL; trailing bytes
+    /// are ignored so a single entry of a string list can be read.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidValue`] for a non-string value or invalid
+    /// UTF-8.
+    pub fn as_str(self) -> Result<&'a str, FwError> {
+        match self.value {
+            FwPropertyValue::Str(value) => Ok(value),
+            FwPropertyValue::Bytes(bytes) => {
+                let end = bytes
+                    .iter()
+                    .position(|byte| *byte == 0)
+                    .unwrap_or(bytes.len());
+                core::str::from_utf8(&bytes[..end]).map_err(|_| FwError::InvalidValue)
+            }
+            _ => Err(FwError::InvalidValue),
+        }
+    }
+
+    /// Interprets the value as a boolean flag.
+    ///
+    /// A flag property is true; numeric properties are true when non-zero.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::InvalidValue`] for a non-flag, non-numeric value.
+    pub fn as_bool(self) -> Result<bool, FwError> {
+        match self.value {
+            FwPropertyValue::Bool(value) => Ok(value),
+            FwPropertyValue::Empty => Ok(true),
+            FwPropertyValue::U32(value) => Ok(value != 0),
+            FwPropertyValue::Bytes([]) => Ok(true),
+            _ => Err(FwError::InvalidValue),
+        }
+    }
+}
+
+/// One translated MMIO resource.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwMmioResource<'a> {
+    /// CPU physical start address.
+    pub base: u64,
+    /// Resource length in bytes.
+    pub size: u64,
+    /// Optional firmware resource name.
+    pub name: Option<&'a str>,
+}
+
+/// One local DMA window declared between a bus and its parent.
+///
+/// The address fields are firmware facts: `bus_addr` is in the child bus
+/// address space and `parent_addr` is in the immediate parent address space.
+/// Neither field is necessarily a CPU physical address.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwDmaRange {
+    /// First address visible on the child bus.
+    pub bus_addr: u64,
+    /// First address in the parent bus.
+    pub parent_addr: u64,
+    /// Window length in bytes.
+    pub size: u64,
+}
+
+/// The node's local DMA range declaration.
+///
+/// This is a declaration, not a device DMA mask or a permission to program
+/// hardware. Ancestor translation and platform policy belong to the consumer.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FwDmaRanges {
+    /// No local declaration.
+    Absent,
+    /// An empty declaration; identity translation at this boundary only.
+    Identity,
+    /// This many explicit windows, indexed with [`FwNode::dma_range`].
+    Windows(usize),
+}
+
+/// A device DMA window resolved and translated by the firmware backend.
+///
+/// `bus_addr` is the first device-visible address and `cpu_addr` the
+/// corresponding first CPU physical address; `size` is the window length. The
+/// window is not a device mask and does not by itself authorize DMA.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwDmaWindow {
+    /// First address in the device's bus address space.
+    pub bus_addr: u64,
+    /// First CPU physical address corresponding to `bus_addr`.
+    pub cpu_addr: u64,
+    /// Window length in bytes.
+    pub size: u64,
+}
+
+/// Why firmware's DMA description cannot be used.
+///
+/// Absence of a declaration is not represented here; it is `Ok(None)`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FwDmaError {
+    /// The backend failed to read or interpret its description.
+    ///
+    /// An absent declaration is not reported here: it is `Ok(None)`.
+    Firmware(FwError),
+    /// The DMA-parent path declares more than one window.
+    MultiWindow,
+    /// A firmware interconnect overrides the structural DMA parent.
+    UnsupportedParent,
+    /// An IOMMU or IOMMU map controls this device's addresses.
+    Iommu,
+    /// The declared window cannot be translated to the CPU address space.
+    UnsupportedTranslation,
+    /// The resolved window is empty, ambiguous or overflows an address space.
+    InvalidWindow,
+}
+
+/// Fixed-capacity firmware parameter cells.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct FwParams {
+    len: u8,
+    data: [u32; FW_IRQ_SPEC_MAX_PARAMS],
+}
+
+impl fmt::Debug for FwParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.debug_list().entries(self.as_slice()).finish()
+    }
+}
+
+impl FwParams {
+    /// Creates an empty parameter list.
+    pub const fn empty() -> Self {
+        Self {
+            len: 0,
+            data: [0; FW_IRQ_SPEC_MAX_PARAMS],
+        }
+    }
+
+    /// Creates a parameter list from firmware cells.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FwError::BufferTooSmall`] when more than
+    /// [`FW_IRQ_SPEC_MAX_PARAMS`] cells are supplied.
+    pub fn new(values: &[u32]) -> Result<Self, FwError> {
+        if values.len() > FW_IRQ_SPEC_MAX_PARAMS {
+            return Err(FwError::BufferTooSmall);
+        }
+        let mut params = Self::empty();
+        params.data[..values.len()].copy_from_slice(values);
+        params.len = values.len() as u8;
+        Ok(params)
+    }
+
+    /// Returns the number of parameter cells.
+    pub fn len(&self) -> usize {
+        usize::from(self.len)
+    }
+
+    /// Returns whether there are no parameter cells.
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
+    /// Returns the parameter cells.
+    pub fn as_slice(&self) -> &[u32] {
+        &self.data[..usize::from(self.len)]
+    }
+
+    /// Returns parameter cell `index`.
+    pub fn get(&self, index: usize) -> Option<u32> {
+        self.as_slice().get(index).copied()
+    }
+}
+
+/// One interrupt specifier as described by firmware.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwIrqSpec<'a> {
+    /// Interrupt controller node that owns the specifier.
+    pub controller: FwNode<'a>,
+    /// Raw binding cells, in firmware order.
+    pub params: FwParams,
+}
+
+/// One resolved firmware reference.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FwReference<'a> {
+    /// Referenced node.
+    pub node: FwNode<'a>,
+    /// Argument cells that followed the reference, in firmware order.
+    pub args: FwParams,
+}
+
+=== drivers/firmware/of/src/lib.rs:1-833 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Device-tree access helpers.
+
+#![no_std]
+
+extern crate alloc;
+
+use core::sync::atomic::{AtomicUsize, Ordering};
+
+use lazyinit::LazyInit;
+use memaddr::PhysAddr;
+pub use rs_fdtree::{
+    Chosen, Dice, FdtError, FdtNode, InterruptController, LinuxFdt, MemoryRegion, NodeProperty,
+    PropertyError, RegIter,
+};
+
+/// Failure to initialize the global device-tree handle.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum FirmwareInitError {
+    /// The boot pointer was null.
+    MissingDeviceTreePtr,
+    /// The blob did not validate as a flattened device tree.
+    BadDeviceTree(FdtError),
+}
+
+static FDT: LazyInit<LinuxFdt<'static>> = LazyInit::new();
+
+/// Interrupt trigger mode decoded from firmware cells.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum InterruptTrigger {
+    /// Interrupt asserted on the rising edge.
+    EdgeRising,
+    /// Interrupt asserted on the falling edge.
+    EdgeFalling,
+    /// Interrupt active while the line is high.
+    LevelHigh,
+    /// Interrupt active while the line is low.
+    LevelLow,
+    /// Undecoded trigger flags; carries the raw flag bits.
+    Unknown(u32),
+}
+
+/// Interrupt controller family owning a decoded interrupt.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum InterruptControllerKind {
+    /// ARM GIC (v2/v3/v4) family.
+    Gic,
+    /// RISC-V PLIC.
+    Plic,
+    /// Controller whose compatible string this crate does not know.
+    Unknown,
+}
+
+/// Configuration access mechanism of a generic PCI host bridge.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PciHostCam {
+    /// Legacy memory-mapped config access (256 bytes per device function).
+    Cam,
+    /// PCI Express enhanced configuration access mechanism (4 KiB per device).
+    Ecam,
+}
+
+/// Facts about a generic PCI host bridge: config window, mechanism, and bus
+/// range.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PciHostInfo {
+    /// Config access mechanism (`Cam` or `Ecam`).
+    pub cam: PciHostCam,
+    /// Physical base of the config space window.
+    pub ecam_base: u64,
+    /// Size of the config space window in bytes.
+    pub ecam_size: u64,
+    /// First bus number in the bridge's `bus-range`.
+    pub bus_start: u8,
+    /// Last bus number in the bridge's `bus-range`.
+    pub bus_end: u8,
+}
+
+/// One CPU-visible memory window from a PCI host bridge's `ranges`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PciRangeInfo {
+    /// CPU physical base address of the window.
+    pub cpu_base: u64,
+    /// Window size in bytes.
+    pub size: u64,
+    /// Whether the range is marked prefetchable.
+    pub prefetchable: bool,
+}
+
+/// A fully decoded interrupt: number, trigger mode, and owning controller.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct InterruptInfo {
+    /// Global IRQ number (GIC SPI/PPI numbering applied).
+    pub irq: usize,
+    /// Decoded trigger mode.
+    pub trigger: InterruptTrigger,
+    /// Controller family the interrupt belongs to.
+    pub controller: InterruptControllerKind,
+}
+
+/// A reserved-memory region together with its DT node name (or
+/// `memreserve` provenance), for debugging and policy decisions.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct NamedMemoryRegion {
+    /// The reserved region itself.
+    pub region: crate::MemoryRegion,
+    /// Node name or `dtb memreserve` tag the region came from.
+    pub name: &'static str,
+}
+
+fn property_u32_cells<const N: usize>(node: FdtNode<'_, '_>, name: &str) -> Option<[u32; N]> {
+    let value = node.property(name)?.value;
+    if value.len() < N * 4 {
+        return None;
+    }
+
+    let mut cells = [0u32; N];
+    for (idx, chunk) in value.chunks_exact(4).take(N).enumerate() {
+        cells[idx] = u32::from_be_bytes(chunk.try_into().ok()?);
+    }
+    Some(cells)
+}
+
+/// Reads a named property as a big-endian `u32`.
+pub fn property_u32(node: FdtNode<'static, 'static>, name: &str) -> Option<u32> {
+    node.property_u32(name)
+}
+
+/// Returns whether the node declares `device_type = "cpu"`.
+pub fn is_cpu_node(node: FdtNode<'_, '_>) -> bool {
+    node.property_str("device_type") == Some("cpu")
+}
+
+/// Returns whether the node is a CPU node whose `status` is not `disabled`.
+pub fn is_enabled_cpu_node(node: FdtNode<'_, '_>) -> bool {
+    is_cpu_node(node) && node.property_str("status") != Some("disabled")
+}
+
+/// Returns the first `reg` address of a CPU node, honoring the parent's
+/// `#address-cells` width.
+pub fn cpu_node_reg(node: FdtNode<'_, '_>) -> Option<u64> {
+    if !is_cpu_node(node) {
+        return None;
+    }
+    node_reg(node)
+}
+
+/// The first `reg` address of a node, honoring the parent's
+/// `#address-cells` width.
+fn node_reg(node: FdtNode<'_, '_>) -> Option<u64> {
+    let address_cells = node.parent_property_u32("#address-cells").unwrap_or(1) as usize;
+    match address_cells {
+        1 => property_u32_cells::<1>(node, "reg").and_then(|cells| parse_cells_u64(&cells)),
+        2 => property_u32_cells::<2>(node, "reg").and_then(|cells| parse_cells_u64(&cells)),
+        _ => None,
+    }
+}
+
+/// Iterates all CPU nodes that are not `status = "disabled"`.
+pub fn enabled_cpu_nodes<'dt>(
+    fdt: &'dt LinuxFdt<'dt>,
+) -> impl Iterator<Item = FdtNode<'dt, 'dt>> + 'dt {
+    fdt.all_nodes().filter(|node| is_enabled_cpu_node(*node))
+}
+
+fn parse_cells_u64(cells: &[u32]) -> Option<u64> {
+    match cells {
+        [value] => Some(*value as u64),
+        [hi, lo] => Some(((*hi as u64) << 32) | (*lo as u64)),
+        _ => None,
+    }
+}
+
+fn parse_gic_trigger(flags: u32) -> InterruptTrigger {
+    match flags & 0xf {
+        1 => InterruptTrigger::EdgeRising,
+        2 => InterruptTrigger::EdgeFalling,
+        4 => InterruptTrigger::LevelHigh,
+        8 => InterruptTrigger::LevelLow,
+        other => InterruptTrigger::Unknown(other),
+    }
+}
+
+fn parse_gic_interrupt(cells: &[u32]) -> Option<InterruptInfo> {
+    match *cells {
+        [0, irq, flags, ..] => Some(InterruptInfo {
+            irq: 32 + irq as usize,
+            trigger: parse_gic_trigger(flags),
+            controller: InterruptControllerKind::Gic,
+        }),
+        [1, irq, flags, ..] => Some(InterruptInfo {
+            irq: 16 + irq as usize,
+            trigger: parse_gic_trigger(flags),
+            controller: InterruptControllerKind::Gic,
+        }),
+        [irq, ..] => Some(InterruptInfo {
+            irq: irq as usize,
+            trigger: InterruptTrigger::Unknown(0),
+            controller: InterruptControllerKind::Gic,
+        }),
+        _ => None,
+    }
+}
+
+fn parse_plic_interrupt(cells: &[u32]) -> Option<InterruptInfo> {
+    match *cells {
+        [irq, ..] => Some(InterruptInfo {
+            irq: irq as usize,
+            trigger: InterruptTrigger::Unknown(0),
+            controller: InterruptControllerKind::Plic,
+        }),
+        _ => None,
+    }
+}
+
+fn controller_kind_from<'a>(
+    compatibles: impl IntoIterator<Item = &'a str>,
+) -> InterruptControllerKind {
+    let mut kind = InterruptControllerKind::Unknown;
+    for compatible in compatibles {
+        match compatible {
+            "arm,gic-400" | "arm,cortex-a15-gic" | "arm,cortex-a7-gic" | "arm,gic-v2"
+            | "arm,gic-v3" | "arm,gic-v4" => return InterruptControllerKind::Gic,
+            "sifive,plic-1.0.0" | "riscv,plic0" => kind = InterruptControllerKind::Plic,
+            _ => {}
+        }
+    }
+    kind
+}
+
+fn controller_kind(node: FdtNode<'static, 'static>) -> InterruptControllerKind {
+    controller_kind_from(node.compatibles())
+}
+
+fn parse_interrupt_by_controller(
+    controller: InterruptControllerKind,
+    cells: &[u32],
+) -> Option<InterruptInfo> {
+    match controller {
+        InterruptControllerKind::Gic => parse_gic_interrupt(cells),
+        InterruptControllerKind::Plic => parse_plic_interrupt(cells),
+        _ => None,
+    }
+}
+
+fn find_node_by_phandle(phandle: u32) -> Option<FdtNode<'static, 'static>> {
+    find_node_by_phandle_in(fdt()?, phandle)
+}
+
+fn find_node_by_phandle_in(
+    fdt: &'static LinuxFdt<'static>,
+    phandle: u32,
+) -> Option<FdtNode<'static, 'static>> {
+    fdt.all_nodes().find(|node| {
+        property_u32(*node, "phandle").or_else(|| property_u32(*node, "linux,phandle"))
+            == Some(phandle)
+    })
+}
+
+/// Decodes raw interrupt specifier cells against the controller's compatible
+/// identifiers.
+///
+/// The device-tree side no longer gathers `interrupts` / `interrupt-parent` /
+/// `interrupts-extended` itself; callers obtain the controller and raw cells
+/// from `rs_fdtree` (`FdtNode::irq_spec` or the fwnode contract) and pass them
+/// here. This function is the transitional GIC/PLIC binding policy that will
+/// move to the controller drivers with `irq_domain`.
+pub fn decode_irq_cells<'a>(
+    controller_compatibles: impl IntoIterator<Item = &'a str>,
+    cells: &[u32],
+) -> Option<InterruptInfo> {
+    parse_interrupt_by_controller(controller_kind_from(controller_compatibles), cells)
+}
+
+/// Decodes a specifier produced by `rs_fdtree::FdtNode::irq_spec`.
+pub fn decode_fdt_irq_spec(
+    controller: FdtNode<'_, '_>,
+    params: rs_fdtree::Cells<'_>,
+) -> Option<InterruptInfo> {
+    // GIC specifiers carry three cells and PLIC specifiers one; anything
+    // longer is not a binding this transitional decoder understands.
+    let mut cells = [0u32; 3];
+    let len = params.read_into(&mut cells).ok()?;
+    decode_irq_cells(controller.compatibles(), &cells[..len])
+}
+
+/// Returns the global device-tree view initialized at boot; `None` before
+/// `init_device_tree_ptr` has run.
+pub fn fdt() -> Option<&'static LinuxFdt<'static>> {
+    FDT.get()
+}
+
+/// Read the total size of the DTB referenced by `ptr`.
+///
+/// # Errors
+///
+/// Returns [`FirmwareInitError::BadDeviceTree`] when the blob fails
+/// `rs_fdtree` validation (a null pointer is reported the same way).
+///
+/// # Safety
+///
+/// `ptr` must point to a valid, readable DTB blob for the duration of this
+/// call.
+pub unsafe fn dtb_total_size_from_ptr(ptr: *const u8) -> Result<usize, FirmwareInitError> {
+    // SAFETY: The caller guarantees `ptr` points to a valid, readable DTB blob
+    // for the duration of this call.
+    let fdt = unsafe { LinuxFdt::from_ptr(ptr) }.map_err(FirmwareInitError::BadDeviceTree)?;
+    Ok(fdt.total_size())
+}
+
+/// Returns the total size in bytes of the initialized DTB.
+pub fn dtb_total_size() -> Option<usize> {
+    Some(fdt()?.total_size())
+}
+
+/// Initialize the global DTB handle from a raw pointer.
+///
+/// # Errors
+///
+/// Returns [`FirmwareInitError::BadDeviceTree`] when the blob fails
+/// `rs_fdtree` validation (a null pointer is reported the same way).
+/// The [`FirmwareInitError::MissingDeviceTreePtr`] variant is not
+/// produced by this function.
+///
+/// # Safety
+///
+/// `ptr` must point to a valid DTB blob that remains accessible for the rest of
+/// the program lifetime.
+pub unsafe fn init_device_tree_ptr(ptr: *const u8) -> Result<(), FirmwareInitError> {
+    // SAFETY: The caller guarantees `ptr` points to a valid, readable DTB blob
+    // that remains accessible for the rest of the program lifetime.
+    let fdt = unsafe { LinuxFdt::from_ptr(ptr) }.map_err(FirmwareInitError::BadDeviceTree)?;
+    FDT.init_once(fdt);
+    Ok(())
+}
+
+/// Returns the kernel command line from the `/chosen` node.
+pub fn chosen_bootargs() -> Option<&'static str> {
+    fdt()?.chosen_bootargs()
+}
+
+/// Returns the root node's `model` string.
+pub fn root_model() -> Option<&'static str> {
+    fdt()?.root_model()
+}
+
+/// Returns the root node's first `compatible` string.
+pub fn root_compatible() -> Option<&'static str> {
+    fdt()?.root_compatible()
+}
+
+/// Finds the first node whose `compatible` list contains the string.
+pub fn find_compatible(compatible: &str) -> Option<FdtNode<'static, 'static>> {
+    fdt()?.find_compatible(compatible)
+}
+
+/// Finds the generic PCI host bridge node (`pci-host-ecam-generic` or
+/// `pci-host-cam-generic`).
+pub fn generic_pci_host() -> Option<FdtNode<'static, 'static>> {
+    generic_pci_host_in(fdt()?)
+}
+
+fn generic_pci_host_in(fdt: &'static LinuxFdt<'static>) -> Option<FdtNode<'static, 'static>> {
+    fdt.find_compatible("pci-host-ecam-generic")
+        .or_else(|| fdt.find_compatible("pci-host-cam-generic"))
+}
+
+/// Finds a node by absolute device-tree path.
+pub fn find_node(path: &str) -> Option<FdtNode<'static, 'static>> {
+    fdt()?.find_node(path)
+}
+
+/// Returns the console device path from the `/chosen` node.
+pub fn chosen_stdout_path() -> Option<&'static str> {
+    fdt()?.chosen_stdout_path()
+}
+
+/// Returns the `/chosen` node wrapper.
+pub fn chosen() -> Option<Chosen<'static, 'static>> {
+    fdt()?.chosen()
+}
+
+/// Returns the log level this board asks for (`/chosen/x-kernel,log-level`),
+/// unvalidated: the caller owns the level vocabulary.
+pub fn chosen_log_level() -> Option<&'static str> {
+    fdt()?.chosen()?.x_kernel_log_level()
+}
+
+/// Resolves a path or an `/aliases` alias to a node.
+pub fn resolve_node(path_or_alias: &str) -> Option<FdtNode<'static, 'static>> {
+    fdt()?.resolve_node(path_or_alias)
+}
+
+/// A control register declared in the DT `syscon-poweroff` style: the
+/// physical address of the register and the vendor-encoded value to write
+/// to it.
+pub struct SysconControl {
+    /// Physical address of the register — the `regmap` target's `reg` base
+    /// plus the node's `offset` property.
+    pub paddr: PhysAddr,
+    /// The node's `value` property.
+    pub value: u32,
+}
+
+/// The device tree's `syscon-poweroff` declaration, if present.
+///
+/// This is how a machine names its power-off register without ACPI tables:
+/// the node points at a `syscon` register block through a `regmap` phandle
+/// and declares the `offset` and `value` of the byte that removes power.
+/// QEMU's loongarch virt machine describes its ACPI GED sleep-control
+/// register this way — address and the whole S5 byte included — so direct
+/// kernel boot (which hands over no ACPI table) still has a firmware
+/// declaration to read instead of a guest-side constant.
+pub fn syscon_poweroff() -> Option<SysconControl> {
+    let node = find_compatible("syscon-poweroff")?;
+    let regmap = find_node_by_phandle(property_u32(node, "regmap")?)?;
+    let offset = u64::from(property_u32(node, "offset")?);
+    Some(SysconControl {
+        paddr: PhysAddr::from_usize((node_reg(regmap)? + offset) as usize),
+        value: property_u32(node, "value")?,
+    })
+}
+
+/// Cached PMU interrupt IRQ. `0` means "not yet resolved"; a real PMU IRQ is
+/// never 0 on a GIC (SGIs start at 0 but the PMU uses an SPI/PPI >= 16).
+static PMU_IRQ_CACHE: AtomicUsize = AtomicUsize::new(0);
+
+fn is_arm_cpu_pmu_compatible(compatible: &str) -> bool {
+    compatible == "arm,armv8-pmuv3"
+        || (compatible.starts_with("arm,cortex-") && compatible.ends_with("-pmu"))
+        || (compatible.starts_with("arm,neoverse-") && compatible.ends_with("-pmu"))
+        || (compatible.starts_with("arm,c1-") && compatible.ends_with("-pmu"))
+}
+
+/// Resolve the PMU interrupt IRQ from an ARM CPU PMU device-tree node.
+///
+/// Linux's ARM PMU drivers match explicit CPU PMU compatibles such as
+/// `arm,armv8-pmuv3`, `arm,cortex-a55-pmu`, and `arm,cortex-a76-pmu`; do the
+/// same here instead of accepting any node whose compatible merely contains
+/// `pmu`, which can also match SoC power-management blocks.
+fn resolve_pmu_irq() -> Option<usize> {
+    let fdt = fdt()?;
+    fdt.all_nodes()
+        .filter(|node| node.compatibles().any(is_arm_cpu_pmu_compatible))
+        .find_map(|node| {
+            node.irq_spec(0)
+                .ok()
+                .flatten()
+                .and_then(|spec| decode_fdt_irq_spec(spec.controller, spec.params))
+                .map(|info| info.irq)
+        })
+}
+
+/// Return the PMU interrupt IRQ number, resolved once from the device tree and
+/// cached for subsequent (hot-path) calls. Falls back to `fallback` (e.g. the
+/// Kconfig default) when the device tree has no PMU node.
+pub fn pmu_irq_or(fallback: usize) -> usize {
+    let cached = PMU_IRQ_CACHE.load(Ordering::Acquire);
+    if cached != 0 {
+        return cached;
+    }
+    let resolved = resolve_pmu_irq().unwrap_or(fallback);
+    if resolved != 0 {
+        PMU_IRQ_CACHE.store(resolved, Ordering::Release);
+    }
+    resolved
+}
+
+/// Describes the generic PCI host bridge: mechanism, config window, and
+/// bus range.
+pub fn generic_pci_host_info() -> Option<PciHostInfo> {
+    let node = generic_pci_host()?;
+    let cam = if node.is_compatible("pci-host-cam-generic") {
+        PciHostCam::Cam
+    } else {
+        PciHostCam::Ecam
+    };
+    let reg = node.reg()?.next()?;
+    let [bus_start, bus_end] = property_u32_cells::<2>(node, "bus-range").unwrap_or([0, 0xff]);
+    Some(PciHostInfo {
+        cam,
+        ecam_base: reg.starting_address as usize as u64,
+        ecam_size: reg.size as u64,
+        bus_start: bus_start as u8,
+        bus_end: bus_end as u8,
+    })
+}
+
+/// Returns the host bridge's memory window from `ranges`, preferring the
+/// non-prefetchable one and falling back to a prefetchable window.
+pub fn generic_pci_non_prefetchable_mem_range() -> Option<PciRangeInfo> {
+    const PCI_ADDR_SPACE_MASK: u32 = 0x0300_0000;
+    const PCI_ADDR_SPACE_MEM32: u32 = 0x0200_0000;
+    const PCI_ADDR_SPACE_MEM64: u32 = 0x0300_0000;
+    const PCI_ADDR_PREFETCH: u32 = 0x4000_0000;
+
+    let node = generic_pci_host()?;
+    let child = node.cell_sizes();
+    let parent_address_cells = node.parent_property_u32("#address-cells").unwrap_or(2) as usize;
+    let total_cells = child.address_cells + parent_address_cells + child.size_cells;
+    let value = node.property("ranges")?.value;
+    if total_cells == 0 || value.len() < total_cells * 4 {
+        return None;
+    }
+
+    let mut preferred = None;
+    let mut fallback = None;
+    for chunk in value.chunks_exact(total_cells * 4) {
+        let mut cells = [0u32; 7];
+        if total_cells > cells.len() {
+            return None;
+        }
+        for (idx, word) in chunk.chunks_exact(4).enumerate() {
+            cells[idx] = u32::from_be_bytes(word.try_into().ok()?);
+        }
+        let flags = cells[0];
+        let space = flags & PCI_ADDR_SPACE_MASK;
+        if space != PCI_ADDR_SPACE_MEM32 && space != PCI_ADDR_SPACE_MEM64 {
+            continue;
+        }
+        let parent_start = child.address_cells;
+        let parent_end = parent_start + parent_address_cells;
+        let size_end = parent_end + child.size_cells;
+        let cpu_base = parse_cells_u64(&cells[parent_start..parent_end])?;
+        let size = parse_cells_u64(&cells[parent_end..size_end])?;
+        let range = PciRangeInfo {
+            cpu_base,
+            size,
+            prefetchable: (flags & PCI_ADDR_PREFETCH) != 0,
+        };
+        if !range.prefetchable {
+            preferred = Some(range);
+            break;
+        }
+        fallback = Some(range);
+    }
+
+    preferred.or(fallback)
+}
+
+/// Maximum parent specifier size in 32-bit cells, matching Linux's phandle cap.
+const MAX_PHANDLE_ARGS: usize = 16;
+
+/// Resolves a legacy INTx route through the bridge's `interrupt-map` for a
+/// (bus, device, function, pin) address.
+///
+/// The PCI child specifier uses three address cells and one interrupt cell;
+/// other child layouts are rejected with `None` before fixed-buffer decoding.
+/// Parent address and interrupt cells share a bounded buffer. A parent
+/// specifier exceeding that capacity is logged and rejected with `None`.
+pub fn generic_pci_legacy_interrupt(
+    bus: u8,
+    device: u8,
+    function: u8,
+    pin: u8,
+) -> Option<InterruptInfo> {
+    pci_legacy_interrupt_from_fdt(fdt()?, bus, device, function, pin)
+}
+
+fn pci_legacy_interrupt_from_fdt(
+    fdt: &'static LinuxFdt<'static>,
+    bus: u8,
+    device: u8,
+    function: u8,
+    pin: u8,
+) -> Option<InterruptInfo> {
+    let node = generic_pci_host_in(fdt)?;
+    let child_address_cells = node.cell_sizes().address_cells;
+    let child_interrupt_cells = property_u32(node, "#interrupt-cells").unwrap_or(1) as usize;
+    if child_address_cells != 3 || child_interrupt_cells != 1 {
+        return None;
+    }
+    let key_cells = child_address_cells + child_interrupt_cells;
+
+    let mut key = [0u32; 4];
+    key[0] = ((bus as u32) << 16) | ((device as u32) << 11) | ((function as u32) << 8);
+    key[1] = 0;
+    key[2] = 0;
+    key[3] = pin as u32;
+
+    let mask_bytes = node.property("interrupt-map-mask")?.value;
+    if mask_bytes.len() < key_cells * 4 {
+        return None;
+    }
+    let mut mask = [0u32; 4];
+    for (idx, word) in mask_bytes.chunks_exact(4).take(key_cells).enumerate() {
+        mask[idx] = u32::from_be_bytes(word.try_into().ok()?);
+    }
+
+    let map = node.property("interrupt-map")?.value;
+    let mut offset = 0usize;
+    while offset + (key_cells + 1) * 4 <= map.len() {
+        let mut child = [0u32; 4];
+        for (idx, slot) in child.iter_mut().enumerate().take(key_cells) {
+            let start = offset + idx * 4;
+            *slot = u32::from_be_bytes(map[start..start + 4].try_into().ok()?);
+        }
+        offset += key_cells * 4;
+
+        let phandle = u32::from_be_bytes(map[offset..offset + 4].try_into().ok()?);
+        offset += 4;
+        let controller_node = find_node_by_phandle_in(fdt, phandle)?;
+        let parent_address_cells =
+            property_u32(controller_node, "#address-cells").unwrap_or(0) as usize;
+        let parent_interrupt_cells =
+            property_u32(controller_node, "#interrupt-cells").unwrap_or(0) as usize;
+        let parent_total_cells = parent_address_cells + parent_interrupt_cells;
+        // The GIC parent may need two address cells plus three interrupt cells.
+        let mut parent = [0u32; MAX_PHANDLE_ARGS];
+        if parent_total_cells > parent.len() {
+            log::warn!(
+                "of: interrupt-map parent specifier needs {parent_total_cells} cells (> \
+                 MAX_PHANDLE_ARGS {MAX_PHANDLE_ARGS})"
+            );
+            return None;
+        }
+        if offset + parent_total_cells * 4 > map.len() {
+            return None;
+        }
+        for (idx, slot) in parent.iter_mut().enumerate().take(parent_total_cells) {
+            let start = offset + idx * 4;
+            *slot = u32::from_be_bytes(map[start..start + 4].try_into().ok()?);
+        }
+        offset += parent_total_cells * 4;
+
+        let matched = child
+            .iter()
+            .zip(mask.iter())
+            .zip(key.iter())
+            .take(key_cells)
+            .all(|((&child, &mask), &key)| (child & mask) == (key & mask));
+        if !matched {
+            continue;
+        }
+
+        let controller = controller_kind(controller_node);
+        return parse_interrupt_by_controller(
+            controller,
+            &parent[parent_address_cells..parent_total_cells],
+        );
+    }
+
+    None
+}
+
+/// Returns the first node carrying an `interrupt-controller` property.
+pub fn interrupt_controller() -> Option<InterruptController<'static, 'static>> {
+    fdt()?.interrupt_controller()
+}
+
+/// Returns the Open DICE reserved-memory region, if the tree describes one.
+pub fn dice_region() -> Option<crate::MemoryRegion> {
+    fdt()?.dice()?.regions()?.next()
+}
+
+fn collect_regions<const N: usize>(
+    source: impl Iterator<Item = crate::MemoryRegion>,
+) -> ([crate::MemoryRegion; N], usize) {
+    let mut regions = [crate::MemoryRegion {
+        starting_address: core::ptr::null(),
+        size: 0,
+    }; N];
+    let mut count = 0;
+
+    for region in source {
+        if region.size == 0 {
+            continue;
+        }
+        if count == N {
+            return (regions, count);
+        }
+        regions[count] = region;
+        count += 1;
+    }
+
+    (regions, count)
+}
+
+fn collect_reserved_regions<const N: usize>(
+    source: impl Iterator<Item = crate::MemoryRegion>,
+) -> ([crate::MemoryRegion; N], usize) {
+    let (mut regions, mut count) = collect_regions(source);
+
+    if count != 0 {
+        regions[..count].sort_unstable_by_key(|region| region.starting_address as usize);
+
+        let mut write = 0;
+        for read in 1..count {
+            let cur_start = regions[write].starting_address as usize;
+            let cur_end = cur_start + regions[write].size;
+            let next_start = regions[read].starting_address as usize;
+            let next_end = next_start + regions[read].size;
+
+            if next_start <= cur_end {
+                regions[write].size = cur_end.max(next_end) - cur_start;
+            } else {
+                write += 1;
+                regions[write] = regions[read];
+            }
+        }
+        count = write + 1;
+    }
+
+    (regions, count)
+}
+
+fn collect_named_regions<const N: usize>(
+    source: impl Iterator<Item = NamedMemoryRegion>,
+) -> ([NamedMemoryRegion; N], usize) {
+    let mut regions = [NamedMemoryRegion {
+        region: crate::MemoryRegion {
+            starting_address: core::ptr::null(),
+            size: 0,
+        },
+        name: "",
+    }; N];
+    let mut count = 0;
+
+    for region in source {
+        if region.region.size == 0 {
+            continue;
+        }
+        if count == N {
+            return (regions, count);
+        }
+        regions[count] = region;
+        count += 1;
+    }
+
+    (regions, count)
+}
+
+/// Read `/memory` regions directly from a DTB pointer without touching the
+/// global DTB state.
+///
+/// # Safety
+///
+/// `ptr` must point to a valid, readable DTB blob for the duration of this
+/// call.
+pub unsafe fn read_memory_regions_from_ptr<const N: usize>(
+    ptr: *const u8,
+) -> Result<([crate::MemoryRegion; N], usize), FirmwareInitError> {
+    // SAFETY: The caller guarantees `ptr` points to a valid, readable DTB blob
+    // for the duration of this call.
+    let fdt = unsafe { LinuxFdt::from_ptr(ptr) }.map_err(FirmwareInitError::BadDeviceTree)?;
+    Ok(collect_regions(fdt.memory_regions()))
+}
+
+/// Read reserved-memory and memreserve entries directly from a DTB pointer
+/// without touching the global DTB state.
+///
+/// # Safety
+///
+/// `ptr` must point to a valid, readable DTB blob for the duration of this
+/// call.
+pub unsafe fn read_reserved_memory_regions_from_ptr<const N: usize>(
+    ptr: *const u8,
+) -> Result<([crate::MemoryRegion; N], usize), FirmwareInitError> {
+    // SAFETY: The caller guarantees `ptr` points to a valid, readable DTB blob
+    // for the duration of this call.
+    let fdt = unsafe { LinuxFdt::from_ptr(ptr) }.map_err(FirmwareInitError::BadDeviceTree)?;
+    Ok(collect_reserved_regions(
+        fdt.mem_reservations().chain(fdt.reserved_memory_regions()),
+    ))
+}
+
+/// Collects `/memory` regions into a fixed-capacity array; returns the
+/// zeroed array and a count of 0 when the tree is unavailable.
+pub fn read_memory_regions<const N: usize>() -> ([crate::MemoryRegion; N], usize) {
+    fdt()
+        .map(|fdt| collect_regions(fdt.memory_regions()))
+        .unwrap_or((
+            [crate::MemoryRegion {
+                starting_address: core::ptr::null(),
+                size: 0,
+            }; N],
+            0,
+        ))
+}
+
+/// Collects memreserve entries plus `/reserved-memory` children into a
+/// fixed-capacity array; returns the zeroed array and a count of 0 when the
+/// tree is unavailable.
+pub fn read_reserved_memory_regions<const N: usize>() -> ([crate::MemoryRegion; N], usize) {
+    fdt()
+        .map(|fdt| {
+            collect_reserved_regions(fdt.mem_reservations().chain(fdt.reserved_memory_regions()))
+        })
+        .unwrap_or((
+            [crate::MemoryRegion {
+                starting_address: core::ptr::null(),
+                size: 0,
+            }; N],
+            0,
+        ))
+}
+
+/// Collects reserved regions with their node names / `memreserve` tags;
+/// returns the zeroed array and a count of 0 when the tree is unavailable.
+pub fn read_named_reserved_memory_regions<const N: usize>() -> ([NamedMemoryRegion; N], usize) {
+    fdt()
+        .map(|fdt| {
+            let memreserve = fdt.mem_reservations().map(|region| NamedMemoryRegion {
+                region,
+                name: "dtb memreserve",
+            });
+            let reserved_nodes = fdt.reserved_memory_nodes().flat_map(|node| {
+                let name = node.compatible().unwrap_or(node.name);
+                node.reg()
+                    .into_iter()
+                    .flatten()
+                    .map(move |region| NamedMemoryRegion { region, name })
+            });
+            collect_named_regions(memreserve.chain(reserved_nodes))
+        })
+        .unwrap_or((
+            [NamedMemoryRegion {
+                region: crate::MemoryRegion {
+                    starting_address: core::ptr::null(),
+                    size: 0,
+                },
+                name: "",
+            }; N],
+            0,
+        ))
+}
+
+// Gate macro resolution as well as the test module for early-boot consumers.
+#[cfg(unittest)]
+unittest::path_mod_test!(unittest_tests, "../ut-tests/of_unittest.rs");
+
+=== drivers/firmware/rs-fdtree/Cargo.toml:1-38 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+[package]
+name = "rs_fdtree"
+version = { workspace = true }
+edition = { workspace = true }
+authors = { workspace = true }
+license = { workspace = true }
+documentation = { workspace = true }
+description = "A pure-Rust #![no_std] crate for parsing Linux Flattened Devicetrees"
+keywords = [
+    "devicetree",
+    "fdt",
+    "dt",
+    "linux",
+]
+
+[features]
+default = []
+alloc = []
+fwnode = ["alloc", "dep:fwnode", "dep:lazyinit"]
+
+[[test]]
+name = "tests_address"
+required-features = ["alloc"]
+
+[[test]]
+name = "tests_fwnode"
+required-features = ["fwnode"]
+
+[[test]]
+name = "tests_index"
+required-features = ["alloc"]
+
+[dependencies]
+fwnode = { workspace = true, optional = true }
+lazyinit = { workspace = true, optional = true }
+
+[lints]
+workspace = true
+
+=== drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:1-294 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Device-tree backend for the neutral firmware-node contract.
+//!
+//! The generic device-tree interpretation — node structure, properties,
+//! availability, identity strings, phandle references, interrupt inheritance
+//! and translated MMIO resources — lives in this crate's core API. This
+//! module only translates those borrowed results into [`fwnode`] handles and
+//! fixed-capacity parameters. Binding-specific meaning of interrupt cells
+//! remains with the controller driver.
+
+use ::fwnode::{
+    FW_IRQ_SPEC_MAX_PARAMS, FwDmaError, FwDmaRange, FwDmaRanges, FwDmaWindow, FwError, FwIrqSpec,
+    FwMmioResource, FwNode, FwNodeId, FwNodeOps, FwParams, FwProperty, FwPropertyValue,
+    FwReference, FwSource,
+};
+use lazyinit::LazyInit;
+
+use crate::{
+    AddressError, AddressErrorReason, Cells, DeviceDmaError, DmaRangeError, DmaRanges, FdtNode,
+    LinuxFdt, NodeIndex, PropertyError, ReferenceError,
+};
+
+/// A borrowed device tree implementing [`FwNodeOps`].
+///
+/// The node index is built on first use, so publishing the backend during
+/// early boot stays allocation-free; callers reach indexed lookups only once
+/// the kernel allocator is available.
+pub struct DtBackend<'a> {
+    tree: LinuxFdt<'a>,
+    index: LazyInit<NodeIndex<'a>>,
+}
+
+impl<'a> DtBackend<'a> {
+    /// Wraps a validated device tree as a firmware-node backend.
+    pub const fn new(tree: LinuxFdt<'a>) -> Self {
+        Self {
+            tree,
+            index: LazyInit::new(),
+        }
+    }
+
+    /// Returns the wrapped device tree.
+    pub fn tree(&self) -> LinuxFdt<'a> {
+        self.tree
+    }
+
+    fn index(&self) -> &NodeIndex<'a> {
+        loop {
+            if let Some(index) = self.index.get() {
+                return index;
+            }
+            if let Some(index) = self.index.call_once(|| NodeIndex::new(self.tree)) {
+                return index;
+            }
+        }
+    }
+
+    /// Returns a handle to the root node.
+    ///
+    /// The parser guarantees a root node, but this returns `None` rather than
+    /// panicking if the tree is queried after invalid construction.
+    pub fn root<'s>(&'s self) -> Option<FwNode<'s>>
+    where
+        'a: 's,
+    {
+        let node = self.tree.find_node("/")?;
+        Some(self.fwnode(node))
+    }
+
+    fn node(&self, id: FwNodeId) -> Option<FdtNode<'_, 'a>> {
+        self.index().node_by_offset(id.raw())
+    }
+
+    fn fwnode<'s>(&'s self, node: FdtNode<'s, 'a>) -> FwNode<'s>
+    where
+        'a: 's,
+    {
+        FwNode::new(self, FwNodeId::new(node.offset()))
+    }
+}
+
+impl<'s, 'a: 's> FwNodeOps<'s> for DtBackend<'a> {
+    fn source(&self) -> FwSource {
+        FwSource::DeviceTree
+    }
+
+    fn name(&self, id: FwNodeId) -> Option<&'s str> {
+        Some(self.node(id)?.name)
+    }
+
+    fn parent(&self, id: FwNodeId) -> Option<FwNodeId> {
+        Some(FwNodeId::new(self.node(id)?.parent()?.offset()))
+    }
+
+    fn first_child(&self, id: FwNodeId) -> Option<FwNodeId> {
+        Some(FwNodeId::new(self.node(id)?.first_child()?.offset()))
+    }
+
+    fn next_sibling(&self, id: FwNodeId) -> Option<FwNodeId> {
+        Some(FwNodeId::new(self.node(id)?.next_sibling()?.offset()))
+    }
+
+    fn is_available(&self, id: FwNodeId) -> Result<bool, FwError> {
+        self.node(id)
+            .ok_or(FwError::InvalidNode)?
+            .is_available()
+            .map_err(|_| FwError::InvalidValue)
+    }
+
+    fn is_interrupt_controller(&self, id: FwNodeId) -> Result<bool, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        Ok(node.property("interrupt-controller").is_some())
+    }
+
+    fn firmware_id(&self, id: FwNodeId, index: usize) -> Option<&'s str> {
+        self.node(id)?.compatibles().nth(index)
+    }
+
+    fn property(&self, id: FwNodeId, name: &str) -> Result<Option<FwProperty<'s>>, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        Ok(node.property(name).map(|property| FwProperty {
+            name: property.name,
+            value: FwPropertyValue::Bytes(property.value),
+        }))
+    }
+
+    fn mmio_resource(
+        &self,
+        id: FwNodeId,
+        index: usize,
+    ) -> Result<Option<FwMmioResource<'s>>, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        let resources = node.mmio_resources().map_err(address_error)?;
+        Ok(resources.get(index).map(|resource| FwMmioResource {
+            base: resource.base,
+            size: resource.size,
+            name: resource.name,
+        }))
+    }
+
+    fn dma_ranges(&self, id: FwNodeId) -> Result<FwDmaRanges, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        match node.dma_ranges().map_err(dma_error)? {
+            DmaRanges::Absent => Ok(FwDmaRanges::Absent),
+            DmaRanges::Identity => Ok(FwDmaRanges::Identity),
+            DmaRanges::Windows(windows) => {
+                let mut count = 0;
+                for range in windows {
+                    range.map_err(dma_error)?;
+                    count += 1;
+                }
+                Ok(FwDmaRanges::Windows(count))
+            }
+        }
+    }
+
+    fn dma_range(&self, id: FwNodeId, index: usize) -> Result<Option<FwDmaRange>, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        let DmaRanges::Windows(windows) = node.dma_ranges().map_err(dma_error)? else {
+            return Ok(None);
+        };
+        let mut selected = None;
+        for (current, range) in windows.enumerate() {
+            let range = range.map_err(dma_error)?;
+            if current == index {
+                selected = Some(FwDmaRange {
+                    bus_addr: range.bus_addr,
+                    parent_addr: range.parent_addr,
+                    size: range.size,
+                });
+            }
+        }
+        Ok(selected)
+    }
+
+    fn dma_coherency(&self, id: FwNodeId) -> Result<Option<bool>, FwError> {
+        self.node(id)
+            .ok_or(FwError::InvalidNode)?
+            .dma_coherency()
+            .map_err(property_error)
+    }
+
+    fn dma_window(&self, id: FwNodeId) -> Result<Option<FwDmaWindow>, FwDmaError> {
+        let node = self
+            .node(id)
+            .ok_or(FwDmaError::Firmware(FwError::InvalidNode))?;
+        match node.device_dma_window() {
+            Ok(window) => Ok(window.map(|window| FwDmaWindow {
+                bus_addr: window.bus_addr,
+                cpu_addr: window.cpu_addr,
+                size: window.size,
+            })),
+            // Device tree keeps "no nonempty declaration on the DMA-parent
+            // path" distinct internally, but the neutral contract represents
+            // absence as `Ok(None)`, never as an error. Only malformed or
+            // unsupported descriptions remain errors here.
+            Err(DeviceDmaError::Missing) => Ok(None),
+            Err(DeviceDmaError::Declaration(error)) => Err(FwDmaError::Firmware(dma_error(error))),
+            Err(DeviceDmaError::MultiWindow) => Err(FwDmaError::MultiWindow),
+            Err(DeviceDmaError::UnsupportedParent) => Err(FwDmaError::UnsupportedParent),
+            Err(DeviceDmaError::Iommu) => Err(FwDmaError::Iommu),
+            Err(DeviceDmaError::UnsupportedTranslation) => Err(FwDmaError::UnsupportedTranslation),
+            Err(DeviceDmaError::InvalidWindow) => Err(FwDmaError::InvalidWindow),
+        }
+    }
+
+    fn dma_effective_coherency(&self, id: FwNodeId) -> Result<Option<bool>, FwError> {
+        self.node(id)
+            .ok_or(FwError::InvalidNode)?
+            .inherited_dma_coherency()
+            .map_err(property_error)
+    }
+
+    fn irq_spec(&'s self, id: FwNodeId, index: usize) -> Result<Option<FwIrqSpec<'s>>, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        let Some(spec) = node
+            .irq_spec_with(self.index(), index)
+            .map_err(reference_error)?
+        else {
+            return Ok(None);
+        };
+        Ok(Some(FwIrqSpec {
+            controller: self.fwnode(spec.controller),
+            params: params(spec.params)?,
+        }))
+    }
+
+    fn reference(
+        &'s self,
+        id: FwNodeId,
+        property: &str,
+        index: usize,
+        arg_cells: usize,
+    ) -> Result<Option<FwReference<'s>>, FwError> {
+        let node = self.node(id).ok_or(FwError::InvalidNode)?;
+        if arg_cells > FW_IRQ_SPEC_MAX_PARAMS {
+            return Err(FwError::BufferTooSmall);
+        }
+        let Some(reference) = node
+            .reference_with(self.index(), property, index, arg_cells)
+            .map_err(reference_error)?
+        else {
+            return Ok(None);
+        };
+        Ok(Some(FwReference {
+            node: self.fwnode(reference.node),
+            args: params(reference.args)?,
+        }))
+    }
+}
+
+fn params(cells: Cells<'_>) -> Result<FwParams, FwError> {
+    let mut values = [0u32; FW_IRQ_SPEC_MAX_PARAMS];
+    cells
+        .read_into(&mut values)
+        .map_err(|_| FwError::BufferTooSmall)?;
+    FwParams::new(&values[..cells.len()]).map_err(|_| FwError::BufferTooSmall)
+}
+
+fn reference_error(error: ReferenceError) -> FwError {
+    match error {
+        ReferenceError::Property(PropertyError::BufferTooSmall { .. }) => FwError::BufferTooSmall,
+        _ => FwError::InvalidValue,
+    }
+}
+
+fn address_error(error: AddressError) -> FwError {
+    match error.reason {
+        AddressErrorReason::Property(PropertyError::Missing) => FwError::Missing,
+        AddressErrorReason::UnsupportedBus | AddressErrorReason::UnsupportedCells(_) => {
+            FwError::Unsupported
+        }
+        _ => FwError::InvalidValue,
+    }
+}
+
+fn dma_error(error: DmaRangeError) -> FwError {
+    match error {
+        DmaRangeError::Property(PropertyError::Missing) => FwError::Missing,
+        DmaRangeError::UnsupportedCells => FwError::Unsupported,
+        _ => FwError::InvalidValue,
+    }
+}
+
+fn property_error(error: PropertyError) -> FwError {
+    match error {
+        PropertyError::Missing => FwError::Missing,
+        PropertyError::BufferTooSmall { .. } => FwError::BufferTooSmall,
+        _ => FwError::InvalidValue,
+    }
+}
+
+=== drivers/firmware/rs-fdtree/src/property.rs:1-241 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Strict, allocation-free property reads shared by DT binding interpreters.
+
+use crate::{FdtNode, NodeProperty};
+
+#[cfg(feature = "alloc")]
+pub(crate) fn resource_names<'b, 'a: 'b>(
+    node: FdtNode<'b, 'a>,
+    property: &str,
+) -> Result<impl Iterator<Item = &'a str> + Clone, (Option<usize>, PropertyError)> {
+    let bytes = match node.property_strict(property) {
+        Ok(property) => property.value,
+        Err(PropertyError::Missing) => return Ok("".split_terminator('\0')),
+        Err(reason) => return Err((None, reason)),
+    };
+    for (index, part) in bytes.split_inclusive(|byte| *byte == 0).enumerate() {
+        part.strip_suffix(&[0])
+            .and_then(|part| core::str::from_utf8(part).ok())
+            .filter(|name| !name.is_empty())
+            .ok_or((Some(index), PropertyError::InvalidEncoding))?;
+    }
+    if bytes.is_empty() {
+        return Err((Some(0), PropertyError::InvalidEncoding));
+    }
+    let text = core::str::from_utf8(bytes).map_err(|_| (None, PropertyError::InvalidEncoding))?;
+    Ok(text.split_terminator('\0'))
+}
+
+/// A borrowed sequence of big-endian 32-bit cells.
+///
+/// Device-tree properties carry cells as four-byte big-endian words. This
+/// view keeps the payload borrowed and decodes each cell on access, so it
+/// stays allocation-free and does not depend on host alignment.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Cells<'a> {
+    bytes: &'a [u8],
+}
+
+impl<'a> Cells<'a> {
+    /// Validates a property payload as a complete cell sequence.
+    pub(crate) fn from_bytes(bytes: &'a [u8]) -> Result<Self, PropertyError> {
+        if !bytes.len().is_multiple_of(4) {
+            return Err(PropertyError::InvalidEncoding);
+        }
+        Ok(Self { bytes })
+    }
+
+    /// Returns the number of cells.
+    pub fn len(&self) -> usize {
+        self.bytes.len() / 4
+    }
+
+    /// Returns whether the sequence has no cells.
+    pub fn is_empty(&self) -> bool {
+        self.bytes.is_empty()
+    }
+
+    /// Returns cell `index`, or `None` when out of range.
+    pub fn get(&self, index: usize) -> Option<u32> {
+        let start = index.checked_mul(4)?;
+        let end = start.checked_add(4)?;
+        let bytes = self.bytes.get(start..end)?;
+        Some(u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]))
+    }
+
+    /// Iterates the cells in firmware order.
+    pub fn iter(&self) -> impl Iterator<Item = u32> + 'a {
+        let bytes = self.bytes;
+        bytes
+            .chunks_exact(4)
+            .map(|cell| u32::from_be_bytes([cell[0], cell[1], cell[2], cell[3]]))
+    }
+
+    /// Returns a sub-sequence of `len` cells starting at `start`.
+    ///
+    /// Returns `None` when the range is outside this sequence.
+    pub fn slice(&self, start: usize, len: usize) -> Option<Self> {
+        let start = start.checked_mul(4)?;
+        let end = start.checked_add(len.checked_mul(4)?)?;
+        Some(Self {
+            bytes: self.bytes.get(start..end)?,
+        })
+    }
+
+    /// Decodes every cell into `output` and returns the number written.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PropertyError::BufferTooSmall`] without modifying `output`
+    /// when it cannot hold the complete sequence.
+    pub fn read_into(&self, output: &mut [u32]) -> Result<usize, PropertyError> {
+        if output.len() < self.len() {
+            return Err(PropertyError::BufferTooSmall {
+                required: self.len(),
+            });
+        }
+        for (value, bytes) in output.iter_mut().zip(self.bytes.chunks_exact(4)) {
+            *value = u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+        }
+        Ok(self.len())
+    }
+
+    /// Returns the borrowed big-endian payload.
+    pub fn as_bytes(&self) -> &'a [u8] {
+        self.bytes
+    }
+}
+
+/// Failure to read a complete property with the requested shape.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PropertyError {
+    /// No property has this name.
+    Missing,
+    /// More than one property has this name on the node.
+    Duplicate,
+    /// The bytes are not a complete value of the requested encoding.
+    InvalidEncoding,
+    /// A list was supplied where a single value was required.
+    WrongType,
+    /// The output is too short; it has not been modified.
+    BufferTooSmall {
+        /// Required number of u32 cells, not bytes.
+        required: usize,
+    },
+}
+
+impl<'a> NodeProperty<'a> {
+    /// Read one NUL-terminated UTF-8 string, rejecting additional strings.
+    pub fn read_string(self) -> Result<&'a str, PropertyError> {
+        let text = self.string_payload()?;
+        if text.contains('\0') {
+            return Err(PropertyError::WrongType);
+        }
+        Ok(text)
+    }
+
+    /// Validate the entire string list before returning its borrowed iterator.
+    ///
+    /// Empty string elements are preserved; binding-specific readers decide
+    /// whether they are permitted. An empty byte property is not a string list.
+    pub fn read_strings(self) -> Result<impl Iterator<Item = &'a str>, PropertyError> {
+        Ok(self.string_payload()?.split('\0'))
+    }
+
+    /// Read exactly one big-endian u32 cell, never silently taking a prefix.
+    pub fn read_u32(self) -> Result<u32, PropertyError> {
+        if !self.value.len().is_multiple_of(4) {
+            return Err(PropertyError::InvalidEncoding);
+        }
+        let bytes = self
+            .value
+            .try_into()
+            .map_err(|_| PropertyError::WrongType)?;
+        Ok(u32::from_be_bytes(bytes))
+    }
+
+    /// Read every cell; malformed input or short output leaves output unchanged.
+    ///
+    /// Empty properties are valid empty arrays. Extra output cells are untouched.
+    pub fn read_u32_array(self, output: &mut [u32]) -> Result<usize, PropertyError> {
+        if !self.value.len().is_multiple_of(4) {
+            return Err(PropertyError::InvalidEncoding);
+        }
+        let required = self.value.len() / 4;
+        if output.len() < required {
+            return Err(PropertyError::BufferTooSmall { required });
+        }
+        for (value, bytes) in output.iter_mut().zip(self.value.chunks_exact(4)) {
+            *value = u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+        }
+        Ok(required)
+    }
+
+    /// Borrow this property as a validated big-endian cell sequence.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PropertyError::InvalidEncoding`] when the payload length is
+    /// not a multiple of four bytes.
+    pub fn cells(self) -> Result<Cells<'a>, PropertyError> {
+        Cells::from_bytes(self.value)
+    }
+
+    fn string_payload(self) -> Result<&'a str, PropertyError> {
+        let bytes = self
+            .value
+            .strip_suffix(&[0])
+            .ok_or(PropertyError::InvalidEncoding)?;
+        core::str::from_utf8(bytes).map_err(|_| PropertyError::InvalidEncoding)
+    }
+}
+
+impl<'b, 'a: 'b> FdtNode<'b, 'a> {
+    /// Interpret this node's status without applying ancestor or population policy.
+    ///
+    /// Missing status, `ok` and `okay` mean available. Other strings mean
+    /// unavailable; malformed or duplicate properties return an error. This is
+    /// allocation-free and does not imply that a controller or driver is ready.
+    pub fn is_available(self) -> Result<bool, PropertyError> {
+        match self.read_string("status") {
+            Ok(status) => Ok(matches!(status, "ok" | "okay")),
+            Err(PropertyError::Missing) => Ok(true),
+            Err(error) => Err(error),
+        }
+    }
+
+    /// Read a uniquely named property, distinguishing absence from duplication.
+    ///
+    /// Scans this node's properties only; no tree index or allocation is required.
+    pub fn property_strict(self, name: &str) -> Result<NodeProperty<'a>, PropertyError> {
+        let mut matches = self.properties().filter(|property| property.name == name);
+        let property = matches.next().ok_or(PropertyError::Missing)?;
+        if matches.next().is_some() {
+            return Err(PropertyError::Duplicate);
+        }
+        Ok(property)
+    }
+
+    /// Read a uniquely named, single NUL-terminated UTF-8 string.
+    pub fn read_string(self, name: &str) -> Result<&'a str, PropertyError> {
+        self.property_strict(name)?.read_string()
+    }
+
+    /// Validate all string elements before publishing a borrowed iterator.
+    pub fn read_strings(self, name: &str) -> Result<impl Iterator<Item = &'a str>, PropertyError> {
+        self.property_strict(name)?.read_strings()
+    }
+
+    /// Read exactly one cell, distinguishing missing, malformed and list values.
+    pub fn read_u32(self, name: &str) -> Result<u32, PropertyError> {
+        self.property_strict(name)?.read_u32()
+    }
+
+    /// Read all cells, leaving output unchanged when the property cannot be read.
+    pub fn read_u32_array(self, name: &str, output: &mut [u32]) -> Result<usize, PropertyError> {
+        self.property_strict(name)?.read_u32_array(output)
+    }
+}
+
+=== drivers/platform/irq/src/gic/firmware.rs:1-270 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! GIC firmware-node selection and binding-specific configuration decoding.
+
+use ::fwnode::{FwError, FwMmioResource, FwNode, FwNodeId};
+use memaddr::PhysAddr;
+
+use super::{GicConfig, GicMmioRegion, GicRedistributorConfig, GicVersion, MAX_GICR_REGIONS};
+
+const REGION_CAPACITY: usize = 1 + MAX_GICR_REGIONS;
+
+pub(super) fn is_gicv2_compatible(compatible: &str) -> bool {
+    matches!(
+        compatible,
+        "arm,gic-400"
+            | "arm,cortex-a15-gic"
+            | "arm,cortex-a9-gic"
+            | "arm,cortex-a7-gic"
+            | "arm,gic-v2"
+    )
+}
+
+pub(super) fn is_gicv3_compatible(compatible: &str) -> bool {
+    matches!(compatible, "arm,gic-v3" | "arm,gic-v4")
+}
+
+/// One discovered GIC controller and the firmware node that described it.
+///
+/// The node is retained so the caller can associate the exact controller
+/// instance with its IRQ domain after initialization. Discovery must not drop
+/// the node and let the IRQ core guess the controller from a compatible string.
+#[derive(Debug, Clone, Copy)]
+pub struct GicSelection<'a> {
+    /// Controller configuration decoded from the node.
+    pub config: GicConfig,
+    /// Firmware node the configuration came from.
+    pub controller: FwNode<'a>,
+}
+
+/// A rejection while translating a firmware node into [`GicConfig`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum GicConfigError {
+    /// The node's interrupt-controller declaration is malformed.
+    Controller {
+        /// Offending firmware node.
+        node: FwNodeId,
+        /// Backend failure.
+        error: FwError,
+    },
+    /// The node's availability declaration is malformed.
+    Status {
+        /// Offending firmware node.
+        node: FwNodeId,
+        /// Backend failure.
+        error: FwError,
+    },
+    /// The node's translated MMIO resources are malformed.
+    Registers {
+        /// Offending firmware node.
+        node: FwNodeId,
+        /// Backend failure.
+        error: FwError,
+    },
+    /// A required or optional binding property is malformed.
+    Property {
+        /// Offending firmware node.
+        node: FwNodeId,
+        /// Binding property name.
+        property: &'static str,
+        /// Backend failure.
+        error: FwError,
+    },
+    /// The node does not describe enough MMIO regions for its version.
+    MissingRegion {
+        /// Offending firmware node.
+        node: FwNodeId,
+    },
+    /// A firmware address or size does not fit the CPU address width.
+    AddressWidth {
+        /// Offending firmware node.
+        node: FwNodeId,
+    },
+    /// The `#redistributor-regions` declaration is zero.
+    InvalidRedistributorCount {
+        /// Offending firmware node.
+        node: FwNodeId,
+    },
+    /// The node describes more MMIO regions than this driver can retain.
+    TooManyRegions {
+        /// Offending firmware node.
+        node: FwNodeId,
+    },
+}
+
+impl GicConfig {
+    /// Translates the first available supported GIC node below `root`.
+    ///
+    /// Returns `Ok(None)` when the tree contains no GIC node with a recognized
+    /// compatible string. A recognized but disabled node is skipped, while a
+    /// malformed availability property is an error: silently falling back to a
+    /// different controller would hide broken firmware.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`GicConfigError`] when a candidate's availability, register
+    /// resources, or binding properties cannot be interpreted, or when a
+    /// GICv3 candidate describes an invalid redistributor region count.
+    pub fn from_fwnode<'a>(root: FwNode<'a>) -> Result<Option<GicSelection<'a>>, GicConfigError> {
+        for node in root.descendants() {
+            let id = node.id();
+            if !node
+                .is_interrupt_controller()
+                .map_err(|error| GicConfigError::Controller { node: id, error })?
+            {
+                continue;
+            }
+            let version = if node.firmware_ids().any(is_gicv3_compatible) {
+                GicVersion::V3
+            } else if node.firmware_ids().any(is_gicv2_compatible) {
+                GicVersion::V2
+            } else {
+                continue;
+            };
+            if !node
+                .is_available()
+                .map_err(|error| GicConfigError::Status { node: id, error })?
+            {
+                continue;
+            }
+            let regions = read_regions(node)?;
+            let config = match version {
+                GicVersion::V2 => gicv2_config(id, &regions)?,
+                GicVersion::V3 => gicv3_config(node, id, &regions)?,
+            };
+            return Ok(Some(GicSelection {
+                config,
+                controller: node,
+            }));
+        }
+        Ok(None)
+    }
+}
+
+/// MMIO regions read from one node, in firmware order.
+struct Regions {
+    data: [Option<GicMmioRegion>; REGION_CAPACITY],
+    len: usize,
+}
+
+impl Regions {
+    fn len(&self) -> usize {
+        self.len
+    }
+
+    fn get(&self, index: usize) -> Option<GicMmioRegion> {
+        self.data.get(index).copied().flatten()
+    }
+}
+
+fn read_regions(node: FwNode<'_>) -> Result<Regions, GicConfigError> {
+    let id = node.id();
+    let mut data = [None; REGION_CAPACITY];
+    let mut len = 0usize;
+    loop {
+        match node.mmio_resource(len) {
+            Ok(Some(resource)) => {
+                if len == REGION_CAPACITY {
+                    return Err(GicConfigError::TooManyRegions { node: id });
+                }
+                data[len] = Some(convert_resource(id, resource)?);
+                len += 1;
+            }
+            Ok(None) => break,
+            Err(error) => {
+                return Err(GicConfigError::Registers { node: id, error });
+            }
+        }
+    }
+    Ok(Regions { data, len })
+}
+
+fn convert_resource(
+    node: FwNodeId,
+    resource: FwMmioResource<'_>,
+) -> Result<GicMmioRegion, GicConfigError> {
+    let width = GicConfigError::AddressWidth { node };
+    let base = usize::try_from(resource.base).map_err(|_| width)?;
+    let size = usize::try_from(resource.size).map_err(|_| width)?;
+    base.checked_add(size).ok_or(width)?;
+    Ok(GicMmioRegion {
+        paddr: PhysAddr::from_usize(base),
+        size,
+    })
+}
+
+fn gicv2_config(node: FwNodeId, regions: &Regions) -> Result<GicConfig, GicConfigError> {
+    let missing = GicConfigError::MissingRegion { node };
+    if regions.len() < 2 {
+        return Err(missing);
+    }
+    Ok(GicConfig {
+        version: GicVersion::V2,
+        gicd: regions.get(0).ok_or(missing)?,
+        gicc: Some(regions.get(1).ok_or(missing)?),
+        gicr: None,
+        gich: regions.get(2),
+        gicv: regions.get(3),
+    })
+}
+
+fn gicv3_config(
+    node: FwNode<'_>,
+    id: FwNodeId,
+    regions: &Regions,
+) -> Result<GicConfig, GicConfigError> {
+    let count = read_u32_property(node, id, "#redistributor-regions")?.unwrap_or(1);
+    let count = usize::try_from(count).map_err(|_| GicConfigError::TooManyRegions { node: id })?;
+    if count == 0 {
+        return Err(GicConfigError::InvalidRedistributorCount { node: id });
+    }
+    if count > MAX_GICR_REGIONS {
+        return Err(GicConfigError::TooManyRegions { node: id });
+    }
+    let missing = GicConfigError::MissingRegion { node: id };
+    if regions.len() < 1 + count {
+        return Err(missing);
+    }
+    let stride = read_u32_property(node, id, "redistributor-stride")?.unwrap_or(0) as usize;
+    let mut gicr_regions = [None; MAX_GICR_REGIONS];
+    for (index, slot) in gicr_regions.iter_mut().take(count).enumerate() {
+        *slot = Some(regions.get(index + 1).ok_or(missing)?);
+    }
+    Ok(GicConfig {
+        version: GicVersion::V3,
+        gicd: regions.get(0).ok_or(missing)?,
+        gicc: None,
+        gicr: Some(GicRedistributorConfig {
+            regions: gicr_regions,
+            count,
+            stride,
+        }),
+        gich: None,
+        gicv: None,
+    })
+}
+
+fn read_u32_property(
+    node: FwNode<'_>,
+    id: FwNodeId,
+    property: &'static str,
+) -> Result<Option<u32>, GicConfigError> {
+    match node.property(property) {
+        Ok(Some(value)) => value
+            .as_u32()
+            .map(Some)
+            .map_err(|error| GicConfigError::Property {
+                node: id,
+                property,
+                error,
+            }),
+        Ok(None) => Ok(None),
+        Err(error) => Err(GicConfigError::Property {
+            node: id,
+            property,
+            error,
+        }),
+    }
+}
+
+=== drivers/firmware/rs-fdtree/src/fwnode_backend/mod.rs:1-15 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Backends that expose device descriptions through the neutral `fwnode`
+//! contract.
+//!
+//! Today this directory contains only the device-tree backend; additional
+//! adapters owned by this crate can be added as sibling submodules. The crate
+//! core keeps the generic device-tree interpretation, so these modules only
+//! translate borrowed results into contract types.
+
+mod dtb;
+
+pub use dtb::DtBackend;
+
+=== drivers/firmware/rs-fdtree/src/lib.rs:1-311 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! A minimal #![no_std] parser for Linux Flattened Devicetrees.
+
+#![no_std]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+#[cfg(feature = "alloc")]
+mod address;
+#[cfg(feature = "alloc")]
+pub use address::{AddressError, AddressErrorReason, MmioResource};
+mod dma;
+pub use dma::{
+    DeviceDmaError, DeviceDmaWindow, DmaRange, DmaRangeError, DmaRangeIter, DmaRanges,
+    parse_dma_ranges,
+};
+#[cfg(feature = "alloc")]
+mod index;
+#[cfg(feature = "alloc")]
+pub use index::NodeIndex;
+
+#[cfg(feature = "fwnode")]
+mod fwnode_backend;
+#[cfg(feature = "fwnode")]
+pub use fwnode_backend::DtBackend;
+
+mod property;
+
+pub use property::{Cells, PropertyError};
+
+mod error;
+mod header;
+mod kernel_nodes;
+mod node;
+mod parsing;
+mod reference;
+
+pub use error::FdtError;
+use header::FdtHeader;
+pub use kernel_nodes::{Chosen, Dice, InterruptController};
+pub use node::{FdtNode, MemoryRegion, NodeProperty, RegIter};
+use parsing::{BigEndianU64, CStr, FdtData};
+pub use reference::{InterruptSpec, NodeReference, ReferenceError};
+
+/// Iterator over the DTB memory-reservation block, yielding each
+/// `(address, size)` pair until the `0, 0` terminator.
+#[derive(Debug, Clone, Copy)]
+pub struct MemReserveIter<'a> {
+    stream: FdtData<'a>,
+}
+
+/// A flattened devicetree located somewhere in memory
+#[derive(Clone, Copy)]
+pub struct LinuxFdt<'a> {
+    data: &'a [u8],
+    header: FdtHeader,
+    mem_rsvmap_end: usize,
+}
+
+impl core::fmt::Debug for LinuxFdt<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("LinuxFdt")
+            .field("total_size", &self.total_size())
+            .finish()
+    }
+}
+
+impl<'a> LinuxFdt<'a> {
+    /// Validates a DTB and borrows its immutable bytes.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FdtError::BadMagic`] for a bad magic value and
+    /// [`FdtError::BufferTooSmall`] for missing header/blob storage.
+    /// [`FdtError::ParseError`] reports invalid block ranges, missing reservation
+    /// termination, unsupported format versions, malformed tokens/properties or
+    /// names, and nesting beyond 63 nodes (including the root). No tree is
+    /// published until the entire structure has passed validation.
+    ///
+    /// Note: this function does ***not*** require that the data be 4-byte
+    /// aligned
+    pub fn new(data: &'a [u8]) -> Result<Self, FdtError> {
+        let mut stream = FdtData::new(data);
+        let header = FdtHeader::from_bytes(&mut stream).ok_or(FdtError::BufferTooSmall)?;
+
+        if !header.valid_magic() {
+            return Err(FdtError::BadMagic);
+        }
+
+        let total_size = header.totalsize.get() as usize;
+        if data.len() < total_size {
+            return Err(FdtError::BufferTooSmall);
+        }
+
+        let data = &data[..total_size];
+        let mem_rsvmap_end = header.validate(data)?;
+        node::validate_structure(&data[header.struct_range()], &data[header.strings_range()])?;
+        Ok(Self {
+            data,
+            header,
+            mem_rsvmap_end,
+        })
+    }
+
+    /// Constructs a `LinuxFdt` from a raw pointer to a DTB blob in
+    /// memory.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FdtError::BadPtr`] for a null pointer, otherwise the same
+    /// validation errors as [`Self::new`]. Actual readable storage shorter than
+    /// the header-declared size violates the caller's safety obligation.
+    ///
+    /// # Safety
+    ///
+    /// `ptr` must point to a readable flattened devicetree blob whose header
+    /// and total-size range remain readable and immutable for the returned lifetime.
+    ///
+    /// Note: this function does ***not*** require that the data be 4-byte
+    /// aligned
+    pub unsafe fn from_ptr(ptr: *const u8) -> Result<Self, FdtError> {
+        if ptr.is_null() {
+            return Err(FdtError::BadPtr);
+        }
+
+        // SAFETY: the caller guarantees a readable header at `ptr`; byte reads
+        // do not require FdtHeader alignment or structurally valid contents.
+        let tmp_header =
+            unsafe { core::slice::from_raw_parts(ptr, core::mem::size_of::<FdtHeader>()) };
+
+        #[expect(
+            clippy::unwrap_used,
+            reason = "CG-021-no-panic-on-reachable-failure: tmp_header contains \
+                      size_of::<FdtHeader>() bytes and the parser only consumes its ten u32 fields"
+        )]
+        let real_size = FdtHeader::from_bytes(&mut FdtData::new(tmp_header))
+            .unwrap()
+            .totalsize
+            .get() as usize;
+
+        // SAFETY: the caller guarantees that the full header-declared range is
+        // readable and immutable for the returned lifetime. Structural
+        // validation follows inside `new`; it cannot establish pointer validity.
+        unsafe { Self::new(core::slice::from_raw_parts(ptr, real_size)) }
+    }
+
+    /// Total size of the devicetree in bytes
+    pub fn total_size(&self) -> usize {
+        self.header.totalsize.get() as usize
+    }
+
+    /// Returns the complete flattened device-tree blob.
+    pub fn as_bytes(&self) -> &'a [u8] {
+        &self.data[..self.total_size()]
+    }
+
+    /// Find a node at a BEGIN_NODE offset in this tree's structure block.
+    ///
+    /// This allocation-free linear lookup rejects non-node offsets. An offset
+    /// is local to this blob, not a canonical firmware identity.
+    pub fn node_at_offset(&self, offset: u32) -> Option<FdtNode<'_, 'a>> {
+        self.all_nodes().find(|node| node.offset() == offset)
+    }
+
+    /// Builds an allocation-backed index over this tree.
+    ///
+    /// Intended for callers past allocator setup. The allocation-free
+    /// accessors remain available and behave identically.
+    #[cfg(feature = "alloc")]
+    pub fn node_index(&self) -> NodeIndex<'a> {
+        NodeIndex::new(*self)
+    }
+
+    /// Returns interrupt controller node.
+    ///
+    /// Searches for the first node with an "interrupt-controller" property.
+    /// Returns `None` if no interrupt controller is found.
+    pub fn interrupt_controller(&self) -> Option<InterruptController<'_, 'a>> {
+        let ic_node = self
+            .all_nodes()
+            .find(|node| node.property("interrupt-controller").is_some())?;
+        Some(InterruptController { node: ic_node })
+    }
+
+    /// Returns the `/chosen` node if present.
+    pub fn chosen(&self) -> Option<Chosen<'_, 'a>> {
+        self.find_node("/chosen").map(|node| Chosen { node })
+    }
+
+    /// Returns the Open DICE node under `/reserved-memory` if present.
+    pub fn dice(&self) -> Option<Dice<'_, 'a>> {
+        self.find_node("/reserved-memory/dice")
+            .or_else(|| {
+                self.find_compatible("google,open-dice")
+                    .or_else(|| self.find_compatible("kylin,open-dice"))
+            })
+            .map(|node| Dice { node })
+    }
+
+    /// Returns an iterator over all of the nodes in the devicetree, depth-first
+    pub fn all_nodes(&self) -> impl Iterator<Item = node::FdtNode<'_, 'a>> {
+        node::all_nodes(self)
+    }
+
+    /// Finds a node by an absolute device-tree path.
+    pub fn find_node(&self, path: &str) -> Option<node::FdtNode<'_, 'a>> {
+        node::find_node(
+            &mut parsing::FdtData::new(self.structs_block()),
+            path,
+            self,
+            None,
+            Ok(None),
+        )
+    }
+
+    /// Iterates the memreserve block entries (physical address/size pairs).
+    pub fn mem_reservations(&self) -> MemReserveIter<'a> {
+        MemReserveIter {
+            stream: FdtData::new(self.mem_rsvmap_block()),
+        }
+    }
+
+    /// Iterates `/memory` node regions as [`MemoryRegion`]s.
+    pub fn memory_regions(&self) -> impl Iterator<Item = MemoryRegion> + '_ {
+        node::memory_regions(self)
+    }
+
+    /// Iterates `/reserved-memory` child regions as [`MemoryRegion`]s.
+    pub fn reserved_memory_regions(&self) -> impl Iterator<Item = MemoryRegion> + '_ {
+        node::reserved_memory_regions(self)
+    }
+
+    /// Iterates `/reserved-memory` child nodes.
+    pub fn reserved_memory_nodes(&self) -> impl Iterator<Item = node::FdtNode<'_, 'a>> + '_ {
+        node::reserved_memory_nodes(self)
+    }
+
+    /// Returns the boot arguments from the `/chosen` node.
+    pub fn chosen_bootargs(&self) -> Option<&'a str> {
+        self.chosen()?.bootargs()
+    }
+
+    /// Returns the console device path from the `/chosen` node.
+    pub fn chosen_stdout_path(&self) -> Option<&'a str> {
+        self.chosen()?.stdout_path()
+    }
+
+    /// Returns the root node's `model` string.
+    pub fn root_model(&self) -> Option<&'a str> {
+        self.find_node("/")?.property_str("model")
+    }
+
+    /// Returns the root node's first `compatible` string.
+    pub fn root_compatible(&self) -> Option<&'a str> {
+        self.find_node("/")?.compatible()
+    }
+
+    /// Finds the first node whose `compatible` list contains the string.
+    pub fn find_compatible(&self, compatible: &str) -> Option<node::FdtNode<'_, 'a>> {
+        self.all_nodes().find(|node| node.is_compatible(compatible))
+    }
+
+    /// Resolves a path or an alias (looked up under `/aliases`) to a node;
+    /// a `:`-suffixed cell suffix is ignored.
+    pub fn resolve_node(&self, path_or_alias: &str) -> Option<node::FdtNode<'_, 'a>> {
+        let key = path_or_alias.split(':').next()?;
+        if key.starts_with('/') {
+            return self.find_node(key);
+        }
+
+        let alias_value = self.find_node("/aliases")?.property_str(key)?;
+        self.find_node(alias_value.split(':').next()?)
+    }
+
+    fn structs_block(&self) -> &'a [u8] {
+        &self.data[self.header.struct_range()]
+    }
+
+    fn mem_rsvmap_block(&self) -> &'a [u8] {
+        &self.data[self.header.mem_rsvmap_range().start..self.mem_rsvmap_end]
+    }
+
+    pub(crate) fn string_at_offset(&self, offset: usize) -> Option<&'a str> {
+        CStr::new(self.strings_block().get(offset..)?)?.as_str()
+    }
+
+    fn strings_block(&self) -> &'a [u8] {
+        &self.data[self.header.strings_range()]
+    }
+}
+
+impl<'a> Iterator for MemReserveIter<'a> {
+    type Item = MemoryRegion;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let address = BigEndianU64::from_bytes(self.stream.remaining())?.get() as usize;
+        self.stream.skip(8);
+        let size = BigEndianU64::from_bytes(self.stream.remaining())?.get() as usize;
+        self.stream.skip(8);
+        if address == 0 && size == 0 {
+            return None;
+        }
+        Some(MemoryRegion {
+            starting_address: address as *const u8,
+            size,
+        })
+    }
+}
+
+=== drivers/platform/irq/src/gic/mod.rs:1-21 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! GIC interrupt controller integration for AArch64 platforms.
+
+use core::{fmt, sync::atomic::Ordering};
+
+mod firmware;
+pub use firmware::{GicConfigError, GicSelection};
+mod xlate;
+use xlate::GIC_XLATE;
+
+mod gicv2;
+mod gicv3;
+mod spi;
+
+use kirq::TargetCpu;
+use lazyinit::LazyInit;
+use memaddr::{PhysAddr, VirtAddr};
+use memspace::iomap_device;
+
+=== drivers/platform/irq/src/gic/mod.rs:134-193 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum GicVersion {
+    V2,
+    V3,
+}
+
+impl fmt::Display for GicVersion {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(match self {
+            Self::V2 => "GICv2",
+            Self::V3 => "GICv3",
+        })
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct GicMmioRegion {
+    pub paddr: PhysAddr,
+    pub size: usize,
+}
+
+/// Maximum number of disjoint GICv3 redistributor regions carried by
+/// [`GicConfig`].
+pub const MAX_GICR_REGIONS: usize = 8;
+
+/// Firmware-described GICv3 redistributor layout.
+///
+/// Device tree may describe multiple GICR regions and an explicit
+/// redistributor stride. The current arm-gic-driver backend walks one
+/// contiguous frame array, so [`init`] accepts this description only when the
+/// regions are contiguous and the stride is the architectural default.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct GicRedistributorConfig {
+    /// Regions in firmware order; only the first `count` entries are used.
+    pub regions: [Option<GicMmioRegion>; MAX_GICR_REGIONS],
+    /// Number of valid entries in `regions`.
+    pub count: usize,
+    /// Firmware-declared redistributor stride, or zero for the default.
+    pub stride: usize,
+}
+
+impl GicRedistributorConfig {
+    /// Iterates the valid redistributor regions in firmware order.
+    pub fn regions(&self) -> impl Iterator<Item = GicMmioRegion> + '_ {
+        self.regions
+            .iter()
+            .take(self.count)
+            .filter_map(|region| *region)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct GicConfig {
+    pub version: GicVersion,
+    pub gicd: GicMmioRegion,
+    pub gicc: Option<GicMmioRegion>,
+    pub gicr: Option<GicRedistributorConfig>,
+    pub gich: Option<GicMmioRegion>,
+    pub gicv: Option<GicMmioRegion>,
+}
+
+=== drivers/platform/irq/src/lib.rs:1-47 @ cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Platform interrupt-controller backends behind the `kirq`
+//! `IntrManagerIf` contract: GIC v2/v3 on AArch64, PLIC on RISC-V, and
+//! the IO-APIC glue on x86_64. See `docs/design.md` for the selection
+//! and dispatch model.
+//!
+//! The primary entry point is the architecture module selected at
+//! compile time — [`gic`] on AArch64 (`gic::init_from_fwnode`,
+//! `gic::init_current_cpu`), `riscv` on RISC-V, and [`x86`] on x86_64
+//! (`x86::init`, `x86::init_secondary`). The backend is
+//! registered with `kirq` through the generated `IntrManagerIf`
+//! provider; platform init only needs the module's `init*` functions.
+//! A production call site is `platforms/kplat-aarch64/src/init.rs`,
+//! which runs `gic::init_from_fwnode` and `gic::init_current_cpu`
+//! during platform bring-up.
+//!
+//! ```ignore
+//! // Kernel code only: run once during platform bring-up.
+//! use irq_driver::gic;
+//!
+//! let root = khal::firmware::fwnode_root()?;
+//! gic::init_from_fwnode(root)?; // discovers/maps the GIC and initializes
+//!                               // the primary CPU interface
+//! // On each secondary CPU only:
+//! // gic::init_current_cpu()?;
+//!
+//! // Effect: interrupt dispatch is initialized — device interrupts
+//! // acknowledged here are now routed into kirq's generic handler, and
+//! // this CPU can receive and complete GIC lines.
+//! ```
+#![no_std]
+
+#[cfg(unittest)]
+extern crate alloc;
+
+#[macro_use]
+extern crate log;
+
+#[cfg(target_arch = "aarch64")]
+pub mod gic;
+#[cfg(target_arch = "riscv64")]
+pub mod riscv;
+#[cfg(target_arch = "x86_64")]
+pub mod x86;

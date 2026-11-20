@@ -1,0 +1,66 @@
+{
+  "role": "EVALUATOR ONLY — never append to model inputs",
+  "reference_policy": "Historical document constraints, not provider-confirmed optimal ownership or true-violation labels; current placement is not oracle.",
+  "claims": [
+    {
+      "id": "R01",
+      "normative_source": "drivers/firmware/of/docs/firmware-node-direction.md:5-9,26-36",
+      "claim": "DT backend owns property decoding and node status; no kernel registration/mapping/allocation policy.",
+      "condition": "Node-local interpretation; distinguish population or ancestor policy.",
+      "implementation_evidence": "drivers/firmware/rs-fdtree/src/property.rs:196-208",
+      "description": "is_available reads own status; absence/ok/okay accepted.",
+      "allowed_conclusion": "Conditional consistency of this behavior with stated DT capability boundary; not proof of device readiness or architectural optimality."
+    },
+    {
+      "id": "R02",
+      "normative_source": "drivers/firmware/of/docs/firmware-node-direction.md:11-16; drivers/firmware/fwnode/docs/design.md:87-103",
+      "claim": "Neutral resource facts separate interpretation from acquisition; backend parses and validates.",
+      "condition": "Mapping/acquisition must not be inferred from resource-return types.",
+      "implementation_evidence": "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:130-143",
+      "description": "Delegates mmio_resources, converts fields/errors.",
+      "allowed_conclusion": "Supports adapter/delegation characterization; delegated address algorithm and runtime behavior are not closed by packet."
+    },
+    {
+      "id": "R03",
+      "normative_source": "drivers/firmware/fwnode/docs/design.md:5-25,29-37,41-50",
+      "claim": "Backend-neutral contract with no parser/kernel policy; prose says util while tree says drivers/firmware/fwnode.",
+      "condition": "Semantic contract and physical directory claim must be separated.",
+      "implementation_evidence": "drivers/firmware/fwnode/src/lib.rs:34-54,90-139,309-339,402-410",
+      "description": "Opaque IDs, borrowed backend and handle operations.",
+      "allowed_conclusion": "Can characterize type/trait seam; conflicting physical-location prose cannot uniquely establish intended directory or justify mandatory move."
+    },
+    {
+      "id": "R04",
+      "normative_source": "drivers/firmware/of/docs/firmware-node-direction.md:18-22,34-38",
+      "claim": "Host integration retains boot DTB ownership/initialization until migrated; other boot helpers separately tracked.",
+      "condition": "Transitional exception; ownership prose is not proof of allocation ownership.",
+      "implementation_evidence": "drivers/firmware/of/src/lib.rs:290-294,332-338",
+      "description": "Lazy global initialization calls LinuxFdt::from_ptr and registers root; caller supplies lifetime obligation.",
+      "allowed_conclusion": "Retaining host integration can be consistent under stated exception; no proof host frees or owns backing allocation."
+    },
+    {
+      "id": "R05",
+      "normative_source": "drivers/firmware/of/docs/firmware-node-direction.md:5-9,83-94",
+      "claim": "Controller register roles/interrupt encodings belong to drivers; ACPI/static producers are planned peers; multi-region programming excluded.",
+      "condition": "Parsing controller config is distinct from backend generic DT translation and hardware programming.",
+      "implementation_evidence": "drivers/platform/irq/src/gic/firmware.rs:97-148,198-247; drivers/platform/irq/src/gic/mod.rs:134-193",
+      "description": "Discovers node, interprets controller regions, produces GicConfig/GicSelection.",
+      "allowed_conclusion": "Controller-specific producer can remain in driver under this document. Actual hardware initialization/validation not included as complete implementation."
+    },
+    {
+      "id": "R06",
+      "normative_source": "drivers/firmware/of/docs/firmware-node-direction.md:71-76,92-94; drivers/firmware/fwnode/docs/design.md:87-93",
+      "claim": "Migration document reports IRQ lookup Unsupported; contract distinguishes specifier cells from controller meaning.",
+      "condition": "First part is historical capability/status report, not timeless prohibition.",
+      "implementation_evidence": "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:217-229",
+      "description": "irq_spec delegates query and returns target plus cells.",
+      "allowed_conclusion": "Can identify document/implementation status conflict; not genuine responsibility violation or unique new migration prescription."
+    }
+  ],
+  "historical_test_counts": {
+    "source": "drivers/firmware/of/docs/firmware-node-direction.md:45-59",
+    "kind": "historical document statements",
+    "allowed": "attribute as statements, not this run's execution evidence"
+  },
+  "exposure": "All six units and historical analyses already seen by development team. Not independent holdout."
+}

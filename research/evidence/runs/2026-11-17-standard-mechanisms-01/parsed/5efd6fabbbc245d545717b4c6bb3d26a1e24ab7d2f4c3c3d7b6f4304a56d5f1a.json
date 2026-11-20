@@ -1,0 +1,2266 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A struct containing information about the location of a panic.",
+          "path": "doc",
+          "range": [
+            155,
+            221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            222,
+            225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This structure is created by [`PanicHookInfo::location()`] and [`PanicInfo::location()`].",
+          "path": "doc",
+          "range": [
+            226,
+            319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            320,
+            323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`PanicInfo::location()`]: crate::panic::PanicInfo::location",
+          "path": "doc",
+          "range": [
+            324,
+            388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`PanicHookInfo::location()`]: ../../std/panic/struct.PanicHookInfo.html#method.location",
+          "path": "doc",
+          "range": [
+            389,
+            481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            482,
+            485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            486,
+            500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            501,
+            504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```should_panic",
+          "path": "doc",
+          "range": [
+            505,
+            524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic;",
+          "path": "doc",
+          "range": [
+            525,
+            544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            545,
+            548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic::set_hook(Box::new(|panic_info| {",
+          "path": "doc",
+          "range": [
+            549,
+            592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(location) = panic_info.location() {",
+          "path": "doc",
+          "range": [
+            593,
+            648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred in file '{}' at line {}\", location.file(), location.line());",
+          "path": "doc",
+          "range": [
+            649,
+            746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            747,
+            763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred but can't get location information...\");",
+          "path": "doc",
+          "range": [
+            764,
+            841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            842,
+            851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }));",
+          "path": "doc",
+          "range": [
+            852,
+            860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            861,
+            864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic!(\"Normal panic\");",
+          "path": "doc",
+          "range": [
+            865,
+            892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            893,
+            900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            901,
+            904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Comparisons",
+          "path": "doc",
+          "range": [
+            905,
+            922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            923,
+            926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Comparisons for equality and ordering are made in file, line, then column priority.",
+          "path": "doc",
+          "range": [
+            927,
+            1014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Files are compared as strings, not `Path`, which could be unexpected.",
+          "path": "doc",
+          "range": [
+            1015,
+            1088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`Location::file`]'s documentation for more discussion.",
+          "path": "doc",
+          "range": [
+            1089,
+            1152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1153,
+            1179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1180,
+            1202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1203,
+            1255
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Location",
+      "range": [
+        155,
+        1608
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1610,
+            1662
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1610,
+        1969
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        1736,
+        1967
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        1701,
+        1967
+      ],
+      "signature_range": [
+        1701,
+        1735
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1971,
+            2023
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1971,
+        2051
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2053,
+            2105
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2053,
+        2344
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        2178,
+        2342
+      ],
+      "kind": "impl_fn",
+      "name": "cmp",
+      "range": [
+        2138,
+        2342
+      ],
+      "signature_range": [
+        2138,
+        2177
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        5
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2254,
+        2283
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        5
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2308,
+        2335
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2346,
+            2398
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2346,
+        2533
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "body_range": [
+        2494,
+        2531
+      ],
+      "kind": "impl_fn",
+      "name": "partial_cmp",
+      "range": [
+        2438,
+        2531
+      ],
+      "signature_range": [
+        2438,
+        2493
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2535,
+            2587
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2535,
+        2765
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        2662,
+        2763
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        2621,
+        2763
+      ],
+      "signature_range": [
+        2621,
+        2661
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2767,
+            2819
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2767,
+        3102
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "body_range": [
+        2916,
+        3100
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2859,
+        3100
+      ],
+      "signature_range": [
+        2859,
+        2915
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3104,
+        11140
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the source location of the caller of this function. If that function's caller is",
+          "path": "doc",
+          "range": [
+            3132,
+            3224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " annotated then its call location will be returned, and so on up the stack to the first call",
+          "path": "doc",
+          "range": [
+            3229,
+            3324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " within a non-tracked function body.",
+          "path": "doc",
+          "range": [
+            3329,
+            3368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3373,
+            3376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3381,
+            3395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3400,
+            3403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```standalone_crate",
+          "path": "doc",
+          "range": [
+            3408,
+            3431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic::Location;",
+          "path": "doc",
+          "range": [
+            3436,
+            3465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3470,
+            3473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// ```",
+          "path": "doc",
+          "range": [
+            3478,
+            3489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///      |1        |11       |21       |31       |41",
+          "path": "doc",
+          "range": [
+            3494,
+            3550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    +-|---------|---------|---------|---------|--------",
+          "path": "doc",
+          "range": [
+            3555,
+            3617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 15 | #[track_caller]",
+          "path": "doc",
+          "range": [
+            3622,
+            3650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 16 | fn new_location() -> &'static Location<'static> {",
+          "path": "doc",
+          "range": [
+            3655,
+            3717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 17 |     Location::caller()",
+          "path": "doc",
+          "range": [
+            3722,
+            3757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    |     ------------------| the value of this expression depends on the caller,",
+          "path": "doc",
+          "range": [
+            3762,
+            3850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    |                       | since the function is marked #[track_caller]",
+          "path": "doc",
+          "range": [
+            3855,
+            3936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 18 | }",
+          "path": "doc",
+          "range": [
+            3941,
+            3955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// ```",
+          "path": "doc",
+          "range": [
+            3960,
+            3971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[track_caller]",
+          "path": "doc",
+          "range": [
+            3976,
+            3995
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn new_location() -> &'static Location<'static> {",
+          "path": "doc",
+          "range": [
+            4000,
+            4053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Location::caller()",
+          "path": "doc",
+          "range": [
+            4058,
+            4084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4089,
+            4094
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4099,
+            4102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// ```",
+          "path": "doc",
+          "range": [
+            4107,
+            4118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///      |1  |5    |11       |21       |31       |41       |51",
+          "path": "doc",
+          "range": [
+            4123,
+            4189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    +-|---|-----|---------|---------|---------|---------|---",
+          "path": "doc",
+          "range": [
+            4194,
+            4261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 29 | fn constant_location() -> &'static Location<'static> {",
+          "path": "doc",
+          "range": [
+            4266,
+            4333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 30 |     new_location()",
+          "path": "doc",
+          "range": [
+            4338,
+            4369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    |     ^ any invocation of constant_location() points here,",
+          "path": "doc",
+          "range": [
+            4374,
+            4443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///    |       no matter the location it is called from",
+          "path": "doc",
+          "range": [
+            4448,
+            4507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// 31 | }",
+          "path": "doc",
+          "range": [
+            4512,
+            4526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// ```",
+          "path": "doc",
+          "range": [
+            4531,
+            4542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn constant_location() -> &'static Location<'static> {",
+          "path": "doc",
+          "range": [
+            4547,
+            4605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     new_location()",
+          "path": "doc",
+          "range": [
+            4610,
+            4632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4637,
+            4642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4647,
+            4650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            4655,
+            4670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //      |1  |5    |11       |21       |31       |41       |51",
+          "path": "doc",
+          "range": [
+            4675,
+            4744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    +-|---|-----|---------|---------|---------|---------|---",
+          "path": "doc",
+          "range": [
+            4749,
+            4819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 29 | fn constant_location() -> &'static Location<'static> {",
+          "path": "doc",
+          "range": [
+            4824,
+            4894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 30 |     new_location()",
+          "path": "doc",
+          "range": [
+            4899,
+            4933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    |     ^ `let constant` points here",
+          "path": "doc",
+          "range": [
+            4938,
+            4986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 31 | }",
+          "path": "doc",
+          "range": [
+            4991,
+            5008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let constant = constant_location();",
+          "path": "doc",
+          "range": [
+            5013,
+            5056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(constant.file(), file!());",
+          "path": "doc",
+          "range": [
+            5061,
+            5106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!((constant.line(), constant.column()), (30, 5));",
+          "path": "doc",
+          "range": [
+            5111,
+            5177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5182,
+            5185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let constant_2 = constant_location();",
+          "path": "doc",
+          "range": [
+            5190,
+            5235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(",
+          "path": "doc",
+          "range": [
+            5240,
+            5259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         (constant.file(), constant.line(), constant.column()),",
+          "path": "doc",
+          "range": [
+            5264,
+            5330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         (constant_2.file(), constant_2.line(), constant_2.column())",
+          "path": "doc",
+          "range": [
+            5335,
+            5406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     );",
+          "path": "doc",
+          "range": [
+            5411,
+            5421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5426,
+            5429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //      |1        |11  |16  |21       |31",
+          "path": "doc",
+          "range": [
+            5434,
+            5483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    +-|---------|----|----|---------|------",
+          "path": "doc",
+          "range": [
+            5488,
+            5541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 55 |     let here = new_location();",
+          "path": "doc",
+          "range": [
+            5546,
+            5592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    |                ^ `let here` points here, as `new_location()` is the callsite",
+          "path": "doc",
+          "range": [
+            5597,
+            5689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 56 |     assert_eq!(here.file(), file!());",
+          "path": "doc",
+          "range": [
+            5694,
+            5747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let here = new_location();",
+          "path": "doc",
+          "range": [
+            5752,
+            5786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(here.file(), file!());",
+          "path": "doc",
+          "range": [
+            5791,
+            5832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!((here.line(), here.column()), (55, 16));",
+          "path": "doc",
+          "range": [
+            5837,
+            5896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5901,
+            5904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //      |1        |11       |21       ||32      |41       |51",
+          "path": "doc",
+          "range": [
+            5909,
+            5978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    +-|---------|---------|---------||--------|---------|------",
+          "path": "doc",
+          "range": [
+            5983,
+            6056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 64 |     let yet_another_location = new_location();",
+          "path": "doc",
+          "range": [
+            6061,
+            6123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     //    |                                ^ `let yet_another_location` points here",
+          "path": "doc",
+          "range": [
+            6128,
+            6215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // 65 |     assert_eq!(here.file(), yet_another_location.file());",
+          "path": "doc",
+          "range": [
+            6220,
+            6293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let yet_another_location = new_location();",
+          "path": "doc",
+          "range": [
+            6298,
+            6348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(here.file(), yet_another_location.file());",
+          "path": "doc",
+          "range": [
+            6353,
+            6414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_ne!(",
+          "path": "doc",
+          "range": [
+            6419,
+            6438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         (here.line(), here.column()),",
+          "path": "doc",
+          "range": [
+            6443,
+            6484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         (yet_another_location.line(), yet_another_location.column())",
+          "path": "doc",
+          "range": [
+            6489,
+            6561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     );",
+          "path": "doc",
+          "range": [
+            6566,
+            6576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            6581,
+            6586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6591,
+            6598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            6603,
+            6614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6619,
+            6672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            6677,
+            6751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            6756,
+            6771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6776,
+            6785
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6842,
+        6894
+      ],
+      "kind": "impl_fn",
+      "name": "caller",
+      "range": [
+        3132,
+        6894
+      ],
+      "signature_range": [
+        6794,
+        6841
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the name of the source file from which the panic originated.",
+          "path": "doc",
+          "range": [
+            6900,
+            6972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6977,
+            6980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `&str`, not `&Path`",
+          "path": "doc",
+          "range": [
+            6985,
+            7010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7015,
+            7018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned name refers to a source path on the compiling system, but it isn't valid to",
+          "path": "doc",
+          "range": [
+            7023,
+            7115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " represent this directly as a `&Path`. The compiled code may run on a different system with",
+          "path": "doc",
+          "range": [
+            7120,
+            7214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a different `Path` implementation than the system providing the contents and this library",
+          "path": "doc",
+          "range": [
+            7219,
+            7312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " does not currently have a different \"host path\" type.",
+          "path": "doc",
+          "range": [
+            7317,
+            7374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7379,
+            7382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The most surprising behavior occurs when \"the same\" file is reachable via multiple paths in",
+          "path": "doc",
+          "range": [
+            7387,
+            7482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the module system (usually using the `#[path = \"...\"]` attribute or similar), which can",
+          "path": "doc",
+          "range": [
+            7487,
+            7578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " cause what appears to be identical code to return differing values from this function.",
+          "path": "doc",
+          "range": [
+            7583,
+            7673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7678,
+            7681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Cross-compilation",
+          "path": "doc",
+          "range": [
+            7686,
+            7709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7714,
+            7717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This value is not suitable for passing to `Path::new` or similar constructors when the host",
+          "path": "doc",
+          "range": [
+            7722,
+            7817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " platform and target platform differ.",
+          "path": "doc",
+          "range": [
+            7822,
+            7862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7867,
+            7870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            7875,
+            7889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7894,
+            7897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```should_panic",
+          "path": "doc",
+          "range": [
+            7902,
+            7921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic;",
+          "path": "doc",
+          "range": [
+            7926,
+            7945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7950,
+            7953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic::set_hook(Box::new(|panic_info| {",
+          "path": "doc",
+          "range": [
+            7958,
+            8001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(location) = panic_info.location() {",
+          "path": "doc",
+          "range": [
+            8006,
+            8061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred in file '{}'\", location.file());",
+          "path": "doc",
+          "range": [
+            8066,
+            8135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            8140,
+            8156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred but can't get location information...\");",
+          "path": "doc",
+          "range": [
+            8161,
+            8238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8243,
+            8252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }));",
+          "path": "doc",
+          "range": [
+            8257,
+            8265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8270,
+            8273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic!(\"Normal panic\");",
+          "path": "doc",
+          "range": [
+            8278,
+            8305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8310,
+            8317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8322,
+            8333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8338,
+            8390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8395,
+            8469
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8510,
+        8601
+      ],
+      "kind": "impl_fn",
+      "name": "file",
+      "range": [
+        6900,
+        8601
+      ],
+      "signature_range": [
+        8478,
+        8509
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the name of the source file as a nul-terminated `CStr`.",
+          "path": "doc",
+          "range": [
+            8607,
+            8674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8679,
+            8682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is useful for interop with APIs that expect C/C++ `__FILE__` or",
+          "path": "doc",
+          "range": [
+            8687,
+            8759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `std::source_location::file_name`, both of which return a nul-terminated `const char*`.",
+          "path": "doc",
+          "range": [
+            8764,
+            8855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8860,
+            8871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8876,
+            8885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8890,
+            8944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8949,
+            9015
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9066,
+        9646
+      ],
+      "kind": "impl_fn",
+      "name": "file_as_c_str",
+      "range": [
+        8607,
+        9646
+      ],
+      "signature_range": [
+        9024,
+        9065
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the line number from which the panic originated.",
+          "path": "doc",
+          "range": [
+            9652,
+            9712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9717,
+            9720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9725,
+            9739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9744,
+            9747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```should_panic",
+          "path": "doc",
+          "range": [
+            9752,
+            9771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic;",
+          "path": "doc",
+          "range": [
+            9776,
+            9795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9800,
+            9803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic::set_hook(Box::new(|panic_info| {",
+          "path": "doc",
+          "range": [
+            9808,
+            9851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(location) = panic_info.location() {",
+          "path": "doc",
+          "range": [
+            9856,
+            9911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred at line {}\", location.line());",
+          "path": "doc",
+          "range": [
+            9916,
+            9983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            9988,
+            10004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred but can't get location information...\");",
+          "path": "doc",
+          "range": [
+            10009,
+            10086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            10091,
+            10100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }));",
+          "path": "doc",
+          "range": [
+            10105,
+            10113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10118,
+            10121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic!(\"Normal panic\");",
+          "path": "doc",
+          "range": [
+            10126,
+            10153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10158,
+            10165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10170,
+            10181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10186,
+            10238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            10243,
+            10317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10322,
+            10331
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10368,
+        10393
+      ],
+      "kind": "impl_fn",
+      "name": "line",
+      "range": [
+        9652,
+        10393
+      ],
+      "signature_range": [
+        10340,
+        10367
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the column from which the panic originated.",
+          "path": "doc",
+          "range": [
+            10399,
+            10454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10459,
+            10462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10467,
+            10481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10486,
+            10489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```should_panic",
+          "path": "doc",
+          "range": [
+            10494,
+            10513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic;",
+          "path": "doc",
+          "range": [
+            10518,
+            10537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10542,
+            10545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic::set_hook(Box::new(|panic_info| {",
+          "path": "doc",
+          "range": [
+            10550,
+            10593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(location) = panic_info.location() {",
+          "path": "doc",
+          "range": [
+            10598,
+            10653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred at column {}\", location.column());",
+          "path": "doc",
+          "range": [
+            10658,
+            10729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            10734,
+            10750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"panic occurred but can't get location information...\");",
+          "path": "doc",
+          "range": [
+            10755,
+            10832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            10837,
+            10846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }));",
+          "path": "doc",
+          "range": [
+            10851,
+            10859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10864,
+            10867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic!(\"Normal panic\");",
+          "path": "doc",
+          "range": [
+            10872,
+            10899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10904,
+            10911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10916,
+            10927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10932,
+            10982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            10987,
+            11061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11066,
+            11075
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11114,
+        11138
+      ],
+      "kind": "impl_fn",
+      "name": "column",
+      "range": [
+        10399,
+        11138
+      ],
+      "signature_range": [
+        11084,
+        11113
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11142,
+            11201
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11142,
+        11403
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11243,
+            11252
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11322,
+        11401
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        11243,
+        11401
+      ],
+      "signature_range": [
+        11257,
+        11321
+      ]
+    },
+    {
+      "ancestors": [
+        20,
+        21
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11332,
+        11395
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11405,
+            11457
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11405,
+        11494
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11495,
+            11547
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11495,
+        11584
+      ]
+    }
+  ],
+  "source_sha256": "51efdd39fcb976a65c7377f0c2a28adc3c3f44d0a81ed8f99d5434d6081405e4"
+}

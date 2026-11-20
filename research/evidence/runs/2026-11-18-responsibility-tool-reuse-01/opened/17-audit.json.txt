@@ -1,0 +1,192 @@
+{
+  "source_sha256": "13785a4969e3274617bf91c97cadae1be80dcf2b1ca104c50973f0a48c60f96f",
+  "document_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+  "fact": {
+    "snapshot": "before",
+    "commit": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "path": "drivers/firmware/of/src/lib.rs",
+    "name": "is_enabled_cpu_node",
+    "range": [
+      4306,
+      4436
+    ],
+    "source_sha256": "13785a4969e3274617bf91c97cadae1be80dcf2b1ca104c50973f0a48c60f96f",
+    "fragment_sha256": "62b30bf25df14fb31af720657846640a6f185659b580b03e681627f305caddc3",
+    "fragment": "fn is_enabled_cpu_node(node: FdtNode<'_, '_>) -> bool {\n    is_cpu_node(node) && node.property_str(\"status\") != Some(\"disabled\")\n}",
+    "schema": "rust-call-syntax/1",
+    "sites": [
+      {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "call_expression",
+        "name": "is_cpu_node",
+        "range": [
+          60,
+          71
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "is_cpu_node",
+        "file_range": [
+          4366,
+          4377
+        ],
+        "line": 139
+      },
+      {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "method_expression",
+        "name": "property_str",
+        "range": [
+          86,
+          98
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "property_str",
+        "file_range": [
+          4392,
+          4404
+        ],
+        "line": 139
+      },
+      {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "call_expression",
+        "name": "Some",
+        "range": [
+          112,
+          116
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "Some",
+        "file_range": [
+          4418,
+          4422
+        ],
+        "line": 139
+      }
+    ],
+    "status": "parsed",
+    "signals": [
+      "low_level_read"
+    ]
+  },
+  "records": [
+    {
+      "condition": {
+        "id": "dt_owner_without_exception",
+        "owner": "DT",
+        "exception_condition": "absent",
+        "provenance": "Analyst simplification of ownership lines5-9; deliberately excludes migration qualifications.",
+        "document_lines": [
+          5,
+          9
+        ]
+      },
+      "source_site": {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "method_expression",
+        "name": "property_str",
+        "range": [
+          86,
+          98
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "property_str",
+        "file_range": [
+          4392,
+          4404
+        ],
+        "line": 139
+      },
+      "source_line": "    is_cpu_node(node) && node.property_str(\"status\") != Some(\"disabled\")",
+      "norm_excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.",
+      "result": "candidate_under_assumption",
+      "actual_violation": "unknown",
+      "provider_approval": "unverified",
+      "semantic_role_mapping": "analyst_hypothesis_not_resolved",
+      "why_document_matters": "Owner assignment and migration qualification are not derivable from implementation location alone."
+    },
+    {
+      "condition": {
+        "id": "dt_owner_pending_migration",
+        "owner": "DT",
+        "exception_condition": "unknown",
+        "provenance": "Analyst conditional interpretation of transition lines18-38; source does not establish this function is covered by an authorized exception.",
+        "document_lines": [
+          18,
+          38
+        ]
+      },
+      "source_site": {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "method_expression",
+        "name": "property_str",
+        "range": [
+          86,
+          98
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "property_str",
+        "file_range": [
+          4392,
+          4404
+        ],
+        "line": 139
+      },
+      "source_line": "    is_cpu_node(node) && node.property_str(\"status\") != Some(\"disabled\")",
+      "norm_excerpt": "Existing OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\nReplace OF callers incrementally, then remove OF; do not rename the current\ncrate and claim that a generic node abstraction exists.\n\n## Current correction\n\nThe scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\ninclusive maximum-address bounds. GIC consumes these DT backend methods.\nIt still uses a DT-specific private discovery adapter; backend-independent\ndriver discovery is a later change, not an accomplished claim here.\n\nRemove the moved OF implementations and forwarding entry points together.\nNo duplicate interpreter or new fwnode wrapper is retained. Existing IRQ/PCI\nor boot helpers not included in this slice remain separately tracked debt.\nPR #1291 must contain only this DT capability move and its GIC consumer, not\nthe full firmware-node framework.",
+      "result": "exception_applicability_unknown",
+      "actual_violation": "unknown",
+      "provider_approval": "unverified",
+      "semantic_role_mapping": "analyst_hypothesis_not_resolved",
+      "why_document_matters": "Owner assignment and migration qualification are not derivable from implementation location alone."
+    },
+    {
+      "condition": {
+        "id": "of_owner_counterfactual",
+        "owner": "OF",
+        "exception_condition": "absent",
+        "provenance": "Constructed alternative owner, not present in historical document; not an error label.",
+        "document_lines": null
+      },
+      "source_site": {
+        "cfg": "not_evaluated",
+        "deferred_depth": 0,
+        "execution": "not_established",
+        "kind": "method_expression",
+        "name": "property_str",
+        "range": [
+          86,
+          98
+        ],
+        "target_resolution": "unresolved",
+        "source_text": "property_str",
+        "file_range": [
+          4392,
+          4404
+        ],
+        "line": 139
+      },
+      "source_line": "    is_cpu_node(node) && node.property_str(\"status\") != Some(\"disabled\")",
+      "norm_excerpt": null,
+      "result": "permitted_under_counterfactual",
+      "actual_violation": "unknown",
+      "provider_approval": "unverified",
+      "semantic_role_mapping": "analyst_hypothesis_not_resolved",
+      "why_document_matters": "Owner assignment and migration qualification are not derivable from implementation location alone."
+    }
+  ],
+  "source_range_verified": true,
+  "new_accuracy_measurement": false,
+  "new_kernel_execution": false,
+  "limits": "Known development candidate; premise propagation and source identity only, not automatic norm extraction or confirmed responsibility violations."
+}

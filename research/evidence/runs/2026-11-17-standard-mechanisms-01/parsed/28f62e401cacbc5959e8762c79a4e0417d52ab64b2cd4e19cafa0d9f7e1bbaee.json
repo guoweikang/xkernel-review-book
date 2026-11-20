@@ -1,0 +1,1617 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Definitions of integer that is known not to equal zero.",
+      "path": "doc",
+      "range": [
+        0,
+        59
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A marker trait for primitive types which can be zero.",
+          "path": "doc",
+          "range": [
+            461,
+            518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            519,
+            522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is an implementation detail for <code>[NonZero]\\<T></code> which may disappear or be replaced at any time.",
+          "path": "doc",
+          "range": [
+            523,
+            638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            639,
+            642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            643,
+            655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            656,
+            659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types implementing this trait must be primitives that are valid when zeroed.",
+          "path": "doc",
+          "range": [
+            660,
+            740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            741,
+            744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The associated `Self::NonZeroInner` type must have the same size+align as `Self`,",
+          "path": "doc",
+          "range": [
+            745,
+            830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but with a niche and bit validity making it so the following `transmutes` are sound:",
+          "path": "doc",
+          "range": [
+            831,
+            919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            920,
+            923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Self::NonZeroInner` to `Option<Self::NonZeroInner>`",
+          "path": "doc",
+          "range": [
+            924,
+            982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Option<Self::NonZeroInner>` to `Self`",
+          "path": "doc",
+          "range": [
+            983,
+            1027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1028,
+            1031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (And, consequently, `Self::NonZeroInner` to `Self`.)",
+          "path": "doc",
+          "range": [
+            1032,
+            1088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1089,
+            1242
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "ZeroablePrimitive",
+      "range": [
+        461,
+        1414
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1416,
+        2448
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2450,
+        2825
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A value that is known not to equal zero.",
+          "path": "doc",
+          "range": [
+            2828,
+            2872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2873,
+            2876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This enables some memory layout optimization.",
+          "path": "doc",
+          "range": [
+            2877,
+            2926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, `Option<NonZero<u32>>` is the same size as `u32`:",
+          "path": "doc",
+          "range": [
+            2927,
+            2993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2994,
+            2997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2998,
+            3005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::{num::NonZero};",
+          "path": "doc",
+          "range": [
+            3006,
+            3035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3036,
+            3039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(size_of::<Option<NonZero<u32>>>(), size_of::<u32>());",
+          "path": "doc",
+          "range": [
+            3040,
+            3108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3109,
+            3116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3117,
+            3120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Layout",
+          "path": "doc",
+          "range": [
+            3121,
+            3133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3134,
+            3137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `NonZero<T>` is guaranteed to have the same layout and bit validity as `T`",
+          "path": "doc",
+          "range": [
+            3138,
+            3216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the exception that the all-zero bit pattern is invalid.",
+          "path": "doc",
+          "range": [
+            3217,
+            3281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Option<NonZero<T>>` is guaranteed to be compatible with `T`, including in",
+          "path": "doc",
+          "range": [
+            3282,
+            3360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " FFI.",
+          "path": "doc",
+          "range": [
+            3361,
+            3369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3370,
+            3373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Thanks to the [null pointer optimization], `NonZero<T>` and",
+          "path": "doc",
+          "range": [
+            3374,
+            3437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Option<NonZero<T>>` are guaranteed to have the same size and alignment:",
+          "path": "doc",
+          "range": [
+            3438,
+            3514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3515,
+            3518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3519,
+            3526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::num::NonZero;",
+          "path": "doc",
+          "range": [
+            3527,
+            3553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3554,
+            3557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(size_of::<NonZero<u32>>(), size_of::<Option<NonZero<u32>>>());",
+          "path": "doc",
+          "range": [
+            3558,
+            3635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(align_of::<NonZero<u32>>(), align_of::<Option<NonZero<u32>>>());",
+          "path": "doc",
+          "range": [
+            3636,
+            3715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3716,
+            3723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3724,
+            3727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [null pointer optimization]: crate::option#representation",
+          "path": "doc",
+          "range": [
+            3728,
+            3789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3790,
+            3793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note on generic usage",
+          "path": "doc",
+          "range": [
+            3794,
+            3821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3822,
+            3825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `NonZero<T>` can only be used with some standard library primitive types",
+          "path": "doc",
+          "range": [
+            3826,
+            3902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (such as `u8`, `i32`, and etc.). The type parameter `T` must implement the",
+          "path": "doc",
+          "range": [
+            3903,
+            3981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " internal trait [`ZeroablePrimitive`], which is currently permanently unstable",
+          "path": "doc",
+          "range": [
+            3982,
+            4063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and cannot be implemented by users. Therefore, you cannot use `NonZero<T>`",
+          "path": "doc",
+          "range": [
+            4064,
+            4142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with your own types, nor can you implement traits for all `NonZero<T>`,",
+          "path": "doc",
+          "range": [
+            4143,
+            4218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " only for concrete types.",
+          "path": "doc",
+          "range": [
+            4219,
+            4247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4248,
+            4304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            4305,
+            4325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nonnull_optimization_guaranteed",
+          "range": [
+            4326,
+            4366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            4367,
+            4403
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "NonZero",
+      "range": [
+        2828,
+        4462
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4464,
+        4901
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4903,
+        5459
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5461,
+        5845
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5981,
+        6020
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6022,
+        6061
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6063,
+        6100
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6102,
+        6139
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6141,
+        6172
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6174,
+        6210
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6213,
+            6261
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6213,
+        6390
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6329,
+            6338
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6367,
+        6388
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        6329,
+        6388
+      ],
+      "signature_range": [
+        6343,
+        6366
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6392,
+            6451
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6392,
+        6514
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6516,
+            6564
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6516,
+        6622
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            6624,
+            6638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6639,
+            6693
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6624,
+        6766
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6768,
+        7167
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7169,
+            7227
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7169,
+        7322
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7324,
+        7512
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7514,
+        8233
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8235,
+        9358
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9360,
+            9408
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9360,
+        9602
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9482,
+            9491
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9562,
+        9600
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        9482,
+        9600
+      ],
+      "signature_range": [
+        9496,
+        9557
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        9604,
+        9940
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        9942,
+        10388
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10390,
+        10841
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10843,
+        11312
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11314,
+        11643
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11645,
+        11977
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11979,
+        16479
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a non-zero if the given value is not zero.",
+          "path": "doc",
+          "range": [
+            12036,
+            12090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12095,
+            12143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            12148,
+            12226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            12231,
+            12242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12247,
+            12256
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12300,
+        12530
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        12036,
+        12530
+      ],
+      "signature_range": [
+        12265,
+        12299
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a non-zero without checking whether the value is non-zero.",
+          "path": "doc",
+          "range": [
+            12536,
+            12606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This results in undefined behavior if the value is zero.",
+          "path": "doc",
+          "range": [
+            12611,
+            12671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12676,
+            12679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            12684,
+            12696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12701,
+            12704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The value must not be zero.",
+          "path": "doc",
+          "range": [
+            12709,
+            12740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12745,
+            12793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            12798,
+            12858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            12863,
+            12874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12879,
+            12888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            12893,
+            12908
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12961,
+        13503
+      ],
+      "kind": "impl_fn",
+      "name": "new_unchecked",
+      "range": [
+        12536,
+        13503
+      ],
+      "signature_range": [
+        12917,
+        12960
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        33
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13180,
+        13408
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a reference to a non-zero mutable reference",
+          "path": "doc",
+          "range": [
+            13509,
+            13565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if the referenced value is not zero.",
+          "path": "doc",
+          "range": [
+            13570,
+            13610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13615,
+            13674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            13679,
+            13690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13695,
+            13704
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13757,
+        14037
+      ],
+      "kind": "impl_fn",
+      "name": "from_mut",
+      "range": [
+        13509,
+        14037
+      ],
+      "signature_range": [
+        13713,
+        13756
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a mutable reference to a non-zero mutable reference",
+          "path": "doc",
+          "range": [
+            14043,
+            14107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without checking whether the referenced value is non-zero.",
+          "path": "doc",
+          "range": [
+            14112,
+            14174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This results in undefined behavior if the referenced value is zero.",
+          "path": "doc",
+          "range": [
+            14179,
+            14250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14255,
+            14258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            14263,
+            14275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14280,
+            14283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The referenced value must not be zero.",
+          "path": "doc",
+          "range": [
+            14288,
+            14330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14335,
+            14394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            14399,
+            14410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14415,
+            14424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            14429,
+            14444
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14506,
+        15093
+      ],
+      "kind": "impl_fn",
+      "name": "from_mut_unchecked",
+      "range": [
+        14043,
+        15093
+      ],
+      "signature_range": [
+        14453,
+        14505
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        36
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14754,
+        14998
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the contained value as a primitive type.",
+          "path": "doc",
+          "range": [
+            15099,
+            15151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            15156,
+            15204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            15209,
+            15279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15284,
+            15293
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15326,
+        16477
+      ],
+      "kind": "impl_fn",
+      "name": "get",
+      "range": [
+        15099,
+        16477
+      ],
+      "signature_range": [
+        15302,
+        15325
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16481,
+        57341
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        57343,
+        62262
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        62333,
+        96995
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        96997,
+        97219
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        97221,
+        97455
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        97457,
+        97708
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        97710,
+        97996
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        97998,
+        98354
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        98392,
+        98632
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        98670,
+        98927
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        98965,
+        99257
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        99259,
+        99482
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        99484,
+        99719
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        99721,
+        99972
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        99974,
+        100260
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        100262,
+        100618
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        100656,
+        100897
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        100935,
+        101192
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        101230,
+        101522
+      ]
+    }
+  ],
+  "source_sha256": "b3a1483e5b6a5383e5c1d174b86792a0010acc69409706d3cfeabb0d2244a420"
+}

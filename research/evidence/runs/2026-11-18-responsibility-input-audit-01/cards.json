@@ -1,0 +1,160 @@
+{
+  "scope": "six real responsibility units, not similarity pairs or true labels",
+  "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+  "path_base": "originals/",
+  "range_convention": "one-based inclusive original file lines",
+  "shared_exception_document": "originals/drivers/firmware/of/docs/firmware-node-direction.md (complete unmodified text; ALL cards must be read with this document)",
+  "cards": [
+    {
+      "id": "R01",
+      "behavior": "读取节点自身status；缺失、ok、okay为可用，其他字符串不可用，解析错误保留。",
+      "entity": {
+        "crate": "rs_fdtree",
+        "module": "property",
+        "type": "FdtNode",
+        "method": "is_available"
+      },
+      "implementation_evidence": [
+        "drivers/firmware/rs-fdtree/src/property.rs:196-208"
+      ],
+      "documented_responsibility": "DT属性解码和节点状态属于rs_fdtree；方法文档限定不应用祖先或设备枚举策略。",
+      "documented_non_responsibility": "可用不等于控制器/驱动已就绪，不负责kernel注册或资源获取。",
+      "norm_evidence": [
+        "drivers/firmware/of/docs/firmware-node-direction.md:5-9,26-36",
+        "drivers/firmware/rs-fdtree/src/property.rs:196-201"
+      ],
+      "exceptions": "仅本节点解释；alloc可选、借用status访问不应被地址收集的alloc需求混同。IRQ/PCI/boot旧helper保留不是所有解释可留上层的通用豁免。",
+      "status": "implementation observed; compatible with selected historical responsibility statement; no provider-confirmed placement label",
+      "unknown": "未审计所有上层状态解释或运行时配置。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    },
+    {
+      "id": "R02",
+      "behavior": "以FwNodeId找DT节点，调用node.mmio_resources，再把base/size/name装配成FwMmioResource并转换错误。",
+      "entity": {
+        "crate": "rs_fdtree",
+        "module": "fwnode_backend::dtb",
+        "type": "DtBackend",
+        "method": "FwNodeOps::mmio_resource"
+      },
+      "implementation_evidence": [
+        "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:130-143"
+      ],
+      "documented_responsibility": "DT核心解释、适配层把借用结果转为中立句柄/资源事实；DT类型在后端内。",
+      "documented_non_responsibility": "资源解释不等于MMIO映射、DMA分配或内核资源获取。",
+      "norm_evidence": [
+        "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:5-12",
+        "drivers/firmware/of/docs/firmware-node-direction.md:11-16,71-76"
+      ],
+      "exceptions": "fwnode feature显式带alloc和可选依赖；DtBackend构造及延迟索引的early-boot说明不意味着后续查询永不分配。方向文档记录分阶段迁移，不能拿全框架未来计划评判本小slice。",
+      "status": "delegation/adaptation observed, not second parser and not proof of complete address algorithm correctness",
+      "unknown": "mmio_resources内部完整地址翻译及实际映射调用链不在本批审计。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    },
+    {
+      "id": "R03",
+      "behavior": "FwNode保存ops trait对象引用与backend-local ID；相等同时比较ID和provider指针；is_available委托ops。",
+      "entity": {
+        "crate": "fwnode",
+        "module": "lib",
+        "type": "FwNode / FwNodeOps / FwNodeId"
+      },
+      "implementation_evidence": [
+        "drivers/firmware/fwnode/src/lib.rs:34-54,90-139,309-339,402-410"
+      ],
+      "documented_responsibility": "backend-neutral事实接口与句柄身份；后端拥有底层表示访问。",
+      "documented_non_responsibility": "不解析特定固件、不做IRQ/MMIO映射、driver注册或资源获取；不得由消费者解释backend-local ID。",
+      "norm_evidence": [
+        "drivers/firmware/fwnode/src/lib.rs:5-21",
+        "drivers/firmware/fwnode/docs/design.md:3-25,40-60",
+        "drivers/firmware/of/docs/firmware-node-direction.md:11-22,65-69"
+      ],
+      "exceptions": "允许首个真实消费者只用DT；ACPI/static是接口方向而非已实现后端证明；不为接口发明动态registry。",
+      "status": "type-level representation and delegation observed; physical crate placement authority unknown",
+      "unknown": "design.md:12写crate lives under util，而同版实际路径及scope树为drivers/firmware/fwnode。保留该文档位置陈述差异，不据此要求移动crate；目标物理层次/有效规范版本需提供者确认。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    },
+    {
+      "id": "R04",
+      "behavior": "OF在调用方保证DTB终身可读的前提下调用LinuxFdt::from_ptr验证，然后FDT.init_once保存全局句柄；fdt()返回该句柄。",
+      "entity": {
+        "crate": "of",
+        "module": "lib",
+        "type": "FDT: LazyInit<LinuxFdt<'static>>",
+        "method": "init_device_tree_ptr / fdt"
+      },
+      "implementation_evidence": [
+        "drivers/firmware/of/src/lib.rs:29,290-294,319-338"
+      ],
+      "documented_responsibility": "host integration在迁移前保留boot DTB ownership/初始化；不是将OF重命名为中立contract。",
+      "documented_non_responsibility": "DT通用解释应进rs_fdtree；控制器策略进driver。保留boot入口不授予OF所有解释职责。",
+      "norm_evidence": [
+        "drivers/firmware/of/docs/firmware-node-direction.md:18-22,34-43,78-81",
+        "drivers/firmware/of/src/lib.rs:319-335"
+      ],
+      "exceptions": "显式until migrated例外；物理DTB内存生存期是调用者安全义务，不能说init_once拥有/分配这块内存。",
+      "status": "reasonable upper-layer integration under explicit historical exception, not provider-certified optimality",
+      "unknown": "全平台发布顺序、khal入口及迁移完成条件未审计。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    },
+    {
+      "id": "R05",
+      "behavior": "driver选择可用GIC节点；将资源槽解释为gicd/gicc/gicr，读取redistributor-regions/stride，并形成GicConfig与保留controller句柄的GicSelection。",
+      "entity": {
+        "crate": "irq_driver",
+        "module": "gic::firmware",
+        "type": "GicConfig / GicSelection",
+        "method": "from_fwnode / gicv2_config / gicv3_config"
+      },
+      "implementation_evidence": [
+        "drivers/platform/irq/src/gic/firmware.rs:29-40,97-148,198-247"
+      ],
+      "documented_responsibility": "GIC/PLIC特定寄存器角色和binding解释属于控制器driver；驱动保有自己的输出config。",
+      "documented_non_responsibility": "不能因为读取属性就把所有binding策略下沉到rs_fdtree；后端提供结构/翻译后的资源事实。",
+      "norm_evidence": [
+        "drivers/firmware/of/docs/firmware-node-direction.md:5-16,83-94",
+        "drivers/platform/irq/src/gic/firmware.rs:5,29-33,97-110"
+      ],
+      "exceptions": "旧文档先叙述私有DT适配器、后叙述中立contract首slice；当前实际from_fwnode接收中立句柄。from_madt/static计划、多region/stride硬件编程限制不得当已执行事实；本批未审计gic::init。",
+      "status": "reasonable upper-layer binding responsibility with observed concrete struct fields; not true-positive placement label",
+      "unknown": "硬件编程能力、所有平台支持及独立维护者授权未验证。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    },
+    {
+      "id": "R06",
+      "behavior": "DtBackend::irq_spec调用DT irq_spec_with(index)，返回controller句柄与固定容量params；不是无条件Unsupported。",
+      "entity": {
+        "crate": "rs_fdtree",
+        "module": "fwnode_backend::dtb",
+        "type": "DtBackend",
+        "method": "FwNodeOps::irq_spec"
+      },
+      "implementation_evidence": [
+        "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:217-229"
+      ],
+      "documented_responsibility": "模块doc称中断继承/通用引用在DT核心，适配结果；binding cells意义仍在controller。",
+      "documented_non_responsibility": "FwIrqSpec事实不等于IRQ domain分配/映射或硬件控制器就绪。",
+      "norm_evidence": [
+        "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs:5-12",
+        "drivers/firmware/fwnode/src/lib.rs:19-21",
+        "drivers/firmware/of/docs/firmware-node-direction.md:71-76,92-94"
+      ],
+      "exceptions": "完整保留既有OF IRQ helper及IRQ/PCI/boot迁移例外；方向文档同版仍说IRQ lookup Unsupported。",
+      "status": "unknown migration status/exception applicability; documented capability claim conflicts with observed implementation path; no violation conclusion",
+      "unknown": "哪些旧OF消费者仍需例外、何时完成迁移、功能配置是否实际运行，均不能由本函数或旧文档推定。",
+      "normative_authority": "historical repository statement; provider confirmation not established",
+      "true_violation": null,
+      "researcher_normative_supplement": null
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "index": 1,
+    "command": [
+      "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "fixture.rs",
+      "-C",
+      "opt-level=0",
+      "-C",
+      "debug-assertions=yes",
+      "-o",
+      "fixture-debug"
+    ],
+    "exit_status": 0,
+    "stdout": "command-01.stdout.log",
+    "stderr": "command-01.stderr.log"
+  },
+  {
+    "index": 2,
+    "command": [
+      "./fixture-debug",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_status": 0,
+    "stdout": "command-02.stdout.log",
+    "stderr": "command-02.stderr.log"
+  },
+  {
+    "index": 3,
+    "command": [
+      "./fixture-debug",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_status": 0,
+    "stdout": "command-03.stdout.log",
+    "stderr": "command-03.stderr.log"
+  },
+  {
+    "index": 4,
+    "command": [
+      "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2024",
+      "--test",
+      "fixture.rs",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-o",
+      "fixture-opt"
+    ],
+    "exit_status": 0,
+    "stdout": "command-04.stdout.log",
+    "stderr": "command-04.stderr.log"
+  },
+  {
+    "index": 5,
+    "command": [
+      "./fixture-opt",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_status": 0,
+    "stdout": "command-05.stdout.log",
+    "stderr": "command-05.stderr.log"
+  },
+  {
+    "index": 6,
+    "command": [
+      "./fixture-opt",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_status": 0,
+    "stdout": "command-06.stdout.log",
+    "stderr": "command-06.stderr.log"
+  }
+]

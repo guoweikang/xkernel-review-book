@@ -1,0 +1,150 @@
+Independent bounded SOURCE REVIEW — reviewer B
+
+Scope and status
+Reviewed only case-004, case-005, case-006 from reviewer/cases.json.
+Fixed source revision recorded for all three: 7e3ac94431a0dbb376d2fc8d85098deeff1bba09.
+This is developer analysis with two method/ranking labels withheld, not gold
+labels or a blind trial. No inference about the withheld labels is made.
+Verdicts: case-004 necessary_difference; case-005 confirmation_candidate
+(partial overlap); case-006 already_shared.
+
+Evidence integrity
+All six complete supplied source files were read as bytes for SHA-256 checks;
+all six snippets were read in full. Every source SHA-256 and snippet SHA-256
+matches its cases.json member. Every snippet equals source[range[0]:range[1]]
+byte-for-byte, with zero-based, end-exclusive byte ranges. Computed first/last
+lines also match metadata. These checks establish artifact consistency with
+the supplied revision attribution, not independent Git provenance verification.
+The actual full-source filenames in metadata are left-source.rs/right-source.rs.
+
+case-004, original fs/kvfs/src/node/inode.rs:
+  Both full sources SHA-256:
+  7f4bd4545f7e152eec40400f1b62d1f6867970146a659d1921a43b8fadb312c0
+  left mknod_with_mode: bytes [73548,73863), lines 2259-2269;
+  snippet SHA-256 c370eb9a6c77dfc2cd893e6d7f9c49ffb3f9d797fd00ea022c8462e002e051f6.
+  right create_with_mode: bytes [71458,71847), lines 2202-2218;
+  snippet SHA-256 302d17f9aa20dbe8fd01d275adb996ad8afa7a0c24c6e36fe83308f464b45780.
+case-005, original fs/kvfs/src/node/dentry.rs:
+  Both full sources SHA-256:
+  5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7
+  left create_exclusive_with: bytes [39168,39674), lines 1165-1180;
+  snippet SHA-256 1bda4a200910993a177ffa2cdaeaba3b4950310849d1fa67d765e389ab71ac7e.
+  right lookup_or_create_with: bytes [39691,40440), lines 1182-1206;
+  snippet SHA-256 740487d6f862a542bab2e8c87c2583ab33c2318973f4d008e25310e04b6ca421.
+case-006, original fs/kvfs/src/mount.rs:
+  Both full sources SHA-256:
+  07f8982d385625a3b730c2329dc9cf983a6dfd75854f5bda85e3668af85f2cdd
+  left mknod: bytes [54306,54799), lines 1492-1507;
+  snippet SHA-256 6b0e044b688df7febd124e50616c22662330d079cb86f202ef8b58d7973aa944.
+  right create: bytes [53226,53637), lines 1467-1475;
+  snippet SHA-256 65ea6acbdfc6d46181532e4ac823b6865c6697718ca0d85d063b1484fa922e19.
+
+case-004 — necessary_difference
+The repeated shape is a location read guard followed by a directory-operation
+dispatch, not two independent implementations of node creation. Both already
+delegate operation availability to require_directory_operations, which returns
+NotADirectory (fs/kvfs/src/node/inode.rs:2166-2171), and location locking to
+Dentry::lock_location (fs/kvfs/src/node/dentry.rs:709-714). The local guard spans
+the filesystem callback in both wrappers (inode.rs:2209-2217,2266-2268).
+The meaningful residual difference is the operation contract: create receives
+exclusive: bool; mknod receives DeviceId. They invoke different trait methods,
+whose defaults even return different errors: create -> PermissionDenied
+(inode.rs:175-185), mknod -> OperationNotPermitted (inode.rs:226-236).
+Both borrow the locked dentry and credentials and return VfsResult<()> without
+translating backend errors. A generic closure wrapper could factor a few lines,
+but the evidence shows no independent common creation mechanism needing that
+additional boundary. Keep distinct dispatch and arguments, the shared helper's
+NotADirectory error, guard lifetime, and each backend's error unchanged. No
+confirmation candidate is proposed for this pair.
+
+case-005 — confirmation_candidate (partial overlap)
+Already shared: directory/name validation, exclusive namespace locking, final
+lookup, and callback execution under the guard are in with_locked_child
+(fs/kvfs/src/node/dentry.rs:1147-1158); lookup/cache mechanics are in
+lookup_locked (dentry.rs:1073-1136). Do not count these as independent duplicate
+mechanisms. Name validation preserves InvalidInput/NameTooLong distinctions
+(dentry.rs:415-425).
+Independent residual overlap: both closures reject an already attached inode
+when exclusive, call the FnOnce callback, propagate its failure, reject a
+still-negative dentry with InvalidInput, then clone that same candidate
+(dentry.rs:1170-1179 versus 1191-1205). This is a small creation-completion
+protocol, not merely a shared list of calls. The right side generalizes it by
+returning Existing on a positive nonexclusive lookup and tagging successful
+creation Created. The result enum is defined at dentry.rs:258-261.
+Smallest boundary: make create_exclusive_with delegate to the existing
+lookup_or_create_with(name, true, create_fn) and adapt the owned enum payload to
+Dentry. No new common helper or new lock is needed. The exclusive call can only
+produce Created on success according to the existing branch; keep the enum
+conversion local without adding an observable error or panic policy. Preserve
+the public/internal signatures, FnOnce ownership, original candidate identity,
+and nonexclusive Existing/Created distinction in lookup_or_create_with.
+Do not conflate is_really_positive (inode attachment) with !is_negative (type
+flags): their definitions differ at dentry.rs:538-555, and the existing protocol
+deliberately uses different predicates before and after the callback.
+ONE adoption-changing obligation: establish observational equivalence of the
+exclusive adapter to the current create_exclusive_with protocol. This includes
+AlreadyExists before callback invocation, exactly one callback on a missing
+candidate while the parent namespace guard remains held, unchanged callback
+errors, InvalidInput on success without instantiation, and the same returned
+dentry identity on success. These are facets of one protocol-equivalence gate;
+if delegation changes any of them, do not adopt it.
+Existing verification entry: no suitable entry identified in the inspected
+source scope. The supplied files contain no discovered test entry exercising
+this protocol; cfg(unittest) helper methods are not evidence of such a test.
+No external test files were opened or test coverage assumed. The lack of a
+verified entry keeps this a confirmation candidate, not an approved refactor.
+
+case-006 — already_shared
+Both Path methods already delegate the substantive name/existence/serialization
+and completion protocol to Dentry::create_exclusive_with
+(fs/kvfs/src/mount.rs:1467-1475,1492-1507; fs/kvfs/src/node/dentry.rs:1165-1180).
+Their repeated as_dir/callback/map shape is adapter glue around that shared
+mechanism. with_dentry preserves the mount by cloning its Arc and takes ownership
+of the returned Dentry (mount.rs:873-875). The duplicated internals noted in
+case-005 belong to that lower-layer pair, not independent implementations here.
+Keep the operation-specific callbacks: vfs_create checks mount writability and
+directory permission, prepares regular-file mode, and forwards exclusive=true
+from Path::create (mount.rs:1343-1362,1472). vfs_mknod uses the requested node type
+and device, with device-access policy followed by CAP_MKNOD checking for character
+and block devices, then mode preparation and mknod dispatch
+(mount.rs:1364-1394). Both pass an empty umask here. Do not hoist these callbacks'
+authorization outside the existing final-lookup lock: a positive child currently
+returns AlreadyExists before create-only authorization runs. Backend operation,
+device/type handling, error ordering, and mount/dentry ownership remain necessary
+differences. No further common boundary is warranted by this pair.
+
+Read ledger and limitations
+Repository root: /root/codes/x-kernel-worktrees/ai-review-book.
+Read root AGENTS.md in full. Checked ancestor AGENTS.md paths (none produced
+contents) and searched for descendant AGENTS.md (none found). The explicit user
+scope overrides the broader research-resume/catalog/build workflow. Did not read
+PROGRESS, ranking, prior review, analyst, catalog, or research workflow files.
+Initial filename discovery displayed other cases.json paths only; no contents
+from those files were read. The authorized cases.json was parsed as one JSON
+document, but only records case-004/005/006 were emitted and judged. No other
+case was reviewed.
+Under research/evidence/runs/2026-11-18-call-subset-continuation-02/reviewer/:
+  case-004/{left,right}-source.rs and {left,right}-snippet.rs;
+  case-005/{left,right}-source.rs and {left,right}-snippet.rs;
+  case-006/{left,right}-source.rs and {left,right}-snippet.rs.
+These are the only source artifacts read. All full-source bytes were hashed;
+semantic inspection used the left copies after confirming equal full-source
+hashes for each pair. Printed line windows (inclusive), including context not
+used as substantive evidence:
+  inode.rs: 155-260, 2120-2305.
+  dentry.rs: 1-120, 250-270, 350-430, 530-560, 700-720,
+             1010-1245, 1490-1600.
+  mount.rs: 865-883, 1335-1560.
+One context output was partly truncated; no conclusion relies on its omitted
+text. Full left copies were also searched for the named helper/predicate/result
+symbols, with_dentry, trait/test/module/include markers; matching lines only
+were displayed. Neighboring functions were context, not additional cases.
+No sources.zip member was read, so there are no archive dependency paths/ranges
+to report. No current-repository production source substitution, network, build,
+test execution, production modification, or helper implementation occurred.
+Only this report was written, using apply_patch.
+Approximate wall time: a few minutes total for the three interleaved reviews,
+including integrity checks and report preparation; each case well below the
+15-minute cap. Observed UTC checkpoints: 2026-11-18 08:51:03, 08:51:29, 08:51:39
+during inspection. No token usage estimate is claimed. These source-only findings
+do not establish runtime behavior beyond the inspected control flow.

@@ -1,0 +1,2474 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A memory allocator that can be registered as the standard library’s default",
+          "path": "doc",
+          "range": [
+            50,
+            131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " through the `#[global_allocator]` attribute.",
+          "path": "doc",
+          "range": [
+            132,
+            180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            181,
+            184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Some of the methods require that a memory block be *currently",
+          "path": "doc",
+          "range": [
+            185,
+            250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocated* via an allocator. This means that:",
+          "path": "doc",
+          "range": [
+            251,
+            300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            301,
+            304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * the starting address for that memory block was previously",
+          "path": "doc",
+          "range": [
+            305,
+            368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   returned by a previous call to an allocation method",
+          "path": "doc",
+          "range": [
+            369,
+            426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   such as `alloc`, and",
+          "path": "doc",
+          "range": [
+            427,
+            453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            454,
+            457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * the memory block has not been subsequently deallocated, where",
+          "path": "doc",
+          "range": [
+            458,
+            525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   blocks are deallocated either by being passed to a deallocation",
+          "path": "doc",
+          "range": [
+            526,
+            595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   method such as `dealloc` or by being",
+          "path": "doc",
+          "range": [
+            596,
+            638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   passed to a reallocation method that returns a non-null pointer.",
+          "path": "doc",
+          "range": [
+            639,
+            709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            710,
+            713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            714,
+            717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            718,
+            731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            732,
+            735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            736,
+            743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::alloc::{GlobalAlloc, Layout};",
+          "path": "doc",
+          "range": [
+            744,
+            786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::UnsafeCell;",
+          "path": "doc",
+          "range": [
+            787,
+            817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ptr::null_mut;",
+          "path": "doc",
+          "range": [
+            818,
+            845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::sync::atomic::{AtomicUsize, Ordering::Relaxed};",
+          "path": "doc",
+          "range": [
+            846,
+            906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            907,
+            910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " const ARENA_SIZE: usize = 128 * 1024;",
+          "path": "doc",
+          "range": [
+            911,
+            952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " const MAX_SUPPORTED_ALIGN: usize = 4096;",
+          "path": "doc",
+          "range": [
+            953,
+            997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[repr(C, align(4096))] // 4096 == MAX_SUPPORTED_ALIGN",
+          "path": "doc",
+          "range": [
+            998,
+            1056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct SimpleAllocator {",
+          "path": "doc",
+          "range": [
+            1057,
+            1085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     arena: UnsafeCell<[u8; ARENA_SIZE]>,",
+          "path": "doc",
+          "range": [
+            1086,
+            1130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     remaining: AtomicUsize, // we allocate from the top, counting down",
+          "path": "doc",
+          "range": [
+            1131,
+            1205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1206,
+            1211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1212,
+            1215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[global_allocator]",
+          "path": "doc",
+          "range": [
+            1216,
+            1239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " static ALLOCATOR: SimpleAllocator = SimpleAllocator {",
+          "path": "doc",
+          "range": [
+            1240,
+            1297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     arena: UnsafeCell::new([0x55; ARENA_SIZE]),",
+          "path": "doc",
+          "range": [
+            1298,
+            1349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     remaining: AtomicUsize::new(ARENA_SIZE),",
+          "path": "doc",
+          "range": [
+            1350,
+            1398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            1399,
+            1405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1406,
+            1409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe impl Sync for SimpleAllocator {}",
+          "path": "doc",
+          "range": [
+            1410,
+            1453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1454,
+            1457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe impl GlobalAlloc for SimpleAllocator {",
+          "path": "doc",
+          "range": [
+            1458,
+            1507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {",
+          "path": "doc",
+          "range": [
+            1508,
+            1567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let size = layout.size();",
+          "path": "doc",
+          "range": [
+            1568,
+            1605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let align = layout.align();",
+          "path": "doc",
+          "range": [
+            1606,
+            1645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1646,
+            1649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // `Layout` contract forbids making a `Layout` with align=0, or align not power of 2.",
+          "path": "doc",
+          "range": [
+            1650,
+            1747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // So we can safely use a mask to ensure alignment without worrying about UB.",
+          "path": "doc",
+          "range": [
+            1748,
+            1837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let align_mask_to_round_down = !(align - 1);",
+          "path": "doc",
+          "range": [
+            1838,
+            1894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1895,
+            1898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if align > MAX_SUPPORTED_ALIGN {",
+          "path": "doc",
+          "range": [
+            1899,
+            1943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             return null_mut();",
+          "path": "doc",
+          "range": [
+            1944,
+            1978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1979,
+            1992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1993,
+            1996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let mut allocated = 0;",
+          "path": "doc",
+          "range": [
+            1997,
+            2031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if self",
+          "path": "doc",
+          "range": [
+            2032,
+            2051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .remaining",
+          "path": "doc",
+          "range": [
+            2052,
+            2078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .try_update(Relaxed, Relaxed, |mut remaining| {",
+          "path": "doc",
+          "range": [
+            2079,
+            2142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 if size > remaining {",
+          "path": "doc",
+          "range": [
+            2143,
+            2184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                     return None;",
+          "path": "doc",
+          "range": [
+            2185,
+            2221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 }",
+          "path": "doc",
+          "range": [
+            2222,
+            2243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 remaining -= size;",
+          "path": "doc",
+          "range": [
+            2244,
+            2282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 remaining &= align_mask_to_round_down;",
+          "path": "doc",
+          "range": [
+            2283,
+            2341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 allocated = remaining;",
+          "path": "doc",
+          "range": [
+            2342,
+            2384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 Some(remaining)",
+          "path": "doc",
+          "range": [
+            2385,
+            2420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             })",
+          "path": "doc",
+          "range": [
+            2421,
+            2439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .is_err()",
+          "path": "doc",
+          "range": [
+            2440,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         {",
+          "path": "doc",
+          "range": [
+            2466,
+            2479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             return null_mut();",
+          "path": "doc",
+          "range": [
+            2480,
+            2514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         };",
+          "path": "doc",
+          "range": [
+            2515,
+            2529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         unsafe { self.arena.get().cast::<u8>().add(allocated) }",
+          "path": "doc",
+          "range": [
+            2530,
+            2597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2598,
+            2607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe fn dealloc(&self, _ptr: *mut u8, _layout: Layout) {}",
+          "path": "doc",
+          "range": [
+            2608,
+            2675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2676,
+            2681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2682,
+            2685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            2686,
+            2701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let _s = format!(\"allocating a string!\");",
+          "path": "doc",
+          "range": [
+            2702,
+            2751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let currently = ALLOCATOR.remaining.load(Relaxed);",
+          "path": "doc",
+          "range": [
+            2752,
+            2810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"allocated so far: {}\", ARENA_SIZE - currently);",
+          "path": "doc",
+          "range": [
+            2811,
+            2876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2877,
+            2882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2883,
+            2890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2891,
+            2894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2895,
+            2907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2908,
+            2911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `GlobalAlloc` trait is an `unsafe` trait for a number of reasons, and",
+          "path": "doc",
+          "range": [
+            2912,
+            2989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementors must ensure that they adhere to these contracts:",
+          "path": "doc",
+          "range": [
+            2990,
+            3055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3056,
+            3059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * It's undefined behavior if global allocators unwind. This restriction may",
+          "path": "doc",
+          "range": [
+            3060,
+            3139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   be lifted in the future, but currently a panic from any of these",
+          "path": "doc",
+          "range": [
+            3140,
+            3210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   functions may lead to memory unsafety.",
+          "path": "doc",
+          "range": [
+            3211,
+            3255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3256,
+            3259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Layout` queries and calculations in general must be correct. Callers of",
+          "path": "doc",
+          "range": [
+            3260,
+            3338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   this trait are allowed to rely on the contracts defined on each method,",
+          "path": "doc",
+          "range": [
+            3339,
+            3416
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   and implementors must ensure such contracts remain true.",
+          "path": "doc",
+          "range": [
+            3417,
+            3479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3480,
+            3483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * You must not rely on allocations actually happening, even if there are explicit",
+          "path": "doc",
+          "range": [
+            3484,
+            3569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   heap allocations in the source. The optimizer may detect unused allocations that it can either",
+          "path": "doc",
+          "range": [
+            3570,
+            3670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   eliminate entirely or move to the stack and thus never invoke the allocator. The",
+          "path": "doc",
+          "range": [
+            3671,
+            3757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   optimizer may further assume that allocation is infallible, so code that used to fail due",
+          "path": "doc",
+          "range": [
+            3758,
+            3853
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   to allocator failures may now suddenly work because the optimizer worked around the",
+          "path": "doc",
+          "range": [
+            3854,
+            3943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   need for an allocation. More concretely, the following code example is unsound, irrespective",
+          "path": "doc",
+          "range": [
+            3944,
+            4042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   of whether your custom allocator allows counting how many allocations have happened.",
+          "path": "doc",
+          "range": [
+            4043,
+            4133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4134,
+            4137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```rust,ignore (unsound and has placeholders)",
+          "path": "doc",
+          "range": [
+            4138,
+            4189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   drop(Box::new(42));",
+          "path": "doc",
+          "range": [
+            4190,
+            4215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   let number_of_heap_allocs = /* call private allocator API */;",
+          "path": "doc",
+          "range": [
+            4216,
+            4283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   unsafe { std::hint::assert_unchecked(number_of_heap_allocs > 0); }",
+          "path": "doc",
+          "range": [
+            4284,
+            4356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```",
+          "path": "doc",
+          "range": [
+            4357,
+            4366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4367,
+            4370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Note that the optimizations mentioned above are not the only",
+          "path": "doc",
+          "range": [
+            4371,
+            4437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   optimization that can be applied. You may generally not rely on heap allocations",
+          "path": "doc",
+          "range": [
+            4438,
+            4524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   happening if they can be removed without changing program behavior.",
+          "path": "doc",
+          "range": [
+            4525,
+            4598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Whether allocations happen or not is not part of the program behavior, even if it",
+          "path": "doc",
+          "range": [
+            4599,
+            4686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   could be detected via an allocator that tracks allocations by printing or otherwise",
+          "path": "doc",
+          "range": [
+            4687,
+            4776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   having side effects.",
+          "path": "doc",
+          "range": [
+            4777,
+            4803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4804,
+            4807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Re-entrance",
+          "path": "doc",
+          "range": [
+            4808,
+            4825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4826,
+            4829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When implementing a global allocator, one has to be careful not to create an infinitely recursive",
+          "path": "doc",
+          "range": [
+            4830,
+            4931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation by accident, as many constructs in the Rust standard library may allocate in",
+          "path": "doc",
+          "range": [
+            4932,
+            5027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " their implementation. For example, on some platforms, [`std::sync::Mutex`] may allocate, so using",
+          "path": "doc",
+          "range": [
+            5028,
+            5129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it is highly problematic in a global allocator.",
+          "path": "doc",
+          "range": [
+            5130,
+            5181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5182,
+            5185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this reason, one should generally stick to library features available through",
+          "path": "doc",
+          "range": [
+            5186,
+            5271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`core`], and avoid using [`std`] in a global allocator. A few features from [`std`] are",
+          "path": "doc",
+          "range": [
+            5272,
+            5364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed to not use `#[global_allocator]` to allocate:",
+          "path": "doc",
+          "range": [
+            5365,
+            5425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5426,
+            5429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - [`std::thread_local`],",
+          "path": "doc",
+          "range": [
+            5430,
+            5459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - [`std::thread::current`],",
+          "path": "doc",
+          "range": [
+            5460,
+            5492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  - [`std::thread::park`] and [`std::thread::Thread`]'s [`unpark`] method and",
+          "path": "doc",
+          "range": [
+            5493,
+            5573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Clone`] implementation.",
+          "path": "doc",
+          "range": [
+            5574,
+            5603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5604,
+            5607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std`]: ../../std/index.html",
+          "path": "doc",
+          "range": [
+            5608,
+            5641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::Mutex`]: ../../std/sync/struct.Mutex.html",
+          "path": "doc",
+          "range": [
+            5642,
+            5700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::thread_local`]: ../../std/macro.thread_local.html",
+          "path": "doc",
+          "range": [
+            5701,
+            5761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::thread::current`]: ../../std/thread/fn.current.html",
+          "path": "doc",
+          "range": [
+            5762,
+            5824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::thread::park`]: ../../std/thread/fn.park.html",
+          "path": "doc",
+          "range": [
+            5825,
+            5881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::thread::Thread`]: ../../std/thread/struct.Thread.html",
+          "path": "doc",
+          "range": [
+            5882,
+            5946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`unpark`]: ../../std/thread/struct.Thread.html#method.unpark",
+          "path": "doc",
+          "range": [
+            5947,
+            6012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6014,
+            6067
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "GlobalAlloc",
+      "range": [
+        50,
+        13175
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Allocates memory as described by the given `layout`.",
+          "path": "doc",
+          "range": [
+            6103,
+            6159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6164,
+            6167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a pointer to newly-allocated memory,",
+          "path": "doc",
+          "range": [
+            6172,
+            6220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or null to indicate allocation failure.",
+          "path": "doc",
+          "range": [
+            6225,
+            6268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6273,
+            6276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            6281,
+            6293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6298,
+            6301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `layout` must have non-zero size. Attempting to allocate for a zero-sized `layout` will",
+          "path": "doc",
+          "range": [
+            6306,
+            6397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " result in undefined behavior.",
+          "path": "doc",
+          "range": [
+            6402,
+            6435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6440,
+            6443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (Extension subtraits might provide more specific bounds on",
+          "path": "doc",
+          "range": [
+            6448,
+            6510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior, e.g., guarantee a sentinel address or a null pointer",
+          "path": "doc",
+          "range": [
+            6515,
+            6581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in response to a zero-size allocation request.)",
+          "path": "doc",
+          "range": [
+            6586,
+            6637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6642,
+            6645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The allocated block of memory may or may not be initialized.",
+          "path": "doc",
+          "range": [
+            6650,
+            6714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6719,
+            6722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            6727,
+            6739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6744,
+            6747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returning a null pointer indicates that either memory is exhausted",
+          "path": "doc",
+          "range": [
+            6752,
+            6822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or `layout` does not meet this allocator's size or alignment constraints.",
+          "path": "doc",
+          "range": [
+            6827,
+            6904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6909,
+            6912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementations are encouraged to return null on memory",
+          "path": "doc",
+          "range": [
+            6917,
+            6976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exhaustion rather than aborting, but this is not",
+          "path": "doc",
+          "range": [
+            6981,
+            7033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a strict requirement. (Specifically: it is *legal* to",
+          "path": "doc",
+          "range": [
+            7038,
+            7095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement this trait atop an underlying native allocation",
+          "path": "doc",
+          "range": [
+            7100,
+            7161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " library that aborts on memory exhaustion.)",
+          "path": "doc",
+          "range": [
+            7166,
+            7212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7217,
+            7220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Clients wishing to abort computation in response to an",
+          "path": "doc",
+          "range": [
+            7225,
+            7283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocation error are encouraged to call the [`handle_alloc_error`] function,",
+          "path": "doc",
+          "range": [
+            7288,
+            7368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " rather than directly invoking `panic!` or similar.",
+          "path": "doc",
+          "range": [
+            7373,
+            7427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7432,
+            7435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`handle_alloc_error`]: ../../alloc/alloc/fn.handle_alloc_error.html",
+          "path": "doc",
+          "range": [
+            7440,
+            7512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7517,
+            7570
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "alloc",
+      "range": [
+        6103,
+        7625
+      ],
+      "signature_range": [
+        7575,
+        7624
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Deallocates the block of memory at the given `ptr` pointer with the given `layout`.",
+          "path": "doc",
+          "range": [
+            7631,
+            7718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7723,
+            7726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            7731,
+            7743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7748,
+            7751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure:",
+          "path": "doc",
+          "range": [
+            7756,
+            7783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7788,
+            7791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `ptr` is a block of memory currently allocated via this allocator and,",
+          "path": "doc",
+          "range": [
+            7796,
+            7872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7877,
+            7880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `layout` is the same layout that was used to allocate that block of",
+          "path": "doc",
+          "range": [
+            7885,
+            7958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   memory.",
+          "path": "doc",
+          "range": [
+            7963,
+            7976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7981,
+            7984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Otherwise the behavior is undefined.",
+          "path": "doc",
+          "range": [
+            7989,
+            8029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8034,
+            8087
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "dealloc",
+      "range": [
+        7631,
+        8147
+      ],
+      "signature_range": [
+        8092,
+        8146
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Behaves like `alloc`, but also ensures that the contents",
+          "path": "doc",
+          "range": [
+            8153,
+            8213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are set to zero before being returned.",
+          "path": "doc",
+          "range": [
+            8218,
+            8260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8265,
+            8268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            8273,
+            8285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8290,
+            8293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller has to ensure that `layout` has non-zero size. Like `alloc`",
+          "path": "doc",
+          "range": [
+            8298,
+            8372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " zero sized `layout` will result in undefined behavior.",
+          "path": "doc",
+          "range": [
+            8377,
+            8435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However the allocated block of memory is guaranteed to be initialized.",
+          "path": "doc",
+          "range": [
+            8440,
+            8514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8519,
+            8522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            8527,
+            8539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8544,
+            8547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returning a null pointer indicates that either memory is exhausted",
+          "path": "doc",
+          "range": [
+            8552,
+            8622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or `layout` does not meet allocator's size or alignment constraints,",
+          "path": "doc",
+          "range": [
+            8627,
+            8699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " just as in `alloc`.",
+          "path": "doc",
+          "range": [
+            8704,
+            8727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8732,
+            8735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Clients wishing to abort computation in response to an",
+          "path": "doc",
+          "range": [
+            8740,
+            8798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocation error are encouraged to call the [`handle_alloc_error`] function,",
+          "path": "doc",
+          "range": [
+            8803,
+            8883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " rather than directly invoking `panic!` or similar.",
+          "path": "doc",
+          "range": [
+            8888,
+            8942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8947,
+            8950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`handle_alloc_error`]: ../../alloc/alloc/fn.handle_alloc_error.html",
+          "path": "doc",
+          "range": [
+            8955,
+            9027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9032,
+            9085
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9147,
+        9561
+      ],
+      "kind": "trait_fn",
+      "name": "alloc_zeroed",
+      "range": [
+        8153,
+        9561
+      ],
+      "signature_range": [
+        9090,
+        9146
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Shrinks or grows a block of memory to the given `new_size` in bytes.",
+          "path": "doc",
+          "range": [
+            9567,
+            9639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The block is described by the given `ptr` pointer and `layout`.",
+          "path": "doc",
+          "range": [
+            9644,
+            9711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9716,
+            9719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this returns a non-null pointer, then ownership of the memory block",
+          "path": "doc",
+          "range": [
+            9724,
+            9798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " referenced by `ptr` has been transferred to this allocator.",
+          "path": "doc",
+          "range": [
+            9803,
+            9866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Any access to the old `ptr` is Undefined Behavior, even if the",
+          "path": "doc",
+          "range": [
+            9871,
+            9937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocation remained in-place. The newly returned pointer is the only valid pointer",
+          "path": "doc",
+          "range": [
+            9942,
+            10028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for accessing this memory now.",
+          "path": "doc",
+          "range": [
+            10033,
+            10067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10072,
+            10075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The new memory block is allocated with `layout`,",
+          "path": "doc",
+          "range": [
+            10080,
+            10132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but with the `size` updated to `new_size` in bytes.",
+          "path": "doc",
+          "range": [
+            10137,
+            10192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This new layout must be used when deallocating the new memory block with `dealloc`.",
+          "path": "doc",
+          "range": [
+            10197,
+            10284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The range `0..min(layout.size(), new_size)` of the new memory block is",
+          "path": "doc",
+          "range": [
+            10289,
+            10363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed to have the same values as the original block.",
+          "path": "doc",
+          "range": [
+            10368,
+            10429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10434,
+            10437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this method returns null, then ownership of the memory",
+          "path": "doc",
+          "range": [
+            10442,
+            10503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " block has not been transferred to this allocator, and the",
+          "path": "doc",
+          "range": [
+            10508,
+            10569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " contents of the memory block are unaltered.",
+          "path": "doc",
+          "range": [
+            10574,
+            10621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10626,
+            10629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            10634,
+            10646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10651,
+            10654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure that:",
+          "path": "doc",
+          "range": [
+            10659,
+            10691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10696,
+            10699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `ptr` is allocated via this allocator,",
+          "path": "doc",
+          "range": [
+            10704,
+            10748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10753,
+            10756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `layout` is the same layout that was used",
+          "path": "doc",
+          "range": [
+            10761,
+            10808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   to allocate that block of memory,",
+          "path": "doc",
+          "range": [
+            10813,
+            10852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10857,
+            10860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `new_size` is greater than zero.",
+          "path": "doc",
+          "range": [
+            10865,
+            10903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10908,
+            10911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `new_size`, when rounded up to the nearest multiple of `layout.align()`,",
+          "path": "doc",
+          "range": [
+            10916,
+            10994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   does not overflow `isize` (i.e., the rounded value must be less than or",
+          "path": "doc",
+          "range": [
+            10999,
+            11076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   equal to `isize::MAX`).",
+          "path": "doc",
+          "range": [
+            11081,
+            11110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11115,
+            11118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If these are not followed, the behavior is undefined.",
+          "path": "doc",
+          "range": [
+            11123,
+            11180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11185,
+            11188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (Extension subtraits might provide more specific bounds on",
+          "path": "doc",
+          "range": [
+            11193,
+            11255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior, e.g., guarantee a sentinel address or a null pointer",
+          "path": "doc",
+          "range": [
+            11260,
+            11326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in response to a zero-size allocation request.)",
+          "path": "doc",
+          "range": [
+            11331,
+            11382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11387,
+            11390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            11395,
+            11407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11412,
+            11415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns null if the new layout does not meet the size",
+          "path": "doc",
+          "range": [
+            11420,
+            11477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and alignment constraints of the allocator, or if reallocation",
+          "path": "doc",
+          "range": [
+            11482,
+            11548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " otherwise fails.",
+          "path": "doc",
+          "range": [
+            11553,
+            11573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11578,
+            11581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementations are encouraged to return null on memory",
+          "path": "doc",
+          "range": [
+            11586,
+            11645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exhaustion rather than panicking or aborting, but this is not",
+          "path": "doc",
+          "range": [
+            11650,
+            11715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a strict requirement. (Specifically: it is *legal* to",
+          "path": "doc",
+          "range": [
+            11720,
+            11777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement this trait atop an underlying native allocation",
+          "path": "doc",
+          "range": [
+            11782,
+            11843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " library that aborts on memory exhaustion.)",
+          "path": "doc",
+          "range": [
+            11848,
+            11894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11899,
+            11902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Clients wishing to abort computation in response to a",
+          "path": "doc",
+          "range": [
+            11907,
+            11964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reallocation error are encouraged to call the [`handle_alloc_error`] function,",
+          "path": "doc",
+          "range": [
+            11969,
+            12051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " rather than directly invoking `panic!` or similar.",
+          "path": "doc",
+          "range": [
+            12056,
+            12110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12115,
+            12118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`handle_alloc_error`]: ../../alloc/alloc/fn.handle_alloc_error.html",
+          "path": "doc",
+          "range": [
+            12123,
+            12195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12200,
+            12253
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12341,
+        13173
+      ],
+      "kind": "trait_fn",
+      "name": "realloc",
+      "range": [
+        9567,
+        13173
+      ],
+      "signature_range": [
+        12258,
+        12340
+      ]
+    }
+  ],
+  "source_sha256": "d497414acb43282c4b281b27b7dcbfb945b71be4219b816eca2ebfa55d646de3"
+}

@@ -1,0 +1,22 @@
+- **共享机制或弃权理由**：可提议抽取两个入口的共同前置流程：检查挂载可写性→取得 inode→以 `Write` 检查属性权限→取得数据写锁 guard→执行一次具体操作。依据是展示的调用与作用域一致，不是函数名相似。是否值得新增辅助函数仍取决于项目惯例。
+
+- **必须保留的差异**：设置操作传递 `value`、`flags`，删除操作不传；分别调用对应的 inode 方法并原样返回结果。不能据此推断覆盖、创建、删除不存在属性等深层行为。
+
+- **已有委托**：`inode()` 委托 `self.dentry.vfs_inode()`；`dentry()` 返回字段引用。可写性检查依据 `is_effectively_readonly()` 的返回值决定是否报错；权限分支已集中在 `check_xattr_permission`；`lock_data()` 调用 `data_lock.write()`；两个 inode 属性方法分别转发至 `inode_operations`。其更深层实现未展示。
+
+- **最小接口草案**：在原接收者上增加私有辅助方法：
+  ```rust
+  fn with_xattr_write(
+      &self,
+      name: &XattrName,
+      cred: &Cred,
+      op: impl FnOnce(&VfsInode, &Dentry, &XattrName) -> VfsResult<()>,
+  ) -> VfsResult<()>
+  ```
+  方法执行共同前置流程，在 guard 作用域内调用 `op(&inode, self.dentry(), name)`；调用者闭包选择设置或删除，设置闭包捕获 `value`、`flags`。
+
+- **约束及其来源(code/doc/unknown)**：`code`：保持检查顺序和 `?` 短路；权限检查在取锁前；guard 覆盖具体调用；不改变权限函数中标志位、命名空间、凭据与类型分支。`doc`：未提供文档声明。`unknown`：只读状态计算、权限底层判定、锁内部行为及后端属性语义。
+
+- **一条可反驳提案的验证义务**：对两个入口比较抽取前后的可观察调用轨迹：任一前置失败均不得执行后续步骤，成功时必须以相同参数、在 guard 存活期间调用对应后端一次并传播其结果；任一反例即否定此草案的等价性。
+
+- **缺失上下文**：所属 `impl` 与 trait 限制、项目抽取惯例、相关测试、上述深层实现，以及可能规定并发行为的文档。

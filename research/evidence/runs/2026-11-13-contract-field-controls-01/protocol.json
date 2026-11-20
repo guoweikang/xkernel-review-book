@@ -1,0 +1,19 @@
+{
+  "status": "frozen before new parser execution; researcher-authored development controls, not independent test data",
+  "purpose": "Separate field correctness, abstention and whole-record correctness for document-assisted discovery/confirmation",
+  "spacy": "3.8.11",
+  "model": "en_core_web_sm",
+  "model_version": "3.8.0",
+  "fields": ["actor", "action", "object", "polarity", "force", "condition"],
+  "reference_semantics": {
+    "actor_object": "canonical lowercase head lemmas, NOT full Rust identities or source-resolved symbols",
+    "action": "canonical lowercase predicate lemma for the embedded target action where applicable; coordination evaluates the first action only, not full sentence coverage",
+    "polarity": "positive or negative for target action, not outer reporting verb",
+    "force": "assertion/report/requirement/conditional; assertion is textual assertion, NOT independently verified implementation",
+    "condition": "none or explicit direction between named predicates; not temporal or deontic verification"
+  },
+  "baseline": "Dependency-only transitive-clause proxy, not SRL: root VERB, one active nsubj+dobj or passive nsubjpass+by-agent pobj; direct neg; all fields abstain for coordination/subclauses or root report/state/require/demand. No case-specific identifiers or gold access. Simple accepted clauses have force assertion and condition none.",
+  "metrics": "Per field and pooled: total, answered, correct, wrong, abstained; coverage=answered/total; selective_exact=correct/answered (null if zero); unconditional_exact=correct/total. Also full-record exact and per-family counts. No weighted score, no statistical/generalization claim.",
+  "checks": ["unique ids and exact field sets", "two prediction passes byte-identical", "gold identity yields all correct", "all-abstain yields zero coverage, undefined selective accuracy", "one wrong field counted once", "duplicate/missing IDs and invalid fields rejected", "source/protocol/model/checker identities archived"],
+  "limits": "Same researcher designs controls and baseline from known failure classes. New wording only, not blind/held-out. No cross-validation, provider verification or Rust ground truth. Do not tune rules after results; any revision needs new protocol. Reference labels are hypotheses for bounded controls, not independent annotations. No performance or refactoring benefit claim."
+}

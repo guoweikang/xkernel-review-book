@@ -1,0 +1,2308 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Utilities for the `char` primitive type.",
+      "path": "doc",
+      "range": [
+        0,
+        44
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        45,
+        48
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " *[See also the `char` primitive type](primitive@char).*",
+      "path": "doc",
+      "range": [
+        49,
+        108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        109,
+        112
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The `char` type represents a single character. More specifically, since",
+      "path": "doc",
+      "range": [
+        113,
+        188
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 'character' isn't a well-defined concept in Unicode, `char` is a '[Unicode",
+      "path": "doc",
+      "range": [
+        189,
+        267
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " scalar value]', which is similar to, but not the same as, a '[Unicode code",
+      "path": "doc",
+      "range": [
+        268,
+        346
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " point]'.",
+      "path": "doc",
+      "range": [
+        347,
+        359
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        360,
+        363
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Unicode scalar value]: https://www.unicode.org/glossary/#unicode_scalar_value",
+      "path": "doc",
+      "range": [
+        364,
+        446
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [Unicode code point]: https://www.unicode.org/glossary/#code_point",
+      "path": "doc",
+      "range": [
+        447,
+        517
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        518,
+        521
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module exists for technical reasons, the primary documentation for",
+      "path": "doc",
+      "range": [
+        522,
+        597
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `char` is directly on [the `char` primitive type][char] itself.",
+      "path": "doc",
+      "range": [
+        598,
+        665
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        666,
+        669
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module is the home of the iterator implementations for the iterators",
+      "path": "doc",
+      "range": [
+        670,
+        747
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " implemented on `char`, as well as some useful constants and conversion",
+      "path": "doc",
+      "range": [
+        748,
+        822
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " functions that convert various types to `char`.",
+      "path": "doc",
+      "range": [
+        823,
+        874
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        876,
+        901
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        902,
+        948
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "convert",
+      "path_overrides": [],
+      "range": [
+        950,
+        962
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "decode",
+      "path_overrides": [],
+      "range": [
+        963,
+        974
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "methods",
+      "path_overrides": [],
+      "range": [
+        975,
+        987
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator over the UTF-16 encoded code points in `iter`, returning",
+          "path": "doc",
+          "range": [
+            5410,
+            5490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unpaired surrogates as `Err`s. Use [`char::decode_utf16`] instead.",
+          "path": "doc",
+          "range": [
+            5491,
+            5561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5562,
+            5614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5615,
+            5624
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5711,
+        5751
+      ],
+      "kind": "fn",
+      "name": "decode_utf16",
+      "range": [
+        5410,
+        5751
+      ],
+      "signature_range": [
+        5629,
+        5710
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a `u32` to a `char`. Use [`char::from_u32`] instead.",
+          "path": "doc",
+          "range": [
+            5753,
+            5818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5819,
+            5864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            5865,
+            5936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5937,
+            5948
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5949,
+            5958
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6005,
+        6039
+      ],
+      "kind": "fn",
+      "name": "from_u32",
+      "range": [
+        5753,
+        6039
+      ],
+      "signature_range": [
+        5963,
+        6004
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a `u32` to a `char`, ignoring validity. Use [`char::from_u32_unchecked`]",
+          "path": "doc",
+          "range": [
+            6041,
+            6126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instead.",
+          "path": "doc",
+          "range": [
+            6127,
+            6139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6140,
+            6199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            6200,
+            6282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            6283,
+            6294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6295,
+            6304
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6360,
+        6480
+      ],
+      "kind": "fn",
+      "name": "from_u32_unchecked",
+      "range": [
+        6041,
+        6480
+      ],
+      "signature_range": [
+        6309,
+        6359
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a digit in the given radix to a `char`. Use [`char::from_digit`] instead.",
+          "path": "doc",
+          "range": [
+            6482,
+            6568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6569,
+            6614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            6615,
+            6686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            6687,
+            6698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6699,
+            6708
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6771,
+        6816
+      ],
+      "kind": "fn",
+      "name": "from_digit",
+      "range": [
+        6482,
+        6816
+      ],
+      "signature_range": [
+        6713,
+        6770
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns an iterator that yields the hexadecimal Unicode escape of a",
+          "path": "doc",
+          "range": [
+            6818,
+            6889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " character, as `char`s.",
+          "path": "doc",
+          "range": [
+            6890,
+            6916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6917,
+            6920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`escape_unicode`] method on [`char`]. See",
+          "path": "doc",
+          "range": [
+            6921,
+            6999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " its documentation for more.",
+          "path": "doc",
+          "range": [
+            7000,
+            7031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7032,
+            7035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`escape_unicode`]: char::escape_unicode",
+          "path": "doc",
+          "range": [
+            7036,
+            7080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            7081,
+            7104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7105,
+            7150
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "EscapeUnicode",
+      "range": [
+        6818,
+        7212
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7214,
+        7334
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7239,
+            7248
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7283,
+        7332
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        7239,
+        7332
+      ],
+      "signature_range": [
+        7253,
+        7282
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7336,
+            7381
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7336,
+        7960
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7443,
+            7452
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7492,
+        7537
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        7443,
+        7537
+      ],
+      "signature_range": [
+        7457,
+        7491
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7543,
+            7552
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7603,
+        7661
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        7543,
+        7661
+      ],
+      "signature_range": [
+        7557,
+        7602
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7667,
+            7676
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7705,
+        7733
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        7667,
+        7733
+      ],
+      "signature_range": [
+        7681,
+        7704
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7739,
+            7748
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7787,
+        7837
+      ],
+      "kind": "impl_fn",
+      "name": "last",
+      "range": [
+        7739,
+        7837
+      ],
+      "signature_range": [
+        7753,
+        7786
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7843,
+            7852
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7922,
+        7958
+      ],
+      "kind": "impl_fn",
+      "name": "advance_by",
+      "range": [
+        7843,
+        7958
+      ],
+      "signature_range": [
+        7857,
+        7921
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7962,
+            8020
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7962,
+        8135
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8068,
+            8077
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8105,
+        8133
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        8068,
+        8133
+      ],
+      "signature_range": [
+        8082,
+        8104
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8137,
+            8183
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8137,
+        8223
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8225,
+            8285
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8225,
+        8432
+      ]
+    },
+    {
+      "ancestors": [
+        19
+      ],
+      "attributes": [],
+      "body_range": [
+        8385,
+        8430
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        8328,
+        8430
+      ],
+      "signature_range": [
+        8328,
+        8384
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that yields the literal escape code of a `char`.",
+          "path": "doc",
+          "range": [
+            8434,
+            8498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8499,
+            8502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`escape_default`] method on [`char`]. See",
+          "path": "doc",
+          "range": [
+            8503,
+            8581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " its documentation for more.",
+          "path": "doc",
+          "range": [
+            8582,
+            8613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8614,
+            8617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`escape_default`]: char::escape_default",
+          "path": "doc",
+          "range": [
+            8618,
+            8662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            8663,
+            8686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8687,
+            8732
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "EscapeDefault",
+      "range": [
+        8434,
+        8794
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8796,
+        9152
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8821,
+            8830
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8878,
+        8933
+      ],
+      "kind": "impl_fn",
+      "name": "printable",
+      "range": [
+        8821,
+        8933
+      ],
+      "signature_range": [
+        8835,
+        8877
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8939,
+            8948
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8996,
+        9047
+      ],
+      "kind": "impl_fn",
+      "name": "backslash",
+      "range": [
+        8939,
+        9047
+      ],
+      "signature_range": [
+        8953,
+        8995
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9053,
+            9062
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9101,
+        9150
+      ],
+      "kind": "impl_fn",
+      "name": "unicode",
+      "range": [
+        9053,
+        9150
+      ],
+      "signature_range": [
+        9067,
+        9100
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9154,
+            9199
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9154,
+        9778
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9261,
+            9270
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9310,
+        9355
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        9261,
+        9355
+      ],
+      "signature_range": [
+        9275,
+        9309
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9361,
+            9370
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9421,
+        9479
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        9361,
+        9479
+      ],
+      "signature_range": [
+        9375,
+        9420
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9485,
+            9494
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9523,
+        9551
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        9485,
+        9551
+      ],
+      "signature_range": [
+        9499,
+        9522
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9557,
+            9566
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9605,
+        9655
+      ],
+      "kind": "impl_fn",
+      "name": "last",
+      "range": [
+        9557,
+        9655
+      ],
+      "signature_range": [
+        9571,
+        9604
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9661,
+            9670
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9740,
+        9776
+      ],
+      "kind": "impl_fn",
+      "name": "advance_by",
+      "range": [
+        9661,
+        9776
+      ],
+      "signature_range": [
+        9675,
+        9739
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9780,
+            9838
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9780,
+        9953
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9886,
+            9895
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9923,
+        9951
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        9886,
+        9951
+      ],
+      "signature_range": [
+        9900,
+        9922
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9955,
+            10001
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9955,
+        10041
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10043,
+            10103
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10043,
+        10264
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10146,
+            10155
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10217,
+        10262
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        10146,
+        10262
+      ],
+      "signature_range": [
+        10160,
+        10216
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that yields the literal escape code of a `char`.",
+          "path": "doc",
+          "range": [
+            10266,
+            10330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10331,
+            10334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `struct` is created by the [`escape_debug`] method on [`char`]. See its",
+          "path": "doc",
+          "range": [
+            10335,
+            10415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " documentation for more.",
+          "path": "doc",
+          "range": [
+            10416,
+            10443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10444,
+            10447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`escape_debug`]: char::escape_debug",
+          "path": "doc",
+          "range": [
+            10448,
+            10488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10489,
+            10547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            10548,
+            10571
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "EscapeDebug",
+      "range": [
+        10266,
+        10630
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10632,
+        10979
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10655,
+            10664
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10707,
+        10760
+      ],
+      "kind": "impl_fn",
+      "name": "printable",
+      "range": [
+        10655,
+        10760
+      ],
+      "signature_range": [
+        10669,
+        10706
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10766,
+            10775
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10823,
+        10874
+      ],
+      "kind": "impl_fn",
+      "name": "backslash",
+      "range": [
+        10766,
+        10874
+      ],
+      "signature_range": [
+        10780,
+        10822
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10880,
+            10889
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10928,
+        10977
+      ],
+      "kind": "impl_fn",
+      "name": "unicode",
+      "range": [
+        10880,
+        10977
+      ],
+      "signature_range": [
+        10894,
+        10927
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10981,
+            11039
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10981,
+        11371
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11099,
+            11108
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11148,
+        11177
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        11099,
+        11177
+      ],
+      "signature_range": [
+        11113,
+        11147
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11183,
+            11192
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11243,
+        11299
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        11183,
+        11299
+      ],
+      "signature_range": [
+        11197,
+        11242
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11305,
+            11314
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11343,
+        11369
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        11305,
+        11369
+      ],
+      "signature_range": [
+        11319,
+        11342
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11373,
+            11431
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11373,
+        11530
+      ]
+    },
+    {
+      "ancestors": [
+        46
+      ],
+      "attributes": [],
+      "body_range": [
+        11500,
+        11528
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        11477,
+        11528
+      ],
+      "signature_range": [
+        11477,
+        11499
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11532,
+            11578
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11532,
+        11616
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11618,
+            11676
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11618,
+        11835
+      ]
+    },
+    {
+      "ancestors": [
+        49
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11717,
+            11726
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11788,
+        11833
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        11717,
+        11833
+      ],
+      "signature_range": [
+        11731,
+        11787
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11837,
+        15081
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15083,
+        15381
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15383,
+        15681
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            15683,
+            15706
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CaseMappingIter",
+      "range": [
+        15683,
+        15762
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15764,
+        16187
+      ]
+    },
+    {
+      "ancestors": [
+        55
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15791,
+            15800
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15849,
+        16185
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        15791,
+        16185
+      ],
+      "signature_range": [
+        15805,
+        15848
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16189,
+        17000
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16287,
+        16316
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        16252,
+        16316
+      ],
+      "signature_range": [
+        16252,
+        16286
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16368,
+        16402
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        16322,
+        16402
+      ],
+      "signature_range": [
+        16322,
+        16367
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16522,
+        16561
+      ],
+      "kind": "impl_fn",
+      "name": "fold",
+      "range": [
+        16408,
+        16561
+      ],
+      "signature_range": [
+        16408,
+        16517
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16591,
+        16621
+      ],
+      "kind": "impl_fn",
+      "name": "count",
+      "range": [
+        16567,
+        16621
+      ],
+      "signature_range": [
+        16567,
+        16590
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16663,
+        16692
+      ],
+      "kind": "impl_fn",
+      "name": "last",
+      "range": [
+        16627,
+        16692
+      ],
+      "signature_range": [
+        16627,
+        16662
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16763,
+        16799
+      ],
+      "kind": "impl_fn",
+      "name": "advance_by",
+      "range": [
+        16698,
+        16799
+      ],
+      "signature_range": [
+        16698,
+        16762
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [],
+      "body_range": [
+        16877,
+        16998
+      ],
+      "kind": "impl_fn",
+      "name": "__iterator_get_unchecked",
+      "range": [
+        16805,
+        16998
+      ],
+      "signature_range": [
+        16805,
+        16876
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17002,
+        17409
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [],
+      "body_range": [
+        17093,
+        17127
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        17053,
+        17127
+      ],
+      "signature_range": [
+        17053,
+        17092
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [],
+      "body_range": [
+        17249,
+        17290
+      ],
+      "kind": "impl_fn",
+      "name": "rfold",
+      "range": [
+        17133,
+        17290
+      ],
+      "signature_range": [
+        17133,
+        17244
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [],
+      "body_range": [
+        17366,
+        17407
+      ],
+      "kind": "impl_fn",
+      "name": "advance_back_by",
+      "range": [
+        17296,
+        17407
+      ],
+      "signature_range": [
+        17296,
+        17365
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17411,
+        17579
+      ]
+    },
+    {
+      "ancestors": [
+        69
+      ],
+      "attributes": [],
+      "body_range": [
+        17483,
+        17511
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        17460,
+        17511
+      ],
+      "signature_range": [
+        17460,
+        17482
+      ]
+    },
+    {
+      "ancestors": [
+        69
+      ],
+      "attributes": [],
+      "body_range": [
+        17544,
+        17577
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        17517,
+        17577
+      ],
+      "signature_range": [
+        17517,
+        17543
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17581,
+        17622
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17671,
+        17716
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17765,
+        17874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17932,
+        17986
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17988,
+        18201
+      ]
+    },
+    {
+      "ancestors": [
+        76
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18032,
+            18041
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18103,
+        18199
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        18032,
+        18199
+      ],
+      "signature_range": [
+        18046,
+        18102
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The error type returned when a checked char conversion fails.",
+          "path": "doc",
+          "range": [
+            18203,
+            18268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18269,
+            18322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            18323,
+            18367
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "TryFromCharError",
+      "range": [
+        18203,
+        18411
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18413,
+            18466
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18413,
+        18631
+      ]
+    },
+    {
+      "ancestors": [
+        79
+      ],
+      "attributes": [],
+      "body_range": [
+        18571,
+        18629
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        18512,
+        18629
+      ],
+      "signature_range": [
+        18512,
+        18570
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18633,
+            18686
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18633,
+        18721
+      ]
+    }
+  ],
+  "source_sha256": "f9e7a4662b7b2796f5b393da88dc3b79fd725f770f060f79c7e5f24de4900a8d"
+}

@@ -1,0 +1,4778 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Utilities for the slice primitive type.",
+      "path": "doc",
+      "range": [
+        0,
+        43
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        44,
+        47
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " *[See also the slice primitive type](slice).*",
+      "path": "doc",
+      "range": [
+        48,
+        97
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        98,
+        101
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Most of the structs in this module are iterator types which can only be created",
+      "path": "doc",
+      "range": [
+        102,
+        185
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " using a certain function. For example, `slice.iter()` yields an [`Iter`].",
+      "path": "doc",
+      "range": [
+        186,
+        263
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        264,
+        267
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " A few functions are provided to create a slice from a value reference",
+      "path": "doc",
+      "range": [
+        268,
+        341
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " or from a raw pointer.",
+      "path": "doc",
+      "range": [
+        342,
+        368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        369,
+        415
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2873,
+        25427
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sorts the slice in ascending order, preserving initial order of equal elements.",
+          "path": "doc",
+          "range": [
+            2891,
+            2974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2979,
+            2982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This sort is stable (i.e., does not reorder equal elements) and *O*(*n* \\* log(*n*))",
+          "path": "doc",
+          "range": [
+            2987,
+            3075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " worst-case.",
+          "path": "doc",
+          "range": [
+            3080,
+            3095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3100,
+            3103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the implementation of [`Ord`] for `T` does not implement a [total order], the function",
+          "path": "doc",
+          "range": [
+            3108,
+            3201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may panic; even if the function exits normally, the resulting order of elements in the slice",
+          "path": "doc",
+          "range": [
+            3206,
+            3302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is unspecified. See also the note on panicking below.",
+          "path": "doc",
+          "range": [
+            3307,
+            3364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3369,
+            3372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When applicable, unstable sorting is preferred because it is generally faster than stable",
+          "path": "doc",
+          "range": [
+            3377,
+            3470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sorting and it doesn't allocate auxiliary memory. See",
+          "path": "doc",
+          "range": [
+            3475,
+            3532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`sort_unstable`](slice::sort_unstable). The exception are partially sorted slices, which",
+          "path": "doc",
+          "range": [
+            3537,
+            3630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may be better served with `slice::sort`.",
+          "path": "doc",
+          "range": [
+            3635,
+            3679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3684,
+            3687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Sorting types that only implement [`PartialOrd`] such as [`f32`] and [`f64`] require",
+          "path": "doc",
+          "range": [
+            3692,
+            3780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " additional precautions. For example, `f32::NAN != f32::NAN`, which doesn't fulfill the",
+          "path": "doc",
+          "range": [
+            3785,
+            3875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reflexivity requirement of [`Ord`]. By using an alternative comparison function with",
+          "path": "doc",
+          "range": [
+            3880,
+            3968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `slice::sort_by` such as [`f32::total_cmp`] or [`f64::total_cmp`] that defines a [total",
+          "path": "doc",
+          "range": [
+            3973,
+            4064
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " order] users can sort slices containing floating-point values. Alternatively, if all values",
+          "path": "doc",
+          "range": [
+            4069,
+            4164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in the slice are guaranteed to be in a subset for which [`PartialOrd::partial_cmp`] forms a",
+          "path": "doc",
+          "range": [
+            4169,
+            4264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [total order], it's possible to sort the slice with `sort_by(|a, b|",
+          "path": "doc",
+          "range": [
+            4269,
+            4340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a.partial_cmp(b).unwrap())`.",
+          "path": "doc",
+          "range": [
+            4345,
+            4377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4382,
+            4385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Current implementation",
+          "path": "doc",
+          "range": [
+            4390,
+            4418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4423,
+            4426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The current implementation is based on [driftsort] by Orson Peters and Lukas Bergdoll, which",
+          "path": "doc",
+          "range": [
+            4431,
+            4527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " combines the fast average case of quicksort with the fast worst case and partial run",
+          "path": "doc",
+          "range": [
+            4532,
+            4620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " detection of mergesort, achieving linear time on fully sorted and reversed inputs. On inputs",
+          "path": "doc",
+          "range": [
+            4625,
+            4721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with k distinct elements, the expected time to sort the data is *O*(*n* \\* log(*k*)).",
+          "path": "doc",
+          "range": [
+            4726,
+            4815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4820,
+            4823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The auxiliary memory allocation behavior depends on the input length. Short slices are",
+          "path": "doc",
+          "range": [
+            4828,
+            4918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " handled without allocation, medium sized slices allocate `self.len()` and beyond that it",
+          "path": "doc",
+          "range": [
+            4923,
+            5015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " clamps at `self.len() / 2`.",
+          "path": "doc",
+          "range": [
+            5020,
+            5051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5056,
+            5059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            5064,
+            5076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5081,
+            5084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May panic if the implementation of [`Ord`] for `T` does not implement a [total order], or if",
+          "path": "doc",
+          "range": [
+            5089,
+            5185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the [`Ord`] implementation itself panics.",
+          "path": "doc",
+          "range": [
+            5190,
+            5235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5240,
+            5243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All safe functions on slices preserve the invariant that even if the function panics, all",
+          "path": "doc",
+          "range": [
+            5248,
+            5341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original elements will remain in the slice and any possible modifications via interior",
+          "path": "doc",
+          "range": [
+            5346,
+            5436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutability are observed in the input. This ensures that recovery code (for instance inside",
+          "path": "doc",
+          "range": [
+            5441,
+            5535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of a `Drop` or following a `catch_unwind`) will still have access to all the original",
+          "path": "doc",
+          "range": [
+            5540,
+            5629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements. For instance, if the slice belongs to a `Vec`, the `Vec::drop` method will be able",
+          "path": "doc",
+          "range": [
+            5634,
+            5730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to dispose of all contained elements.",
+          "path": "doc",
+          "range": [
+            5735,
+            5776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5781,
+            5784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5789,
+            5803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5808,
+            5811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5816,
+            5823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut v = [4, -5, 1, -3, 2];",
+          "path": "doc",
+          "range": [
+            5828,
+            5862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5867,
+            5870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " v.sort();",
+          "path": "doc",
+          "range": [
+            5875,
+            5888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [-5, -3, 1, 2, 4]);",
+          "path": "doc",
+          "range": [
+            5893,
+            5930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5935,
+            5942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5947,
+            5950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [driftsort]: https://github.com/Voultapher/driftsort",
+          "path": "doc",
+          "range": [
+            5955,
+            6011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [total order]: https://en.wikipedia.org/wiki/Total_order",
+          "path": "doc",
+          "range": [
+            6016,
+            6076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            6081,
+            6116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            6121,
+            6151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6156,
+            6201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6206,
+            6215
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6273,
+        6314
+      ],
+      "kind": "impl_fn",
+      "name": "sort",
+      "range": [
+        2891,
+        6314
+      ],
+      "signature_range": [
+        6224,
+        6268
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sorts the slice in ascending order with a comparison function, preserving initial order of",
+          "path": "doc",
+          "range": [
+            6320,
+            6414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " equal elements.",
+          "path": "doc",
+          "range": [
+            6419,
+            6438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6443,
+            6446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This sort is stable (i.e., does not reorder equal elements) and *O*(*n* \\* log(*n*))",
+          "path": "doc",
+          "range": [
+            6451,
+            6539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " worst-case.",
+          "path": "doc",
+          "range": [
+            6544,
+            6559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6564,
+            6567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the comparison function `compare` does not implement a [total order], the function may",
+          "path": "doc",
+          "range": [
+            6572,
+            6665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic; even if the function exits normally, the resulting order of elements in the slice is",
+          "path": "doc",
+          "range": [
+            6670,
+            6765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unspecified. See also the note on panicking below.",
+          "path": "doc",
+          "range": [
+            6770,
+            6824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6829,
+            6832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example `|a, b| (a - b).cmp(a)` is a comparison function that is neither transitive nor",
+          "path": "doc",
+          "range": [
+            6837,
+            6932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reflexive nor total, `a < b < c < a` with `a = 1, b = 2, c = 3`. For more information and",
+          "path": "doc",
+          "range": [
+            6937,
+            7030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " examples see the [`Ord`] documentation.",
+          "path": "doc",
+          "range": [
+            7035,
+            7078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7083,
+            7086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Current implementation",
+          "path": "doc",
+          "range": [
+            7091,
+            7119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7124,
+            7127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The current implementation is based on [driftsort] by Orson Peters and Lukas Bergdoll, which",
+          "path": "doc",
+          "range": [
+            7132,
+            7228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " combines the fast average case of quicksort with the fast worst case and partial run",
+          "path": "doc",
+          "range": [
+            7233,
+            7321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " detection of mergesort, achieving linear time on fully sorted and reversed inputs. On inputs",
+          "path": "doc",
+          "range": [
+            7326,
+            7422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with k distinct elements, the expected time to sort the data is *O*(*n* \\* log(*k*)).",
+          "path": "doc",
+          "range": [
+            7427,
+            7516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7521,
+            7524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The auxiliary memory allocation behavior depends on the input length. Short slices are",
+          "path": "doc",
+          "range": [
+            7529,
+            7619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " handled without allocation, medium sized slices allocate `self.len()` and beyond that it",
+          "path": "doc",
+          "range": [
+            7624,
+            7716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " clamps at `self.len() / 2`.",
+          "path": "doc",
+          "range": [
+            7721,
+            7752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7757,
+            7760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            7765,
+            7777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7782,
+            7785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May panic if `compare` does not implement a [total order], or if `compare` itself panics.",
+          "path": "doc",
+          "range": [
+            7790,
+            7883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7888,
+            7891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All safe functions on slices preserve the invariant that even if the function panics, all",
+          "path": "doc",
+          "range": [
+            7896,
+            7989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original elements will remain in the slice and any possible modifications via interior",
+          "path": "doc",
+          "range": [
+            7994,
+            8084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutability are observed in the input. This ensures that recovery code (for instance inside",
+          "path": "doc",
+          "range": [
+            8089,
+            8183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of a `Drop` or following a `catch_unwind`) will still have access to all the original",
+          "path": "doc",
+          "range": [
+            8188,
+            8277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements. For instance, if the slice belongs to a `Vec`, the `Vec::drop` method will be able",
+          "path": "doc",
+          "range": [
+            8282,
+            8378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to dispose of all contained elements.",
+          "path": "doc",
+          "range": [
+            8383,
+            8424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8429,
+            8432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            8437,
+            8451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8456,
+            8459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8464,
+            8471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut v = [4, -5, 1, -3, 2];",
+          "path": "doc",
+          "range": [
+            8476,
+            8510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " v.sort_by(|a, b| a.cmp(b));",
+          "path": "doc",
+          "range": [
+            8515,
+            8546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [-5, -3, 1, 2, 4]);",
+          "path": "doc",
+          "range": [
+            8551,
+            8588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8593,
+            8596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // reverse sorting",
+          "path": "doc",
+          "range": [
+            8601,
+            8623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " v.sort_by(|a, b| b.cmp(a));",
+          "path": "doc",
+          "range": [
+            8628,
+            8659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [4, 2, 1, -3, -5]);",
+          "path": "doc",
+          "range": [
+            8664,
+            8701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8706,
+            8713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8718,
+            8721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [driftsort]: https://github.com/Voultapher/driftsort",
+          "path": "doc",
+          "range": [
+            8726,
+            8782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [total order]: https://en.wikipedia.org/wiki/Total_order",
+          "path": "doc",
+          "range": [
+            8787,
+            8847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            8852,
+            8887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            8892,
+            8922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8927,
+            8972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8977,
+            8986
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9088,
+        9152
+      ],
+      "kind": "impl_fn",
+      "name": "sort_by",
+      "range": [
+        6320,
+        9152
+      ],
+      "signature_range": [
+        8995,
+        9083
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        2
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        9116,
+        9144
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sorts the slice in ascending order with a key extraction function, preserving initial order",
+          "path": "doc",
+          "range": [
+            9158,
+            9253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of equal elements.",
+          "path": "doc",
+          "range": [
+            9258,
+            9280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9285,
+            9288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This sort is stable (i.e., does not reorder equal elements) and *O*(*m* \\* *n* \\* log(*n*))",
+          "path": "doc",
+          "range": [
+            9293,
+            9388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " worst-case, where the key function is *O*(*m*).",
+          "path": "doc",
+          "range": [
+            9393,
+            9444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9449,
+            9452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the implementation of [`Ord`] for `K` does not implement a [total order], the function",
+          "path": "doc",
+          "range": [
+            9457,
+            9550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may panic; even if the function exits normally, the resulting order of elements in the slice",
+          "path": "doc",
+          "range": [
+            9555,
+            9651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is unspecified. See also the note on panicking below.",
+          "path": "doc",
+          "range": [
+            9656,
+            9713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9718,
+            9721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Current implementation",
+          "path": "doc",
+          "range": [
+            9726,
+            9754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9759,
+            9762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The current implementation is based on [driftsort] by Orson Peters and Lukas Bergdoll, which",
+          "path": "doc",
+          "range": [
+            9767,
+            9863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " combines the fast average case of quicksort with the fast worst case and partial run",
+          "path": "doc",
+          "range": [
+            9868,
+            9956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " detection of mergesort, achieving linear time on fully sorted and reversed inputs. On inputs",
+          "path": "doc",
+          "range": [
+            9961,
+            10057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with k distinct elements, the expected time to sort the data is *O*(*n* \\* log(*k*)).",
+          "path": "doc",
+          "range": [
+            10062,
+            10151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10156,
+            10159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The auxiliary memory allocation behavior depends on the input length. Short slices are",
+          "path": "doc",
+          "range": [
+            10164,
+            10254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " handled without allocation, medium sized slices allocate `self.len()` and beyond that it",
+          "path": "doc",
+          "range": [
+            10259,
+            10351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " clamps at `self.len() / 2`.",
+          "path": "doc",
+          "range": [
+            10356,
+            10387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10392,
+            10395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            10400,
+            10412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10417,
+            10420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May panic if the implementation of [`Ord`] for `K` does not implement a [total order], or if",
+          "path": "doc",
+          "range": [
+            10425,
+            10521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the [`Ord`] implementation or the key-function `f` panics.",
+          "path": "doc",
+          "range": [
+            10526,
+            10588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10593,
+            10596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All safe functions on slices preserve the invariant that even if the function panics, all",
+          "path": "doc",
+          "range": [
+            10601,
+            10694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original elements will remain in the slice and any possible modifications via interior",
+          "path": "doc",
+          "range": [
+            10699,
+            10789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutability are observed in the input. This ensures that recovery code (for instance inside",
+          "path": "doc",
+          "range": [
+            10794,
+            10888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of a `Drop` or following a `catch_unwind`) will still have access to all the original",
+          "path": "doc",
+          "range": [
+            10893,
+            10982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements. For instance, if the slice belongs to a `Vec`, the `Vec::drop` method will be able",
+          "path": "doc",
+          "range": [
+            10987,
+            11083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to dispose of all contained elements.",
+          "path": "doc",
+          "range": [
+            11088,
+            11129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11134,
+            11137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11142,
+            11156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11161,
+            11164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11169,
+            11176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut v = [4i32, -5, 1, -3, 2];",
+          "path": "doc",
+          "range": [
+            11181,
+            11218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11223,
+            11226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " v.sort_by_key(|k| k.abs());",
+          "path": "doc",
+          "range": [
+            11231,
+            11262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [1, 2, -3, 4, -5]);",
+          "path": "doc",
+          "range": [
+            11267,
+            11304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11309,
+            11316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11321,
+            11324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [driftsort]: https://github.com/Voultapher/driftsort",
+          "path": "doc",
+          "range": [
+            11329,
+            11385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [total order]: https://en.wikipedia.org/wiki/Total_order",
+          "path": "doc",
+          "range": [
+            11390,
+            11450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            11455,
+            11490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            11495,
+            11525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11530,
+            11587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11592,
+            11601
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11709,
+        11766
+      ],
+      "kind": "impl_fn",
+      "name": "sort_by_key",
+      "range": [
+        9158,
+        11766
+      ],
+      "signature_range": [
+        11610,
+        11704
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        4
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        11737,
+        11758
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sorts the slice in ascending order with a key extraction function, preserving initial order",
+          "path": "doc",
+          "range": [
+            11772,
+            11867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of equal elements.",
+          "path": "doc",
+          "range": [
+            11872,
+            11894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11899,
+            11902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This sort is stable (i.e., does not reorder equal elements) and *O*(*m* \\* *n* + *n* \\*",
+          "path": "doc",
+          "range": [
+            11907,
+            11998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " log(*n*)) worst-case, where the key function is *O*(*m*).",
+          "path": "doc",
+          "range": [
+            12003,
+            12064
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12069,
+            12072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " During sorting, the key function is called at most once per element, by using temporary",
+          "path": "doc",
+          "range": [
+            12077,
+            12168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " storage to remember the results of key evaluation. The order of calls to the key function is",
+          "path": "doc",
+          "range": [
+            12173,
+            12269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unspecified and may change in future versions of the standard library.",
+          "path": "doc",
+          "range": [
+            12274,
+            12348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12353,
+            12356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the implementation of [`Ord`] for `K` does not implement a [total order], the function",
+          "path": "doc",
+          "range": [
+            12361,
+            12454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may panic; even if the function exits normally, the resulting order of elements in the slice",
+          "path": "doc",
+          "range": [
+            12459,
+            12555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is unspecified. See also the note on panicking below.",
+          "path": "doc",
+          "range": [
+            12560,
+            12617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12622,
+            12625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For simple key functions (e.g., functions that are property accesses or basic operations),",
+          "path": "doc",
+          "range": [
+            12630,
+            12724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`sort_by_key`](slice::sort_by_key) is likely to be faster.",
+          "path": "doc",
+          "range": [
+            12729,
+            12792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12797,
+            12800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Current implementation",
+          "path": "doc",
+          "range": [
+            12805,
+            12833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12838,
+            12841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The current implementation is based on [instruction-parallel-network sort][ipnsort] by Lukas",
+          "path": "doc",
+          "range": [
+            12846,
+            12942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Bergdoll, which combines the fast average case of randomized quicksort with the fast worst",
+          "path": "doc",
+          "range": [
+            12947,
+            13041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " case of heapsort, while achieving linear time on fully sorted and reversed inputs. And",
+          "path": "doc",
+          "range": [
+            13046,
+            13136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *O*(*k* \\* log(*n*)) where *k* is the number of distinct elements in the input. It leverages",
+          "path": "doc",
+          "range": [
+            13141,
+            13237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " superscalar out-of-order execution capabilities commonly found in CPUs, to efficiently",
+          "path": "doc",
+          "range": [
+            13242,
+            13332
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " perform the operation.",
+          "path": "doc",
+          "range": [
+            13337,
+            13363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13368,
+            13371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In the worst case, the algorithm allocates temporary storage in a `Vec<(K, usize)>` the",
+          "path": "doc",
+          "range": [
+            13376,
+            13467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " length of the slice.",
+          "path": "doc",
+          "range": [
+            13472,
+            13496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13501,
+            13504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            13509,
+            13521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13526,
+            13529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May panic if the implementation of [`Ord`] for `K` does not implement a [total order], or if",
+          "path": "doc",
+          "range": [
+            13534,
+            13630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the [`Ord`] implementation panics.",
+          "path": "doc",
+          "range": [
+            13635,
+            13673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13678,
+            13681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All safe functions on slices preserve the invariant that even if the function panics, all",
+          "path": "doc",
+          "range": [
+            13686,
+            13779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original elements will remain in the slice and any possible modifications via interior",
+          "path": "doc",
+          "range": [
+            13784,
+            13874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mutability are observed in the input. This ensures that recovery code (for instance inside",
+          "path": "doc",
+          "range": [
+            13879,
+            13973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of a `Drop` or following a `catch_unwind`) will still have access to all the original",
+          "path": "doc",
+          "range": [
+            13978,
+            14067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements. For instance, if the slice belongs to a `Vec`, the `Vec::drop` method will be able",
+          "path": "doc",
+          "range": [
+            14072,
+            14168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to dispose of all contained elements.",
+          "path": "doc",
+          "range": [
+            14173,
+            14214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14219,
+            14222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14227,
+            14241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14246,
+            14249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14254,
+            14261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut v = [4i32, -5, 1, -3, 2, 10];",
+          "path": "doc",
+          "range": [
+            14266,
+            14307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14312,
+            14315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Strings are sorted by lexicographical order.",
+          "path": "doc",
+          "range": [
+            14320,
+            14371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " v.sort_by_cached_key(|k| k.to_string());",
+          "path": "doc",
+          "range": [
+            14376,
+            14420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(v, [-3, -5, 1, 10, 2, 4]);",
+          "path": "doc",
+          "range": [
+            14425,
+            14466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14471,
+            14478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14483,
+            14486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [ipnsort]: https://github.com/Voultapher/sort-research-rs/tree/main/ipnsort",
+          "path": "doc",
+          "range": [
+            14491,
+            14570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [total order]: https://en.wikipedia.org/wiki/Total_order",
+          "path": "doc",
+          "range": [
+            14575,
+            14635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            14640,
+            14675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            14680,
+            14710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            14715,
+            14780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14785,
+            14794
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14905,
+        16713
+      ],
+      "kind": "impl_fn",
+      "name": "sort_by_cached_key",
+      "range": [
+        11772,
+        16713
+      ],
+      "signature_range": [
+        14803,
+        14900
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15016,
+        15877
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16632,
+        16658
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16679,
+        16707
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Copies `self` into a new `Vec`.",
+          "path": "doc",
+          "range": [
+            16719,
+            16754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16759,
+            16762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            16767,
+            16781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16786,
+            16789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16794,
+            16801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = [10, 40, 30];",
+          "path": "doc",
+          "range": [
+            16806,
+            16831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = s.to_vec();",
+          "path": "doc",
+          "range": [
+            16836,
+            16859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Here, `s` and `x` can be modified independently.",
+          "path": "doc",
+          "range": [
+            16864,
+            16919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16924,
+            16931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            16936,
+            16971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            16976,
+            17006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_conversion_suggestion",
+          "range": [
+            17011,
+            17041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            17046,
+            17091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17096,
+            17105
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17173,
+        17211
+      ],
+      "kind": "impl_fn",
+      "name": "to_vec",
+      "range": [
+        16719,
+        17211
+      ],
+      "signature_range": [
+        17114,
+        17168
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Copies `self` into a new `Vec` with an allocator.",
+          "path": "doc",
+          "range": [
+            17217,
+            17270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17275,
+            17278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            17283,
+            17297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17302,
+            17305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17310,
+            17317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(allocator_api)]",
+          "path": "doc",
+          "range": [
+            17322,
+            17352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17357,
+            17360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::alloc::System;",
+          "path": "doc",
+          "range": [
+            17365,
+            17392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17397,
+            17400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = [10, 40, 30];",
+          "path": "doc",
+          "range": [
+            17405,
+            17430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = s.to_vec_in(System);",
+          "path": "doc",
+          "range": [
+            17435,
+            17467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Here, `s` and `x` can be modified independently.",
+          "path": "doc",
+          "range": [
+            17472,
+            17527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17532,
+            17539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            17544,
+            17579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            17584,
+            17614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17619,
+            17628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17633,
+            17688
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17786,
+        20190
+      ],
+      "kind": "impl_fn",
+      "name": "to_vec_in",
+      "range": [
+        17217,
+        20190
+      ],
+      "signature_range": [
+        17697,
+        17781
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11
+      ],
+      "attributes": [],
+      "kind": "trait",
+      "name": "ConvertVec",
+      "range": [
+        17836,
+        17985
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        12
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "to_vec",
+      "range": [
+        17867,
+        17975
+      ],
+      "signature_range": [
+        17867,
+        17974
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17995,
+        19504
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18041,
+            18050
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18133,
+        19494
+      ],
+      "kind": "impl_fn",
+      "name": "to_vec",
+      "range": [
+        18041,
+        19494
+      ],
+      "signature_range": [
+        18071,
+        18132
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        14,
+        15
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "DropGuard",
+      "range": [
+        18151,
+        18289
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        14,
+        15
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18306,
+        18703
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        14,
+        15,
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18383,
+            18392
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18432,
+        18685
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        18383,
+        18685
+      ],
+      "signature_range": [
+        18413,
+        18431
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        19514,
+        20184
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        11,
+        19
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19567,
+            19576
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19651,
+        20174
+      ],
+      "kind": "impl_fn",
+      "name": "to_vec",
+      "range": [
+        19567,
+        20174
+      ],
+      "signature_range": [
+        19589,
+        19650
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts `self` into a vector without clones or allocation.",
+          "path": "doc",
+          "range": [
+            20196,
+            20259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20264,
+            20267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The resulting vector can be converted back into a box via",
+          "path": "doc",
+          "range": [
+            20272,
+            20333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Vec<T>`'s `into_boxed_slice` method.",
+          "path": "doc",
+          "range": [
+            20338,
+            20379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20384,
+            20387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20392,
+            20406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20411,
+            20414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20419,
+            20426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s: Box<[i32]> = Box::new([10, 40, 30]);",
+          "path": "doc",
+          "range": [
+            20431,
+            20478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = s.into_vec();",
+          "path": "doc",
+          "range": [
+            20483,
+            20508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // `s` cannot be used anymore because it has been converted into `x`.",
+          "path": "doc",
+          "range": [
+            20513,
+            20586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20591,
+            20594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(x, vec![10, 40, 30]);",
+          "path": "doc",
+          "range": [
+            20599,
+            20635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20640,
+            20647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            20652,
+            20682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20687,
+            20732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20737,
+            20746
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20814,
+        21012
+      ],
+      "kind": "impl_fn",
+      "name": "into_vec",
+      "range": [
+        20196,
+        21012
+      ],
+      "signature_range": [
+        20755,
+        20813
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a vector by copying a slice `n` times.",
+          "path": "doc",
+          "range": [
+            21018,
+            21068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21073,
+            21076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            21081,
+            21093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21098,
+            21101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will panic if the capacity would overflow.",
+          "path": "doc",
+          "range": [
+            21106,
+            21166
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21171,
+            21174
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21179,
+            21193
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21198,
+            21201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21206,
+            21213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([1, 2].repeat(3), vec![1, 2, 1, 2, 1, 2]);",
+          "path": "doc",
+          "range": [
+            21218,
+            21275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21280,
+            21287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21292,
+            21295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A panic upon overflow:",
+          "path": "doc",
+          "range": [
+            21300,
+            21326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21331,
+            21334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```should_panic",
+          "path": "doc",
+          "range": [
+            21339,
+            21358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // this will panic at runtime",
+          "path": "doc",
+          "range": [
+            21363,
+            21396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " b\"0123456789abcdef\".repeat(usize::MAX);",
+          "path": "doc",
+          "range": [
+            21401,
+            21444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21449,
+            21456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            21461,
+            21491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            21496,
+            21531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21536,
+            21597
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21674,
+        23600
+      ],
+      "kind": "impl_fn",
+      "name": "repeat",
+      "range": [
+        21018,
+        23600
+      ],
+      "signature_range": [
+        21606,
+        21669
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Flattens a slice of `T` into a single value `Self::Output`.",
+          "path": "doc",
+          "range": [
+            23606,
+            23669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23674,
+            23677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23682,
+            23696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23701,
+            23704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23709,
+            23716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([\"hello\", \"world\"].concat(), \"helloworld\");",
+          "path": "doc",
+          "range": [
+            23721,
+            23779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([[1, 2], [3, 4]].concat(), [1, 2, 3, 4]);",
+          "path": "doc",
+          "range": [
+            23784,
+            23840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23845,
+            23852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            23857,
+            23887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23892,
+            23937
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24053,
+        24089
+      ],
+      "kind": "impl_fn",
+      "name": "concat",
+      "range": [
+        23606,
+        24089
+      ],
+      "signature_range": [
+        23946,
+        24048
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Flattens a slice of `T` into a single value `Self::Output`, placing a",
+          "path": "doc",
+          "range": [
+            24095,
+            24168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " given separator between each.",
+          "path": "doc",
+          "range": [
+            24173,
+            24206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24211,
+            24214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            24219,
+            24233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24238,
+            24241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24246,
+            24253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([\"hello\", \"world\"].join(\" \"), \"hello world\");",
+          "path": "doc",
+          "range": [
+            24258,
+            24318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([[1, 2], [3, 4]].join(&0), [1, 2, 0, 3, 4]);",
+          "path": "doc",
+          "range": [
+            24323,
+            24382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([[1, 2], [3, 4]].join(&[0, 0][..]), [1, 2, 0, 0, 3, 4]);",
+          "path": "doc",
+          "range": [
+            24387,
+            24458
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24463,
+            24470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            24475,
+            24505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24510,
+            24572
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24705,
+        24742
+      ],
+      "kind": "impl_fn",
+      "name": "join",
+      "range": [
+        24095,
+        24742
+      ],
+      "signature_range": [
+        24581,
+        24700
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Flattens a slice of `T` into a single value `Self::Output`, placing a",
+          "path": "doc",
+          "range": [
+            24748,
+            24821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " given separator between each.",
+          "path": "doc",
+          "range": [
+            24826,
+            24859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24864,
+            24867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            24872,
+            24886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24891,
+            24894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24899,
+            24906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![allow(deprecated)]",
+          "path": "doc",
+          "range": [
+            24911,
+            24938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([\"hello\", \"world\"].connect(\" \"), \"hello world\");",
+          "path": "doc",
+          "range": [
+            24943,
+            25006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!([[1, 2], [3, 4]].connect(&0), [1, 2, 0, 3, 4]);",
+          "path": "doc",
+          "range": [
+            25011,
+            25073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            25078,
+            25085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            25090,
+            25120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25125,
+            25170
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "deprecated",
+          "range": [
+            25175,
+            25252
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25388,
+        25425
+      ],
+      "kind": "impl_fn",
+      "name": "connect",
+      "range": [
+        24748,
+        25425
+      ],
+      "signature_range": [
+        25261,
+        25383
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25429,
+        27055
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a vector containing a copy of this slice where each byte",
+          "path": "doc",
+          "range": [
+            25445,
+            25513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is mapped to its ASCII upper case equivalent.",
+          "path": "doc",
+          "range": [
+            25518,
+            25567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25572,
+            25575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ASCII letters 'a' to 'z' are mapped to 'A' to 'Z',",
+          "path": "doc",
+          "range": [
+            25580,
+            25634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but non-ASCII letters are unchanged.",
+          "path": "doc",
+          "range": [
+            25639,
+            25679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25684,
+            25687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To uppercase the value in-place, use [`make_ascii_uppercase`].",
+          "path": "doc",
+          "range": [
+            25692,
+            25758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25763,
+            25766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_ascii_uppercase`]: slice::make_ascii_uppercase",
+          "path": "doc",
+          "range": [
+            25771,
+            25828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            25833,
+            25868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            25873,
+            25903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            25908,
+            26021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26026,
+            26094
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26099,
+            26108
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26157,
+        26246
+      ],
+      "kind": "impl_fn",
+      "name": "to_ascii_uppercase",
+      "range": [
+        25445,
+        26246
+      ],
+      "signature_range": [
+        26117,
+        26156
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a vector containing a copy of this slice where each byte",
+          "path": "doc",
+          "range": [
+            26252,
+            26320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is mapped to its ASCII lower case equivalent.",
+          "path": "doc",
+          "range": [
+            26325,
+            26374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26379,
+            26382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ASCII letters 'A' to 'Z' are mapped to 'a' to 'z',",
+          "path": "doc",
+          "range": [
+            26387,
+            26441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but non-ASCII letters are unchanged.",
+          "path": "doc",
+          "range": [
+            26446,
+            26486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26491,
+            26494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To lowercase the value in-place, use [`make_ascii_lowercase`].",
+          "path": "doc",
+          "range": [
+            26499,
+            26565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26570,
+            26573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_ascii_lowercase`]: slice::make_ascii_lowercase",
+          "path": "doc",
+          "range": [
+            26578,
+            26635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            26640,
+            26675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            26680,
+            26710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            26715,
+            26828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26833,
+            26901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26906,
+            26915
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26964,
+        27053
+      ],
+      "kind": "impl_fn",
+      "name": "to_ascii_lowercase",
+      "range": [
+        26252,
+        27053
+      ],
+      "signature_range": [
+        26924,
+        26963
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Helper trait for [`[T]::concat`](slice::concat).",
+          "path": "doc",
+          "range": [
+            27279,
+            27331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27332,
+            27335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note: the `Item` type parameter is not used in this trait,",
+          "path": "doc",
+          "range": [
+            27336,
+            27398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but it allows impls to be more generic.",
+          "path": "doc",
+          "range": [
+            27399,
+            27442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Without it, we get this error:",
+          "path": "doc",
+          "range": [
+            27443,
+            27477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27478,
+            27481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```error",
+          "path": "doc",
+          "range": [
+            27482,
+            27494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " error[E0207]: the type parameter `T` is not constrained by the impl trait, self type, or predica",
+          "path": "doc",
+          "range": [
+            27495,
+            27595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    --> library/alloc/src/slice.rs:608:6",
+          "path": "doc",
+          "range": [
+            27596,
+            27639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     |",
+          "path": "doc",
+          "range": [
+            27640,
+            27649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 608 | impl<T: Clone, V: Borrow<[T]>> Concat for [V] {",
+          "path": "doc",
+          "range": [
+            27650,
+            27707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     |      ^ unconstrained type parameter",
+          "path": "doc",
+          "range": [
+            27708,
+            27753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27754,
+            27761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27762,
+            27765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is because there could exist `V` types with multiple `Borrow<[_]>` impls,",
+          "path": "doc",
+          "range": [
+            27766,
+            27848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such that multiple `T` types would apply:",
+          "path": "doc",
+          "range": [
+            27849,
+            27894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27895,
+            27898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27899,
+            27906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #[allow(dead_code)]",
+          "path": "doc",
+          "range": [
+            27907,
+            27932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub struct Foo(Vec<u32>, Vec<String>);",
+          "path": "doc",
+          "range": [
+            27933,
+            27975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27976,
+            27979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::borrow::Borrow<[u32]> for Foo {",
+          "path": "doc",
+          "range": [
+            27980,
+            28025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn borrow(&self) -> &[u32] { &self.0 }",
+          "path": "doc",
+          "range": [
+            28026,
+            28072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28073,
+            28078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28079,
+            28082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl std::borrow::Borrow<[String]> for Foo {",
+          "path": "doc",
+          "range": [
+            28083,
+            28131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn borrow(&self) -> &[String] { &self.1 }",
+          "path": "doc",
+          "range": [
+            28132,
+            28181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28182,
+            28187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28188,
+            28195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28196,
+            28256
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Concat",
+      "range": [
+        27279,
+        28588
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": " Implementation of [`[T]::concat`](slice::concat)",
+          "path": "doc",
+          "range": [
+            28424,
+            28476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28481,
+            28541
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "concat",
+      "range": [
+        28424,
+        28586
+      ],
+      "signature_range": [
+        28546,
+        28585
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Helper trait for [`[T]::join`](slice::join)",
+          "path": "doc",
+          "range": [
+            28590,
+            28637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28638,
+            28698
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Join",
+      "range": [
+        28590,
+        29035
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Implementation of [`[T]::join`](slice::join)",
+          "path": "doc",
+          "range": [
+            28861,
+            28909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28914,
+            28974
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "join",
+      "range": [
+        28861,
+        29033
+      ],
+      "signature_range": [
+        28979,
+        29032
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            29037,
+            29072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29073,
+            29131
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29037,
+        29480
+      ]
+    },
+    {
+      "ancestors": [
+        33
+      ],
+      "attributes": [],
+      "body_range": [
+        29248,
+        29478
+      ],
+      "kind": "impl_fn",
+      "name": "concat",
+      "range": [
+        29214,
+        29478
+      ],
+      "signature_range": [
+        29214,
+        29247
+      ]
+    },
+    {
+      "ancestors": [
+        33,
+        34
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        29286,
+        29314
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            29482,
+            29517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29518,
+            29576
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29482,
+        30195
+      ]
+    },
+    {
+      "ancestors": [
+        36
+      ],
+      "attributes": [],
+      "body_range": [
+        29699,
+        30193
+      ],
+      "kind": "impl_fn",
+      "name": "join",
+      "range": [
+        29658,
+        30193
+      ],
+      "signature_range": [
+        29658,
+        29698
+      ]
+    },
+    {
+      "ancestors": [
+        36,
+        37
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29839,
+        29845
+      ]
+    },
+    {
+      "ancestors": [
+        36,
+        37
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        29894,
+        29914
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            30197,
+            30232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            30233,
+            30291
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30197,
+        30945
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [],
+      "body_range": [
+        30418,
+        30943
+      ],
+      "kind": "impl_fn",
+      "name": "join",
+      "range": [
+        30375,
+        30943
+      ],
+      "signature_range": [
+        30375,
+        30417
+      ]
+    },
+    {
+      "ancestors": [
+        40,
+        41
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30558,
+        30564
+      ]
+    },
+    {
+      "ancestors": [
+        40,
+        41
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        30625,
+        30645
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            31155,
+            31200
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31155,
+        31307
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": [
+        31280,
+        31305
+      ],
+      "kind": "impl_fn",
+      "name": "borrow",
+      "range": [
+        31255,
+        31305
+      ],
+      "signature_range": [
+        31255,
+        31279
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            31309,
+            31354
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31309,
+        31480
+      ]
+    },
+    {
+      "ancestors": [
+        46
+      ],
+      "attributes": [],
+      "body_range": [
+        31449,
+        31478
+      ],
+      "kind": "impl_fn",
+      "name": "borrow_mut",
+      "range": [
+        31412,
+        31478
+      ],
+      "signature_range": [
+        31412,
+        31448
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            31645,
+            31680
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "SpecCloneIntoVec",
+      "range": [
+        31645,
+        31785
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "clone_into",
+      "range": [
+        31738,
+        31783
+      ],
+      "signature_range": [
+        31738,
+        31782
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            31787,
+            31822
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31787,
+        32364
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [],
+      "body_range": [
+        31942,
+        32362
+      ],
+      "kind": "impl_fn",
+      "name": "clone_into",
+      "range": [
+        31889,
+        32362
+      ],
+      "signature_range": [
+        31897,
+        31941
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            32366,
+            32401
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32366,
+        32593
+      ]
+    },
+    {
+      "ancestors": [
+        52
+      ],
+      "attributes": [],
+      "body_range": [
+        32520,
+        32591
+      ],
+      "kind": "impl_fn",
+      "name": "clone_into",
+      "range": [
+        32475,
+        32591
+      ],
+      "signature_range": [
+        32475,
+        32519
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            32595,
+            32630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            32631,
+            32676
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32595,
+        32907
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [],
+      "body_range": [
+        32769,
+        32798
+      ],
+      "kind": "impl_fn",
+      "name": "to_owned",
+      "range": [
+        32740,
+        32798
+      ],
+      "signature_range": [
+        32740,
+        32768
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [],
+      "body_range": [
+        32846,
+        32905
+      ],
+      "kind": "impl_fn",
+      "name": "clone_into",
+      "range": [
+        32804,
+        32905
+      ],
+      "signature_range": [
+        32804,
+        32845
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33083,
+            33092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            33093,
+            33128
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33215,
+        33275
+      ],
+      "kind": "fn",
+      "name": "stable_sort",
+      "range": [
+        33083,
+        33275
+      ],
+      "signature_range": [
+        33129,
+        33214
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            33277,
+            33312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            33313,
+            33367
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33277,
+        33613
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [],
+      "body_range": [
+        33461,
+        33505
+      ],
+      "kind": "impl_fn",
+      "name": "with_capacity",
+      "range": [
+        33419,
+        33505
+      ],
+      "signature_range": [
+        33419,
+        33460
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [],
+      "body_range": [
+        33570,
+        33611
+      ],
+      "kind": "impl_fn",
+      "name": "as_uninit_slice_mut",
+      "range": [
+        33511,
+        33611
+      ],
+      "signature_range": [
+        33511,
+        33569
+      ]
+    }
+  ],
+  "source_sha256": "b1f0a5f6e3d104d6176699cf05efdfe1725095cd984fdf4422ddc3093726361c"
+}

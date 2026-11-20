@@ -1,0 +1,155 @@
+#[def_test]
+fn test_exclusive_fixture_positive_rejects_before_callback() {
+    let filesystem = Arc::new(MockFilesystem);
+    let parent = make_dir_entry(filesystem.clone(), 3001, "parent");
+    let existing = make_dir_entry_with_parent(filesystem, 3002, Some(parent.clone()), "child");
+    assert!(parent
+        .insert_cache(String::from("child"), existing.clone())
+        .is_none());
+    assert!(existing.is_really_positive());
+    let mut callback_count = 0;
+    let result = parent.create_exclusive_with("child", |_| {
+        callback_count += 1;
+        Ok(())
+    });
+    assert!(matches!(result, Err(VfsError::AlreadyExists)));
+    assert!(callback_count == 0);
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&existing)));
+}
+
+#[def_test]
+fn test_exclusive_fixture_callback_error_unchanged() {
+    let parent = make_dir_entry(Arc::new(MockFilesystem), 3003, "parent");
+    let negative = Dentry::new_negative(Some(parent.clone()), String::from("child"));
+    assert!(parent
+        .insert_cache(String::from("child"), negative.clone())
+        .is_none());
+    let mut callback_count = 0;
+    let mut callback_identity = false;
+    let result = parent.create_exclusive_with("child", |candidate| {
+        callback_count += 1;
+        callback_identity = candidate.ptr_eq(&negative);
+        Err(VfsError::NotFound)
+    });
+    assert!(matches!(result, Err(VfsError::NotFound)));
+    assert!(callback_count == 1);
+    assert!(callback_identity);
+    assert!(negative.is_negative());
+    assert!(negative.is_really_negative());
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&negative)));
+}
+
+#[def_test]
+fn test_exclusive_fixture_ok_without_instantiation() {
+    let parent = make_dir_entry(Arc::new(MockFilesystem), 3004, "parent");
+    let negative = Dentry::new_negative(Some(parent.clone()), String::from("child"));
+    assert!(parent
+        .insert_cache(String::from("child"), negative.clone())
+        .is_none());
+    let mut callback_count = 0;
+    let mut callback_identity = false;
+    let result = parent.create_exclusive_with("child", |candidate| {
+        callback_count += 1;
+        callback_identity = candidate.ptr_eq(&negative);
+        Ok(())
+    });
+    assert!(matches!(result, Err(VfsError::InvalidInput)));
+    assert!(callback_count == 1);
+    assert!(callback_identity);
+    assert!(negative.is_negative());
+    assert!(negative.is_really_negative());
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&negative)));
+}
+
+#[def_test]
+fn test_exclusive_fixture_success_preserves_identity() {
+    let filesystem = Arc::new(MockFilesystem);
+    let parent = make_dir_entry(filesystem.clone(), 3005, "parent");
+    let negative = Dentry::new_negative(Some(parent.clone()), String::from("child"));
+    assert!(parent
+        .insert_cache(String::from("child"), negative.clone())
+        .is_none());
+    let inode = VfsInode::new_file(
+        Arc::new(MockFileOps::new(filesystem, 3006, &[])),
+        inode_init(3006, NodeType::RegularFile, 0),
+    );
+    let mut callback_count = 0;
+    let mut callback_identity = false;
+    let result = parent.create_exclusive_with("child", |candidate| {
+        callback_count += 1;
+        callback_identity = candidate.ptr_eq(&negative);
+        candidate.instantiate(inode)
+    });
+    assert!(callback_count == 1);
+    assert!(callback_identity);
+    assert!(result.as_ref().is_ok_and(|entry| entry.ptr_eq(&negative)));
+    assert!(negative.is_really_positive());
+    assert!(!negative.is_negative());
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&negative)));
+}
+
+#[def_test]
+fn test_exclusive_fixture_nonexclusive_existing() {
+    let filesystem = Arc::new(MockFilesystem);
+    let parent = make_dir_entry(filesystem.clone(), 3007, "parent");
+    let existing = make_dir_entry_with_parent(filesystem, 3008, Some(parent.clone()), "child");
+    assert!(parent
+        .insert_cache(String::from("child"), existing.clone())
+        .is_none());
+    assert!(existing.is_really_positive());
+    let mut callback_count = 0;
+    let result = parent.lookup_or_create_with("child", false, |_| {
+        callback_count += 1;
+        Ok(())
+    });
+    let existing_identity = matches!(
+        &result,
+        Ok(super::LookupCreateResult::Existing(entry)) if entry.ptr_eq(&existing)
+    );
+    assert!(existing_identity);
+    assert!(callback_count == 0);
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&existing)));
+}
+
+#[def_test]
+fn test_exclusive_fixture_nonexclusive_created() {
+    let filesystem = Arc::new(MockFilesystem);
+    let parent = make_dir_entry(filesystem.clone(), 3009, "parent");
+    let negative = Dentry::new_negative(Some(parent.clone()), String::from("child"));
+    assert!(parent
+        .insert_cache(String::from("child"), negative.clone())
+        .is_none());
+    let inode = VfsInode::new_file(
+        Arc::new(MockFileOps::new(filesystem, 3010, &[])),
+        inode_init(3010, NodeType::RegularFile, 0),
+    );
+    let mut callback_count = 0;
+    let mut callback_identity = false;
+    let result = parent.lookup_or_create_with("child", false, |candidate| {
+        callback_count += 1;
+        callback_identity = candidate.ptr_eq(&negative);
+        candidate.instantiate(inode)
+    });
+    let created_identity = matches!(
+        &result,
+        Ok(super::LookupCreateResult::Created(entry)) if entry.ptr_eq(&negative)
+    );
+    assert!(created_identity);
+    assert!(callback_count == 1);
+    assert!(callback_identity);
+    assert!(negative.is_really_positive());
+    assert!(!negative.is_negative());
+    assert!(parent
+        .lookup_cache("child")
+        .is_some_and(|entry| entry.ptr_eq(&negative)));
+}

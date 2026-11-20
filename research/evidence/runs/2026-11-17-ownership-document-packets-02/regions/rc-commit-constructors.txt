@@ -1,0 +1,9 @@
+    #[inline]
+    unsafe fn from_inner_in(ptr: NonNull<RcInner<T>>, alloc: A) -> Self {
+        Self { ptr, phantom: PhantomData, alloc }
+    }
+
+    #[inline]
+    unsafe fn from_ptr_in(ptr: *mut RcInner<T>, alloc: A) -> Self {
+        unsafe { Self::from_inner_in(NonNull::new_unchecked(ptr), alloc) }
+    }

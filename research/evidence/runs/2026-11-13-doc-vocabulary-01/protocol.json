@@ -1,0 +1,21 @@
+{
+  "scope": "Development OOV mechanism ablation, not semantic accuracy",
+  "parent": "research/evidence/runs/2026-11-12-doc-source-projection-01",
+  "corpus": "research/evidence/runs/2026-11-09-source-doc-inventory-02/bindings.json",
+  "methods": ["frozen_word", "extended_word", "char_count"],
+  "word": "lowercase, (?u)\\b\\w\\w+\\b tokens, unigram+bigram, raw counts, original corpus smooth IDF and L2",
+  "extension": "Union vocabulary includes all frozen candidates, queries and controls including interventions; keep original corpus N and df, new terms df=0; explicit transductive diagnostic, no held-out claim",
+  "character": "lowercase then collapse whitespace; exact character 3,4,5-gram counts including spaces across word boundaries, L2; no hashing, learned vocabulary or IDF; NOT isolated vocabulary ablation",
+  "controls": {
+    "base": "change permission preserve type",
+    "reversal": "change type preserve permission",
+    "paraphrase": "keep type while replacing permissions",
+    "identical": "change permission preserve type",
+    "empty": ""
+  },
+  "metrics": ["full-vector equality and cosine for revised/intervention pairs", "retained changed feature counts", "six fixed-query top1 and all scores", "control similarities; no semantic labels"],
+  "repeats": 2,
+  "budget": "same 3 candidates, 6 queries, top1 positive score, ties by id; not same computational feature budget",
+  "checks": ["frozen_word all rankings and scores equal prior run", "repeat byte identity", "identical control cosine 1 and empty 0", "artifact hashes"],
+  "stop": "Complete all three methods twice; no query rewrite or feature-range tuning; retain adverse control outcomes"
+}

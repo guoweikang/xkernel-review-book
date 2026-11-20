@@ -1,0 +1,37 @@
+{
+  "schema": "doc-field-evidence/1",
+  "packet_run": "research/evidence/runs/2026-11-12-governed-doc-packets-01",
+  "status": "researcher_source_audit_not_provider_validation",
+  "ranges": {
+    "permission-role": {
+      "purpose": [[145,148]], "input_preconditions": [[96,97],[145,148]],
+      "changed_and_preserved_state": [[96,97],[145,148]], "effects_and_callback_boundary": [[145,148]],
+      "errors_and_partial_completion": [[145,148]], "execution_context": [[145,148]],
+      "configuration": [], "delegation": [[145,148]]
+    },
+    "complete-command": {
+      "purpose": [[45,56],[87,128]], "input_preconditions": [[87,95]],
+      "changed_and_preserved_state": [[112,128]], "effects_and_callback_boundary": [[87,118]],
+      "errors_and_partial_completion": [[98,128]], "execution_context": [[96,118]],
+      "configuration": [], "delegation": [[82,84],[112,118]]
+    },
+    "firmware-ownership": {
+      "purpose": [[5,9]], "owned_capabilities": [[5,9]], "non_goals": [[5,9]],
+      "invariants_and_resources": [[11,20]], "dependency_direction": [[11,20]],
+      "delegation_interfaces": [[26,32],[64,76]], "configuration": [[26,29],[72,76]],
+      "exceptions": [[34,38],[92,94]]
+    }
+  },
+  "qualifications": {
+    "complete-command/effects_and_callback_boundary": "One callback only after nonempty in-limit input has been fully copied; empty input or collection failure invokes none. The callback may fail.",
+    "complete-command/changed_and_preserved_state": "Position advances only on the successful completion path. The actual CommandFile::write returns data.len() on success; generic short-callback scenarios are not demonstrated for this exact receiver.",
+    "firmware-ownership/delegation_interfaces": "Design text is evidence of a named interface, not proof of every current capability; its Unsupported IRQ lookup status conflicts with same-revision source.",
+    "firmware-ownership/exceptions": "Retain the scoped transition exclusions, but do not adopt the documented Unsupported IRQ lookup as a verified current capability gap."
+  },
+  "additional_sources": {
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "paths": ["drivers/firmware/rs-fdtree/Cargo.toml", "drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs"]
+  },
+  "guards": ["exact source hash and line ranges", "unknown stays unknown", "no semantic truth from link existence", "same revision for contradiction evidence", "never overwrite previous packet"],
+  "stop": "Index all 24 fields, retain qualifications and source contradiction, run provenance rejection controls; no retrieval effect claims"
+}

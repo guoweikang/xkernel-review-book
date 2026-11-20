@@ -1,0 +1,849 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The result of a coroutine resumption.",
+          "path": "doc",
+          "range": [
+            22,
+            63
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            64,
+            67
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This enum is returned from the `Coroutine::resume` method and indicates the",
+          "path": "doc",
+          "range": [
+            68,
+            147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " possible return values of a coroutine. Currently this corresponds to either",
+          "path": "doc",
+          "range": [
+            148,
+            227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a suspension point (`Yielded`) or a termination point (`Complete`).",
+          "path": "doc",
+          "range": [
+            228,
+            299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            300,
+            367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            368,
+            395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            396,
+            453
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "CoroutineState",
+      "range": [
+        22,
+        1133
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The trait implemented by builtin coroutine types.",
+          "path": "doc",
+          "range": [
+            1135,
+            1188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1189,
+            1192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Coroutines are currently an",
+          "path": "doc",
+          "range": [
+            1193,
+            1224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " experimental language feature in Rust. Added in [RFC 2033] coroutines are",
+          "path": "doc",
+          "range": [
+            1225,
+            1302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " currently intended to primarily provide a building block for async/await",
+          "path": "doc",
+          "range": [
+            1303,
+            1379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " syntax but will likely extend to also providing an ergonomic definition for",
+          "path": "doc",
+          "range": [
+            1380,
+            1459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " iterators and other primitives.",
+          "path": "doc",
+          "range": [
+            1460,
+            1495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1496,
+            1499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The syntax and semantics for coroutines is unstable and will require a",
+          "path": "doc",
+          "range": [
+            1500,
+            1574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " further RFC for stabilization. At this time, though, the syntax is",
+          "path": "doc",
+          "range": [
+            1575,
+            1645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " closure-like:",
+          "path": "doc",
+          "range": [
+            1646,
+            1663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1664,
+            1667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1668,
+            1679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(coroutines)]",
+          "path": "doc",
+          "range": [
+            1680,
+            1707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(coroutine_trait)]",
+          "path": "doc",
+          "range": [
+            1708,
+            1740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(stmt_expr_attributes)]",
+          "path": "doc",
+          "range": [
+            1741,
+            1778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1779,
+            1782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::{Coroutine, CoroutineState};",
+          "path": "doc",
+          "range": [
+            1783,
+            1829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::pin::Pin;",
+          "path": "doc",
+          "range": [
+            1830,
+            1852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1853,
+            1856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            1857,
+            1872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut coroutine = #[coroutine] || {",
+          "path": "doc",
+          "range": [
+            1873,
+            1918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         yield 1;",
+          "path": "doc",
+          "range": [
+            1919,
+            1939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         \"foo\"",
+          "path": "doc",
+          "range": [
+            1940,
+            1957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     };",
+          "path": "doc",
+          "range": [
+            1958,
+            1968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1969,
+            1972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match Pin::new(&mut coroutine).resume(()) {",
+          "path": "doc",
+          "range": [
+            1973,
+            2024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         CoroutineState::Yielded(1) => {}",
+          "path": "doc",
+          "range": [
+            2025,
+            2069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         _ => panic!(\"unexpected return from resume\"),",
+          "path": "doc",
+          "range": [
+            2070,
+            2127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2128,
+            2137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match Pin::new(&mut coroutine).resume(()) {",
+          "path": "doc",
+          "range": [
+            2138,
+            2189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         CoroutineState::Complete(\"foo\") => {}",
+          "path": "doc",
+          "range": [
+            2190,
+            2239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         _ => panic!(\"unexpected return from resume\"),",
+          "path": "doc",
+          "range": [
+            2240,
+            2297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2298,
+            2307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2308,
+            2313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2314,
+            2321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2322,
+            2325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " More documentation of coroutines can be found in the [unstable book].",
+          "path": "doc",
+          "range": [
+            2326,
+            2399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2400,
+            2403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [RFC 2033]: https://github.com/rust-lang/rfcs/pull/2033",
+          "path": "doc",
+          "range": [
+            2404,
+            2463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [unstable book]: ../../unstable-book/language-features/coroutines.html",
+          "path": "doc",
+          "range": [
+            2464,
+            2538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            2539,
+            2560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2561,
+            2618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "fundamental",
+          "range": [
+            2619,
+            2633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2634,
+            2699
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Coroutine",
+      "range": [
+        1135,
+        4929
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Resumes the execution of this coroutine.",
+          "path": "doc",
+          "range": [
+            3494,
+            3538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3543,
+            3546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will resume execution of the coroutine or start execution",
+          "path": "doc",
+          "range": [
+            3551,
+            3626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if it hasn't already. This call will return back into the coroutine's",
+          "path": "doc",
+          "range": [
+            3631,
+            3704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " last suspension point, resuming execution from the latest `yield`. The",
+          "path": "doc",
+          "range": [
+            3709,
+            3783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " coroutine will continue executing until it either yields or returns, at",
+          "path": "doc",
+          "range": [
+            3788,
+            3863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which point this function will return.",
+          "path": "doc",
+          "range": [
+            3868,
+            3910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3915,
+            3918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Return value",
+          "path": "doc",
+          "range": [
+            3923,
+            3941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3946,
+            3949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `CoroutineState` enum returned from this function indicates what",
+          "path": "doc",
+          "range": [
+            3954,
+            4026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " state the coroutine is in upon returning. If the `Yielded` variant is",
+          "path": "doc",
+          "range": [
+            4031,
+            4104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returned then the coroutine has reached a suspension point and a value",
+          "path": "doc",
+          "range": [
+            4109,
+            4183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " has been yielded out. Coroutines in this state are available for",
+          "path": "doc",
+          "range": [
+            4188,
+            4256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " resumption at a later point.",
+          "path": "doc",
+          "range": [
+            4261,
+            4293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4298,
+            4301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `Complete` is returned then the coroutine has completely finished",
+          "path": "doc",
+          "range": [
+            4306,
+            4378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the value provided. It is invalid for the coroutine to be resumed",
+          "path": "doc",
+          "range": [
+            4383,
+            4457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " again.",
+          "path": "doc",
+          "range": [
+            4462,
+            4472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4477,
+            4480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            4485,
+            4497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4502,
+            4505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function may panic if it is called after the `Complete` variant has",
+          "path": "doc",
+          "range": [
+            4510,
+            4586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " been returned previously. While coroutine literals in the language are",
+          "path": "doc",
+          "range": [
+            4591,
+            4665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed to panic on resuming after `Complete`, this is not guaranteed",
+          "path": "doc",
+          "range": [
+            4670,
+            4746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for all implementations of the `Coroutine` trait.",
+          "path": "doc",
+          "range": [
+            4751,
+            4804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            4809,
+            4837
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "resume",
+      "range": [
+        3494,
+        4927
+      ],
+      "signature_range": [
+        4842,
+        4926
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4931,
+            4988
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4931,
+        5254
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        5204,
+        5252
+      ],
+      "kind": "impl_fn",
+      "name": "resume",
+      "range": [
+        5115,
+        5252
+      ],
+      "signature_range": [
+        5115,
+        5203
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5256,
+            5313
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5256,
+        5586
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "body_range": [
+        5532,
+        5584
+      ],
+      "kind": "impl_fn",
+      "name": "resume",
+      "range": [
+        5443,
+        5584
+      ],
+      "signature_range": [
+        5443,
+        5531
+      ]
+    }
+  ],
+  "source_sha256": "2efdc7a8f95729f287c19d4d64498f278b78f9cc018c3ecf3f7430ece96284a4"
+}

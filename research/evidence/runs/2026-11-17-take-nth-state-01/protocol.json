@@ -1,0 +1,12 @@
+{
+  "hypothesis": "Replacing Take::nth by a loop over the adapter's next, stopping at the first None, preserves subsequent observable behavior for any Iterator",
+  "scope": "Installed Rust1.95.0, Take limit2, nth index1, followed by one next; no production modification",
+  "sequences": {"resumable": [null, 10, 20], "finite": [10, 20, 30]},
+  "base_iterator": "Custom iterator emits the given Option sequence and uses default nth/advance_by; every underlying next result is recorded, no FusedIterator claim",
+  "arms": ["original Take::nth", "scan_nth: call adapter.next count times with ? early exit, then once for result"],
+  "observation": "First result, follow-up next result, and underlying next call trace; initial return alone insufficient",
+  "prediction": "resumable first result None both; original follow-up None, scan follow-up10. Finite first20/follow-upNone both. Trace counts conditional on this base iterator only",
+  "executions": "Debug/release twice, all4cases every execution; compare known prediction and repeated traces",
+  "limits": ["One concrete counterexample to universal replacement, not all replacements", "Not a standard-library bug", "Does not imply Skip/Take should merge", "No generic next-call cost guarantee because methods may be overridden", "Manual trait context from parser-rejected file explicitly separate from AST units", "No performance result or independent benchmark accuracy"],
+  "stop": "Close universal replacement hypothesis if counterexample observed; no parameter, seed or performance expansion"
+}

@@ -1,0 +1,1334 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " The `ByteStr` type and trait implementations.",
+      "path": "doc",
+      "range": [
+        0,
+        49
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "traits",
+      "path_overrides": [],
+      "range": [
+        51,
+        62
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A wrapper for `&[u8]` representing a human-readable string that's conventionally, but not",
+          "path": "doc",
+          "range": [
+            299,
+            392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " always, UTF-8.",
+          "path": "doc",
+          "range": [
+            393,
+            411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            412,
+            415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike `&str`, this type permits non-UTF-8 contents, making it suitable for user input,",
+          "path": "doc",
+          "range": [
+            416,
+            507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " non-native filenames (as `Path` only supports native filenames), and other applications that",
+          "path": "doc",
+          "range": [
+            508,
+            604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " need to round-trip whatever data the user provides.",
+          "path": "doc",
+          "range": [
+            605,
+            660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            661,
+            664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For an owned, growable byte string buffer, use",
+          "path": "doc",
+          "range": [
+            665,
+            715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`ByteString`](../../std/bstr/struct.ByteString.html).",
+          "path": "doc",
+          "range": [
+            716,
+            774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            775,
+            778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ByteStr` implements `Deref` to `[u8]`, so all methods available on `[u8]` are available on",
+          "path": "doc",
+          "range": [
+            779,
+            874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ByteStr`.",
+          "path": "doc",
+          "range": [
+            875,
+            889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            890,
+            893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Representation",
+          "path": "doc",
+          "range": [
+            894,
+            914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            915,
+            918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `&ByteStr` has the same representation as a `&str`. That is, a `&ByteStr` is a wide pointer",
+          "path": "doc",
+          "range": [
+            919,
+            1016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which includes a pointer to some bytes and a length.",
+          "path": "doc",
+          "range": [
+            1017,
+            1073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1074,
+            1077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Trait implementations",
+          "path": "doc",
+          "range": [
+            1078,
+            1105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1106,
+            1109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `ByteStr` type has a number of trait implementations, and in particular, defines equality",
+          "path": "doc",
+          "range": [
+            1110,
+            1207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and comparisons between `&ByteStr`, `&str`, and `&[u8]`, for convenience.",
+          "path": "doc",
+          "range": [
+            1208,
+            1285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1286,
+            1289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `Debug` implementation for `ByteStr` shows its bytes as a normal string, with invalid UTF-8",
+          "path": "doc",
+          "range": [
+            1290,
+            1389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " presented as hex escape sequences.",
+          "path": "doc",
+          "range": [
+            1390,
+            1428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1429,
+            1432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `Display` implementation behaves as if the `ByteStr` were first lossily converted to a",
+          "path": "doc",
+          "range": [
+            1433,
+            1527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `str`, with invalid UTF-8 presented as the Unicode replacement character (�).",
+          "path": "doc",
+          "range": [
+            1528,
+            1611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1612,
+            1659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            1660,
+            1680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            1681,
+            1703
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "ByteStr",
+      "range": [
+        299,
+        1733
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1735,
+        4826
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a `ByteStr` slice from anything that can be converted to a byte slice.",
+          "path": "doc",
+          "range": [
+            1754,
+            1836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1841,
+            1844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a zero-cost conversion.",
+          "path": "doc",
+          "range": [
+            1849,
+            1884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1889,
+            1892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            1897,
+            1910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1915,
+            1918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You can create a `ByteStr` from a byte array, a byte slice or a string slice:",
+          "path": "doc",
+          "range": [
+            1923,
+            2004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2009,
+            2012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2017,
+            2024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![feature(bstr)]",
+          "path": "doc",
+          "range": [
+            2029,
+            2052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::bstr::ByteStr;",
+          "path": "doc",
+          "range": [
+            2057,
+            2086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ByteStr::new(b\"abc\");",
+          "path": "doc",
+          "range": [
+            2091,
+            2124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let b = ByteStr::new(&b\"abc\"[..]);",
+          "path": "doc",
+          "range": [
+            2129,
+            2167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let c = ByteStr::new(\"abc\");",
+          "path": "doc",
+          "range": [
+            2172,
+            2204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2209,
+            2212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a, b);",
+          "path": "doc",
+          "range": [
+            2217,
+            2238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a, c);",
+          "path": "doc",
+          "range": [
+            2243,
+            2264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2269,
+            2276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2281,
+            2290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2295,
+            2342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            2347,
+            2415
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2490,
+        2541
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        1754,
+        2541
+      ],
+      "signature_range": [
+        2424,
+        2489
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the same string as `&ByteStr`.",
+          "path": "doc",
+          "range": [
+            2547,
+            2589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2594,
+            2597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is redundant when used directly on `&ByteStr`, but",
+          "path": "doc",
+          "range": [
+            2602,
+            2668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it helps dereferencing other \"container\" types,",
+          "path": "doc",
+          "range": [
+            2673,
+            2724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for example `Box<ByteStr>` or `Arc<ByteStr>`.",
+          "path": "doc",
+          "range": [
+            2729,
+            2778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2783,
+            2792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2858,
+            2905
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2954,
+        2974
+      ],
+      "kind": "impl_fn",
+      "name": "as_byte_str",
+      "range": [
+        2547,
+        2974
+      ],
+      "signature_range": [
+        2914,
+        2953
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the same string as `&mut ByteStr`.",
+          "path": "doc",
+          "range": [
+            2980,
+            3026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3031,
+            3034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is redundant when used directly on `&mut ByteStr`, but",
+          "path": "doc",
+          "range": [
+            3039,
+            3109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it helps dereferencing other \"container\" types,",
+          "path": "doc",
+          "range": [
+            3114,
+            3165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for example `Box<ByteStr>` or `MutexGuard<ByteStr>`.",
+          "path": "doc",
+          "range": [
+            3170,
+            3226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3231,
+            3240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3306,
+            3353
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3414,
+        3434
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut_byte_str",
+      "range": [
+        2980,
+        3434
+      ],
+      "signature_range": [
+        3362,
+        3413
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            3440,
+            3454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3459,
+            3514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3519,
+            3528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            3533,
+            3600
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3652,
+        3883
+      ],
+      "kind": "impl_fn",
+      "name": "from_bytes",
+      "range": [
+        3440,
+        3883
+      ],
+      "signature_range": [
+        3609,
+        3651
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            3889,
+            3903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3908,
+            3963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3968,
+            3977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            3982,
+            4049
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4113,
+        4344
+      ],
+      "kind": "impl_fn",
+      "name": "from_bytes_mut",
+      "range": [
+        3889,
+        4344
+      ],
+      "signature_range": [
+        4058,
+        4112
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            4350,
+            4364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4369,
+            4424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4429,
+            4438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            4443,
+            4510
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4553,
+        4576
+      ],
+      "kind": "impl_fn",
+      "name": "as_bytes",
+      "range": [
+        4350,
+        4576
+      ],
+      "signature_range": [
+        4519,
+        4552
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            4582,
+            4596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4601,
+            4656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4661,
+            4670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            4675,
+            4742
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4797,
+        4824
+      ],
+      "kind": "impl_fn",
+      "name": "as_bytes_mut",
+      "range": [
+        4582,
+        4824
+      ],
+      "signature_range": [
+        4751,
+        4796
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        4828,
+        5069
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5071,
+        5306
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5308,
+            5366
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5308,
+        5403
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5405,
+            5452
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5405,
+        6028
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [],
+      "body_range": [
+        5544,
+        6026
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        5487,
+        6026
+      ],
+      "signature_range": [
+        5487,
+        5543
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5554,
+        5569
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5713,
+        5729
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5771,
+        5812
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5840,
+        5873
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5920,
+        5967
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5988,
+        6003
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6030,
+            6077
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6030,
+        7260
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [],
+      "body_range": [
+        6171,
+        7258
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        6114,
+        7258
+      ],
+      "signature_range": [
+        6114,
+        6170
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        22
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        6250,
+        6368
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        22
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6938,
+        6957
+      ]
+    },
+    {
+      "ancestors": [
+        21,
+        22
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7205,
+        7224
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7262,
+        7485
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7487,
+        7713
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7797,
+        8033
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8035,
+        8270
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8519,
+        8743
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8831,
+        9074
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9076,
+            9123
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9076,
+        9226
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [],
+      "body_range": [
+        9184,
+        9224
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        9163,
+        9224
+      ],
+      "signature_range": [
+        9163,
+        9183
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9228,
+            9275
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9228,
+        9390
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "body_range": [
+        9340,
+        9388
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        9319,
+        9388
+      ],
+      "signature_range": [
+        9319,
+        9339
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10545,
+        10873
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10875,
+        11223
+      ]
+    }
+  ],
+  "source_sha256": "b86a615e076688cb8cfc62d5fd1833aab9db25a5cd03c65d9cd25a35d93c89b0"
+}

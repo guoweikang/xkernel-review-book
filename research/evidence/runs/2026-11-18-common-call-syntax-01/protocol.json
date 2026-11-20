@@ -1,0 +1,101 @@
+{
+  "schema": "common-call-syntax-protocol/1",
+  "run_id": "2026-11-18-common-call-syntax-01",
+  "status": "frozen_before_execution",
+  "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "scope_protocol": {
+    "path": "research/evidence/runs/2026-11-16-discovery-common-scope-01/protocol.json",
+    "sha256": "1531098def4b6329970f9a2a39819575b0350264457a1af98630d56629863279"
+  },
+  "scope_units": {
+    "path": "research/evidence/runs/2026-11-16-discovery-common-scope-01/units.json",
+    "sha256": "6661ca3219631819ad9724359fa78e3f0c9aa7f8cf33490d47ecd7b3fedf3f58"
+  },
+  "corpus_report": {
+    "path": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/report.json",
+    "sha256": "24fd92a027526bbc18635f2d7db64040409a33268c75606b98dd5190dca42f9c"
+  },
+  "inputs": {
+    "units": {
+      "path": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/units.json",
+      "sha256": "39fe73d980a836b3d342b4464d6e3e884c64c60cf7085c2abd7c1ec172a0853a"
+    },
+    "tokens": {
+      "path": "research/evidence/runs/2026-11-05-rust-token-bags-01/report.json",
+      "sha256": "d91ee509901ae4b4f6e13b1c1e028bc4f447c92413ba33b1a8d91a9a0b2b91e1"
+    },
+    "unit_archive": {
+      "path": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/units.zip",
+      "sha256": "ecf5fdf05df570695b9d330b9a48ce3dd6854c6f11c3f82c4d5014b281e12f7e"
+    },
+    "source_archive": {
+      "path": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/sources.zip",
+      "sha256": "7f802960629508cf740b095bb7b586a0d3f3cad170c1d2b39634eb40e0da74d6"
+    }
+  },
+  "probe": {
+    "binary": {
+      "path": ".build/rust-call-probe/debug/rust-call-probe",
+      "sha256": "dc1b5b93d71deb6954528a2cf5170209b89fc01cff9450350ba0f3752d5bd1c3"
+    },
+    "source": {
+      "path": "research/tools/rust-syntax-probe/src/bin/rust-call-probe.rs",
+      "sha256": "f5d9bfa5a6a1d90765c6153e3c5166b59506fc758e355d597eba0624149c5e3c"
+    },
+    "cargo_toml": {
+      "path": "research/tools/rust-syntax-probe/Cargo.toml",
+      "sha256": "ec22200302d65d3880bd29c7335343d2361db6629b0aff27a29dcad3c3c59d81"
+    },
+    "cargo_lock": {
+      "path": "research/tools/rust-syntax-probe/Cargo.lock",
+      "sha256": "2d1fc92903184052c45941c495337123f7c4c0a092a843643a47e9dbb3e501d1"
+    },
+    "prior_report": {
+      "path": "research/evidence/runs/2026-11-06-reviewed-call-syntax-01/report.json",
+      "sha256": "a6f9adee715df5608f402591bc9cdd15cba4c44f9a022d0cce3c5e7bb61a7911"
+    },
+    "prior_runner": {
+      "path": "research/evidence/runs/2026-11-06-reviewed-call-syntax-01/runner.py",
+      "sha256": "dd7662f82f089e51ab2334da70f721a8c20c4af2882db4d3ff5a21eb6aa27f76"
+    }
+  },
+  "expected_units": 812,
+  "population": "All common-scope code_eligible IDs; equal to token records with size_eligible; no exclusions after parsing",
+  "selection_order": "unit_id ascending",
+  "source_identity_chain": "units and tokens hashes must equal common-scope protocol inputs; archive hashes are transitively anchored by the scope-pinned units rows and frozen corpus report, not falsely claimed to be direct fields of common-scope protocol",
+  "controls": [
+    "legacy syntax fixture: Chinese UTF8, library::call::<u8>, object.read, callback, opaque hidden macro",
+    "legacy deferred fixture: closure, async, local fn, immediate call",
+    "legacy invalid syntax rejected"
+  ],
+  "limits": {
+    "wall_seconds": 120,
+    "per_probe_seconds": 5,
+    "network": false,
+    "models": false,
+    "ranking": false,
+    "frontend_changes": false
+  },
+  "failure_policy": "Retain one record for every selected unit, including rejected, adapter_error and not_run_due_to_gate_or_deadline; nonzero exit if any selected unit is not parsed or controls fail",
+  "semantics": {
+    "resolved_edges": 0,
+    "target_resolution": "unresolved",
+    "cfg": "not_evaluated",
+    "execution": "not_established",
+    "macro_policy": "retain opaque_macro separately; no expansion",
+    "deferred_policy": "retain deferred_depth; not runtime ordering"
+  },
+  "outputs": [
+    "calls.json",
+    "controls.json",
+    "summary.json",
+    "environment.json",
+    "run.log",
+    "runner.py",
+    "probe.rs",
+    "Cargo.toml",
+    "Cargo.lock",
+    "selected-units.zip"
+  ],
+  "baseline_or_scoring": "not_run; principal owns representation/ranking comparison"
+}

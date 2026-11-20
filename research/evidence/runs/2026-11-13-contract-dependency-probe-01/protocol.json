@@ -1,0 +1,12 @@
+{
+  "scope": "Parse-only capability probe on already-seen synthetic contract text; no automatic logical formulas or extraction accuracy",
+  "input": "research/evidence/runs/2026-11-13-rust-contract-logic-01/protocol.json",
+  "selection": "Every premise and hypothesis, de-duplicate exact strings in first occurrence order; retain family/case bindings evaluation-side",
+  "spacy": "3.8.11",
+  "model": "en_core_web_sm",
+  "model_version": "3.8.0",
+  "components": "Load official pipeline with ner excluded; keep other installed components; record actual list",
+  "outputs": ["all token texts/offsets/lemmas/POS/morphology/dependency labels/head IDs", "sentence ranges", "bindings separate from parsed text"],
+  "checks": ["token spans match original text", "head indices in bounds", "dependency paths terminate at roots without cycles", "two full passes identical", "installed model file hashes and package versions"],
+  "limits": "spaCy English labels are not assumed to be Universal Dependencies. Syntax is not SRL, entailment, deontic logic or Rust semantics. No custom per-case rules, no model tuning."
+}

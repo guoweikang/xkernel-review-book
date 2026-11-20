@@ -1,0 +1,28 @@
+{
+  "design": "Replay 4 archived mode/repeat trace files x 12 rows x 2 declarations = 96 evaluations; no new Rust execution.",
+  "input_lengths": {
+    "complete": 4,
+    "empty": 0,
+    "oversize": 4097,
+    "short_success": 4,
+    "short_then_fault": 4,
+    "callback_fault": 4
+  },
+  "payload_model": "byte[index] = index % 251, from frozen original harness",
+  "bindings": "manual callback event mapping to self.write; command owns declaration, scalar is evaluated as a replacement candidate, not falsely rebound as the same source entity",
+  "semantics": "Count applies after successful collection, including callback failure. Collection failure requires no callback. Out-of-domain is neither pass nor failure.",
+  "expected_per_trace_file": {
+    "once": {
+      "observed_satisfied": 6,
+      "counterexample": 2,
+      "outside_declared_domain": 4
+    },
+    "twice": {
+      "observed_satisfied": 1,
+      "counterexample": 7,
+      "outside_declared_domain": 4
+    }
+  },
+  "limits": "Previously seen development traces with modeled dependencies; valid rewind, no cursor effects on failed copy, no short callback returns. No zero-copy scenario or incomplete-trace scenario exercised.",
+  "stop": "All archived conditions retained; no tuning and no performance/novelty or general sharing claim."
+}

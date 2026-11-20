@@ -1,0 +1,124 @@
+Rust ownership test audit — 2026-11-17-ownership-test-audit-01
+固定提交：59807616e1fa2540724bfbac14d7976d7e4a3860
+结论类型：既有测试源码审计；原始 harness 执行 0；适配测试执行 0；无复现或内存安全证明。
+
+一、可立即交接的既有测试
+以下路径均相对于 rust-lang/rust；original/ 下保留完整同路径原文。
+
+1. library/coretests/tests/clone.rs:24 test_clone_to_uninit_slice_success
+   String 三元素，直接 CloneToUninit 调用，成功后 assume_init，断言 a == b。
+   覆盖成功初始化与值相等；String 在作用域退出时析构，但普通运行不自动证明无别名/双重释放。
+2. library/coretests/tests/clone.rs:40 test_clone_to_uninit_slice_drops_on_panic
+   #[cfg(panic = "unwind")]；3 个原对象，首次 clone 成功变 4，第二次 clone 在创建前 panic。
+   catch_unwind 精确匹配 "intentional panic"；断言 COUNTER == 3，再 drop(a)，断言 == 0。
+   自定义有 Drop 的非 TrivialClone 类型是零大小类型。目标为栈上 MaybeUninit 数组。
+   这是已初始化前缀组件回收的直接既有测试；没有 heap allocation guard，不证明分配释放。
+   绑定 core/src/clone.rs:555 的 slice impl → CopySpec::clone_slice；
+   core/src/clone/uninit.rs:26-49 创建 InitializingSlice、逐项 push、成功 forget；
+   同文件:86-124 只借用存储，initialized_len 限制 assume_init_drop 前缀，无 deallocate。
+3. library/alloctests/tests/rc.rs:519 test_cowrc_clone_make_unique、:543 test_cowrc_clone_unique2；
+   library/alloctests/tests/sync.rs:245 test_cowarc_clone_make_mut、:269 test_cowarc_clone_unique2。
+   多强引用的正常 make_mut，验证值分离。比较的是值，不是 ptr_eq，不是 clone 次数。
+4. library/alloctests/tests/rc.rs:581 test_cowrc_unsized；
+   library/alloctests/tests/arc.rs:250 make_mut_unsized。
+   [i32] 的正常 make_mut，覆盖独占及共享之后的值结果。
+   i32 是 TrivialClone，不能拿它覆盖有 Drop 的非平凡 clone 展开路径。
+5. library/alloctests/tests/rc.rs:566 test_cowrc_clone_weak；
+   library/alloctests/tests/sync.rs:291 test_cowarc_clone_weak。
+   唯一强引用加 Weak，make_mut 后值 76，旧 Weak upgrade 为 None。
+   没有可观测 clone 计数或必 panic Clone。仅有 Weak 失效断言，不足以动态证明“未 clone”。
+6. library/alloctests/tests/rc.rs:677 与 library/alloctests/tests/sync.rs:506：
+   test_clone_from_slice_panic，#[should_panic]，第 3 个 Fail 克隆前 panic，前两个带 String 克隆完成。
+   相邻 test_clone_from_slice 是正常对照。panic 测试无 drop 计数、allocator 计数或精确 panic 文本要求。
+   关键区别：Rc/Arc::from(slice) → RcFromSlice/ArcFromSlice::from_slice →
+   from_iter_exact(v.iter().cloned(), len)，不是 make_mut/clone_to_uninit。
+   rc.rs:2329、sync.rs:2274 的 from_iter_exact 自有 Guard，同时 drop 已初始化前缀并 Global.deallocate；
+   不能用这个测试充当 InitializingSlice + UniqueRcUninit/UniqueArcUninit 双层分工的执行证据。
+7. library/alloctests/tests/rc.rs:212 与 library/alloctests/tests/arc.rs:215 panic_no_leak。
+   通过 AllocCount 记录 allocate/deallocate，在 PanicOnDrop 展开后断言 1→0，并校验 panic payload。
+   arc.rs:91 的 type Rc<T,A> = Arc<T,A> 是别名，故 arc 文件确实测试 Arc，不是误用 Rc。
+   这是销毁已初始化对象时 destructor panic 的分配回收测试，不是 clone panic 或 Unique*Uninit 测试。
+   allocator_api 不稳定；非 unwind 配置忽略。不能直接 stable 原样抽取。
+8. rc.rs:155 / arc.rs:158 shared_from_iter_trustedlen_panic 是邻接失败路径；
+   迭代器第 98 项 panic，should_panic 匹配消息，无组件或分配计数；与 make_mut 路径不同。
+
+二、双层职责的源码绑定（不是运行结果）
+多强引用 make_mut → clone_from_ref_in：
+- alloc/src/rc.rs:2065、:1345：先 UniqueRcUninit::new，再 clone_to_uninit；成功 into_rc。
+- alloc/src/sync.rs:2492、:1495：对应 Arc；并发计数协议不在本次验证范围。
+- core/src/clone/uninit.rs:26-49、:86-124：非 TrivialClone slice 展开时只 drop 已初始化前缀。
+- alloc/src/rc.rs:4490/4501 与 sync.rs:4270/4282：成功交付 ManuallyDrop 守卫，失败 Drop 只 deallocate，
+  不把目标作为完整 T 析构；其 layout、allocator 与 DST 元数据不得在适配时丢失。
+- core/src/clone.rs:528-542：panic 后目标不得读/drop；组件回收为 should；
+  调用者 deallocate 为可选防泄漏建议。现有具体实现仍确实回收，不能因契约可选就删除。
+已初始化组件可以清理，禁止的是把整个未完成目标当作初始化 T 析构。
+上述既有测试未联合观测 make_mut clone panic 的“组件回收 + 外层 allocation 释放”。
+在扫描的测试目录中未找到直接 make_mut clone-panic 测试；这是有范围的检索结论，不是 Rust 全仓库不存在。
+
+三、可运行性与最小忠实适配建议
+本机 rustc +1.95.0 -vV 与固定提交完全一致，x86_64-unknown-linux-gnu，默认 cfg panic="unwind"。
+已安装 rust-src 包含 alloctests/coretests，但根 x.py、根 Cargo.toml 不存在。
+alloctests/tests/lib.rs 有 allocator_api/test/unique_rc_arc 等 feature，coretests 有 clone_to_uninit；
+Cargo 测试有 rand/rand_xorshift 等依赖。不能将原目录当普通 stable 单文件原样跑。
+本批没有尝试完整 bootstrap，也没有声称缺失 x.py 导致所有其他 harness 方式均不可能。
+
+优先下一步（只建议，本批未编写/编译/执行）：
+A. 稳定工具链原断言适配：
+   抽取第3–6项的原函数体和属性，按 rc_tests / arc_tests 模块分隔同名函数；
+   仅添加 std::rc::Rc / std::sync::Arc 导入，Arc unsized 函数局部 alloc::sync::Arc
+   可改为 std::sync::Arc 并记录这一字面差异。保留所有原断言和 #[should_panic]。
+   rustc +1.95.0 --edition=2024 --test <fixture.rs> -C panic=unwind -o <fixture>
+   <fixture> --test-threads=1
+   这是安装 std 的原测试抽取适配，不是重建固定源或原 Rust harness 复现。
+B. 组件清理与 make_mut 分工的稳定 API 适配：
+   保留第2项 CountsDropsAndPanics 的 Clone/Drop 和 panic payload/3→0 断言，
+   把原 stack storage + clone_to_uninit 调用替换为“Rc/Arc<[CountsDropsAndPanics]> 的
+   make_mut”，初始化必须用 Rc/Arc::new(array) 再 unsize，避免 from(&slice) 提前 clone。
+   保留另一个强引用强制 clone 分支；catch_unwind 用 AssertUnwindSafe 包住可变 owner。
+   panic 后应仍有原3个对象；先 drop 一份 owner，另一份维持3，再 drop 最后 owner，归零。
+   这些调用/所有权断言改动属于衍生集成见证，不能叫原 test_clone_to_uninit_slice_drops_on_panic 复现。
+   可加源指针/强引用计数/原值不变断言，但须登记为新增观测。
+   正常非平凡 Clone 的对照需要禁用或提高原“第5个对象 panic”阈值；这是新增条件，提前冻结。
+C. Weak-only 不 clone 控制：
+   原 weak 测试使用整数；新增一类 Clone 一旦调用就 panic 的值，唯一强引用 + Weak，
+   make_mut 成功且旧 Weak upgrade None 才可作为未 clone 的动态控制；
+   独占且无 Weak 同样应成功。另保留强引用的控制必须触发预期 panic，排除探针失效。
+   这是基于原 weak 用例的新增见证，不能声称上游原测试已经含此控制。
+D. 分配释放仍需独立观测：
+   B 的计数不证明 Unique*Uninit 的 deallocate。零大小元素也不取消 Rc/Arc 头部分配。
+   若要直接复用 AllocCount，需要带 allocator_api 的可用工具链/明确特性解锁条件，
+   并在 make_mut clone-panic 场景记录新分配回收、旧分配仍存活、最后 Weak 释放后旧分配回收。
+   不建议为当前缺口发明通用全局 allocator 验证器。stable 的组件见证先单独结案，
+   allocator 释放保留为源码已知、该路径执行未知。
+E. 原 core 测试原样抽取需要 clone_to_uninit feature；普通 stable 1.95.0 不能直接使用。
+   即使以后用 RUSTC_BOOTSTRAP 或另一 nightly 解锁，也必须记录条件，并且不是普通 stable 复现；
+   另一 nightly 的 std 不是本固定提交。优先用 B 的稳定公开入口并如实标明改动。
+
+四、检索、归档和限制
+manifest.json 先于下载/结论写入，固定最多20个官方文件请求、0原/适配运行。
+sources.json 记录14次请求：13个成功原件；alloctests/Cargo.toml 首次 TLS EOF，单次重试成功。
+所有13件 SHA-256、Git blob SHA-1 和字节数均与已归档官方 library tree 核验一致；
+tree 来源与 SHA-256 见 verification.json（非本批重新下载树，可信链承接 upstream-01）。
+完整原件通过 apply_patch 落盘后重算摘要，避免行尾变化被误称原始字节。
+source-excerpts.json 保存关键原文及原文件SHA-256；完整 original/ 是最终定位依据。
+core/src/slice/mod.rs 的 clone_to_uninit/InitializingSlice 检索无命中，保留这份导航负结果原件。
+installed-test-search.txt 扫描安装版 alloctests/tests、coretests/tests 的 make_mut/clone_to_uninit/
+UniqueRcUninit/UniqueArcUninit；命中集中于归档文件，但不覆盖 rust 全部 tests/ui、run-pass、
+Miri 独立测试仓库或历史提交。未搜索这些范围不能宣称全仓库不存在失败测试。
+
+历史检索：
+lookup-question.json：make_mut / clone panic / 部分初始化，12命中/12显示/0截断。
+lookup-identity.json：CloneToUninit / ownership-admission-01 / 固定commit，51命中/12显示/39截断。
+都含本轮manifest自命中，不能当独立旧证据；不据这些计数声称全文语义召回。
+已打开准入笔记、AGENTS、本地skill、检索流程、PROGRESS顶部、责任专题、旧官方树，
+旧库存freeze及新13件原文。旧 parsed 巨型材料和39条省略结果未逐件阅读。
+主线程关于责任表和 uninit.rs 的两次消息作为导航；本批独立下载并回读同commit uninit.rs。
+没有委托新的背景代理：当前任务本身是有界研究交接，工具无可用子代理启动接口。
+
+五、校验与交付边界
+13/13原件哈希核验通过。catalog 检查通过：232 documents / 10 topics / five negative controls。
+既有生成站点只读校验通过：280 HTML / local links / artifact isolation / 87 archive checksums。
+未重新 book build：现有 build.py 会删除/重写共享 .build/src 与 dist，
+本次“仅独立目录输出”边界优先；主线程集成后可统一重建。站点校验不等于新构建通过。
+所有新增文件仅在本run目录；没有新增Markdown，不需要动 catalog；没有修改进度/生产代码、
+commit/push。FILELIST.txt 给出准确目录内文件清单，checksums.json 覆盖其余交付文件。

@@ -1,0 +1,17 @@
+{
+  "question": "Does one private live-winner-or-insert helper reduce duplicated policy without an unacceptable ownership, lock, allocation or interface cost?",
+  "candidate": "call-subset-continuation-02/case-002, fixed revision 7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "inputs": "Frozen baseline-dentry.rs and six-test fixture/results from cache-transaction-fixture-01; direct source dependencies only",
+  "designs": ["Unchanged baseline", "Single private Cow<str> helper owning children guard; wrapper-specific admission and retention remain outside"],
+  "checks": [
+    "Raw live-winner selection including PAR, expired and absent insertion",
+    "Owned name moved on insertion, borrowed name materialized only on miss, no extra candidate clone",
+    "Guard release before retention and ownership/destruction ordering on each branch",
+    "Policy stays in wrappers and no public type/trait or callback interface added",
+    "Common invariant centralized versus extra helper, branches, concepts and nonblank lines; no weighted quality score"
+  ],
+  "execution_boundary": "Static admission and exact proposal artifact only. No candidate kernel run unless separately admitted and frozen. Existing fixture success is not candidate equivalence.",
+  "budget": "One concrete proposal, one independent source review; no redesign loop or generic ownership framework",
+  "decision": "State behavioral gaps separately from maintainability judgment. If unresolved adoption-changing ordering/cost issue remains, retain hypothesis but do not promote to a refactoring recommendation. Missing proof is not proof of a production defect.",
+  "stop": "Close this proposal after review. If rejected, return to research-stage bottleneck; do not repair with Option state, return guards or wider production interface merely to obtain a positive result."
+}

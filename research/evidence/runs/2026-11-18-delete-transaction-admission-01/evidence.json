@@ -1,0 +1,318 @@
+{
+  "schema": "delete-transaction-evidence/1",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "git_repository_read_only": "/root/codes/x-kernel-worktrees/ai-review-rules",
+  "archive": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/sources.zip",
+  "archive_sha256": "7f802960629508cf740b095bb7b586a0d3f3cad170c1d2b39634eb40e0da74d6",
+  "records": [
+    {
+      "id": "D",
+      "path": "fs/kvfs/src/node/dentry.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7",
+      "bytes": 55869,
+      "line_count": 1657,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "D415",
+          "start_line": 415,
+          "end_line": 425,
+          "text": "    fn verify_child_name(name: &str) -> VfsResult<()> {\n        if name.is_empty() || name == DOT || name == DOTDOT {\n            return Err(VfsError::InvalidInput);\n        }\n        if name.contains('/') || name.contains('\\0') {\n            return Err(VfsError::InvalidInput);\n        }\n        if name.len() > MAX_NAME_LEN {\n            return Err(VfsError::NameTooLong);\n        }\n        Ok(())\n"
+        },
+        {
+          "id": "D705",
+          "start_line": 705,
+          "end_line": 715,
+          "text": "    fn mark_unlinked(&self) {\n        self.0.location.write().is_unlinked = true;\n    }\n\n    pub(crate) fn lock_location(&self) -> LockedDentry<'_> {\n        LockedDentry {\n            dentry: self,\n            location: self.0.location.read(),\n        }\n    }\n\n"
+        },
+        {
+          "id": "D764",
+          "start_line": 764,
+          "end_line": 775,
+          "text": "    pub fn is_dir(&self) -> bool {\n        self.vfs_inode().is_dir()\n    }\n\n    /// Returns this entry if it is a directory.\n    pub fn as_dir(&self) -> VfsResult<&Self> {\n        if self.is_dir() {\n            Ok(self)\n        } else {\n            Err(VfsError::NotADirectory)\n        }\n    }\n"
+        },
+        {
+          "id": "D875",
+          "start_line": 875,
+          "end_line": 897,
+          "text": "    fn remove_cache_entry(&self, name: &str) -> Option<Dentry> {\n        let entry = self\n            .0\n            .children\n            .lock()\n            .remove(name)\n            .and_then(|entry| entry.upgrade().map(Dentry));\n        if let Some(entry) = &entry\n            && let Some(super_block) = entry.super_block()\n        {\n            super_block.uncache_dentry(entry);\n        }\n        entry\n    }\n\n    fn forget_cache_entry(&self, name: &str) {\n        if let Some(entry) = self.remove_cache_entry(name)\n            && entry.is_really_positive()\n            && let Ok(dir) = entry.as_dir()\n        {\n            dir.forget();\n        }\n    }\n"
+        },
+        {
+          "id": "D1073",
+          "start_line": 1073,
+          "end_line": 1089,
+          "text": "    fn lookup_locked(&self, dir_inode: &VfsInode, name: &str) -> VfsResult<Dentry> {\n        loop {\n            if let Some(entry) = self.lookup_cache_entry(name) {\n                return Ok(entry);\n            }\n\n            let candidate = Dentry::new_negative(Some(self.clone()), name.to_owned());\n            let lookup_guard = candidate.0.lookup_mutex.lock();\n            candidate.begin_parallel_lookup();\n            if let Some(entry) = self.cache_lookup_candidate(name, &candidate) {\n                candidate.end_parallel_lookup();\n                drop(lookup_guard);\n                if entry.is_parallel_lookup() {\n                    let _lookup_guard = entry.0.lookup_mutex.lock();\n                }\n                continue;\n            }\n"
+        },
+        {
+          "id": "D1091",
+          "start_line": 1091,
+          "end_line": 1134,
+          "text": "            let result = match dir_inode.lookup_child(&candidate) {\n                Ok(Some(entry)) => {\n                    let location = entry.0.location.read();\n                    let has_expected_parent = location\n                        .parent\n                        .as_ref()\n                        .is_some_and(|parent| parent.ptr_eq(self));\n                    let is_valid =\n                        entry.is_really_positive() && has_expected_parent && location.name == name;\n                    drop(location);\n                    if is_valid {\n                        if self.can_cache_children() && entry.can_cache_as_child() {\n                            self.replace_lookup_candidate(name, &candidate, &entry);\n                        } else {\n                            // Non-cacheable entry (e.g. procfs): retract the\n                            // transient candidate without ever publishing the\n                            // entry into the children map or the dcache, so a\n                            // lookup performs no cache-then-uncache churn.\n                            self.uncache_lookup_candidate(name, &candidate);\n                        }\n                        Ok(entry)\n                    } else {\n                        self.uncache_lookup_candidate(name, &candidate);\n                        Err(VfsError::InvalidInput)\n                    }\n                }\n                Ok(None) => {\n                    if !self.can_cache_children() {\n                        // Non-cacheable parent (e.g. procfs): do not retain\n                        // negative dentries either, or every failed name\n                        // lookup would accumulate a permanent dcache entry\n                        // and poison later lookups of the same name.\n                        self.uncache_lookup_candidate(name, &candidate);\n                    }\n                    Ok(candidate.clone())\n                }\n                Err(err) => {\n                    self.uncache_lookup_candidate(name, &candidate);\n                    Err(err)\n                }\n            };\n            candidate.end_parallel_lookup();\n            drop(lookup_guard);\n            return result;\n"
+        },
+        {
+          "id": "D1138",
+          "start_line": 1138,
+          "end_line": 1158,
+          "text": "    fn lookup_positive_locked(&self, dir_inode: &VfsInode, name: &str) -> VfsResult<Dentry> {\n        let entry = self.lookup_locked(dir_inode, name)?;\n        if entry.is_negative() {\n            Err(VfsError::NotFound)\n        } else {\n            Ok(entry)\n        }\n    }\n\n    fn with_locked_child<R>(\n        &self,\n        name: &str,\n        operation_fn: impl FnOnce(&Dentry) -> VfsResult<R>,\n    ) -> VfsResult<R> {\n        self.as_dir()?;\n        Self::verify_child_name(name)?;\n        let dir_inode = self.vfs_inode();\n        let _namespace_guard = dir_inode.lock_namespace_exclusive();\n        let candidate = self.lookup_locked(&dir_inode, name)?;\n        operation_fn(&candidate)\n    }\n"
+        },
+        {
+          "id": "D1208",
+          "start_line": 1208,
+          "end_line": 1269,
+          "text": "    /// Unlinks a non-directory child by name.\n    #[cfg(unittest)]\n    fn unlink(&self, name: &str) -> VfsResult<()> {\n        self.unlink_with(name, |_| Ok(()))\n    }\n\n    pub(crate) fn unlink_with<F>(&self, name: &str, may_unlink_fn: F) -> VfsResult<()>\n    where\n        F: FnOnce(&Dentry) -> VfsResult<()>,\n    {\n        self.as_dir()?;\n        Self::verify_child_name(name)?;\n        let dir_inode = self.vfs_inode();\n        let _namespace_guard = dir_inode.lock_namespace_exclusive();\n        let entry = self.lookup_positive_locked(&dir_inode, name)?;\n        let victim_inode = entry.vfs_inode();\n        if Arc::ptr_eq(&victim_inode, &dir_inode) {\n            return Err(VfsError::InvalidInput);\n        }\n        let _victim_guard = victim_inode.lock_namespace_exclusive();\n        if entry.is_dir() {\n            return Err(VfsError::IsADirectory);\n        }\n        may_unlink_fn(&entry)?;\n        dir_inode.unlink(&entry)?;\n        entry.mark_unlinked();\n        self.forget_cache_entry(name);\n        Ok(())\n    }\n\n    /// Removes a directory child by name.\n    ///\n    /// The filesystem `rmdir` callback is authoritative for whether the\n    /// directory is empty.\n    #[cfg(unittest)]\n    fn rmdir(&self, name: &str) -> VfsResult<()> {\n        self.rmdir_with(name, |_| Ok(()))\n    }\n\n    pub(crate) fn rmdir_with<F>(&self, name: &str, may_rmdir_fn: F) -> VfsResult<()>\n    where\n        F: FnOnce(&Dentry) -> VfsResult<()>,\n    {\n        self.as_dir()?;\n        Self::verify_child_name(name)?;\n        let dir_inode = self.vfs_inode();\n        let _namespace_guard = dir_inode.lock_namespace_exclusive();\n        let entry = self.lookup_positive_locked(&dir_inode, name)?;\n        let victim_inode = entry.vfs_inode();\n        if Arc::ptr_eq(&victim_inode, &dir_inode) {\n            return Err(VfsError::InvalidInput);\n        }\n        let _victim_guard = victim_inode.lock_namespace_exclusive();\n        if !entry.is_dir() {\n            return Err(VfsError::NotADirectory);\n        }\n        may_rmdir_fn(&entry)?;\n        dir_inode.rmdir(&entry)?;\n        entry.mark_unlinked();\n        self.forget_cache_entry(name);\n        Ok(())\n    }\n"
+        },
+        {
+          "id": "D1382",
+          "start_line": 1382,
+          "end_line": 1398,
+          "text": "    /// Clears cached child dentries and per-dentry data recursively.\n    pub(crate) fn forget(&self) {\n        let children = mem::take(&mut *self.0.children.lock());\n        for child in children\n            .into_values()\n            .filter_map(|entry| entry.upgrade().map(Dentry))\n        {\n            if child.is_really_positive()\n                && let Ok(dir) = child.as_dir()\n            {\n                dir.forget();\n            }\n            if let Some(super_block) = child.super_block() {\n                super_block.uncache_dentry(&child);\n            }\n        }\n    }\n"
+        },
+        {
+          "id": "D1657",
+          "start_line": 1657,
+          "end_line": 1657,
+          "text": "unittest::path_mod_test!(tests_dentry, \"../../ut-tests/node_dentry.rs\");\n"
+        }
+      ]
+    },
+    {
+      "id": "I",
+      "path": "fs/kvfs/src/node/inode.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "7f4bd4545f7e152eec40400f1b62d1f6867970146a659d1921a43b8fadb312c0",
+      "bytes": 91695,
+      "line_count": 2813,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "I196",
+          "start_line": 196,
+          "end_line": 198,
+          "text": "    fn unlink(&self, _dir: &VfsInode, _dentry: &LockedDentry<'_>) -> VfsResult<()> {\n        Err(VfsError::NotADirectory)\n    }\n"
+        },
+        {
+          "id": "I222",
+          "start_line": 222,
+          "end_line": 224,
+          "text": "    fn rmdir(&self, dir: &VfsInode, dentry: &LockedDentry<'_>) -> VfsResult<()> {\n        self.unlink(dir, dentry)\n    }\n"
+        },
+        {
+          "id": "I2180",
+          "start_line": 2180,
+          "end_line": 2186,
+          "text": "    pub(crate) fn lock_namespace_shared(&self) -> RwLockReadGuard<'_, ()> {\n        self.namespace_lock.read()\n    }\n\n    pub(crate) fn lock_namespace_exclusive(&self) -> RwLockWriteGuard<'_, ()> {\n        self.namespace_lock.write()\n    }\n"
+        },
+        {
+          "id": "I2285",
+          "start_line": 2285,
+          "end_line": 2295,
+          "text": "    /// Unlink a child below this directory inode.\n    pub(crate) fn unlink(&self, dentry: &Dentry) -> VfsResult<()> {\n        let dentry = dentry.lock_location();\n        self.require_directory_operations()?.unlink(self, &dentry)\n    }\n\n    /// Remove a directory child below this directory inode.\n    pub(crate) fn rmdir(&self, dentry: &Dentry) -> VfsResult<()> {\n        let dentry = dentry.lock_location();\n        self.require_directory_operations()?.rmdir(self, &dentry)\n    }\n"
+        }
+      ]
+    },
+    {
+      "id": "M",
+      "path": "fs/kvfs/src/mount.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "07f8982d385625a3b730c2329dc9cf983a6dfd75854f5bda85e3668af85f2cdd",
+      "bytes": 71064,
+      "line_count": 1919,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "M1630",
+          "start_line": 1630,
+          "end_line": 1645,
+          "text": "    ) -> VfsResult<Option<RemovedEntry>> {\n        self.check_writable_mount()?;\n        // Captured under the namespace lock, from the dentry the removal\n        // actually unlinks -- the event identity must describe that object,\n        // not whatever a separate lookup saw before the lock was taken.\n        let mut removed = None;\n        self.dentry.as_dir()?.unlink_with(name, |victim| {\n            if has_trailing_slash {\n                return Err(VfsError::NotADirectory);\n            }\n            self.may_modify_directory(cred)?;\n            let victim_path = self.with_dentry(victim.clone());\n            self.check_sticky(&victim_path, cred)?;\n            victim_path.check_not_mountpoint()?;\n            // Pre-unlink `nlink`: the FS decrements it when the unlink below\n            // runs, and the retired-or-survives decision is about that move.\n"
+        },
+        {
+          "id": "M1658",
+          "start_line": 1658,
+          "end_line": 1668,
+          "text": "                victim_nlink: Some(\n                    victim_path\n                        .getattr()\n                        .map_or_else(|_| victim_path.identity().nlink, |meta| meta.nlink),\n                ),\n                victim_dentry: victim.clone(),\n            });\n            Ok(())\n        })?;\n        Ok(removed)\n    }\n"
+        },
+        {
+          "id": "M1675",
+          "start_line": 1675,
+          "end_line": 1685,
+          "text": "    /// Removes a directory like `Mount::rmdir` and reports the victim.\n    pub fn rmdir_tracked(&self, name: &str, cred: &Cred) -> VfsResult<Option<RemovedEntry>> {\n        self.check_writable_mount()?;\n        let mut removed = None;\n        self.dentry.as_dir()?.rmdir_with(name, |victim| {\n            self.may_modify_directory(cred)?;\n            let victim_path = self.with_dentry(victim.clone());\n            self.check_sticky(&victim_path, cred)?;\n            victim_path.check_not_mountpoint()?;\n            removed = Some(RemovedEntry {\n                parent: self.inode(),\n"
+        },
+        {
+          "id": "M1691",
+          "start_line": 1691,
+          "end_line": 1701,
+          "text": "                victim_nlink: Some(\n                    victim_path\n                        .getattr()\n                        .map_or_else(|_| victim_path.identity().nlink, |meta| meta.nlink),\n                ),\n                victim_dentry: victim.clone(),\n            });\n            Ok(())\n        })?;\n        Ok(removed)\n    }\n"
+        }
+      ]
+    },
+    {
+      "id": "S",
+      "path": "fs/kvfs/src/super_block.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "7e5edfffdcd7ad1f2a109f811d7940cffd02913f854acc69853ecb5d4a1d5e5b",
+      "bytes": 49777,
+      "line_count": 1325,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "S1178",
+          "start_line": 1178,
+          "end_line": 1196,
+          "text": "    /// Retains a hashed dentry until it is explicitly evicted from the dcache.\n    pub(crate) fn cache_dentry(&self, dentry: Dentry) {\n        let key = dentry.key();\n        let replaced = self.dentry_cache.lock().insert(key, dentry);\n        drop(replaced);\n    }\n\n    /// Removes a dentry from the dcache without affecting external references.\n    pub(crate) fn uncache_dentry(&self, dentry: &Dentry) {\n        let key = dentry.key();\n        let removed = self.dentry_cache.lock().remove(&key);\n        drop(removed);\n    }\n\n    /// Returns whether `dentry` is currently retained by the dcache.\n    #[cfg(unittest)]\n    pub(crate) fn is_dentry_cached(&self, dentry: &Dentry) -> bool {\n        self.dentry_cache.lock().contains_key(&dentry.key())\n    }\n"
+        }
+      ]
+    },
+    {
+      "id": "T",
+      "path": "fs/kvfs/ut-tests/node_dentry.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b",
+      "bytes": 43711,
+      "line_count": 1273,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "T317",
+          "start_line": 317,
+          "end_line": 333,
+          "text": "    fn unlink(&self, _dir: &VfsInode, _dentry: &LockedDentry<'_>) -> VfsResult<()> {\n        self.unlink_count.fetch_add(1, Ordering::Relaxed);\n        if self.can_remove {\n            Ok(())\n        } else {\n            Err(VfsError::OperationNotSupported)\n        }\n    }\n\n    fn rmdir(&self, _dir: &VfsInode, _dentry: &LockedDentry<'_>) -> VfsResult<()> {\n        self.rmdir_count.fetch_add(1, Ordering::Relaxed);\n        if self.can_remove {\n            Ok(())\n        } else {\n            Err(VfsError::OperationNotSupported)\n        }\n    }\n"
+        },
+        {
+          "id": "T682",
+          "start_line": 682,
+          "end_line": 725,
+          "text": "#[def_test]\nfn test_rmdir_uses_directory_removal_callback() {\n    let root_operations = Arc::new(MockDirOps::new_removable(44));\n    let root_inode = VfsInode::new_openable_dir(\n        root_operations.clone(),\n        inode_init(44, NodeType::Directory, 0),\n    );\n    let root = Dentry::new_dir_from_inode(root_inode, None, String::new());\n    let (victim, _) = make_removable_dir_entry(45, Some(root.clone()), \"victim\");\n    let (cached_child, _) =\n        make_file_entry(Arc::new(MockFilesystem), 46, Some(victim.clone()), \"cached\");\n    victim.insert_cache(String::from(\"cached\"), cached_child.clone());\n    root.insert_cache(String::from(\"victim\"), victim.clone());\n\n    root.rmdir(\"victim\").unwrap();\n\n    assert_eq!(root_operations.unlink_count.load(Ordering::Relaxed), 0);\n    assert_eq!(root_operations.rmdir_count.load(Ordering::Relaxed), 1);\n    assert!(root.lookup_cache(\"victim\").is_none());\n}\n\n#[def_test]\nfn test_unlink_validator_observes_callback_victim() {\n    let root_operations = Arc::new(MockDirOps::new_removable(60));\n    let root_inode = VfsInode::new_openable_dir(\n        root_operations.clone(),\n        inode_init(60, NodeType::Directory, 0),\n    );\n    let root = Dentry::new_dir_from_inode(root_inode, None, String::new());\n    let (victim, _) = make_file_entry(Arc::new(MockFilesystem), 61, Some(root.clone()), \"victim\");\n    root.insert_cache(String::from(\"victim\"), victim.clone());\n\n    assert_eq!(\n        root.unlink_with(\"victim\", |checked| {\n            if !checked.ptr_eq(&victim) {\n                return Err(VfsError::InvalidInput);\n            }\n            Err(VfsError::OperationNotPermitted)\n        }),\n        Err(VfsError::OperationNotPermitted)\n    );\n    assert_eq!(root_operations.unlink_count.load(Ordering::Relaxed), 0);\n    assert!(root.lookup_cache(\"victim\").unwrap().ptr_eq(&victim));\n}\n"
+        },
+        {
+          "id": "T850",
+          "start_line": 850,
+          "end_line": 857,
+          "text": "#[def_test]\nfn test_remove_rejects_parent_inode_as_victim() {\n    let root = make_renamable_dir_entry(77, None, \"\");\n    root.insert_cache(String::from(\"self\"), root.clone());\n\n    assert_eq!(root.unlink(\"self\"), Err(VfsError::InvalidInput));\n    assert_eq!(root.rmdir(\"self\"), Err(VfsError::InvalidInput));\n}\n"
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "path": "fs/kvfs/src/lib.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "d71c333a503a2fff3e1090f5ddfba1856b859291147de0dc946ef148ab0f99e8",
+      "bytes": 4282,
+      "line_count": 111,
+      "origin": "fixed Git object; byte-identical to existing sources.zip member",
+      "excerpts": [
+        {
+          "id": "L10",
+          "start_line": 10,
+          "end_line": 13,
+          "text": ")]\n#![no_std]\n\nextern crate alloc;\n"
+        },
+        {
+          "id": "L106",
+          "start_line": 106,
+          "end_line": 109,
+          "text": "pub type VfsError = kerrno::KError;\npub type VfsResult<T> = Result<T, VfsError>;\n\nuse ksync::{Mutex, MutexGuard, RwLock, RwLockReadGuard, RwLockWriteGuard};\n"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "path": "fs/kvfs/Cargo.toml",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "7ad6579c4045adf4f0153fe5c72ce68f7999091e9c07413c4e2924ce85f97bb3",
+      "bytes": 1033,
+      "line_count": 41,
+      "origin": "fixed Git object, not in corpus sources.zip",
+      "excerpts": [
+        {
+          "id": "C11",
+          "start_line": 11,
+          "end_line": 38,
+          "text": "[dependencies]\nkalloc-types.workspace = true\nblock.workspace = true\nkcred = { workspace = true }\nkdevice = { workspace = true }\nkerrno = { workspace = true}\nkquota.workspace = true\nktime_types.workspace = true\nktime.workspace = true\nkpoll = { workspace = true }\nksignal.workspace = true\nklazy = { workspace = true }\nbitflags = \"2.10\"\nhashbrown = \"0.15\"\ninherit-methods-macro = \"0.1\"\niov_iter = { workspace = true }\nlog = \"0.4\"\nlinux-raw-sys = { workspace = true, features = [\"general\", \"ioctl\"] }\nosvm.workspace = true\nsmallvec = \"1.15\"\nslab.workspace = true\nunittest = { workspace = true}\nksync = { workspace = true }\nintrusive-collections.workspace = true\nktask.workspace = true\nmemaddr = { workspace = true }\npagecache = { workspace = true }\nvmobj = { workspace = true }\n"
+        }
+      ]
+    },
+    {
+      "id": "R",
+      "path": "task/ksync/src/rwlock.rs",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "dd5bb0e3a569430905784b0c580c8ff0ca8faf880565d6e6766f7fc535be7cb6",
+      "bytes": 13949,
+      "line_count": 424,
+      "origin": "fixed Git object, not in corpus sources.zip",
+      "excerpts": [
+        {
+          "id": "R43",
+          "start_line": 43,
+          "end_line": 55,
+          "text": "/// A contended acquire spins before sleeping while the recorded writer runs on\n/// another CPU or readers hold the lock, and stops once a reschedule is\n/// pending. Waiting does not reserve the lock: as with\n/// [`RawMutex`](crate::RawMutex), any caller can take a released lock before a\n/// woken waiter runs, so the lock does not promise starvation freedom.\n///\n/// # Panics\n///\n/// `lock_exclusive` and `lock_shared` panic when this task is the recorded\n/// writer, as [`RawMutex`](crate::RawMutex) does on re-entry. Readers are not\n/// recorded, so acquiring again while holding only read guards waits. A record\n/// that stores the `TaskInner` address can panic a later task that reused the\n/// address while the write record is still held.\n"
+        },
+        {
+          "id": "R184",
+          "start_line": 184,
+          "end_line": 209,
+          "text": "    #[inline]\n    fn lock_exclusive(&self) {\n        #[cfg(feature = \"stats\")]\n        let mut did_block = false;\n        let mut unowned = Spin::new(UNOWNED_SPIN);\n\n        loop {\n            if self.try_acquire_write()\n                || self.spin_to_acquire(&mut unowned, || self.try_acquire_write())\n            {\n                self.owner.set_current();\n                #[cfg(feature = \"stats\")]\n                self.record_write_acquisitions();\n                return;\n            }\n            listener!(self.writer_event => listener);\n            if self.state.load(Ordering::Acquire) != 0 {\n                #[cfg(feature = \"stats\")]\n                if !did_block {\n                    self.record_write_contentions();\n                    did_block = true;\n                }\n                block_on(listener);\n            }\n        }\n    }\n"
+        },
+        {
+          "id": "R226",
+          "start_line": 226,
+          "end_line": 236,
+          "text": "    unsafe fn unlock_exclusive(&self) {\n        // SAFETY: `lock_api` only calls `unlock_exclusive` for the current\n        // exclusive owner, so clearing the owner record, the write-lock bit,\n        // and waking waiters preserves the raw rwlock state machine.\n        self.owner.clear();\n        self.state.store(0, Ordering::Release);\n\n        // Wake up all waiting readers and one writer\n        self.reader_event.notify(usize::MAX);\n        self.writer_event.notify(1);\n    }\n"
+        }
+      ]
+    },
+    {
+      "id": "G",
+      "path": "fs/kvfs/docs/design.md",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "bea59b9d711df69d2ab3f5a5f486625027ed27af4d23d184e2e20fa500769317",
+      "bytes": 102652,
+      "line_count": 1403,
+      "origin": "fixed Git object, not in corpus sources.zip",
+      "excerpts": [
+        {
+          "id": "G112",
+          "start_line": 112,
+          "end_line": 135,
+          "text": "## Test Layout\n\nGuest tests live in crate-root `ut-tests/`; `unittest::path_mod_test!`\nmounts them at their original private parents under `cfg(unittest)`.\nThere are 25 mounts and 28 modules containing 250 guest cases. The\n`address_space::tests` mount retains its `read`, `truncate` and `writeback`\nchildren in `ut-tests/address_space/`, including shared fixtures and the\n`observe_readahead_run` re-export used by the production-side test hook.\nThe other files mirror their source names, with nested names flattened:\n`node_dentry.rs`, `node_inode.rs`, `node_device.rs`, and\n`node_device_registration.rs`. The dentry module remains `tests_dentry`;\nother mounted guest modules remain `tests`.\n\nAll guest cases retain their original assertions and parent access, without\nadditional architecture/feature gates. Seventeen cases retain `serial`\n(seven superblock, nine device, one lock); none carries `user`.\nProduction-owned `cfg(unittest)` hooks remain in place.\nThe separate `path::test` host module is mounted from `tests/host/path.rs`\nunder its original `cfg(test)`, with its one `#[test]` case unchanged.\nIt is not a guest case or a standalone Cargo integration-test target.\nThe guest mount in `src/path.rs` also has an outer `cfg(unittest)` so a\nstandalone `rustc --test` wrapper can import this alloc/core-only source\nwithout resolving the kernel `unittest` crate.\nGuest validation uses the configured kernel unittest workflow.\n"
+        }
+      ]
+    },
+    {
+      "id": "W",
+      "path": "Cargo.toml",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "sha256": "f82e3f13203453a2ea2963bae80c645ef9a0301e7709fca35279decaceb073b0",
+      "bytes": 14670,
+      "line_count": 373,
+      "origin": "fixed Git object, not in corpus sources.zip",
+      "excerpts": [
+        {
+          "id": "W63",
+          "start_line": 63,
+          "end_line": 65,
+          "text": "[workspace.package]\nversion = \"0.3.0-dev\"\nedition = \"2024\"\n"
+        },
+        {
+          "id": "W79",
+          "start_line": 79,
+          "end_line": 79,
+          "text": "unexpected_cfgs = { level = \"warn\", check-cfg = [\"cfg(unittest)\"] }\n"
+        },
+        {
+          "id": "W165",
+          "start_line": 165,
+          "end_line": 165,
+          "text": "ksync = { path = \"task/ksync\" }\n"
+        },
+        {
+          "id": "W201",
+          "start_line": 201,
+          "end_line": 201,
+          "text": "kvfs = { path = \"fs/kvfs\" }\n"
+        }
+      ]
+    }
+  ],
+  "scope": "Targeted original context excerpts, not exhaustive backend/config audit. No production reads at moving HEAD."
+}

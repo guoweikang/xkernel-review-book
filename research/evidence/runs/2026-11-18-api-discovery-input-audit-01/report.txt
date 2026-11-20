@@ -1,0 +1,102 @@
+固定 Rust API/调用发现输入只读审计
+日期：2026-11-18；本审计最多五个入口，不运行模型、排序、编译或调用探针。
+路径均相对 /root/codes/x-kernel-worktrees/ai-review-book。
+
+结论
+现有语料和原 rust-call-probe 足以支持“未解析的调用/API拼写”视角，不足以建立 resolved 调用图。
+可直接复用固定函数字节、snapshot ID、原 token bag 和调用语法前端，不需重写前端。
+既有 calls.json 仅33个已评审函数，不是812全量；用户后续授权的812提取另立 common-call-syntax-01，不能混作本审计已有结果。
+
+入口1：共同候选总体与排名输入
+scripts/run_common_budget_ranking.py:21-38、:45-64、:67-83。
+直接读取 research/evidence/runs/2026-11-16-discovery-common-scope-01/protocol.json 的 inputs.{units,tokens,docs,doc_protocol,ledger}.{path,sha256}。
+共同总体 units.json 每行字段：unit_id,cfg,code_eligible,doc_state,package,path,start_line,test_path_hint,tokens。
+2180总单位，812 code_eligible；非空文档200、空文档612；812无序对329266。
+原排名器读取 token报告 records.size_eligible，file_id 连接 blocks.file，unit_id 连接源units和文档bindings。
+code = token多重集交集计数/max(token长度)；没有读取调用记录，没有调用/API专用表示。
+文档bindings路径 research/evidence/runs/2026-11-09-source-doc-inventory-02/bindings.json；字段 unit_id,path,package,node_index,ancestor_indices,doc_text,literal_doc_nonempty,test_path_hint。
+文档TF-IDF在2180上fit，再限制812；不是只对有文档者构造总体。
+历史输出 research/evidence/runs/2026-11-16-common-budget-01/{report.json,freeze.json,code-top100.json,documentation-top100.json,fusion-top100.json,review-queue.json}。
+top100每项 [score,unit_id1,unit_id2]；review-queue是 unit_ids,methods,members,truth=unknown，不是独立真值。
+可复用共同ID、分母、哈希和队列约定；不把旧代码分数解释成API使用相似度。此次没有重跑排名。
+
+入口2：syn单位库存、归档字节与保守模块路径候选（同一源输入链）
+scripts/inventory_rust_units.py:26-97；scripts/export_rust_baseline_corpus.py:13-16、:23-33、:64-104。
+固定xkernel commit：7e3ac94431a0dbb376d2fc8d85098deeff1bba09。
+仅 fs/kvfs、task/kspin、util/klazy、util/macros 四个物理包，88文件；不是整个仓库。
+读取 research/evidence/runs/2026-11-05-source-units-v2-verified/{inventory.json,modules.json,report.json,protocol.json}。
+inventory schema=source-unit-inventory/1；files[path]：schema,status,source_sha256,diagnostics,file_attributes,physical_package,test_path_hint,units。
+函数unit字段：snapshot_id,kind,name,range,signature_range,body_range,ancestors,attributes,start_line,end_line,cfg_state。
+ID依赖commit/path/sourcehash/kind/range/index，不是跨版本稳定符号ID。
+归档 research/evidence/runs/2026-11-05-rust-baseline-corpus-01/{units.json,units.zip,sources.zip,report.json}。
+units数组字段：id,entry,path,package,name,kind,range,start_line,end_line,sha256,source_sha256,original_range,attributes,ancestor_ids,nested_in_function,ancestor_attributes,file_attributes,test_path_hint,cfg。
+units.zip[entry]是signature start到body end的原字节，去掉属性/doc前缀；sources.zip[path]是完整文件原字节。
+units.sha256是片段hash；units.source_sha256是完整文件hash。range是片段在完整文件中的半开UTF8字节区间；original_range包含属性等前缀，不能混用。
+2180仅fn/impl_fn/有默认体trait_fn；不包含45个无体声明，22个嵌套函数、638个test路径提示单位保留。
+宏生成、cfg激活、类型、真实运行路径均未建立；物理包不等于逻辑模块或Cargo target归属。
+modules schema=source-module-candidates/1。scripts/map_source_modules.py:18-66、:70-105：只列tracked文件路径候选，50 matched_candidate、7 deferred。
+records字段：source,source_range,declaration_id,name,status,reason,candidates,basis（条件存在）,target（匹配时）,target_in_inventory,cfg_state,semantic_membership,file_role_assumption。
+默认foo.rs/foo/mod.rs及有限#[path]支持；cfg_attr、inline祖先path、非模块祖先保守defer。
+matched_candidate不表示编译器语义成员，更不表示use alias、reexport或函数路径解析。
+历史研究工具Rust1.95.0；syn=2.0.119、proc-macro2=1.0.107、serde_json=1.0.154（Cargo.toml/lock固定）。
+重要版本差异：当前src/main.rs hash 5f4f4d079275fa2300066f7bc83b93508c341d7fb200ec6ad8b05e4b3ad0fa8a，与旧report.inputs所记 bdb2857e2afc4cae6e253eb8e6013d5307a372ae0a418f15703e6204699c64cc 不同；当前source-workflow二进制也不等于历史007378dd...。
+因此直接复用已冻结库存，不以今天的main.rs或二进制冒充旧抽取。当前Cargo.toml/lock、inventory_rust_units.py、map_source_modules.py仍匹配旧hash。
+
+入口3：token表示与SCC bag
+scripts/prepare_rust_token_bags.py:13-46、:87-117；research/tools/rust-syntax-probe/src/bin/rust-token-probe.rs:6-43。
+读取 research/evidence/runs/2026-11-05-rust-token-bags-01/{report.json,blocks.file,rust-token-probe.rs,Cargo.toml,Cargo.lock}。
+report.records字段：file_id,unit_id,path,range,start_line,end_line,status,tokens,unique_tokens,size_eligible；tokens是计数，不是token序列。
+原前端schema rust-token-probe/1，产生有序字符串tokens：ident:原名、literal:原值、punct:字符:joint/alone、open/close:delimiter。
+bag格式 1,file_id,total,unique,MD5(body)@#@t<UTF8十六进制token>@@::@@count,...；decode_bag返回Counter。
+此序列被bag化后没有顺序/调用边界/词法位置；Counter中ident不能区分定义、调用、局部变量或类型。
+token树不做类型检查或语义解析；普通注释不成为token，doc可能词法脱糖，不能当API特征提取器。
+2180全部tokenized；812长度在65..500000；被排除1368全部小于65，超过上限0。
+这可能排除短包装/委托函数，因此812总体只是旧比较范围，不是完整API使用覆盖；具体漏掉哪些行为未在本审计标注。
+blocks.file hash=61b48af5c38541d484f9cd32bbf96173aa6d325fd5e9af63159a95922ad5656d，与common-budget冻结值相同。
+可复用decode_bag和旧代码基线；不能从无序bag恢复调用链。
+
+入口4：原调用语法探针及既有拼写绑定适配
+scripts/probe_reviewed_calls.py 与 research/evidence/runs/2026-11-06-reviewed-call-syntax-01/runner.py 当前逐字节相同。
+research/tools/rust-syntax-probe/src/bin/rust-call-probe.rs:13-41、:44-73。
+读取旧run/{calls.json,report.json,controls.json,probe.rs,Cargo.toml,Cargo.lock,runner.py}。
+calls数组记录字段：unit_id,path,name,source_sha256,original_range,schema,status,sites；这里source_sha256实际上是片段hash，不是完整文件hash！
+schema=rust-call-syntax/1；status parsed/rejected；reject带error，sites=[]，不能当零调用成功样本。
+site字段：kind,name,range,deferred_depth,target_resolution,cfg,execution；旧Python wrapper另加source_text。
+call_expression只在func是Expr::Path时把ident段用::拼起来，否则name=null；不解析函数指针、构造器、trait或关联项。
+路径name会省略泛型参数、leading ::以及qself上下文；source_text保留原被调用表达式拼写。method_expression仅method ident，不含receiver类型/身份。
+opaque_macro保留宏path和整个macro span，不进入宏tokens找内部调用；宏名不得当普通调用合并。
+deferred_depth标记closure/async/item嵌套，不是控制流、实际运行顺序或是否执行的证明。
+范围：call是callee表达式span，method只是method名span；sites按源码位置排序，不是调用序列轨迹。参数、返回值、receiver、调用对象关系不在schema中。
+所有site target_resolution=unresolved，cfg=not_evaluated，execution=not_established；resolved_edges必须为0。
+旧records仅18个已评审pair的33个唯一unit，均在812内；361 site=169 method+151 call+41 opaque_macro，11 deferred，92种name值。
+812中另779个没有旧调用记录；2180中另2147个没有旧调用记录，不得当无调用。
+位置映射必须用 units[unit_id].range[0]+site.range；不能用calls.original_range[0]。本次33条中14条两种起点不同。
+可复用旧runner的3控制：包含中文的调用拼写/宏不透明控制，closure/async/local fn deferred控制，非法语法reject控制；以及sourcehash、UTF8切片校验。
+旧CLI硬编码reviewed ledger和.build二进制，不是全812提取器；可以仅新增批次wrapper，复用原探针，不改Rust前端。
+原probe.rs SHA256 f5d9bfa5a6a1d90765c6153e3c5166b59506fc758e355d597eba0624149c5e3c；当前源码相同。
+现有 .build/rust-call-probe/debug/rust-call-probe 存在，SHA256 dc1b5b93d71deb6954528a2cf5170209b89fc01cff9450350ba0f3752d5bd1c3，与旧记录相同。本审计只读hash，未执行。
+辅助 scripts/bind_call_references.py:21-46：bind(binary,source,source_sha256,target)只把显式target拼写与site.name精确匹配；输出visible_spelling/nested_spelling_only/no_visible_spelling/parse_rejected，target_resolution/execution/delegation_correctness/safe_exemption仍unknown。
+其旧run research/evidence/runs/2026-11-16-call-reference-binding-01/{bindings-1.json,bindings-2.json,controls.json,report.json}仅4个声明与11控制，不提供全量API知识、自然语言提取或委托豁免。此为同一调用入口的适配，不另算新前端。
+
+入口5：既有委托单例控制
+scripts/probe_existing_delegation.py:12-26、:36-74、:76-104。
+读取 research/evidence/runs/2026-11-16-delegation-control-01/{protocol.json,results.json,runner.py}。
+源码在 .build/delegation-probe/2026-11-16-delegation-control-01/{original.rs,probe.rs}，本次确认都存在且匹配protocol hash。
+来源是 /root/codes/kvirtiodrivers，commit 5464361169822b3dbd3956017083bf8bbf7a7c2e，src/transport/mod.rs；不是2180语料的四包和commit。
+固定DeviceType的TryFrom<u32/u16/u8>三个实现；block()只是marker加花括号计数截取，非通用Rust解析器。
+protocol字段revision,path,original_sha256,probe_sha256,runner_sha256,local_source,implementation_blocks_sha256,adaptation,arms,document_basis,measurement,stop。
+results字段rustc,runs[{mode,repeat,exit_code,stdout,command,binary_sha256}],independent_normative_doc_information,retrieval_effect_measured。
+历史Rust1.97.1，debug/release各两次有限域比较记录成功；本次未重跑，不作新验证结果或API召回能力。
+可复用为已知委托控制背景/身份检查方式；不能直接用于全量调用抽取、路径解析或独立发现标签。
+
+本次实际只读复核
+对2180片段和88归档源逐项校验hash与range切片一致；对361旧site校验UTF8 source_text一致。
+10项归档hash复核通过：baseline的units.json/units.zip/sources.zip，旧calls的calls.json/probe.rs/Cargo.toml/Cargo.lock/runner.py，库存inventory.json/modules.json。
+common-scope五项inputs hash全部匹配；blocks.file匹配旧freeze；委托original/probe匹配旧protocol。
+当前common ranking、delegation、token bag、reviewed calls脚本与各自历史副本相同；未重建或运行它们。
+只读research_lookup查询 rust-call-syntax API 812 --limit 5：877命中、返回5、省略872；字面检索非穷尽审计。还定向读取上述实际schema、源文件和旧report，不把历史通过当本次重新执行。
+未读真实用户笔记/数据库，无网络、模型、评分、生产改动或共享进度/catalog变更。
+
+交接边界
+下一比较由主线程决定调用表示和排序，方向由审议Agent决定。本报告只确认输入与工具可用性。
+全812抽取若执行必须独立记录失败分母、固定hash、源片段、原探针身份，保持opaque/deferred/rejected及resolved_edges=0；不得用语法名冒充resolved API，也不能把不出现拼写当未使用能力。

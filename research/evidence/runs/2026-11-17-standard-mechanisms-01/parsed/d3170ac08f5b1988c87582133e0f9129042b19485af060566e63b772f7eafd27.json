@@ -1,0 +1,5446 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            364,
+            399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            400,
+            453
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        364,
+        840
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `T` into a `Box<T>`",
+          "path": "doc",
+          "range": [
+            487,
+            521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            526,
+            529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The conversion allocates on the heap and moves `t`",
+          "path": "doc",
+          "range": [
+            534,
+            588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from the stack into it.",
+          "path": "doc",
+          "range": [
+            593,
+            620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            625,
+            628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            633,
+            647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            652,
+            655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            660,
+            671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x = 5;",
+          "path": "doc",
+          "range": [
+            676,
+            690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed = Box::new(5);",
+          "path": "doc",
+          "range": [
+            695,
+            723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            728,
+            731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Box::from(x), boxed);",
+          "path": "doc",
+          "range": [
+            736,
+            772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            777,
+            784
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        811,
+        838
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        487,
+        838
+      ],
+      "signature_range": [
+        789,
+        810
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            842,
+            886
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        842,
+        1707
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `Box<T>` into a `Pin<Box<T>>`. If `T` does not implement [`Unpin`], then",
+          "path": "doc",
+          "range": [
+            980,
+            1067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `*boxed` will be pinned in memory and unable to be moved.",
+          "path": "doc",
+          "range": [
+            1072,
+            1133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1138,
+            1141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion does not allocate on the heap and happens in place.",
+          "path": "doc",
+          "range": [
+            1146,
+            1217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1222,
+            1225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is also available via [`Box::into_pin`].",
+          "path": "doc",
+          "range": [
+            1230,
+            1279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1284,
+            1287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Constructing and pinning a `Box` with <code><Pin<Box\\<T>>>::from([Box::new]\\(x))</code>",
+          "path": "doc",
+          "range": [
+            1292,
+            1383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can also be written more concisely using <code>[Box::pin]\\(x)</code>.",
+          "path": "doc",
+          "range": [
+            1388,
+            1461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This `From` implementation is useful if you already have a `Box<T>`, or you are",
+          "path": "doc",
+          "range": [
+            1466,
+            1549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " constructing a (pinned) `Box` in a different way than with [`Box::new`].",
+          "path": "doc",
+          "range": [
+            1554,
+            1630
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1669,
+        1705
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        980,
+        1705
+      ],
+      "signature_range": [
+        1635,
+        1668
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            1709,
+            1744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1745,
+            1800
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1709,
+        2369
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `&[T]` into a `Box<[T]>`",
+          "path": "doc",
+          "range": [
+            1846,
+            1885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1890,
+            1893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion allocates on the heap",
+          "path": "doc",
+          "range": [
+            1898,
+            1939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and performs a copy of `slice` and its contents.",
+          "path": "doc",
+          "range": [
+            1944,
+            1996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2001,
+            2004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2009,
+            2023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            2028,
+            2039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // create a &[u8] which will be used to create a Box<[u8]>",
+          "path": "doc",
+          "range": [
+            2044,
+            2106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let slice: &[u8] = &[104, 101, 108, 108, 111];",
+          "path": "doc",
+          "range": [
+            2111,
+            2161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed_slice: Box<[u8]> = Box::from(slice);",
+          "path": "doc",
+          "range": [
+            2166,
+            2216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2221,
+            2224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed_slice:?}\");",
+          "path": "doc",
+          "range": [
+            2229,
+            2261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2266,
+            2273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2278,
+            2287
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2325,
+        2367
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        1846,
+        2367
+      ],
+      "signature_range": [
+        2292,
+        2324
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            2371,
+            2406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2407,
+            2466
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2371,
+        3083
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `&mut [T]` into a `Box<[T]>`",
+          "path": "doc",
+          "range": [
+            2516,
+            2559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2564,
+            2567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion allocates on the heap",
+          "path": "doc",
+          "range": [
+            2572,
+            2613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and performs a copy of `slice` and its contents.",
+          "path": "doc",
+          "range": [
+            2618,
+            2670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2675,
+            2678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2683,
+            2697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            2702,
+            2713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // create a &mut [u8] which will be used to create a Box<[u8]>",
+          "path": "doc",
+          "range": [
+            2718,
+            2784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut array = [104, 101, 108, 108, 111];",
+          "path": "doc",
+          "range": [
+            2789,
+            2835
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let slice: &mut [u8] = &mut array;",
+          "path": "doc",
+          "range": [
+            2840,
+            2878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed_slice: Box<[u8]> = Box::from(slice);",
+          "path": "doc",
+          "range": [
+            2883,
+            2933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2938,
+            2941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed_slice:?}\");",
+          "path": "doc",
+          "range": [
+            2946,
+            2978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2983,
+            2990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2995,
+            3004
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3046,
+        3081
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        2516,
+        3081
+      ],
+      "signature_range": [
+        3009,
+        3045
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            3085,
+            3120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3121,
+            3174
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3085,
+        3693
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `Cow<'_, [T]>` into a `Box<[T]>`",
+          "path": "doc",
+          "range": [
+            3228,
+            3275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3280,
+            3283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When `cow` is the `Cow::Borrowed` variant, this",
+          "path": "doc",
+          "range": [
+            3288,
+            3339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " conversion allocates on the heap and copies the",
+          "path": "doc",
+          "range": [
+            3344,
+            3395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " underlying slice. Otherwise, it will try to reuse the owned",
+          "path": "doc",
+          "range": [
+            3400,
+            3463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Vec`'s allocation.",
+          "path": "doc",
+          "range": [
+            3468,
+            3491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3496,
+            3505
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3549,
+        3691
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        3228,
+        3691
+      ],
+      "signature_range": [
+        3510,
+        3548
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            3695,
+            3730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3731,
+            3786
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3695,
+        4181
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `&str` into a `Box<str>`",
+          "path": "doc",
+          "range": [
+            3822,
+            3861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3866,
+            3869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion allocates on the heap",
+          "path": "doc",
+          "range": [
+            3874,
+            3915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and performs a copy of `s`.",
+          "path": "doc",
+          "range": [
+            3920,
+            3951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3956,
+            3959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3964,
+            3978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3983,
+            3986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            3991,
+            4002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<str> = Box::from(\"hello\");",
+          "path": "doc",
+          "range": [
+            4007,
+            4052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed}\");",
+          "path": "doc",
+          "range": [
+            4057,
+            4081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4086,
+            4093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4098,
+            4107
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4141,
+        4179
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        3822,
+        4179
+      ],
+      "signature_range": [
+        4112,
+        4140
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            4183,
+            4218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4219,
+            4278
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4183,
+        4777
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `&mut str` into a `Box<str>`",
+          "path": "doc",
+          "range": [
+            4318,
+            4361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4366,
+            4369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion allocates on the heap",
+          "path": "doc",
+          "range": [
+            4374,
+            4415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and performs a copy of `s`.",
+          "path": "doc",
+          "range": [
+            4420,
+            4451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4456,
+            4459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4464,
+            4478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4483,
+            4486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            4491,
+            4502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut original = String::from(\"hello\");",
+          "path": "doc",
+          "range": [
+            4507,
+            4552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let original: &mut str = &mut original;",
+          "path": "doc",
+          "range": [
+            4557,
+            4600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<str> = Box::from(original);",
+          "path": "doc",
+          "range": [
+            4605,
+            4651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed}\");",
+          "path": "doc",
+          "range": [
+            4656,
+            4680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4685,
+            4692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4697,
+            4706
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4744,
+        4775
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        4318,
+        4775
+      ],
+      "signature_range": [
+        4711,
+        4743
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            4779,
+            4814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4815,
+            4868
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4779,
+        5792
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `Cow<'_, str>` into a `Box<str>`",
+          "path": "doc",
+          "range": [
+            4912,
+            4959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4964,
+            4967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When `cow` is the `Cow::Borrowed` variant, this",
+          "path": "doc",
+          "range": [
+            4972,
+            5023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " conversion allocates on the heap and copies the",
+          "path": "doc",
+          "range": [
+            5028,
+            5079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " underlying `str`. Otherwise, it will try to reuse the owned",
+          "path": "doc",
+          "range": [
+            5084,
+            5147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `String`'s allocation.",
+          "path": "doc",
+          "range": [
+            5152,
+            5178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5183,
+            5186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5191,
+            5205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5210,
+            5213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            5218,
+            5229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::borrow::Cow;",
+          "path": "doc",
+          "range": [
+            5234,
+            5259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5264,
+            5267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let unboxed = Cow::Borrowed(\"hello\");",
+          "path": "doc",
+          "range": [
+            5272,
+            5313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<str> = Box::from(unboxed);",
+          "path": "doc",
+          "range": [
+            5318,
+            5363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed}\");",
+          "path": "doc",
+          "range": [
+            5368,
+            5392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5397,
+            5404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5409,
+            5412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            5417,
+            5428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::borrow::Cow;",
+          "path": "doc",
+          "range": [
+            5433,
+            5460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let unboxed = Cow::Owned(\"hello\".to_string());",
+          "path": "doc",
+          "range": [
+            5465,
+            5515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<str> = Box::from(unboxed);",
+          "path": "doc",
+          "range": [
+            5520,
+            5565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed}\");",
+          "path": "doc",
+          "range": [
+            5570,
+            5594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5599,
+            5606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5611,
+            5620
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5664,
+        5790
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        4912,
+        5790
+      ],
+      "signature_range": [
+        5625,
+        5663
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5794,
+            5849
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5794,
+        6673
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `Box<str>` into a `Box<[u8]>`",
+          "path": "doc",
+          "range": [
+            5910,
+            5954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5959,
+            5962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion does not allocate on the heap and happens in place.",
+          "path": "doc",
+          "range": [
+            5967,
+            6038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6043,
+            6046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6051,
+            6065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            6070,
+            6081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // create a Box<str> which will be used to create a Box<[u8]>",
+          "path": "doc",
+          "range": [
+            6086,
+            6151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<str> = Box::from(\"hello\");",
+          "path": "doc",
+          "range": [
+            6156,
+            6201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed_str: Box<[u8]> = Box::from(boxed);",
+          "path": "doc",
+          "range": [
+            6206,
+            6254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6259,
+            6262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // create a &[u8] which will be used to create a Box<[u8]>",
+          "path": "doc",
+          "range": [
+            6267,
+            6329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let slice: &[u8] = &[104, 101, 108, 108, 111];",
+          "path": "doc",
+          "range": [
+            6334,
+            6384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed_slice = Box::from(slice);",
+          "path": "doc",
+          "range": [
+            6389,
+            6428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6433,
+            6436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(boxed_slice, boxed_str);",
+          "path": "doc",
+          "range": [
+            6441,
+            6480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6485,
+            6492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6497,
+            6506
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6543,
+        6671
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        5910,
+        6671
+      ],
+      "signature_range": [
+        6511,
+        6542
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            6675,
+            6710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6711,
+            6766
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6675,
+        7161
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `[T; N]` into a `Box<[T]>`",
+          "path": "doc",
+          "range": [
+            6823,
+            6864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6869,
+            6872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This conversion moves the array to newly heap-allocated memory.",
+          "path": "doc",
+          "range": [
+            6877,
+            6944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6949,
+            6952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6957,
+            6971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6976,
+            6979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            6984,
+            6995
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let boxed: Box<[u8]> = Box::from([4, 2]);",
+          "path": "doc",
+          "range": [
+            7000,
+            7045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{boxed:?}\");",
+          "path": "doc",
+          "range": [
+            7050,
+            7076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7081,
+            7088
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7128,
+        7159
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        6823,
+        7159
+      ],
+      "signature_range": [
+        7093,
+        7127
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Casts a boxed slice to a boxed array.",
+          "path": "doc",
+          "range": [
+            7163,
+            7204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7205,
+            7208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            7209,
+            7221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7222,
+            7225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `boxed_slice.len()` must be exactly `N`.",
+          "path": "doc",
+          "range": [
+            7226,
+            7270
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7396,
+        7705
+      ],
+      "kind": "fn",
+      "name": "boxed_slice_as_array_unchecked",
+      "range": [
+        7163,
+        7705
+      ],
+      "signature_range": [
+        7271,
+        7395
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7402,
+        7440
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7707,
+            7768
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7707,
+        8401
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to convert a `Box<[T]>` into a `Box<[T; N]>`.",
+          "path": "doc",
+          "range": [
+            7861,
+            7919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7924,
+            7927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The conversion occurs in-place and does not require a",
+          "path": "doc",
+          "range": [
+            7932,
+            7989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " new memory allocation.",
+          "path": "doc",
+          "range": [
+            7994,
+            8020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8025,
+            8028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            8033,
+            8045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8050,
+            8053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the old `Box<[T]>` in the `Err` variant if",
+          "path": "doc",
+          "range": [
+            8058,
+            8112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `boxed_slice.len()` does not equal `N`.",
+          "path": "doc",
+          "range": [
+            8117,
+            8160
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8229,
+        8399
+      ],
+      "kind": "impl_fn",
+      "name": "try_from",
+      "range": [
+        7861,
+        8399
+      ],
+      "signature_range": [
+        8165,
+        8228
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            8403,
+            8438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8439,
+            8504
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8403,
+        9452
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to convert a `Vec<T>` into a `Box<[T; N]>`.",
+          "path": "doc",
+          "range": [
+            8593,
+            8649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8654,
+            8657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Like [`Vec::into_boxed_slice`], this is in-place if `vec.capacity() == N`,",
+          "path": "doc",
+          "range": [
+            8662,
+            8740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but will require a reallocation otherwise.",
+          "path": "doc",
+          "range": [
+            8745,
+            8791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8796,
+            8799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            8804,
+            8816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8821,
+            8824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the original `Vec<T>` in the `Err` variant if",
+          "path": "doc",
+          "range": [
+            8829,
+            8886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `boxed_slice.len()` does not equal `N`.",
+          "path": "doc",
+          "range": [
+            8891,
+            8934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8939,
+            8942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            8947,
+            8961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8966,
+            8969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can be used with [`vec!`] to create an array on the heap:",
+          "path": "doc",
+          "range": [
+            8974,
+            9040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9045,
+            9048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9053,
+            9060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let state: Box<[f32; 100]> = vec![1.0; 100].try_into().unwrap();",
+          "path": "doc",
+          "range": [
+            9065,
+            9133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(state.len(), 100);",
+          "path": "doc",
+          "range": [
+            9138,
+            9171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9176,
+            9183
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9242,
+        9450
+      ],
+      "kind": "impl_fn",
+      "name": "try_from",
+      "range": [
+        8593,
+        9450
+      ],
+      "signature_range": [
+        9188,
+        9241
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9454,
+        11167
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            9495,
+            9547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9552,
+            9555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9560,
+            9574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9579,
+            9582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9587,
+            9594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            9599,
+            9621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9626,
+            9629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(value: Box<dyn Any>) {",
+          "path": "doc",
+          "range": [
+            9634,
+            9679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Ok(string) = value.downcast::<String>() {",
+          "path": "doc",
+          "range": [
+            9684,
+            9740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"String ({}): {}\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            9745,
+            9807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            9812,
+            9821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            9826,
+            9831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9836,
+            9839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let my_string = \"Hello World\".to_string();",
+          "path": "doc",
+          "range": [
+            9844,
+            9890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(my_string));",
+          "path": "doc",
+          "range": [
+            9895,
+            9936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(0i8));",
+          "path": "doc",
+          "range": [
+            9941,
+            9976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9981,
+            9988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9993,
+            10002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10007,
+            10052
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10114,
+        10216
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        9495,
+        10216
+      ],
+      "signature_range": [
+        10061,
+        10113
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": " Downcasts the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            10222,
+            10263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10268,
+            10271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a safe alternative see [`downcast`].",
+          "path": "doc",
+          "range": [
+            10276,
+            10320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10325,
+            10328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10333,
+            10347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10352,
+            10355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10360,
+            10367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            10372,
+            10407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10412,
+            10415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            10420,
+            10442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10447,
+            10450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            10455,
+            10499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10504,
+            10507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            10512,
+            10524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            10529,
+            10585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10590,
+            10595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10600,
+            10607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10612,
+            10615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            10620,
+            10632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10637,
+            10640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            10645,
+            10709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            10714,
+            10766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10771,
+            10774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`downcast`]: Self::downcast",
+          "path": "doc",
+          "range": [
+            10779,
+            10811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10816,
+            10825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10830,
+            10890
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10955,
+        11165
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked",
+      "range": [
+        10222,
+        11165
+      ],
+      "signature_range": [
+        10899,
+        10954
+      ]
+    },
+    {
+      "ancestors": [
+        26,
+        28
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10965,
+        10994
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11169,
+        12912
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            11217,
+            11269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11274,
+            11277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11282,
+            11296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11301,
+            11304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11309,
+            11316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            11321,
+            11343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11348,
+            11351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(value: Box<dyn Any + Send>) {",
+          "path": "doc",
+          "range": [
+            11356,
+            11408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Ok(string) = value.downcast::<String>() {",
+          "path": "doc",
+          "range": [
+            11413,
+            11469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"String ({}): {}\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            11474,
+            11536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            11541,
+            11550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            11555,
+            11560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11565,
+            11568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let my_string = \"Hello World\".to_string();",
+          "path": "doc",
+          "range": [
+            11573,
+            11619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(my_string));",
+          "path": "doc",
+          "range": [
+            11624,
+            11665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(0i8));",
+          "path": "doc",
+          "range": [
+            11670,
+            11705
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11710,
+            11717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11722,
+            11731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11736,
+            11781
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11843,
+        11945
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        11217,
+        11945
+      ],
+      "signature_range": [
+        11790,
+        11842
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Downcasts the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            11951,
+            11992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11997,
+            12000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a safe alternative see [`downcast`].",
+          "path": "doc",
+          "range": [
+            12005,
+            12049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12054,
+            12057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12062,
+            12076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12081,
+            12084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12089,
+            12096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            12101,
+            12136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12141,
+            12144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            12149,
+            12171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12176,
+            12179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any + Send> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            12184,
+            12235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12240,
+            12243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            12248,
+            12260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            12265,
+            12321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12326,
+            12331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12336,
+            12343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12348,
+            12351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            12356,
+            12368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12373,
+            12376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            12381,
+            12445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            12450,
+            12502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12507,
+            12510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`downcast`]: Self::downcast",
+          "path": "doc",
+          "range": [
+            12515,
+            12547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12552,
+            12561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12566,
+            12626
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12691,
+        12910
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked",
+      "range": [
+        11951,
+        12910
+      ],
+      "signature_range": [
+        12635,
+        12690
+      ]
+    },
+    {
+      "ancestors": [
+        30,
+        32
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12701,
+        12730
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12914,
+        14723
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            12969,
+            13021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13026,
+            13029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13034,
+            13048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13053,
+            13056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13061,
+            13068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            13073,
+            13095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13100,
+            13103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(value: Box<dyn Any + Send + Sync>) {",
+          "path": "doc",
+          "range": [
+            13108,
+            13167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Ok(string) = value.downcast::<String>() {",
+          "path": "doc",
+          "range": [
+            13172,
+            13228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"String ({}): {}\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            13233,
+            13295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            13300,
+            13309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            13314,
+            13319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13324,
+            13327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let my_string = \"Hello World\".to_string();",
+          "path": "doc",
+          "range": [
+            13332,
+            13378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(my_string));",
+          "path": "doc",
+          "range": [
+            13383,
+            13424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(Box::new(0i8));",
+          "path": "doc",
+          "range": [
+            13429,
+            13464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13469,
+            13476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13481,
+            13490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13495,
+            13562
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13624,
+        13726
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        12969,
+        13726
+      ],
+      "signature_range": [
+        13571,
+        13623
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Downcasts the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            13732,
+            13773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13778,
+            13781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a safe alternative see [`downcast`].",
+          "path": "doc",
+          "range": [
+            13786,
+            13830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13835,
+            13838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13843,
+            13857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13862,
+            13865
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13870,
+            13877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            13882,
+            13917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13922,
+            13925
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            13930,
+            13952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13957,
+            13960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any + Send + Sync> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            13965,
+            14023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14028,
+            14031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            14036,
+            14048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            14053,
+            14109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            14114,
+            14119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14124,
+            14131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14136,
+            14139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            14144,
+            14156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14161,
+            14164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            14169,
+            14233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            14238,
+            14290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14295,
+            14298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`downcast`]: Self::downcast",
+          "path": "doc",
+          "range": [
+            14303,
+            14335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14340,
+            14349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14354,
+            14414
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14479,
+        14721
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked",
+      "range": [
+        13732,
+        14721
+      ],
+      "signature_range": [
+        14423,
+        14478
+      ]
+    },
+    {
+      "ancestors": [
+        34,
+        36
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14489,
+        14518
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            14725,
+            14760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            14761,
+            14806
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14725,
+        15621
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a type of [`Error`] into a box of dyn [`Error`].",
+          "path": "doc",
+          "range": [
+            14869,
+            14930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14935,
+            14938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14943,
+            14957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14962,
+            14965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14970,
+            14977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            14982,
+            15008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            15013,
+            15030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15035,
+            15038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            15043,
+            15063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct AnError;",
+          "path": "doc",
+          "range": [
+            15068,
+            15087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15092,
+            15095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for AnError {",
+          "path": "doc",
+          "range": [
+            15100,
+            15135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            15140,
+            15206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"An error\")",
+          "path": "doc",
+          "range": [
+            15211,
+            15244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            15249,
+            15258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15263,
+            15268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15273,
+            15276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for AnError {}",
+          "path": "doc",
+          "range": [
+            15281,
+            15310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15315,
+            15318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let an_error = AnError;",
+          "path": "doc",
+          "range": [
+            15323,
+            15350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(0 == size_of_val(&an_error));",
+          "path": "doc",
+          "range": [
+            15355,
+            15396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error>::from(an_error);",
+          "path": "doc",
+          "range": [
+            15401,
+            15458
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(size_of::<Box<dyn Error>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            15463,
+            15534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15539,
+            15546
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15590,
+        15619
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        14869,
+        15619
+      ],
+      "signature_range": [
+        15551,
+        15589
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            15623,
+            15658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            15659,
+            15704
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15623,
+        16750
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a type of [`Error`] + [`Send`] + [`Sync`] into a box of",
+          "path": "doc",
+          "range": [
+            15795,
+            15863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dyn [`Error`] + [`Send`] + [`Sync`].",
+          "path": "doc",
+          "range": [
+            15868,
+            15908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15913,
+            15916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            15921,
+            15935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15940,
+            15943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15948,
+            15955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            15960,
+            15986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt;",
+          "path": "doc",
+          "range": [
+            15991,
+            16008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16013,
+            16016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[derive(Debug)]",
+          "path": "doc",
+          "range": [
+            16021,
+            16041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct AnError;",
+          "path": "doc",
+          "range": [
+            16046,
+            16065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16070,
+            16073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl fmt::Display for AnError {",
+          "path": "doc",
+          "range": [
+            16078,
+            16113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {",
+          "path": "doc",
+          "range": [
+            16118,
+            16184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         write!(f, \"An error\")",
+          "path": "doc",
+          "range": [
+            16189,
+            16222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            16227,
+            16236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            16241,
+            16246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16251,
+            16254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Error for AnError {}",
+          "path": "doc",
+          "range": [
+            16259,
+            16288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16293,
+            16296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe impl Send for AnError {}",
+          "path": "doc",
+          "range": [
+            16301,
+            16336
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16341,
+            16344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe impl Sync for AnError {}",
+          "path": "doc",
+          "range": [
+            16349,
+            16384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16389,
+            16392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let an_error = AnError;",
+          "path": "doc",
+          "range": [
+            16397,
+            16424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(0 == size_of_val(&an_error));",
+          "path": "doc",
+          "range": [
+            16429,
+            16470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error + Send + Sync>::from(an_error);",
+          "path": "doc",
+          "range": [
+            16475,
+            16546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(",
+          "path": "doc",
+          "range": [
+            16551,
+            16563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     size_of::<Box<dyn Error + Send + Sync>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            16568,
+            16649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16654,
+            16661
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16719,
+        16748
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        15795,
+        16748
+      ],
+      "signature_range": [
+        16666,
+        16718
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            16752,
+            16787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16788,
+            16833
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16752,
+        17939
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`String`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].",
+          "path": "doc",
+          "range": [
+            16900,
+            16976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16981,
+            16984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            16989,
+            17003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17008,
+            17011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17016,
+            17023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            17028,
+            17054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17059,
+            17062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_string_error = \"a string error\".to_string();",
+          "path": "doc",
+          "range": [
+            17067,
+            17121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error + Send + Sync>::from(a_string_error);",
+          "path": "doc",
+          "range": [
+            17126,
+            17203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(",
+          "path": "doc",
+          "range": [
+            17208,
+            17220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     size_of::<Box<dyn Error + Send + Sync>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            17225,
+            17306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17311,
+            17318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17323,
+            17332
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17395,
+        17937
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        16900,
+        17937
+      ],
+      "signature_range": [
+        17337,
+        17394
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "StringError",
+      "range": [
+        17405,
+        17432
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17442,
+        17471
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17481,
+        17657
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43,
+        46
+      ],
+      "attributes": [],
+      "body_range": [
+        17586,
+        17647
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        17529,
+        17647
+      ],
+      "signature_range": [
+        17529,
+        17585
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17723,
+        17895
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43,
+        48
+      ],
+      "attributes": [],
+      "body_range": [
+        17826,
+        17885
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        17769,
+        17885
+      ],
+      "signature_range": [
+        17769,
+        17825
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            17941,
+            17976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            17977,
+            18033
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17941,
+        18627
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`String`] into a box of dyn [`Error`].",
+          "path": "doc",
+          "range": [
+            18086,
+            18140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18145,
+            18148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            18153,
+            18167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18172,
+            18175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18180,
+            18187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            18192,
+            18218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18223,
+            18226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_string_error = \"a string error\".to_string();",
+          "path": "doc",
+          "range": [
+            18231,
+            18285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error>::from(a_string_error);",
+          "path": "doc",
+          "range": [
+            18290,
+            18353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(size_of::<Box<dyn Error>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            18358,
+            18429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18434,
+            18441
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18494,
+        18625
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        18086,
+        18625
+      ],
+      "signature_range": [
+        18446,
+        18493
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            18629,
+            18664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18665,
+            18710
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18629,
+        19325
+      ]
+    },
+    {
+      "ancestors": [
+        52
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`str`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].",
+          "path": "doc",
+          "range": [
+            18775,
+            18848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18853,
+            18856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`str`]: prim@str",
+          "path": "doc",
+          "range": [
+            18861,
+            18882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18887,
+            18890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            18895,
+            18909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18914,
+            18917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18922,
+            18929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            18934,
+            18960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18965,
+            18968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_str_error = \"a str error\";",
+          "path": "doc",
+          "range": [
+            18973,
+            19009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error + Send + Sync>::from(a_str_error);",
+          "path": "doc",
+          "range": [
+            19014,
+            19088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(",
+          "path": "doc",
+          "range": [
+            19093,
+            19105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     size_of::<Box<dyn Error + Send + Sync>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            19110,
+            19191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19196,
+            19203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19208,
+            19217
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19278,
+        19323
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        18775,
+        19323
+      ],
+      "signature_range": [
+        19222,
+        19277
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            19327,
+            19362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            19363,
+            19419
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        19327,
+        19929
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`str`] into a box of dyn [`Error`].",
+          "path": "doc",
+          "range": [
+            19470,
+            19521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19526,
+            19529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`str`]: prim@str",
+          "path": "doc",
+          "range": [
+            19534,
+            19555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19560,
+            19563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            19568,
+            19582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19587,
+            19590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19595,
+            19602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            19607,
+            19633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19638,
+            19641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_str_error = \"a str error\";",
+          "path": "doc",
+          "range": [
+            19646,
+            19682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error>::from(a_str_error);",
+          "path": "doc",
+          "range": [
+            19687,
+            19747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(size_of::<Box<dyn Error>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            19752,
+            19823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19828,
+            19835
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19882,
+        19927
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        19470,
+        19927
+      ],
+      "signature_range": [
+        19840,
+        19881
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            19931,
+            19966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            19967,
+            20021
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        19931,
+        20657
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`Cow`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].",
+          "path": "doc",
+          "range": [
+            20098,
+            20171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20176,
+            20179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20184,
+            20198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20203,
+            20206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20211,
+            20218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            20223,
+            20249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::borrow::Cow;",
+          "path": "doc",
+          "range": [
+            20254,
+            20279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20284,
+            20287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_cow_str_error = Cow::from(\"a str error\");",
+          "path": "doc",
+          "range": [
+            20292,
+            20343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error + Send + Sync>::from(a_cow_str_error);",
+          "path": "doc",
+          "range": [
+            20348,
+            20426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(",
+          "path": "doc",
+          "range": [
+            20431,
+            20443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     size_of::<Box<dyn Error + Send + Sync>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            20448,
+            20529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20534,
+            20541
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20610,
+        20655
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        20098,
+        20655
+      ],
+      "signature_range": [
+        20546,
+        20609
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            20659,
+            20694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20695,
+            20749
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        20659,
+        21294
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a [`Cow`] into a box of dyn [`Error`].",
+          "path": "doc",
+          "range": [
+            20812,
+            20863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20868,
+            20871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20876,
+            20890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20895,
+            20898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20903,
+            20910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::error::Error;",
+          "path": "doc",
+          "range": [
+            20915,
+            20941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::borrow::Cow;",
+          "path": "doc",
+          "range": [
+            20946,
+            20971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20976,
+            20979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_cow_str_error = Cow::from(\"a str error\");",
+          "path": "doc",
+          "range": [
+            20984,
+            21035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a_boxed_error = Box::<dyn Error>::from(a_cow_str_error);",
+          "path": "doc",
+          "range": [
+            21040,
+            21104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(size_of::<Box<dyn Error>>() == size_of_val(&a_boxed_error))",
+          "path": "doc",
+          "range": [
+            21109,
+            21180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21185,
+            21192
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21247,
+        21292
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        20812,
+        21292
+      ],
+      "signature_range": [
+        21197,
+        21246
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        21296,
+        21802
+      ]
+    },
+    {
+      "ancestors": [
+        60
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            21317,
+            21369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21374,
+            21383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21388,
+            21442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            21447,
+            21477
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21569,
+        21800
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        21317,
+        21800
+      ],
+      "signature_range": [
+        21486,
+        21568
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        21804,
+        22320
+      ]
+    },
+    {
+      "ancestors": [
+        62
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            21832,
+            21884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21889,
+            21898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21903,
+            21957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            21962,
+            21992
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22091,
+        22318
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        21832,
+        22318
+      ],
+      "signature_range": [
+        22001,
+        22090
+      ]
+    },
+    {
+      "ancestors": [
+        62,
+        63
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        22176,
+        22311
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22322,
+        22848
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": " Attempts to downcast the box to a concrete type.",
+          "path": "doc",
+          "range": [
+            22357,
+            22409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22414,
+            22423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            22428,
+            22482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_incoherent_impl",
+          "range": [
+            22487,
+            22517
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22604,
+        22846
+      ],
+      "kind": "impl_fn",
+      "name": "downcast",
+      "range": [
+        22357,
+        22846
+      ],
+      "signature_range": [
+        22526,
+        22603
+      ]
+    },
+    {
+      "ancestors": [
+        65,
+        66
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        22689,
+        22839
+      ]
+    }
+  ],
+  "source_sha256": "1534b6cd36659f2753a6633dd4bd25d7f9bbccb0ff1d83e3adc5fb52569fb45e"
+}

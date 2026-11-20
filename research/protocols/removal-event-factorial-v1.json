@@ -1,0 +1,16 @@
+{
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "question": "Can a lock-local RemovedEntry snapshot be extracted without changing tracked removal behavior, and do added observations distinguish an erroneous no-fallback policy?",
+  "conditions": ["original-observed", "candidate-observed", "mutant-old", "mutant-observed"],
+  "implementation": "fs/kvfs/src/mount.rs",
+  "tests": "fs/kvfs/ut-tests/mount.rs",
+  "fixture": "research/fixtures/removal-event-tests.rs",
+  "candidate": "Extract only the identical RemovedEntry construction at both original closure sites; retain policy checks, namespace locking, reference ownership and deletion ordering.",
+  "mutant": "In both original constructions, getattr failure returns None instead of Some(cached nlink); getattr success still returns Some(authoritative nlink).",
+  "observations": ["returned parent/name/victim identity", "backend nlink distinct from cached nlink", "getattr failure uses cached nlink", "underlying deletion failure does not deliver success", "existing refusal paths"],
+  "environment": {"toolchain": "1.95.0", "cargo_offline": true, "cargo_jobs": 4, "qemu_accel": false, "cpus": 2, "memory": "1g"},
+  "limits": {"seconds_per_condition": 300, "attempts_per_condition": 1},
+  "freeze": "Save fixture, original/candidate/mutant sources, exact implementation diff, input hashes and runner before running any condition.",
+  "completion": "All four conditions have retained per-test outputs and immutable source/configuration checks. If original-observed fails, retain failure and diagnose before interpreting candidate or mutant.",
+  "limits_of_inference": ["Development candidate selected after source review, not blind evaluation", "Original behavior is compatibility reference, not correctness specification", "One fault model, not general mutation detection rate", "Real kernel test harness with controlled backend fixture, not real disk removal workload", "No concurrency-interleaving, notification-end-to-end, performance or maintenance benefit claim"]
+}

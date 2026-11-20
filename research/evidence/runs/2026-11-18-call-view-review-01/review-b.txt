@@ -1,0 +1,48 @@
+独立源码审读 B：case-004 / case-005 / case-006
+
+审读边界
+仅依据 reviewer/cases.json 与指定三个 case 的原始 snippet/source；source_revision 为 7e3ac94431a0dbb376d2fc8d85098deeff1bba09。这是受限证据下的 AI 源码审读意见，不是维护者意见，不是独立人类 gold 标签，也不是合并建议或收益承诺。不推断候选筛选方法。
+下列引用均使用元数据中的原始源码路径及完整 source 的真实行号，不使用 snippet 从 1 开始的行号。每对均在 10 分钟上限内完成；未联网、未构建、未执行测试、未修改生产文件。确认义务是后续工作条件，本次未实施。
+
+case-004
+对象：fs/kvfs/ut-tests/pipe.rs:125–138 interrupted_pipe_write_preserves_committed_prefix；同文件:171–187 interrupted_small_pipe_write_remains_atomic。
+判定：可进入一次机制确认。范围严格限定为测试脚手架中的“给当前任务设置中断—执行一次操作—清除中断—返回结果”，不合并两个测试的语义，不据此提出生产写入路径重构。
+
+共同操作：创建匿名管道、resize(PIPE_BUF)，给当前任务设置中断，在中断存在时调用 write，清除中断后检查返回值并读回数据（pipe.rs:126–137、172–186）。完整文件中相邻迭代器测试也有同样的中断包围步骤（157–160）；这只佐证局部脚手架边界，不扩大本对审读范围。
+现有共享：两者已使用同一个 PipeObject 构造、resize、write、read API 和 ktask 当前任务接口。完整所给文件内没有把该中断包围步骤提取为本地 helper；super::* 引入了什么其他 helper 是 unknown，不能声称仓库不存在共享设施。生产 write 的内部委托关系未提供。
+必须保留的差异：左侧从空管道开始，以 PIPE_BUF+17 个 0x53 字节调用 write(false, false, ...)，要求返回 Ok(PIPE_BUF)、提交前缀可读，随后读返回 WouldBlock（128–137）。右侧先预填 PIPE_BUF-2 个 0x21 字节，再以四字节调用 write(false, true, ...)，要求 IoWaitInterrupted、readable_len 不变、原内容不变（174–186）。这是“已有进展后短写”和“空间不足时小写保持原子性”两个不同的断言契约。第二个布尔参数的含义可从测试意图理解，但其生产签名与实现未读，不能把推断当作已核实定义。
+状态/配置边界：两个测试均是 #[def_test]（124、170），元数据 cfg=not_evaluated；不能假定运行器串行或每例独立任务。中断是当前任务状态，不能把设置/清除搬到不相同的任务或扩大到管道预填及结果断言。当前代码在 write 返回后清除中断，并未在这里实现 panic 路径恢复或保存原先中断状态。
+最小确认义务：先确认测试运行器与 ktask 对任务身份、初始中断状态、嵌套设置/清除和 panic 的约束；再确认一个仅用于测试的包围 helper 能保持“设置—恰好一次原 write—清除—调用者断言”的顺序及 Result 原样返回。是否加入 RAII/恢复旧状态必须单独确认，不能冒充等价提取。保留两例名称、容量/数据/两个布尔参数及全部不同断言；后续验证至少覆盖这两种返回与内容状态，确认无中断泄漏。若现有框架已经提供等价设施，应复用而不是新增。几行脚手架的共享收益 unknown。
+未读依赖：PipeObject 及 PIPE_BUF 定义、write/read/resize/readable_len 实现、ktask::{current, interrupt, clear_interrupt}、unittest::def_test 和 super 模块、测试入口及构建配置。生产内核机制是否重复：证据不足。
+
+case-005
+对象：fs/kvfs/ut-tests/mount.rs:1108–1123 test_hidden_mount_cannot_be_unmounted_while_overmounted；同文件:1059–1080 test_unmount_rejects_mount_with_nested_children。
+判定：必要差异阻断本假设。这里的假设指把两个“卸载失败后依次解除挂载”的测试当成同一可替代行为，或由此认定生产卸载检查应合并；不排除独立的、小范围 fixture 整理。
+
+共同操作：构造三个空 StatFsFlags 的 mock filesystem，建立 root mount，lookup "mnt" 并挂载两个 filesystem；先断言某次 unmount 失败，再解除阻碍并卸载目标，最后确认 root children 为空（1059–1080、1108–1123）。
+现有共享：这里已有实质测试基础设施。mock_filesystem 共享 inode/dentry/superblock 创建（339–344），其内部复用 inode_init（287–301）与 mock_superblock（323–337）；mount_filesystem 已统一委托到 mount_filesystem_with_requested_superblock_flags，固定 MountFlags::empty()、None、None（37–39）；lookup_no_follow 对普通名称实际调用 resolve_final_mount（27–35），名称不意味着永远不跨挂载。两例均调用相同 root_path/unmount API，但这些生产实现不在所给文件内。
+必须保留的差异：左侧把 a、b 挂到同一个先前保存的 mount_dir（1114–1116），直接针对被覆盖的 a.root_path() 卸载，必须得到 InvalidInput（1118）；卸载 b 后才允许卸载 a（1120–1121）。右侧第二个挂载点来自 child_mount.root_path() 内的 "mnt"（1067–1068），形成嵌套关系；卸载有子挂载的 child 必须得到 ResourceBusy，并明确检查 child 与 root 的 children 均仍为 1（1070–1075），然后先卸 grandchild 再卸 child（1077–1079）。覆盖可见性与嵌套子树约束不能因相同调用名而抹平。
+状态/配置/契约：三份 mock filesystem 均独立创建，且均使用空 flags；不能以复用同一个 SuperBlock 替代三次构造而默认等价。完整文件还展示了同 superblock 再挂载可能返回已有 mount 的测试预期（745–764），但其生产依据 unknown。helper 若重新 lookup 覆盖后的 "mnt"，会经过 resolve_final_mount，可能把待检验的隐藏路径改成可见路径，破坏左例的触发条件。两例均 #[def_test]，cfg 未求值；失败时的完整拓扑与可见性不由最后 children=0 单独证明。
+最小确认义务：如果只考虑 fixture，共享最多先到“新 root filesystem/root mount 及首次挂载点”，把同点覆盖或子目录嵌套明确留在各例；确认返回句柄保留正确 mount/dentry 身份、各 filesystem 独立、lookup 时机不变。两种错误码与右例失败后的 children 检查必须分别保留。若要讨论生产检查共享，需要另行获准读取 unmount/挂载拓扑实现，确认可见性校验、子挂载校验及错误优先级；本次没有依据断言它们是重复机制。现有 mock/挂载委托已承担大量共享，新增泛化 runner 的收益没有证据。
+未读依赖：Mount、Path、SuperBlock、Dentry/VfsInode 的生产定义，unmount、children、resolve_final_mount、mount_filesystem_with_requested_superblock_flags 的实现及同步/生命周期协议；kcred、ktime_types、kalloc_types、unittest 和 crate/super 的其他依赖、构建配置。没有从相同测试形状推出生产内核改进。
+
+case-006
+对象：util/klazy/src/lazy.rs:72–83 Lazy::fmt；util/klazy/src/once.rs:62–71 Once::fmt。
+判定：可进入一次机制确认。仅指“非阻塞取得 Option<&T> 后，以各自标签和未就绪占位符完成单字段 Debug tuple”的局部呈现机制；不承诺值得抽取，不重做初始化/同步状态机。
+
+共同操作：两者都建立 debug_tuple，对同一 Once::get 语义返回的 Some(&T) 格式化内容，None 时用 format_args! 构造不加字符串引号的占位内容，然后 finish（lazy.rs:74–82；once.rs:64–70）。
+现有共享/委托：Lazy 明确持有 Once<T>（lazy.rs:64–68），fmt 直接调用 value_storage.get（77）；Once::fmt 调用自身 get（once.rs:66）。Once::get 已统一执行一次 Acquire load，仅 Ready 时安全地返回已初始化值，其余状态均返回 None（481–497）；状态枚举见99–104，Ready 的 Release 发布见313–319。因此核心安全访问与状态判定已经共享，不存在两份可由这对 fmt 合并的同步算法。Lazy::force 也委托 Once::call_once（lazy.rs:138–148），但 fmt 没有调用 force。
+必须保留的差异/契约：外层 tuple 标签分别是 LazyValue、OnceCell；缺值文本分别是 <uninit>、<not-ready>（lazy.rs:74、79；once.rs:64、68）。不能直接让 Lazy::fmt 转调 Once::fmt 并声称输出等价，也不能把 Option 或普通 &str 的 Debug 直接替代现有 field：会改变结构或引号。两个 fmt 都只要求 T: Debug，Lazy 的 F 不要求 Debug 或 FnOnce（lazy.rs:71）；不能为 helper 增加这些约束或触碰 factory。
+状态/配置边界：get 将 Uninitialized、Initializing、Failed 都映射为 None；<uninit> 文本不证明 Lazy 一定处于从未开始初始化状态。fmt 不应新增等待、启动初始化或因 poison 分支主动 panic；wait/poll 的行为不同（once.rs:341–390），不可替换 get。这里的“不主动 panic/等待”限于容器状态查询，用户 T::fmt 自身可能失败或有副作用。once.rs:630–635 的 unittest/test 模块条件仅控制测试模块；两处 fmt 本身没有可见 cfg，元数据仍为 not_evaluated，外围构建环境 unknown。
+可共享的最小边界：可考虑一个模块内部或兄弟模块可用的函数，接收 Formatter、一次取得的 Option<&T>、tuple 名称和占位文本；只负责现有 match/field/finish，保留 format_args! 的呈现方式。get 仍在各调用处执行一次，避免重复读取时并发初始化使判断和使用脱节。helper 的模块可见性需核对未提供的 crate 根，不提出新公共 API。这个机会只减少很短的呈现重复，不能称为性能、同步安全或内核功能提升。
+最小确认义务：对每种类型分别确认未初始化、初始化中、Ready、poison 后的行为保持；普通 {:?} 与 alternate {:#?} 的标签、占位无引号、内容和换行保持；使用有调用计数/返回 fmt::Error 的 T::fmt 检查只调用一次且错误原样传播；确认 Lazy factory 不因格式化被调用，F 仍无新增 trait bound。并发场景只允许单次 get 快照及其现有 Ready/None 结果，不要求初始化竞争下输出固定。后续验证可用受控初始化屏障及可用的 panic 测试环境，具体脚手架和 panic 配置 unknown。本次仅静态核对，未运行这些确认。
+未读依赖：crate 根及模块可见性声明、Cargo/工具链/target/feature/panic 配置、core::fmt/Cell/UnsafeCell/MaybeUninit/atomic 的实际实现、外部 Debug 调用方/输出快照、once.rs 声明的 once_unittest.rs 与 once_host.rs。Once 的 get/状态机及 Lazy 的 factory/force 定义已在给定完整文件中阅读，不列为未知依赖；其在目标环境中的执行结果仍未验证。
+
+实际读取与证据核对记录
+1. 完整读取 reviewer/cases.json；其中也包含 case-001–003 的元数据，未读取其 snippet/source，也未审读这些 case。
+2. case-004/left-snippet.rs、right-snippet.rs 全文；left-source.rs 全文226行。right-source.rs 由 cmp 全文件逐字节比较确认与 left-source.rs 相同（exit 0），并由哈希/切片校验再次读取；未另行重复打印相同正文。
+3. case-005/left-snippet.rs、right-snippet.rs 全文；left-source.rs 分1–600、601–1200、1201–1728行完整读取。right-source.rs 经 cmp 全文件确认与左侧相同（exit 0），并由哈希/切片校验再次读取；未另行重复打印相同正文。
+4. case-006/left-snippet.rs、right-snippet.rs 全文；left-source.rs 全文165行、right-source.rs 全文635行。
+5. 对六个 member 的 source_sha256、snippet sha256、source[range] 与 snippet 字节相等性逐一校验，全部通过；从字节偏移重新计算起止行，分别为125–138、171–187、1108–1123、1059–1080、72–83、62–71，与元数据一致。这验证材料对应关系，不是编译/运行验证，也未独立验证 revision 的仓库来源。
+6. 仅做过 reviewer 顶层目录列表及指定三个 case 文件行数检查；没有读取 manifest.json。未读 analyst-only、排名、旧评审、研究进度或其他 case 原始文件，未遍历生产依赖、Git 历史或外部文档。没有调用研究/代码评审技能而扩大证据范围。
+7. 唯一写入为本 review-b.txt，使用 apply_patch；未生成临时文件或测试产物。以上各项 unknown 不因观察到共同 API 名称、测试名或注释而被补全。

@@ -1,0 +1,21 @@
+{
+  "question": "Can real Dentry tests distinguish the frozen cache insertion contract from a deliberately wrong PAR_LOOKUP filtering implementation?",
+  "status": "Prospective separate fixture experiment; not a retroactive continuation-batch admission",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "candidate": "call-subset-continuation-02/case-002; first retained hypothesis by frozen slot order",
+  "inputs": "Verified existing isolated kernel archive and configuration from cache-transaction-preflight-01; frozen registered node_dentry test module",
+  "budget": "One appended test module section, at most six test entries, two execution cells, each <=300 seconds, one compile integration correction maximum, total implementation budget <=90 minutes",
+  "cases": [
+    "Both wrappers: live normal and live PAR_LOOKUP winner returned with identical Arc identity and unchanged raw weak slot",
+    "Both wrappers: absent and expired weak slots admit candidate; return None and raw slot points to candidate",
+    "Wrapper policy difference: non-cacheable parent prevents insert_cache but not cache_lookup_candidate",
+    "Owned insertion child policy: DONTCACHE rejected unless PERSISTENT; borrowed lookup candidate does not apply this gate",
+    "Inserted child with superblock stays alive after caller releases it, and can be evicted using existing API"
+  ],
+  "oracle": "Explicit state/identity assertions on real private-access Dentry map in its registered child test module. No generated helper computes expected answers. Do not inspect PAR or expired state through filtering lookup_cache_entry.",
+  "negative_control": "Only in isolated research source, change cache_lookup_candidate live-upgrade branch to filter out PAR_LOOKUP winners. Require the new live-PAR identity/Some assertion to fail; compilation failure, unrelated panic or timeout do not count as mutant detection.",
+  "sequence": "Freeze exact appended fixture, source hashes, mutant patch and command before either cell. Run original plus fixture, then single mutant plus same fixture. Preserve logs and restore isolated source in finally. Never modify production checkout.",
+  "stop": "If access requires new production interfaces, baseline asserts fail, runner unavailable or budget exceeded, preserve failure and stop; do not silently replace with host model or change oracle. No refactoring candidate implementation in this batch.",
+  "unknowns": "Sequential tests do not prove concurrency linearizability, unlock-before-retention timing, allocation/clone budget, arbitrary destructor behavior or net maintenance benefit. Lock and ownership boundaries remain static obligations.",
+  "interpretation": "Baseline passes and designated mutant fails establish limited fixture sensitivity only, not refactor equivalence or method superiority. Existing six-slot review outcomes remain unchanged."
+}

@@ -1,0 +1,16 @@
+请仅依据以下同版材料，逐项审阅 R01–R06 的实际行为及其 type/mod/crate 职责位置，不要求一定移动，也不要把当前位置当作规范。
+每项最多350汉字，包含：
+1. 实际行为与当前位置（给源码定位）。
+2. 适用职责规范及来源；区分规范、未来计划、状态描述与实现事实。没有适用规范时明确缺证据。
+3. type/mod/crate 层级的位置建议或 unknown；说明条件，不声称架构最优或真实违规。
+4. 例外与必要区分。
+5. 缺失证据及一个有界下一步检查。
+材料未形成全依赖、宏展开、cfg或调用图闭包；未提供的实现不得臆测。保留原始普通注释与rustdoc，故代码材料并非无文档基线。若出现历史测试数量，仅是文档陈述，不是本批执行结果。禁止使用工具或外部资料。
+
+固定实体定位（仅定位，不是职责答案）：
+R01 drivers/firmware/rs-fdtree/src/property.rs — FdtNode::is_available
+R02 drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs — DtBackend 的 FwNodeOps::mmio_resource
+R03 drivers/firmware/fwnode/src/lib.rs — FwNode、FwNodeId、FwNodeOps 及 FwNode::mmio_resource
+R04 drivers/firmware/of/src/lib.rs — FDT、fdt、init_device_tree_ptr
+R05 drivers/platform/irq/src/gic/firmware.rs — GicConfig::from_fwnode、GicSelection、gicv2_config、gicv3_config
+R06 drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs — DtBackend 的 FwNodeOps::irq_spec

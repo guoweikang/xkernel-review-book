@@ -1,0 +1,575 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        171,
+        1844
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up a possibly underfull node by merging with or stealing from a",
+          "path": "doc",
+          "range": [
+            255,
+            329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sibling. If successful but at the cost of shrinking the parent node,",
+          "path": "doc",
+          "range": [
+            334,
+            406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns that shrunk parent node. Returns an `Err` if the node is",
+          "path": "doc",
+          "range": [
+            411,
+            479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " an empty root.",
+          "path": "doc",
+          "range": [
+            484,
+            502
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        669,
+        1842
+      ],
+      "kind": "impl_fn",
+      "name": "fix_node_through_parent",
+      "range": [
+        255,
+        1842
+      ],
+      "signature_range": [
+        507,
+        668
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1846,
+        2697
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up a possibly underfull node, and if that causes its parent node",
+          "path": "doc",
+          "range": [
+            1930,
+            2005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to shrink, stocks up the parent, recursively.",
+          "path": "doc",
+          "range": [
+            2010,
+            2059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `true` if it fixed the tree, `false` if it couldn't because the",
+          "path": "doc",
+          "range": [
+            2064,
+            2139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " root node became empty.",
+          "path": "doc",
+          "range": [
+            2144,
+            2171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2176,
+            2179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method does not expect ancestors to already be underfull upon entry",
+          "path": "doc",
+          "range": [
+            2184,
+            2260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and panics if it encounters an empty ancestor.",
+          "path": "doc",
+          "range": [
+            2265,
+            2315
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2439,
+        2695
+      ],
+      "kind": "impl_fn",
+      "name": "fix_node_and_affected_ancestors",
+      "range": [
+        1930,
+        2695
+      ],
+      "signature_range": [
+        2331,
+        2438
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2699,
+        4736
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes empty levels on the top, but keeps an empty leaf if the entire tree is empty.",
+          "path": "doc",
+          "range": [
+            2727,
+            2816
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2886,
+        3008
+      ],
+      "kind": "impl_fn",
+      "name": "fix_top",
+      "range": [
+        2727,
+        3008
+      ],
+      "signature_range": [
+        2832,
+        2885
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up or merge away any underfull nodes on the right border of the",
+          "path": "doc",
+          "range": [
+            3014,
+            3088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " tree. The other nodes, those that are not the root nor a rightmost edge,",
+          "path": "doc",
+          "range": [
+            3093,
+            3169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " must already have at least MIN_LEN elements.",
+          "path": "doc",
+          "range": [
+            3174,
+            3222
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3301,
+        3503
+      ],
+      "kind": "impl_fn",
+      "name": "fix_right_border",
+      "range": [
+        3014,
+        3503
+      ],
+      "signature_range": [
+        3238,
+        3300
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " The symmetric clone of `fix_right_border`.",
+          "path": "doc",
+          "range": [
+            3509,
+            3555
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3633,
+        3834
+      ],
+      "kind": "impl_fn",
+      "name": "fix_left_border",
+      "range": [
+        3509,
+        3834
+      ],
+      "signature_range": [
+        3571,
+        3632
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up any underfull nodes on the right border of the tree.",
+          "path": "doc",
+          "range": [
+            3840,
+            3906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The other nodes, those that are neither the root nor a rightmost edge,",
+          "path": "doc",
+          "range": [
+            3911,
+            3985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " must be prepared to have up to MIN_LEN elements stolen.",
+          "path": "doc",
+          "range": [
+            3990,
+            4049
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4109,
+        4734
+      ],
+      "kind": "impl_fn",
+      "name": "fix_right_border_of_plentiful",
+      "range": [
+        3840,
+        4734
+      ],
+      "signature_range": [
+        4065,
+        4108
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        8
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4356,
+        4410
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4738,
+        5438
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        4916,
+        5135
+      ],
+      "kind": "impl_fn",
+      "name": "fix_left_border_of_left_edge",
+      "range": [
+        4842,
+        5135
+      ],
+      "signature_range": [
+        4842,
+        4915
+      ]
+    },
+    {
+      "ancestors": [
+        10,
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5060,
+        5118
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        5217,
+        5436
+      ],
+      "kind": "impl_fn",
+      "name": "fix_right_border_of_right_edge",
+      "range": [
+        5141,
+        5436
+      ],
+      "signature_range": [
+        5141,
+        5216
+      ]
+    },
+    {
+      "ancestors": [
+        10,
+        13
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5361,
+        5419
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5440,
+        7456
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up the left child, assuming the right child isn't underfull, and",
+          "path": "doc",
+          "range": [
+            5538,
+            5613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " provisions an extra element to allow merging its children in turn",
+          "path": "doc",
+          "range": [
+            5618,
+            5687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without becoming underfull.",
+          "path": "doc",
+          "range": [
+            5692,
+            5723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the left child.",
+          "path": "doc",
+          "range": [
+            5728,
+            5755
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5897,
+        6482
+      ],
+      "kind": "impl_fn",
+      "name": "fix_left_child",
+      "range": [
+        5538,
+        6482
+      ],
+      "signature_range": [
+        5760,
+        5896
+      ]
+    },
+    {
+      "ancestors": [
+        15,
+        16
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6021,
+        6076
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Stocks up the right child, assuming the left child isn't underfull, and",
+          "path": "doc",
+          "range": [
+            6488,
+            6563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " provisions an extra element to allow merging its children in turn",
+          "path": "doc",
+          "range": [
+            6568,
+            6637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without becoming underfull.",
+          "path": "doc",
+          "range": [
+            6642,
+            6673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns wherever the right child ended up.",
+          "path": "doc",
+          "range": [
+            6678,
+            6724
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6867,
+        7454
+      ],
+      "kind": "impl_fn",
+      "name": "fix_right_child",
+      "range": [
+        6488,
+        7454
+      ],
+      "signature_range": [
+        6729,
+        6866
+      ]
+    },
+    {
+      "ancestors": [
+        15,
+        18
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6993,
+        7047
+      ]
+    }
+  ],
+  "source_sha256": "690f95d7744400ef22f3ef23947d671c838944de0b8c9cb031455fe8efd0d71c"
+}

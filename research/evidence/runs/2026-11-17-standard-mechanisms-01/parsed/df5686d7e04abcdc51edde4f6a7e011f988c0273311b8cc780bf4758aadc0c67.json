@@ -1,0 +1,1140 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Conversion into a `Future`.",
+          "path": "doc",
+          "range": [
+            28,
+            59
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            60,
+            63
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " By implementing `IntoFuture` for a type, you define how it will be",
+          "path": "doc",
+          "range": [
+            64,
+            134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " converted to a future.",
+          "path": "doc",
+          "range": [
+            135,
+            161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            162,
+            165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `.await` desugaring",
+          "path": "doc",
+          "range": [
+            166,
+            191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            192,
+            195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `.await` keyword desugars into a call to `IntoFuture::into_future`",
+          "path": "doc",
+          "range": [
+            196,
+            270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " first before polling the future to completion. `IntoFuture` is implemented",
+          "path": "doc",
+          "range": [
+            271,
+            349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for all `T: Future` which means the `into_future` method will be available",
+          "path": "doc",
+          "range": [
+            350,
+            428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on all futures.",
+          "path": "doc",
+          "range": [
+            429,
+            448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            449,
+            452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            453,
+            466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::IntoFuture;",
+          "path": "doc",
+          "range": [
+            467,
+            499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            500,
+            503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn foo() {",
+          "path": "doc",
+          "range": [
+            504,
+            526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = async { \"meow\" };",
+          "path": "doc",
+          "range": [
+            527,
+            556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut fut = v.into_future();",
+          "path": "doc",
+          "range": [
+            557,
+            591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"meow\", fut.await);",
+          "path": "doc",
+          "range": [
+            592,
+            626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            627,
+            634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            635,
+            642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            643,
+            646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Async builders",
+          "path": "doc",
+          "range": [
+            647,
+            667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            668,
+            671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When implementing futures manually there will often be a choice between",
+          "path": "doc",
+          "range": [
+            672,
+            747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementing `Future` or `IntoFuture` for a type. Implementing `Future` is a",
+          "path": "doc",
+          "range": [
+            748,
+            828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " good choice in most cases. But implementing `IntoFuture` is most useful when",
+          "path": "doc",
+          "range": [
+            829,
+            909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementing \"async builder\" types, which allow their values to be modified",
+          "path": "doc",
+          "range": [
+            910,
+            989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " multiple times before being `.await`ed.",
+          "path": "doc",
+          "range": [
+            990,
+            1033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1034,
+            1037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1038,
+            1049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::{ready, Ready, IntoFuture};",
+          "path": "doc",
+          "range": [
+            1050,
+            1098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1099,
+            1102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Eventually multiply two numbers",
+          "path": "doc",
+          "range": [
+            1103,
+            1142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub struct Multiply {",
+          "path": "doc",
+          "range": [
+            1143,
+            1168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     num: u16,",
+          "path": "doc",
+          "range": [
+            1169,
+            1186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     factor: u16,",
+          "path": "doc",
+          "range": [
+            1187,
+            1207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1208,
+            1213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1214,
+            1217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Multiply {",
+          "path": "doc",
+          "range": [
+            1218,
+            1237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     /// Constructs a new instance of `Multiply`.",
+          "path": "doc",
+          "range": [
+            1238,
+            1290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pub fn new(num: u16, factor: u16) -> Self {",
+          "path": "doc",
+          "range": [
+            1291,
+            1342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Self { num, factor }",
+          "path": "doc",
+          "range": [
+            1343,
+            1375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1376,
+            1385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1386,
+            1389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     /// Set the number to multiply by the factor.",
+          "path": "doc",
+          "range": [
+            1390,
+            1443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pub fn number(mut self, num: u16) -> Self {",
+          "path": "doc",
+          "range": [
+            1444,
+            1495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.num = num;",
+          "path": "doc",
+          "range": [
+            1496,
+            1523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self",
+          "path": "doc",
+          "range": [
+            1524,
+            1540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1541,
+            1550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1551,
+            1554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     /// Set the factor to multiply the number with.",
+          "path": "doc",
+          "range": [
+            1555,
+            1610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pub fn factor(mut self, factor: u16) -> Self {",
+          "path": "doc",
+          "range": [
+            1611,
+            1665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.factor = factor;",
+          "path": "doc",
+          "range": [
+            1666,
+            1699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self",
+          "path": "doc",
+          "range": [
+            1700,
+            1716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1717,
+            1726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1727,
+            1732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1733,
+            1736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl IntoFuture for Multiply {",
+          "path": "doc",
+          "range": [
+            1737,
+            1771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     type Output = u16;",
+          "path": "doc",
+          "range": [
+            1772,
+            1798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     type IntoFuture = Ready<Self::Output>;",
+          "path": "doc",
+          "range": [
+            1799,
+            1845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1846,
+            1849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn into_future(self) -> Self::IntoFuture {",
+          "path": "doc",
+          "range": [
+            1850,
+            1900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ready(self.num * self.factor)",
+          "path": "doc",
+          "range": [
+            1901,
+            1942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1943,
+            1952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1953,
+            1958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1959,
+            1962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // NOTE: Rust does not yet have an `async fn main` function, that functionality",
+          "path": "doc",
+          "range": [
+            1963,
+            2046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // currently only exists in the ecosystem.",
+          "path": "doc",
+          "range": [
+            2047,
+            2093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async fn run() {",
+          "path": "doc",
+          "range": [
+            2094,
+            2114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let num = Multiply::new(0, 0)  // initialize the builder to number: 0, factor: 0",
+          "path": "doc",
+          "range": [
+            2115,
+            2203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         .number(2)                 // change the number to 2",
+          "path": "doc",
+          "range": [
+            2204,
+            2268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         .factor(2)                 // change the factor to 2",
+          "path": "doc",
+          "range": [
+            2269,
+            2333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         .await;                    // convert to future and .await",
+          "path": "doc",
+          "range": [
+            2334,
+            2404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2405,
+            2408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(num, 4);",
+          "path": "doc",
+          "range": [
+            2409,
+            2436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2437,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2443,
+            2450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2451,
+            2454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Usage in trait bounds",
+          "path": "doc",
+          "range": [
+            2455,
+            2482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2483,
+            2486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Using `IntoFuture` in trait bounds allows a function to be generic over both",
+          "path": "doc",
+          "range": [
+            2487,
+            2567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Future` and `IntoFuture`. This is convenient for users of the function, so",
+          "path": "doc",
+          "range": [
+            2568,
+            2647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when they are using it they don't have to make an extra call to",
+          "path": "doc",
+          "range": [
+            2648,
+            2715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `IntoFuture::into_future` to obtain an instance of `Future`:",
+          "path": "doc",
+          "range": [
+            2716,
+            2780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2781,
+            2784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            2785,
+            2796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::IntoFuture;",
+          "path": "doc",
+          "range": [
+            2797,
+            2829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2830,
+            2833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Converts the output of a future to a string.",
+          "path": "doc",
+          "range": [
+            2834,
+            2886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " async fn fut_to_string<Fut>(fut: Fut) -> String",
+          "path": "doc",
+          "range": [
+            2887,
+            2938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where",
+          "path": "doc",
+          "range": [
+            2939,
+            2948
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Fut: IntoFuture,",
+          "path": "doc",
+          "range": [
+            2949,
+            2973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Fut::Output: std::fmt::Debug,",
+          "path": "doc",
+          "range": [
+            2974,
+            3011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            3012,
+            3017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     format!(\"{:?}\", fut.await)",
+          "path": "doc",
+          "range": [
+            3018,
+            3052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3053,
+            3058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3059,
+            3066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3067,
+            3119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            3120,
+            3159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "diagnostic::on_unimplemented",
+          "range": [
+            3160,
+            3358
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "IntoFuture",
+      "range": [
+        28,
+        4146
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a future from a value.",
+          "path": "doc",
+          "range": [
+            3689,
+            3723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3728,
+            3731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3736,
+            3750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3755,
+            3758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            3763,
+            3779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3784,
+            3787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            3792,
+            3805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::IntoFuture;",
+          "path": "doc",
+          "range": [
+            3810,
+            3842
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3847,
+            3850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn foo() {",
+          "path": "doc",
+          "range": [
+            3855,
+            3877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let v = async { \"meow\" };",
+          "path": "doc",
+          "range": [
+            3882,
+            3911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut fut = v.into_future();",
+          "path": "doc",
+          "range": [
+            3916,
+            3950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"meow\", fut.await);",
+          "path": "doc",
+          "range": [
+            3955,
+            3989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            3994,
+            4001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4006,
+            4013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4018,
+            4070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            4075,
+            4098
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "into_future",
+      "range": [
+        3689,
+        4144
+      ],
+      "signature_range": [
+        4103,
+        4143
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4148,
+            4200
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4148,
+        4358
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        4336,
+        4356
+      ],
+      "kind": "impl_fn",
+      "name": "into_future",
+      "range": [
+        4295,
+        4356
+      ],
+      "signature_range": [
+        4295,
+        4335
+      ]
+    }
+  ],
+  "source_sha256": "076941ebe7b191e304bb0a852935f1ecc910284cd94350d5de00e8022952811f"
+}

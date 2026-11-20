@@ -1,0 +1,15 @@
+{
+  "schema": "bounded-relation-preflight/1",
+  "question": "Can Kani check an existing extraction candidate against its original Rust methods without rewriting either module?",
+  "parent_run": "2026-11-17-path-module-01",
+  "prerequisite": "Kani 0.68.0 official true/false controls both match in kani-recovery-01",
+  "input_domain": {"buffer": "[u8; 4] symbolic", "prefix_length": "symbolic usize <= 4", "assumption": "selected prefix is valid UTF-8", "no_other_restrictions": true},
+  "methods": ["Pathname::file_name", "Pathname::parent"],
+  "observations": ["None versus Some", "string content", "length", "returned starting pointer equality on the SAME shared input buffer"],
+  "source_policy": "Copy original/src/path.rs and candidate/src/path.rs byte-for-byte from parent run; no replacement of rfind, UTF-8 checking, or std implementations",
+  "unwind": 64,
+  "budget": {"total_seconds": 900, "attempt_seconds": 420, "address_space_bytes": 8589934592, "max_harness_only_repairs": 1},
+  "classification": ["all obligations successful within domain", "counterexample requiring inspection", "unwinding incomplete", "unsupported/compile failure", "resource timeout or memory failure"],
+  "stop": "One completed relation attempt; at most one harness-only interface repair on compile failure, recorded separately. No parameter tuning or increasing input length.",
+  "exclusions": ["longer paths", "pop/normalize state sequences", "all Unicode path combinations", "concurrent execution", "document understanding/effect", "performance/maintenance benefits", "independent quality labels", "unbounded equivalence"]
+}

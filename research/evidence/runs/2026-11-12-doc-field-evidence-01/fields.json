@@ -1,0 +1,752 @@
+[
+  {
+    "packet": "permission-role",
+    "field": "purpose",
+    "text": "Return a mode value with replacement permission bits.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "input_preconditions",
+    "text": "Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          96,
+          97
+        ],
+        "excerpt": "const NODE_TYPE_MASK: u16 = 0o170000;\nconst PERMISSION_MASK: u16 = 0o7777;\n",
+        "sha256": "0b629b40348f1bafa17c00280db1e740a60da9e1ba5b9b144ce876cc59a4da42"
+      },
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "changed_and_preserved_state",
+    "text": "Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          96,
+          97
+        ],
+        "excerpt": "const NODE_TYPE_MASK: u16 = 0o170000;\nconst PERMISSION_MASK: u16 = 0o7777;\n",
+        "sha256": "0b629b40348f1bafa17c00280db1e740a60da9e1ba5b9b144ce876cc59a4da42"
+      },
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "effects_and_callback_boundary",
+    "text": "Compute and return a value; this function body performs no callback or external state mutation.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "errors_and_partial_completion",
+    "text": "The body has no Result return or explicit error branch; this is not a general guarantee about all callers.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "execution_context",
+    "text": "The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "permission-role",
+    "field": "configuration",
+    "text": "Unknown: resolved build configuration not collected.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "unknown",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": []
+  },
+  {
+    "packet": "permission-role",
+    "field": "delegation",
+    "text": "The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/types.rs",
+      "name": "with_permission",
+      "lines": [
+        146,
+        148
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/permission-role/source.txt",
+    "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          145,
+          148
+        ],
+        "excerpt": "    /// Returns this mode with new permission bits and the same file type.\n    pub const fn with_permission(self, permission: NodePermission) -> Self {\n        Self((self.0 & NODE_TYPE_MASK) | (permission.bits() & PERMISSION_MASK))\n    }\n",
+        "sha256": "87557dd491cbc415a4fe643bed8fdf2b063ffe22ef9fed535fa6e18292e5e09d"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "purpose",
+    "text": "Deliver an accepted iterator payload to the command write callback as one complete command.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          45,
+          56
+        ],
+        "excerpt": "    Read,\n    /// Consuming one write request.\n    Write {\n        /// Open file description whose opener credential governs the command.\n        file: &'a VfsFile,\n        /// Complete command supplied by this write request.\n        data: &'a [u8],\n    },\n}\n\n/// A simple command file that consumes each write as one complete request.\npub struct CommandFile<F>(F);\n",
+        "sha256": "811fd83406610cbfba195de9d916abf166183d36fd53916264b0588e76d5f8a5"
+      },
+      {
+        "lines": [
+          87,
+          128
+        ],
+        "excerpt": "    fn write_iter(&self, iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {\n        const MAX_COMMAND_SIZE: usize = 4096;\n        let count = iter.count();\n        if count == 0 {\n            return Ok(0);\n        }\n        if count > MAX_COMMAND_SIZE {\n            return Err(VfsError::FileTooLarge);\n        }\n        let mut command = alloc::vec![0; count];\n        let mut copied = 0;\n        while copied < count {\n            let read = match iter.copy_from_iter(&mut command[copied..]) {\n                Ok(read) => read,\n                Err(error) => {\n                    iter.revert(copied)?;\n                    return Err(error);\n                }\n            };\n            if read == 0 {\n                iter.revert(copied)?;\n                return Err(VfsError::BadAddress);\n            }\n            copied += read;\n        }\n        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n        if written > count {\n            iter.revert(count)?;\n            return Err(VfsError::InvalidData);\n        }\n        iter.revert(count - written)?;\n        if written == 0 {\n            return Err(VfsError::WriteZero);\n        }\n        iocb.advance(written);\n        Ok(written)\n",
+        "sha256": "b8dce0ff01f0b25dba218659d9ed96ef3c74dddcca107f052b2e7596b1780ff7"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "input_preconditions",
+    "text": "Empty input returns zero; input exceeding 4096 bytes is rejected before copying or callback invocation.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          87,
+          95
+        ],
+        "excerpt": "    fn write_iter(&self, iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {\n        const MAX_COMMAND_SIZE: usize = 4096;\n        let count = iter.count();\n        if count == 0 {\n            return Ok(0);\n        }\n        if count > MAX_COMMAND_SIZE {\n            return Err(VfsError::FileTooLarge);\n        }\n",
+        "sha256": "0f13871f43a63b1a8c66c3cd581c71d3493e78bfd97bb091b6e3e4c9bc6d4684"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "changed_and_preserved_state",
+    "text": "Advance file position by the accepted write count; rewind unaccepted copied bytes through the iterator contract.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "qualified",
+    "evidence_kind": "source_body_observation",
+    "qualification": "Position advances only on the successful completion path. The actual CommandFile::write returns data.len() on success; generic short-callback scenarios are not demonstrated for this exact receiver.",
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          112,
+          128
+        ],
+        "excerpt": "        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n        if written > count {\n            iter.revert(count)?;\n            return Err(VfsError::InvalidData);\n        }\n        iter.revert(count - written)?;\n        if written == 0 {\n            return Err(VfsError::WriteZero);\n        }\n        iocb.advance(written);\n        Ok(written)\n",
+        "sha256": "e07cf2af7a11c59ec6ccf1b0a304025e5d121e1b49ff204f9ffd7ca691b01087"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "effects_and_callback_boundary",
+    "text": "Collect the entire accepted payload before invoking the write callback once, even when copying requires multiple successful short copies.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "qualified",
+    "evidence_kind": "source_body_observation",
+    "qualification": "One callback only after nonempty in-limit input has been fully copied; empty input or collection failure invokes none. The callback may fail.",
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          87,
+          118
+        ],
+        "excerpt": "    fn write_iter(&self, iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {\n        const MAX_COMMAND_SIZE: usize = 4096;\n        let count = iter.count();\n        if count == 0 {\n            return Ok(0);\n        }\n        if count > MAX_COMMAND_SIZE {\n            return Err(VfsError::FileTooLarge);\n        }\n        let mut command = alloc::vec![0; count];\n        let mut copied = 0;\n        while copied < count {\n            let read = match iter.copy_from_iter(&mut command[copied..]) {\n                Ok(read) => read,\n                Err(error) => {\n                    iter.revert(copied)?;\n                    return Err(error);\n                }\n            };\n            if read == 0 {\n                iter.revert(copied)?;\n                return Err(VfsError::BadAddress);\n            }\n            copied += read;\n        }\n        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n",
+        "sha256": "bdc9b56295954bdce58c729b7babead951f2e951800c9bd07859ad067b33fbb8"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "errors_and_partial_completion",
+    "text": "Copy errors or zero progress trigger rewind of prior copied bytes before returning an error; rewind can itself fail. Callback errors trigger rewind of the complete count. This does not undo arbitrary callback side effects.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          98,
+          128
+        ],
+        "excerpt": "        while copied < count {\n            let read = match iter.copy_from_iter(&mut command[copied..]) {\n                Ok(read) => read,\n                Err(error) => {\n                    iter.revert(copied)?;\n                    return Err(error);\n                }\n            };\n            if read == 0 {\n                iter.revert(copied)?;\n                return Err(VfsError::BadAddress);\n            }\n            copied += read;\n        }\n        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n        if written > count {\n            iter.revert(count)?;\n            return Err(VfsError::InvalidData);\n        }\n        iter.revert(count - written)?;\n        if written == 0 {\n            return Err(VfsError::WriteZero);\n        }\n        iocb.advance(written);\n        Ok(written)\n",
+        "sha256": "f211386c4867c822944c0c92e05949d5b4380beafdd0ee54fa8cf8925c052acd"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "execution_context",
+    "text": "The body allocates a command buffer and invokes caller-dependent iterator and write operations; their scheduling and memory-access requirements must be supplied separately.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          96,
+          118
+        ],
+        "excerpt": "        let mut command = alloc::vec![0; count];\n        let mut copied = 0;\n        while copied < count {\n            let read = match iter.copy_from_iter(&mut command[copied..]) {\n                Ok(read) => read,\n                Err(error) => {\n                    iter.revert(copied)?;\n                    return Err(error);\n                }\n            };\n            if read == 0 {\n                iter.revert(copied)?;\n                return Err(VfsError::BadAddress);\n            }\n            copied += read;\n        }\n        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n",
+        "sha256": "176773952aea6f31b8adf0171789f1377ea5a04bf3e40f127874cb3f2f075ef9"
+      }
+    ]
+  },
+  {
+    "packet": "complete-command",
+    "field": "configuration",
+    "text": "Unknown: resolved build configuration not collected.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "unknown",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": []
+  },
+  {
+    "packet": "complete-command",
+    "field": "delegation",
+    "text": "Dispatch the assembled command through self.write; the iterator wrapper owns its copy/rewind accounting contract.",
+    "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "entity_identity": {
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "lines": [
+        87,
+        129
+      ]
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/complete-command/source.txt",
+    "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+    "state": "source_linked",
+    "evidence_kind": "source_body_observation",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          82,
+          84
+        ],
+        "excerpt": "    fn write(&self, file: &VfsFile, data: &[u8], _offset: u64) -> VfsResult<usize> {\n        (self.0)(SimpleFileOperation::Write { file, data })?;\n        Ok(data.len())\n",
+        "sha256": "b7bf0548e9124b7cb3ec01ec0b3f9387b8303f53b2fe48f30db259b1edcd87a7"
+      },
+      {
+        "lines": [
+          112,
+          118
+        ],
+        "excerpt": "        let written = match self.write(iocb.file(), &command, iocb.ki_pos()) {\n            Ok(written) => written,\n            Err(error) => {\n                iter.revert(count)?;\n                return Err(error);\n            }\n        };\n",
+        "sha256": "d2fd72945302cca487ecc863a35554c4c063fd072e632cc5f8960d4fd27818e7"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "purpose",
+    "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          5,
+          9
+        ],
+        "excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n",
+        "sha256": "89ab361aab02446ac22ce40258d9ce45670941541dee9a366fcee081b6336d51"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "owned_capabilities",
+    "text": "Own structural access, property decoding, node status and device-tree address translation.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          5,
+          9
+        ],
+        "excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n",
+        "sha256": "89ab361aab02446ac22ce40258d9ce45670941541dee9a366fcee081b6336d51"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "non_goals",
+    "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          5,
+          9
+        ],
+        "excerpt": "rs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n",
+        "sha256": "89ab361aab02446ac22ce40258d9ce45670941541dee9a366fcee081b6336d51"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "invariants_and_resources",
+    "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          11,
+          20
+        ],
+        "excerpt": "A future fwnode contract sits above backends. Its public handles, property\noperations, parent/child relations, availability and parameterized references\nmust not expose FdtNode, LinuxFdt or DT cell layout. Resource interpretation is\nseparate from ordinary properties; resource acquisition remains in the existing\nOS provider contracts. The initial real consumer can be DT only. Do not invent\nACPI support or a dynamic backend registry to justify the interface.\n\nExisting OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\n",
+        "sha256": "e21fc8a2ead421c3ea75c1e5321b361c585780f9f1ea26034e5ce8c8fb8ecd33"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "dependency_direction",
+    "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          11,
+          20
+        ],
+        "excerpt": "A future fwnode contract sits above backends. Its public handles, property\noperations, parent/child relations, availability and parameterized references\nmust not expose FdtNode, LinuxFdt or DT cell layout. Resource interpretation is\nseparate from ordinary properties; resource acquisition remains in the existing\nOS provider contracts. The initial real consumer can be DT only. Do not invent\nACPI support or a dynamic backend registry to justify the interface.\n\nExisting OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\n",
+        "sha256": "e21fc8a2ead421c3ea75c1e5321b361c585780f9f1ea26034e5ce8c8fb8ecd33"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "delegation_interfaces",
+    "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "qualified",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": "Design text is evidence of a named interface, not proof of every current capability; its Unsupported IRQ lookup status conflicts with same-revision source.",
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          26,
+          32
+        ],
+        "excerpt": "The scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\ninclusive maximum-address bounds. GIC consumes these DT backend methods.\nIt still uses a DT-specific private discovery adapter; backend-independent\ndriver discovery is a later change, not an accomplished claim here.\n",
+        "sha256": "c6472718df90f3bc7b82cdc89fcf88da3c335db828d6c4457f9500397978498b"
+      },
+      {
+        "lines": [
+          64,
+          76
+        ],
+        "excerpt": "## Implemented neutral contract (first slice)\n\n`drivers/firmware/fwnode` defines the backend-neutral contract:\n`FwNodeId`, opaque `FwNode<'a>` handles over a `FwNodeOps<'a>` provider,\n`FwProperty`/`FwPropertyValue`, `FwMmioResource`, and\n`FwIrqSpec`/`FwParams`. Handles are comparable across backends and carry no\n`FdtNode`, `LinuxFdt` or cell-layout types.\n\n`rs_fdtree` implements the contract as `DtBackend` behind its optional\n`fwnode` feature. Structure, availability, compatible strings and translated\nMMIO resources come from the existing strict DT interpretation. Generic DT\ninterrupt translation is still `Unsupported`: it moves into the backend only\nwhen controller `xlate`/`irq_domain` work makes the mapping well defined.\n",
+        "sha256": "3d7d585fdee852efdfab156cfe6f626f0faa8148dd5085e935473f73f9f7e2a5"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "configuration",
+    "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "source_linked",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": null,
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          26,
+          29
+        ],
+        "excerpt": "The scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\n",
+        "sha256": "b6e3253ec2c5cac4096c3313da08fed4e8c2f0610808f9da430d0e9de0185b94"
+      },
+      {
+        "lines": [
+          72,
+          76
+        ],
+        "excerpt": "`rs_fdtree` implements the contract as `DtBackend` behind its optional\n`fwnode` feature. Structure, availability, compatible strings and translated\nMMIO resources come from the existing strict DT interpretation. Generic DT\ninterrupt translation is still `Unsupported`: it moves into the backend only\nwhen controller `xlate`/`irq_domain` work makes the mapping well defined.\n",
+        "sha256": "04203280649a978f88b8d7b6b3ceb4fe89a11c7da81a479e57b542c0c62e5597"
+      }
+    ]
+  },
+  {
+    "packet": "firmware-ownership",
+    "field": "exceptions",
+    "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+    "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "entity_identity": {
+      "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+      "name": "rs_fdtree responsibility contract, stored in OF migration design"
+    },
+    "source": "research/evidence/runs/2026-11-12-governed-doc-packets-01/firmware-ownership/source.txt",
+    "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+    "state": "qualified",
+    "evidence_kind": "design_statement_not_implementation_proof",
+    "qualification": "Retain the scoped transition exclusions, but do not adopt the documented Unsupported IRQ lookup as a verified current capability gap.",
+    "provider_validated": false,
+    "evaluation_eligible": false,
+    "evidence": [
+      {
+        "lines": [
+          34,
+          38
+        ],
+        "excerpt": "Remove the moved OF implementations and forwarding entry points together.\nNo duplicate interpreter or new fwnode wrapper is retained. Existing IRQ/PCI\nor boot helpers not included in this slice remain separately tracked debt.\nPR #1291 must contain only this DT capability move and its GIC consumer, not\nthe full firmware-node framework.\n",
+        "sha256": "70ceda7dcf4d954c7314f96b0617452bac06b81710e4d12b08a8c6ec9c2b82a0"
+      },
+      {
+        "lines": [
+          92,
+          94
+        ],
+        "excerpt": "Not included in this slice: an ACPI fwnode backend, device-to-controller IRQ\nlookup through `FwIrqSpec` (still `Unsupported` in `DtBackend`), a dynamic\n`irq_domain`, and multi-region/custom-stride redistributor programming.\n",
+        "sha256": "6d593823239c2dfacc09828699e1550665c94744eb309211ef09d81b47fc8c8a"
+      }
+    ]
+  }
+]

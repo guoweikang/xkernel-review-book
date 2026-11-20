@@ -1,0 +1,8431 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Compiler intrinsics.",
+      "path": "doc",
+      "range": [
+        0,
+        24
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        25,
+        28
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The functions in this module are implementation details of `core` and should",
+      "path": "doc",
+      "range": [
+        29,
+        109
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " not be used outside of the standard library. We generally provide access to",
+      "path": "doc",
+      "range": [
+        110,
+        189
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " intrinsics via stable wrapper functions. Use these instead.",
+      "path": "doc",
+      "range": [
+        190,
+        253
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        254,
+        257
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " These are the imports making intrinsics available to Rust code. The actual implementations live in the compiler.",
+      "path": "doc",
+      "range": [
+        258,
+        374
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Some of these intrinsics are lowered to MIR in <https://github.com/rust-lang/rust/blob/HEAD/compiler/rustc_mir_transform/src/lower_intrinsics.rs>.",
+      "path": "doc",
+      "range": [
+        375,
+        525
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The remaining intrinsics are implemented for the LLVM backend in <https://github.com/rust-lang/rust/blob/HEAD/compiler/rustc_codegen_ssa/src/mir/intrinsic.rs>",
+      "path": "doc",
+      "range": [
+        526,
+        688
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and <https://github.com/rust-lang/rust/blob/HEAD/compiler/rustc_codegen_llvm/src/intrinsic.rs>,",
+      "path": "doc",
+      "range": [
+        689,
+        788
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and for const evaluation in <https://github.com/rust-lang/rust/blob/HEAD/compiler/rustc_const_eval/src/interpret/intrinsics.rs>.",
+      "path": "doc",
+      "range": [
+        789,
+        921
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        922,
+        925
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Const intrinsics",
+      "path": "doc",
+      "range": [
+        926,
+        948
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        949,
+        952
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In order to make an intrinsic unstable usable at compile-time, copy the implementation from",
+      "path": "doc",
+      "range": [
+        953,
+        1048
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " <https://github.com/rust-lang/miri/blob/master/src/intrinsics> to",
+      "path": "doc",
+      "range": [
+        1049,
+        1118
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " <https://github.com/rust-lang/rust/blob/HEAD/compiler/rustc_const_eval/src/interpret/intrinsics.rs>",
+      "path": "doc",
+      "range": [
+        1119,
+        1222
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and make the intrinsic declaration below a `const fn`. This should be done in coordination with",
+      "path": "doc",
+      "range": [
+        1223,
+        1322
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " wg-const-eval.",
+      "path": "doc",
+      "range": [
+        1323,
+        1341
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1342,
+        1345
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If an intrinsic is supposed to be used from a `const fn` with a `rustc_const_stable` attribute,",
+      "path": "doc",
+      "range": [
+        1346,
+        1445
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `#[rustc_intrinsic_const_stable_indirect]` needs to be added to the intrinsic. Such a change requires",
+      "path": "doc",
+      "range": [
+        1446,
+        1551
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " T-lang approval, because it may bake a feature into the language that cannot be replicated in",
+      "path": "doc",
+      "range": [
+        1552,
+        1649
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " user code without compiler support.",
+      "path": "doc",
+      "range": [
+        1650,
+        1689
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1690,
+        1693
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Volatiles",
+      "path": "doc",
+      "range": [
+        1694,
+        1709
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1710,
+        1713
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The volatile intrinsics provide operations intended to act on I/O",
+      "path": "doc",
+      "range": [
+        1714,
+        1783
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " memory, which are guaranteed to not be reordered by the compiler",
+      "path": "doc",
+      "range": [
+        1784,
+        1852
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " across other volatile intrinsics. See [`read_volatile`][ptr::read_volatile]",
+      "path": "doc",
+      "range": [
+        1853,
+        1932
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and [`write_volatile`][ptr::write_volatile].",
+      "path": "doc",
+      "range": [
+        1933,
+        1981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1982,
+        1985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Atomics",
+      "path": "doc",
+      "range": [
+        1986,
+        1999
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2000,
+        2003
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The atomic intrinsics provide common atomic operations on machine",
+      "path": "doc",
+      "range": [
+        2004,
+        2073
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " words, with multiple possible memory orderings. See the",
+      "path": "doc",
+      "range": [
+        2074,
+        2133
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [atomic types][atomic] docs for details.",
+      "path": "doc",
+      "range": [
+        2134,
+        2178
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2179,
+        2182
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Unwinding",
+      "path": "doc",
+      "range": [
+        2183,
+        2198
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2199,
+        2202
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust intrinsics may, in general, unwind. If an intrinsic can never unwind, add the",
+      "path": "doc",
+      "range": [
+        2203,
+        2289
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `#[rustc_nounwind]` attribute so that the compiler can make use of this fact.",
+      "path": "doc",
+      "range": [
+        2290,
+        2371
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2372,
+        2375
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " However, even for intrinsics that may unwind, rustc assumes that a Rust intrinsics will never",
+      "path": "doc",
+      "range": [
+        2376,
+        2473
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " initiate a foreign (non-Rust) unwind, and thus for panic=abort we can always assume that these",
+      "path": "doc",
+      "range": [
+        2474,
+        2572
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " intrinsics cannot unwind.",
+      "path": "doc",
+      "range": [
+        2573,
+        2602
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        2604,
+        2876
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "bounds",
+      "path_overrides": [],
+      "range": [
+        3022,
+        3033
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "fallback",
+      "path_overrides": [],
+      "range": [
+        3034,
+        3051
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "gpu",
+      "path_overrides": [],
+      "range": [
+        3052,
+        3064
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "mir",
+      "path_overrides": [],
+      "range": [
+        3065,
+        3077
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "simd",
+      "path_overrides": [],
+      "range": [
+        3078,
+        3091
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A type for atomic ordering parameters for intrinsics. This is a separate type from",
+          "path": "doc",
+          "range": [
+            3357,
+            3443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `atomic::Ordering` so that we can make it `ConstParamTy` and fix the values used here without a",
+          "path": "doc",
+          "range": [
+            3444,
+            3543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " risk of leaking that to stable code.",
+          "path": "doc",
+          "range": [
+            3544,
+            3584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            3585,
+            3607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            3608,
+            3653
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "AtomicOrdering",
+      "range": [
+        3357,
+        3882
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        4013,
+        4514
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        4516,
+        5070
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5072,
+        5427
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5429,
+        5799
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5801,
+        6198
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6200,
+        6695
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6697,
+        7198
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7200,
+        7702
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7704,
+        8213
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8215,
+        8713
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        8715,
+        9217
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        9219,
+        9616
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        9618,
+        10015
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10017,
+        10423
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10425,
+        10831
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        10833,
+        11035
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11037,
+        11303
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The `prefetch` intrinsic is a hint to the code generator to insert a prefetch instruction",
+          "path": "doc",
+          "range": [
+            11305,
+            11398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for the given address if supported; otherwise, it is a no-op.",
+          "path": "doc",
+          "range": [
+            11399,
+            11464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prefetches have no effect on the behavior of the program but can change its performance",
+          "path": "doc",
+          "range": [
+            11465,
+            11556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " characteristics.",
+          "path": "doc",
+          "range": [
+            11557,
+            11577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11578,
+            11581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `LOCALITY` argument is a temporal locality specifier ranging from (0) - no locality,",
+          "path": "doc",
+          "range": [
+            11582,
+            11674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to (3) - extremely local keep in cache.",
+          "path": "doc",
+          "range": [
+            11675,
+            11718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11719,
+            11722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            11723,
+            11777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            11778,
+            11796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            11797,
+            11814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            11815,
+            11850
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11923,
+        12018
+      ],
+      "kind": "fn",
+      "name": "prefetch_read_data",
+      "range": [
+        11305,
+        12018
+      ],
+      "signature_range": [
+        11855,
+        11922
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The `prefetch` intrinsic is a hint to the code generator to insert a prefetch instruction",
+          "path": "doc",
+          "range": [
+            12020,
+            12113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for the given address if supported; otherwise, it is a no-op.",
+          "path": "doc",
+          "range": [
+            12114,
+            12179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prefetches have no effect on the behavior of the program but can change its performance",
+          "path": "doc",
+          "range": [
+            12180,
+            12271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " characteristics.",
+          "path": "doc",
+          "range": [
+            12272,
+            12292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12293,
+            12296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `LOCALITY` argument is a temporal locality specifier ranging from (0) - no locality,",
+          "path": "doc",
+          "range": [
+            12297,
+            12389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to (3) - extremely local keep in cache.",
+          "path": "doc",
+          "range": [
+            12390,
+            12433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12434,
+            12437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            12438,
+            12492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            12493,
+            12511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            12512,
+            12529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            12530,
+            12565
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12639,
+        12734
+      ],
+      "kind": "fn",
+      "name": "prefetch_write_data",
+      "range": [
+        12020,
+        12734
+      ],
+      "signature_range": [
+        12570,
+        12638
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The `prefetch` intrinsic is a hint to the code generator to insert a prefetch instruction",
+          "path": "doc",
+          "range": [
+            12736,
+            12829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for the given address if supported; otherwise, it is a no-op.",
+          "path": "doc",
+          "range": [
+            12830,
+            12895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prefetches have no effect on the behavior of the program but can change its performance",
+          "path": "doc",
+          "range": [
+            12896,
+            12987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " characteristics.",
+          "path": "doc",
+          "range": [
+            12988,
+            13008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13009,
+            13012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `LOCALITY` argument is a temporal locality specifier ranging from (0) - no locality,",
+          "path": "doc",
+          "range": [
+            13013,
+            13105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to (3) - extremely local keep in cache.",
+          "path": "doc",
+          "range": [
+            13106,
+            13149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13150,
+            13153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            13154,
+            13208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            13209,
+            13227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            13228,
+            13245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            13246,
+            13281
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13361,
+        13456
+      ],
+      "kind": "fn",
+      "name": "prefetch_read_instruction",
+      "range": [
+        12736,
+        13456
+      ],
+      "signature_range": [
+        13286,
+        13360
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The `prefetch` intrinsic is a hint to the code generator to insert a prefetch instruction",
+          "path": "doc",
+          "range": [
+            13458,
+            13551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for the given address if supported; otherwise, it is a no-op.",
+          "path": "doc",
+          "range": [
+            13552,
+            13617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prefetches have no effect on the behavior of the program but can change its performance",
+          "path": "doc",
+          "range": [
+            13618,
+            13709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " characteristics.",
+          "path": "doc",
+          "range": [
+            13710,
+            13730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13731,
+            13734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `LOCALITY` argument is a temporal locality specifier ranging from (0) - no locality,",
+          "path": "doc",
+          "range": [
+            13735,
+            13827
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to (3) - extremely local keep in cache.",
+          "path": "doc",
+          "range": [
+            13828,
+            13871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13872,
+            13875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            13876,
+            13930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            13931,
+            13949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            13950,
+            13967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            13968,
+            14003
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14084,
+        14179
+      ],
+      "kind": "fn",
+      "name": "prefetch_write_instruction",
+      "range": [
+        13458,
+        14179
+      ],
+      "signature_range": [
+        14008,
+        14083
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        14181,
+        14359
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        14361,
+        14837
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        14839,
+        15600
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        15602,
+        16116
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Informs the optimizer that a condition is always true.",
+          "path": "doc",
+          "range": [
+            16118,
+            16176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the condition is false, the behavior is undefined.",
+          "path": "doc",
+          "range": [
+            16177,
+            16234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16235,
+            16238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " No code is generated for this intrinsic, but the optimizer will try",
+          "path": "doc",
+          "range": [
+            16239,
+            16310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to preserve it (and its condition) between passes, which may interfere",
+          "path": "doc",
+          "range": [
+            16311,
+            16385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with optimization of surrounding code and reduce performance. It should",
+          "path": "doc",
+          "range": [
+            16386,
+            16461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not be used if the invariant can be discovered by the optimizer on its",
+          "path": "doc",
+          "range": [
+            16462,
+            16536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " own, or if it does not enable any significant optimizations.",
+          "path": "doc",
+          "range": [
+            16537,
+            16601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16602,
+            16605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized version of this intrinsic is [`core::hint::assert_unchecked`].",
+          "path": "doc",
+          "range": [
+            16606,
+            16687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic_const_stable_indirect",
+          "range": [
+            16688,
+            16728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            16729,
+            16746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16747,
+            16803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            16804,
+            16822
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16859,
+        16988
+      ],
+      "kind": "fn",
+      "name": "assume",
+      "range": [
+        16118,
+        16988
+      ],
+      "signature_range": [
+        16827,
+        16858
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that current code path is cold.",
+          "path": "doc",
+          "range": [
+            16990,
+            17047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17048,
+            17051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            17052,
+            17112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            17113,
+            17155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            17156,
+            17222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            17223,
+            17249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17250,
+            17253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized version of this intrinsic is [`core::hint::cold_path`].",
+          "path": "doc",
+          "range": [
+            17254,
+            17328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            17329,
+            17347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            17348,
+            17365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            17366,
+            17401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            17402,
+            17409
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17435,
+        17437
+      ],
+      "kind": "fn",
+      "name": "cold_path",
+      "range": [
+        16990,
+        17437
+      ],
+      "signature_range": [
+        17414,
+        17434
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that branch condition is likely to be true.",
+          "path": "doc",
+          "range": [
+            17439,
+            17508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the value passed to it.",
+          "path": "doc",
+          "range": [
+            17509,
+            17544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17545,
+            17548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Any use other than with `if` statements will probably not have an effect.",
+          "path": "doc",
+          "range": [
+            17549,
+            17626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17627,
+            17630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            17631,
+            17691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            17692,
+            17734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            17735,
+            17801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            17802,
+            17828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17829,
+            17832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            17833,
+            17887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17888,
+            17944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            17945,
+            17962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17963,
+            17980
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18018,
+        18099
+      ],
+      "kind": "fn",
+      "name": "likely",
+      "range": [
+        17439,
+        18099
+      ],
+      "signature_range": [
+        17985,
+        18017
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that branch condition is likely to be false.",
+          "path": "doc",
+          "range": [
+            18101,
+            18171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the value passed to it.",
+          "path": "doc",
+          "range": [
+            18172,
+            18207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18208,
+            18211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Any use other than with `if` statements will probably not have an effect.",
+          "path": "doc",
+          "range": [
+            18212,
+            18289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18290,
+            18293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            18294,
+            18354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            18355,
+            18397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            18398,
+            18464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            18465,
+            18491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18492,
+            18495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic does not have a stable counterpart.",
+          "path": "doc",
+          "range": [
+            18496,
+            18550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18551,
+            18607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            18608,
+            18625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18626,
+            18643
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18683,
+        18764
+      ],
+      "kind": "fn",
+      "name": "unlikely",
+      "range": [
+        18101,
+        18764
+      ],
+      "signature_range": [
+        18648,
+        18682
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns either `true_val` or `false_val` depending on condition `b` with a",
+          "path": "doc",
+          "range": [
+            18766,
+            18844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hint to the compiler that this condition is unlikely to be correctly",
+          "path": "doc",
+          "range": [
+            18845,
+            18917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " predicted by a CPU's branch predictor (e.g. a binary search).",
+          "path": "doc",
+          "range": [
+            18918,
+            18983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18984,
+            18987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is otherwise functionally equivalent to `if b { true_val } else { false_val }`.",
+          "path": "doc",
+          "range": [
+            18988,
+            19076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19077,
+            19080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            19081,
+            19141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            19142,
+            19184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            19185,
+            19251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            19252,
+            19278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19279,
+            19282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The public form of this intrinsic is [`core::hint::select_unpredictable`].",
+          "path": "doc",
+          "range": [
+            19283,
+            19361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However unlike the public form, the intrinsic will not drop the value that",
+          "path": "doc",
+          "range": [
+            19362,
+            19440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is not selected.",
+          "path": "doc",
+          "range": [
+            19441,
+            19461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            19462,
+            19518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            19519,
+            19600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            19601,
+            19619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            19620,
+            19637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            19638,
+            19673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19674,
+            19683
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19762,
+        19883
+      ],
+      "kind": "fn",
+      "name": "select_unpredictable",
+      "range": [
+        18766,
+        19883
+      ],
+      "signature_range": [
+        19688,
+        19761
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        19885,
+        20335
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        20337,
+        20813
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        20815,
+        21237
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        21239,
+        21736
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        21738,
+        22225
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        22227,
+        34753
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        34755,
+        35374
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        35376,
+        36162
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        36164,
+        37193
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        37195,
+        38020
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        38022,
+        39024
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        39026,
+        39429
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        39431,
+        40076
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        40077,
+        40522
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        40523,
+        41101
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        41103,
+        41326
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        41327,
+        41552
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        41554,
+        41874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        41875,
+        42198
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        42200,
+        42419
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        42420,
+        42639
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        42640,
+        42859
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        42860,
+        43085
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        43087,
+        43315
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        43316,
+        43544
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        43545,
+        43773
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        43774,
+        44008
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        44010,
+        44220
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        44221,
+        44431
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        44432,
+        44642
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        44643,
+        44859
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        44861,
+        45073
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        45074,
+        45286
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        45287,
+        45499
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        45500,
+        45718
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        45720,
+        45945
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        45946,
+        46171
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        46172,
+        46397
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        46398,
+        46631
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        46633,
+        46850
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        46851,
+        47068
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        47069,
+        47286
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        47287,
+        47510
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        47512,
+        47738
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        47739,
+        47965
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        47966,
+        48192
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        48193,
+        48425
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        48427,
+        48648
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        48649,
+        48870
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        48871,
+        49092
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        49093,
+        49320
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        49322,
+        49551
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        49552,
+        49781
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        49782,
+        50011
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        50012,
+        50247
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        50249,
+        50474
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        50475,
+        50700
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        50701,
+        50926
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        50927,
+        51158
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        51160,
+        51449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        51450,
+        51739
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        51740,
+        52029
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        52030,
+        52327
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        52329,
+        52981
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        52982,
+        53634
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        53635,
+        54287
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        54288,
+        54946
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        54948,
+        55241
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        55242,
+        55535
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        55536,
+        55829
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        55830,
+        56129
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        56131,
+        56425
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        56426,
+        56720
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        56721,
+        57015
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        57016,
+        57316
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        57318,
+        57589
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        57590,
+        57861
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        57862,
+        58133
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        58134,
+        58411
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        58413,
+        58796
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        58798,
+        59181
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        59183,
+        59566
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        59568,
+        59957
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        59959,
+        60271
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        60272,
+        60584
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        60585,
+        60897
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        60898,
+        61216
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        61218,
+        61522
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        61524,
+        61831
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        61833,
+        62143
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        62145,
+        62449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        62451,
+        62756
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        62758,
+        63100
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        63102,
+        63386
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        63388,
+        63675
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        63677,
+        63967
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        63969,
+        64253
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        64255,
+        64540
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        64542,
+        65081
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        65083,
+        66157
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        66159,
+        66709
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        66711,
+        67792
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        67794,
+        68346
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        68348,
+        68874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        68876,
+        69410
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        69412,
+        69922
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Combine two values which have no bits in common.",
+          "path": "doc",
+          "range": [
+            69924,
+            69976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            69977,
+            69980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This allows the backend to implement it as `a + b` *or* `a | b`,",
+          "path": "doc",
+          "range": [
+            69981,
+            70049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " depending which is easier to implement on a specific target.",
+          "path": "doc",
+          "range": [
+            70050,
+            70114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70115,
+            70118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            70119,
+            70131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70132,
+            70135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Requires that `(a & b) == 0`, or equivalently that `(a | b) == (a + b)`.",
+          "path": "doc",
+          "range": [
+            70136,
+            70212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70213,
+            70216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Otherwise it's immediate UB.",
+          "path": "doc",
+          "range": [
+            70217,
+            70249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            70250,
+            70319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            70320,
+            70337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            70338,
+            70356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            70357,
+            70372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            70373,
+            70408
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        70540,
+        70656
+      ],
+      "kind": "fn",
+      "name": "disjoint_bitor",
+      "range": [
+        69924,
+        70656
+      ],
+      "signature_range": [
+        70456,
+        70539
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        70658,
+        71212
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        71214,
+        71770
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        71772,
+        72331
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Performs full-width multiplication and addition with a carry:",
+          "path": "doc",
+          "range": [
+            72333,
+            72398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `multiplier * multiplicand + addend + carry`.",
+          "path": "doc",
+          "range": [
+            72399,
+            72448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            72449,
+            72452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is possible without any overflow.  For `uN`:",
+          "path": "doc",
+          "range": [
+            72453,
+            72506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    MAX * MAX + MAX + MAX",
+          "path": "doc",
+          "range": [
+            72507,
+            72535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " => (2ⁿ-1) × (2ⁿ-1) + (2ⁿ-1) + (2ⁿ-1)",
+          "path": "doc",
+          "range": [
+            72536,
+            72585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " => (2²ⁿ - 2ⁿ⁺¹ + 1) + (2ⁿ⁺¹ - 2)",
+          "path": "doc",
+          "range": [
+            72586,
+            72635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " => 2²ⁿ - 1",
+          "path": "doc",
+          "range": [
+            72636,
+            72653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            72654,
+            72657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For `iN`, the upper bound is MIN * MIN + MAX + MAX => 2²ⁿ⁻² + 2ⁿ - 2,",
+          "path": "doc",
+          "range": [
+            72658,
+            72739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and the lower bound is MAX * MIN + MIN + MIN => -2²ⁿ⁻² - 2ⁿ + 2ⁿ⁺¹.",
+          "path": "doc",
+          "range": [
+            72740,
+            72824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            72825,
+            72828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This currently supports unsigned integers *only*, no signed ones.",
+          "path": "doc",
+          "range": [
+            72829,
+            72898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized versions of this intrinsic are available on integers.",
+          "path": "doc",
+          "range": [
+            72899,
+            72971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            72972,
+            73028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            73029,
+            73105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            73106,
+            73123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            73124,
+            73142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            73143,
+            73178
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        73345,
+        73409
+      ],
+      "kind": "fn",
+      "name": "carrying_mul_add",
+      "range": [
+        72333,
+        73409
+      ],
+      "signature_range": [
+        73183,
+        73344
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        73411,
+        73731
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        73733,
+        74139
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        74140,
+        74561
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        74563,
+        74998
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        74999,
+        75435
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        75437,
+        75864
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        75866,
+        76296
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        76298,
+        76731
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Performs rotate left.",
+          "path": "doc",
+          "range": [
+            76733,
+            76758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            76759,
+            76762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            76763,
+            76823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            76824,
+            76866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            76867,
+            76933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            76934,
+            76960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            76961,
+            76964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized versions of this intrinsic are available on the integer",
+          "path": "doc",
+          "range": [
+            76965,
+            77039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " primitives via the `rotate_left` method. For example,",
+          "path": "doc",
+          "range": [
+            77040,
+            77097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`u32::rotate_left`]",
+          "path": "doc",
+          "range": [
+            77098,
+            77122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic_const_stable_indirect",
+          "range": [
+            77123,
+            77163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            77164,
+            77181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            77182,
+            77200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            77201,
+            77266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            77267,
+            77302
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        77385,
+        77660
+      ],
+      "kind": "fn",
+      "name": "rotate_left",
+      "range": [
+        76733,
+        77660
+      ],
+      "signature_range": [
+        77307,
+        77384
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Performs rotate right.",
+          "path": "doc",
+          "range": [
+            77662,
+            77688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            77689,
+            77692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            77693,
+            77753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            77754,
+            77796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            77797,
+            77863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            77864,
+            77890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            77891,
+            77894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized versions of this intrinsic are available on the integer",
+          "path": "doc",
+          "range": [
+            77895,
+            77969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " primitives via the `rotate_right` method. For example,",
+          "path": "doc",
+          "range": [
+            77970,
+            78028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`u32::rotate_right`]",
+          "path": "doc",
+          "range": [
+            78029,
+            78054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic_const_stable_indirect",
+          "range": [
+            78055,
+            78095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            78096,
+            78113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            78114,
+            78132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            78133,
+            78198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            78199,
+            78234
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        78318,
+        78593
+      ],
+      "kind": "fn",
+      "name": "rotate_right",
+      "range": [
+        77662,
+        78593
+      ],
+      "signature_range": [
+        78239,
+        78317
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        78595,
+        79165
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        79166,
+        79736
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        79737,
+        80307
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        80309,
+        80863
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        80864,
+        81418
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Funnel Shift left.",
+          "path": "doc",
+          "range": [
+            81420,
+            81442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            81443,
+            81446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Concatenates `a` and `b` (with `a` in the most significant half),",
+          "path": "doc",
+          "range": [
+            81447,
+            81516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " creating an integer twice as wide. Then shift this integer left",
+          "path": "doc",
+          "range": [
+            81517,
+            81584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by `shift`), and extract the most significant half. If `a` and `b`",
+          "path": "doc",
+          "range": [
+            81585,
+            81655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are the same, this is equivalent to a rotate left operation.",
+          "path": "doc",
+          "range": [
+            81656,
+            81720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            81721,
+            81724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is undefined behavior if `shift` is greater than or equal to the",
+          "path": "doc",
+          "range": [
+            81725,
+            81796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bit size of `T`.",
+          "path": "doc",
+          "range": [
+            81797,
+            81817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            81818,
+            81821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Safe versions of this intrinsic are available on the integer primitives",
+          "path": "doc",
+          "range": [
+            81822,
+            81897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " via the `funnel_shl` method. For example, [`u32::funnel_shl`].",
+          "path": "doc",
+          "range": [
+            81898,
+            81964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            81965,
+            81983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            81984,
+            82001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            82002,
+            82070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            82071,
+            82127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            82128,
+            82143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            82144,
+            82179
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        82299,
+        82405
+      ],
+      "kind": "fn",
+      "name": "unchecked_funnel_shl",
+      "range": [
+        81420,
+        82405
+      ],
+      "signature_range": [
+        82184,
+        82298
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Funnel Shift right.",
+          "path": "doc",
+          "range": [
+            82407,
+            82430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            82431,
+            82434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Concatenates `a` and `b` (with `a` in the most significant half),",
+          "path": "doc",
+          "range": [
+            82435,
+            82504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " creating an integer twice as wide. Then shift this integer right",
+          "path": "doc",
+          "range": [
+            82505,
+            82573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by `shift` (taken modulo the bit size of `T`), and extract the",
+          "path": "doc",
+          "range": [
+            82574,
+            82640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " least significant half. If `a` and `b` are the same, this is equivalent",
+          "path": "doc",
+          "range": [
+            82641,
+            82716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to a rotate right operation.",
+          "path": "doc",
+          "range": [
+            82717,
+            82749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            82750,
+            82753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is undefined behavior if `shift` is greater than or equal to the",
+          "path": "doc",
+          "range": [
+            82754,
+            82825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bit size of `T`.",
+          "path": "doc",
+          "range": [
+            82826,
+            82846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            82847,
+            82850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Safer versions of this intrinsic are available on the integer primitives",
+          "path": "doc",
+          "range": [
+            82851,
+            82927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " via the `funnel_shr` method. For example, [`u32::funnel_shr`]",
+          "path": "doc",
+          "range": [
+            82928,
+            82993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            82994,
+            83012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            83013,
+            83030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            83031,
+            83099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            83100,
+            83156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            83157,
+            83172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            83173,
+            83208
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        83328,
+        83434
+      ],
+      "kind": "fn",
+      "name": "unchecked_funnel_shr",
+      "range": [
+        82407,
+        83434
+      ],
+      "signature_range": [
+        83213,
+        83327
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Carryless multiply.",
+          "path": "doc",
+          "range": [
+            83436,
+            83459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            83460,
+            83463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Safe versions of this intrinsic are available on the integer primitives",
+          "path": "doc",
+          "range": [
+            83464,
+            83539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " via the `carryless_mul` method. For example, [`u32::carryless_mul`].",
+          "path": "doc",
+          "range": [
+            83540,
+            83612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            83613,
+            83631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            83632,
+            83649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            83650,
+            83723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            83724,
+            83785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            83786,
+            83821
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        83901,
+        83927
+      ],
+      "kind": "fn",
+      "name": "carryless_mul",
+      "range": [
+        83436,
+        83927
+      ],
+      "signature_range": [
+        83826,
+        83900
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        83929,
+        84428
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        84430,
+        84942
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        84944,
+        85499
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        85501,
+        86688
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        86690,
+        87216
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        87218,
+        87439
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        87441,
+        87680
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " See documentation of `<*const T>::guaranteed_eq` for details.",
+          "path": "doc",
+          "range": [
+            87682,
+            87747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `2` if the result is unknown.",
+          "path": "doc",
+          "range": [
+            87748,
+            87789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `1` if the pointers are guaranteed equal.",
+          "path": "doc",
+          "range": [
+            87790,
+            87843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `0` if the pointers are guaranteed inequal.",
+          "path": "doc",
+          "range": [
+            87844,
+            87899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            87900,
+            87918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            87919,
+            87936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_do_not_const_check",
+          "range": [
+            87937,
+            87964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            87965,
+            87974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            87975,
+            88010
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        88084,
+        88112
+      ],
+      "kind": "fn",
+      "name": "ptr_guaranteed_cmp",
+      "range": [
+        87682,
+        88112
+      ],
+      "signature_range": [
+        88015,
+        88083
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        88114,
+        89282
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        89284,
+        90057
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        90059,
+        90298
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        90300,
+        92622
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        92624,
+        94886
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns whether the argument's value is statically known at",
+          "path": "doc",
+          "range": [
+            94888,
+            94951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compile-time.",
+          "path": "doc",
+          "range": [
+            94952,
+            94969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            94970,
+            94973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is useful when there is a way of writing the code that will",
+          "path": "doc",
+          "range": [
+            94974,
+            95042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be *faster* when some variables have known values, but *slower*",
+          "path": "doc",
+          "range": [
+            95043,
+            95110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in the general case: an `if is_val_statically_known(var)` can be used",
+          "path": "doc",
+          "range": [
+            95111,
+            95184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to select between these two variants. The `if` will be optimized away",
+          "path": "doc",
+          "range": [
+            95185,
+            95258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and only the desired branch remains.",
+          "path": "doc",
+          "range": [
+            95259,
+            95299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            95300,
+            95303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Formally speaking, this function non-deterministically returns `true`",
+          "path": "doc",
+          "range": [
+            95304,
+            95377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or `false`, and the caller has to ensure sound behavior for both cases.",
+          "path": "doc",
+          "range": [
+            95378,
+            95453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In other words, the following code has *Undefined Behavior*:",
+          "path": "doc",
+          "range": [
+            95454,
+            95518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            95519,
+            95522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            95523,
+            95536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(core_intrinsics)]",
+          "path": "doc",
+          "range": [
+            95537,
+            95569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![allow(internal_features)]",
+          "path": "doc",
+          "range": [
+            95570,
+            95604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::unreachable_unchecked;",
+          "path": "doc",
+          "range": [
+            95605,
+            95646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::intrinsics::is_val_statically_known;",
+          "path": "doc",
+          "range": [
+            95647,
+            95696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            95697,
+            95700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if !is_val_statically_known(0) { unsafe { unreachable_unchecked(); } }",
+          "path": "doc",
+          "range": [
+            95701,
+            95775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            95776,
+            95783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            95784,
+            95787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This also means that the following code's behavior is unspecified; it",
+          "path": "doc",
+          "range": [
+            95788,
+            95861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " may panic, or it may not:",
+          "path": "doc",
+          "range": [
+            95862,
+            95891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            95892,
+            95895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```no_run",
+          "path": "doc",
+          "range": [
+            95896,
+            95909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(core_intrinsics)]",
+          "path": "doc",
+          "range": [
+            95910,
+            95942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![allow(internal_features)]",
+          "path": "doc",
+          "range": [
+            95943,
+            95977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::intrinsics::is_val_statically_known;",
+          "path": "doc",
+          "range": [
+            95978,
+            96027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96028,
+            96031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(is_val_statically_known(0), is_val_statically_known(0));",
+          "path": "doc",
+          "range": [
+            96032,
+            96103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            96104,
+            96111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96112,
+            96115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unsafe code may not rely on `is_val_statically_known` returning any",
+          "path": "doc",
+          "range": [
+            96116,
+            96187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " particular value, ever. However, the compiler will generally make it",
+          "path": "doc",
+          "range": [
+            96188,
+            96260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " return `true` only if the value of the argument is actually known.",
+          "path": "doc",
+          "range": [
+            96261,
+            96331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96332,
+            96335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Stability concerns",
+          "path": "doc",
+          "range": [
+            96336,
+            96360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96361,
+            96364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While it is safe to call, this intrinsic may behave differently in",
+          "path": "doc",
+          "range": [
+            96365,
+            96435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a `const` context than otherwise. See the [`const_eval_select()`]",
+          "path": "doc",
+          "range": [
+            96436,
+            96505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " documentation for an explanation of the issues this can cause. Unlike",
+          "path": "doc",
+          "range": [
+            96506,
+            96579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `const_eval_select`, this intrinsic isn't guaranteed to behave",
+          "path": "doc",
+          "range": [
+            96580,
+            96646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " deterministically even in a `const` context.",
+          "path": "doc",
+          "range": [
+            96647,
+            96695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96696,
+            96699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Type Requirements",
+          "path": "doc",
+          "range": [
+            96700,
+            96723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96724,
+            96727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `T` must be either a `bool`, a `char`, a primitive numeric type (e.g. `f32`,",
+          "path": "doc",
+          "range": [
+            96728,
+            96808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but not `NonZeroISize`), or any thin pointer (e.g. `*mut String`).",
+          "path": "doc",
+          "range": [
+            96809,
+            96879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Any other argument types *may* cause a compiler error.",
+          "path": "doc",
+          "range": [
+            96880,
+            96938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96939,
+            96942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Pointers",
+          "path": "doc",
+          "range": [
+            96943,
+            96958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            96959,
+            96962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When the input is a pointer, only the pointer itself is",
+          "path": "doc",
+          "range": [
+            96963,
+            97022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ever considered. The pointee has no effect. Currently, these functions",
+          "path": "doc",
+          "range": [
+            97023,
+            97097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behave identically:",
+          "path": "doc",
+          "range": [
+            97098,
+            97121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97122,
+            97125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            97126,
+            97133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(core_intrinsics)]",
+          "path": "doc",
+          "range": [
+            97134,
+            97166
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #![allow(internal_features)]",
+          "path": "doc",
+          "range": [
+            97167,
+            97201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::intrinsics::is_val_statically_known;",
+          "path": "doc",
+          "range": [
+            97202,
+            97251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97252,
+            97255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn foo(x: &i32) -> bool {",
+          "path": "doc",
+          "range": [
+            97256,
+            97285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     is_val_statically_known(x)",
+          "path": "doc",
+          "range": [
+            97286,
+            97320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            97321,
+            97326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97327,
+            97330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn bar(x: &i32) -> bool {",
+          "path": "doc",
+          "range": [
+            97331,
+            97360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     is_val_statically_known(",
+          "path": "doc",
+          "range": [
+            97361,
+            97393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         (x as *const i32).addr()",
+          "path": "doc",
+          "range": [
+            97394,
+            97430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     )",
+          "path": "doc",
+          "range": [
+            97431,
+            97440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            97441,
+            97446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # _ = foo(&5_i32);",
+          "path": "doc",
+          "range": [
+            97447,
+            97469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # _ = bar(&5_i32);",
+          "path": "doc",
+          "range": [
+            97470,
+            97492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            97493,
+            97500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable_indirect",
+          "range": [
+            97501,
+            97531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            97532,
+            97549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            97550,
+            97606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            97607,
+            97625
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        97689,
+        97702
+      ],
+      "kind": "fn",
+      "name": "is_val_statically_known",
+      "range": [
+        94888,
+        97702
+      ],
+      "signature_range": [
+        97630,
+        97688
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Non-overlapping *typed* swap of a single value.",
+          "path": "doc",
+          "range": [
+            97704,
+            97755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97756,
+            97759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The codegen backends will replace this with a better implementation when",
+          "path": "doc",
+          "range": [
+            97760,
+            97836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `T` is a simple type that can be loaded and stored as an immediate.",
+          "path": "doc",
+          "range": [
+            97837,
+            97908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97909,
+            97912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized form of this intrinsic is [`crate::mem::swap`].",
+          "path": "doc",
+          "range": [
+            97913,
+            97979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            97980,
+            97983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            97984,
+            97996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Behavior is undefined if any of the following conditions are violated:",
+          "path": "doc",
+          "range": [
+            97997,
+            98071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            98072,
+            98075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * Both `x` and `y` must be [valid] for both reads and writes.",
+          "path": "doc",
+          "range": [
+            98076,
+            98141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            98142,
+            98145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * Both `x` and `y` must be properly aligned.",
+          "path": "doc",
+          "range": [
+            98146,
+            98194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            98195,
+            98198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The region of memory beginning at `x` must *not* overlap with the region of memory",
+          "path": "doc",
+          "range": [
+            98199,
+            98287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   beginning at `y`.",
+          "path": "doc",
+          "range": [
+            98288,
+            98311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            98312,
+            98315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * The memory pointed by `x` and `y` must both contain values of type `T`.",
+          "path": "doc",
+          "range": [
+            98316,
+            98393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            98394,
+            98397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [valid]: crate::ptr#safety",
+          "path": "doc",
+          "range": [
+            98398,
+            98428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            98429,
+            98446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            98447,
+            98456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            98457,
+            98475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic_const_stable_indirect",
+          "range": [
+            98476,
+            98516
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        98588,
+        98771
+      ],
+      "kind": "fn",
+      "name": "typed_swap_nonoverlapping",
+      "range": [
+        97704,
+        98771
+      ],
+      "signature_range": [
+        98521,
+        98587
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns whether we should perform some UB-checking at runtime. This eventually evaluates to",
+          "path": "doc",
+          "range": [
+            98773,
+            98868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `cfg!(ub_checks)`, but behaves different from `cfg!` when mixing crates built with different",
+          "path": "doc",
+          "range": [
+            98869,
+            98965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " flags: if the crate has UB checks enabled or carries the `#[rustc_preserve_ub_checks]`",
+          "path": "doc",
+          "range": [
+            98966,
+            99056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " attribute, evaluation is delayed until monomorphization (or until the call gets inlined into",
+          "path": "doc",
+          "range": [
+            99057,
+            99153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a crate that does not delay evaluation further); otherwise it can happen any time.",
+          "path": "doc",
+          "range": [
+            99154,
+            99240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            99241,
+            99244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The common case here is a user program built with ub_checks linked against the distributed",
+          "path": "doc",
+          "range": [
+            99245,
+            99339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sysroot which is built without ub_checks but with `#[rustc_preserve_ub_checks]`.",
+          "path": "doc",
+          "range": [
+            99340,
+            99424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For code that gets monomorphized in the user crate (i.e., generic functions and functions with",
+          "path": "doc",
+          "range": [
+            99425,
+            99523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `#[inline]`), gating assertions on `ub_checks()` rather than `cfg!(ub_checks)` means that",
+          "path": "doc",
+          "range": [
+            99524,
+            99617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assertions are enabled whenever the *user crate* has UB checks enabled. However, if the",
+          "path": "doc",
+          "range": [
+            99618,
+            99709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " user has UB checks disabled, the checks will still get optimized out. This intrinsic is",
+          "path": "doc",
+          "range": [
+            99710,
+            99801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " primarily used by [`crate::ub_checks::assert_unsafe_precondition`].",
+          "path": "doc",
+          "range": [
+            99802,
+            99873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic_const_stable_indirect",
+          "range": [
+            99874,
+            99914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            99937,
+            99954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            99955,
+            99973
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        100007,
+        100030
+      ],
+      "kind": "fn",
+      "name": "ub_checks",
+      "range": [
+        98773,
+        100030
+      ],
+      "signature_range": [
+        99978,
+        100006
+      ]
+    },
+    {
+      "ancestors": [
+        180
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        100013,
+        100028
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns whether we should perform some overflow-checking at runtime. This eventually evaluates to",
+          "path": "doc",
+          "range": [
+            100032,
+            100133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `cfg!(overflow_checks)`, but behaves different from `cfg!` when mixing crates built with different",
+          "path": "doc",
+          "range": [
+            100134,
+            100236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " flags: if the crate has overflow checks enabled or carries the `#[rustc_inherit_overflow_checks]`",
+          "path": "doc",
+          "range": [
+            100237,
+            100338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " attribute, evaluation is delayed until monomorphization (or until the call gets inlined into",
+          "path": "doc",
+          "range": [
+            100339,
+            100435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a crate that does not delay evaluation further); otherwise it can happen any time.",
+          "path": "doc",
+          "range": [
+            100436,
+            100522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            100523,
+            100526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The common case here is a user program built with overflow_checks linked against the distributed",
+          "path": "doc",
+          "range": [
+            100527,
+            100627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sysroot which is built without overflow_checks but with `#[rustc_inherit_overflow_checks]`.",
+          "path": "doc",
+          "range": [
+            100628,
+            100723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For code that gets monomorphized in the user crate (i.e., generic functions and functions with",
+          "path": "doc",
+          "range": [
+            100724,
+            100822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `#[inline]`), gating assertions on `overflow_checks()` rather than `cfg!(overflow_checks)` means that",
+          "path": "doc",
+          "range": [
+            100823,
+            100928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assertions are enabled whenever the *user crate* has overflow checks enabled. However if the",
+          "path": "doc",
+          "range": [
+            100929,
+            101025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " user has overflow checks disabled, the checks will still get optimized out.",
+          "path": "doc",
+          "range": [
+            101026,
+            101105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            101106,
+            101123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            101124,
+            101142
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        101182,
+        101212
+      ],
+      "kind": "fn",
+      "name": "overflow_checks",
+      "range": [
+        100032,
+        101212
+      ],
+      "signature_range": [
+        101147,
+        101181
+      ]
+    },
+    {
+      "ancestors": [
+        182
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        101188,
+        101210
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Allocates a block of memory at compile time.",
+          "path": "doc",
+          "range": [
+            101214,
+            101262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " At runtime, just returns a null pointer.",
+          "path": "doc",
+          "range": [
+            101263,
+            101307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            101308,
+            101311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            101312,
+            101324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            101325,
+            101328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The `align` argument must be a power of two.",
+          "path": "doc",
+          "range": [
+            101329,
+            101379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - At compile time, a compile error occurs if this constraint is violated.",
+          "path": "doc",
+          "range": [
+            101380,
+            101460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - At runtime, it is not checked.",
+          "path": "doc",
+          "range": [
+            101461,
+            101500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            101501,
+            101565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            101566,
+            101583
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            101584,
+            101602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            101603,
+            101638
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        101714,
+        101901
+      ],
+      "kind": "fn",
+      "name": "const_allocate",
+      "range": [
+        101214,
+        101901
+      ],
+      "signature_range": [
+        101643,
+        101713
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Deallocates a memory which allocated by `intrinsics::const_allocate` at compile time.",
+          "path": "doc",
+          "range": [
+            101903,
+            101992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " At runtime, it does nothing.",
+          "path": "doc",
+          "range": [
+            101993,
+            102025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            102026,
+            102029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            102030,
+            102042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            102043,
+            102046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The `align` argument must be a power of two.",
+          "path": "doc",
+          "range": [
+            102047,
+            102097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - At compile time, a compile error occurs if this constraint is violated.",
+          "path": "doc",
+          "range": [
+            102098,
+            102178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - At runtime, it is not checked.",
+          "path": "doc",
+          "range": [
+            102179,
+            102218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If the `ptr` is created in an another const, this intrinsic doesn't deallocate it.",
+          "path": "doc",
+          "range": [
+            102219,
+            102307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If the `ptr` is pointing to a local variable, this intrinsic doesn't deallocate it.",
+          "path": "doc",
+          "range": [
+            102308,
+            102397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            102398,
+            102462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            102463,
+            102519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            102520,
+            102537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            102538,
+            102556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            102557,
+            102592
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        102674,
+        102696
+      ],
+      "kind": "fn",
+      "name": "const_deallocate",
+      "range": [
+        101903,
+        102696
+      ],
+      "signature_range": [
+        102597,
+        102673
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Convert the allocation this pointer points to into immutable global memory.",
+          "path": "doc",
+          "range": [
+            102698,
+            102777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The pointer must point to the beginning of a heap allocation.",
+          "path": "doc",
+          "range": [
+            102778,
+            102843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This operation only makes sense during compile time. At runtime, it does nothing.",
+          "path": "doc",
+          "range": [
+            102844,
+            102929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            102930,
+            102994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            102995,
+            103012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            103013,
+            103031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "miri::intrinsic_fallback_is_spec",
+          "range": [
+            103032,
+            103067
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        103133,
+        103212
+      ],
+      "kind": "fn",
+      "name": "const_make_global",
+      "range": [
+        102698,
+        103212
+      ],
+      "signature_range": [
+        103072,
+        103132
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Check if the pre-condition `cond` has been met.",
+          "path": "doc",
+          "range": [
+            103214,
+            103265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            103266,
+            103269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " By default, if `contract_checks` is enabled, this will panic with no unwind if the condition",
+          "path": "doc",
+          "range": [
+            103270,
+            103366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns false.",
+          "path": "doc",
+          "range": [
+            103367,
+            103385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            103386,
+            103389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this function is a no-op during constant evaluation.",
+          "path": "doc",
+          "range": [
+            103390,
+            103456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            103457,
+            103519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            103885,
+            103949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            103950,
+            103985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            103986,
+            104004
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        104075,
+        104432
+      ],
+      "kind": "fn",
+      "name": "contract_check_requires",
+      "range": [
+        103214,
+        104432
+      ],
+      "signature_range": [
+        104009,
+        104074
+      ]
+    },
+    {
+      "ancestors": [
+        187
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        104081,
+        104430
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Check if the post-condition `cond` has been met.",
+          "path": "doc",
+          "range": [
+            104434,
+            104486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            104487,
+            104490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " By default, if `contract_checks` is enabled, this will panic with no unwind if the condition",
+          "path": "doc",
+          "range": [
+            104491,
+            104587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns false.",
+          "path": "doc",
+          "range": [
+            104588,
+            104606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            104607,
+            104610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `cond` is `None`, then no postcondition checking is performed.",
+          "path": "doc",
+          "range": [
+            104611,
+            104680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            104681,
+            104684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this function is a no-op during constant evaluation.",
+          "path": "doc",
+          "range": [
+            104685,
+            104751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            104752,
+            104814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            105054,
+            105118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            105119,
+            105153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            105154,
+            105172
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        105287,
+        105905
+      ],
+      "kind": "fn",
+      "name": "contract_check_ensures",
+      "range": [
+        104434,
+        105905
+      ],
+      "signature_range": [
+        105177,
+        105286
+      ]
+    },
+    {
+      "ancestors": [
+        189
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        105293,
+        105903
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        105907,
+        106169
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        106171,
+        106439
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        106441,
+        107333
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        107335,
+        108102
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        108104,
+        108935
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        108937,
+        109590
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        109592,
+        110005
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        110007,
+        110428
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            110430,
+            110448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            110449,
+            110505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Check if a type represented by a `TypeId` implements a trait represented by a `TypeId`.",
+          "path": "doc",
+          "range": [
+            110506,
+            110597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can only be called at compile time, the backends do",
+          "path": "doc",
+          "range": [
+            110598,
+            110656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not implement it. If it implements the trait the dyn metadata gets returned for vtable access.",
+          "path": "doc",
+          "range": [
+            110657,
+            110755
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        110887,
+        111011
+      ],
+      "kind": "fn",
+      "name": "type_id_vtable",
+      "range": [
+        110430,
+        111011
+      ],
+      "signature_range": [
+        110760,
+        110886
+      ]
+    },
+    {
+      "ancestors": [
+        199
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        110893,
+        111009
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Compute the type information of a concrete type.",
+          "path": "doc",
+          "range": [
+            111013,
+            111065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can only be called at compile time, the backends do",
+          "path": "doc",
+          "range": [
+            111066,
+            111124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not implement it.",
+          "path": "doc",
+          "range": [
+            111125,
+            111146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            111147,
+            111165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            111166,
+            111222
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        111300,
+        111367
+      ],
+      "kind": "fn",
+      "name": "type_of",
+      "range": [
+        111013,
+        111367
+      ],
+      "signature_range": [
+        111227,
+        111299
+      ]
+    },
+    {
+      "ancestors": [
+        201
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        111306,
+        111365
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        111369,
+        111935
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        111937,
+        112625
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Tests (at compile-time) if two [`crate::any::TypeId`] instances identify the",
+          "path": "doc",
+          "range": [
+            112627,
+            112707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " same type. This is necessary because at const-eval time the actual discriminating",
+          "path": "doc",
+          "range": [
+            112708,
+            112793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " data is opaque and cannot be inspected directly.",
+          "path": "doc",
+          "range": [
+            112794,
+            112846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            112847,
+            112850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stabilized version of this intrinsic is the [PartialEq] impl for [`core::any::TypeId`].",
+          "path": "doc",
+          "range": [
+            112851,
+            112946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            112947,
+            112964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            112965,
+            113021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            113022,
+            113040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_do_not_const_check",
+          "range": [
+            113041,
+            113068
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        113147,
+        113171
+      ],
+      "kind": "fn",
+      "name": "type_id_eq",
+      "range": [
+        112627,
+        113171
+      ],
+      "signature_range": [
+        113073,
+        113146
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        113173,
+        113743
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        113745,
+        114106
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        114108,
+        114799
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        114801,
+        115447
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        115449,
+        116110
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        116112,
+        116793
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        116795,
+        117517
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        117519,
+        118241
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        118243,
+        118930
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the minimum of two `f16` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            118932,
+            118993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            118994,
+            118997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 minimum. In particular:",
+          "path": "doc",
+          "range": [
+            118998,
+            119057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            119058,
+            119155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            119156,
+            119229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            119230,
+            119233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            119234,
+            119294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            119295,
+            119337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            119338,
+            119404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            119405,
+            119431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            119432,
+            119449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            119450,
+            119468
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        119516,
+        119792
+      ],
+      "kind": "fn",
+      "name": "minimumf16",
+      "range": [
+        118932,
+        119792
+      ],
+      "signature_range": [
+        119473,
+        119515
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the minimum of two `f32` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            119794,
+            119855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            119856,
+            119859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 minimum. In particular:",
+          "path": "doc",
+          "range": [
+            119860,
+            119919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            119920,
+            120017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            120018,
+            120091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            120092,
+            120095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            120096,
+            120156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            120157,
+            120199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            120200,
+            120266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            120267,
+            120293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            120294,
+            120311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            120312,
+            120330
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        120378,
+        120654
+      ],
+      "kind": "fn",
+      "name": "minimumf32",
+      "range": [
+        119794,
+        120654
+      ],
+      "signature_range": [
+        120335,
+        120377
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the minimum of two `f64` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            120656,
+            120717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            120718,
+            120721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 minimum. In particular:",
+          "path": "doc",
+          "range": [
+            120722,
+            120781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            120782,
+            120879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            120880,
+            120953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            120954,
+            120957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            120958,
+            121018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            121019,
+            121061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            121062,
+            121128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            121129,
+            121155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            121156,
+            121173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            121174,
+            121192
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        121240,
+        121516
+      ],
+      "kind": "fn",
+      "name": "minimumf64",
+      "range": [
+        120656,
+        121516
+      ],
+      "signature_range": [
+        121197,
+        121239
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the minimum of two `f128` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            121518,
+            121580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            121581,
+            121584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 minimum. In particular:",
+          "path": "doc",
+          "range": [
+            121585,
+            121644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            121645,
+            121742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            121743,
+            121816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            121817,
+            121820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            121821,
+            121881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            121882,
+            121924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            121925,
+            121991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            121992,
+            122018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            122019,
+            122036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            122037,
+            122055
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        122107,
+        122383
+      ],
+      "kind": "fn",
+      "name": "minimumf128",
+      "range": [
+        121518,
+        122383
+      ],
+      "signature_range": [
+        122060,
+        122106
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        122385,
+        123066
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        123068,
+        123790
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        123792,
+        124514
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        124516,
+        125203
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the maximum of two `f16` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            125205,
+            125266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            125267,
+            125270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 maximum. In particular:",
+          "path": "doc",
+          "range": [
+            125271,
+            125330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            125331,
+            125428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            125429,
+            125502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            125503,
+            125506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            125507,
+            125567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            125568,
+            125610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            125611,
+            125677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            125678,
+            125704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            125705,
+            125722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            125723,
+            125741
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        125789,
+        125978
+      ],
+      "kind": "fn",
+      "name": "maximumf16",
+      "range": [
+        125205,
+        125978
+      ],
+      "signature_range": [
+        125746,
+        125788
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the maximum of two `f32` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            125980,
+            126041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            126042,
+            126045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 maximum. In particular:",
+          "path": "doc",
+          "range": [
+            126046,
+            126105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            126106,
+            126203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            126204,
+            126277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            126278,
+            126281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            126282,
+            126342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            126343,
+            126385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            126386,
+            126452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            126453,
+            126479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            126480,
+            126497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            126498,
+            126516
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        126564,
+        126753
+      ],
+      "kind": "fn",
+      "name": "maximumf32",
+      "range": [
+        125980,
+        126753
+      ],
+      "signature_range": [
+        126521,
+        126563
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the maximum of two `f64` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            126755,
+            126816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            126817,
+            126820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 maximum. In particular:",
+          "path": "doc",
+          "range": [
+            126821,
+            126880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            126881,
+            126978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            126979,
+            127052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            127053,
+            127056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            127057,
+            127117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            127118,
+            127160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            127161,
+            127227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            127228,
+            127254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            127255,
+            127272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            127273,
+            127291
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        127339,
+        127528
+      ],
+      "kind": "fn",
+      "name": "maximumf64",
+      "range": [
+        126755,
+        127528
+      ],
+      "signature_range": [
+        127296,
+        127338
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the maximum of two `f128` values, propagating NaN.",
+          "path": "doc",
+          "range": [
+            127530,
+            127592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            127593,
+            127596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This behaves like IEEE 754-2019 maximum. In particular:",
+          "path": "doc",
+          "range": [
+            127597,
+            127656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If one of the arguments is NaN, then a NaN is returned using the usual NaN propagation rules.",
+          "path": "doc",
+          "range": [
+            127657,
+            127754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this operation, -0.0 is considered to be strictly less than +0.0.",
+          "path": "doc",
+          "range": [
+            127755,
+            127828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            127829,
+            127832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike most intrinsics, this is safe to call;",
+          "path": "doc",
+          "range": [
+            127833,
+            127893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it does not require an `unsafe` block.",
+          "path": "doc",
+          "range": [
+            127894,
+            127936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore, implementations must not require the user to uphold",
+          "path": "doc",
+          "range": [
+            127937,
+            128003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any safety invariants.",
+          "path": "doc",
+          "range": [
+            128004,
+            128030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            128031,
+            128048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            128049,
+            128067
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        128119,
+        128308
+      ],
+      "kind": "fn",
+      "name": "maximumf128",
+      "range": [
+        127530,
+        128308
+      ],
+      "signature_range": [
+        128072,
+        128118
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        128310,
+        128537
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        128539,
+        128807
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        128809,
+        129077
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        129079,
+        129312
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        129314,
+        129573
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        129575,
+        129875
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        129876,
+        130176
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        130178,
+        130444
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        130446,
+        131768
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        131770,
+        133064
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Inform Miri that a given pointer definitely has a certain alignment.",
+          "path": "doc",
+          "range": [
+            133066,
+            133138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            133139,
+            133151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            133152,
+            133203
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        133286,
+        134002
+      ],
+      "kind": "fn",
+      "name": "miri_promise_symbolic_alignment",
+      "range": [
+        133066,
+        134002
+      ],
+      "signature_range": [
+        133215,
+        133285
+      ]
+    },
+    {
+      "ancestors": [
+        237
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        133707,
+        134000
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        134004,
+        134625
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Duplicates a variable argument list. The returned list is initially at the same position as",
+          "path": "doc",
+          "range": [
+            134627,
+            134722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the one in `src`, but can be advanced independently.",
+          "path": "doc",
+          "range": [
+            134723,
+            134779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            134780,
+            134783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Codegen backends should not have custom behavior for this intrinsic, they should always use",
+          "path": "doc",
+          "range": [
+            134784,
+            134879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this fallback implementation. This intrinsic *does not* map to the LLVM `va_copy` intrinsic.",
+          "path": "doc",
+          "range": [
+            134880,
+            134976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            134977,
+            134980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This intrinsic exists only as a hook for Miri and constant evaluation, and is used to detect UB",
+          "path": "doc",
+          "range": [
+            134981,
+            135080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when a variable argument list is used incorrectly.",
+          "path": "doc",
+          "range": [
+            135081,
+            135135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            135136,
+            135154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            135155,
+            135172
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        135230,
+        135253
+      ],
+      "kind": "fn",
+      "name": "va_copy",
+      "range": [
+        134627,
+        135253
+      ],
+      "signature_range": [
+        135177,
+        135229
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Destroy the variable argument list `ap` after initialization with `va_start` (part of the",
+          "path": "doc",
+          "range": [
+            135255,
+            135348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " desugaring of `...`) or `va_copy`.",
+          "path": "doc",
+          "range": [
+            135349,
+            135387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135388,
+            135391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Code generation backends should not provide a custom implementation for this intrinsic. This",
+          "path": "doc",
+          "range": [
+            135392,
+            135488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " intrinsic *does not* map to the LLVM `va_end` intrinsic.",
+          "path": "doc",
+          "range": [
+            135489,
+            135549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135550,
+            135553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is a no-op on all current targets, but used as a hook for const evaluation to",
+          "path": "doc",
+          "range": [
+            135554,
+            135649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " detect UB when a variable argument list is used incorrectly.",
+          "path": "doc",
+          "range": [
+            135650,
+            135714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135715,
+            135718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            135719,
+            135731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135732,
+            135735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ap` must not be used to access variable arguments after this call.",
+          "path": "doc",
+          "range": [
+            135736,
+            135807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135808,
+            135811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_intrinsic",
+          "range": [
+            135812,
+            135830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            135831,
+            135848
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        135897,
+        135936
+      ],
+      "kind": "fn",
+      "name": "va_end",
+      "range": [
+        135255,
+        135936
+      ],
+      "signature_range": [
+        135853,
+        135896
+      ]
+    }
+  ],
+  "source_sha256": "2ea92e546b728fe7e745c6c17327274acc6eedd915ca6cafb0793e10d1b78497"
+}

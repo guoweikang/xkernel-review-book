@@ -1,0 +1,20 @@
+## purpose
+Provide the device-tree backend's structural and property interpretation capabilities.
+
+## owned_capabilities
+Own structural access, property decoding, node status and device-tree address translation.
+
+## non_goals
+Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.
+
+## invariants_and_resources
+Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.
+
+## dependency_direction
+Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.
+
+## delegation_interfaces
+The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.
+
+## configuration
+The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.

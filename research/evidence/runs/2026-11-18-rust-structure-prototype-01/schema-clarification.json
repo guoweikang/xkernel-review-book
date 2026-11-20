@@ -1,0 +1,13 @@
+{
+  "status": "pre_execution_clarification_not_new_controls",
+  "schema": "rust-structure-subset/1",
+  "exact_source": "root source_text and every node source_text; half-open UTF8 ranges relative to root source",
+  "coverage.complete_supported": "Only closed exported body subtree, not full AST, signature, types, cfg, binding or execution",
+  "coverage.exported_tree_closed": "All emitted nodes including signature/type metadata non-opaque",
+  "coverage.lexical_scopes_without_unknown_effects": "No exported scope was tainted; not a claim of true binding completeness",
+  "scopes.unknown_binding_effects": "Historical flag; a scope can become uncertain after earlier uses, which retain their earlier candidates",
+  "block_items": "Pre-scan only for presence of Stmt::Item; if present, mark entire block scope uncertain from entry, because names may have block-wide scope. Do not resolve item declarations. This is conservative even when there is no actual collision.",
+  "attrs": "Every unsupported attribute subtree retains exact source, cfg stays not_evaluated; function/parameter attributes make function scope uncertain",
+  "candidate_null": "unknown_scope, no_visible_lexical_binder, or not_a_local_use distinguished by candidate_status",
+  "ordered_children": "Source-byte sorted children; node IDs reflect extraction visitation, which visits let initializer before binder"
+}

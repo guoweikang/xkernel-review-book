@@ -1,0 +1,40 @@
+--- original/tests.rs
++++ instrumented/tests.rs
+@@ -748,18 +748,28 @@
+     let cache = new_cache();
+     write_cached(&cache, 0, &vec![0x31; PAGE_SIZE_4K * 2]).unwrap();
+     let mut pending = None;
++    let mut budget = 2;
++    let mut trace_sequence = 0;
++    let trace_receipt = include_str!("research-trace-receipt.txt").trim();
++    unittest::ktest_println!("ACCT1 {} pc-reject-v1 0 begin 2", trace_receipt);
+     assert_eq!(
+         cache.submit_cache_pages(
+             (PAGE_SIZE_4K * 2) as u64,
+             0..u64::MAX,
+-            &mut 2,
++            &mut budget,
+             &mut 0,
+             PAGE_SIZE_4K,
+             &mut |batch| {
++                trace_sequence += 1;
++                unittest::ktest_println!("ACCT1 {} pc-reject-v1 {} handoff {}", trace_receipt, trace_sequence, batch.data().len());
+                 if pending.is_none() {
+                     pending = Some(batch);
++                    trace_sequence += 1;
++                    unittest::ktest_println!("ACCT1 {} pc-reject-v1 {} accept 1", trace_receipt, trace_sequence);
+                     Ok(())
+                 } else {
++                    trace_sequence += 1;
++                    unittest::ktest_println!("ACCT1 {} pc-reject-v1 {} reject 1", trace_receipt, trace_sequence);
+                     Err(KError::Io)
+                 }
+             }
+@@ -773,6 +783,7 @@
+     drop(pending);
+     assert_eq!(dirty_indices(&cache), vec![0, 1]);
+     cache.wait_on_writeback_range(0..u64::MAX).unwrap();
++    unittest::ktest_println!("ACCT1 {} pc-reject-v1 {} end {}", trace_receipt, trace_sequence + 1, budget);
+ }
+ 
+ #[def_test]

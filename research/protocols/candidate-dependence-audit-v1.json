@@ -1,0 +1,16 @@
+{
+  "question": "Which candidate judgments reuse endpoints, exact implementation bytes or source files, and what does this prevent us from claiming about independence?",
+  "parent": "2026-11-17-rank-fusion-review-02",
+  "historical_queue": "2026-11-16-common-budget-01",
+  "population": "All 43 prepared pairs, without selecting by outcome",
+  "graphs": {
+    "endpoint": "Cases adjacent if they share a unit ID",
+    "exact_body": "Cases adjacent if they share a unit ID or an exact snippet SHA256",
+    "source_file": "Cases adjacent if they share a unit ID, exact snippet SHA256, or a pinned source path+source SHA256"
+  },
+  "closure": "Connected components, not just direct pairwise matches; every case retained",
+  "measurements": ["components and sizes under each graph", "edge reasons", "unique endpoints/files/packages", "old versus newly added pairs", "whether newly added pairs reuse old endpoints or files"],
+  "checks": ["input artifact hashes", "complete disjoint component partitions", "nested grouping monotonicity", "transitive bridge, exact-copy and source-file controls", "independent breadth-first component recomputation"],
+  "limits": ["These are mechanical dependence groups, not semantic families or statistically independent units", "Different components may share ancestry or algorithms", "Source-file grouping is conservative and may overgroup", "No automatic held-out split or relevance labels"],
+  "stop": "One complete audit and controls; reuse existing layered evaluator, no new ranking or parameter search"
+}

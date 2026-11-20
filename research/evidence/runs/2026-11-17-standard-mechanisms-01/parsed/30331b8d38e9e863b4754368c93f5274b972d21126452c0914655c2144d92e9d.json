@@ -1,0 +1,2096 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Memory allocation APIs",
+      "path": "doc",
+      "range": [
+        0,
+        26
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        28,
+        82
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The global memory allocator.",
+          "path": "doc",
+          "range": [
+            1424,
+            1456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1457,
+            1460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type implements the [`Allocator`] trait by forwarding calls",
+          "path": "doc",
+          "range": [
+            1461,
+            1529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the allocator registered with the `#[global_allocator]` attribute",
+          "path": "doc",
+          "range": [
+            1530,
+            1602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if there is one, or the `std` crate’s default.",
+          "path": "doc",
+          "range": [
+            1603,
+            1655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1656,
+            1659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note: while this type is unstable, the functionality it provides can be",
+          "path": "doc",
+          "range": [
+            1660,
+            1735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accessed through the [free functions in `alloc`](self#functions).",
+          "path": "doc",
+          "range": [
+            1736,
+            1805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1806,
+            1861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1862,
+            1900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1984,
+            2011
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Global",
+      "range": [
+        1424,
+        2030
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Allocates memory with the global allocator.",
+          "path": "doc",
+          "range": [
+            2032,
+            2079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2080,
+            2083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function forwards calls to the [`GlobalAlloc::alloc`] method",
+          "path": "doc",
+          "range": [
+            2084,
+            2153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the allocator registered with the `#[global_allocator]` attribute",
+          "path": "doc",
+          "range": [
+            2154,
+            2226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if there is one, or the `std` crate’s default.",
+          "path": "doc",
+          "range": [
+            2227,
+            2279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2280,
+            2283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is expected to be deprecated in favor of the `allocate` method",
+          "path": "doc",
+          "range": [
+            2284,
+            2364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the [`Global`] type when it and the [`Allocator`] trait become stable.",
+          "path": "doc",
+          "range": [
+            2365,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2443,
+            2446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2447,
+            2459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2460,
+            2463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`GlobalAlloc::alloc`].",
+          "path": "doc",
+          "range": [
+            2464,
+            2495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2496,
+            2499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2500,
+            2514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2515,
+            2518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2519,
+            2526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::alloc::{alloc, dealloc, handle_alloc_error, Layout};",
+          "path": "doc",
+          "range": [
+            2527,
+            2592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2593,
+            2596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            2597,
+            2609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let layout = Layout::new::<u16>();",
+          "path": "doc",
+          "range": [
+            2610,
+            2652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let ptr = alloc(layout);",
+          "path": "doc",
+          "range": [
+            2653,
+            2685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if ptr.is_null() {",
+          "path": "doc",
+          "range": [
+            2686,
+            2712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         handle_alloc_error(layout);",
+          "path": "doc",
+          "range": [
+            2713,
+            2752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2753,
+            2762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2763,
+            2766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     *(ptr as *mut u16) = 42;",
+          "path": "doc",
+          "range": [
+            2767,
+            2799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*(ptr as *mut u16), 42);",
+          "path": "doc",
+          "range": [
+            2800,
+            2843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2844,
+            2847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     dealloc(ptr, layout);",
+          "path": "doc",
+          "range": [
+            2848,
+            2877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2878,
+            2883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2884,
+            2891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2892,
+            2945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2946,
+            2997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2998,
+            3007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            3008,
+            3039
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3142,
+        3404
+      ],
+      "kind": "fn",
+      "name": "alloc",
+      "range": [
+        2032,
+        3404
+      ],
+      "signature_range": [
+        3099,
+        3141
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Deallocates memory with the global allocator.",
+          "path": "doc",
+          "range": [
+            3406,
+            3455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3456,
+            3459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function forwards calls to the [`GlobalAlloc::dealloc`] method",
+          "path": "doc",
+          "range": [
+            3460,
+            3531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the allocator registered with the `#[global_allocator]` attribute",
+          "path": "doc",
+          "range": [
+            3532,
+            3604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if there is one, or the `std` crate’s default.",
+          "path": "doc",
+          "range": [
+            3605,
+            3657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3658,
+            3661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is expected to be deprecated in favor of the `deallocate` method",
+          "path": "doc",
+          "range": [
+            3662,
+            3744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the [`Global`] type when it and the [`Allocator`] trait become stable.",
+          "path": "doc",
+          "range": [
+            3745,
+            3822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3823,
+            3826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            3827,
+            3839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3840,
+            3843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`GlobalAlloc::dealloc`].",
+          "path": "doc",
+          "range": [
+            3844,
+            3877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3878,
+            3931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3932,
+            3941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            3942,
+            3973
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4081,
+        4154
+      ],
+      "kind": "fn",
+      "name": "dealloc",
+      "range": [
+        3406,
+        4154
+      ],
+      "signature_range": [
+        4033,
+        4080
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Reallocates memory with the global allocator.",
+          "path": "doc",
+          "range": [
+            4156,
+            4205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4206,
+            4209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function forwards calls to the [`GlobalAlloc::realloc`] method",
+          "path": "doc",
+          "range": [
+            4210,
+            4281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the allocator registered with the `#[global_allocator]` attribute",
+          "path": "doc",
+          "range": [
+            4282,
+            4354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if there is one, or the `std` crate’s default.",
+          "path": "doc",
+          "range": [
+            4355,
+            4407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4408,
+            4411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is expected to be deprecated in favor of the `grow` and `shrink` methods",
+          "path": "doc",
+          "range": [
+            4412,
+            4502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the [`Global`] type when it and the [`Allocator`] trait become stable.",
+          "path": "doc",
+          "range": [
+            4503,
+            4580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4581,
+            4584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            4585,
+            4597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4598,
+            4601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`GlobalAlloc::realloc`].",
+          "path": "doc",
+          "range": [
+            4602,
+            4635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4636,
+            4689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4690,
+            4741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4742,
+            4751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            4752,
+            4783
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4919,
+        5002
+      ],
+      "kind": "fn",
+      "name": "realloc",
+      "range": [
+        4156,
+        5002
+      ],
+      "signature_range": [
+        4843,
+        4918
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Allocates zero-initialized memory with the global allocator.",
+          "path": "doc",
+          "range": [
+            5004,
+            5068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5069,
+            5072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function forwards calls to the [`GlobalAlloc::alloc_zeroed`] method",
+          "path": "doc",
+          "range": [
+            5073,
+            5149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the allocator registered with the `#[global_allocator]` attribute",
+          "path": "doc",
+          "range": [
+            5150,
+            5222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if there is one, or the `std` crate’s default.",
+          "path": "doc",
+          "range": [
+            5223,
+            5275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5276,
+            5279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is expected to be deprecated in favor of the `allocate_zeroed` method",
+          "path": "doc",
+          "range": [
+            5280,
+            5367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the [`Global`] type when it and the [`Allocator`] trait become stable.",
+          "path": "doc",
+          "range": [
+            5368,
+            5445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5446,
+            5449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            5450,
+            5462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5463,
+            5466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`GlobalAlloc::alloc_zeroed`].",
+          "path": "doc",
+          "range": [
+            5467,
+            5505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5506,
+            5509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5510,
+            5524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5525,
+            5528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5529,
+            5536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::alloc::{alloc_zeroed, dealloc, handle_alloc_error, Layout};",
+          "path": "doc",
+          "range": [
+            5537,
+            5609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5610,
+            5613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            5614,
+            5626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let layout = Layout::new::<u16>();",
+          "path": "doc",
+          "range": [
+            5627,
+            5669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let ptr = alloc_zeroed(layout);",
+          "path": "doc",
+          "range": [
+            5670,
+            5709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if ptr.is_null() {",
+          "path": "doc",
+          "range": [
+            5710,
+            5736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         handle_alloc_error(layout);",
+          "path": "doc",
+          "range": [
+            5737,
+            5776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            5777,
+            5786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5787,
+            5790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*(ptr as *mut u16), 0);",
+          "path": "doc",
+          "range": [
+            5791,
+            5833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5834,
+            5837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     dealloc(ptr, layout);",
+          "path": "doc",
+          "range": [
+            5838,
+            5867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5868,
+            5873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5874,
+            5881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5882,
+            5935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5936,
+            5987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5988,
+            5997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            5998,
+            6029
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6139,
+        6408
+      ],
+      "kind": "fn",
+      "name": "alloc_zeroed",
+      "range": [
+        5004,
+        6408
+      ],
+      "signature_range": [
+        6089,
+        6138
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6410,
+        16595
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6428,
+            6437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            6442,
+            6473
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6622,
+        7062
+      ],
+      "kind": "impl_fn",
+      "name": "alloc_impl_runtime",
+      "range": [
+        6428,
+        7062
+      ],
+      "signature_range": [
+        6533,
+        6621
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7068,
+            7077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            7082,
+            7113
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7234,
+        7884
+      ],
+      "kind": "impl_fn",
+      "name": "deallocate_impl_runtime",
+      "range": [
+        7068,
+        7884
+      ],
+      "signature_range": [
+        7173,
+        7233
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7931,
+            7940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            7945,
+            7976
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8220,
+        10075
+      ],
+      "kind": "impl_fn",
+      "name": "grow_impl_runtime",
+      "range": [
+        7931,
+        10075
+      ],
+      "signature_range": [
+        8036,
+        8219
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        8
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8230,
+        8393
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10122,
+            10131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            10136,
+            10167
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10414,
+        12162
+      ],
+      "kind": "impl_fn",
+      "name": "shrink_impl_runtime",
+      "range": [
+        10122,
+        12162
+      ],
+      "signature_range": [
+        10227,
+        10413
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        10
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10424,
+        10587
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12213,
+            12222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12227,
+            12258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            12318,
+            12382
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12481,
+        12651
+      ],
+      "kind": "impl_fn",
+      "name": "alloc_impl",
+      "range": [
+        12213,
+        12651
+      ],
+      "signature_range": [
+        12387,
+        12480
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12704,
+            12713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            12718,
+            12749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            12809,
+            12873
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12951,
+        13128
+      ],
+      "kind": "impl_fn",
+      "name": "deallocate_impl",
+      "range": [
+        12704,
+        13128
+      ],
+      "signature_range": [
+        12878,
+        12950
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13175,
+            13184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            13189,
+            13220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            13280,
+            13344
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13538,
+        13740
+      ],
+      "kind": "impl_fn",
+      "name": "grow_impl",
+      "range": [
+        13175,
+        13740
+      ],
+      "signature_range": [
+        13349,
+        13537
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13789,
+            13798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            13803,
+            13834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            13894,
+            13958
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14132,
+        14335
+      ],
+      "kind": "impl_fn",
+      "name": "shrink_impl",
+      "range": [
+        13789,
+        14335
+      ],
+      "signature_range": [
+        13963,
+        14131
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14341,
+            14350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            14355,
+            14386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            14446,
+            14510
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14608,
+        15240
+      ],
+      "kind": "impl_fn",
+      "name": "alloc_impl_const",
+      "range": [
+        14341,
+        15240
+      ],
+      "signature_range": [
+        14515,
+        14607
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15246,
+            15255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15260,
+            15291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            15351,
+            15415
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15485,
+        15764
+      ],
+      "kind": "impl_fn",
+      "name": "deallocate_impl_const",
+      "range": [
+        15246,
+        15764
+      ],
+      "signature_range": [
+        15420,
+        15484
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15770,
+            15779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg_attr",
+          "range": [
+            15784,
+            15815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            15875,
+            15939
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16139,
+        16593
+      ],
+      "kind": "impl_fn",
+      "name": "grow_shrink_impl_const",
+      "range": [
+        15770,
+        16593
+      ],
+      "signature_range": [
+        15944,
+        16138
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        16597,
+        18743
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Signals a memory allocation error.",
+          "path": "doc",
+          "range": [
+            19188,
+            19226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19227,
+            19230
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Callers of memory allocation APIs wishing to cease execution",
+          "path": "doc",
+          "range": [
+            19231,
+            19295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in response to an allocation error are encouraged to call this function,",
+          "path": "doc",
+          "range": [
+            19296,
+            19372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " rather than directly invoking [`panic!`] or similar.",
+          "path": "doc",
+          "range": [
+            19373,
+            19429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19430,
+            19433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is guaranteed to diverge (not return normally with a value), but depending on",
+          "path": "doc",
+          "range": [
+            19434,
+            19529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " global configuration, it may either panic (resulting in unwinding or aborting as per",
+          "path": "doc",
+          "range": [
+            19530,
+            19618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " configuration for all panics), or abort the process (with no unwinding).",
+          "path": "doc",
+          "range": [
+            19619,
+            19695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19696,
+            19699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The default behavior is:",
+          "path": "doc",
+          "range": [
+            19700,
+            19728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19729,
+            19732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  * If the binary links against `std` (typically the case), then",
+          "path": "doc",
+          "range": [
+            19733,
+            19800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   print a message to standard error and abort the process.",
+          "path": "doc",
+          "range": [
+            19801,
+            19863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   This behavior can be replaced with [`set_alloc_error_hook`] and [`take_alloc_error_hook`].",
+          "path": "doc",
+          "range": [
+            19864,
+            19960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Future versions of Rust may panic by default instead.",
+          "path": "doc",
+          "range": [
+            19961,
+            20020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20021,
+            20024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * If the binary does not link against `std` (all of its crates are marked",
+          "path": "doc",
+          "range": [
+            20025,
+            20102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   [`#![no_std]`][no_std]), then call [`panic!`] with a message.",
+          "path": "doc",
+          "range": [
+            20103,
+            20170
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   [The panic handler] applies as to any panic.",
+          "path": "doc",
+          "range": [
+            20171,
+            20221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20222,
+            20225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`set_alloc_error_hook`]: ../../std/alloc/fn.set_alloc_error_hook.html",
+          "path": "doc",
+          "range": [
+            20226,
+            20300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`take_alloc_error_hook`]: ../../std/alloc/fn.take_alloc_error_hook.html",
+          "path": "doc",
+          "range": [
+            20301,
+            20377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [The panic handler]: https://doc.rust-lang.org/reference/runtime.html#the-panic_handler-attribute",
+          "path": "doc",
+          "range": [
+            20378,
+            20479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [no_std]: https://doc.rust-lang.org/reference/names/preludes.html#the-no_std-attribute",
+          "path": "doc",
+          "range": [
+            20480,
+            20570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            20571,
+            20624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            20625,
+            20696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            20697,
+            20732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            20733,
+            20740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "optimize",
+          "range": [
+            20741,
+            20758
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20812,
+        21247
+      ],
+      "kind": "fn",
+      "name": "handle_alloc_error",
+      "range": [
+        19188,
+        21247
+      ],
+      "signature_range": [
+        20763,
+        20811
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "body_range": [
+        20852,
+        20896
+      ],
+      "kind": "fn",
+      "name": "ct_error",
+      "range": [
+        20818,
+        20896
+      ],
+      "signature_range": [
+        20818,
+        20851
+      ]
+    },
+    {
+      "ancestors": [
+        20,
+        21
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        20862,
+        20889
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20902,
+            20911
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20949,
+        21054
+      ],
+      "kind": "fn",
+      "name": "rt_error",
+      "range": [
+        20902,
+        21054
+      ],
+      "signature_range": [
+        20916,
+        20948
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            21249,
+            21284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            21285,
+            21299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            21300,
+            21327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            21328,
+            21384
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "__alloc_error_handler",
+      "path_overrides": [],
+      "range": [
+        21249,
+        21810
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "rustc_std_internal_symbol",
+          "range": [
+            21526,
+            21554
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21632,
+        21808
+      ],
+      "kind": "fn",
+      "name": "__rdl_alloc_error_handler",
+      "range": [
+        21526,
+        21808
+      ],
+      "signature_range": [
+        21563,
+        21631
+      ]
+    },
+    {
+      "ancestors": [
+        24,
+        25
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        21691,
+        21747
+      ]
+    }
+  ],
+  "source_sha256": "3ed91ffdd959a1f42e1eefa2ec368c845aff2cd0e4b9a8258fd646db63df8d2f"
+}

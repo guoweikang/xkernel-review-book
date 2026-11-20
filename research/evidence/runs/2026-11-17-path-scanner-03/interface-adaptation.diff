@@ -1,0 +1,53 @@
+--- research/evidence/runs/2026-11-17-path-scanner-02/fixture.rs	2026-11-17 01:06:10.223920886 +0000
++++ research/evidence/runs/2026-11-17-path-scanner-03/fixture.rs	2026-11-17 01:08:23.262260181 +0000
+@@ -2,6 +2,25 @@
+ 
+ include!("original.rs");
+ 
++struct CandidatePathname<'a> { inner: &'a str }
++
++impl<'a> CandidatePathname<'a> {
++    pub fn new(input: &'a str) -> Self { Self { inner: input } }
++    pub fn as_str(&self) -> &'a str { self.inner }
++    pub fn file_name(&self) -> Option<&'a str> {
++        let (start, end) = scan(self.inner)?;
++        match &self.inner[start..end] {
++            "." | ".." => None,
++            name => Some(name),
++        }
++    }
++    pub fn parent(&self) -> Option<CandidatePathname<'a>> {
++        let (start, _) = scan(self.inner)?;
++        let parent_end = if start == 0 { 0 } else if start == 1 { 1 } else { start - 1 };
++        Some(Self::new(&self.inner[..parent_end]))
++    }
++}
++
+ fn scan(input: &str) -> Option<(usize, usize)> {
+     let mut end = input.len();
+     loop {
+@@ -48,6 +67,10 @@
+ }
+ 
+ fn main() {
++    for (input, expected) in [("../a/b/c", Some("c")), ("a/b/.", Some("b")), ("a/..", None)] {
++        assert_eq!(Pathname::new(input).file_name(), expected);
++        assert_eq!(CandidatePathname::new(input).file_name(), expected);
++    }
+     for (index, line) in io::stdin().lock().lines().enumerate() {
+         let line = line.unwrap();
+         let bytes: Vec<u8> = (0..line.len()).step_by(2)
+@@ -58,7 +81,12 @@
+         let expected = (signature(&input, reference.0), signature(&input, reference.1));
+         let mut differences = Vec::new();
+         for variant in 0..3 {
+-            let result = candidate(&input, variant);
++            let result = if variant == 0 {
++                let path = CandidatePathname::new(&input);
++                (path.file_name(), path.parent().map(|parent| parent.as_str()))
++            } else {
++                candidate(&input, variant)
++            };
+             let actual = (signature(&input, result.0), signature(&input, result.1));
+             differences.push(if expected == actual { "0" } else { "1" });
+         }

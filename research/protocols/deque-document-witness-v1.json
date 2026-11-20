@@ -1,0 +1,11 @@
+{
+  "purpose": "Prepare bounded behavior evidence for documentation claims, not score discovery or propose a refactoring",
+  "source": "Rust1.95.0 commit59807616e1fa2540724bfbac14d7976d7e4a3860 alloc/src/collections/vec_deque/mod.rs",
+  "methods": ["pop_front_if", "pop_back_if"],
+  "cases": "Both endpoints x lengths0,1,3 with initial sequence10,20,30 truncated x predicate result false,true; predicate increments observed endpoint by100 and call count",
+  "expected": "Empty invokes predicate0times; nonempty1time; mutation remains on false, mutated element returned on true; endpoint-specific order retained",
+  "executions": "Host rustc+1.95.0 debug/release, twice each, same12cases; archive binary/std artifact hashes, compiler version and logs",
+  "negative_claim": "ReturnNone implies no element mutation is refuted by concrete nonempty false cases; this is a constructed incorrect claim, not a statement attributed to Rust docs",
+  "limits": ["Installed std library execution, not rebuilding archived alloc source", "12conditions not12independentmechanismfamilies", "No generic predicate/panic/drop/allocation/concurrency guarantees", "No optimization benefit or shared-mechanism truth label", "Document-code consistency distinct from code-code relation"],
+  "stop": "One complete bounded witness batch, no candidate helper implementation or score tuning"
+}

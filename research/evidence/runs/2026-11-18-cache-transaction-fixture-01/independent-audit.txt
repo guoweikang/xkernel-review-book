@@ -1,0 +1,44 @@
+Independent cache transaction fixture audit — 2026-11-18
+Status: INPUT REVIEW LIMITED ADMIT; OUTCOME VALIDATION PENDING.
+Read-only review, no build/run, no fixture/source edits, no use of producer runner. Only this audit authored. No endless polling: original run was still compiling at last inspection; original/report.json absent and mutant directory absent. These are not test outcomes.
+
+Sources actually inspected
+research/protocols/cache-transaction-fixture-v1.json
+This run: fixture.rs, baseline-test.rs, baseline-dentry.rs, mutant-dentry.rs, freeze.json, opening of append.patch, original/run.log (available partial log). Command construction inspected in runner; emitted command.json contents not independently validated at this cutoff.
+scripts/run_cache_transaction_fixture.py
+research/evidence/runs/2026-11-18-cache-transaction-preflight-01/report.json (declares 3634 source files checked with no differences; not independently repeated here).
+Read-only isolated source: /tmp/xkernel-pagecache-n1y2__y3/fs/kvfs/ut-tests/node_dentry.rs; util/unittest/src/lib.rs:39–62 and framework.rs:603–626. No writes to that tree.
+Lookup: python3 scripts/research_lookup.py cache-transaction-fixture --limit 2; 11 literal hits, 2 returned. Original artifacts, not lookup snippets, support findings.
+
+Input identity / exact change
+Recomputed all three research_inputs hashes in freeze.json: match protocol, runner and fixture.
+fixture.rs SHA256 eff6801d6ae9ce23a1e6542609003cb1cf8adca462f533c5149e7f35b268becd; exactly six #[def_test] entries.
+baseline-test.rs SHA256 c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b.
+baseline-test bytes + one newline + fixture bytes produce exactly bae16c14d8b67251bb33dc8b3c441f8d119f44efed521081906a346d676753d4, the frozen test hash for BOTH cells. Isolated test file currently matches this hash and unchanged baseline prefix/fixture suffix. Thus no baseline test removal or rewrite in the inspected appended input.
+baseline-dentry.rs SHA256 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7; mutant-dentry.rs SHA256 e8803b09451f3f7e4e542e674ea864646bbd36974aa90698d48ce29ceaf567fb; both match frozen cell hashes.
+Whole-file diff has exactly one added line, in cache_lookup_candidate live-upgrade chain at original lines833–835:
+    .filter(|entry| !entry.is_parallel_lookup())
+No other dentry change. This is a deliberately wrong collision policy, not a proposed refactor. It makes a live PAR winner look unavailable and overwrites its weak slot with candidate, returning None. The owned insert_cache wrapper is unchanged.
+
+Actual private access / kernel boundary
+baseline-dentry.rs:1657 invokes unittest::path_mod_test!(tests_dentry, "../../ut-tests/node_dentry.rs"). The inspected macro expands to a cfg(unittest) child module with that path. Tests import super::Dentry and can access parent-module private fields/methods through normal Rust descendant privacy. No new public production interface is needed. The fixture calls real Dentry methods and accesses its real children/flags locks; it is not the previous host Drop model. Filesystem/inode operations use existing MockFilesystem/MockDirOps helpers, so this is kernel Dentry/cache integration with test doubles, not full filesystem I/O or realistic concurrency.
+
+Oracle and cleanup
+live_normal_winner: distinct live winner/candidate; both wrappers must return Some of identical Arc allocation; raw weak slot identity must be unchanged. Raw children access avoids lookup_cache_entry's PAR filter and expired-slot removal.
+live_par_winner: begin_parallel_lookup on winner; both wrappers checked for identical returned winner, unchanged raw weak slot and preserved PAR flag. Measurements saved first, then end_parallel_lookup and slot removal occur BEFORE any of the three assertions. Thus designated mutant failure cannot leave that synthetic PAR flag/slot uncleared. Loop order is owned=false branch first (borrowed=false), then mutated borrowed=true branch; no explicit branch label in failure output, so branch attribution uses source order plus the mutation, not a logged branch identity.
+absent/expired: explicitly proves weak upgrade fails while raw slot still exists for expired input; both wrappers must return None and install candidate weak identity, preserve sentinel, and leave exactly two slots. Uses direct raw map, not filtering lookup. Clears local map on normal completion.
+non_cacheable_parent: existing helper really sets NodeFlags::NON_CACHEABLE; fixture distinguishes owned rejection from borrowed admission despite both returning None.
+child_cache_policy: explicit four-state table covers empty, DONTCACHE, PERSISTENT, and both. Owned rejects only DONTCACHE without PERSISTENT; borrowed admits all. This is an explicit expected-policy table checked against fixed current implementation, not independent provider confirmation of design desirability.
+superblock_retention: tests each wrapper with/without superblock; candidate's caller strong reference is released before weak upgrade. With superblock requires live retained candidate and is_dentry_cached, evicts via uncache_lookup_candidate, checks raw slot and superblock removal, then releases temporary retained reference and requires upgrade failure. Without superblock requires expiry despite raw weak slot. This supports retention/eviction for these cases, not unlock timing or exact clone counts.
+Some non-PAR tests assert before final map clear. These assertions return TestResult::Failed, unwinding ordinary scopes by return rather than panic; local objects drop, but the fixture is not a universal failure-path cleanup proof. PAR's critical cleanup is deliberately before assert. No async waiter is exercised by begin/end flag manipulation.
+
+Exact required negative observation
+unittest::assert! is NOT a standard panic assertion here: framework.rs:603–613 prints "assert! failed at <file>:<line>: <condition>" then returns TestResult::Failed. Required evidence is the actual assertion diagnostic naming par_winner_identity in test_cache_fixture_live_par_winner, accompanied by the named test failure and complete run context. An arbitrary panic, build failure, timeout, failed process code or different assertion does not count. Frozen source uses assert!(par_winner_identity), so the diagnostic can be precise.
+Runner's test-results.txt selector misses this assert diagnostic: it searches 'RESULT ', 'Test results', 'ALL_TESTS_PASSED', 'FAILED_TESTS', 'panicked', or 'test_research_cache_', whereas new functions are test_cache_fixture_*. Main MUST inspect full run.log, not accept the summary alone. This is an audit/reporting limitation, not an instruction to edit the frozen runner.
+
+Runner and pending outcome checks
+Runner checks frozen source/config before launch, declares offline toolchain1.95.0, two allowed cell names, 300s subprocess timeout and process-group kill. It records post-run source hashes/config status, raw log hash and exit status; it deliberately does not classify detection. Its setup commands are outside the 300s subprocess timeout. It does not enforce global two-cell/time/repair budget beyond one output directory per cell, nor implement source restoration in finally. Parent orchestration must supply and verify the protocol's restoration obligation; that is currently unverified, not presumed satisfied. Do not reuse the active tree/runner from review.
+Final admission requires original complete results including all six named fixture entries, unchanged input/config evidence, then mutant's exact par_winner_identity failure and context excluding unrelated failures, raw log hash verification, and restoration record. No such completed outputs were available at review cutoff. Merely reaching compilation is not evidence of successful private-access compilation or oracle sensitivity.
+
+Limits / verdict
+LIMITED ADMIT inputs as a plausible six-entry sequential real-Dentry fixture with a single interpretable negative control. No fixture oracle defect found for the stated narrow cases. Actual outcomes remain PENDING. Even baseline pass plus designated mutant failure establishes only sensitivity to this PAR collision-policy change: not equivalence of a future shared helper, real scheduling/linearizability, unlock-before-retention timing, allocation budget, destructor safety, architecture quality or net maintenance benefit. No independent experiment added; main owns completion and interpretation.

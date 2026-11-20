@@ -1,0 +1,696 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Definitions of `Wrapping<T>`.",
+      "path": "doc",
+      "range": [
+        0,
+        33
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Provides intentionally-wrapped arithmetic on `T`.",
+          "path": "doc",
+          "range": [
+            267,
+            320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            321,
+            324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Operations like `+` on `u32` values are intended to never overflow,",
+          "path": "doc",
+          "range": [
+            325,
+            396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and in some debug configurations overflow is detected and results",
+          "path": "doc",
+          "range": [
+            397,
+            466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in a panic. While most arithmetic falls into this category, some",
+          "path": "doc",
+          "range": [
+            467,
+            535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " code explicitly expects and relies upon modular arithmetic (e.g.,",
+          "path": "doc",
+          "range": [
+            536,
+            605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hashing).",
+          "path": "doc",
+          "range": [
+            606,
+            619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            620,
+            623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Wrapping arithmetic can be achieved either through methods like",
+          "path": "doc",
+          "range": [
+            624,
+            691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `wrapping_add`, or through the `Wrapping<T>` type, which says that",
+          "path": "doc",
+          "range": [
+            692,
+            762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all standard arithmetic operations on the underlying value are",
+          "path": "doc",
+          "range": [
+            763,
+            829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " intended to have wrapping semantics.",
+          "path": "doc",
+          "range": [
+            830,
+            870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            871,
+            874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The underlying value can be retrieved through the `.0` index of the",
+          "path": "doc",
+          "range": [
+            875,
+            946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Wrapping` tuple.",
+          "path": "doc",
+          "range": [
+            947,
+            968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            969,
+            972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            973,
+            987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            988,
+            991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            992,
+            999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::num::Wrapping;",
+          "path": "doc",
+          "range": [
+            1000,
+            1027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1028,
+            1031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = Wrapping(0u32);",
+          "path": "doc",
+          "range": [
+            1032,
+            1062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let one = Wrapping(1u32);",
+          "path": "doc",
+          "range": [
+            1063,
+            1092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1093,
+            1096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(u32::MAX, (zero - one).0);",
+          "path": "doc",
+          "range": [
+            1097,
+            1138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1139,
+            1146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1147,
+            1150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Layout",
+          "path": "doc",
+          "range": [
+            1151,
+            1163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1164,
+            1167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Wrapping<T>` is guaranteed to have the same layout and ABI as `T`.",
+          "path": "doc",
+          "range": [
+            1168,
+            1239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1240,
+            1285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1286,
+            1355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            1356,
+            1376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            1377,
+            1414
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Wrapping",
+      "range": [
+        267,
+        1491
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1493,
+            1538
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1493,
+        1680
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        1649,
+        1678
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        1592,
+        1678
+      ],
+      "signature_range": [
+        1592,
+        1648
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1682,
+            1739
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1682,
+        1885
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        1854,
+        1883
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        1797,
+        1883
+      ],
+      "signature_range": [
+        1797,
+        1853
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1887,
+            1940
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1887,
+        2084
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "body_range": [
+        2053,
+        2082
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        1996,
+        2082
+      ],
+      "signature_range": [
+        1996,
+        2052
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2086,
+            2139
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2086,
+        2281
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "body_range": [
+        2250,
+        2279
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2193,
+        2279
+      ],
+      "signature_range": [
+        2193,
+        2249
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2283,
+            2336
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2283,
+        2484
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        2453,
+        2482
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2396,
+        2482
+      ],
+      "signature_range": [
+        2396,
+        2452
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2486,
+            2539
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2486,
+        2687
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "body_range": [
+        2656,
+        2685
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2599,
+        2685
+      ],
+      "signature_range": [
+        2599,
+        2655
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2713,
+        5346
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5348,
+        7697
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7748,
+        8281
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8283,
+        8351
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8431,
+        23534
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        23536,
+        23606
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        23608,
+        37460
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        37462,
+        37536
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        37538,
+        42494
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        42496,
+        42551
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        42553,
+        45447
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        45449,
+        45506
+      ]
+    }
+  ],
+  "source_sha256": "e440fcee9eeb2b8aa7d831f044a7c69a3bcbfa319529fceb7b7f32323d682586"
+}

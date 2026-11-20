@@ -1,0 +1,1924 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Ways to create a `str` from bytes slice.",
+      "path": "doc",
+      "range": [
+        0,
+        44
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a slice of bytes to a string slice.",
+          "path": "doc",
+          "range": [
+            137,
+            185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            186,
+            189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is an alias to [`str::from_utf8`].",
+          "path": "doc",
+          "range": [
+            190,
+            233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            234,
+            237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A string slice ([`&str`]) is made of bytes ([`u8`]), and a byte slice",
+          "path": "doc",
+          "range": [
+            238,
+            311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ([`&[u8]`][byteslice]) is made of bytes, so this function converts between",
+          "path": "doc",
+          "range": [
+            312,
+            390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the two. Not all byte slices are valid string slices, however: [`&str`] requires",
+          "path": "doc",
+          "range": [
+            391,
+            475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that it is valid UTF-8. `from_utf8()` checks to ensure that the bytes are valid",
+          "path": "doc",
+          "range": [
+            476,
+            559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " UTF-8, and then does the conversion.",
+          "path": "doc",
+          "range": [
+            560,
+            600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            601,
+            604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`&str`]: str",
+          "path": "doc",
+          "range": [
+            605,
+            622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [byteslice]: slice",
+          "path": "doc",
+          "range": [
+            623,
+            645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            646,
+            649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you are sure that the byte slice is valid UTF-8, and you don't want to",
+          "path": "doc",
+          "range": [
+            650,
+            727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " incur the overhead of the validity check, there is an unsafe version of",
+          "path": "doc",
+          "range": [
+            728,
+            803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this function, [`from_utf8_unchecked`], which has the same",
+          "path": "doc",
+          "range": [
+            804,
+            866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior but skips the check.",
+          "path": "doc",
+          "range": [
+            867,
+            900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            901,
+            904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you need a `String` instead of a `&str`, consider",
+          "path": "doc",
+          "range": [
+            905,
+            961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`String::from_utf8`][string].",
+          "path": "doc",
+          "range": [
+            962,
+            996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            997,
+            1000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [string]: ../../std/string/struct.String.html#method.from_utf8",
+          "path": "doc",
+          "range": [
+            1001,
+            1067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1068,
+            1071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Because you can stack-allocate a `[u8; N]`, and you can take a",
+          "path": "doc",
+          "range": [
+            1072,
+            1138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`&[u8]`][byteslice] of it, this function is one way to have a",
+          "path": "doc",
+          "range": [
+            1139,
+            1205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " stack-allocated string. There is an example of this in the",
+          "path": "doc",
+          "range": [
+            1206,
+            1268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " examples section below.",
+          "path": "doc",
+          "range": [
+            1269,
+            1296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1297,
+            1300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [byteslice]: slice",
+          "path": "doc",
+          "range": [
+            1301,
+            1323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1324,
+            1327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            1328,
+            1340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1341,
+            1344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `Err` if the slice is not UTF-8 with a description as to why the",
+          "path": "doc",
+          "range": [
+            1345,
+            1421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " provided slice is not UTF-8.",
+          "path": "doc",
+          "range": [
+            1422,
+            1454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1455,
+            1458
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1459,
+            1473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1474,
+            1477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            1478,
+            1494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1495,
+            1498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1499,
+            1506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            1507,
+            1524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1525,
+            1528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // some bytes, in a vector",
+          "path": "doc",
+          "range": [
+            1529,
+            1559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = vec![240, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            1560,
+            1609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1610,
+            1613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // We can use the ? (try) operator to check if the bytes are valid",
+          "path": "doc",
+          "range": [
+            1614,
+            1684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = str::from_utf8(&sparkle_heart)?;",
+          "path": "doc",
+          "range": [
+            1685,
+            1741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1742,
+            1745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"💖\", sparkle_heart);",
+          "path": "doc",
+          "range": [
+            1746,
+            1784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Ok::<_, str::Utf8Error>(())",
+          "path": "doc",
+          "range": [
+            1785,
+            1818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1819,
+            1826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1827,
+            1830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Incorrect bytes:",
+          "path": "doc",
+          "range": [
+            1831,
+            1851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1852,
+            1855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1856,
+            1863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            1864,
+            1881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1882,
+            1885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // some invalid bytes, in a vector",
+          "path": "doc",
+          "range": [
+            1886,
+            1924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = vec![0, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            1925,
+            1972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1973,
+            1976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(str::from_utf8(&sparkle_heart).is_err());",
+          "path": "doc",
+          "range": [
+            1977,
+            2030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2031,
+            2038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2039,
+            2042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the docs for [`Utf8Error`] for more details on the kinds of",
+          "path": "doc",
+          "range": [
+            2043,
+            2110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " errors that can be returned.",
+          "path": "doc",
+          "range": [
+            2111,
+            2143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2144,
+            2147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A \"stack allocated string\":",
+          "path": "doc",
+          "range": [
+            2148,
+            2179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2180,
+            2183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2184,
+            2191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            2192,
+            2209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2210,
+            2213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // some bytes, in a stack-allocated array",
+          "path": "doc",
+          "range": [
+            2214,
+            2259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = [240, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            2260,
+            2305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2306,
+            2309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // We know these bytes are valid, so just use `unwrap()`.",
+          "path": "doc",
+          "range": [
+            2310,
+            2371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart: &str = str::from_utf8(&sparkle_heart).unwrap();",
+          "path": "doc",
+          "range": [
+            2372,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2443,
+            2446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"💖\", sparkle_heart);",
+          "path": "doc",
+          "range": [
+            2447,
+            2485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2486,
+            2493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2494,
+            2539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            2540,
+            2619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            2620,
+            2662
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2723,
+        2992
+      ],
+      "kind": "fn",
+      "name": "from_utf8",
+      "range": [
+        137,
+        2992
+      ],
+      "signature_range": [
+        2667,
+        2722
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a mutable slice of bytes to a mutable string slice.",
+          "path": "doc",
+          "range": [
+            2994,
+            3058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3059,
+            3062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is an alias to [`str::from_utf8_mut`].",
+          "path": "doc",
+          "range": [
+            3063,
+            3110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3111,
+            3114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3115,
+            3129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3130,
+            3133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            3134,
+            3150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3151,
+            3154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3155,
+            3162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            3163,
+            3180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3181,
+            3184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // \"Hello, Rust!\" as a mutable vector",
+          "path": "doc",
+          "range": [
+            3185,
+            3226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut hellorust = vec![72, 101, 108, 108, 111, 44, 32, 82, 117, 115, 116, 33];",
+          "path": "doc",
+          "range": [
+            3227,
+            3311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3312,
+            3315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // As we know these bytes are valid, we can use `unwrap()`",
+          "path": "doc",
+          "range": [
+            3316,
+            3378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let outstr = str::from_utf8_mut(&mut hellorust).unwrap();",
+          "path": "doc",
+          "range": [
+            3379,
+            3440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3441,
+            3444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello, Rust!\", outstr);",
+          "path": "doc",
+          "range": [
+            3445,
+            3484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3485,
+            3492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3493,
+            3496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Incorrect bytes:",
+          "path": "doc",
+          "range": [
+            3497,
+            3517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3518,
+            3521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3522,
+            3529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            3530,
+            3547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3548,
+            3551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Some invalid bytes in a mutable vector",
+          "path": "doc",
+          "range": [
+            3552,
+            3597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut invalid = vec![128, 223];",
+          "path": "doc",
+          "range": [
+            3598,
+            3635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3636,
+            3639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(str::from_utf8_mut(&mut invalid).is_err());",
+          "path": "doc",
+          "range": [
+            3640,
+            3695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3696,
+            3703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the docs for [`Utf8Error`] for more details on the kinds of",
+          "path": "doc",
+          "range": [
+            3704,
+            3771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " errors that can be returned.",
+          "path": "doc",
+          "range": [
+            3772,
+            3804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3805,
+            3860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            3861,
+            3933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            3934,
+            3980
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4053,
+        4326
+      ],
+      "kind": "fn",
+      "name": "from_utf8_mut",
+      "range": [
+        2994,
+        4326
+      ],
+      "signature_range": [
+        3985,
+        4052
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a slice of bytes to a string slice without checking",
+          "path": "doc",
+          "range": [
+            4328,
+            4392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that the string contains valid UTF-8.",
+          "path": "doc",
+          "range": [
+            4393,
+            4434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4435,
+            4438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is an alias to [`str::from_utf8_unchecked`].",
+          "path": "doc",
+          "range": [
+            4439,
+            4492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4493,
+            4496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the safe version, [`from_utf8`], for more information.",
+          "path": "doc",
+          "range": [
+            4497,
+            4559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4560,
+            4563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            4564,
+            4576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4577,
+            4580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The bytes passed in must be valid UTF-8.",
+          "path": "doc",
+          "range": [
+            4581,
+            4625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4626,
+            4629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4630,
+            4644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4645,
+            4648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            4649,
+            4665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4666,
+            4669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4670,
+            4677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            4678,
+            4695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4696,
+            4699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // some bytes, in a vector",
+          "path": "doc",
+          "range": [
+            4700,
+            4730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = vec![240, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            4731,
+            4780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4781,
+            4784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = unsafe {",
+          "path": "doc",
+          "range": [
+            4785,
+            4817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     str::from_utf8_unchecked(&sparkle_heart)",
+          "path": "doc",
+          "range": [
+            4818,
+            4866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            4867,
+            4873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4874,
+            4877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"💖\", sparkle_heart);",
+          "path": "doc",
+          "range": [
+            4878,
+            4916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4917,
+            4924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4925,
+            4934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4935,
+            4946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4947,
+            4992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            4993,
+            5075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            5076,
+            5128
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5187,
+        5365
+      ],
+      "kind": "fn",
+      "name": "from_utf8_unchecked",
+      "range": [
+        4328,
+        5365
+      ],
+      "signature_range": [
+        5133,
+        5186
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a slice of bytes to a string slice without checking",
+          "path": "doc",
+          "range": [
+            5367,
+            5431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that the string contains valid UTF-8; mutable version.",
+          "path": "doc",
+          "range": [
+            5432,
+            5490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5491,
+            5494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is an alias to [`str::from_utf8_unchecked_mut`].",
+          "path": "doc",
+          "range": [
+            5495,
+            5552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5553,
+            5556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the immutable version, [`from_utf8_unchecked()`] for documentation and safety requirements.",
+          "path": "doc",
+          "range": [
+            5557,
+            5656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5657,
+            5660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5661,
+            5675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5676,
+            5679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            5680,
+            5696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5697,
+            5700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5701,
+            5708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            5709,
+            5726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5727,
+            5730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut heart = vec![240, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            5731,
+            5776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let heart = unsafe { str::from_utf8_unchecked_mut(&mut heart) };",
+          "path": "doc",
+          "range": [
+            5777,
+            5845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5846,
+            5849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"💖\", heart);",
+          "path": "doc",
+          "range": [
+            5850,
+            5880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5881,
+            5888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5889,
+            5898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5899,
+            5910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5911,
+            5966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            5967,
+            6053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            6054,
+            6110
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6181,
+        6495
+      ],
+      "kind": "fn",
+      "name": "from_utf8_unchecked_mut",
+      "range": [
+        5367,
+        6495
+      ],
+      "signature_range": [
+        6115,
+        6180
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a `&str` from a pointer and a length.",
+          "path": "doc",
+          "range": [
+            6497,
+            6546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6547,
+            6550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The pointed-to bytes must be valid UTF-8.",
+          "path": "doc",
+          "range": [
+            6551,
+            6596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this might not be the case, use `str::from_utf8(slice::from_raw_parts(ptr, len))`,",
+          "path": "doc",
+          "range": [
+            6597,
+            6686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which will return an `Err` if the data isn't valid UTF-8.",
+          "path": "doc",
+          "range": [
+            6687,
+            6748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6749,
+            6752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is the `str` equivalent of [`slice::from_raw_parts`](crate::slice::from_raw_parts).",
+          "path": "doc",
+          "range": [
+            6753,
+            6854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See that function's documentation for safety concerns and examples.",
+          "path": "doc",
+          "range": [
+            6855,
+            6926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6927,
+            6930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The mutable version of this function is [`from_raw_parts_mut`].",
+          "path": "doc",
+          "range": [
+            6931,
+            6998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6999,
+            7008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7009,
+            7020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7021,
+            7082
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7161,
+        7291
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts",
+      "range": [
+        6497,
+        7291
+      ],
+      "signature_range": [
+        7087,
+        7160
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a `&mut str` from a pointer and a length.",
+          "path": "doc",
+          "range": [
+            7293,
+            7346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7347,
+            7350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The pointed-to bytes must be valid UTF-8.",
+          "path": "doc",
+          "range": [
+            7351,
+            7396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If this might not be the case, use `str::from_utf8_mut(slice::from_raw_parts_mut(ptr, len))`,",
+          "path": "doc",
+          "range": [
+            7397,
+            7494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which will return an `Err` if the data isn't valid UTF-8.",
+          "path": "doc",
+          "range": [
+            7495,
+            7556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7557,
+            7560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is the `str` equivalent of [`slice::from_raw_parts_mut`](crate::slice::from_raw_parts_mut).",
+          "path": "doc",
+          "range": [
+            7561,
+            7670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See that function's documentation for safety concerns and examples.",
+          "path": "doc",
+          "range": [
+            7671,
+            7742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7743,
+            7746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The immutable version of this function is [`from_raw_parts`].",
+          "path": "doc",
+          "range": [
+            7747,
+            7812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7813,
+            7822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7823,
+            7834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7835,
+            7896
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7981,
+        8123
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts_mut",
+      "range": [
+        7293,
+        8123
+      ],
+      "signature_range": [
+        7901,
+        7980
+      ]
+    }
+  ],
+  "source_sha256": "0f0393f31bedc348d9b420efa68a90eb8e7af6165ac75ed6fbe3a4856ae38bad"
+}

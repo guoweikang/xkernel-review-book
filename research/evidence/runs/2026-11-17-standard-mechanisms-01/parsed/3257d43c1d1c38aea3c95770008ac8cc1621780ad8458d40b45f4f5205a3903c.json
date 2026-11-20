@@ -1,0 +1,510 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " This module contains the hybrid top-level loop combining bottom-up Mergesort with top-down",
+      "path": "doc",
+      "range": [
+        0,
+        94
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Quicksort.",
+      "path": "doc",
+      "range": [
+        95,
+        109
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Sorts `v` based on comparison function `is_less`. If `eager_sort` is true,",
+          "path": "doc",
+          "range": [
+            390,
+            468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will only do small-sorts and physical merges, ensuring O(N * log(N))",
+          "path": "doc",
+          "range": [
+            469,
+            544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " worst-case complexity. `scratch.len()` must be at least",
+          "path": "doc",
+          "range": [
+            545,
+            604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `max(v.len() - v.len() / 2, SMALL_SORT_GENERAL_SCRATCH_LEN)` otherwise the implementation may abort.",
+          "path": "doc",
+          "range": [
+            605,
+            709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Fully ascending and descending inputs will be sorted with exactly N - 1",
+          "path": "doc",
+          "range": [
+            710,
+            785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " comparisons.",
+          "path": "doc",
+          "range": [
+            786,
+            802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            803,
+            806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is the main loop for driftsort, which uses powersort's heuristic to",
+          "path": "doc",
+          "range": [
+            807,
+            883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " determine in which order to merge runs, see below for details.",
+          "path": "doc",
+          "range": [
+            884,
+            950
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1091,
+        5388
+      ],
+      "kind": "fn",
+      "name": "sort",
+      "range": [
+        390,
+        5388
+      ],
+      "signature_range": [
+        955,
+        1090
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7462,
+            7479
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7524,
+        7645
+      ],
+      "kind": "fn",
+      "name": "merge_tree_scale_factor",
+      "range": [
+        7462,
+        7645
+      ],
+      "signature_range": [
+        7480,
+        7523
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7567,
+        7599
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7770,
+            7787
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7872,
+        8020
+      ],
+      "kind": "fn",
+      "name": "merge_tree_depth",
+      "range": [
+        7770,
+        8020
+      ],
+      "signature_range": [
+        7788,
+        7871
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        8056,
+        8763
+      ],
+      "kind": "fn",
+      "name": "sqrt_approx",
+      "range": [
+        8022,
+        8763
+      ],
+      "signature_range": [
+        8022,
+        8055
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8803,
+            8820
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9009,
+        9814
+      ],
+      "kind": "fn",
+      "name": "logical_merge",
+      "range": [
+        8803,
+        9814
+      ],
+      "signature_range": [
+        8821,
+        9008
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Creates a new logical run.",
+          "path": "doc",
+          "range": [
+            9816,
+            9846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9847,
+            9850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A logical run can either be sorted or unsorted. If there is a pre-existing",
+          "path": "doc",
+          "range": [
+            9851,
+            9929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " run that clears the `min_good_run_len` threshold it is returned as a sorted",
+          "path": "doc",
+          "range": [
+            9930,
+            10009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " run. If not, the result depends on the value of `eager_sort`. If it is true,",
+          "path": "doc",
+          "range": [
+            10010,
+            10090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " then a sorted run of length `T::SMALL_SORT_THRESHOLD` is returned, and if it",
+          "path": "doc",
+          "range": [
+            10091,
+            10171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is false an unsorted run of length `min_good_run_len` is returned.",
+          "path": "doc",
+          "range": [
+            10172,
+            10242
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10430,
+        11472
+      ],
+      "kind": "fn",
+      "name": "create_run",
+      "range": [
+        9816,
+        11472
+      ],
+      "signature_range": [
+        10243,
+        10429
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        11600,
+        11853
+      ],
+      "kind": "fn",
+      "name": "stable_quicksort",
+      "range": [
+        11474,
+        11853
+      ],
+      "signature_range": [
+        11474,
+        11599
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Compactly stores the length of a run, and whether or not it is sorted. This",
+          "path": "doc",
+          "range": [
+            11855,
+            11934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can always fit in a `usize` because the maximum slice length is [`isize::MAX`].",
+          "path": "doc",
+          "range": [
+            11935,
+            12018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            12019,
+            12041
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "DriftsortRun",
+      "range": [
+        11855,
+        12069
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12071,
+        12455
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12095,
+            12112
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12154,
+        12193
+      ],
+      "kind": "impl_fn",
+      "name": "new_sorted",
+      "range": [
+        12095,
+        12193
+      ],
+      "signature_range": [
+        12117,
+        12153
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12199,
+            12216
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12260,
+        12293
+      ],
+      "kind": "impl_fn",
+      "name": "new_unsorted",
+      "range": [
+        12199,
+        12293
+      ],
+      "signature_range": [
+        12221,
+        12259
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12299,
+            12316
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12345,
+        12376
+      ],
+      "kind": "impl_fn",
+      "name": "sorted",
+      "range": [
+        12299,
+        12376
+      ],
+      "signature_range": [
+        12321,
+        12344
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12382,
+            12399
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12426,
+        12453
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        12382,
+        12453
+      ],
+      "signature_range": [
+        12404,
+        12425
+      ]
+    }
+  ],
+  "source_sha256": "5992b53abed257aa1c2dc2bb811d6a525294471e7a98d434f161d376100bf9c9"
+}

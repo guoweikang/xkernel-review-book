@@ -1,0 +1,173 @@
+{
+  "scope": "audit-only; never append this ledger to model input",
+  "facts": [
+    {
+      "id": "RC01",
+      "endpoint": "Rc::clone_from_ref_in",
+      "text": "先调用 UniqueRcUninit::new(value, alloc)，然后把 data_ptr 转为 *mut u8 传给 value.clone_to_uninit；调用返回后才调用 into_rc 并返回该 Rc。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 1345,
+        "end": 1359
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "code-explicit; native entry doc only states clone construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "RC02",
+      "endpoint": "UniqueRcUninit::new / try_new",
+      "text": "保存 Layout::for_value(for_value) 和 Some(alloc)；分配时用 for_value 的指针元数据形成 RcInner<T> 指针。try_new 用 ? 返回分配错误。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4450,
+        "end": 4477
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of layout, metadata and fallible construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "RC03",
+      "endpoint": "UniqueRcUninit::data_ptr / into_rc",
+      "text": "data_ptr 按保存的值布局计算偏移。into_rc 用 ManuallyDrop 包装守卫，从 Option 中取出分配器，再通过 Rc::from_ptr_in 构造返回值。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4480,
+        "end": 4498
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of offset and transfer operations; safety precondition already native",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "RC04",
+      "endpoint": "UniqueRcUninit::drop",
+      "text": "Drop 取出保存的分配器，使用 rc_inner_layout_for_value_layout(layout_for_value) 释放 ptr 指向的分配；该函数体没有对 T 调用 drop_in_place。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4501,
+        "end": 4513
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native already states deallocation without value drop; addition identifies concrete allocator/layout operations",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "ARC01",
+      "endpoint": "Arc::clone_from_ref_in",
+      "text": "先调用 UniqueArcUninit::new(value, alloc)，再以 data_ptr 转换出的 *mut u8 调用 value.clone_to_uninit；调用返回后才执行 into_arc 并返回该 Arc。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 1495,
+        "end": 1509
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "code-explicit; native entry doc only states clone construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "ARC02",
+      "endpoint": "UniqueArcUninit::new / try_new",
+      "text": "保存值布局及 Some(alloc)，通过带 for_value 元数据的 ArcInner<T> 指针建立守卫。try_new 在分配失败时通过 ? 返回错误。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4230,
+        "end": 4257
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of layout, metadata and fallible construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "ARC03",
+      "endpoint": "UniqueArcUninit::data_ptr / into_arc",
+      "text": "data_ptr 根据保存的值布局计算偏移。into_arc 通过 ManuallyDrop 包装守卫，取出分配器和指针后调用 Arc::from_ptr_in。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4260,
+        "end": 4279
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of offset and transfer operations; safety precondition already native",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "ARC04",
+      "endpoint": "UniqueArcUninit::drop",
+      "text": "在 not(no_global_oom_handling) 配置下，Drop 用取出的分配器及 arcinner_layout_for_value_layout(layout_for_value) 执行 deallocate；函数体没有对 T 调用 drop_in_place。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4281,
+        "end": 4294
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native already states deallocation without value drop; addition identifies cfg and allocator/layout",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "CORE01",
+      "endpoint": "CloneToUninit for [T]",
+      "text": "slice 实现以 self 的元数据建立目标 *mut [T]，随后调用 T 的 CopySpec::clone_slice。",
+      "source": {
+        "path": "library/core/src/clone.rs",
+        "start": 555,
+        "end": 564
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of metadata adaptation and dispatch",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "CORE02",
+      "endpoint": "CopySpec::clone_slice for T: Clone",
+      "text": "默认实现把目标借用为 [MaybeUninit<T>]，通过 InitializingSlice 逐项接收 element_ref.clone() 的结果；全部完成后 mem::forget(initializing)。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 24,
+        "end": 50
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new external documentation of operations already visible in code/internal comments",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "CORE03",
+      "endpoint": "InitializingSlice",
+      "text": "该对象保存借用的 [MaybeUninit<T>] 和 initialized_len。push 写入元素后才递增计数；Drop 对 data[..initialized_len] 调用 assume_init_drop，没有释放底层存储的操作。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 84,
+        "end": 123
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native describes non-owned storage and unwind cleanup; addition spells out counter transition and exact prefix operation",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    },
+    {
+      "id": "CORE04",
+      "endpoint": "CopySpec for T: TrivialClone",
+      "text": "该特化的 clone_one 与 clone_slice 调用 ptr::copy_nonoverlapping；slice 路径先 debug_assert_eq 两侧长度。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 53,
+        "end": 82
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of retained specialization; not a claim about all Clone implementations",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded"
+    }
+  ]
+}

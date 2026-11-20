@@ -1,0 +1,435 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Models a reborrow of some unique reference, when you know that the reborrow",
+          "path": "doc",
+          "range": [
+            56,
+            135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and all its descendants (i.e., all pointers and references derived from it)",
+          "path": "doc",
+          "range": [
+            136,
+            215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will not be used any more at some point, after which you want to use the",
+          "path": "doc",
+          "range": [
+            216,
+            292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original unique reference again.",
+          "path": "doc",
+          "range": [
+            293,
+            329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            330,
+            333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The borrow checker usually handles this stacking of borrows for you, but",
+          "path": "doc",
+          "range": [
+            334,
+            410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " some control flows that accomplish this stacking are too complicated for",
+          "path": "doc",
+          "range": [
+            411,
+            487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the compiler to follow. A `DormantMutRef` allows you to check borrowing",
+          "path": "doc",
+          "range": [
+            488,
+            563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " yourself, while still expressing its stacked nature, and encapsulating",
+          "path": "doc",
+          "range": [
+            564,
+            638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the raw pointer code needed to do this without undefined behavior.",
+          "path": "doc",
+          "range": [
+            639,
+            709
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "DormantMutRef",
+      "range": [
+        56,
+        810
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        812,
+        885
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        886,
+        959
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        961,
+        2932
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Capture a unique borrow, and immediately reborrow it. For the compiler,",
+          "path": "doc",
+          "range": [
+            1000,
+            1075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the lifetime of the new reference is the same as the lifetime of the",
+          "path": "doc",
+          "range": [
+            1080,
+            1152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " original reference, but you promise to use it for a shorter period.",
+          "path": "doc",
+          "range": [
+            1157,
+            1228
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1286,
+        1566
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        1000,
+        1566
+      ],
+      "signature_range": [
+        1244,
+        1285
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Revert to the unique borrow initially captured.",
+          "path": "doc",
+          "range": [
+            1572,
+            1623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1628,
+            1631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            1636,
+            1648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1653,
+            1656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The reborrow must have ended, i.e., the reference returned by `new` and",
+          "path": "doc",
+          "range": [
+            1661,
+            1736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all pointers and references derived from it, must not be used anymore.",
+          "path": "doc",
+          "range": [
+            1741,
+            1815
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1867,
+        2000
+      ],
+      "kind": "impl_fn",
+      "name": "awaken",
+      "range": [
+        1572,
+        2000
+      ],
+      "signature_range": [
+        1831,
+        1866
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows a new mutable reference from the unique borrow initially captured.",
+          "path": "doc",
+          "range": [
+            2006,
+            2084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2089,
+            2092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2097,
+            2109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2114,
+            2117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The reborrow must have ended, i.e., the reference returned by `new` and",
+          "path": "doc",
+          "range": [
+            2122,
+            2197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all pointers and references derived from it, must not be used anymore.",
+          "path": "doc",
+          "range": [
+            2202,
+            2276
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2335,
+        2468
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow",
+      "range": [
+        2006,
+        2468
+      ],
+      "signature_range": [
+        2292,
+        2334
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows a new shared reference from the unique borrow initially captured.",
+          "path": "doc",
+          "range": [
+            2474,
+            2551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2556,
+            2559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2564,
+            2576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2581,
+            2584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The reborrow must have ended, i.e., the reference returned by `new` and",
+          "path": "doc",
+          "range": [
+            2589,
+            2664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all pointers and references derived from it, must not be used anymore.",
+          "path": "doc",
+          "range": [
+            2669,
+            2743
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2801,
+        2930
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow_shared",
+      "range": [
+        2474,
+        2930
+      ],
+      "signature_range": [
+        2759,
+        2800
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            2934,
+            2946
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "tests",
+      "path_overrides": [],
+      "range": [
+        2934,
+        2957
+      ]
+    }
+  ],
+  "source_sha256": "ad6a86684e01895df92fbfd6f9c4ac69182f19bcaf926a79a579014c14e4b33f"
+}

@@ -1,0 +1,422 @@
+[
+  {
+    "id": "direct",
+    "source": "fn probe() { self.target(); }",
+    "target": "target",
+    "expected": "visible_spelling",
+    "result": {
+      "state": "visible_spelling",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            18,
+            24
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              18,
+              24
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "comment_string",
+    "source": "fn probe() { /* target() */ let text = \"target()\"; }",
+    "target": "target",
+    "expected": "no_visible_spelling",
+    "result": {
+      "state": "no_visible_spelling",
+      "matches": [],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "closure",
+    "source": "fn probe() { let deferred = || self.target(); }",
+    "target": "target",
+    "expected": "nested_spelling_only",
+    "result": {
+      "state": "nested_spelling_only",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 1,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            36,
+            42
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 1,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              36,
+              42
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "macro",
+    "source": "fn probe() { invoke!(self.target()); }",
+    "target": "target",
+    "expected": "no_visible_spelling",
+    "result": {
+      "state": "no_visible_spelling",
+      "matches": [],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "opaque_macro",
+            "name": "invoke",
+            "range": [
+              13,
+              35
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "invoke!(self.target())"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "other_receiver",
+    "source": "fn probe() { other.target(); }",
+    "target": "target",
+    "expected": "visible_spelling",
+    "result": {
+      "state": "visible_spelling",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            19,
+            25
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              19,
+              25
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "unreachable",
+    "source": "fn probe() { if false { self.target(); } }",
+    "target": "target",
+    "expected": "visible_spelling",
+    "result": {
+      "state": "visible_spelling",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            29,
+            35
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              29,
+              35
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "function_pointer",
+    "source": "fn probe() { let callback = target; callback(); }",
+    "target": "target",
+    "expected": "no_visible_spelling",
+    "result": {
+      "state": "no_visible_spelling",
+      "matches": [],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "call_expression",
+            "name": "callback",
+            "range": [
+              36,
+              44
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "callback"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "cfg",
+    "source": "fn probe() { #[cfg(any())] self.target(); }",
+    "target": "target",
+    "expected": "visible_spelling",
+    "result": {
+      "state": "visible_spelling",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            32,
+            38
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              32,
+              38
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "qualified",
+    "source": "fn probe() { module::target(); }",
+    "target": "target",
+    "expected": "no_visible_spelling",
+    "result": {
+      "state": "no_visible_spelling",
+      "matches": [],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "call_expression",
+            "name": "module::target",
+            "range": [
+              13,
+              27
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "module::target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "utf8",
+    "source": "fn probe() { let text = \"中文\"; self.target(); }",
+    "target": "target",
+    "expected": "visible_spelling",
+    "result": {
+      "state": "visible_spelling",
+      "matches": [
+        {
+          "cfg": "not_evaluated",
+          "deferred_depth": 0,
+          "execution": "not_established",
+          "kind": "method_expression",
+          "name": "target",
+          "range": [
+            39,
+            45
+          ],
+          "target_resolution": "unresolved",
+          "source_text": "target"
+        }
+      ],
+      "syntax": {
+        "schema": "rust-call-syntax/1",
+        "sites": [
+          {
+            "cfg": "not_evaluated",
+            "deferred_depth": 0,
+            "execution": "not_established",
+            "kind": "method_expression",
+            "name": "target",
+            "range": [
+              39,
+              45
+            ],
+            "target_resolution": "unresolved",
+            "source_text": "target"
+          }
+        ],
+        "status": "parsed"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  },
+  {
+    "id": "invalid",
+    "source": "fn probe( {",
+    "target": "target",
+    "expected": "parse_rejected",
+    "result": {
+      "state": "parse_rejected",
+      "matches": [],
+      "syntax": {
+        "error": "cannot parse string into token stream",
+        "schema": "rust-call-syntax/1",
+        "sites": [],
+        "status": "rejected"
+      },
+      "target_resolution": "unknown",
+      "execution": "unknown",
+      "delegation_correctness": "unknown",
+      "safe_exemption": "unknown"
+    }
+  }
+]

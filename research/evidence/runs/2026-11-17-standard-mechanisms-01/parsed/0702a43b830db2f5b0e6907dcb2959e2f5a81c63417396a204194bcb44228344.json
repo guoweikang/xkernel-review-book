@@ -1,0 +1,3059 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Rustc internal tooling for hand-writing MIR.",
+      "path": "doc",
+      "range": [
+        0,
+        48
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        49,
+        52
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " If for some reasons you are not writing rustc tests and have found yourself considering using",
+      "path": "doc",
+      "range": [
+        53,
+        150
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " this feature, turn back. This is *exceptionally* unstable. There is no attempt at all to make",
+      "path": "doc",
+      "range": [
+        151,
+        248
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " anything work besides those things which the rustc test suite happened to need. If you make a",
+      "path": "doc",
+      "range": [
+        249,
+        346
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " typo you'll probably ICE. Really, this is not the solution to your problems. Consider instead",
+      "path": "doc",
+      "range": [
+        347,
+        444
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " supporting the [stable MIR project group](https://github.com/rust-lang/project-stable-mir).",
+      "path": "doc",
+      "range": [
+        445,
+        540
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        541,
+        544
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The documentation for this module describes how to use this feature. If you are interested in",
+      "path": "doc",
+      "range": [
+        545,
+        642
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " hacking on the implementation, most of that documentation lives at",
+      "path": "doc",
+      "range": [
+        643,
+        713
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `rustc_mir_build/src/build/custom/mod.rs`.",
+      "path": "doc",
+      "range": [
+        714,
+        760
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        761,
+        764
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Typical usage will look like this:",
+      "path": "doc",
+      "range": [
+        765,
+        803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        804,
+        807
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        808,
+        819
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(core_intrinsics, custom_mir)]",
+      "path": "doc",
+      "range": [
+        820,
+        864
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![allow(internal_features)]",
+      "path": "doc",
+      "range": [
+        865,
+        897
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        898,
+        901
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use core::intrinsics::mir::*;",
+      "path": "doc",
+      "range": [
+        902,
+        935
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        936,
+        939
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"built\")]",
+      "path": "doc",
+      "range": [
+        940,
+        976
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " pub fn simple(x: i32) -> i32 {",
+      "path": "doc",
+      "range": [
+        977,
+        1011
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        1012,
+        1026
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let temp2: i32;",
+      "path": "doc",
+      "range": [
+        1027,
+        1054
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1055,
+        1058
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        1059,
+        1072
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             let temp1 = x;",
+      "path": "doc",
+      "range": [
+        1073,
+        1103
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Goto(my_second_block)",
+      "path": "doc",
+      "range": [
+        1104,
+        1141
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        1142,
+        1155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1156,
+        1159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         my_second_block = {",
+      "path": "doc",
+      "range": [
+        1160,
+        1191
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             temp2 = Move(temp1);",
+      "path": "doc",
+      "range": [
+        1192,
+        1228
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET = temp2;",
+      "path": "doc",
+      "range": [
+        1229,
+        1257
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        1258,
+        1282
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        1283,
+        1296
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        1297,
+        1306
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        1307,
+        1312
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1313,
+        1320
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1321,
+        1324
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The `custom_mir` attribute tells the compiler to treat the function as being custom MIR. This",
+      "path": "doc",
+      "range": [
+        1325,
+        1422
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " attribute only works on functions - there is no way to insert custom MIR into the middle of",
+      "path": "doc",
+      "range": [
+        1423,
+        1518
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " another function. The `dialect` and `phase` parameters indicate which [version of MIR][dialect",
+      "path": "doc",
+      "range": [
+        1519,
+        1617
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " docs] you are inserting here. Generally you'll want to use `#![custom_mir(dialect = \"built\")]`",
+      "path": "doc",
+      "range": [
+        1618,
+        1716
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " if you want your MIR to be modified by the full MIR pipeline, or `#![custom_mir(dialect =",
+      "path": "doc",
+      "range": [
+        1717,
+        1810
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " \"runtime\", phase = \"optimized\")]` if you don't.",
+      "path": "doc",
+      "range": [
+        1811,
+        1862
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1863,
+        1866
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [dialect docs]:",
+      "path": "doc",
+      "range": [
+        1867,
+        1886
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     https://doc.rust-lang.org/nightly/nightly-rustc/rustc_middle/mir/enum.MirPhase.html",
+      "path": "doc",
+      "range": [
+        1887,
+        1978
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1979,
+        1982
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The input to the [`mir!`] macro is:",
+      "path": "doc",
+      "range": [
+        1983,
+        2022
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2023,
+        2026
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - An optional return type annotation in the form of `type RET = ...;`. This may be required",
+      "path": "doc",
+      "range": [
+        2027,
+        2123
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    if the compiler cannot infer the type of RET.",
+      "path": "doc",
+      "range": [
+        2124,
+        2176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - A possibly empty list of local declarations. Locals can also be declared inline on",
+      "path": "doc",
+      "range": [
+        2177,
+        2266
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    assignments via `let`. Type inference generally works. Shadowing does not.",
+      "path": "doc",
+      "range": [
+        2267,
+        2348
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - A list of basic blocks. The first of these is the start block and is where execution begins.",
+      "path": "doc",
+      "range": [
+        2349,
+        2448
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    All blocks other than the start block need to be given a name, so that they can be referred",
+      "path": "doc",
+      "range": [
+        2449,
+        2547
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    to later.",
+      "path": "doc",
+      "range": [
+        2548,
+        2564
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     - Each block is a list of semicolon terminated statements, followed by a terminator. The",
+      "path": "doc",
+      "range": [
+        2565,
+        2661
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "       syntax for the various statements and terminators is designed to be as similar as possible",
+      "path": "doc",
+      "range": [
+        2662,
+        2762
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "       to the syntax for analogous concepts in native Rust. See below for a list.",
+      "path": "doc",
+      "range": [
+        2763,
+        2847
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2848,
+        2851
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Examples",
+      "path": "doc",
+      "range": [
+        2852,
+        2866
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2867,
+        2870
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        2871,
+        2882
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(core_intrinsics, custom_mir)]",
+      "path": "doc",
+      "range": [
+        2883,
+        2927
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![allow(internal_features)]",
+      "path": "doc",
+      "range": [
+        2928,
+        2960
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![allow(unused_assignments)]",
+      "path": "doc",
+      "range": [
+        2961,
+        2994
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2995,
+        2998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use core::intrinsics::mir::*;",
+      "path": "doc",
+      "range": [
+        2999,
+        3032
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3033,
+        3036
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"built\")]",
+      "path": "doc",
+      "range": [
+        3037,
+        3073
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " pub fn choose_load(a: &i32, b: &i32, c: bool) -> i32 {",
+      "path": "doc",
+      "range": [
+        3074,
+        3132
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        3133,
+        3147
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        3148,
+        3161
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             match c {",
+      "path": "doc",
+      "range": [
+        3162,
+        3187
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 true => t,",
+      "path": "doc",
+      "range": [
+        3188,
+        3218
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 _ => f,",
+      "path": "doc",
+      "range": [
+        3219,
+        3246
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             }",
+      "path": "doc",
+      "range": [
+        3247,
+        3264
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        3265,
+        3278
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3279,
+        3282
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         t = {",
+      "path": "doc",
+      "range": [
+        3283,
+        3300
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             let temp = a;",
+      "path": "doc",
+      "range": [
+        3301,
+        3330
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Goto(load_and_exit)",
+      "path": "doc",
+      "range": [
+        3331,
+        3366
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        3367,
+        3380
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3381,
+        3384
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         f = {",
+      "path": "doc",
+      "range": [
+        3385,
+        3402
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             temp = b;",
+      "path": "doc",
+      "range": [
+        3403,
+        3428
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Goto(load_and_exit)",
+      "path": "doc",
+      "range": [
+        3429,
+        3464
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        3465,
+        3478
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3479,
+        3482
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         load_and_exit = {",
+      "path": "doc",
+      "range": [
+        3483,
+        3512
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET = *temp;",
+      "path": "doc",
+      "range": [
+        3513,
+        3541
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        3542,
+        3566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        3567,
+        3580
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        3581,
+        3590
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3591,
+        3596
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3597,
+        3600
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"built\")]",
+      "path": "doc",
+      "range": [
+        3601,
+        3637
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn unwrap_unchecked<T>(opt: Option<T>) -> T {",
+      "path": "doc",
+      "range": [
+        3638,
+        3687
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        3688,
+        3702
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        3703,
+        3716
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET = Move(Field(Variant(opt, 1), 0));",
+      "path": "doc",
+      "range": [
+        3717,
+        3771
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        3772,
+        3796
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        3797,
+        3810
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        3811,
+        3820
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3821,
+        3826
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3827,
+        3830
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"runtime\", phase = \"optimized\")]",
+      "path": "doc",
+      "range": [
+        3831,
+        3890
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn push_and_pop<T>(v: &mut Vec<T>, value: T) {",
+      "path": "doc",
+      "range": [
+        3891,
+        3941
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        3942,
+        3956
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let _unused;",
+      "path": "doc",
+      "range": [
+        3957,
+        3981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let popped;",
+      "path": "doc",
+      "range": [
+        3982,
+        4005
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4006,
+        4009
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        4010,
+        4023
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Call(_unused = Vec::push(v, value), ReturnTo(pop), UnwindContinue())",
+      "path": "doc",
+      "range": [
+        4024,
+        4108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4109,
+        4122
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4123,
+        4126
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         pop = {",
+      "path": "doc",
+      "range": [
+        4127,
+        4146
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Call(popped = Vec::pop(v), ReturnTo(drop), UnwindContinue())",
+      "path": "doc",
+      "range": [
+        4147,
+        4223
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4224,
+        4237
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4238,
+        4241
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         drop = {",
+      "path": "doc",
+      "range": [
+        4242,
+        4262
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Drop(popped, ReturnTo(ret), UnwindContinue())",
+      "path": "doc",
+      "range": [
+        4263,
+        4324
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4325,
+        4338
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4339,
+        4342
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         ret = {",
+      "path": "doc",
+      "range": [
+        4343,
+        4362
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        4363,
+        4387
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4388,
+        4401
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        4402,
+        4411
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4412,
+        4417
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4418,
+        4421
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"runtime\", phase = \"optimized\")]",
+      "path": "doc",
+      "range": [
+        4422,
+        4481
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn annotated_return_type() -> (i32, bool) {",
+      "path": "doc",
+      "range": [
+        4482,
+        4529
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        4530,
+        4544
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         type RET = (i32, bool);",
+      "path": "doc",
+      "range": [
+        4545,
+        4580
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        4581,
+        4594
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET.0 = 1;",
+      "path": "doc",
+      "range": [
+        4595,
+        4621
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET.1 = true;",
+      "path": "doc",
+      "range": [
+        4622,
+        4651
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        4652,
+        4676
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        4677,
+        4690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        4691,
+        4700
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4701,
+        4706
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4707,
+        4714
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4715,
+        4718
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " We can also set off compilation failures that happen in sufficiently late stages of the",
+      "path": "doc",
+      "range": [
+        4719,
+        4810
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " compiler:",
+      "path": "doc",
+      "range": [
+        4811,
+        4824
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4825,
+        4828
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust,compile_fail",
+      "path": "doc",
+      "range": [
+        4829,
+        4853
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(core_intrinsics, custom_mir)]",
+      "path": "doc",
+      "range": [
+        4854,
+        4898
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4899,
+        4902
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " extern crate core;",
+      "path": "doc",
+      "range": [
+        4903,
+        4925
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use core::intrinsics::mir::*;",
+      "path": "doc",
+      "range": [
+        4926,
+        4959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4960,
+        4963
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"built\")]",
+      "path": "doc",
+      "range": [
+        4964,
+        5000
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn borrow_error(should_init: bool) -> i32 {",
+      "path": "doc",
+      "range": [
+        5001,
+        5048
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir! {",
+      "path": "doc",
+      "range": [
+        5049,
+        5063
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         let temp: i32;",
+      "path": "doc",
+      "range": [
+        5064,
+        5090
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5091,
+        5094
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        5095,
+        5108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             match should_init {",
+      "path": "doc",
+      "range": [
+        5109,
+        5144
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 true => init,",
+      "path": "doc",
+      "range": [
+        5145,
+        5178
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "                 _ => use_temp,",
+      "path": "doc",
+      "range": [
+        5179,
+        5213
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             }",
+      "path": "doc",
+      "range": [
+        5214,
+        5231
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        5232,
+        5245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5246,
+        5249
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         init = {",
+      "path": "doc",
+      "range": [
+        5250,
+        5270
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             temp = 0;",
+      "path": "doc",
+      "range": [
+        5271,
+        5296
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Goto(use_temp)",
+      "path": "doc",
+      "range": [
+        5297,
+        5327
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        5328,
+        5341
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5342,
+        5345
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         use_temp = {",
+      "path": "doc",
+      "range": [
+        5346,
+        5370
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             RET = temp;",
+      "path": "doc",
+      "range": [
+        5371,
+        5398
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        5399,
+        5423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        5424,
+        5437
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        5438,
+        5447
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        5448,
+        5453
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        5454,
+        5461
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        5462,
+        5465
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        5466,
+        5477
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " error[E0381]: used binding is possibly-uninitialized",
+      "path": "doc",
+      "range": [
+        5478,
+        5534
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   --> test.rs:24:13",
+      "path": "doc",
+      "range": [
+        5535,
+        5558
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    |",
+      "path": "doc",
+      "range": [
+        5559,
+        5567
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 8  | /     mir! {",
+      "path": "doc",
+      "range": [
+        5568,
+        5589
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 9  | |         let temp: i32;",
+      "path": "doc",
+      "range": [
+        5590,
+        5623
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 10 | |",
+      "path": "doc",
+      "range": [
+        5624,
+        5634
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 11 | |         {",
+      "path": "doc",
+      "range": [
+        5635,
+        5655
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ...  |",
+      "path": "doc",
+      "range": [
+        5656,
+        5666
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 19 | |             temp = 0;",
+      "path": "doc",
+      "range": [
+        5667,
+        5699
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    | |             -------- binding initialized here in some conditions",
+      "path": "doc",
+      "range": [
+        5700,
+        5775
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ...  |",
+      "path": "doc",
+      "range": [
+        5776,
+        5786
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 24 | |             RET = temp;",
+      "path": "doc",
+      "range": [
+        5787,
+        5821
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    | |             ^^^^^^^^^^ value used here but it is possibly-uninitialized",
+      "path": "doc",
+      "range": [
+        5822,
+        5904
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 25 | |             Return()",
+      "path": "doc",
+      "range": [
+        5905,
+        5936
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 26 | |         }",
+      "path": "doc",
+      "range": [
+        5937,
+        5957
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " 27 | |     }",
+      "path": "doc",
+      "range": [
+        5958,
+        5974
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    | |_____- binding declared here but left uninitialized",
+      "path": "doc",
+      "range": [
+        5975,
+        6036
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6037,
+        6040
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " error: aborting due to 1 previous error",
+      "path": "doc",
+      "range": [
+        6041,
+        6084
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6085,
+        6088
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For more information about this error, try `rustc --explain E0381`.",
+      "path": "doc",
+      "range": [
+        6089,
+        6160
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        6161,
+        6168
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6169,
+        6172
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Syntax",
+      "path": "doc",
+      "range": [
+        6173,
+        6185
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6186,
+        6189
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The lists below are an exhaustive description of how various MIR constructs can be created.",
+      "path": "doc",
+      "range": [
+        6190,
+        6285
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Anything missing from the list should be assumed to not be supported, PRs welcome.",
+      "path": "doc",
+      "range": [
+        6286,
+        6372
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6373,
+        6376
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Locals",
+      "path": "doc",
+      "range": [
+        6377,
+        6392
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6393,
+        6396
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - The `_0` return local can always be accessed via `RET`.",
+      "path": "doc",
+      "range": [
+        6397,
+        6459
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Arguments can be accessed via their regular name.",
+      "path": "doc",
+      "range": [
+        6460,
+        6516
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - All other locals need to be declared with `let` somewhere and then can be accessed by name.",
+      "path": "doc",
+      "range": [
+        6517,
+        6615
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6616,
+        6619
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Places",
+      "path": "doc",
+      "range": [
+        6620,
+        6635
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Locals implicitly convert to places.",
+      "path": "doc",
+      "range": [
+        6636,
+        6679
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Field accesses, derefs, and indexing work normally.",
+      "path": "doc",
+      "range": [
+        6680,
+        6738
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Fields in variants can be accessed via the [`Variant`] and [`Field`] associated functions,",
+      "path": "doc",
+      "range": [
+        6739,
+        6836
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    see their documentation for details.",
+      "path": "doc",
+      "range": [
+        6837,
+        6880
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        6881,
+        6884
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Operands",
+      "path": "doc",
+      "range": [
+        6885,
+        6902
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Places implicitly convert to `Copy` operands.",
+      "path": "doc",
+      "range": [
+        6903,
+        6955
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - `Move` operands can be created via [`Move`].",
+      "path": "doc",
+      "range": [
+        6956,
+        7007
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Const blocks, literals, named constants, and const params all just work.",
+      "path": "doc",
+      "range": [
+        7008,
+        7087
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`Static`] and [`StaticMut`] can be used to create `&T` and `*mut T`s to statics. These are",
+      "path": "doc",
+      "range": [
+        7088,
+        7186
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    constants in MIR and the only way to access statics.",
+      "path": "doc",
+      "range": [
+        7187,
+        7246
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7247,
+        7250
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Statements",
+      "path": "doc",
+      "range": [
+        7251,
+        7270
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Assign statements work via normal Rust assignment.",
+      "path": "doc",
+      "range": [
+        7271,
+        7328
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`Retag`], [`StorageLive`], [`StorageDead`] statements have an associated function.",
+      "path": "doc",
+      "range": [
+        7329,
+        7419
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7420,
+        7423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Rvalues",
+      "path": "doc",
+      "range": [
+        7424,
+        7440
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        7441,
+        7444
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Operands implicitly convert to `Use` rvalues.",
+      "path": "doc",
+      "range": [
+        7445,
+        7497
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - `&`, `&mut`, `addr_of!`, and `addr_of_mut!` all work to create their associated rvalue.",
+      "path": "doc",
+      "range": [
+        7498,
+        7592
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`CastTransmute`], [`CastPtrToPtr`], [`CastUnsize`], and [`Discriminant`]",
+      "path": "doc",
+      "range": [
+        7593,
+        7673
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    have associated functions.",
+      "path": "doc",
+      "range": [
+        7674,
+        7707
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Unary and binary operations use their normal Rust syntax - `a * b`, `!c`, etc.",
+      "path": "doc",
+      "range": [
+        7708,
+        7793
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - The binary operation `Offset` can be created via [`Offset`].",
+      "path": "doc",
+      "range": [
+        7794,
+        7861
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Checked binary operations are represented by wrapping the associated binop in [`Checked`].",
+      "path": "doc",
+      "range": [
+        7862,
+        7959
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - Array repetition syntax (`[foo; 10]`) creates the associated rvalue.",
+      "path": "doc",
+      "range": [
+        7960,
+        8035
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8036,
+        8039
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Terminators",
+      "path": "doc",
+      "range": [
+        8040,
+        8060
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8061,
+        8064
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`Goto`], [`Return`], [`Unreachable`] and [`Drop`](Drop()) have associated functions.",
+      "path": "doc",
+      "range": [
+        8065,
+        8157
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - `match some_int_operand` becomes a `SwitchInt`. Each arm should be `literal => basic_block`",
+      "path": "doc",
+      "range": [
+        8158,
+        8256
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     - The exception is the last arm, which must be `_ => basic_block` and corresponds to the",
+      "path": "doc",
+      "range": [
+        8257,
+        8353
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "       otherwise branch.",
+      "path": "doc",
+      "range": [
+        8354,
+        8381
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`Call`] has an associated function as well, with special syntax:",
+      "path": "doc",
+      "range": [
+        8382,
+        8454
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    `Call(ret_val = function(arg1, arg2, ...), ReturnTo(next_block), UnwindContinue())`.",
+      "path": "doc",
+      "range": [
+        8455,
+        8546
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  - [`TailCall`] does not have a return destination or next block, so its syntax is just",
+      "path": "doc",
+      "range": [
+        8547,
+        8638
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "    `TailCall(function(arg1, arg2, ...))`.",
+      "path": "doc",
+      "range": [
+        8639,
+        8684
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8685,
+        8688
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #### Debuginfo",
+      "path": "doc",
+      "range": [
+        8689,
+        8707
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        8708,
+        8711
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Debuginfo associates source code variable names (of variables that may not exist any more) with",
+      "path": "doc",
+      "range": [
+        8712,
+        8811
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " MIR expressions that indicate where the value of that variable is stored. The syntax to do so",
+      "path": "doc",
+      "range": [
+        8812,
+        8909
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is:",
+      "path": "doc",
+      "range": [
+        8910,
+        8917
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        8918,
+        8929
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " debug source_var_name => expression;",
+      "path": "doc",
+      "range": [
+        8930,
+        8970
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        8971,
+        8978
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Both places and constants are supported in the `expression`.",
+      "path": "doc",
+      "range": [
+        8979,
+        9043
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9044,
+        9047
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        9048,
+        9059
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![allow(internal_features)]",
+      "path": "doc",
+      "range": [
+        9060,
+        9092
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(core_intrinsics, custom_mir)]",
+      "path": "doc",
+      "range": [
+        9093,
+        9137
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9138,
+        9141
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use core::intrinsics::mir::*;",
+      "path": "doc",
+      "range": [
+        9142,
+        9175
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        9176,
+        9179
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[custom_mir(dialect = \"built\")]",
+      "path": "doc",
+      "range": [
+        9180,
+        9216
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn debuginfo(arg: Option<&i32>) {",
+      "path": "doc",
+      "range": [
+        9217,
+        9254
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     mir!(",
+      "path": "doc",
+      "range": [
+        9255,
+        9268
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Debuginfo for a source variable `plain_local` that just duplicates `arg`.",
+      "path": "doc",
+      "range": [
+        9269,
+        9357
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         debug plain_local => arg;",
+      "path": "doc",
+      "range": [
+        9358,
+        9395
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Debuginfo for a source variable `projection` that can be computed by dereferencing",
+      "path": "doc",
+      "range": [
+        9396,
+        9493
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // a field of `arg`.",
+      "path": "doc",
+      "range": [
+        9494,
+        9526
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         debug projection => *Field::<&i32>(Variant(arg, 1), 0);",
+      "path": "doc",
+      "range": [
+        9527,
+        9594
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         // Debuginfo for a source variable `constant` that always holds the value `5`.",
+      "path": "doc",
+      "range": [
+        9595,
+        9685
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         debug constant => 5_usize;",
+      "path": "doc",
+      "range": [
+        9686,
+        9724
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         {",
+      "path": "doc",
+      "range": [
+        9725,
+        9738
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             Return()",
+      "path": "doc",
+      "range": [
+        9739,
+        9763
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        9764,
+        9777
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     )",
+      "path": "doc",
+      "range": [
+        9778,
+        9787
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        9788,
+        9793
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        9794,
+        9801
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        9803,
+        9936
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "allow",
+      "range": [
+        9937,
+        10025
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Type representing basic blocks.",
+          "path": "doc",
+          "range": [
+            10027,
+            10062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10063,
+            10066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All terminators will have this type as a return type. It helps achieve some type safety.",
+          "path": "doc",
+          "range": [
+            10067,
+            10159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            10160,
+            10204
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "BasicBlock",
+      "range": [
+        10027,
+        10339
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The reason we are terminating the process during unwinding.",
+          "path": "doc",
+          "range": [
+            10341,
+            10404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            10405,
+            10461
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "UnwindTerminateReason",
+      "range": [
+        10341,
+        10722
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10806,
+        11019
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "struct",
+      "name": "UnwindActionArg",
+      "range": [
+        11039,
+        11066
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11067,
+        11198
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11200,
+        11345
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11347,
+        11582
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11584,
+        11752
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "struct",
+      "name": "ReturnToArg",
+      "range": [
+        11788,
+        11811
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11812,
+        11882
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11900,
+        11948
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11950,
+        12017
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12019,
+        12077
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12079,
+        12635
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12637,
+        13212
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13214,
+        13366
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13368,
+        13469
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13472,
+        13528
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13530,
+        13586
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13588,
+        13635
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13637,
+        13697
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13699,
+        13821
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13823,
+        13866
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13868,
+        13914
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13916,
+        13971
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13973,
+        14031
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14033,
+        14199
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14201,
+        14277
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14279,
+        14340
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14342,
+        16343
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16345,
+        16538
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16540,
+        16799
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16801,
+        17007
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        17009,
+        17224
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        17226,
+        17329
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        17331,
+        17429
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        17432,
+        19265
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        19267,
+        19529
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        19531,
+        20604
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        20606,
+        23115
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        23117,
+        23571
+      ]
+    }
+  ],
+  "source_sha256": "d346f034702f0092182978bc59f3a27e4bfbd9f8eab374e6ef44f37c078d8a5a"
+}

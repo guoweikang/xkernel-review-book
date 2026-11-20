@@ -1,0 +1,70 @@
+--- a/fs/kvfs/src/mount.rs
++++ b/fs/kvfs/src/mount.rs
+@@ -1621,6 +1621,23 @@
+             .map(|_| ())
+     }
+ 
++    fn snapshot_removed_entry(&self, name: &str, victim: &Dentry, victim_path: &Path) -> RemovedEntry {
++        RemovedEntry {
++        parent: self.inode(),
++        name: alloc::string::String::from(name),
++        // Authoritative when the backend answers, cached otherwise:
++        // a removal whose link count cannot be decided would leave the
++        // watch pinned to a dead object forever, which is worse than
++        // acting on a possibly stale count.
++        victim_nlink: Some(
++            victim_path
++                .getattr()
++                .map_or_else(|_| victim_path.identity().nlink, |meta| meta.nlink),
++        ),
++        victim_dentry: victim.clone(),
++    }
++    }
++
+     /// Unlinks like `Mount::unlink_with_pathname` and reports the victim.
+     pub(crate) fn unlink_with_pathname_tracked(
+         &self,
+@@ -1648,20 +1665,7 @@
+             // failure means no retirement decision is taken at all rather than
+             // a wrong one. Parent and victim references pin the event objects
+             // independently of the mount used to reach them.
+-            removed = Some(RemovedEntry {
+-                parent: self.inode(),
+-                name: alloc::string::String::from(name),
+-                // Authoritative when the backend answers, cached otherwise:
+-                // a removal whose link count cannot be decided would leave the
+-                // watch pinned to a dead object forever, which is worse than
+-                // acting on a possibly stale count.
+-                victim_nlink: Some(
+-                    victim_path
+-                        .getattr()
+-                        .map_or_else(|_| victim_path.identity().nlink, |meta| meta.nlink),
+-                ),
+-                victim_dentry: victim.clone(),
+-            });
++            removed = Some(self.snapshot_removed_entry(name, victim, &victim_path));
+             Ok(())
+         })?;
+         Ok(removed)
+@@ -1681,20 +1685,7 @@
+             let victim_path = self.with_dentry(victim.clone());
+             self.check_sticky(&victim_path, cred)?;
+             victim_path.check_not_mountpoint()?;
+-            removed = Some(RemovedEntry {
+-                parent: self.inode(),
+-                name: alloc::string::String::from(name),
+-                // Authoritative when the backend answers, cached otherwise:
+-                // a removal whose link count cannot be decided would leave the
+-                // watch pinned to a dead object forever, which is worse than
+-                // acting on a possibly stale count.
+-                victim_nlink: Some(
+-                    victim_path
+-                        .getattr()
+-                        .map_or_else(|_| victim_path.identity().nlink, |meta| meta.nlink),
+-                ),
+-                victim_dentry: victim.clone(),
+-            });
++            removed = Some(self.snapshot_removed_entry(name, victim, &victim_path));
+             Ok(())
+         })?;
+         Ok(removed)

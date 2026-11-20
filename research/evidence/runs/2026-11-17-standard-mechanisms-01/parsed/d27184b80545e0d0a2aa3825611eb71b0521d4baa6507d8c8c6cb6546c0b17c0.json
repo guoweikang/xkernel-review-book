@@ -1,0 +1,2822 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        0,
+        52
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Types and Traits for working with asynchronous tasks.",
+      "path": "doc",
+      "range": [
+        54,
+        111
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        112,
+        115
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " **Note**: Some of the types in this module are only available",
+      "path": "doc",
+      "range": [
+        116,
+        181
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " on platforms that support atomic loads and stores of pointers.",
+      "path": "doc",
+      "range": [
+        182,
+        248
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This may be detected at compile time using",
+      "path": "doc",
+      "range": [
+        249,
+        295
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `#[cfg(target_has_atomic = \"ptr\")]`.",
+      "path": "doc",
+      "range": [
+        296,
+        336
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The implementation of waking a task on an executor.",
+          "path": "doc",
+          "range": [
+            557,
+            612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            613,
+            616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait can be used to create a [`Waker`]. An executor can define an",
+          "path": "doc",
+          "range": [
+            617,
+            692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation of this trait, and use that to construct a [`Waker`] to pass",
+          "path": "doc",
+          "range": [
+            693,
+            772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the tasks that are executed on that executor.",
+          "path": "doc",
+          "range": [
+            773,
+            825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            826,
+            829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait is a memory-safe and ergonomic alternative to constructing a",
+          "path": "doc",
+          "range": [
+            830,
+            905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`RawWaker`]. It supports the common executor design in which the data used",
+          "path": "doc",
+          "range": [
+            906,
+            985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to wake up a task is stored in an [`Arc`]. Some executors (especially",
+          "path": "doc",
+          "range": [
+            986,
+            1059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " those for embedded systems) cannot use this API, which is why [`RawWaker`]",
+          "path": "doc",
+          "range": [
+            1060,
+            1138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exists as an alternative for those systems.",
+          "path": "doc",
+          "range": [
+            1139,
+            1186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1187,
+            1190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To construct a [`Waker`] from some type `W` implementing this trait,",
+          "path": "doc",
+          "range": [
+            1191,
+            1263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " wrap it in an [`Arc<W>`](Arc) and call `Waker::from()` on that.",
+          "path": "doc",
+          "range": [
+            1264,
+            1331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is also possible to convert to [`RawWaker`] in the same way.",
+          "path": "doc",
+          "range": [
+            1332,
+            1399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1400,
+            1403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <!-- Ideally we'd link to the `From` impl, but rustdoc doesn't generate any page for it within",
+          "path": "doc",
+          "range": [
+            1404,
+            1502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      `alloc` because `alloc` neither defines nor re-exports `From` or `Waker`, and we can't",
+          "path": "doc",
+          "range": [
+            1503,
+            1598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      link ../../std/task/struct.Waker.html#impl-From%3CArc%3CW,+Global%3E%3E-for-Waker",
+          "path": "doc",
+          "range": [
+            1599,
+            1689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      without getting a link-checking error in CI. -->",
+          "path": "doc",
+          "range": [
+            1690,
+            1747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1748,
+            1751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1752,
+            1766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1767,
+            1770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A basic `block_on` function that takes a future and runs it to completion on",
+          "path": "doc",
+          "range": [
+            1771,
+            1851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the current thread.",
+          "path": "doc",
+          "range": [
+            1852,
+            1875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1876,
+            1879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **Note:** This example trades correctness for simplicity. In order to prevent",
+          "path": "doc",
+          "range": [
+            1880,
+            1961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " deadlocks, production-grade implementations will also need to handle",
+          "path": "doc",
+          "range": [
+            1962,
+            2034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " intermediate calls to `thread::unpark` as well as nested invocations.",
+          "path": "doc",
+          "range": [
+            2035,
+            2108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2109,
+            2112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            2113,
+            2124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            2125,
+            2153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::sync::Arc;",
+          "path": "doc",
+          "range": [
+            2154,
+            2177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{Context, Poll, Wake};",
+          "path": "doc",
+          "range": [
+            2178,
+            2219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::thread::{self, Thread};",
+          "path": "doc",
+          "range": [
+            2220,
+            2256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::pin::pin;",
+          "path": "doc",
+          "range": [
+            2257,
+            2280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2281,
+            2284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// A waker that wakes up the current thread when called.",
+          "path": "doc",
+          "range": [
+            2285,
+            2346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct ThreadWaker(Thread);",
+          "path": "doc",
+          "range": [
+            2347,
+            2378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2379,
+            2382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Wake for ThreadWaker {",
+          "path": "doc",
+          "range": [
+            2383,
+            2414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn wake(self: Arc<Self>) {",
+          "path": "doc",
+          "range": [
+            2415,
+            2449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.0.unpark();",
+          "path": "doc",
+          "range": [
+            2450,
+            2478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2479,
+            2488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2489,
+            2494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2495,
+            2498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Run a future to completion on the current thread.",
+          "path": "doc",
+          "range": [
+            2499,
+            2556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn block_on<T>(fut: impl Future<Output = T>) -> T {",
+          "path": "doc",
+          "range": [
+            2557,
+            2612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Pin the future so it can be polled.",
+          "path": "doc",
+          "range": [
+            2613,
+            2659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut fut = pin!(fut);",
+          "path": "doc",
+          "range": [
+            2660,
+            2692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2693,
+            2696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Create a new context to be passed to the future.",
+          "path": "doc",
+          "range": [
+            2697,
+            2756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let t = thread::current();",
+          "path": "doc",
+          "range": [
+            2757,
+            2791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let waker = Arc::new(ThreadWaker(t)).into();",
+          "path": "doc",
+          "range": [
+            2792,
+            2844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut cx = Context::from_waker(&waker);",
+          "path": "doc",
+          "range": [
+            2845,
+            2894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2895,
+            2898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Run the future to completion.",
+          "path": "doc",
+          "range": [
+            2899,
+            2939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     loop {",
+          "path": "doc",
+          "range": [
+            2940,
+            2954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         match fut.as_mut().poll(&mut cx) {",
+          "path": "doc",
+          "range": [
+            2955,
+            3001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Poll::Ready(res) => return res,",
+          "path": "doc",
+          "range": [
+            3002,
+            3049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Poll::Pending => thread::park(),",
+          "path": "doc",
+          "range": [
+            3050,
+            3098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            3099,
+            3112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            3113,
+            3122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3123,
+            3128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3129,
+            3132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " block_on(async {",
+          "path": "doc",
+          "range": [
+            3133,
+            3153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"Hi from inside a future!\");",
+          "path": "doc",
+          "range": [
+            3154,
+            3199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            3200,
+            3207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3208,
+            3215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            3216,
+            3249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3250,
+            3301
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Wake",
+      "range": [
+        557,
+        3856
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wake this task.",
+          "path": "doc",
+          "range": [
+            3323,
+            3342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3347,
+            3398
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "wake",
+      "range": [
+        3323,
+        3428
+      ],
+      "signature_range": [
+        3403,
+        3427
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wake this task without consuming the waker.",
+          "path": "doc",
+          "range": [
+            3434,
+            3481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3486,
+            3489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an executor supports a cheaper way to wake without consuming the",
+          "path": "doc",
+          "range": [
+            3494,
+            3565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker, it should override this method. By default, it clones the",
+          "path": "doc",
+          "range": [
+            3570,
+            3638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Arc`] and calls [`wake`] on the clone.",
+          "path": "doc",
+          "range": [
+            3643,
+            3687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3692,
+            3695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`wake`]: Wake::wake",
+          "path": "doc",
+          "range": [
+            3700,
+            3724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3729,
+            3780
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3818,
+        3854
+      ],
+      "kind": "trait_fn",
+      "name": "wake_by_ref",
+      "range": [
+        3434,
+        3854
+      ],
+      "signature_range": [
+        3785,
+        3817
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            3857,
+            3890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3891,
+            3942
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3857,
+        4341
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Use a [`Wake`]-able type as a `Waker`.",
+          "path": "doc",
+          "range": [
+            4010,
+            4052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4057,
+            4060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " No heap allocations or atomic operations are used for this conversion.",
+          "path": "doc",
+          "range": [
+            4065,
+            4139
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4176,
+        4339
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        4010,
+        4339
+      ],
+      "signature_range": [
+        4144,
+        4175
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            4342,
+            4375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4376,
+            4427
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4342,
+        4702
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Use a `Wake`-able type as a `RawWaker`.",
+          "path": "doc",
+          "range": [
+            4498,
+            4541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4546,
+            4549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " No heap allocations or atomic operations are used for this conversion.",
+          "path": "doc",
+          "range": [
+            4554,
+            4628
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4668,
+        4700
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        4498,
+        4700
+      ],
+      "signature_range": [
+        4633,
+        4667
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a closure into a [`Waker`].",
+          "path": "doc",
+          "range": [
+            4704,
+            4744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4745,
+            4748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The closure gets called every time the waker is woken.",
+          "path": "doc",
+          "range": [
+            4749,
+            4807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4808,
+            4811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4812,
+            4826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4827,
+            4830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4831,
+            4838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(waker_fn)]",
+          "path": "doc",
+          "range": [
+            4839,
+            4864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::waker_fn;",
+          "path": "doc",
+          "range": [
+            4865,
+            4893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4894,
+            4897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let waker = waker_fn(|| println!(\"woken\"));",
+          "path": "doc",
+          "range": [
+            4898,
+            4945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4946,
+            4949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker.wake_by_ref(); // Prints \"woken\".",
+          "path": "doc",
+          "range": [
+            4950,
+            4993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker.wake();        // Prints \"woken\".",
+          "path": "doc",
+          "range": [
+            4994,
+            5037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5038,
+            5045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            5046,
+            5079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5080,
+            5131
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5196,
+        5499
+      ],
+      "kind": "fn",
+      "name": "waker_fn",
+      "range": [
+        4704,
+        5499
+      ],
+      "signature_range": [
+        5136,
+        5195
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "WakeFn",
+      "range": [
+        5202,
+        5240
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5246,
+        5456
+      ]
+    },
+    {
+      "ancestors": [
+        7,
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        5339,
+        5373
+      ],
+      "kind": "impl_fn",
+      "name": "wake",
+      "range": [
+        5314,
+        5373
+      ],
+      "signature_range": [
+        5314,
+        5338
+      ]
+    },
+    {
+      "ancestors": [
+        7,
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        5416,
+        5450
+      ],
+      "kind": "impl_fn",
+      "name": "wake_by_ref",
+      "range": [
+        5383,
+        5450
+      ],
+      "signature_range": [
+        5383,
+        5415
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            5813,
+            5846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5847,
+            5864
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5938,
+        7746
+      ],
+      "kind": "fn",
+      "name": "raw_waker",
+      "range": [
+        5813,
+        7746
+      ],
+      "signature_range": [
+        5865,
+        5937
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6508,
+            6525
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6615,
+        6839
+      ],
+      "kind": "fn",
+      "name": "clone_waker",
+      "range": [
+        6508,
+        6839
+      ],
+      "signature_range": [
+        6530,
+        6614
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "body_range": [
+        6977,
+        7083
+      ],
+      "kind": "fn",
+      "name": "wake",
+      "range": [
+        6911,
+        7083
+      ],
+      "signature_range": [
+        6911,
+        6976
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "body_range": [
+        7240,
+        7373
+      ],
+      "kind": "fn",
+      "name": "wake_by_ref",
+      "range": [
+        7167,
+        7373
+      ],
+      "signature_range": [
+        7167,
+        7239
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "body_range": [
+        7507,
+        7581
+      ],
+      "kind": "fn",
+      "name": "drop_waker",
+      "range": [
+        7435,
+        7581
+      ],
+      "signature_range": [
+        7435,
+        7506
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An analogous trait to `Wake` but used to construct a `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            7748,
+            7818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7819,
+            7822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This API works in exactly the same way as `Wake`,",
+          "path": "doc",
+          "range": [
+            7823,
+            7876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " except that it uses an `Rc` instead of an `Arc`,",
+          "path": "doc",
+          "range": [
+            7877,
+            7929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and the result is a `LocalWaker` instead of a `Waker`.",
+          "path": "doc",
+          "range": [
+            7930,
+            7988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7989,
+            7992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The benefits of using `LocalWaker` over `Waker` are that it allows the local waker",
+          "path": "doc",
+          "range": [
+            7993,
+            8079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to hold data that does not implement `Send` and `Sync`. Additionally, it saves calls",
+          "path": "doc",
+          "range": [
+            8080,
+            8168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to `Arc::clone`, which requires atomic synchronization.",
+          "path": "doc",
+          "range": [
+            8169,
+            8228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8229,
+            8232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8233,
+            8236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            8237,
+            8251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8252,
+            8255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a simplified example of a `spawn` and a `block_on` function. The `spawn` function",
+          "path": "doc",
+          "range": [
+            8256,
+            8349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is used to push new tasks onto the run queue, while the block on function will remove them",
+          "path": "doc",
+          "range": [
+            8350,
+            8444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and poll them. When a task is woken, it will put itself back on the run queue to be polled",
+          "path": "doc",
+          "range": [
+            8445,
+            8539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by the executor.",
+          "path": "doc",
+          "range": [
+            8540,
+            8560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8561,
+            8564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **Note:** This example trades correctness for simplicity. A real world example would interleave",
+          "path": "doc",
+          "range": [
+            8565,
+            8664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " poll calls with calls to an io reactor to wait for events instead of spinning on a loop.",
+          "path": "doc",
+          "range": [
+            8665,
+            8757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8758,
+            8761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            8762,
+            8773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(local_waker)]",
+          "path": "doc",
+          "range": [
+            8774,
+            8802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{LocalWake, ContextBuilder, LocalWaker, Waker};",
+          "path": "doc",
+          "range": [
+            8803,
+            8869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            8870,
+            8898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::pin::Pin;",
+          "path": "doc",
+          "range": [
+            8899,
+            8921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::rc::Rc;",
+          "path": "doc",
+          "range": [
+            8922,
+            8942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::RefCell;",
+          "path": "doc",
+          "range": [
+            8943,
+            8970
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::collections::VecDeque;",
+          "path": "doc",
+          "range": [
+            8971,
+            9006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9007,
+            9010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9011,
+            9014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thread_local! {",
+          "path": "doc",
+          "range": [
+            9015,
+            9034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // A queue containing all tasks ready to do progress",
+          "path": "doc",
+          "range": [
+            9035,
+            9095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     static RUN_QUEUE: RefCell<VecDeque<Rc<Task>>> = RefCell::default();",
+          "path": "doc",
+          "range": [
+            9096,
+            9171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            9172,
+            9177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9178,
+            9181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type BoxedFuture = Pin<Box<dyn Future<Output = ()>>>;",
+          "path": "doc",
+          "range": [
+            9182,
+            9239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9240,
+            9243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Task(RefCell<BoxedFuture>);",
+          "path": "doc",
+          "range": [
+            9244,
+            9282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9283,
+            9286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl LocalWake for Task {",
+          "path": "doc",
+          "range": [
+            9287,
+            9316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn wake(self: Rc<Self>) {",
+          "path": "doc",
+          "range": [
+            9317,
+            9350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         RUN_QUEUE.with_borrow_mut(|queue| {",
+          "path": "doc",
+          "range": [
+            9351,
+            9398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             queue.push_back(self)",
+          "path": "doc",
+          "range": [
+            9399,
+            9436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         })",
+          "path": "doc",
+          "range": [
+            9437,
+            9451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            9452,
+            9461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            9462,
+            9467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9468,
+            9471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn spawn<F>(future: F)",
+          "path": "doc",
+          "range": [
+            9472,
+            9498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where",
+          "path": "doc",
+          "range": [
+            9499,
+            9508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     F: Future<Output=()> + 'static + Send + Sync",
+          "path": "doc",
+          "range": [
+            9509,
+            9561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            9562,
+            9567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let task = RefCell::new(Box::pin(future));",
+          "path": "doc",
+          "range": [
+            9568,
+            9618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     RUN_QUEUE.with_borrow_mut(|queue| {",
+          "path": "doc",
+          "range": [
+            9619,
+            9662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         queue.push_back(Rc::new(Task(task)));",
+          "path": "doc",
+          "range": [
+            9663,
+            9712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     });",
+          "path": "doc",
+          "range": [
+            9713,
+            9724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            9725,
+            9730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9731,
+            9734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn block_on<F>(future: F)",
+          "path": "doc",
+          "range": [
+            9735,
+            9764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where",
+          "path": "doc",
+          "range": [
+            9765,
+            9774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     F: Future<Output=()> + 'static + Sync + Send",
+          "path": "doc",
+          "range": [
+            9775,
+            9827
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            9828,
+            9833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     spawn(future);",
+          "path": "doc",
+          "range": [
+            9834,
+            9856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     loop {",
+          "path": "doc",
+          "range": [
+            9857,
+            9871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let Some(task) = RUN_QUEUE.with_borrow_mut(|queue| queue.pop_front()) else {",
+          "path": "doc",
+          "range": [
+            9872,
+            9960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // we exit, since there are no more tasks remaining on the queue",
+          "path": "doc",
+          "range": [
+            9961,
+            10041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             return;",
+          "path": "doc",
+          "range": [
+            10042,
+            10065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         };",
+          "path": "doc",
+          "range": [
+            10066,
+            10080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10081,
+            10084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // cast the Rc<Task> into a `LocalWaker`",
+          "path": "doc",
+          "range": [
+            10085,
+            10137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let local_waker: LocalWaker = task.clone().into();",
+          "path": "doc",
+          "range": [
+            10138,
+            10200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Build the context using `ContextBuilder`",
+          "path": "doc",
+          "range": [
+            10201,
+            10256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let mut cx = ContextBuilder::from_waker(Waker::noop())",
+          "path": "doc",
+          "range": [
+            10257,
+            10323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .local_waker(&local_waker)",
+          "path": "doc",
+          "range": [
+            10324,
+            10366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .build();",
+          "path": "doc",
+          "range": [
+            10367,
+            10392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10393,
+            10396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Poll the task",
+          "path": "doc",
+          "range": [
+            10397,
+            10425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let _ = task.0",
+          "path": "doc",
+          "range": [
+            10426,
+            10452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .borrow_mut()",
+          "path": "doc",
+          "range": [
+            10453,
+            10482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .as_mut()",
+          "path": "doc",
+          "range": [
+            10483,
+            10508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             .poll(&mut cx);",
+          "path": "doc",
+          "range": [
+            10509,
+            10540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            10541,
+            10550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10551,
+            10556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10557,
+            10560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " block_on(async {",
+          "path": "doc",
+          "range": [
+            10561,
+            10581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"hello world\");",
+          "path": "doc",
+          "range": [
+            10582,
+            10614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            10615,
+            10622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10623,
+            10630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10631,
+            10634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10635,
+            10689
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "LocalWake",
+      "range": [
+        7748,
+        11264
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wake this task.",
+          "path": "doc",
+          "range": [
+            10716,
+            10735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10740,
+            10794
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "wake",
+      "range": [
+        10716,
+        10823
+      ],
+      "signature_range": [
+        10799,
+        10822
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wake this task without consuming the local waker.",
+          "path": "doc",
+          "range": [
+            10829,
+            10882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10887,
+            10890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an executor supports a cheaper way to wake without consuming the",
+          "path": "doc",
+          "range": [
+            10895,
+            10966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker, it should override this method. By default, it clones the",
+          "path": "doc",
+          "range": [
+            10971,
+            11039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Rc`] and calls [`wake`] on the clone.",
+          "path": "doc",
+          "range": [
+            11044,
+            11087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11092,
+            11095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`wake`]: LocalWaker::wake",
+          "path": "doc",
+          "range": [
+            11100,
+            11130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11135,
+            11189
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11226,
+        11262
+      ],
+      "kind": "trait_fn",
+      "name": "wake_by_ref",
+      "range": [
+        10829,
+        11262
+      ],
+      "signature_range": [
+        11194,
+        11225
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11266,
+            11320
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11266,
+        11731
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Use a `Wake`-able type as a `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            11383,
+            11428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11433,
+            11436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " No heap allocations or atomic operations are used for this conversion.",
+          "path": "doc",
+          "range": [
+            11441,
+            11515
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11556,
+        11729
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        11383,
+        11729
+      ],
+      "signature_range": [
+        11520,
+        11555
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            11732,
+            11773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11774,
+            11828
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11732,
+        12098
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": " Use a `Wake`-able type as a `RawWaker`.",
+          "path": "doc",
+          "range": [
+            11889,
+            11932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11937,
+            11940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " No heap allocations or atomic operations are used for this conversion.",
+          "path": "doc",
+          "range": [
+            11945,
+            12019
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12058,
+        12096
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        11889,
+        12096
+      ],
+      "signature_range": [
+        12024,
+        12057
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Converts a closure into a [`LocalWaker`].",
+          "path": "doc",
+          "range": [
+            12100,
+            12145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12146,
+            12149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The closure gets called every time the local waker is woken.",
+          "path": "doc",
+          "range": [
+            12150,
+            12214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12215,
+            12218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12219,
+            12233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12234,
+            12237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12238,
+            12245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(local_waker)]",
+          "path": "doc",
+          "range": [
+            12246,
+            12274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(waker_fn)]",
+          "path": "doc",
+          "range": [
+            12275,
+            12300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::local_waker_fn;",
+          "path": "doc",
+          "range": [
+            12301,
+            12335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12336,
+            12339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let waker = local_waker_fn(|| println!(\"woken\"));",
+          "path": "doc",
+          "range": [
+            12340,
+            12393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12394,
+            12397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker.wake_by_ref(); // Prints \"woken\".",
+          "path": "doc",
+          "range": [
+            12398,
+            12441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " waker.wake();        // Prints \"woken\".",
+          "path": "doc",
+          "range": [
+            12442,
+            12485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12486,
+            12493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12552,
+            12603
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12679,
+        13004
+      ],
+      "kind": "fn",
+      "name": "local_waker_fn",
+      "range": [
+        12100,
+        13004
+      ],
+      "signature_range": [
+        12608,
+        12678
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "LocalWakeFn",
+      "range": [
+        12685,
+        12728
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12734,
+        12952
+      ]
+    },
+    {
+      "ancestors": [
+        24,
+        26
+      ],
+      "attributes": [],
+      "body_range": [
+        12836,
+        12870
+      ],
+      "kind": "impl_fn",
+      "name": "wake",
+      "range": [
+        12812,
+        12870
+      ],
+      "signature_range": [
+        12812,
+        12835
+      ]
+    },
+    {
+      "ancestors": [
+        24,
+        26
+      ],
+      "attributes": [],
+      "body_range": [
+        12912,
+        12946
+      ],
+      "kind": "impl_fn",
+      "name": "wake_by_ref",
+      "range": [
+        12880,
+        12946
+      ],
+      "signature_range": [
+        12880,
+        12911
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13316,
+            13333
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13403,
+        14785
+      ],
+      "kind": "fn",
+      "name": "local_raw_waker",
+      "range": [
+        13316,
+        14785
+      ],
+      "signature_range": [
+        13334,
+        13402
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13575,
+            13592
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13673,
+        13896
+      ],
+      "kind": "fn",
+      "name": "clone_waker",
+      "range": [
+        13575,
+        13896
+      ],
+      "signature_range": [
+        13597,
+        13672
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "body_range": [
+        14029,
+        14139
+      ],
+      "kind": "fn",
+      "name": "wake",
+      "range": [
+        13972,
+        14139
+      ],
+      "signature_range": [
+        13972,
+        14028
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "body_range": [
+        14287,
+        14424
+      ],
+      "kind": "fn",
+      "name": "wake_by_ref",
+      "range": [
+        14223,
+        14424
+      ],
+      "signature_range": [
+        14223,
+        14286
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "body_range": [
+        14548,
+        14621
+      ],
+      "kind": "fn",
+      "name": "drop_waker",
+      "range": [
+        14485,
+        14621
+      ],
+      "signature_range": [
+        14485,
+        14547
+      ]
+    }
+  ],
+  "source_sha256": "923eb7d2dc6b44e5692b6ffd61475134fb92902dbc0f8d38c4db2b99792b5a18"
+}

@@ -1,0 +1,1270 @@
+=== discsource1 ===
+====case-001
+---left
+fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.try_read() {
+            Some(guard) => f
+                .debug_struct("SpinRwLock")
+                .field("data", &&*guard)
+                .finish(),
+            None => f
+                .debug_struct("SpinRwLock")
+                .field("data", &"<locked>")
+                .finish(),
+        }
+    }---right
+fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.try_lock() {
+            Some(guard) => f.debug_struct("SpinLock").field("data", &&*guard).finish(),
+            None => f
+                .debug_struct("SpinLock")
+                .field("data", &"<locked>")
+                .finish(),
+        }
+    }====case-005
+---left
+ Creates a symbolic link under this directory path.fn symlink(&self, name: &str, target: &str, cred: &Cred) -> VfsResult<Self> {
+        self.dentry
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| self.vfs_symlink(candidate, target, cred))
+            .map(|entry| self.with_dentry(entry))
+    }---right
+ Creates a hard link to an existing path.fn link(&self, name: &str, source: &Self, cred: &Cred) -> VfsResult<Self> {
+        self.dentry
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| self.vfs_link(candidate, source, cred))
+            .map(|entry| self.with_dentry(entry))
+    }====case-006
+---left
+ Creates a symbolic link under this directory path.fn symlink(&self, name: &str, target: &str, cred: &Cred) -> VfsResult<Self> {
+        self.dentry
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| self.vfs_symlink(candidate, target, cred))
+            .map(|entry| self.with_dentry(entry))
+    }---right
+ Creates a directory under this directory path.fn mkdir(&self, name: &str, permission: NodePermission, cred: &Cred) -> VfsResult<Self> {
+        self.dentry
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                self.vfs_mkdir(candidate, permission, NodePermission::empty(), cred)
+            })
+            .map(|entry| self.with_dentry(entry))
+    }====case-007
+---left
+fn getattr(
+        &self,
+        _idmap: &MountIdmap,
+        _path: Option<&crate::Path>,
+        _request_mask: GetattrRequestMask,
+        _query_flags: GetattrQueryFlags,
+    ) -> VfsResult<Metadata> {
+        Ok(Metadata {
+            device: 0,
+            inode: 7,
+            nlink: 1,
+            mode: Umode::new(
+                NodeType::CharacterDevice,
+                NodePermission::from_bits_truncate(0o666),
+            ),
+            uid: 0,
+            gid: 0,
+            size: 0,
+            block_size: 0,
+            blocks: 0,
+            rdev: self.rdev,
+            atime: SystemTime::UNIX_EPOCH,
+            mtime: SystemTime::UNIX_EPOCH,
+            ctime: SystemTime::UNIX_EPOCH,
+        })
+    }---right
+fn getattr(
+        &self,
+        _idmap: &MountIdmap,
+        _path: Option<&crate::Path>,
+        _request_mask: GetattrRequestMask,
+        _query_flags: GetattrQueryFlags,
+    ) -> VfsResult<Metadata> {
+        Ok(Metadata {
+            device: 0,
+            inode: 8,
+            nlink: 1,
+            mode: Umode::new(
+                NodeType::BlockDevice,
+                NodePermission::from_bits_truncate(0o666),
+            ),
+            uid: 0,
+            gid: 0,
+            size: 0,
+            block_size: 0,
+            blocks: 0,
+            rdev: self.rdev,
+            atime: SystemTime::UNIX_EPOCH,
+            mtime: SystemTime::UNIX_EPOCH,
+            ctime: SystemTime::UNIX_EPOCH,
+        })
+    }====case-008
+---left
+ Publishes bytes read from a non-pipe source only after reserving space.
+ Runs in sleepable task context under this pipe's mutex. `read_fn` must
+ not reenter a pipe. Callers must not hold file-position locks; the callback
+ may lock its non-pipe source position. A positive result is
+ fully accepted, including short reads; source errors do not trigger a
+ wait for destination space.
+ An oversized callback result returns EIO without publishing pipe data;
+ side effects in the source cannot be rolled back.fn splice_write(
+        &self,
+        nonblocking: bool,
+        scratch: &mut [u8],
+        mut read_fn: impl FnMut(&mut [u8]) -> KResult<usize>,
+    ) -> KResult<usize> {
+        if scratch.is_empty() {
+            return Ok(0);
+        }
+        let result = block_on(poll_file_io(self, IoEvents::OUT, nonblocking, || {
+            let mut state = self.state.lock();
+            if state.readers == 0 {
+                drop(state);
+                let _ = send_sig_current(Signo::SIGPIPE);
+                return Ok(Err(KError::BrokenPipe));
+            }
+            let count = scratch.len().min(state.available());
+            if count == 0 {
+                return Err(KError::WouldBlock);
+            }
+            let result = read_fn(&mut scratch[..count]);
+            if let Ok(read) = result {
+                if read > count {
+                    return Ok(Err(KError::Io));
+                }
+                state.write_from(&scratch[..read]);
+            }
+            Ok(result)
+        }))?;
+        if matches!(result, Ok(count) if count > 0) {
+            ktask::with_wake_sync(|| self.rd_wait.wake());
+        }
+        result
+    }---right
+ Transfers buffered bytes to a non-pipe destination without consuming a
+ rejected suffix. Runs in sleepable task context under this pipe's mutex.
+ `write_fn` must not reenter a pipe. Callers must not hold file-position
+ locks; the callback may lock its non-pipe destination. Callback errors are not
+ mistaken for an empty source pipe.
+ An oversized callback result returns EIO without consuming pipe data;
+ side effects in the destination cannot be rolled back.fn splice_read(
+        &self,
+        nonblocking: bool,
+        scratch: &mut [u8],
+        mut write_fn: impl FnMut(&[u8]) -> KResult<usize>,
+    ) -> KResult<usize> {
+        if scratch.is_empty() {
+            return Ok(0);
+        }
+        let result = block_on(poll_file_io(self, IoEvents::IN, nonblocking, || {
+            let mut state = self.state.lock();
+            let count = scratch.len().min(state.buffer.len());
+            if count == 0 {
+                return if state.writers == 0 {
+                    Ok(Ok(0))
+                } else {
+                    Err(KError::WouldBlock)
+                };
+            }
+            state.copy_prefix(&mut scratch[..count]);
+            let result = write_fn(&scratch[..count]);
+            if let Ok(written) = result {
+                if written > count {
+                    return Ok(Err(KError::Io));
+                }
+                drop(state.buffer.drain(..written));
+            }
+            Ok(result)
+        }))?;
+        if matches!(result, Ok(count) if count > 0) {
+            ktask::with_wake_sync(|| self.wr_wait.wake());
+        }
+        result
+    }====case-013
+---left
+fn read(&self, _file: &VfsFile, buf: &mut [u8], offset: u64) -> VfsResult<usize> {
+        let data = self.data.lock();
+        let start = offset as usize;
+        if start >= data.len() {
+            return Ok(0);
+        }
+        let count = buf.len().min(data.len() - start);
+        buf[..count].copy_from_slice(&data[start..start + count]);
+        Ok(count)
+    }---right
+fn read(&self, _file: &VfsFile, buf: &mut [u8], offset: u64) -> VfsResult<usize> {
+        let data = self.data.lock();
+        let offset = offset as usize;
+        if offset >= data.len() {
+            return Ok(0);
+        }
+        let count = buf.len().min(data.len() - offset);
+        buf[..count].copy_from_slice(&data[offset..offset + count]);
+        Ok(count)
+    }
+=== discsource2 ===
+====case-015
+---left
+ Derive macro that generates `unsafe impl UserRead for T {}`.
+
+ The caller asserts that any bit pattern read from user memory is a valid `T`.fn derive_user_read(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+    let path = match posix_types_private_path() {
+        Ok(path) => path,
+        Err(error) => return error.to_compile_error().into(),
+    };
+    quote! {
+        unsafe impl #impl_generics #path::__private::UserReadTrait for #name #ty_generics #where_clause {}
+    }
+    .into()
+}---right
+ Derive macro that generates `unsafe impl UserWrite for T {}`.
+
+ The caller asserts that writing `T` to user memory as raw bytes is always safe.fn derive_user_write(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+    let path = match posix_types_private_path() {
+        Ok(path) => path,
+        Err(error) => return error.to_compile_error().into(),
+    };
+    quote! {
+        unsafe impl #impl_generics #path::__private::UserWriteTrait for #name #ty_generics #where_clause {}
+    }
+    .into()
+}====case-016
+---left
+ Creates a directory like [`Filename::mkdir_at`] and reports the created
+ entry with the parent identity and name captured by the operation.fn mkdir_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        permission: NodePermission,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, _) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                parent.vfs_mkdir(candidate, permission, umask, cred)
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }---right
+ Creates a symbolic link like [`Filename::symlink_at`] and reports the
+ created entry with the parent identity and name captured by the
+ operation.fn symlink_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        target: &str,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, has_trailing_slash) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                if has_trailing_slash {
+                    return Err(VfsError::NotFound);
+                }
+                parent.vfs_symlink(candidate, target, cred)
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }====case-017
+---left
+ Creates a directory like [`Filename::mkdir_at`] and reports the created
+ entry with the parent identity and name captured by the operation.fn mkdir_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        permission: NodePermission,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, _) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                parent.vfs_mkdir(candidate, permission, umask, cred)
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }---right
+ Creates a node like [`Filename::mknod_at`] and reports the created
+ entry with the parent identity and name captured by the operation.fn mknod_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        mode: Umode,
+        device: DeviceId,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let node_type = may_mknod(mode)?;
+        let mode = mode.with_node_type(node_type);
+        let (parent, last, has_trailing_slash) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+        let device = if matches!(node_type, NodeType::CharacterDevice | NodeType::BlockDevice) {
+            device
+        } else {
+            DeviceId::default()
+        };
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                if has_trailing_slash {
+                    return Err(VfsError::NotFound);
+                }
+                if node_type == NodeType::RegularFile {
+                    parent.vfs_create(candidate, mode, umask, true, cred)
+                } else {
+                    parent.vfs_mknod(candidate, mode, device, umask, cred)
+                }
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }====case-018
+---left
+ Creates a directory like [`Filename::mkdir_at`] and reports the created
+ entry with the parent identity and name captured by the operation.fn mkdir_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        permission: NodePermission,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, _) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                parent.vfs_mkdir(candidate, permission, umask, cred)
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }---right
+ Creates a hard link like [`Filename::link_at`] and reports the created
+ entry with the parent identity and name captured by the operation.fn link_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        source: &Path,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, has_trailing_slash) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+            .create_exclusive_with(name, |candidate| {
+                if has_trailing_slash {
+                    return Err(VfsError::NotFound);
+                }
+                parent.vfs_link(candidate, source, cred)
+            })
+            .map(|entry| parent.with_dentry(entry))?;
+        Ok(CreatedEntry {
+            path,
+            name: String::from(name),
+            parent: parent.inode(),
+        })
+    }====case-019
+---left
+fn unlink_with<F>(&self, name: &str, may_unlink_fn: F) -> VfsResult<()>
+    where
+        F: FnOnce(&Dentry) -> VfsResult<()>,
+    {
+        self.as_dir()?;
+        Self::verify_child_name(name)?;
+        let dir_inode = self.vfs_inode();
+        let _namespace_guard = dir_inode.lock_namespace_exclusive();
+        let entry = self.lookup_positive_locked(&dir_inode, name)?;
+        let victim_inode = entry.vfs_inode();
+        if Arc::ptr_eq(&victim_inode, &dir_inode) {
+            return Err(VfsError::InvalidInput);
+        }
+        let _victim_guard = victim_inode.lock_namespace_exclusive();
+        if entry.is_dir() {
+            return Err(VfsError::IsADirectory);
+        }
+        may_unlink_fn(&entry)?;
+        dir_inode.unlink(&entry)?;
+        entry.mark_unlinked();
+        self.forget_cache_entry(name);
+        Ok(())
+    }---right
+fn rmdir_with<F>(&self, name: &str, may_rmdir_fn: F) -> VfsResult<()>
+    where
+        F: FnOnce(&Dentry) -> VfsResult<()>,
+    {
+        self.as_dir()?;
+        Self::verify_child_name(name)?;
+        let dir_inode = self.vfs_inode();
+        let _namespace_guard = dir_inode.lock_namespace_exclusive();
+        let entry = self.lookup_positive_locked(&dir_inode, name)?;
+        let victim_inode = entry.vfs_inode();
+        if Arc::ptr_eq(&victim_inode, &dir_inode) {
+            return Err(VfsError::InvalidInput);
+        }
+        let _victim_guard = victim_inode.lock_namespace_exclusive();
+        if !entry.is_dir() {
+            return Err(VfsError::NotADirectory);
+        }
+        may_rmdir_fn(&entry)?;
+        dir_inode.rmdir(&entry)?;
+        entry.mark_unlinked();
+        self.forget_cache_entry(name);
+        Ok(())
+    }====case-021
+---left
+ Tries to acquire a shared read lock without spinning.fn try_read(&self) -> Option<SpinRwLockReadGuard<'_, G, T>> {
+        let guard_state = G::acquire();
+        let state = self.state.load(Ordering::Relaxed);
+        let acquired = state & WRITE_LOCKED == 0
+            && state != READER_MASK
+            && self
+                .state
+                .compare_exchange(state, state + 1, Ordering::Acquire, Ordering::Relaxed)
+                .is_ok();
+
+        if acquired {
+            #[cfg(feature = "stats")]
+            self.record_read_acquisition(false);
+            Some(SpinRwLockReadGuard {
+                lock: self,
+                guard_state,
+            })
+        } else {
+            G::release(guard_state);
+            None
+        }
+    }---right
+ Tries to acquire an exclusive write lock without spinning.fn try_write(&self) -> Option<SpinRwLockWriteGuard<'_, G, T>> {
+        let guard_state = G::acquire();
+        let acquired = self
+            .state
+            .compare_exchange(0, WRITE_LOCKED, Ordering::Acquire, Ordering::Relaxed)
+            .is_ok();
+
+        if acquired {
+            #[cfg(feature = "stats")]
+            self.record_write_acquisition(false);
+            Some(SpinRwLockWriteGuard {
+                lock: self,
+                guard_state,
+            })
+        } else {
+            G::release(guard_state);
+            None
+        }
+    }
+=== discexposure ===
+research/notes/2026-11-17-removal-event-baseline.md:5:共同预算队列索引7为`unlink_with_pathname_tracked/rmdir_tracked`，属于本次固定top20预算下融合独有的两对之一。代码中存在相同RemovedEntry构造及getattr失败回退，是检查文档/代码多视角候选是否带来可用局部机制的下一对象。它不是文档独自发现的结果，也不因融合独有就成为有价值重构。
+research/notes/2026-11-17-removal-event-baseline.md:7:检索`research_lookup.py RemovedEntry unlink_with rmdir_tracked --limit 6`；实际读取固定语料mount/dentry/types/namei，随后对同一Git版本查阅POSIX消费者及node_dentry、mount测试，复用pagecache原内核测试运行方案。Goodall并行只读核查锁范围、消费路径及既有断言；其审阅没有冒充执行结果。
+research/notes/2026-11-16-common-budget-ranking.md:48:| 16 | unlink_with/rmdir_with共享命名空间锁、查找、victim锁及清理；类型判断、错误与最终操作不同，保留局部共享假设 |
+research/notes/2026-11-16-common-budget-ranking.md:51:| 21 | symlink_at_entry/mknod_at_entry共享parent查找、exclusive create及CreatedEntry封装；mknod类型/设备/权限处理需保留 |
+research/notes/2026-11-16-common-budget-ranking.md:66:- **7，unlink_with_pathname_tracked/rmdir_tracked：**共享权限/sticky/mountpoint检查与RemovedEntry组装，分别进入unlink_with/rmdir_with；unlink额外有尾斜杠检查。局部事件信息组装值得后续确认，必须保持命名空间锁内采样及失败行为。没有重构执行或收益证据。
+research/notes/2026-11-16-common-budget-ranking.md:84:| 12 | derive_user_read/write宏解析模板相似；UserRead/UserWrite安全承诺不能合并，未验证宏展开 |
+research/notes/2026-11-16-common-budget-ranking.md:88:| 18 | try_read/try_write共用guard骨架，但CAS状态、读者上限及统计不同；配置未执行 |
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-008/left-source.rs:260:    pub(crate) fn splice_read(
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-008/left-source.rs:303:    pub(crate) fn splice_write(
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-008/left-source.rs:341:    pub(crate) fn splice_to(
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-008/left-source.rs:687:fn pipe_read_iter(iocb: &mut Kiocb<'_>, iter: &mut IovIterDest<'_>) -> VfsResult<usize> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-008/left-source.rs:697:fn pipe_write_iter(iocb: &mut Kiocb<'_>, iter: &mut IovIterSource<'_>) -> VfsResult<usize> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:16:    AccMode, CreatedEntry, DeviceId, FMode, Filename, LookupFlags, LookupIntent, MountFlags,
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:80:    has_trailing_slash: bool,
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:101:    pub fn has_trailing_slash(&self) -> bool {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:102:        self.has_trailing_slash
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:117:        Ok((self.parent, self.last, self.has_trailing_slash))
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:196:    fn has_trailing_slashes(&self) -> bool {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:451:        if self.last_type == LastType::Norm && self.has_trailing_slashes() {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:504:                has_trailing_slash: nd.has_trailing_slashes(),
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:551:            has_trailing_slash: nd.has_trailing_slashes(),
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:666:            if self.has_trailing_slashes() {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:674:        if self.has_trailing_slashes() {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:942:    ) -> VfsResult<CreatedEntry> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:955:        Ok(CreatedEntry {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1001:    ) -> VfsResult<CreatedEntry> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1004:        let (parent, last, has_trailing_slash) = self
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1018:                if has_trailing_slash {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1028:        Ok(CreatedEntry {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1062:    ) -> VfsResult<CreatedEntry> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1063:        let (parent, last, has_trailing_slash) = self
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1072:                if has_trailing_slash {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1078:        Ok(CreatedEntry {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1105:    ) -> VfsResult<CreatedEntry> {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1106:        let (parent, last, has_trailing_slash) = self
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1115:                if has_trailing_slash {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1121:        Ok(CreatedEntry {
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-016/left-source.rs:1152:            lookup.has_trailing_slash,
+research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/case-019/left-source.rs:1165:    pub(crate) fn create_exclusive_with(
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/namei.rs:612:fn create_operations_preserve_trailing_slash_policy() {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/namei.rs:796:    let existing_with_trailing_slash = Filename::new("/target/").mknod_at(
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/namei.rs:808:        existing_with_trailing_slash,
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/namei.rs:1316:fn o_path_trailing_slash_follows_symlink_and_requires_directory() {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/namei.rs:1458:fn trailing_slash_survives_final_symlink_expansion() {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:18:            pipe.splice_read(true, &mut scratch, |bytes| {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:39:            pipe.splice_write(true, &mut scratch, |bytes| {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:59:        pipe.splice_read(true, &mut scratch, |_| Err(KError::IoWaitInterrupted)),
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:63:        pipe.splice_read(true, &mut scratch, |bytes| {
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:81:        pipe.splice_write(true, &mut scratch, |_| panic!(
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/ut-tests/pipe.rs:89:        pipe.splice_write(true, &mut scratch, |bytes| {
+
+=== disccontext ===
+        }
+    }
+
+    fn lookup_positive_locked(&self, dir_inode: &VfsInode, name: &str) -> VfsResult<Dentry> {
+        let entry = self.lookup_locked(dir_inode, name)?;
+        if entry.is_negative() {
+            Err(VfsError::NotFound)
+        } else {
+            Ok(entry)
+        }
+    }
+
+    fn with_locked_child<R>(
+        &self,
+        name: &str,
+        operation_fn: impl FnOnce(&Dentry) -> VfsResult<R>,
+    ) -> VfsResult<R> {
+        self.as_dir()?;
+        Self::verify_child_name(name)?;
+        let dir_inode = self.vfs_inode();
+        let _namespace_guard = dir_inode.lock_namespace_exclusive();
+        let candidate = self.lookup_locked(&dir_inode, name)?;
+        operation_fn(&candidate)
+    }
+
+    /// Runs an exclusive child-creation callback after a locked final lookup.
+    ///
+    /// The callback receives a negative dentry and runs while the parent
+    /// directory namespace lock is held. It must instantiate that dentry
+    /// before returning success.
+    pub(crate) fn create_exclusive_with(
+        &self,
+        name: &str,
+        create_fn: impl FnOnce(&Dentry) -> VfsResult<()>,
+    ) -> VfsResult<Dentry> {
+        self.with_locked_child(name, |candidate| {
+            if candidate.is_really_positive() {
+                return Err(VfsError::AlreadyExists);
+            }
+            create_fn(candidate)?;
+            if candidate.is_negative() {
+                return Err(VfsError::InvalidInput);
+            }
+            Ok(candidate.clone())
+        })
+    }
+
+    pub(crate) fn lookup_or_create_with<F>(
+        &self,
+        name: &str,
+        exclusive: bool,
+        create_fn: F,
+    ) -> VfsResult<LookupCreateResult>
+    where
+        F: FnOnce(&Dentry) -> VfsResult<()>,
+    {
+        self.with_locked_child(name, |candidate| {
+            if candidate.is_really_positive() {
+                return if exclusive {
+                    Err(VfsError::AlreadyExists)
+                } else {
+                    Ok(LookupCreateResult::Existing(candidate.clone()))
+                };
+            }
+
+            create_fn(candidate)?;
+            if candidate.is_negative() {
+                return Err(VfsError::InvalidInput);
+            }
+            Ok(LookupCreateResult::Created(candidate.clone()))
+        })
+    }
+
+    /// Unlinks a non-directory child by name.
+    #[cfg(unittest)]
+    fn unlink(&self, name: &str) -> VfsResult<()> {
+        self.unlink_with(name, |_| Ok(()))
+    }
+
+    pub(crate) fn unlink_with<F>(&self, name: &str, may_unlink_fn: F) -> VfsResult<()>
+    where
+    has_trailing_slash: bool,
+}
+
+impl ParentLookup {
+    /// Returns the parent path.
+    pub fn parent(&self) -> &Path {
+        &self.parent
+    }
+
+    /// Returns the final component name.
+    pub fn name(&self) -> &str {
+        self.last.as_str()
+    }
+
+    /// Returns the classified final component type.
+    pub fn last_type(&self) -> LastType {
+        self.last_type
+    }
+
+    /// Returns whether the original pathname had trailing slashes after the
+    /// final component.
+    pub fn has_trailing_slash(&self) -> bool {
+        self.has_trailing_slash
+    }
+
+    /// Consumes this lookup and returns a normal final component.
+    pub fn into_normal(self) -> VfsResult<(Path, String)> {
+        if self.last_type != LastType::Norm {
+            return Err(VfsError::InvalidInput);
+        }
+        Ok((self.parent, self.last.as_str().to_owned()))
+    }
+
+    fn into_create(self) -> VfsResult<(Path, Qstr, bool)> {
+        if self.last_type != LastType::Norm {
+            return Err(VfsError::AlreadyExists);
+        }
+        Ok((self.parent, self.last, self.has_trailing_slash))
+    }
+}
+
+            &tree.root,
+            &tree.base,
+            NodePermission::default(),
+            NodePermission::empty(),
+            &kcred::initial_cred(),
+        )
+        .unwrap_err();
+
+    assert_eq!(err, VfsError::AlreadyExists);
+}
+
+#[def_test]
+fn create_operations_preserve_trailing_slash_policy() {
+    let tree = test_tree();
+
+    let err = Filename::new("/missing/")
+        .symlink_at(&tree.root, &tree.base, "target", &kcred::initial_cred())
+        .unwrap_err();
+    assert_eq!(err, VfsError::NotFound);
+
+    let created = Filename::new("/missing/")
+        .mkdir_at(
+            &tree.root,
+            &tree.base,
+            NodePermission::default(),
+            NodePermission::empty(),
+            &kcred::initial_cred(),
+        )
+        .unwrap();
+    assert!(created.parent().unwrap().ptr_eq(&tree.root));
+    assert_eq!(created.name(), "missing");
+}
+
+#[def_test]
+fn may_mknod_assigns_linux_errors_to_decoded_types() {
+    assert_eq!(
+        may_mknod(Umode::from_bits(0o600)),
+        Ok(NodeType::RegularFile)
+    );
+    assert_eq!(
+        may_mknod(Umode::from_bits(0o040700)),
+        Err(VfsError::OperationNotPermitted)
+    );
+    assert_eq!(
+        may_mknod(Umode::from_bits(0o120777)),
+        Err(VfsError::InvalidInput)
+    );
+    assert_eq!(
+        may_mknod(Umode::from_bits(0o030600)),
+        Err(VfsError::InvalidInput)
+    );
+}
+
+#[def_test]
+fn mknod_at_dispatches_types_and_prepares_callback_arguments() {
+    let tree = test_tree();
+    let root_ops = tree.root.downcast_node::<TestDir>().unwrap();
+    let cred = kcred::initial_cred();
+    let umask = NodePermission::from_bits_truncate(0o027);
+
+    let regular = Filename::new("/regular")
+        .mknod_at(
+            &tree.root,
+            &tree.base,
+            Umode::new(
+                NodeType::RegularFile,
+                NodePermission::from_bits_truncate(0o6754),
+            ),
+            DeviceId::new(8, 1),
+            umask,
+            &cred,
+        )
+        .unwrap();
+    assert_eq!(regular.node_type(), NodeType::RegularFile);
+
+    let fifo = Filename::new("/fifo")
+        .mknod_at(
+            &tree.root,
+            &tree.base,
+            Umode::new(NodeType::Fifo, NodePermission::from_bits_truncate(0o666)),
+            DeviceId::new(8, 2),
+            umask,
+            &cred,
+        )
+        .unwrap();
+    assert_eq!(fifo.node_type(), NodeType::Fifo);
+
+    let device = DeviceId::new(8, 3);
+    let character = Filename::new("/character")
+        .mknod_at(
+            &tree.root,
+            &tree.base,
+            Umode::new(
+                NodeType::CharacterDevice,
+                NodePermission::from_bits_truncate(0o666),
+            ),
+            device,
+            umask,
+            &cred,
+        )
+        .unwrap();
+    assert_eq!(character.node_type(), NodeType::CharacterDevice);
+
+    let creations = root_ops.creations();
+    assert_eq!(creations.len(), 3);
+    assert_eq!(creations[0].mode, Umode::from_bits(0o106750));
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+use alloc::vec;
+
+use unittest::def_test;
+
+use super::*;
+
+#[def_test]
+fn splice_rejects_oversized_write_without_consuming_source() {
+    for reported in [4, usize::MAX] {
+        let pipe = PipeObject::new_anonymous();
+        pipe.write(true, true, b"abcdef").unwrap();
+        let mut scratch = [0; 3];
+        assert_eq!(
+            pipe.splice_read(true, &mut scratch, |bytes| {
+                assert_eq!(bytes, b"abc");
+                Ok(reported)
+            }),
+            Err(KError::Io)
+        );
+        let mut remaining = [0; 6];
+        assert_eq!(pipe.read(true, &mut remaining), Ok(6));
+        assert_eq!(&remaining, b"abcdef");
+    }
+}
+
+#[def_test]
+fn splice_rejects_oversized_read_without_publishing_data() {
+    for reported in [4, usize::MAX] {
+        let pipe = PipeObject::new_anonymous();
+        pipe.resize(PIPE_BUF).unwrap();
+        let original = vec![1; PIPE_BUF - 3];
+        pipe.write(true, true, &original).unwrap();
+        let mut scratch = [0; 8];
+        assert_eq!(
+            pipe.splice_write(true, &mut scratch, |bytes| {
+                assert_eq!(bytes.len(), 3);
+                bytes.fill(2);
+                Ok(reported)
+            }),
+            Err(KError::Io)
+        );
+        let mut remaining = vec![0; PIPE_BUF];
+        assert_eq!(pipe.read(true, &mut remaining), Ok(original.len()));
+        assert_eq!(&remaining[..original.len()], original.as_slice());
+        assert_eq!(pipe.read(true, &mut remaining), Err(KError::WouldBlock));
+    }
+}
+
+#[def_test]
+fn splice_retains_rejected_and_short_written_data() {
+    let pipe = PipeObject::new_anonymous();
+    pipe.write(true, true, b"abcdef").unwrap();
+    let mut scratch = [0; 6];
+    assert_eq!(
+        pipe.splice_read(true, &mut scratch, |_| Err(KError::IoWaitInterrupted)),
+        Err(KError::IoWaitInterrupted)
+    );
+    assert_eq!(
+        pipe.splice_read(true, &mut scratch, |bytes| {
+            assert_eq!(bytes, b"abcdef");
+            Ok(2)
+        }),
+        Ok(2)
+    );
+    let mut remaining = [0; 6];
+    assert_eq!(pipe.read(true, &mut remaining), Ok(4));
+    assert_eq!(&remaining[..4], b"cdef");
+}
+
+#[def_test]
+fn splice_reserves_space_before_reading_source() {
+    let pipe = PipeObject::new_anonymous();
+    pipe.resize(PIPE_BUF).unwrap();
+    pipe.write(true, true, &vec![1; PIPE_BUF]).unwrap();
+    let mut scratch = [0; 8];
+    assert_eq!(
+        pipe.splice_write(true, &mut scratch, |_| panic!(
+            "full pipe must not consume source"
+        )),
+        Err(KError::WouldBlock)
+    );
+    let mut drain = [0; 3];
+    pipe.read(true, &mut drain).unwrap();
+    assert_eq!(
+        pipe.splice_write(true, &mut scratch, |bytes| {
+            assert_eq!(bytes.len(), 3);
+            bytes.copy_from_slice(b"end");
+            Ok(3)
+        }),
+        Ok(3)
+    );
+}
+
+#[def_test]
+fn splice_between_pipes_retains_untransferred_suffix() {
+    let source = PipeObject::new_anonymous();
+    let destination = PipeObject::new_anonymous();
+    destination.resize(PIPE_BUF).unwrap();
+    let data = [vec![1; PIPE_BUF], vec![2; PIPE_BUF]].concat();
+    source.write(true, false, &data).unwrap();
+    assert_eq!(
+        source.splice_to(&destination, data.len(), true),
+        Ok(PIPE_BUF)
+    );
+    assert_eq!(
+        source.splice_to(&destination, data.len(), true),
+        Err(KError::WouldBlock)
+    );
+    let mut bytes = vec![0; PIPE_BUF];
+    assert_eq!(source.read(true, &mut bytes), Ok(PIPE_BUF));
+    assert!(bytes.iter().all(|byte| *byte == 2));
+    assert_eq!(destination.read(true, &mut bytes), Ok(PIPE_BUF));
+    assert!(bytes.iter().all(|byte| *byte == 1));
+    assert_eq!(
+        source.splice_to(&source, 1, true),
+        Err(KError::InvalidInput)
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/src/poll.rs:23:pub async fn poll_file_io<P: Pollable, F: FnMut() -> KResult<T>, T>(
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Anonymous pipe and pathname FIFO implementation.
+
+use alloc::{collections::VecDeque, sync::Arc};
+
+use iov_iter::{IovIterDest, IovIterSource};
+use kerrno::{KError, KResult, LinuxError};
+use klazy::Lazy;
+use kpoll::{IoEvents, PollContext, PollRegisterError, PollSet, Pollable};
+use ksignal::{Signo, send_sig_current};
+use ktask::future::{block_on, poll_io};
+use linux_raw_sys::ioctl::FIONREAD;
+use memaddr::PAGE_SIZE_4K;
+use osvm::VirtMutPtr;
+
+use crate::{
+    FMode, FileOperations, Kiocb, VfsFile, VfsFileBuilder, VfsInode, VfsResult, poll_file_io,
+};
+
+/// Initial pipe buffer capacity in bytes.
+pub(crate) const RING_BUFFER_INIT_SIZE: usize = 65536;
+/// Maximum pipe buffer capacity in bytes.
+pub(crate) const PIPE_MAX_SIZE: usize = 1024 * 1024;
+/// Maximum size of an atomic pipe write.
+///
+/// See `PIPE_BUF` in <https://man7.org/linux/man-pages/man7/pipe.7.html>.
+pub(crate) const PIPE_BUF: usize = 4096;
+
+struct PipeState {
+    buffer: VecDeque<u8>,
+    capacity: usize,
+    files: usize,
+    readers: usize,
+    writers: usize,
+    r_counter: u64,
+    w_counter: u64,
+}
+
+impl PipeState {
+    fn available(&self) -> usize {
+        self.capacity.saturating_sub(self.buffer.len())
+    }
+
+    fn copy_prefix(&self, dst: &mut [u8]) -> usize {
+        let count = dst.len().min(self.buffer.len());
+        if count == 0 {
+            return 0;
+        }
+
+        let (head, tail) = self.buffer.as_slices();
+        let head_len = count.min(head.len());
+        dst[..head_len].copy_from_slice(&head[..head_len]);
+        let tail_len = count - head_len;
+        if tail_len != 0 {
+            dst[head_len..count].copy_from_slice(&tail[..tail_len]);
+        }
+        count
+    // The linker script defines __unittest_start and __unittest_end symbols
+    let output = quote! {
+        #test_fn
+
+        #[used]
+        #[unsafe(link_section = ".unittest")]
+        #[allow(non_upper_case_globals)]
+        static #descriptor_name: unittest::TestDescriptor = unittest::TestDescriptor::new(
+            #fn_name_str,
+            module_path!(),
+            #fn_name,
+            #should_panic_val,
+            #ignore_val,
+            #serial_val,
+            #execution_mode,
+        );
+    };
+
+    output.into()
+}
+
+// ======== UserRead / UserWrite derive macros ========
+
+/// Resolve the crate path for `posix_types::__private` trait aliases.
+///
+/// Returns `crate` when invoked inside `posix-types` itself,
+/// and the external crate name otherwise. Missing dependencies produce a
+/// derive-site compile error rather than a procedural-macro panic.
+fn posix_types_private_path() -> syn::Result<proc_macro2::TokenStream> {
+    use proc_macro_crate::{FoundCrate, crate_name};
+    let found = crate_name("posix-types").map_err(|error| {
+        syn::Error::new(
+            Span::call_site(),
+            format!("posix-types dependency is required: {error}"),
+        )
+    })?;
+    Ok(match found {
+        FoundCrate::Itself => quote!(crate),
+        FoundCrate::Name(name) => {
+            let ident = Ident::new(&name, Span::call_site());
+            quote!(#ident)
+        }
+    })
+}
+
+/// Derive macro that generates `unsafe impl UserRead for T {}`.
+///
+/// The caller asserts that any bit pattern read from user memory is a valid `T`.
+#[proc_macro_derive(UserRead)]
+pub fn derive_user_read(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+    let path = match posix_types_private_path() {
+        Ok(path) => path,
+        Err(error) => return error.to_compile_error().into(),
+    };
+    quote! {
+        unsafe impl #impl_generics #path::__private::UserReadTrait for #name #ty_generics #where_clause {}
+    }
+    .into()
+}
+
+/// Derive macro that generates `unsafe impl UserWrite for T {}`.
+///
+/// The caller asserts that writing `T` to user memory as raw bytes is always safe.
+#[proc_macro_derive(UserWrite)]
+pub fn derive_user_write(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+    let path = match posix_types_private_path() {
+        Ok(path) => path,
+        Err(error) => return error.to_compile_error().into(),
+    };
+    quote! {
+        unsafe impl #impl_generics #path::__private::UserWriteTrait for #name #ty_generics #where_clause {}
+    }
+    .into()
+}
+
+
+=== disccontext2 ===
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+// See LICENSES for license details.
+
+//! Readiness-first waits for explicitly opted-in file operations.
+
+use kerrno::{KError, KResult};
+use kpoll::{IoEvents, Pollable};
+use ktask::future::poll_io_with_cause;
+
+/// Tries file I/O, waiting only when the operation would block.
+///
+/// Nonblocking calls never register a wait. A signal interrupting a blocking
+/// wait triggers one final operation attempt: readiness, EOF and other errors
+/// take precedence over [`KError::IoWaitInterrupted`]. Ordinary operation and
+/// registration errors are never promoted to that marker.
+///
+/// Poll in sleepable task context. `operation_fn` may acquire sleepable object
+/// locks, but must return `WouldBlock` instead of waiting for I/O readiness and
+/// release its locks before returning. It owns any partial progress: an enclosing
+/// transfer must report completed bytes before propagating an interruption. The marker
+/// defaults to EINTR; only audited syscall exits may request syscall restart.
+pub async fn poll_file_io<P: Pollable, F: FnMut() -> KResult<T>, T>(
+    pollable: &P,
+    events: IoEvents,
+    is_nonblocking: bool,
+    mut operation_fn: F,
+) -> KResult<T> {
+    match operation_fn() {
+        Err(KError::WouldBlock) if !is_nonblocking => {}
+        result => return result,
+    }
+
+    match poll_io_with_cause(pollable, events, false, &mut operation_fn).await {
+        Ok(result) => result,
+        Err(interrupted) if interrupted.is_task_interrupt() => match operation_fn() {
+            Err(KError::WouldBlock) => Err(KError::IoWaitInterrupted),
+            result => result,
+        },
+        Err(error) => Err(error.into()),
+    }
+}
+
+unittest::path_mod_test!(tests, "../ut-tests/poll.rs");
+        Nameidata::parent_lookup(root, base, self, intent, cred)
+    }
+
+    /// Creates a directory with the final lookup and VFS policy under the
+    /// parent directory namespace lock.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`VfsError::AlreadyExists`] when the final component already
+    /// exists, or the pathname, mount, authorization, or filesystem error from
+    /// the corresponding VFS stage.
+    pub fn mkdir_at(
+        &self,
+        root: &Path,
+        base: &Path,
+        permission: NodePermission,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<Path> {
+        self.mkdir_at_entry(root, base, permission, umask, cred)
+            .map(|created| created.path)
+    }
+
+    /// Creates a directory like [`Filename::mkdir_at`] and reports the created
+    /// entry with the parent identity and name captured by the operation.
+    pub fn mkdir_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        permission: NodePermission,
+        umask: NodePermission,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, _) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        let path = parent
+            .dentry()
+            .as_dir()?
+        })
+    }
+
+    /// Creates a symbolic link with a single locked final lookup.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`VfsError::AlreadyExists`] when the destination exists,
+    /// [`VfsError::NotFound`] for an absent destination with trailing slashes,
+    /// or the pathname, authorization, mount, or filesystem error.
+    pub fn symlink_at(
+        &self,
+        root: &Path,
+        base: &Path,
+        target: &str,
+        cred: &Cred,
+    ) -> VfsResult<Path> {
+        self.symlink_at_entry(root, base, target, cred)
+            .map(|created| created.path)
+    }
+
+    /// Creates a symbolic link like [`Filename::symlink_at`] and reports the
+    /// created entry with the parent identity and name captured by the
+    /// operation.
+    pub fn symlink_at_entry(
+        &self,
+        root: &Path,
+        base: &Path,
+        target: &str,
+        cred: &Cred,
+    ) -> VfsResult<CreatedEntry> {
+        let (parent, last, has_trailing_slash) = self
+            .parent_at(root, base, LookupIntent::Open, cred)?
+            .into_create()?;
+        let name = last.as_str();
+
+        )
+        .unwrap();
+
+    assert_eq!(file.path().display_path().unwrap(), "/fifo-open");
+    assert!(Arc::ptr_eq(file.inode(), &expected.inode()));
+    assert_eq!(file.node_type(), NodeType::Fifo);
+    assert_eq!(file.path().metadata().inode, 20);
+    assert!(file.is_stream());
+    assert!(file.mode().contains(FMode::READ | FMode::WRITE));
+}
+
+#[def_test]
+fn mkdir_at_uses_locked_vfs_mode_preparation() {
+    let tree = test_tree();
+    let cred = kcred::initial_cred();
+    let created = Filename::new("/created-dir/")
+        .mkdir_at(
+            &tree.root,
+            &tree.base,
+            NodePermission::from_bits_truncate(0o7777),
+            NodePermission::from_bits_truncate(0o027),
+            &cred,
+        )
+        .unwrap();
+
+    assert!(created.is_dir());
+    assert_eq!(
+        created.metadata().mode.permission().bits(),
+        NodePermission::from_bits_truncate(0o1750).bits()
+    );
+
+    let existing = Filename::new("/target").mkdir_at(
+        &tree.root,
+        &tree.base,
+        NodePermission::from_bits_truncate(0o755),
+        NodePermission::empty(),
+        &cred,
+    );
+    assert!(matches!(existing, Err(VfsError::AlreadyExists)));
+}
+
+#[def_test]
+fn mknod_at_preserves_linux_error_precedence() {
+    let tree = test_tree();
+    tree.root
+        .dentry()
+        .update_metadata(MetadataUpdate {
+            mode: Some(NodePermission::from_bits_truncate(0o777)),
+            ..Default::default()
+        })
+        .unwrap();
+    let cred = kcred::Cred::new(1000, 1000);
+
+    let existing = Filename::new("/target").mknod_at(
+        &tree.root,
+        &tree.base,
+        Umode::new(
+            NodeType::CharacterDevice,
+            NodePermission::from_bits_truncate(0o600),
+        ),
+        DeviceId::new(1, 3),
+        NodePermission::empty(),
+        &cred,
+    );
+    assert!(matches!(existing, Err(VfsError::AlreadyExists)));
+
+    let existing_with_trailing_slash = Filename::new("/target/").mknod_at(
+        &tree.root,
+        &tree.base,
+        Umode::new(
+            NodeType::RegularFile,
+            NodePermission::from_bits_truncate(0o600),
+        ),
+        DeviceId::default(),
+        NodePermission::empty(),
+        &cred,
+    );
+    assert!(matches!(
+        existing_with_trailing_slash,
+        Err(VfsError::AlreadyExists)
+    ));
+
+    let denied = Filename::new("/device").mknod_at(
+        &tree.root,
+        &tree.base,
+        Umode::new(
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/src/lib.rs:27:mod namei;
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09:fs/kvfs/src/lib.rs:33:pub mod pipe;
+rg: research/evidence/runs/2026-11-17-removal-event-baseline-01/report.json: IO error for operation on research/evidence/runs/2026-11-17-removal-event-baseline-01/report.json: No such file or directory (os error 2)

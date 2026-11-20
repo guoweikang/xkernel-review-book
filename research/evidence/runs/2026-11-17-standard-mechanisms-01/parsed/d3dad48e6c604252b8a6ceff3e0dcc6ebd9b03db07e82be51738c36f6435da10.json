@@ -1,0 +1,1544 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": "\n\nFloating-point number to decimal conversion routines.\n\n# Problem statement\n\nWe are given the floating-point number `v = f * 2^e` with an integer `f`,\nand its bounds `minus` and `plus` such that any number between `v - minus` and\n`v + plus` will be rounded to `v`. For the simplicity we assume that\nthis range is exclusive. Then we would like to get the unique decimal\nrepresentation `V = 0.d[0..n-1] * 10^k` such that:\n\n- `d[0]` is non-zero.\n\n- It's correctly rounded when parsed back: `v - minus < V < v + plus`.\n  Furthermore it is shortest such one, i.e., there is no representation\n  with less than `n` digits that is correctly rounded.\n\n- It's closest to the original value: `abs(V - v) <= 10^(k-n) / 2`. Note that\n  there might be two representations satisfying this uniqueness requirement,\n  in which case some tie-breaking mechanism is used.\n\nWe will call this mode of operation as to the *shortest* mode. This mode is used\nwhen there is no additional constraint, and can be thought as a \"natural\" mode\nas it matches the ordinary intuition (it at least prints `0.1f32` as \"0.1\").\n\nWe have two more modes of operation closely related to each other. In these modes\nwe are given either the number of significant digits `n` or the last-digit\nlimitation `limit` (which determines the actual `n`), and we would like to get\nthe representation `V = 0.d[0..n-1] * 10^k` such that:\n\n- `d[0]` is non-zero, unless `n` was zero in which case only `k` is returned.\n\n- It's closest to the original value: `abs(V - v) <= 10^(k-n) / 2`. Again,\n  there might be some tie-breaking mechanism.\n\nWhen `limit` is given but not `n`, we set `n` such that `k - n = limit`\nso that the last digit `d[n-1]` is scaled by `10^(k-n) = 10^limit`.\nIf such `n` is negative, we clip it to zero so that we will only get `k`.\nWe are also limited by the supplied buffer. This limitation is used to print\nthe number up to given number of fractional digits without knowing\nthe correct `k` beforehand.\n\nWe will call the mode of operation requiring `n` as to the *exact* mode,\nand one requiring `limit` as to the *fixed* mode. The exact mode is a subset of\nthe fixed mode: the sufficiently large last-digit limitation will eventually fill\nthe supplied buffer and let the algorithm to return.\n\n# Implementation overview\n\nIt is easy to get the floating point printing correct but slow (Russ Cox has\n[demonstrated](https://research.swtch.com/ftoa) how it's easy), or incorrect but\nfast (naïve division and modulo). But it is surprisingly hard to print\nfloating point numbers correctly *and* efficiently.\n\nThere are two classes of algorithms widely known to be correct.\n\n- The \"Dragon\" family of algorithm is first described by Guy L. Steele Jr. and\n  Jon L. White. They rely on the fixed-size big integer for their correctness.\n  A slight improvement was found later, which is posthumously described by\n  Robert G. Burger and R. Kent Dybvig. David Gay's `dtoa.c` routine is\n  a popular implementation of this strategy.\n\n- The \"Grisu\" family of algorithm is first described by Florian Loitsch.\n  They use very cheap integer-only procedure to determine the close-to-correct\n  representation which is at least guaranteed to be shortest. The variant,\n  Grisu3, actively detects if the resulting representation is incorrect.\n\nWe implement both algorithms with necessary tweaks to suit our requirements.\nIn particular, published literatures are short of the actual implementation\ndifficulties like how to avoid arithmetic overflows. Each implementation,\navailable in `strategy::dragon` and `strategy::grisu` respectively,\nextensively describes all necessary justifications and many proofs for them.\n(It is still difficult to follow though. You have been warned.)\n\nBoth implementations expose two public functions:\n\n- `format_shortest(decoded, buf)`, which always needs at least\n  `MAX_SIG_DIGITS` digits of buffer. Implements the shortest mode.\n\n- `format_exact(decoded, buf, limit)`, which accepts as small as\n  one digit of buffer. Implements exact and fixed modes.\n\nThey try to fill the `u8` buffer with digits and returns the number of digits\nwritten and the exponent `k`. They are total for all finite `f32` and `f64`\ninputs (Grisu internally falls back to Dragon if necessary).\n\nThe rendered digits are formatted into the actual string form with\nfour functions:\n\n- `to_shortest_str` prints the shortest representation, which can be padded by\n  zeroes to make *at least* given number of fractional digits.\n\n- `to_shortest_exp_str` prints the shortest representation, which can be\n  padded by zeroes when its exponent is in the specified ranges,\n  or can be printed in the exponential form such as `1.23e45`.\n\n- `to_exact_exp_str` prints the exact representation with given number of\n  digits in the exponential form.\n\n- `to_exact_fixed_str` prints the fixed representation with *exactly*\n  given number of fractional digits.\n\nThey all return a slice of preallocated `Part` array, which corresponds to\nthe individual part of strings: a fixed string, a part of rendered digits,\na number of zeroes or a small (`u16`) number. The caller is expected to\nprovide a large enough buffer and `Part` array, and to assemble the final\nstring from resulting `Part`s itself.\n\nAll algorithms and formatting functions are accompanied by extensive tests\nin `coretests::num::flt2dec` module. It also shows how to use individual\nfunctions.\n\n",
+      "path": "doc",
+      "range": [
+        0,
+        5390
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        5522,
+        5537
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        5538,
+        5656
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "decoder",
+      "path_overrides": [],
+      "range": [
+        5794,
+        5810
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "estimator",
+      "path_overrides": [],
+      "range": [
+        5811,
+        5829
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Digit-generation algorithms.",
+          "path": "doc",
+          "range": [
+            5831,
+            5863
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "strategy",
+      "path_overrides": [],
+      "range": [
+        5831,
+        5923
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "dragon",
+      "path_overrides": [],
+      "range": [
+        5887,
+        5902
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "grisu",
+      "path_overrides": [],
+      "range": [
+        5907,
+        5921
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " When `d` contains decimal digits, increase the last digit and propagate carry.",
+          "path": "doc",
+          "range": [
+            6266,
+            6348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a next digit when it causes the length to change.",
+          "path": "doc",
+          "range": [
+            6349,
+            6410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            6411,
+            6425
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6470,
+        6987
+      ],
+      "kind": "fn",
+      "name": "round_up",
+      "range": [
+        6266,
+        6987
+      ],
+      "signature_range": [
+        6430,
+        6469
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        6501,
+        6515
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats given decimal digits `0.<...buf...> * 10^exp` into the decimal form",
+          "path": "doc",
+          "range": [
+            6989,
+            7068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with at least given number of fractional digits. The result is stored to",
+          "path": "doc",
+          "range": [
+            7069,
+            7145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the supplied parts array and a slice of written parts is returned.",
+          "path": "doc",
+          "range": [
+            7146,
+            7216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7217,
+            7220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `frac_digits` can be less than the number of actual fractional digits in `buf`;",
+          "path": "doc",
+          "range": [
+            7221,
+            7304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will be ignored and full digits will be printed. It is only used to print",
+          "path": "doc",
+          "range": [
+            7305,
+            7385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " additional zeroes after rendered digits. Thus `frac_digits` of 0 means that",
+          "path": "doc",
+          "range": [
+            7386,
+            7465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will only print given digits and nothing else.",
+          "path": "doc",
+          "range": [
+            7466,
+            7519
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7667,
+        10658
+      ],
+      "kind": "fn",
+      "name": "digits_to_dec_str",
+      "range": [
+        6989,
+        10658
+      ],
+      "signature_range": [
+        7520,
+        7666
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7673,
+        7697
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7703,
+        7725
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7731,
+        7756
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats the given decimal digits `0.<...buf...> * 10^exp` into the exponential",
+          "path": "doc",
+          "range": [
+            10660,
+            10742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " form with at least the given number of significant digits. When `upper` is `true`,",
+          "path": "doc",
+          "range": [
+            10743,
+            10829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the exponent will be prefixed by `E`; otherwise that's `e`. The result is",
+          "path": "doc",
+          "range": [
+            10830,
+            10907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " stored to the supplied parts array and a slice of written parts is returned.",
+          "path": "doc",
+          "range": [
+            10908,
+            10988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10989,
+            10992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `min_digits` can be less than the number of actual significant digits in `buf`;",
+          "path": "doc",
+          "range": [
+            10993,
+            11076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will be ignored and full digits will be printed. It is only used to print",
+          "path": "doc",
+          "range": [
+            11077,
+            11157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " additional zeroes after rendered digits. Thus, `min_digits == 0` means that",
+          "path": "doc",
+          "range": [
+            11158,
+            11237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will only print the given digits and nothing else.",
+          "path": "doc",
+          "range": [
+            11238,
+            11295
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11460,
+        12523
+      ],
+      "kind": "fn",
+      "name": "digits_to_exp_str",
+      "range": [
+        10660,
+        12523
+      ],
+      "signature_range": [
+        11296,
+        11459
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11466,
+        11490
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11496,
+        11518
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11524,
+        11549
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Sign formatting options.",
+          "path": "doc",
+          "range": [
+            12525,
+            12553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            12554,
+            12598
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "Sign",
+      "range": [
+        12525,
+        12804
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the static byte string corresponding to the sign to be formatted.",
+          "path": "doc",
+          "range": [
+            12806,
+            12883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can be either `\"\"`, `\"+\"` or `\"-\"`.",
+          "path": "doc",
+          "range": [
+            12884,
+            12926
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13012,
+        13372
+      ],
+      "kind": "fn",
+      "name": "determine_sign",
+      "range": [
+        12806,
+        13372
+      ],
+      "signature_range": [
+        12927,
+        13011
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats the given floating point number into the decimal form with at least",
+          "path": "doc",
+          "range": [
+            13374,
+            13453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " given number of fractional digits. The result is stored to the supplied parts",
+          "path": "doc",
+          "range": [
+            13454,
+            13535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " array while utilizing given byte buffer as a scratch. `upper` is currently",
+          "path": "doc",
+          "range": [
+            13536,
+            13614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unused but left for the future decision to change the case of non-finite values,",
+          "path": "doc",
+          "range": [
+            13615,
+            13699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " i.e., `inf` and `nan`. The first part to be rendered is always a `Part::Sign`",
+          "path": "doc",
+          "range": [
+            13700,
+            13781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (which can be an empty string if no sign is rendered).",
+          "path": "doc",
+          "range": [
+            13782,
+            13840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13841,
+            13844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `format_shortest` should be the underlying digit-generation function.",
+          "path": "doc",
+          "range": [
+            13845,
+            13918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It should return the part of the buffer that it initialized.",
+          "path": "doc",
+          "range": [
+            13919,
+            13983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You probably would want `strategy::grisu::format_shortest` for this.",
+          "path": "doc",
+          "range": [
+            13984,
+            14056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14057,
+            14060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `frac_digits` can be less than the number of actual fractional digits in `v`;",
+          "path": "doc",
+          "range": [
+            14061,
+            14142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will be ignored and full digits will be printed. It is only used to print",
+          "path": "doc",
+          "range": [
+            14143,
+            14223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " additional zeroes after rendered digits. Thus `frac_digits` of 0 means that",
+          "path": "doc",
+          "range": [
+            14224,
+            14303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it will only print given digits and nothing else.",
+          "path": "doc",
+          "range": [
+            14304,
+            14357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14358,
+            14361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The byte buffer should be at least `MAX_SIG_DIGITS` bytes long.",
+          "path": "doc",
+          "range": [
+            14362,
+            14429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There should be at least 4 parts available, due to the worst case like",
+          "path": "doc",
+          "range": [
+            14430,
+            14504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[+][0.][0000][2][0000]` with `frac_digits = 10`.",
+          "path": "doc",
+          "range": [
+            14505,
+            14558
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14869,
+        16537
+      ],
+      "kind": "fn",
+      "name": "to_shortest_str",
+      "range": [
+        13374,
+        16537
+      ],
+      "signature_range": [
+        14563,
+        14868
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14875,
+        14900
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14906,
+        14942
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats the given floating point number into the decimal form or",
+          "path": "doc",
+          "range": [
+            16539,
+            16607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the exponential form, depending on the resulting exponent. The result is",
+          "path": "doc",
+          "range": [
+            16608,
+            16684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " stored to the supplied parts array while utilizing given byte buffer",
+          "path": "doc",
+          "range": [
+            16685,
+            16757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as a scratch. `upper` is used to determine the case of non-finite values",
+          "path": "doc",
+          "range": [
+            16758,
+            16834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (`inf` and `nan`) or the case of the exponent prefix (`e` or `E`).",
+          "path": "doc",
+          "range": [
+            16835,
+            16905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The first part to be rendered is always a `Part::Sign` (which can be",
+          "path": "doc",
+          "range": [
+            16906,
+            16978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " an empty string if no sign is rendered).",
+          "path": "doc",
+          "range": [
+            16979,
+            17023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17024,
+            17027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `format_shortest` should be the underlying digit-generation function.",
+          "path": "doc",
+          "range": [
+            17028,
+            17101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It should return the part of the buffer that it initialized.",
+          "path": "doc",
+          "range": [
+            17102,
+            17166
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You probably would want `strategy::grisu::format_shortest` for this.",
+          "path": "doc",
+          "range": [
+            17167,
+            17239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17240,
+            17243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `dec_bounds` is a tuple `(lo, hi)` such that the number is formatted",
+          "path": "doc",
+          "range": [
+            17244,
+            17320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as decimal only when `10^lo <= V < 10^hi`. Note that this is the *apparent* `V`",
+          "path": "doc",
+          "range": [
+            17321,
+            17404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instead of the actual `v`! Thus any printed exponent in the exponential form",
+          "path": "doc",
+          "range": [
+            17405,
+            17485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " cannot be in this range, avoiding any confusion.",
+          "path": "doc",
+          "range": [
+            17486,
+            17538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17539,
+            17542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The byte buffer should be at least `MAX_SIG_DIGITS` bytes long.",
+          "path": "doc",
+          "range": [
+            17543,
+            17610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There should be at least 6 parts available, due to the worst case like",
+          "path": "doc",
+          "range": [
+            17611,
+            17685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[+][1][.][2345][e][-][6]`.",
+          "path": "doc",
+          "range": [
+            17686,
+            17717
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18053,
+        19661
+      ],
+      "kind": "fn",
+      "name": "to_shortest_exp_str",
+      "range": [
+        16539,
+        19661
+      ],
+      "signature_range": [
+        17722,
+        18052
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18059,
+        18084
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18090,
+        18126
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18132,
+        18169
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns a rather crude approximation (upper bound) for the maximum buffer size",
+          "path": "doc",
+          "range": [
+            19663,
+            19745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " calculated from the given decoded exponent.",
+          "path": "doc",
+          "range": [
+            19746,
+            19793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19794,
+            19797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The exact limit is:",
+          "path": "doc",
+          "range": [
+            19798,
+            19821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19822,
+            19825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - when `exp < 0`, the maximum length is `ceil(log_10 (5^-exp * (2^64 - 1)))`.",
+          "path": "doc",
+          "range": [
+            19826,
+            19907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - when `exp >= 0`, the maximum length is `ceil(log_10 (2^exp * (2^64 - 1)))`.",
+          "path": "doc",
+          "range": [
+            19908,
+            19989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19990,
+            19993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ceil(log_10 (x^exp * (2^64 - 1)))` is less than `ceil(log_10 (2^64 - 1)) +",
+          "path": "doc",
+          "range": [
+            19994,
+            20073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ceil(exp * log_10 x)`, which is in turn less than `20 + (1 + exp * log_10 x)`.",
+          "path": "doc",
+          "range": [
+            20074,
+            20156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " We use the facts that `log_10 2 < 5/16` and `log_10 5 < 12/16`, which is",
+          "path": "doc",
+          "range": [
+            20157,
+            20233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " enough for our purposes.",
+          "path": "doc",
+          "range": [
+            20234,
+            20262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20263,
+            20266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Why do we need this? `format_exact` functions will fill the entire buffer",
+          "path": "doc",
+          "range": [
+            20267,
+            20344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unless limited by the last digit restriction, but it is possible that",
+          "path": "doc",
+          "range": [
+            20345,
+            20418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the number of digits requested is ridiculously large (say, 30,000 digits).",
+          "path": "doc",
+          "range": [
+            20419,
+            20497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The vast majority of buffer will be filled with zeroes, so we don't want to",
+          "path": "doc",
+          "range": [
+            20498,
+            20577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocate all the buffer beforehand. Consequently, for any given arguments,",
+          "path": "doc",
+          "range": [
+            20578,
+            20656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 826 bytes of buffer should be sufficient for `f64`. Compare this with",
+          "path": "doc",
+          "range": [
+            20657,
+            20730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the actual number for the worst case: 770 bytes (when `exp = -1074`).",
+          "path": "doc",
+          "range": [
+            20731,
+            20804
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20848,
+        20921
+      ],
+      "kind": "fn",
+      "name": "estimate_max_buf_len",
+      "range": [
+        19663,
+        20921
+      ],
+      "signature_range": [
+        20805,
+        20847
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats given floating point number into the exponential form with",
+          "path": "doc",
+          "range": [
+            20923,
+            20993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exactly given number of significant digits. The result is stored to",
+          "path": "doc",
+          "range": [
+            20994,
+            21065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the supplied parts array while utilizing given byte buffer as a scratch.",
+          "path": "doc",
+          "range": [
+            21066,
+            21142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `upper` is used to determine the case of the exponent prefix (`e` or `E`).",
+          "path": "doc",
+          "range": [
+            21143,
+            21221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The first part to be rendered is always a `Part::Sign` (which can be",
+          "path": "doc",
+          "range": [
+            21222,
+            21294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " an empty string if no sign is rendered).",
+          "path": "doc",
+          "range": [
+            21295,
+            21339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21340,
+            21343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `format_exact` should be the underlying digit-generation function.",
+          "path": "doc",
+          "range": [
+            21344,
+            21414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It should return the part of the buffer that it initialized.",
+          "path": "doc",
+          "range": [
+            21415,
+            21479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You probably would want `strategy::grisu::format_exact` for this.",
+          "path": "doc",
+          "range": [
+            21480,
+            21549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21550,
+            21553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The byte buffer should be at least `ndigits` bytes long unless `ndigits` is",
+          "path": "doc",
+          "range": [
+            21554,
+            21633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so large that only the fixed number of digits will be ever written.",
+          "path": "doc",
+          "range": [
+            21634,
+            21705
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (The tipping point for `f64` is about 800, so 1000 bytes should be enough.)",
+          "path": "doc",
+          "range": [
+            21706,
+            21785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There should be at least 6 parts available, due to the worst case like",
+          "path": "doc",
+          "range": [
+            21786,
+            21860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[+][1][.][2345][e][-][6]`.",
+          "path": "doc",
+          "range": [
+            21861,
+            21892
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22219,
+        24218
+      ],
+      "kind": "fn",
+      "name": "to_exact_exp_str",
+      "range": [
+        20923,
+        24218
+      ],
+      "signature_range": [
+        21897,
+        22218
+      ]
+    },
+    {
+      "ancestors": [
+        25
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        22225,
+        22250
+      ]
+    },
+    {
+      "ancestors": [
+        25
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        22256,
+        22276
+      ]
+    },
+    {
+      "ancestors": [
+        25
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        23902,
+        23954
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Formats given floating point number into the decimal form with exactly",
+          "path": "doc",
+          "range": [
+            24220,
+            24294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " given number of fractional digits. The result is stored to the supplied parts",
+          "path": "doc",
+          "range": [
+            24295,
+            24376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " array while utilizing given byte buffer as a scratch. `upper` is currently",
+          "path": "doc",
+          "range": [
+            24377,
+            24455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unused but left for the future decision to change the case of non-finite values,",
+          "path": "doc",
+          "range": [
+            24456,
+            24540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " i.e., `inf` and `nan`. The first part to be rendered is always a `Part::Sign`",
+          "path": "doc",
+          "range": [
+            24541,
+            24622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (which can be an empty string if no sign is rendered).",
+          "path": "doc",
+          "range": [
+            24623,
+            24681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24682,
+            24685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `format_exact` should be the underlying digit-generation function.",
+          "path": "doc",
+          "range": [
+            24686,
+            24756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It should return the part of the buffer that it initialized.",
+          "path": "doc",
+          "range": [
+            24757,
+            24821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You probably would want `strategy::grisu::format_exact` for this.",
+          "path": "doc",
+          "range": [
+            24822,
+            24891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24892,
+            24895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The byte buffer should be enough for the output unless `frac_digits` is",
+          "path": "doc",
+          "range": [
+            24896,
+            24971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so large that only the fixed number of digits will be ever written.",
+          "path": "doc",
+          "range": [
+            24972,
+            25043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (The tipping point for `f64` is about 800, and 1000 bytes should be enough.)",
+          "path": "doc",
+          "range": [
+            25044,
+            25124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There should be at least 4 parts available, due to the worst case like",
+          "path": "doc",
+          "range": [
+            25125,
+            25199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[+][0.][0000][2][0000]` with `frac_digits = 10`.",
+          "path": "doc",
+          "range": [
+            25200,
+            25253
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25569,
+        28817
+      ],
+      "kind": "fn",
+      "name": "to_exact_fixed_str",
+      "range": [
+        24220,
+        28817
+      ],
+      "signature_range": [
+        25258,
+        25568
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        25575,
+        25600
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27103,
+        27131
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27857,
+        27887
+      ]
+    }
+  ],
+  "source_sha256": "155bd4953edc4ef8fe004376b4fba894bb478ff853bcb7cb44cc6bdb3325fe03"
+}

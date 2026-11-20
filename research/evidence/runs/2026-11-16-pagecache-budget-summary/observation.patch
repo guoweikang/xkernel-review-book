@@ -1,0 +1,24 @@
+--- original-old/tests.rs
++++ original-observed/tests.rs
+@@ -748,11 +748,12 @@
+     let cache = new_cache();
+     write_cached(&cache, 0, &vec![0x31; PAGE_SIZE_4K * 2]).unwrap();
+     let mut pending = None;
++    let mut budget = 2;
+     assert_eq!(
+         cache.submit_cache_pages(
+             (PAGE_SIZE_4K * 2) as u64,
+             0..u64::MAX,
+-            &mut 2,
++            &mut budget,
+             &mut 0,
+             PAGE_SIZE_4K,
+             &mut |batch| {
+@@ -773,6 +774,7 @@
+     drop(pending);
+     assert_eq!(dirty_indices(&cache), vec![0, 1]);
+     cache.wait_on_writeback_range(0..u64::MAX).unwrap();
++    assert_eq!(budget, 0);
+ }
+ 
+ #[def_test]

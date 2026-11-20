@@ -1,0 +1,371 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Functions to parse floating-point numbers.",
+      "path": "doc",
+      "range": [
+        0,
+        46
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Parse 8 digits, loaded as bytes in little-endian order.",
+          "path": "doc",
+          "range": [
+            247,
+            306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            307,
+            310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This uses the trick where every digit is in [0x030, 0x39],",
+          "path": "doc",
+          "range": [
+            311,
+            373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and therefore can be parsed in 3 multiplications, much",
+          "path": "doc",
+          "range": [
+            374,
+            432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " faster than the normal 8.",
+          "path": "doc",
+          "range": [
+            433,
+            462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            463,
+            466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is based off the algorithm described in \"Fast numeric string to",
+          "path": "doc",
+          "range": [
+            467,
+            539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " int\", available here: <https://johnnylee-sde.github.io/Fast-numeric-string-to-int/>.",
+          "path": "doc",
+          "range": [
+            540,
+            628
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        665,
+        1046
+      ],
+      "kind": "fn",
+      "name": "parse_8digits",
+      "range": [
+        247,
+        1046
+      ],
+      "signature_range": [
+        629,
+        664
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Parse digits until a non-digit character is found.",
+          "path": "doc",
+          "range": [
+            1048,
+            1102
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1165,
+        1569
+      ],
+      "kind": "fn",
+      "name": "try_parse_digits",
+      "range": [
+        1048,
+        1569
+      ],
+      "signature_range": [
+        1103,
+        1164
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        1481,
+        1553
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Parse up to 19 digits (the max that can be stored in a 64-bit integer).",
+          "path": "doc",
+          "range": [
+            1571,
+            1646
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1701,
+        2113
+      ],
+      "kind": "fn",
+      "name": "try_parse_19digits",
+      "range": [
+        1571,
+        2113
+      ],
+      "signature_range": [
+        1647,
+        1700
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Parse the scientific notation component of a float.",
+          "path": "doc",
+          "range": [
+            2115,
+            2170
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2225,
+        2872
+      ],
+      "kind": "fn",
+      "name": "parse_scientific",
+      "range": [
+        2115,
+        2872
+      ],
+      "signature_range": [
+        2171,
+        2224
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2476,
+        2527
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2562,
+        2752
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Parse a partial, non-special floating point number.",
+          "path": "doc",
+          "range": [
+            2874,
+            2929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2930,
+            2933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This creates a representation of the float as the",
+          "path": "doc",
+          "range": [
+            2934,
+            2987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " significant digits and the decimal exponent.",
+          "path": "doc",
+          "range": [
+            2988,
+            3036
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3103,
+        5404
+      ],
+      "kind": "fn",
+      "name": "parse_partial_number",
+      "range": [
+        2874,
+        5404
+      ],
+      "signature_range": [
+        3037,
+        3102
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        3109,
+        3137
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Try to parse a non-special floating point number,",
+          "path": "doc",
+          "range": [
+            5406,
+            5459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as well as two slices with integer and fractional parts",
+          "path": "doc",
+          "range": [
+            5460,
+            5519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and the parsed exponent.",
+          "path": "doc",
+          "range": [
+            5520,
+            5548
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5598,
+        5746
+      ],
+      "kind": "fn",
+      "name": "parse_number",
+      "range": [
+        5406,
+        5746
+      ],
+      "signature_range": [
+        5553,
+        5597
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Try to parse a special, non-finite float.",
+          "path": "doc",
+          "range": [
+            5748,
+            5793
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5874,
+        7230
+      ],
+      "kind": "fn",
+      "name": "parse_inf_nan",
+      "range": [
+        5748,
+        7230
+      ],
+      "signature_range": [
+        5805,
+        5873
+      ]
+    }
+  ],
+  "source_sha256": "e13165d1c2a0bcf909621bb77a97970d00e335917c3607909f31af15b05aa46a"
+}

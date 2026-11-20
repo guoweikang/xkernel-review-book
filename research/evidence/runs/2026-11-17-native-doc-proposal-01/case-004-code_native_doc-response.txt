@@ -1,0 +1,17 @@
+- **共享机制或弃权理由**：两者均将同一个 `Arc<T>` 克隆并转换为 `Arc<dyn Any + Send + Sync>`，再将原值转换为 `Arc<dyn InodeOperations>`，最终调用同一构造入口。可复用现有 `new_dir_with_flags`，无需新增抽取函数。
+
+- **必须保留的差异**：`new_dir` 固定传入 `NodeFlags::empty()`；`new_dir_with_flags` 传入调用者提供的 `flags`。不得据此推定空标志的业务含义。
+
+- **已有委托**：两者已委托给 `Self::new_dir_with_inode_operations`；其实现未展示，不能推定它如何构造或保存参数。
+
+- **最小接口草案**：保持两者签名及泛型约束，仅将 `new_dir` 的函数体改为：
+  ```rust
+  Self::new_dir_with_flags(node, NodeFlags::empty(), init)
+  ```
+  这是提案，未修改代码。
+
+- **约束及其来源(code/doc/unknown)**：`code`：保留 `T: Any + Send + Sync + InodeOperations`、返回类型、同源 `Arc` 的两种 trait 对象转换及参数传递。`doc`：两份文档均声明“构造不带目录文件操作的目录 inode”，不是实现事实。`unknown`：下游行为、标志计算的副作用及求值顺序是否可观察。
+
+- **一条可反驳提案的验证义务**：验证提前求值 `NodeFlags::empty()` 不改变可观察行为：原代码先克隆及转换 `node`，提案先计算空标志再进入委托函数；若此顺序差异影响结果、异常路径或副作用，则否决该提案。
+
+- **缺失上下文**：`NodeFlags::empty()` 与共同构造入口的实现、相关宏或条件编译、调用方及行为测试契约。

@@ -1,0 +1,225 @@
+#[def_test]
+fn test_cache_fixture_live_normal_winner() {
+    for borrowed in [false, true] {
+        let parent = make_dir_entry(Arc::new(MockFilesystem), 2001, "parent");
+        let winner = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+        let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+        let winner_weak = Arc::downgrade(&winner.0);
+        parent
+            .0
+            .children
+            .lock()
+            .insert(String::from("slot"), winner_weak.clone());
+        let result = if borrowed {
+            parent.cache_lookup_candidate("slot", &candidate)
+        } else {
+            parent.insert_cache(String::from("slot"), candidate.clone())
+        };
+        let winner_identity = result.as_ref().is_some_and(|entry| entry.ptr_eq(&winner));
+        let slot_unchanged = parent
+            .0
+            .children
+            .lock()
+            .get("slot")
+            .is_some_and(|entry| alloc::sync::Weak::ptr_eq(entry, &winner_weak));
+        parent.0.children.lock().remove("slot");
+        assert!(winner_identity);
+        assert!(slot_unchanged);
+        assert!(!candidate.ptr_eq(&winner));
+    }
+}
+
+#[def_test]
+fn test_cache_fixture_live_par_winner() {
+    for borrowed in [false, true] {
+        let parent = make_dir_entry(Arc::new(MockFilesystem), 2002, "parent");
+        let winner = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+        let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+        let winner_weak = Arc::downgrade(&winner.0);
+        winner.begin_parallel_lookup();
+        parent
+            .0
+            .children
+            .lock()
+            .insert(String::from("slot"), winner_weak.clone());
+        let result = if borrowed {
+            parent.cache_lookup_candidate("slot", &candidate)
+        } else {
+            parent.insert_cache(String::from("slot"), candidate.clone())
+        };
+        let par_winner_identity = result.as_ref().is_some_and(|entry| entry.ptr_eq(&winner));
+        let slot_unchanged = parent
+            .0
+            .children
+            .lock()
+            .get("slot")
+            .is_some_and(|entry| alloc::sync::Weak::ptr_eq(entry, &winner_weak));
+        let par_preserved = winner.is_parallel_lookup();
+        winner.end_parallel_lookup();
+        parent.0.children.lock().remove("slot");
+        assert!(par_winner_identity);
+        assert!(slot_unchanged);
+        assert!(par_preserved);
+    }
+}
+
+#[def_test]
+fn test_cache_fixture_absent_and_expired() {
+    for borrowed in [false, true] {
+        for expired in [false, true] {
+            let parent = make_dir_entry(Arc::new(MockFilesystem), 2003, "parent");
+            let sentinel = Dentry::new_negative(Some(parent.clone()), String::from("sentinel"));
+            let sentinel_weak = Arc::downgrade(&sentinel.0);
+            parent
+                .0
+                .children
+                .lock()
+                .insert(String::from("sentinel"), sentinel_weak.clone());
+            if expired {
+                let previous = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+                let previous_weak = Arc::downgrade(&previous.0);
+                parent
+                    .0
+                    .children
+                    .lock()
+                    .insert(String::from("slot"), previous_weak.clone());
+                drop(previous);
+                assert!(previous_weak.upgrade().is_none());
+                assert!(parent.0.children.lock().contains_key("slot"));
+            } else {
+                assert!(!parent.0.children.lock().contains_key("slot"));
+            }
+            let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+            let candidate_weak = Arc::downgrade(&candidate.0);
+            let result = if borrowed {
+                parent.cache_lookup_candidate("slot", &candidate)
+            } else {
+                parent.insert_cache(String::from("slot"), candidate.clone())
+            };
+            assert!(result.is_none());
+            {
+                let children = parent.0.children.lock();
+                assert!(children
+                    .get("slot")
+                    .is_some_and(|entry| { alloc::sync::Weak::ptr_eq(entry, &candidate_weak) }));
+                assert!(children
+                    .get("sentinel")
+                    .is_some_and(|entry| { alloc::sync::Weak::ptr_eq(entry, &sentinel_weak) }));
+                assert!(children.len() == 2);
+            }
+            parent.0.children.lock().clear();
+        }
+    }
+}
+
+#[def_test]
+fn test_cache_fixture_non_cacheable_parent() {
+    for borrowed in [false, true] {
+        let (parent, _) = make_non_cacheable_dir(Arc::new(MockFilesystem), 2004, None, "parent");
+        let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+        let candidate_weak = Arc::downgrade(&candidate.0);
+        let result = if borrowed {
+            parent.cache_lookup_candidate("slot", &candidate)
+        } else {
+            parent.insert_cache(String::from("slot"), candidate.clone())
+        };
+        assert!(result.is_none());
+        {
+            let children = parent.0.children.lock();
+            if borrowed {
+                assert!(children
+                    .get("slot")
+                    .is_some_and(|entry| { alloc::sync::Weak::ptr_eq(entry, &candidate_weak) }));
+            } else {
+                assert!(!children.contains_key("slot"));
+            }
+        }
+        parent.0.children.lock().clear();
+    }
+}
+
+#[def_test]
+fn test_cache_fixture_child_cache_policy() {
+    for borrowed in [false, true] {
+        for (flags, owned_admitted) in [
+            (super::DentryFlags::empty(), true),
+            (super::DentryFlags::DONTCACHE, false),
+            (super::DentryFlags::PERSISTENT, true),
+            (
+                super::DentryFlags::DONTCACHE | super::DentryFlags::PERSISTENT,
+                true,
+            ),
+        ] {
+            let parent = make_dir_entry(Arc::new(MockFilesystem), 2005, "parent");
+            let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+            candidate.0.flags.lock().insert(flags);
+            let candidate_weak = Arc::downgrade(&candidate.0);
+            let result = if borrowed {
+                parent.cache_lookup_candidate("slot", &candidate)
+            } else {
+                parent.insert_cache(String::from("slot"), candidate.clone())
+            };
+            assert!(result.is_none());
+            {
+                let children = parent.0.children.lock();
+                if borrowed || owned_admitted {
+                    assert!(children.get("slot").is_some_and(|entry| {
+                        alloc::sync::Weak::ptr_eq(entry, &candidate_weak)
+                    }));
+                } else {
+                    assert!(!children.contains_key("slot"));
+                }
+            }
+            parent.0.children.lock().clear();
+        }
+    }
+}
+
+#[def_test]
+fn test_cache_fixture_superblock_retention() {
+    for borrowed in [false, true] {
+        for attached in [false, true] {
+            let parent = make_dir_entry(Arc::new(MockFilesystem), 2006, "parent");
+            let super_block = if attached {
+                Some(SuperBlock::new(
+                    &MOCK_FILE_SYSTEM_TYPE,
+                    &MOCK_SUPER_OPERATIONS,
+                    |_| parent.clone(),
+                ))
+            } else {
+                None
+            };
+            let candidate = Dentry::new_negative(Some(parent.clone()), String::from("slot"));
+            assert!(candidate.super_block().is_some() == attached);
+            let candidate_weak = Arc::downgrade(&candidate.0);
+            let result = if borrowed {
+                let result = parent.cache_lookup_candidate("slot", &candidate);
+                drop(candidate);
+                result
+            } else {
+                parent.insert_cache(String::from("slot"), candidate)
+            };
+            assert!(result.is_none());
+            assert!(parent
+                .0
+                .children
+                .lock()
+                .get("slot")
+                .is_some_and(|entry| { alloc::sync::Weak::ptr_eq(entry, &candidate_weak) }));
+            if let Some(super_block) = &super_block {
+                let retained = candidate_weak.upgrade().map(Dentry);
+                assert!(retained.is_some());
+                let retained = retained.unwrap();
+                assert!(super_block.is_dentry_cached(&retained));
+                parent.uncache_lookup_candidate("slot", &retained);
+                assert!(!parent.0.children.lock().contains_key("slot"));
+                assert!(!super_block.is_dentry_cached(&retained));
+                drop(retained);
+                assert!(candidate_weak.upgrade().is_none());
+            } else {
+                assert!(candidate_weak.upgrade().is_none());
+                parent.0.children.lock().remove("slot");
+            }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+impl<T: ?Sized + CloneToUninit, A: Allocator + Clone> Rc<T, A> {
+    /// Makes a mutable reference into the given `Rc`.
+    ///
+    /// If there are other `Rc` pointers to the same allocation, then `make_mut` will
+    /// [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also
+    /// referred to as clone-on-write.
+    ///
+    /// However, if there are no other `Rc` pointers to this allocation, but some [`Weak`]
+    /// pointers, then the [`Weak`] pointers will be disassociated and the inner value will not
+    /// be cloned.
+    ///
+    /// See also [`get_mut`], which will fail rather than cloning the inner value
+    /// or disassociating [`Weak`] pointers.
+    ///
+    /// [`clone`]: Clone::clone
+    /// [`get_mut`]: Rc::get_mut
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::rc::Rc;
+    ///
+    /// let mut data = Rc::new(5);
+    ///
+    /// *Rc::make_mut(&mut data) += 1;         // Won't clone anything
+    /// let mut other_data = Rc::clone(&data); // Won't clone inner data
+    /// *Rc::make_mut(&mut data) += 1;         // Clones inner data
+    /// *Rc::make_mut(&mut data) += 1;         // Won't clone anything
+    /// *Rc::make_mut(&mut other_data) *= 2;   // Won't clone anything
+    ///
+    /// // Now `data` and `other_data` point to different allocations.
+    /// assert_eq!(*data, 8);
+    /// assert_eq!(*other_data, 12);
+    /// ```
+    ///
+    /// [`Weak`] pointers will be disassociated:
+    ///
+    /// ```
+    /// use std::rc::Rc;
+    ///
+    /// let mut data = Rc::new(75);
+    /// let weak = Rc::downgrade(&data);
+    ///
+    /// assert!(75 == *data);
+    /// assert!(75 == *weak.upgrade().unwrap());
+    ///
+    /// *Rc::make_mut(&mut data) += 1;
+    ///
+    /// assert!(76 == *data);
+    /// assert!(weak.upgrade().is_none());
+    /// ```
+    #[inline]
+    #[stable(feature = "rc_unique", since = "1.4.0")]
+    pub fn make_mut(this: &mut Self) -> &mut T {
+        let size_of_val = size_of_val::<T>(&**this);
+
+        if Rc::strong_count(this) != 1 {
+            // Gotta clone the data, there are other Rcs.
+            *this = Rc::clone_from_ref_in(&**this, this.alloc.clone());
+        } else if Rc::weak_count(this) != 0 {
+            // Can just steal the data, all that's left is Weaks
+
+            // We don't need panic-protection like the above branch does, but we might as well
+            // use the same mechanism.
+            let mut in_progress: UniqueRcUninit<T, A> =
+                UniqueRcUninit::new(&**this, this.alloc.clone());
+            unsafe {
+                // Initialize `in_progress` with move of **this.
+                // We have to express this in terms of bytes because `T: ?Sized`; there is no
+                // operation that just copies a value based on its `size_of_val()`.
+                ptr::copy_nonoverlapping(
+                    ptr::from_ref(&**this).cast::<u8>(),
+                    in_progress.data_ptr().cast::<u8>(),
+                    size_of_val,
+                );
+
+                this.inner().dec_strong();
+                // Remove implicit strong-weak ref (no need to craft a fake
+                // Weak here -- we know other Weaks can clean up for us)
+                this.inner().dec_weak();
+                // Replace `this` with newly constructed Rc that has the moved data.
+                ptr::write(this, in_progress.into_rc());
+            }
+        }
+        // This unsafety is ok because we're guaranteed that the pointer
+        // returned is the *only* pointer that will ever be returned to T. Our
+        // reference count is guaranteed to be 1 at this point, and we required
+        // the `Rc<T>` itself to be `mut`, so we're returning the only possible
+        // reference to the allocation.
+        unsafe { &mut this.ptr.as_mut().value }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "Offline raw SRL smoke on all sixteen frozen field-development sentences, not independent evaluation or paper score reproduction",
+  "input": "research/evidence/runs/2026-11-13-contract-field-controls-01/cases.json",
+  "environment": ".build/srl-preflight-env; existing layered HanLP2.1.7 plus fixed-source common0.0.24",
+  "resources": [
+    {"id":"mtl","url":"https://ftp.hankcs.com/hanlp/mtl/ud_ontonotes_tok_pos_lem_fea_ner_srl_dep_sdp_con_mMiniLMv2L6_no_space_20220731_161526.zip","bytes":475327511},
+    {"id":"tokenizer","url":"https://ftp.hankcs.com/hanlp/transformers/mMiniLMv2L6-no-space-tokenizer_20220616_094859.zip","bytes":3730182},
+    {"id":"encoder","url":"https://ftp.hankcs.com/hanlp/transformers/mMiniLMv2L6-no-space_20220616_094949.zip","bytes":228455859}
+  ],
+  "download_limits": "Three fixed archives only, one attempt each, 600s per archive; preserve partial files and failures. Exact declared sizes and ZIP CRC checks required; locally measured SHA256 identifies bytes, not publisher authenticity.",
+  "extraction_limits": "No absolute/traversal/symlink members; max total uncompressed3GiB per archive; originals ignored by Git. No archive scripts executed.",
+  "execution": "CPU4threads, seed0, two passes, tasks=srl, batch_size=4, raw input sentences with no gold predicates or fields. Block socket connections, HF offline, local resource alias maps, force torch weights_only=True and reject unsafe fallback. External wall timeout600s.",
+  "checks": ["input hash matches frozen parent", "all ids retained", "raw output saved for both passes", "token span bounds and text alignment", "repeat comparison without assuming determinism", "record model/package/file identities and empty frames", "record load_state_dict missing/unexpected keys and stop if any; do not silently accept partial weights"],
+  "stop": "Preserve load/inference failure; at most one local compatibility repair without changing model weights, task or inputs; no unsafe deserialization or new online assets. No case-specific semantic mappings.",
+  "interpretation": "No six-field accuracy without a separately frozen mapping. ARG roles, predicate coverage and repeated output are not Rust truth, responsibility correctness or refactoring benefit. No claimed innovation merely from using SRL."
+}

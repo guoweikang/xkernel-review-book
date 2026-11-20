@@ -1,0 +1,54 @@
+--- baseline/rust-structure-probe.rs
++++ new/rust-structure-if-probe.rs
+@@ -3,6 +3,23 @@
+ use proc_macro2::Span;
+ use serde_json::{json, Value};
+ use syn::{spanned::Spanned, Expr, FnArg, Pat, Stmt};
++
++#[derive(Default)]
++struct ConditionBinding {
++    found: bool,
++}
++
++impl<'ast> syn::visit::Visit<'ast> for ConditionBinding {
++    fn visit_expr_let(&mut self, _expression: &'ast syn::ExprLet) {
++        self.found = true;
++    }
++}
++
++fn condition_has_binding(expression: &Expr) -> bool {
++    let mut detector = ConditionBinding::default();
++    syn::visit::Visit::visit_expr(&mut detector, expression);
++    detector.found
++}
+ 
+ struct Frame {
+     id: usize,
+@@ -112,6 +129,7 @@
+ 
+     fn expr(&mut self, expression: &Expr, parent: usize, role: &str) {
+         let (kind, attributes) = match expression {
++            Expr::If(value) if !condition_has_binding(&value.cond) => ("ordinary_if", &value.attrs),
+             Expr::Path(value) => ("path", &value.attrs),
+             Expr::Call(value) => ("call", &value.attrs),
+             Expr::MethodCall(value) => ("method_call", &value.attrs),
+@@ -158,6 +176,19 @@
+         }
+         let id = self.node(kind, expression.span(), Some(parent), role);
+         match expression {
++            Expr::If(value) => {
++                let condition_start = self.nodes.len();
++                self.expr(&value.cond, id, "condition");
++                if self.nodes[condition_start..].iter().any(|node| node["coverage"] == "opaque") {
++                    self.frames.last_mut().unwrap().uncertain = true;
++                    let scope = self.frames.last().unwrap().id;
++                    self.scopes[scope]["unknown_binding_effects"] = json!(true);
++                }
++                self.block(&value.then_branch, id, "then_branch");
++                if let Some((_, branch)) = &value.else_branch {
++                    self.expr(branch, id, "else_branch");
++                }
++            }
+             Expr::Path(path) => self.name(&path.path.segments[0].ident, id, "local_use", false, true),
+             Expr::Call(call) => {
+                 self.expr(&call.func, id, "callee");

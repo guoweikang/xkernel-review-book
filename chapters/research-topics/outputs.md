@@ -2,6 +2,8 @@
 
 ## 产出应由证据决定
 
+[阶段研究报告（2026-11-18）](../research/notes/2026-11-18-stage-progress.md)按研究问题汇总实验、复现层级与跨crate证据缺口，作为汇报入口；历史草稿保留原时点。
+
 论文、阶段汇报和PPT是同一研究证据的不同呈现，不是额外的实验事实。现有草稿与汇报材料保留原时点，不能因标题或图表完整就视为研究结论已经成立。
 
 [草稿证据审计](../research/notes/2026-11-11-manuscript-evidence-audit.md)与[研究简报](../research/publications/2026-11-11-research-briefing/index.md)应结合专题最新综合页阅读；历史数字不覆盖后来核查结果。

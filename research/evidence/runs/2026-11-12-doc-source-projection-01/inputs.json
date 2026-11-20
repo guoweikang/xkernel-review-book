@@ -1,0 +1,114 @@
+{
+  "docs-revised": [
+    {
+      "id": "complete-command",
+      "text": "",
+      "claim_ids": []
+    },
+    {
+      "id": "firmware-ownership",
+      "text": "The device-tree backend owns structural access, property decoding, node status and device-tree address translation.\n\nKernel registration, IRQ mapping, MMIO mapping and DMA allocation remain outside the device-tree library's responsibility.\n\nKeep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.\n\nThe frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.\n\nThe design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.",
+      "claim_ids": [
+        "firmware-owner",
+        "firmware-exclusion",
+        "firmware-transition",
+        "firmware-reported-gap",
+        "firmware-planned"
+      ]
+    },
+    {
+      "id": "permission-role",
+      "text": " Returns this mode with new permission bits and the same file type.",
+      "claim_ids": []
+    }
+  ],
+  "docs-intervention": [
+    {
+      "id": "complete-command",
+      "text": "",
+      "claim_ids": []
+    },
+    {
+      "id": "firmware-ownership",
+      "text": "The device-tree backend owns structural access, property decoding, node status and device-tree address translation.\n\nKernel registration, IRQ mapping, MMIO mapping and DMA allocation belong within the device-tree library's responsibility.\n\nKeep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.\n\nThe frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.\n\nThe design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.",
+      "claim_ids": [
+        "firmware-owner",
+        "firmware-exclusion",
+        "firmware-transition",
+        "firmware-reported-gap",
+        "firmware-planned"
+      ]
+    },
+    {
+      "id": "permission-role",
+      "text": " Returns this mode with new permission bits and the same file type.",
+      "claim_ids": []
+    }
+  ],
+  "docs_source-revised": [
+    {
+      "id": "complete-command",
+      "text": "Empty input returns zero; requests exceeding 4096 bytes are rejected before copying or invoking the write handler.\n\nFor nonempty input of at most 4096 bytes, invoke self.write once only after the whole payload has been collected successfully; a collection error or zero progress invokes no handler.\n\nThe concrete CommandFile::write method returns the entire supplied byte count if its handler succeeds; its handler does not return a short byte count.\n\nAdvance file position only after write completion and successful rewind checks; a rewind error can return early and does not undo arbitrary handler side effects.",
+      "claim_ids": [
+        "command-entry",
+        "command-boundary",
+        "command-result",
+        "command-position"
+      ]
+    },
+    {
+      "id": "firmware-ownership",
+      "text": "The device-tree backend owns structural access, property decoding, node status and device-tree address translation.\n\nKernel registration, IRQ mapping, MMIO mapping and DMA allocation remain outside the device-tree library's responsibility.\n\nKeep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.\n\nThe frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.\n\nIn the same revision, DtBackend::irq_spec calls irq_spec_with and constructs FwIrqSpec for a returned specification; this is not proof that every IRQ form or runtime configuration works.\n\nThe manifest declares fwnode as including alloc and optional fwnode/lazyinit dependencies; actual project feature activation is not established.\n\nThe design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.",
+      "claim_ids": [
+        "firmware-owner",
+        "firmware-exclusion",
+        "firmware-transition",
+        "firmware-reported-gap",
+        "firmware-observed-path",
+        "firmware-feature",
+        "firmware-planned"
+      ]
+    },
+    {
+      "id": "permission-role",
+      "text": " Returns this mode with new permission bits and the same file type.\n\nReturn a mode with replacement permission bits while retaining original file-type bits; this does not establish that those bits denote a valid NodeType.\n\nThis function body computes a value without allocation, locking or external callbacks; caller execution requirements are outside this observation.",
+      "claim_ids": [
+        "role-change",
+        "role-effects"
+      ]
+    }
+  ],
+  "docs_source-intervention": [
+    {
+      "id": "complete-command",
+      "text": "Empty input returns zero; requests exceeding 4096 bytes are rejected before copying or invoking the write handler.\n\nFor nonempty input of at most 4096 bytes, invoke self.write after each successfully copied fragment rather than waiting for the whole payload; earlier handlers may have run before a later collection error.\n\nThe concrete CommandFile::write method returns the entire supplied byte count if its handler succeeds; its handler does not return a short byte count.\n\nAdvance file position only after write completion and successful rewind checks; a rewind error can return early and does not undo arbitrary handler side effects.",
+      "claim_ids": [
+        "command-entry",
+        "command-boundary",
+        "command-result",
+        "command-position"
+      ]
+    },
+    {
+      "id": "firmware-ownership",
+      "text": "The device-tree backend owns structural access, property decoding, node status and device-tree address translation.\n\nKernel registration, IRQ mapping, MMIO mapping and DMA allocation belong within the device-tree library's responsibility.\n\nKeep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.\n\nThe frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.\n\nIn the same revision, DtBackend::irq_spec calls irq_spec_with and constructs FwIrqSpec for a returned specification; this is not proof that every IRQ form or runtime configuration works.\n\nThe manifest declares fwnode as including alloc and optional fwnode/lazyinit dependencies; actual project feature activation is not established.\n\nThe design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.",
+      "claim_ids": [
+        "firmware-owner",
+        "firmware-exclusion",
+        "firmware-transition",
+        "firmware-reported-gap",
+        "firmware-observed-path",
+        "firmware-feature",
+        "firmware-planned"
+      ]
+    },
+    {
+      "id": "permission-role",
+      "text": " Returns this mode with new permission bits and the same file type.\n\nReturn a mode with replacement file-type bits while retaining original permission bits; this does not establish that those bits denote a valid NodeType.\n\nThis function body computes a value without allocation, locking or external callbacks; caller execution requirements are outside this observation.",
+      "claim_ids": [
+        "role-change",
+        "role-effects"
+      ]
+    }
+  ]
+}

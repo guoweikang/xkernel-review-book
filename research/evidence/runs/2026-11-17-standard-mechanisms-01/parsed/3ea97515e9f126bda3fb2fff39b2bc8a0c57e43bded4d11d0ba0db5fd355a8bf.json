@@ -1,0 +1,752 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Utilities related to FFI bindings.",
+      "path": "doc",
+      "range": [
+        0,
+        38
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        39,
+        42
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This module provides utilities to handle data across non-Rust",
+      "path": "doc",
+      "range": [
+        43,
+        108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " interfaces, like other programming languages and the underlying",
+      "path": "doc",
+      "range": [
+        109,
+        176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " operating system. It is mainly of use for FFI (Foreign Function",
+      "path": "doc",
+      "range": [
+        177,
+        244
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Interface) bindings and code that needs to exchange C-like strings",
+      "path": "doc",
+      "range": [
+        245,
+        315
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " with other languages.",
+      "path": "doc",
+      "range": [
+        316,
+        341
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        342,
+        345
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Overview",
+      "path": "doc",
+      "range": [
+        346,
+        360
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        361,
+        364
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust represents owned strings with the [`String`] type, and",
+      "path": "doc",
+      "range": [
+        365,
+        428
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " borrowed slices of strings with the [`str`] primitive. Both are",
+      "path": "doc",
+      "range": [
+        429,
+        496
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " always in UTF-8 encoding, and may contain nul bytes in the middle,",
+      "path": "doc",
+      "range": [
+        497,
+        567
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " i.e., if you look at the bytes that make up the string, there may",
+      "path": "doc",
+      "range": [
+        568,
+        637
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " be a `\\0` among them. Both `String` and `str` store their length",
+      "path": "doc",
+      "range": [
+        638,
+        706
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " explicitly; there are no nul terminators at the end of strings",
+      "path": "doc",
+      "range": [
+        707,
+        773
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " like in C.",
+      "path": "doc",
+      "range": [
+        774,
+        788
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        789,
+        792
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " C strings are different from Rust strings:",
+      "path": "doc",
+      "range": [
+        793,
+        839
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        840,
+        843
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **Encodings** - Rust strings are UTF-8, but C strings may use",
+      "path": "doc",
+      "range": [
+        844,
+        911
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " other encodings. If you are using a string from C, you should",
+      "path": "doc",
+      "range": [
+        912,
+        977
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " check its encoding explicitly, rather than just assuming that it",
+      "path": "doc",
+      "range": [
+        978,
+        1046
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is UTF-8 like you can do in Rust.",
+      "path": "doc",
+      "range": [
+        1047,
+        1084
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1085,
+        1088
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **Character size** - C strings may use `char` or `wchar_t`-sized",
+      "path": "doc",
+      "range": [
+        1089,
+        1159
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " characters; please **note** that C's `char` is different from Rust's.",
+      "path": "doc",
+      "range": [
+        1160,
+        1233
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The C standard leaves the actual sizes of those types open to",
+      "path": "doc",
+      "range": [
+        1234,
+        1299
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " interpretation, but defines different APIs for strings made up of",
+      "path": "doc",
+      "range": [
+        1300,
+        1369
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " each character type. Rust strings are always UTF-8, so different",
+      "path": "doc",
+      "range": [
+        1370,
+        1438
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Unicode characters will be encoded in a variable number of bytes",
+      "path": "doc",
+      "range": [
+        1439,
+        1507
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " each. The Rust type [`char`] represents a '[Unicode scalar",
+      "path": "doc",
+      "range": [
+        1508,
+        1570
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " value]', which is similar to, but not the same as, a '[Unicode",
+      "path": "doc",
+      "range": [
+        1571,
+        1637
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " code point]'.",
+      "path": "doc",
+      "range": [
+        1638,
+        1655
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1656,
+        1659
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **Nul terminators and implicit string lengths** - Often, C",
+      "path": "doc",
+      "range": [
+        1660,
+        1724
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " strings are nul-terminated, i.e., they have a `\\0` character at the",
+      "path": "doc",
+      "range": [
+        1725,
+        1796
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " end. The length of a string buffer is not stored, but has to be",
+      "path": "doc",
+      "range": [
+        1797,
+        1864
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " calculated; to compute the length of a string, C code must",
+      "path": "doc",
+      "range": [
+        1865,
+        1927
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " manually call a function like `strlen()` for `char`-based strings,",
+      "path": "doc",
+      "range": [
+        1928,
+        1998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " or `wcslen()` for `wchar_t`-based ones. Those functions return",
+      "path": "doc",
+      "range": [
+        1999,
+        2065
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the number of characters in the string excluding the nul",
+      "path": "doc",
+      "range": [
+        2066,
+        2126
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " terminator, so the buffer length is really `len+1` characters.",
+      "path": "doc",
+      "range": [
+        2127,
+        2193
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust strings don't have a nul terminator; their length is always",
+      "path": "doc",
+      "range": [
+        2194,
+        2262
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " stored and does not need to be calculated. While in Rust",
+      "path": "doc",
+      "range": [
+        2263,
+        2323
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " accessing a string's length is an *O*(1) operation (because the",
+      "path": "doc",
+      "range": [
+        2324,
+        2391
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " length is stored); in C it is an *O*(*n*) operation because the",
+      "path": "doc",
+      "range": [
+        2392,
+        2459
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " length needs to be computed by scanning the string for the nul",
+      "path": "doc",
+      "range": [
+        2460,
+        2526
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " terminator.",
+      "path": "doc",
+      "range": [
+        2527,
+        2542
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2543,
+        2546
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **Internal nul characters** - When C strings have a nul",
+      "path": "doc",
+      "range": [
+        2547,
+        2608
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " terminator character, this usually means that they cannot have nul",
+      "path": "doc",
+      "range": [
+        2609,
+        2679
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " characters in the middle — a nul character would essentially",
+      "path": "doc",
+      "range": [
+        2680,
+        2746
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " truncate the string. Rust strings *can* have nul characters in",
+      "path": "doc",
+      "range": [
+        2747,
+        2813
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the middle, because nul does not have to mark the end of the",
+      "path": "doc",
+      "range": [
+        2814,
+        2878
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " string in Rust.",
+      "path": "doc",
+      "range": [
+        2879,
+        2898
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2899,
+        2902
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Representations of non-Rust strings",
+      "path": "doc",
+      "range": [
+        2903,
+        2944
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2945,
+        2948
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`CString`] and [`CStr`] are useful when you need to transfer",
+      "path": "doc",
+      "range": [
+        2949,
+        3014
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " UTF-8 strings to and from languages with a C ABI, like Python.",
+      "path": "doc",
+      "range": [
+        3015,
+        3081
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3082,
+        3085
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **From Rust to C:** [`CString`] represents an owned, C-friendly",
+      "path": "doc",
+      "range": [
+        3086,
+        3155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " string: it is nul-terminated, and has no internal nul characters.",
+      "path": "doc",
+      "range": [
+        3156,
+        3225
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust code can create a [`CString`] out of a normal string (provided",
+      "path": "doc",
+      "range": [
+        3226,
+        3297
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " that the string doesn't have nul characters in the middle), and",
+      "path": "doc",
+      "range": [
+        3298,
+        3365
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " then use a variety of methods to obtain a raw <code>\\*mut [u8]</code> that can",
+      "path": "doc",
+      "range": [
+        3366,
+        3448
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " then be passed as an argument to functions which use the C",
+      "path": "doc",
+      "range": [
+        3449,
+        3511
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " conventions for strings.",
+      "path": "doc",
+      "range": [
+        3512,
+        3540
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3541,
+        3544
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " * **From C to Rust:** [`CStr`] represents a borrowed C string; it",
+      "path": "doc",
+      "range": [
+        3545,
+        3614
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is what you would use to wrap a raw <code>\\*const [u8]</code> that you got from",
+      "path": "doc",
+      "range": [
+        3615,
+        3698
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " a C function. A [`CStr`] is guaranteed to be a nul-terminated array",
+      "path": "doc",
+      "range": [
+        3699,
+        3770
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " of bytes. Once you have a [`CStr`], you can convert it to a Rust",
+      "path": "doc",
+      "range": [
+        3771,
+        3839
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " <code>&[str]</code> if it's valid UTF-8, or lossily convert it by adding",
+      "path": "doc",
+      "range": [
+        3840,
+        3916
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " replacement characters.",
+      "path": "doc",
+      "range": [
+        3917,
+        3944
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3945,
+        3948
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`String`]: crate::string::String",
+      "path": "doc",
+      "range": [
+        3949,
+        3986
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`CStr`]: core::ffi::CStr",
+      "path": "doc",
+      "range": [
+        3987,
+        4016
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        4018,
+        4069
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4315,
+            4368
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "c_str",
+      "path_overrides": [],
+      "range": [
+        4315,
+        4383
+      ]
+    }
+  ],
+  "source_sha256": "d7bd201345e8fc6c792937e548b7c229975e39180f98f5b2c4e292964c07f375"
+}

@@ -1,0 +1,54 @@
+{
+  "status": "development admission audit, frozen before validator execution; no effectiveness comparison",
+  "started_utc": "2026-11-16 08:40:21 UTC",
+  "sources": {
+    "claims": "research/evidence/runs/2026-11-12-governed-claims-v2-01/claims.json",
+    "contracts": "research/evidence/runs/2026-11-16-crate-contract-01/cases.json",
+    "registry": "research/evidence/runs/2026-11-16-crate-contract-01/registry.json"
+  },
+  "criteria": [
+    "Preserve entity/version scope on both arms, with identical evidence-side metadata",
+    "Preserve every action/object/role, quantifier, conjunction/disjunction, polarity, modality and condition direction",
+    "Preserve disclaimers, exceptions, unknowns and epistemic limits; unknown is not false",
+    "No added source facts, caller identity or owner only in the structured arm",
+    "Exact spans and schema acceptance are mechanical checks, not semantic equivalence proofs",
+    "Keep analyst mappings and source verification out of detector inputs unless both arms receive equal information",
+    "Record creation/review operations prospectively; elapsed agent wall time is not human labor",
+    "No effect measurement until counterpart content and remaining ambiguities are reviewed; agent review is not independent human gold"
+  ],
+  "records": [
+    {
+      "claim": "role-change",
+      "contract": "role",
+      "clauses": [
+        {"text": "Return a mode with replacement permission bits while retaining original file-type bits", "fields": ["effect.replace", "effect.preserve", "effect.result"], "status": "manual_partial_alignment"},
+        {"text": "this does not establish that those bits denote a valid NodeType.", "fields": [], "status": "no_dedicated_field"}
+      ],
+      "review_questions": ["Replacement value input binding is supplied by the obligation adapter, not by the short natural-language clause", "A lack of validity guarantee is not an assertion that the result is invalid", "Do not inject responsibility.owner or unconditionality as new knowledge only on the structured side"],
+      "admission": "not_admitted_pending_content_alignment"
+    },
+    {
+      "claim": "command-boundary",
+      "contract": "command",
+      "clauses": [
+        {"text": "For nonempty input of at most 4096 bytes", "fields": ["conditions"], "status": "manual_partial_alignment"},
+        {"text": "invoke self.write once only after the whole payload has been collected successfully", "fields": ["effect.target", "effect.count", "effect.after", "effect.payload"], "status": "condition_direction_requires_review"},
+        {"text": "a collection error or zero progress invokes no handler.", "fields": ["effect.on_collection_failure"], "status": "requires_explicit_failure_definition"}
+      ],
+      "review_questions": ["Only-after imposes a necessary temporal precondition, not by itself an unconditional liveness promise", "The existing evaluator includes zero progress in collection failure; that definition must be equally available to both arms", "count=1 is evaluated after complete collection in the old adapter; do not silently attribute adapter assumptions to the text"],
+      "admission": "not_admitted_pending_content_alignment"
+    },
+    {
+      "claim": "firmware-transition",
+      "contract": null,
+      "clauses": [
+        {"text": "Keep boot DTB ownership in host integration until migrated", "fields": [], "status": "unsupported_normative_temporal_scope"},
+        {"text": "helpers outside the scoped migration remain separately tracked debt.", "fields": [], "status": "unsupported_exception_scope"}
+      ],
+      "review_questions": ["No actual migration completion or implementation ownership follows from a prescription", "The migrated event and scoped helpers are not resolved here", "An owner string does not encode the temporal transition and separate debt statement"],
+      "admission": "no_existing_counterpart"
+    }
+  ],
+  "execution": "Reuse unchanged check_crate_contract.validate on role and command, twice; test that adding an unmapped disclaimer field is rejected by v0; firmware lacks counterpart, do not invent one",
+  "stop": "Three record admission audit only. No new schema/parser, no re-execution of old Rust tests, no model ranking, no claims of increased quality or novelty. Preserve later review corrections separately."
+}

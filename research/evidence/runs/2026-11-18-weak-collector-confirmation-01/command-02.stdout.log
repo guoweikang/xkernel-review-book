@@ -1,0 +1,41 @@
+
+running 6 tests
+test candidate_inodes_guard_release ... CandidateInodes collection_boundary: internal_guard_scope=source_checked; setup_try_lock_control=PASS
+CandidateInodes wrapper_returned: guard_free=true external_dropped=true snapshot_pins=2 drops=[]
+destructor identity=42 same_mutex_try_lock=success
+CandidateInodes final_snapshot_drop: destructor_count=1 guard_free=true
+ok
+test candidate_set_guard_release ... CandidateSet collection_boundary: outer_guard_held=true
+CandidateSet wrapper_returned: guard_free=true external_dropped=true snapshot_pins=2 drops=[]
+destructor identity=42 same_mutex_try_lock=success
+CandidateSet final_snapshot_drop: destructor_count=1 guard_free=true
+ok
+test empty_and_all_expired ... OriginalSet empty: returned=[] retained=[] drops=[9]
+OriginalSet all_expired: returned=[] retained=[] drops=[9]
+CandidateSet empty: returned=[] retained=[] drops=[9]
+CandidateSet all_expired: returned=[] retained=[] drops=[9]
+OriginalInodes empty: returned=[] retained=[] drops=[9]
+OriginalInodes all_expired: returned=[] retained=[] drops=[9]
+CandidateInodes empty: returned=[] retained=[] drops=[9]
+CandidateInodes all_expired: returned=[] retained=[] drops=[9]
+ok
+test mixed_duplicates_same_allocations_and_pinning ... OriginalSet mixed: returned=[10,20,10] retained=[10,20,10] exact_pointer_oracle=PASS counts=(3, 2)
+CandidateSet mixed: returned=[10,20,10] retained=[10,20,10] exact_pointer_oracle=PASS counts=(5, 3)
+OriginalInodes mixed: returned=[10,20,10] retained=[10,20,10] exact_pointer_oracle=PASS counts=(7, 4)
+CandidateInodes mixed: returned=[10,20,10] retained=[10,20,10] exact_pointer_oracle=PASS counts=(9, 5)
+external_owners_dropped: counts=(8,4) drops=[]
+final_snapshots_dropped: counts=(0,0) drops_once_each=[10,20] recollect_empty=PASS
+ok
+test original_inodes_guard_release ... OriginalInodes collection_boundary: internal_guard_scope=source_checked; setup_try_lock_control=PASS
+OriginalInodes wrapper_returned: guard_free=true external_dropped=true snapshot_pins=2 drops=[]
+destructor identity=42 same_mutex_try_lock=success
+OriginalInodes final_snapshot_drop: destructor_count=1 guard_free=true
+ok
+test original_set_guard_release ... OriginalSet collection_boundary: outer_guard_held=true
+OriginalSet wrapper_returned: guard_free=true external_dropped=true snapshot_pins=2 drops=[]
+destructor identity=42 same_mutex_try_lock=success
+OriginalSet final_snapshot_drop: destructor_count=1 guard_free=true
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

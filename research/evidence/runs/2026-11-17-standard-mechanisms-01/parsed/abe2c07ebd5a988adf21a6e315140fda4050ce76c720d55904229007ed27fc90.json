@@ -1,0 +1,2775 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A cell which can nominally be written to only once.",
+          "path": "doc",
+          "range": [
+            53,
+            108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            109,
+            112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This allows obtaining a shared `&T` reference to its inner value without copying or replacing",
+          "path": "doc",
+          "range": [
+            113,
+            210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it (unlike [`Cell`]), and without runtime borrow checks (unlike [`RefCell`]). However,",
+          "path": "doc",
+          "range": [
+            211,
+            301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " only immutable references can be obtained unless one has a mutable reference to the cell",
+          "path": "doc",
+          "range": [
+            302,
+            394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " itself. In the same vein, the cell can only be re-initialized with such a mutable reference.",
+          "path": "doc",
+          "range": [
+            395,
+            491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            492,
+            495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `OnceCell` can be thought of as a safe abstraction over uninitialized data that becomes",
+          "path": "doc",
+          "range": [
+            496,
+            589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " initialized once written.",
+          "path": "doc",
+          "range": [
+            590,
+            619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            620,
+            623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a thread-safe version of this struct, see [`std::sync::OnceLock`].",
+          "path": "doc",
+          "range": [
+            624,
+            698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            699,
+            702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`RefCell`]: crate::cell::RefCell",
+          "path": "doc",
+          "range": [
+            703,
+            740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Cell`]: crate::cell::Cell",
+          "path": "doc",
+          "range": [
+            741,
+            772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::OnceLock`]: ../../std/sync/struct.OnceLock.html",
+          "path": "doc",
+          "range": [
+            773,
+            837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            838,
+            841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            842,
+            856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            857,
+            860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            861,
+            868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            869,
+            897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            898,
+            901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            902,
+            933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_none());",
+          "path": "doc",
+          "range": [
+            934,
+            968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            969,
+            972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value: &String = cell.get_or_init(|| {",
+          "path": "doc",
+          "range": [
+            973,
+            1019
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     \"Hello, World!\".to_string()",
+          "path": "doc",
+          "range": [
+            1020,
+            1055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            1056,
+            1063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(value, \"Hello, World!\");",
+          "path": "doc",
+          "range": [
+            1064,
+            1103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_some());",
+          "path": "doc",
+          "range": [
+            1104,
+            1138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1139,
+            1146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1147,
+            1197
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "OnceCell",
+      "range": [
+        53,
+        1301
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1303,
+        11235
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new uninitialized cell.",
+          "path": "doc",
+          "range": [
+            1329,
+            1366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1371,
+            1380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            1385,
+            1396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1401,
+            1451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            1456,
+            1518
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1557,
+        1614
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        1329,
+        1614
+      ],
+      "signature_range": [
+        1527,
+        1556
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the reference to the underlying value.",
+          "path": "doc",
+          "range": [
+            1620,
+            1667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1672,
+            1675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `None` if the cell is uninitialized.",
+          "path": "doc",
+          "range": [
+            1680,
+            1728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1733,
+            1742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1747,
+            1797
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1834,
+        1939
+      ],
+      "kind": "impl_fn",
+      "name": "get",
+      "range": [
+        1620,
+        1939
+      ],
+      "signature_range": [
+        1806,
+        1833
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the mutable reference to the underlying value.",
+          "path": "doc",
+          "range": [
+            1945,
+            2000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2005,
+            2008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `None` if the cell is uninitialized.",
+          "path": "doc",
+          "range": [
+            2013,
+            2061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2066,
+            2075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2080,
+            2130
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2179,
+        2224
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut",
+      "range": [
+        1945,
+        2224
+      ],
+      "signature_range": [
+        2139,
+        2178
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Initializes the contents of the cell to `value`.",
+          "path": "doc",
+          "range": [
+            2230,
+            2282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2287,
+            2290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            2295,
+            2307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2312,
+            2315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method returns `Ok(())` if the cell was uninitialized",
+          "path": "doc",
+          "range": [
+            2320,
+            2382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `Err(value)` if it was already initialized.",
+          "path": "doc",
+          "range": [
+            2387,
+            2438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2443,
+            2446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2451,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2470,
+            2473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2478,
+            2485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            2490,
+            2518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2523,
+            2526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            2531,
+            2562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_none());",
+          "path": "doc",
+          "range": [
+            2567,
+            2601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2606,
+            2609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.set(92), Ok(()));",
+          "path": "doc",
+          "range": [
+            2614,
+            2651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.set(62), Err(62));",
+          "path": "doc",
+          "range": [
+            2656,
+            2694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2699,
+            2702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_some());",
+          "path": "doc",
+          "range": [
+            2707,
+            2741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2746,
+            2753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2758,
+            2767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2772,
+            2822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_should_not_be_called_on_const_items",
+          "range": [
+            2827,
+            2871
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2921,
+        3049
+      ],
+      "kind": "impl_fn",
+      "name": "set",
+      "range": [
+        2230,
+        3049
+      ],
+      "signature_range": [
+        2880,
+        2920
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Initializes the contents of the cell to `value` if the cell was",
+          "path": "doc",
+          "range": [
+            3055,
+            3122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " uninitialized, then returns a reference to it.",
+          "path": "doc",
+          "range": [
+            3127,
+            3177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3182,
+            3185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Errors",
+          "path": "doc",
+          "range": [
+            3190,
+            3202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3207,
+            3210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method returns `Ok(&value)` if the cell was uninitialized",
+          "path": "doc",
+          "range": [
+            3215,
+            3281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `Err((&current_value, value))` if it was already initialized.",
+          "path": "doc",
+          "range": [
+            3286,
+            3355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3360,
+            3363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3368,
+            3382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3387,
+            3390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3395,
+            3402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(once_cell_try_insert)]",
+          "path": "doc",
+          "range": [
+            3407,
+            3444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3449,
+            3452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            3457,
+            3485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3490,
+            3493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            3498,
+            3529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_none());",
+          "path": "doc",
+          "range": [
+            3534,
+            3568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3573,
+            3576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.try_insert(92), Ok(&92));",
+          "path": "doc",
+          "range": [
+            3581,
+            3626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.try_insert(62), Err((&92, 62)));",
+          "path": "doc",
+          "range": [
+            3631,
+            3683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3688,
+            3691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_some());",
+          "path": "doc",
+          "range": [
+            3696,
+            3730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3735,
+            3742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3747,
+            3756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3761,
+            3824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_should_not_be_called_on_const_items",
+          "range": [
+            3829,
+            3873
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3936,
+        4366
+      ],
+      "kind": "impl_fn",
+      "name": "try_insert",
+      "range": [
+        3055,
+        4366
+      ],
+      "signature_range": [
+        3882,
+        3935
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the contents of the cell, initializing it to `f()`",
+          "path": "doc",
+          "range": [
+            4372,
+            4431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " if the cell was uninitialized.",
+          "path": "doc",
+          "range": [
+            4436,
+            4470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4475,
+            4478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            4483,
+            4495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4500,
+            4503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `f()` panics, the panic is propagated to the caller, and the cell",
+          "path": "doc",
+          "range": [
+            4508,
+            4580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " remains uninitialized.",
+          "path": "doc",
+          "range": [
+            4585,
+            4611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4616,
+            4619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is an error to reentrantly initialize the cell from `f`. Doing",
+          "path": "doc",
+          "range": [
+            4624,
+            4693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so results in a panic.",
+          "path": "doc",
+          "range": [
+            4698,
+            4724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4729,
+            4732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4737,
+            4751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4756,
+            4759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4764,
+            4771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            4776,
+            4804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4809,
+            4812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            4817,
+            4848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_or_init(|| 92);",
+          "path": "doc",
+          "range": [
+            4853,
+            4893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(value, &92);",
+          "path": "doc",
+          "range": [
+            4898,
+            4925
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_or_init(|| unreachable!());",
+          "path": "doc",
+          "range": [
+            4930,
+            4982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(value, &92);",
+          "path": "doc",
+          "range": [
+            4987,
+            5014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5019,
+            5026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5031,
+            5040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5045,
+            5095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_should_not_be_called_on_const_items",
+          "range": [
+            5100,
+            5144
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5230,
+        5332
+      ],
+      "kind": "impl_fn",
+      "name": "get_or_init",
+      "range": [
+        4372,
+        5332
+      ],
+      "signature_range": [
+        5153,
+        5225
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        7
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        5267,
+        5285
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the mutable reference of the contents of the cell,",
+          "path": "doc",
+          "range": [
+            5338,
+            5397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " initializing it to `f()` if the cell was uninitialized.",
+          "path": "doc",
+          "range": [
+            5402,
+            5461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5466,
+            5469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            5474,
+            5486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5491,
+            5494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `f()` panics, the panic is propagated to the caller, and the cell",
+          "path": "doc",
+          "range": [
+            5499,
+            5571
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " remains uninitialized.",
+          "path": "doc",
+          "range": [
+            5576,
+            5602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5607,
+            5610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5615,
+            5629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5634,
+            5637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5642,
+            5649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(once_cell_get_mut)]",
+          "path": "doc",
+          "range": [
+            5654,
+            5688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5693,
+            5696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            5701,
+            5729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5734,
+            5737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            5742,
+            5777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_mut_or_init(|| 92);",
+          "path": "doc",
+          "range": [
+            5782,
+            5826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*value, 92);",
+          "path": "doc",
+          "range": [
+            5831,
+            5858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5863,
+            5866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *value += 2;",
+          "path": "doc",
+          "range": [
+            5871,
+            5887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*value, 94);",
+          "path": "doc",
+          "range": [
+            5892,
+            5919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5924,
+            5927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_mut_or_init(|| unreachable!());",
+          "path": "doc",
+          "range": [
+            5932,
+            5988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*value, 94);",
+          "path": "doc",
+          "range": [
+            5993,
+            6020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6025,
+            6032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6037,
+            6046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6051,
+            6111
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6209,
+        6315
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut_or_init",
+      "range": [
+        5338,
+        6315
+      ],
+      "signature_range": [
+        6120,
+        6204
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        9
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        6250,
+        6268
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the contents of the cell, initializing it to `f()` if",
+          "path": "doc",
+          "range": [
+            6321,
+            6383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the cell was uninitialized. If the cell was uninitialized",
+          "path": "doc",
+          "range": [
+            6388,
+            6449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `f()` failed, an error is returned.",
+          "path": "doc",
+          "range": [
+            6454,
+            6497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6502,
+            6505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            6510,
+            6522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6527,
+            6530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `f()` panics, the panic is propagated to the caller, and the cell",
+          "path": "doc",
+          "range": [
+            6535,
+            6607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " remains uninitialized.",
+          "path": "doc",
+          "range": [
+            6612,
+            6638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6643,
+            6646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is an error to reentrantly initialize the cell from `f`. Doing",
+          "path": "doc",
+          "range": [
+            6651,
+            6720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so results in a panic.",
+          "path": "doc",
+          "range": [
+            6725,
+            6751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6756,
+            6759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6764,
+            6778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6783,
+            6786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6791,
+            6798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(once_cell_try)]",
+          "path": "doc",
+          "range": [
+            6803,
+            6833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6838,
+            6841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            6846,
+            6874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6879,
+            6882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            6887,
+            6918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.get_or_try_init(|| Err(())), Err(()));",
+          "path": "doc",
+          "range": [
+            6923,
+            6981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_none());",
+          "path": "doc",
+          "range": [
+            6986,
+            7020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_or_try_init(|| -> Result<i32, ()> {",
+          "path": "doc",
+          "range": [
+            7025,
+            7085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Ok(92)",
+          "path": "doc",
+          "range": [
+            7090,
+            7104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            7109,
+            7116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(value, Ok(&92));",
+          "path": "doc",
+          "range": [
+            7121,
+            7152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.get(), Some(&92))",
+          "path": "doc",
+          "range": [
+            7157,
+            7194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7199,
+            7206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7211,
+            7267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_should_not_be_called_on_const_items",
+          "range": [
+            7272,
+            7316
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7431,
+        7541
+      ],
+      "kind": "impl_fn",
+      "name": "get_or_try_init",
+      "range": [
+        6321,
+        7541
+      ],
+      "signature_range": [
+        7325,
+        7426
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the mutable reference of the contents of the cell, initializing",
+          "path": "doc",
+          "range": [
+            7547,
+            7619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it to `f()` if the cell was uninitialized. If the cell was uninitialized",
+          "path": "doc",
+          "range": [
+            7624,
+            7700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `f()` failed, an error is returned.",
+          "path": "doc",
+          "range": [
+            7705,
+            7748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7753,
+            7756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            7761,
+            7773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7778,
+            7781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `f()` panics, the panic is propagated to the caller, and the cell",
+          "path": "doc",
+          "range": [
+            7786,
+            7858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " remains uninitialized.",
+          "path": "doc",
+          "range": [
+            7863,
+            7889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7894,
+            7897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            7902,
+            7916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7921,
+            7924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7929,
+            7936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(once_cell_get_mut)]",
+          "path": "doc",
+          "range": [
+            7941,
+            7975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7980,
+            7983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            7988,
+            8016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8021,
+            8024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cell: OnceCell<u32> = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            8029,
+            8079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8084,
+            8087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Failed attempts to initialize the cell do not change its contents",
+          "path": "doc",
+          "range": [
+            8092,
+            8164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get_mut_or_try_init(|| \"not a number!\".parse()).is_err());",
+          "path": "doc",
+          "range": [
+            8169,
+            8244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(cell.get().is_none());",
+          "path": "doc",
+          "range": [
+            8249,
+            8283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8288,
+            8291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let value = cell.get_mut_or_try_init(|| \"1234\".parse());",
+          "path": "doc",
+          "range": [
+            8296,
+            8356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(value, Ok(&mut 1234));",
+          "path": "doc",
+          "range": [
+            8361,
+            8398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8403,
+            8406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let Ok(value) = value else { return; };",
+          "path": "doc",
+          "range": [
+            8411,
+            8454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *value += 2;",
+          "path": "doc",
+          "range": [
+            8459,
+            8475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.get(), Some(&1236))",
+          "path": "doc",
+          "range": [
+            8480,
+            8519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8524,
+            8531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8536,
+            8596
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8723,
+        8841
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut_or_try_init",
+      "range": [
+        7547,
+        8841
+      ],
+      "signature_range": [
+        8605,
+        8718
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            8967,
+            8974
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9078,
+        9500
+      ],
+      "kind": "impl_fn",
+      "name": "try_init",
+      "range": [
+        8967,
+        9500
+      ],
+      "signature_range": [
+        8979,
+        9073
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        13
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        9468,
+        9492
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Consumes the cell, returning the wrapped value.",
+          "path": "doc",
+          "range": [
+            9506,
+            9557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9562,
+            9565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `None` if the cell was uninitialized.",
+          "path": "doc",
+          "range": [
+            9570,
+            9619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9624,
+            9627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9632,
+            9646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9651,
+            9654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9659,
+            9666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            9671,
+            9699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9704,
+            9707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell: OnceCell<String> = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            9712,
+            9761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.into_inner(), None);",
+          "path": "doc",
+          "range": [
+            9766,
+            9806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9811,
+            9814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            9819,
+            9850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = cell.set(\"hello\".to_owned());",
+          "path": "doc",
+          "range": [
+            9855,
+            9896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.into_inner(), Some(\"hello\".to_owned()));",
+          "path": "doc",
+          "range": [
+            9901,
+            9961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9966,
+            9973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9978,
+            9987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9992,
+            10042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            10047,
+            10121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            10126,
+            10184
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10232,
+        10444
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        9506,
+        10444
+      ],
+      "signature_range": [
+        10193,
+        10231
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Takes the value out of this `OnceCell`, moving it back to an uninitialized state.",
+          "path": "doc",
+          "range": [
+            10450,
+            10535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10540,
+            10543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Has no effect and returns `None` if the `OnceCell` is uninitialized.",
+          "path": "doc",
+          "range": [
+            10548,
+            10620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10625,
+            10628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Safety is guaranteed by requiring a mutable reference.",
+          "path": "doc",
+          "range": [
+            10633,
+            10691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10696,
+            10699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10704,
+            10718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10723,
+            10726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10731,
+            10738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::OnceCell;",
+          "path": "doc",
+          "range": [
+            10743,
+            10771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10776,
+            10779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cell: OnceCell<String> = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            10784,
+            10837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.take(), None);",
+          "path": "doc",
+          "range": [
+            10842,
+            10876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10881,
+            10884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cell = OnceCell::new();",
+          "path": "doc",
+          "range": [
+            10889,
+            10924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = cell.set(\"hello\".to_owned());",
+          "path": "doc",
+          "range": [
+            10929,
+            10970
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.take(), Some(\"hello\".to_owned()));",
+          "path": "doc",
+          "range": [
+            10975,
+            11029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(cell.get(), None);",
+          "path": "doc",
+          "range": [
+            11034,
+            11067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11072,
+            11079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11084,
+            11093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11098,
+            11148
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11189,
+        11233
+      ],
+      "kind": "impl_fn",
+      "name": "take",
+      "range": [
+        10450,
+        11233
+      ],
+      "signature_range": [
+        11157,
+        11188
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11237,
+        11465
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11467,
+            11517
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11467,
+        11832
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [],
+      "body_range": [
+        11628,
+        11830
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        11571,
+        11830
+      ],
+      "signature_range": [
+        11571,
+        11627
+      ]
+    },
+    {
+      "ancestors": [
+        18,
+        19
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11768,
+        11792
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11834,
+            11884
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11834,
+        12114
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11928,
+            11937
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11973,
+        12112
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        11928,
+        12112
+      ],
+      "signature_range": [
+        11942,
+        11972
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12116,
+            12166
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12116,
+        12310
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12218,
+            12227
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12267,
+        12308
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        12218,
+        12308
+      ],
+      "signature_range": [
+        12232,
+        12266
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12312,
+            12362
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12312,
+        12396
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        12398,
+        12746
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12831,
+            12881
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12831,
+        12914
+      ]
+    }
+  ],
+  "source_sha256": "d2432271f2979484f95a7e9737f42d9448cb9edef723d7fab287611431e7294e"
+}

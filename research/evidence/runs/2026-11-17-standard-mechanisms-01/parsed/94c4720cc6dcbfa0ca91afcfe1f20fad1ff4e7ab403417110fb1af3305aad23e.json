@@ -1,0 +1,6191 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        0,
+        53
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A `RawWaker` allows the implementor of a task executor to create a [`Waker`]",
+          "path": "doc",
+          "range": [
+            211,
+            291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or a [`LocalWaker`] which provides customized wakeup behavior.",
+          "path": "doc",
+          "range": [
+            292,
+            358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            359,
+            362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It consists of a data pointer and a [virtual function pointer table (vtable)][vtable]",
+          "path": "doc",
+          "range": [
+            363,
+            452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that customizes the behavior of the `RawWaker`.",
+          "path": "doc",
+          "range": [
+            453,
+            504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            505,
+            508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `RawWaker`s are unsafe to use.",
+          "path": "doc",
+          "range": [
+            509,
+            543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementing the [`Wake`] trait is a safe alternative that requires memory allocation.",
+          "path": "doc",
+          "range": [
+            544,
+            634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            635,
+            638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [vtable]: https://en.wikipedia.org/wiki/Virtual_method_table",
+          "path": "doc",
+          "range": [
+            639,
+            703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Wake`]: ../../alloc/task/trait.Wake.html",
+          "path": "doc",
+          "range": [
+            704,
+            750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            751,
+            778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            779,
+            831
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RawWaker",
+      "range": [
+        211,
+        1315
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1317,
+        3148
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `RawWaker` from the provided `data` pointer and `vtable`.",
+          "path": "doc",
+          "range": [
+            1337,
+            1412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1417,
+            1420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `data` pointer can be used to store arbitrary data as required",
+          "path": "doc",
+          "range": [
+            1425,
+            1495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by the executor. This could be e.g. a type-erased pointer to an `Arc`",
+          "path": "doc",
+          "range": [
+            1500,
+            1573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is associated with the task.",
+          "path": "doc",
+          "range": [
+            1578,
+            1615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The value of this pointer will get passed to all functions that are part",
+          "path": "doc",
+          "range": [
+            1620,
+            1696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the `vtable` as the first parameter.",
+          "path": "doc",
+          "range": [
+            1701,
+            1744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1749,
+            1752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is important to consider that the `data` pointer must point to a",
+          "path": "doc",
+          "range": [
+            1757,
+            1828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thread safe type such as an `Arc<T: Send + Sync>`",
+          "path": "doc",
+          "range": [
+            1833,
+            1886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when used to construct a [`Waker`]. This restriction is lifted when",
+          "path": "doc",
+          "range": [
+            1891,
+            1962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " constructing a [`LocalWaker`], which allows using types that do not implement",
+          "path": "doc",
+          "range": [
+            1967,
+            2048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <code>[Send] + [Sync]</code> like `Rc<T>`.",
+          "path": "doc",
+          "range": [
+            2053,
+            2099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2104,
+            2107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `vtable` customizes the behavior of a `Waker` which gets created",
+          "path": "doc",
+          "range": [
+            2112,
+            2184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from a `RawWaker`. For each operation on the `Waker`, the associated",
+          "path": "doc",
+          "range": [
+            2189,
+            2261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function in the `vtable` of the underlying `RawWaker` will be called.",
+          "path": "doc",
+          "range": [
+            2266,
+            2339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2344,
+            2353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_promotable",
+          "range": [
+            2358,
+            2377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2382,
+            2434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            2439,
+            2503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2508,
+            2519
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2603,
+        2644
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        1337,
+        2644
+      ],
+      "signature_range": [
+        2528,
+        2602
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2861,
+        2879
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2928,
+        2934
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        2990,
+        2996
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        3077,
+        3083
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A virtual function pointer table (vtable) that specifies the behavior",
+          "path": "doc",
+          "range": [
+            3150,
+            3223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of a [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            3224,
+            3246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3247,
+            3250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The pointer passed to all functions inside the vtable is the `data` pointer",
+          "path": "doc",
+          "range": [
+            3251,
+            3330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from the enclosing [`RawWaker`] object.",
+          "path": "doc",
+          "range": [
+            3331,
+            3374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3375,
+            3378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The functions inside this struct are only intended to be called on the `data`",
+          "path": "doc",
+          "range": [
+            3379,
+            3460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointer of a properly constructed [`RawWaker`] object from inside the",
+          "path": "doc",
+          "range": [
+            3461,
+            3534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`RawWaker`] implementation. Calling one of the contained functions using",
+          "path": "doc",
+          "range": [
+            3535,
+            3612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " any other `data` pointer will cause undefined behavior.",
+          "path": "doc",
+          "range": [
+            3613,
+            3672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3673,
+            3676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that while this type implements `PartialEq`, comparing function pointers, and hence",
+          "path": "doc",
+          "range": [
+            3677,
+            3769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " comparing structs like this that contain function pointers, is unreliable: pointers to the same",
+          "path": "doc",
+          "range": [
+            3770,
+            3869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function can compare inequal (because functions are duplicated in multiple codegen units), and",
+          "path": "doc",
+          "range": [
+            3870,
+            3968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointers to *different* functions can compare equal (since identical functions can be",
+          "path": "doc",
+          "range": [
+            3969,
+            4058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " deduplicated within a codegen unit).",
+          "path": "doc",
+          "range": [
+            4059,
+            4099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4100,
+            4103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Thread safety",
+          "path": "doc",
+          "range": [
+            4104,
+            4123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the [`RawWaker`] will be used to construct a [`Waker`] then",
+          "path": "doc",
+          "range": [
+            4124,
+            4190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " these functions must all be thread-safe (even though [`RawWaker`] is",
+          "path": "doc",
+          "range": [
+            4191,
+            4263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <code>\\![Send] + \\![Sync]</code>). This is because [`Waker`] is <code>[Send] + [Sync]</code>,",
+          "path": "doc",
+          "range": [
+            4264,
+            4361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and it may be moved to arbitrary threads or invoked by `&` reference. For example,",
+          "path": "doc",
+          "range": [
+            4362,
+            4448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this means that if the `clone` and `drop` functions manage a reference count,",
+          "path": "doc",
+          "range": [
+            4449,
+            4530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " they must do so atomically.",
+          "path": "doc",
+          "range": [
+            4531,
+            4562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4563,
+            4566
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However, if the [`RawWaker`] will be used to construct a [`LocalWaker`] instead, then",
+          "path": "doc",
+          "range": [
+            4567,
+            4656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " these functions don't need to be thread safe. This means that <code>\\![Send] + \\![Sync]</code>",
+          "path": "doc",
+          "range": [
+            4657,
+            4755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "  data can be stored in the data pointer, and reference counting does not need any atomic",
+          "path": "doc",
+          "range": [
+            4756,
+            4848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " synchronization. This is because [`LocalWaker`] is not thread safe itself, so it cannot",
+          "path": "doc",
+          "range": [
+            4849,
+            4940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be sent across threads.",
+          "path": "doc",
+          "range": [
+            4941,
+            4968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4969,
+            5021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            5022,
+            5074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            5075,
+            5115
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RawWakerVTable",
+      "range": [
+        3150,
+        6628
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6630,
+        9580
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `RawWakerVTable` from the provided `clone`, `wake`,",
+          "path": "doc",
+          "range": [
+            6656,
+            6725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `wake_by_ref`, and `drop` functions.",
+          "path": "doc",
+          "range": [
+            6730,
+            6770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6775,
+            6778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the [`RawWaker`] will be used to construct a [`Waker`] then",
+          "path": "doc",
+          "range": [
+            6783,
+            6849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " these functions must all be thread-safe (even though [`RawWaker`] is",
+          "path": "doc",
+          "range": [
+            6854,
+            6926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <code>\\![Send] + \\![Sync]</code>). This is because [`Waker`] is <code>[Send] + [Sync]</code>,",
+          "path": "doc",
+          "range": [
+            6931,
+            7028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and it may be moved to arbitrary threads or invoked by `&` reference. For example,",
+          "path": "doc",
+          "range": [
+            7033,
+            7119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this means that if the `clone` and `drop` functions manage a reference count,",
+          "path": "doc",
+          "range": [
+            7124,
+            7205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " they must do so atomically.",
+          "path": "doc",
+          "range": [
+            7210,
+            7241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7246,
+            7249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However, if the [`RawWaker`] will be used to construct a [`LocalWaker`] instead, then",
+          "path": "doc",
+          "range": [
+            7254,
+            7343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " these functions don't need to be thread safe. This means that <code>\\![Send] + \\![Sync]</code>",
+          "path": "doc",
+          "range": [
+            7348,
+            7446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " data can be stored in the data pointer, and reference counting does not need any atomic",
+          "path": "doc",
+          "range": [
+            7451,
+            7542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " synchronization. This is because [`LocalWaker`] is not thread safe itself, so it cannot",
+          "path": "doc",
+          "range": [
+            7547,
+            7638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be sent across threads.",
+          "path": "doc",
+          "range": [
+            7643,
+            7670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `clone`",
+          "path": "doc",
+          "range": [
+            7675,
+            7688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7693,
+            7696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will be called when the [`RawWaker`] gets cloned, e.g. when",
+          "path": "doc",
+          "range": [
+            7701,
+            7778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the [`Waker`]/[`LocalWaker`] in which the [`RawWaker`] is stored gets cloned.",
+          "path": "doc",
+          "range": [
+            7783,
+            7864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7869,
+            7872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The implementation of this function must retain all resources that are",
+          "path": "doc",
+          "range": [
+            7877,
+            7951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " required for this additional instance of a [`RawWaker`] and associated",
+          "path": "doc",
+          "range": [
+            7956,
+            8030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " task. Calling `wake` on the resulting [`RawWaker`] should result in a wakeup",
+          "path": "doc",
+          "range": [
+            8035,
+            8115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the same task that would have been awoken by the original [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            8120,
+            8198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8203,
+            8206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `wake`",
+          "path": "doc",
+          "range": [
+            8211,
+            8223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8228,
+            8231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will be called when `wake` is called on the [`Waker`].",
+          "path": "doc",
+          "range": [
+            8236,
+            8308
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It must wake up the task associated with this [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            8313,
+            8376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8381,
+            8384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The implementation of this function must make sure to release any",
+          "path": "doc",
+          "range": [
+            8389,
+            8458
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " resources that are associated with this instance of a [`RawWaker`] and",
+          "path": "doc",
+          "range": [
+            8463,
+            8537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " associated task.",
+          "path": "doc",
+          "range": [
+            8542,
+            8562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8567,
+            8570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `wake_by_ref`",
+          "path": "doc",
+          "range": [
+            8575,
+            8594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8599,
+            8602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will be called when `wake_by_ref` is called on the [`Waker`].",
+          "path": "doc",
+          "range": [
+            8607,
+            8686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It must wake up the task associated with this [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            8691,
+            8754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8759,
+            8762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is similar to `wake`, but must not consume the provided data",
+          "path": "doc",
+          "range": [
+            8767,
+            8845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointer.",
+          "path": "doc",
+          "range": [
+            8850,
+            8862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8867,
+            8870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # `drop`",
+          "path": "doc",
+          "range": [
+            8875,
+            8887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8892,
+            8895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function will be called when a [`Waker`]/[`LocalWaker`] gets",
+          "path": "doc",
+          "range": [
+            8900,
+            8969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dropped.",
+          "path": "doc",
+          "range": [
+            8974,
+            8986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8991,
+            8994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The implementation of this function must make sure to release any",
+          "path": "doc",
+          "range": [
+            8999,
+            9068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " resources that are associated with this instance of a [`RawWaker`] and",
+          "path": "doc",
+          "range": [
+            9073,
+            9147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " associated task.",
+          "path": "doc",
+          "range": [
+            9152,
+            9172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_promotable",
+          "range": [
+            9177,
+            9196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9201,
+            9253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            9258,
+            9322
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9523,
+        9578
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        6656,
+        9578
+      ],
+      "signature_range": [
+        9331,
+        9522
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            9582,
+            9598
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "ExtData",
+      "range": [
+        9582,
+        9660
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The context of an asynchronous task.",
+          "path": "doc",
+          "range": [
+            9662,
+            9702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9703,
+            9706
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Currently, `Context` only serves to provide access to a [`&Waker`](Waker)",
+          "path": "doc",
+          "range": [
+            9707,
+            9784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which can be used to wake the current task.",
+          "path": "doc",
+          "range": [
+            9785,
+            9832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9833,
+            9885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            9886,
+            9905
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Context",
+      "range": [
+        9662,
+        10438
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10440,
+        11798
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Context` from a [`&Waker`](Waker).",
+          "path": "doc",
+          "range": [
+            10467,
+            10520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10525,
+            10577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            10582,
+            10646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10651,
+            10662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10667,
+            10676
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10731,
+        10788
+      ],
+      "kind": "impl_fn",
+      "name": "from_waker",
+      "range": [
+        10467,
+        10788
+      ],
+      "signature_range": [
+        10685,
+        10730
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the [`Waker`] for the current task.",
+          "path": "doc",
+          "range": [
+            10794,
+            10856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10861,
+            10870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10875,
+            10886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10891,
+            10943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            10948,
+            11012
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11056,
+        11083
+      ],
+      "kind": "impl_fn",
+      "name": "waker",
+      "range": [
+        10794,
+        11083
+      ],
+      "signature_range": [
+        11021,
+        11055
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the [`LocalWaker`] for the current task.",
+          "path": "doc",
+          "range": [
+            11089,
+            11156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11161,
+            11170
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11175,
+            11229
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11284,
+        11317
+      ],
+      "kind": "impl_fn",
+      "name": "local_waker",
+      "range": [
+        11089,
+        11317
+      ],
+      "signature_range": [
+        11238,
+        11283
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the extension data for the current task.",
+          "path": "doc",
+          "range": [
+            11323,
+            11390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11395,
+            11404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11409,
+            11463
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11512,
+        11796
+      ],
+      "kind": "impl_fn",
+      "name": "ext",
+      "range": [
+        11323,
+        11796
+      ],
+      "signature_range": [
+        11472,
+        11511
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11800,
+            11852
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11800,
+        12028
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        11948,
+        12026
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        11891,
+        12026
+      ],
+      "signature_range": [
+        11891,
+        11947
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A Builder used to construct a `Context` instance",
+          "path": "doc",
+          "range": [
+            12030,
+            12082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with support for `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            12083,
+            12117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12118,
+            12121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12122,
+            12136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12137,
+            12144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(local_waker)]",
+          "path": "doc",
+          "range": [
+            12145,
+            12173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{ContextBuilder, LocalWaker, Waker, Poll};",
+          "path": "doc",
+          "range": [
+            12174,
+            12235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            12236,
+            12264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12265,
+            12268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let local_waker = LocalWaker::noop();",
+          "path": "doc",
+          "range": [
+            12269,
+            12310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let waker = Waker::noop();",
+          "path": "doc",
+          "range": [
+            12311,
+            12341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12342,
+            12345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cx = ContextBuilder::from_waker(&waker)",
+          "path": "doc",
+          "range": [
+            12346,
+            12397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .local_waker(&local_waker)",
+          "path": "doc",
+          "range": [
+            12398,
+            12432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .build();",
+          "path": "doc",
+          "range": [
+            12433,
+            12450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12451,
+            12454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut future = std::pin::pin!(async { 20 });",
+          "path": "doc",
+          "range": [
+            12455,
+            12505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let poll = future.as_mut().poll(&mut cx);",
+          "path": "doc",
+          "range": [
+            12506,
+            12551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(poll, Poll::Ready(20));",
+          "path": "doc",
+          "range": [
+            12552,
+            12590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12591,
+            12594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12595,
+            12602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12603,
+            12657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            12658,
+            12674
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "ContextBuilder",
+      "range": [
+        12030,
+        13196
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        13198,
+        15282
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a ContextBuilder from a Waker.",
+          "path": "doc",
+          "range": [
+            13232,
+            13274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13279,
+            13288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13293,
+            13347
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13402,
+        13704
+      ],
+      "kind": "impl_fn",
+      "name": "from_waker",
+      "range": [
+        13232,
+        13704
+      ],
+      "signature_range": [
+        13356,
+        13401
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a ContextBuilder from an existing Context.",
+          "path": "doc",
+          "range": [
+            13710,
+            13764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13769,
+            13778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13783,
+            13837
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13893,
+        14239
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        13710,
+        14239
+      ],
+      "signature_range": [
+        13846,
+        13892
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sets the value for the waker on `Context`.",
+          "path": "doc",
+          "range": [
+            14245,
+            14291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14296,
+            14305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14310,
+            14364
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14420,
+        14458
+      ],
+      "kind": "impl_fn",
+      "name": "waker",
+      "range": [
+        14245,
+        14458
+      ],
+      "signature_range": [
+        14373,
+        14419
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sets the value for the local waker on `Context`.",
+          "path": "doc",
+          "range": [
+            14464,
+            14516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14521,
+            14530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14535,
+            14589
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14662,
+        14706
+      ],
+      "kind": "impl_fn",
+      "name": "local_waker",
+      "range": [
+        14464,
+        14706
+      ],
+      "signature_range": [
+        14598,
+        14661
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sets the value for the extension data on `Context`.",
+          "path": "doc",
+          "range": [
+            14712,
+            14767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14772,
+            14781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14786,
+            14840
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14899,
+        14956
+      ],
+      "kind": "impl_fn",
+      "name": "ext",
+      "range": [
+        14712,
+        14956
+      ],
+      "signature_range": [
+        14849,
+        14898
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Builds the `Context`.",
+          "path": "doc",
+          "range": [
+            14962,
+            14987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14992,
+            15001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15006,
+            15060
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15105,
+        15280
+      ],
+      "kind": "impl_fn",
+      "name": "build",
+      "range": [
+        14962,
+        15280
+      ],
+      "signature_range": [
+        15069,
+        15104
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A `Waker` is a handle for waking up a task by notifying its executor that it",
+          "path": "doc",
+          "range": [
+            15284,
+            15364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is ready to be run.",
+          "path": "doc",
+          "range": [
+            15365,
+            15388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15389,
+            15392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This handle encapsulates a [`RawWaker`] instance, which defines the",
+          "path": "doc",
+          "range": [
+            15393,
+            15464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " executor-specific wakeup behavior.",
+          "path": "doc",
+          "range": [
+            15465,
+            15503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15504,
+            15507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The typical life of a `Waker` is that it is constructed by an executor, wrapped in a",
+          "path": "doc",
+          "range": [
+            15508,
+            15596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Context`], then passed to [`Future::poll()`]. Then, if the future chooses to return",
+          "path": "doc",
+          "range": [
+            15597,
+            15686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Poll::Pending`], it must also store the waker somehow and call [`Waker::wake()`] when",
+          "path": "doc",
+          "range": [
+            15687,
+            15778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the future should be polled again.",
+          "path": "doc",
+          "range": [
+            15779,
+            15817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15818,
+            15821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implements [`Clone`], [`Send`], and [`Sync`]; therefore, a waker may be invoked",
+          "path": "doc",
+          "range": [
+            15822,
+            15905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from any thread, including ones not in any way managed by the executor. For example,",
+          "path": "doc",
+          "range": [
+            15906,
+            15994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this might be done to wake a future when a blocking function call completes on another",
+          "path": "doc",
+          "range": [
+            15995,
+            16085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thread.",
+          "path": "doc",
+          "range": [
+            16086,
+            16097
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16098,
+            16101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that it is preferable to use `waker.clone_from(&new_waker)` instead",
+          "path": "doc",
+          "range": [
+            16102,
+            16178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `*waker = new_waker.clone()`, as the former will avoid cloning the waker",
+          "path": "doc",
+          "range": [
+            16179,
+            16258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unnecessarily if the two wakers [wake the same task](Self::will_wake).",
+          "path": "doc",
+          "range": [
+            16259,
+            16333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16334,
+            16337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Constructing a `Waker` from a [`RawWaker`] is unsafe.",
+          "path": "doc",
+          "range": [
+            16338,
+            16395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementing the [`Wake`] trait is a safe alternative that requires memory allocation.",
+          "path": "doc",
+          "range": [
+            16396,
+            16486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16487,
+            16490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Future::poll()`]: core::future::Future::poll",
+          "path": "doc",
+          "range": [
+            16491,
+            16541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Poll::Pending`]: core::task::Poll::Pending",
+          "path": "doc",
+          "range": [
+            16542,
+            16590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Wake`]: ../../alloc/task/trait.Wake.html",
+          "path": "doc",
+          "range": [
+            16591,
+            16637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            16638,
+            16658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16659,
+            16711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            16712,
+            16746
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Waker",
+      "range": [
+        15284,
+        16788
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16790,
+            16842
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16790,
+        16866
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16867,
+            16919
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16867,
+        16949
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16950,
+            17002
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16950,
+        17032
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17034,
+        25164
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wakes up the task associated with this `Waker`.",
+          "path": "doc",
+          "range": [
+            17051,
+            17102
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17107,
+            17110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As long as the executor keeps running and the task is not finished, it is",
+          "path": "doc",
+          "range": [
+            17115,
+            17192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed that each invocation of [`wake()`](Self::wake) (or",
+          "path": "doc",
+          "range": [
+            17197,
+            17262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`wake_by_ref()`](Self::wake_by_ref)) will be followed by at least one",
+          "path": "doc",
+          "range": [
+            17267,
+            17341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`poll()`] of the task to which this `Waker` belongs. This makes",
+          "path": "doc",
+          "range": [
+            17346,
+            17414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it possible to temporarily yield to other tasks while running potentially",
+          "path": "doc",
+          "range": [
+            17419,
+            17496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unbounded processing loops.",
+          "path": "doc",
+          "range": [
+            17501,
+            17532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17537,
+            17540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the above implies that multiple wake-ups may be coalesced into a",
+          "path": "doc",
+          "range": [
+            17545,
+            17623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " single [`poll()`] invocation by the runtime.",
+          "path": "doc",
+          "range": [
+            17628,
+            17676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17681,
+            17684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Also note that yielding to competing tasks is not guaranteed: it is the",
+          "path": "doc",
+          "range": [
+            17689,
+            17764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " executor’s choice which task to run and the executor may choose to run the",
+          "path": "doc",
+          "range": [
+            17769,
+            17849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " current task again.",
+          "path": "doc",
+          "range": [
+            17854,
+            17877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17882,
+            17885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`poll()`]: crate::future::Future::poll",
+          "path": "doc",
+          "range": [
+            17890,
+            17933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17938,
+            17947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            17952,
+            18004
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18027,
+        18563
+      ],
+      "kind": "impl_fn",
+      "name": "wake",
+      "range": [
+        17051,
+        18563
+      ],
+      "signature_range": [
+        18013,
+        18026
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wakes up the task associated with this `Waker` without consuming the `Waker`.",
+          "path": "doc",
+          "range": [
+            18569,
+            18650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18655,
+            18658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is similar to [`wake()`](Self::wake), but may be slightly less efficient in",
+          "path": "doc",
+          "range": [
+            18663,
+            18747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the case where an owned `Waker` is available. This method should be preferred to",
+          "path": "doc",
+          "range": [
+            18752,
+            18836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " calling `waker.clone().wake()`.",
+          "path": "doc",
+          "range": [
+            18841,
+            18876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18881,
+            18890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            18895,
+            18947
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18978,
+        19230
+      ],
+      "kind": "impl_fn",
+      "name": "wake_by_ref",
+      "range": [
+        18569,
+        19230
+      ],
+      "signature_range": [
+        18956,
+        18977
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if this `Waker` and another `Waker` would awake the same task.",
+          "path": "doc",
+          "range": [
+            19236,
+            19317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19322,
+            19325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function works on a best-effort basis, and may return false even",
+          "path": "doc",
+          "range": [
+            19330,
+            19403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when the `Waker`s would awaken the same task. However, if this function",
+          "path": "doc",
+          "range": [
+            19408,
+            19483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns `true`, it is guaranteed that the `Waker`s will awaken the same task.",
+          "path": "doc",
+          "range": [
+            19488,
+            19569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19574,
+            19577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is primarily used for optimization purposes — for example,",
+          "path": "doc",
+          "range": [
+            19582,
+            19660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this type's [`clone_from`](Self::clone_from) implementation uses it to",
+          "path": "doc",
+          "range": [
+            19665,
+            19739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " avoid cloning the waker when they would wake the same task anyway.",
+          "path": "doc",
+          "range": [
+            19744,
+            19814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19819,
+            19828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            19833,
+            19844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            19849,
+            19901
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19953,
+        20321
+      ],
+      "kind": "impl_fn",
+      "name": "will_wake",
+      "range": [
+        19236,
+        20321
+      ],
+      "signature_range": [
+        19910,
+        19952
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Waker` from the provided `data` pointer and `vtable`.",
+          "path": "doc",
+          "range": [
+            20327,
+            20399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20404,
+            20407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `data` pointer can be used to store arbitrary data as required",
+          "path": "doc",
+          "range": [
+            20412,
+            20482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by the executor. This could be e.g. a type-erased pointer to an `Arc`",
+          "path": "doc",
+          "range": [
+            20487,
+            20560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is associated with the task.",
+          "path": "doc",
+          "range": [
+            20565,
+            20602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The value of this pointer will get passed to all functions that are part",
+          "path": "doc",
+          "range": [
+            20607,
+            20683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the `vtable` as the first parameter.",
+          "path": "doc",
+          "range": [
+            20688,
+            20731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20736,
+            20739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is important to consider that the `data` pointer must point to a",
+          "path": "doc",
+          "range": [
+            20744,
+            20815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " thread safe type such as an `Arc`.",
+          "path": "doc",
+          "range": [
+            20820,
+            20858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20863,
+            20866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `vtable` customizes the behavior of a `Waker`. For each operation",
+          "path": "doc",
+          "range": [
+            20871,
+            20944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on the `Waker`, the associated function in the `vtable` will be called.",
+          "path": "doc",
+          "range": [
+            20949,
+            21024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21029,
+            21032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            21037,
+            21049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21054,
+            21057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The behavior of the returned `Waker` is undefined if the contract defined",
+          "path": "doc",
+          "range": [
+            21062,
+            21139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in [`RawWakerVTable`]'s documentation is not upheld.",
+          "path": "doc",
+          "range": [
+            21144,
+            21200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21205,
+            21208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (Authors wishing to avoid unsafe code may implement the [`Wake`] trait instead, at the",
+          "path": "doc",
+          "range": [
+            21213,
+            21303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " cost of a required heap allocation.)",
+          "path": "doc",
+          "range": [
+            21308,
+            21348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21353,
+            21356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Wake`]: ../../alloc/task/trait.Wake.html",
+          "path": "doc",
+          "range": [
+            21361,
+            21407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21412,
+            21421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            21426,
+            21437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21442,
+            21496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            21501,
+            21567
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21654,
+        21712
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        20327,
+        21712
+      ],
+      "signature_range": [
+        21576,
+        21653
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Waker` from [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            21718,
+            21762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21767,
+            21770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            21775,
+            21787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21792,
+            21795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The behavior of the returned `Waker` is undefined if the contract defined",
+          "path": "doc",
+          "range": [
+            21800,
+            21877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in [`RawWaker`]'s and [`RawWakerVTable`]'s documentation is not upheld.",
+          "path": "doc",
+          "range": [
+            21882,
+            21957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21962,
+            21965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (Authors wishing to avoid unsafe code may implement the [`Wake`] trait instead, at the",
+          "path": "doc",
+          "range": [
+            21970,
+            22060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " cost of a required heap allocation.)",
+          "path": "doc",
+          "range": [
+            22065,
+            22105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22110,
+            22113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Wake`]: ../../alloc/task/trait.Wake.html",
+          "path": "doc",
+          "range": [
+            22118,
+            22164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22169,
+            22178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            22183,
+            22194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            22199,
+            22251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            22256,
+            22320
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22380,
+        22411
+      ],
+      "kind": "impl_fn",
+      "name": "from_raw",
+      "range": [
+        21718,
+        22411
+      ],
+      "signature_range": [
+        22329,
+        22379
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to a `Waker` that does nothing when used.",
+          "path": "doc",
+          "range": [
+            22417,
+            22482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22487,
+            22490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is mostly useful for writing tests that need a [`Context`] to poll",
+          "path": "doc",
+          "range": [
+            22675,
+            22750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " some futures, but are not expecting those futures to wake the waker or",
+          "path": "doc",
+          "range": [
+            22755,
+            22829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " do not need to do anything specific if it happens.",
+          "path": "doc",
+          "range": [
+            22834,
+            22888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22893,
+            22896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " More generally, using `Waker::noop()` to poll a future",
+          "path": "doc",
+          "range": [
+            22901,
+            22959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " means discarding the notification of when the future should be polled again.",
+          "path": "doc",
+          "range": [
+            22964,
+            23044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " So it should only be used when such a notification will not be needed to make progress.",
+          "path": "doc",
+          "range": [
+            23049,
+            23140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23145,
+            23148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an owned `Waker` is needed, `clone()` this one.",
+          "path": "doc",
+          "range": [
+            23153,
+            23207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23212,
+            23215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23220,
+            23234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23239,
+            23242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23247,
+            23254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            23259,
+            23287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task;",
+          "path": "doc",
+          "range": [
+            23292,
+            23310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23315,
+            23318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cx = task::Context::from_waker(task::Waker::noop());",
+          "path": "doc",
+          "range": [
+            23323,
+            23387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23392,
+            23395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut future = Box::pin(async { 10 });",
+          "path": "doc",
+          "range": [
+            23400,
+            23444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(future.as_mut().poll(&mut cx), task::Poll::Ready(10));",
+          "path": "doc",
+          "range": [
+            23449,
+            23518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23523,
+            23530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23535,
+            23544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            23549,
+            23560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23565,
+            23616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            23621,
+            23684
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23727,
+        23812
+      ],
+      "kind": "impl_fn",
+      "name": "noop",
+      "range": [
+        22417,
+        23812
+      ],
+      "signature_range": [
+        23693,
+        23726
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `data` pointer used to create this `Waker`.",
+          "path": "doc",
+          "range": [
+            23818,
+            23874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23879,
+            23888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            23893,
+            23904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23909,
+            23963
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24000,
+        24031
+      ],
+      "kind": "impl_fn",
+      "name": "data",
+      "range": [
+        23818,
+        24031
+      ],
+      "signature_range": [
+        23972,
+        23999
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `vtable` pointer used to create this `Waker`.",
+          "path": "doc",
+          "range": [
+            24037,
+            24095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24100,
+            24109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            24114,
+            24125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24130,
+            24184
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24237,
+        24270
+      ],
+      "kind": "impl_fn",
+      "name": "vtable",
+      "range": [
+        24037,
+        24270
+      ],
+      "signature_range": [
+        24193,
+        24236
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a `Waker` from a function pointer.",
+          "path": "doc",
+          "range": [
+            24276,
+            24325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24330,
+            24339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            24344,
+            24355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            24360,
+            24420
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24467,
+        25162
+      ],
+      "kind": "impl_fn",
+      "name": "from_fn_ptr",
+      "range": [
+        24276,
+        25162
+      ],
+      "signature_range": [
+        24429,
+        24466
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        40
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        24708,
+        24743
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        40
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        24761,
+        24804
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        40
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        24822,
+        24865
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        40
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        24883,
+        24889
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25166,
+            25218
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25166,
+        26828
+      ]
+    },
+    {
+      "ancestors": [
+        45
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25246,
+            25255
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25284,
+        25611
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        25246,
+        25611
+      ],
+      "signature_range": [
+        25260,
+        25283
+      ]
+    },
+    {
+      "ancestors": [
+        45
+      ],
+      "attributes": [
+        {
+          "doc_text": " Assigns a clone of `source` to `self`, unless [`self.will_wake(source)`][Waker::will_wake] anyway.",
+          "path": "doc",
+          "range": [
+            25617,
+            25719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25724,
+            25727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is preferred over simply assigning `source.clone()` to `self`,",
+          "path": "doc",
+          "range": [
+            25732,
+            25810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as it avoids cloning the waker if `self` is already the same waker.",
+          "path": "doc",
+          "range": [
+            25815,
+            25886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25891,
+            25894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            25899,
+            25913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25918,
+            25921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            25926,
+            25933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            25938,
+            25966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::pin::Pin;",
+          "path": "doc",
+          "range": [
+            25971,
+            25993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::sync::{Arc, Mutex};",
+          "path": "doc",
+          "range": [
+            25998,
+            26030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{Context, Poll, Waker};",
+          "path": "doc",
+          "range": [
+            26035,
+            26077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26082,
+            26085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Waiter {",
+          "path": "doc",
+          "range": [
+            26090,
+            26109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     shared: Arc<Mutex<Shared>>,",
+          "path": "doc",
+          "range": [
+            26114,
+            26149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26154,
+            26159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26164,
+            26167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Shared {",
+          "path": "doc",
+          "range": [
+            26172,
+            26191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     waker: Waker,",
+          "path": "doc",
+          "range": [
+            26196,
+            26217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // ...",
+          "path": "doc",
+          "range": [
+            26222,
+            26236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26241,
+            26246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26251,
+            26254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Future for Waiter {",
+          "path": "doc",
+          "range": [
+            26259,
+            26287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     type Output = ();",
+          "path": "doc",
+          "range": [
+            26292,
+            26317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<()> {",
+          "path": "doc",
+          "range": [
+            26322,
+            26395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let mut shared = self.shared.lock().unwrap();",
+          "path": "doc",
+          "range": [
+            26400,
+            26457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26462,
+            26465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // update the waker",
+          "path": "doc",
+          "range": [
+            26470,
+            26501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         shared.waker.clone_from(cx.waker());",
+          "path": "doc",
+          "range": [
+            26506,
+            26554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26559,
+            26562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // readiness logic ...",
+          "path": "doc",
+          "range": [
+            26567,
+            26601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #       Poll::Ready(())",
+          "path": "doc",
+          "range": [
+            26606,
+            26633
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26638,
+            26647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26652,
+            26657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26662,
+            26665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26670,
+            26677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26682,
+            26691
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26736,
+        26826
+      ],
+      "kind": "impl_fn",
+      "name": "clone_from",
+      "range": [
+        25617,
+        26826
+      ],
+      "signature_range": [
+        26696,
+        26735
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26830,
+            26882
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26830,
+        27217
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26909,
+            26918
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26942,
+        27215
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        26909,
+        27215
+      ],
+      "signature_range": [
+        26923,
+        26941
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            27219,
+            27271
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27219,
+        27580
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [],
+      "body_range": [
+        27361,
+        27578
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        27304,
+        27578
+      ],
+      "signature_range": [
+        27304,
+        27360
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A `LocalWaker` is analogous to a [`Waker`], but it does not implement [`Send`] or [`Sync`].",
+          "path": "doc",
+          "range": [
+            27582,
+            27677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27678,
+            27681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This handle encapsulates a [`RawWaker`] instance, which defines the",
+          "path": "doc",
+          "range": [
+            27682,
+            27753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " executor-specific wakeup behavior.",
+          "path": "doc",
+          "range": [
+            27754,
+            27792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27793,
+            27796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Local wakers can be requested from a `Context` with the [`local_waker`] method.",
+          "path": "doc",
+          "range": [
+            27797,
+            27880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27881,
+            27884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The typical life of a `LocalWaker` is that it is constructed by an executor, wrapped in a",
+          "path": "doc",
+          "range": [
+            27885,
+            27978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Context`] using [`ContextBuilder`], then passed to [`Future::poll()`]. Then, if the future chooses to return",
+          "path": "doc",
+          "range": [
+            27979,
+            28093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Poll::Pending`], it must also store the waker somehow and call [`LocalWaker::wake()`] when",
+          "path": "doc",
+          "range": [
+            28094,
+            28190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the future should be polled again.",
+          "path": "doc",
+          "range": [
+            28191,
+            28229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28230,
+            28233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implements [`Clone`], but neither [`Send`] nor [`Sync`]; therefore, a local waker may",
+          "path": "doc",
+          "range": [
+            28234,
+            28323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not be moved to other threads. In general, when deciding to use wakers or local wakers,",
+          "path": "doc",
+          "range": [
+            28324,
+            28415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " local wakers are preferable unless the waker needs to be sent across threads. This is because",
+          "path": "doc",
+          "range": [
+            28416,
+            28513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " wakers can incur in additional cost related to memory synchronization.",
+          "path": "doc",
+          "range": [
+            28514,
+            28588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28589,
+            28592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that it is preferable to use `local_waker.clone_from(&new_waker)` instead",
+          "path": "doc",
+          "range": [
+            28593,
+            28675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `*local_waker = new_waker.clone()`, as the former will avoid cloning the waker",
+          "path": "doc",
+          "range": [
+            28676,
+            28761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unnecessarily if the two wakers [wake the same task](Self::will_wake).",
+          "path": "doc",
+          "range": [
+            28762,
+            28836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28837,
+            28840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            28841,
+            28855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Usage of a local waker to implement a future analogous to `std::thread::yield_now()`.",
+          "path": "doc",
+          "range": [
+            28856,
+            28945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28946,
+            28953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(local_waker)]",
+          "path": "doc",
+          "range": [
+            28954,
+            28982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::{Future, poll_fn};",
+          "path": "doc",
+          "range": [
+            28983,
+            29022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::Poll;",
+          "path": "doc",
+          "range": [
+            29023,
+            29047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29048,
+            29051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // a future that returns pending once.",
+          "path": "doc",
+          "range": [
+            29052,
+            29094
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn yield_now() -> impl Future<Output=()> + Unpin {",
+          "path": "doc",
+          "range": [
+            29095,
+            29149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut yielded = false;",
+          "path": "doc",
+          "range": [
+            29150,
+            29182
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     poll_fn(move |cx| {",
+          "path": "doc",
+          "range": [
+            29183,
+            29210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if !yielded {",
+          "path": "doc",
+          "range": [
+            29211,
+            29236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             yielded = true;",
+          "path": "doc",
+          "range": [
+            29237,
+            29268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             cx.local_waker().wake_by_ref();",
+          "path": "doc",
+          "range": [
+            29269,
+            29316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             return Poll::Pending;",
+          "path": "doc",
+          "range": [
+            29317,
+            29354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            29355,
+            29368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         return Poll::Ready(())",
+          "path": "doc",
+          "range": [
+            29369,
+            29403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            29404,
+            29414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29415,
+            29420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29421,
+            29424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # async fn __() {",
+          "path": "doc",
+          "range": [
+            29425,
+            29446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " yield_now().await;",
+          "path": "doc",
+          "range": [
+            29447,
+            29469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            29470,
+            29477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            29478,
+            29485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29486,
+            29489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Future::poll()`]: core::future::Future::poll",
+          "path": "doc",
+          "range": [
+            29490,
+            29540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Poll::Pending`]: core::task::Poll::Pending",
+          "path": "doc",
+          "range": [
+            29541,
+            29589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`local_waker`]: core::task::Context::local_waker",
+          "path": "doc",
+          "range": [
+            29590,
+            29643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29644,
+            29698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            29699,
+            29719
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "LocalWaker",
+      "range": [
+        27582,
+        29766
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29768,
+            29822
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29768,
+        29851
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29853,
+        37522
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wakes up the task associated with this `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            29875,
+            29931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29936,
+            29939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As long as the executor keeps running and the task is not finished, it is",
+          "path": "doc",
+          "range": [
+            29944,
+            30021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed that each invocation of [`wake()`](Self::wake) (or",
+          "path": "doc",
+          "range": [
+            30026,
+            30091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`wake_by_ref()`](Self::wake_by_ref)) will be followed by at least one",
+          "path": "doc",
+          "range": [
+            30096,
+            30170
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`poll()`] of the task to which this `LocalWaker` belongs. This makes",
+          "path": "doc",
+          "range": [
+            30175,
+            30248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it possible to temporarily yield to other tasks while running potentially",
+          "path": "doc",
+          "range": [
+            30253,
+            30330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unbounded processing loops.",
+          "path": "doc",
+          "range": [
+            30335,
+            30366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30371,
+            30374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the above implies that multiple wake-ups may be coalesced into a",
+          "path": "doc",
+          "range": [
+            30379,
+            30457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " single [`poll()`] invocation by the runtime.",
+          "path": "doc",
+          "range": [
+            30462,
+            30510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30515,
+            30518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Also note that yielding to competing tasks is not guaranteed: it is the",
+          "path": "doc",
+          "range": [
+            30523,
+            30598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " executor’s choice which task to run and the executor may choose to run the",
+          "path": "doc",
+          "range": [
+            30603,
+            30683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " current task again.",
+          "path": "doc",
+          "range": [
+            30688,
+            30711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30716,
+            30719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`poll()`]: crate::future::Future::poll",
+          "path": "doc",
+          "range": [
+            30724,
+            30767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30772,
+            30781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            30786,
+            30840
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30863,
+        31399
+      ],
+      "kind": "impl_fn",
+      "name": "wake",
+      "range": [
+        29875,
+        31399
+      ],
+      "signature_range": [
+        30849,
+        30862
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wakes up the task associated with this `LocalWaker` without consuming the `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            31405,
+            31496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31501,
+            31504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is similar to [`wake()`](Self::wake), but may be slightly less efficient in",
+          "path": "doc",
+          "range": [
+            31509,
+            31593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the case where an owned `Waker` is available. This method should be preferred to",
+          "path": "doc",
+          "range": [
+            31598,
+            31682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " calling `waker.clone().wake()`.",
+          "path": "doc",
+          "range": [
+            31687,
+            31722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31727,
+            31736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            31741,
+            31795
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31826,
+        32078
+      ],
+      "kind": "impl_fn",
+      "name": "wake_by_ref",
+      "range": [
+        31405,
+        32078
+      ],
+      "signature_range": [
+        31804,
+        31825
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if this `LocalWaker` and another `LocalWaker` would awake the same task.",
+          "path": "doc",
+          "range": [
+            32084,
+            32175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32180,
+            32183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function works on a best-effort basis, and may return false even",
+          "path": "doc",
+          "range": [
+            32188,
+            32261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when the `Waker`s would awaken the same task. However, if this function",
+          "path": "doc",
+          "range": [
+            32266,
+            32341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns `true`, it is guaranteed that the `Waker`s will awaken the same task.",
+          "path": "doc",
+          "range": [
+            32346,
+            32427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32432,
+            32435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is primarily used for optimization purposes — for example,",
+          "path": "doc",
+          "range": [
+            32440,
+            32518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this type's [`clone_from`](Self::clone_from) implementation uses it to",
+          "path": "doc",
+          "range": [
+            32523,
+            32597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " avoid cloning the waker when they would wake the same task anyway.",
+          "path": "doc",
+          "range": [
+            32602,
+            32672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32677,
+            32686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            32691,
+            32702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            32707,
+            32761
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32818,
+        33186
+      ],
+      "kind": "impl_fn",
+      "name": "will_wake",
+      "range": [
+        32084,
+        33186
+      ],
+      "signature_range": [
+        32770,
+        32817
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `LocalWaker` from the provided `data` pointer and `vtable`.",
+          "path": "doc",
+          "range": [
+            33192,
+            33269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33274,
+            33277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `data` pointer can be used to store arbitrary data as required",
+          "path": "doc",
+          "range": [
+            33282,
+            33352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by the executor. This could be e.g. a type-erased pointer to an `Arc`",
+          "path": "doc",
+          "range": [
+            33357,
+            33430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is associated with the task.",
+          "path": "doc",
+          "range": [
+            33435,
+            33472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The value of this pointer will get passed to all functions that are part",
+          "path": "doc",
+          "range": [
+            33477,
+            33553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the `vtable` as the first parameter.",
+          "path": "doc",
+          "range": [
+            33558,
+            33601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33606,
+            33609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `vtable` customizes the behavior of a `LocalWaker`. For each",
+          "path": "doc",
+          "range": [
+            33614,
+            33682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " operation on the `LocalWaker`, the associated function in the `vtable`",
+          "path": "doc",
+          "range": [
+            33687,
+            33761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will be called.",
+          "path": "doc",
+          "range": [
+            33766,
+            33785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33790,
+            33793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            33798,
+            33810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33815,
+            33818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The behavior of the returned `Waker` is undefined if the contract defined",
+          "path": "doc",
+          "range": [
+            33823,
+            33900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in [`RawWakerVTable`]'s documentation is not upheld.",
+          "path": "doc",
+          "range": [
+            33905,
+            33961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33966,
+            33969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33974,
+            33983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            33988,
+            33999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            34004,
+            34058
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34145,
+        34208
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        33192,
+        34208
+      ],
+      "signature_range": [
+        34067,
+        34144
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `LocalWaker` from [`RawWaker`].",
+          "path": "doc",
+          "range": [
+            34214,
+            34263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34268,
+            34271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The behavior of the returned `LocalWaker` is undefined if the contract defined",
+          "path": "doc",
+          "range": [
+            34276,
+            34358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in [`RawWaker`]'s and [`RawWakerVTable`]'s documentation is not upheld.",
+          "path": "doc",
+          "range": [
+            34363,
+            34438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Therefore this method is unsafe.",
+          "path": "doc",
+          "range": [
+            34443,
+            34479
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            34484,
+            34493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            34498,
+            34509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            34514,
+            34568
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34633,
+        34663
+      ],
+      "kind": "impl_fn",
+      "name": "from_raw",
+      "range": [
+        34214,
+        34663
+      ],
+      "signature_range": [
+        34577,
+        34632
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to a `LocalWaker` that does nothing when used.",
+          "path": "doc",
+          "range": [
+            34669,
+            34739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34744,
+            34747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is mostly useful for writing tests that need a [`Context`] to poll",
+          "path": "doc",
+          "range": [
+            34927,
+            35002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " some futures, but are not expecting those futures to wake the waker or",
+          "path": "doc",
+          "range": [
+            35007,
+            35081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " do not need to do anything specific if it happens.",
+          "path": "doc",
+          "range": [
+            35086,
+            35140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35145,
+            35148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " More generally, using `LocalWaker::noop()` to poll a future",
+          "path": "doc",
+          "range": [
+            35153,
+            35216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " means discarding the notification of when the future should be polled again,",
+          "path": "doc",
+          "range": [
+            35221,
+            35301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " So it should only be used when such a notification will not be needed to make progress.",
+          "path": "doc",
+          "range": [
+            35306,
+            35397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35402,
+            35405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an owned `LocalWaker` is needed, `clone()` this one.",
+          "path": "doc",
+          "range": [
+            35410,
+            35469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35474,
+            35477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            35482,
+            35496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35501,
+            35504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            35509,
+            35516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(local_waker)]",
+          "path": "doc",
+          "range": [
+            35521,
+            35549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::future::Future;",
+          "path": "doc",
+          "range": [
+            35554,
+            35582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::task::{ContextBuilder, LocalWaker, Waker, Poll};",
+          "path": "doc",
+          "range": [
+            35587,
+            35648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35653,
+            35656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut cx = ContextBuilder::from_waker(Waker::noop())",
+          "path": "doc",
+          "range": [
+            35661,
+            35719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .local_waker(LocalWaker::noop())",
+          "path": "doc",
+          "range": [
+            35724,
+            35764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .build();",
+          "path": "doc",
+          "range": [
+            35769,
+            35786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35791,
+            35794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut future = Box::pin(async { 10 });",
+          "path": "doc",
+          "range": [
+            35799,
+            35843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(future.as_mut().poll(&mut cx), Poll::Ready(10));",
+          "path": "doc",
+          "range": [
+            35848,
+            35911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            35916,
+            35923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35928,
+            35937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            35942,
+            35953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            35958,
+            36012
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36060,
+        36155
+      ],
+      "kind": "impl_fn",
+      "name": "noop",
+      "range": [
+        34669,
+        36155
+      ],
+      "signature_range": [
+        36021,
+        36059
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `data` pointer used to create this `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            36161,
+            36222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36227,
+            36236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            36241,
+            36252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36257,
+            36311
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36348,
+        36379
+      ],
+      "kind": "impl_fn",
+      "name": "data",
+      "range": [
+        36161,
+        36379
+      ],
+      "signature_range": [
+        36320,
+        36347
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `vtable` pointer used to create this `LocalWaker`.",
+          "path": "doc",
+          "range": [
+            36385,
+            36448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36453,
+            36462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            36467,
+            36478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36483,
+            36537
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36590,
+        36623
+      ],
+      "kind": "impl_fn",
+      "name": "vtable",
+      "range": [
+        36385,
+        36623
+      ],
+      "signature_range": [
+        36546,
+        36589
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a `LocalWaker` from a function pointer.",
+          "path": "doc",
+          "range": [
+            36629,
+            36683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36688,
+            36697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            36702,
+            36713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36718,
+            36778
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36825,
+        37520
+      ],
+      "kind": "impl_fn",
+      "name": "from_fn_ptr",
+      "range": [
+        36629,
+        37520
+      ],
+      "signature_range": [
+        36787,
+        36824
+      ]
+    },
+    {
+      "ancestors": [
+        54,
+        63
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        37066,
+        37101
+      ]
+    },
+    {
+      "ancestors": [
+        54,
+        63
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        37119,
+        37162
+      ]
+    },
+    {
+      "ancestors": [
+        54,
+        63
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        37180,
+        37223
+      ]
+    },
+    {
+      "ancestors": [
+        54,
+        63
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        37241,
+        37247
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            37523,
+            37577
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37523,
+        38132
+      ]
+    },
+    {
+      "ancestors": [
+        68
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37610,
+            37619
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37648,
+        37980
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        37610,
+        37980
+      ],
+      "signature_range": [
+        37624,
+        37647
+      ]
+    },
+    {
+      "ancestors": [
+        68
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37986,
+            37995
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38040,
+        38130
+      ],
+      "kind": "impl_fn",
+      "name": "clone_from",
+      "range": [
+        37986,
+        38130
+      ],
+      "signature_range": [
+        38000,
+        38039
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        38134,
+        38445
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            38447,
+            38501
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38447,
+        38846
+      ]
+    },
+    {
+      "ancestors": [
+        72
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38533,
+            38542
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38566,
+        38844
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        38533,
+        38844
+      ],
+      "signature_range": [
+        38547,
+        38565
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            38848,
+            38902
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38848,
+        39221
+      ]
+    },
+    {
+      "ancestors": [
+        74
+      ],
+      "attributes": [],
+      "body_range": [
+        38997,
+        39219
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        38940,
+        39219
+      ],
+      "signature_range": [
+        38940,
+        38996
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            39223,
+            39277
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        39223,
+        39306
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            39307,
+            39361
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        39307,
+        39390
+      ]
+    }
+  ],
+  "source_sha256": "48756307918b0dccf871b259c4065c1a1a6422ced107bd9c1c2fe4788cd34048"
+}

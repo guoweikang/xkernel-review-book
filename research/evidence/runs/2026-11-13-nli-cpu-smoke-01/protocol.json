@@ -1,0 +1,15 @@
+{
+  "status": "planned_not_executed",
+  "purpose": "Alternative pretrained discriminative NLI smoke test, not historical checkpoint reproduction",
+  "model": "cross-encoder/nli-deberta-v3-base",
+  "revision": "6c749ce3425cd33b46d187e45b92bbf96ee12ec7",
+  "weight_sha256": "d8148c6d49e0a7925134294c56326c71fe0ab1dc390e37355e00c7efbb488afa",
+  "data": "research/evidence/originals/2026-11-13-relation-benchmarks-01/hans-data.tsv",
+  "selection": "For each of the 30 subcases, sort pairID lexicographically, select first 10; 300 already-exposed development examples, not random or held-out",
+  "input": "Only sentence1 then sentence2; no gold label, parse, subcase or template in model input",
+  "inference": "CPU float32 eval + inference_mode, threads=4, batch=8, max_length=128; report untruncated lengths and truncation; run twice; label argmax over 3 logits then collapse neutral/contradiction, NOT threshold summed negative probabilities",
+  "loading": "local_files_only=true, trust_remote_code=false, safetensors only; isolated environment, record exact installed distributions",
+  "budget": "30 minutes wall limit for inference batch; retain partial output/failure without reporting full-set metrics",
+  "checks": ["weight hash and id2label exactly 0 contradiction 1 entailment 2 neutral", "unique complete selected IDs", "finite logits", "repeat prediction agreement and maximum absolute logit difference", "report overall and by gold/subcase; no probability calibration claim"],
+  "stopping": "No prompt/query tuning, no thresholds chosen on these labels; inspect failures before scaling or Rust transfer"
+}

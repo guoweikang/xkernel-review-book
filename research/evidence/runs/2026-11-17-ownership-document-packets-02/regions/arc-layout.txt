@@ -1,0 +1,25 @@
+// This is repr(C) to future-proof against possible field-reordering, which
+// would interfere with otherwise safe [into|from]_raw() of transmutable
+// inner types.
+// Unlike RcInner, repr(align(2)) is not strictly required because atomic types
+// have the alignment same as its size, but we use it for consistency and clarity.
+#[repr(C, align(2))]
+struct ArcInner<T: ?Sized> {
+    strong: Atomic<usize>,
+
+    // the value usize::MAX acts as a sentinel for temporarily "locking" the
+    // ability to upgrade weak pointers or downgrade strong ones; this is used
+    // to avoid races in `make_mut` and `get_mut`.
+    weak: Atomic<usize>,
+
+    data: T,
+}
+
+/// Calculate layout for `ArcInner<T>` using the inner value's layout
+fn arcinner_layout_for_value_layout(layout: Layout) -> Layout {
+    // Calculate layout using the given value layout.
+    // Previously, layout was calculated on the expression
+    // `&*(ptr as *const ArcInner<T>)`, but this created a misaligned
+    // reference (see #54908).
+    Layout::new::<ArcInner<()>>().extend(layout).unwrap().0.pad_to_align()
+}

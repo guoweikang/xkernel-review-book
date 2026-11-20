@@ -1,0 +1,20 @@
+## purpose
+Return a mode value with replacement permission bits.
+
+## input_preconditions
+Accept a mode value and NodePermission; retain only permission bits selected by PERMISSION_MASK from the supplied permission.
+
+## changed_and_preserved_state
+Replace permission bits and preserve the original file-type bits selected by NODE_TYPE_MASK.
+
+## effects_and_callback_boundary
+Compute and return a value; this function body performs no callback or external state mutation.
+
+## errors_and_partial_completion
+The body has no Result return or explicit error branch; this is not a general guarantee about all callers.
+
+## execution_context
+The extracted body uses integer masks and contains no allocation, lock acquisition or blocking call.
+
+## delegation
+The body computes the bit-mask expression directly and does not delegate to a shared field-update helper.

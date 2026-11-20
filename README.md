@@ -1,7 +1,7 @@
 # AI 代码审查：原理、方法与评价
 
 独立的 mdBook 源码仓库。入口是 `chapters/README.md`，研究原始笔记保留于 `research/`。
-当前为基础调研及共同学习，不是已验证的 AI review 产品。
+包含基础学习、论文调研、基线适配及局部工程实验，不是已验证的通用 AI review 产品。
 
 仓库：<https://github.com/guoweikang/xkernel-review-book>。
 内容按基础前置知识、流程地图、六个审查环节组织；论文与工程实践归入对应环节。
@@ -10,6 +10,20 @@
 `research/archive/sources.json`。实验原始输入输出按批次存放在 `research/evidence/runs/`，
 公开文件摘要清单位于 `research/archive/snapshots/`。缓存与部分本地原件不随Git上传，
 当前不宣称提供完整离线复现环境。
+
+## 当前研究进度（2026-11-20整理）
+
+优先阅读[阶段研究报告](research/notes/2026-11-18-stage-progress.md)，再从
+[主题地图](chapters/research-topics/scope.md)查看发现、确认、职责文档与评价证据；
+[进度记录](research/PROGRESS.md)保留各批次的决策及接续入口。
+
+- 发现：已有词元、文档与调用视角的基线及固定范围比较，尚未证明独立数据上的稳定收益。
+- 确认：保留成功与拒绝案例。最新直接委托实验中，原版／候选各303项测试通过；
+  缓存Cow helper因清理顺序变化的可接受性未闭合而暂不推荐。
+- 边界：测试通过不代表完整等价、性能提升或生产采用；跨crate及跨项目收益仍待验证。
+- 下一步：跨crate真实consumer—provider能力关系及同版契约的证据覆盖比较，尚未执行。
+
+最近完成的实验日期为2026-11-18，本次整理与归档不计作新增实验。
 
 ## 构建与访问
 

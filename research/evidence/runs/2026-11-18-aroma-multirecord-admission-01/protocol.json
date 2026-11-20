@@ -1,0 +1,9 @@
+{
+  "question": "Does the pinned official Aroma artifact offer a small native multi-record non-self-retrieval task with recoverable source provenance?",
+  "commit": "e8d8beeb99255d8929874c156fd65aac74d21508",
+  "sources": "Official repository recursive tree, all three datasets CSV, original README and reference test/build metadata",
+  "budget": "At most 5MB downloaded metadata and CSV, 40s per request. No dependency installs, Java builds, reconstructing 5339 repositories, handcrafted AST or algorithm run in this admission batch.",
+  "checks": ["Distinguish repository manifest, query examples, original corpus trees and result references", "Count records and provenance fields", "Check first nonempty result-source link in original CSV order, max one source file <=1MB", "Check available Java/Maven locally without installation"],
+  "decision": "Run a later frozen original algorithm batch only if native multi-record input and provenance are available within budget. Otherwise retain exact blockers; no synthetic positives or self-query substitute.",
+  "retrieval": "research_lookup.py Aroma PAM multi-record --limit 4:114 hits,4 returned,110 omitted. Existing source README, replay, feasibility and latest Progress inspected; not exhaustive."
+}

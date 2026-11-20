@@ -1,0 +1,803 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "SearchBound",
+      "range": [
+        209,
+        569
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        571,
+        842
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        656,
+        840
+      ],
+      "kind": "impl_fn",
+      "name": "from_range",
+      "range": [
+        600,
+        840
+      ],
+      "signature_range": [
+        611,
+        655
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "SearchResult",
+      "range": [
+        844,
+        1059
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "IndexResult",
+      "range": [
+        1061,
+        1124
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1126,
+        6799
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Looks up a given key in a (sub)tree headed by the node, recursively.",
+          "path": "doc",
+          "range": [
+            1225,
+            1297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a `Found` with the handle of the matching KV, if any. Otherwise,",
+          "path": "doc",
+          "range": [
+            1302,
+            1378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns a `GoDown` with the handle of the leaf edge where the key belongs.",
+          "path": "doc",
+          "range": [
+            1383,
+            1461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1466,
+            1469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key, like the tree",
+          "path": "doc",
+          "range": [
+            1474,
+            1552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in a `BTreeMap` is.",
+          "path": "doc",
+          "range": [
+            1557,
+            1580
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1788,
+        2131
+      ],
+      "kind": "impl_fn",
+      "name": "search_tree",
+      "range": [
+        1225,
+        2131
+      ],
+      "signature_range": [
+        1596,
+        1783
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Descends to the nearest node where the edge matching the lower bound",
+          "path": "doc",
+          "range": [
+            2137,
+            2209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the range is different from the edge matching the upper bound, i.e.,",
+          "path": "doc",
+          "range": [
+            2214,
+            2289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the nearest node that has at least one key contained in the range.",
+          "path": "doc",
+          "range": [
+            2294,
+            2364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2369,
+            2372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If found, returns an `Ok` with that node, the strictly ascending pair of",
+          "path": "doc",
+          "range": [
+            2377,
+            2453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " edge indices in the node delimiting the range, and the corresponding",
+          "path": "doc",
+          "range": [
+            2458,
+            2530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pair of bounds for continuing the search in the child nodes, in case",
+          "path": "doc",
+          "range": [
+            2535,
+            2607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the node is internal.",
+          "path": "doc",
+          "range": [
+            2612,
+            2637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2642,
+            2645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If not found, returns an `Err` with the leaf edge matching the entire",
+          "path": "doc",
+          "range": [
+            2650,
+            2723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " range.",
+          "path": "doc",
+          "range": [
+            2728,
+            2738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2743,
+            2746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As a diagnostic service, panics if the range specifies impossible bounds.",
+          "path": "doc",
+          "range": [
+            2751,
+            2828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2833,
+            2836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key.",
+          "path": "doc",
+          "range": [
+            2841,
+            2905
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3370,
+        5672
+      ],
+      "kind": "impl_fn",
+      "name": "search_tree_for_bifurcation",
+      "range": [
+        2137,
+        5672
+      ],
+      "signature_range": [
+        2921,
+        3365
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        3903,
+        3967
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4013,
+        4077
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4295,
+        4354
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4400,
+        4459
+      ]
+    },
+    {
+      "ancestors": [
+        5,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5193,
+        5241
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds an edge in the node delimiting the lower bound of a range.",
+          "path": "doc",
+          "range": [
+            5678,
+            5746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Also returns the lower bound to be used for continuing the search in",
+          "path": "doc",
+          "range": [
+            5751,
+            5823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the matching child node, if `self` is an internal node.",
+          "path": "doc",
+          "range": [
+            5828,
+            5887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5892,
+            5895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key.",
+          "path": "doc",
+          "range": [
+            5900,
+            5964
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6181,
+        6342
+      ],
+      "kind": "impl_fn",
+      "name": "find_lower_bound_edge",
+      "range": [
+        5678,
+        6342
+      ],
+      "signature_range": [
+        5980,
+        6176
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Clone of `find_lower_bound_edge` for the upper bound.",
+          "path": "doc",
+          "range": [
+            6348,
+            6405
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6622,
+        6797
+      ],
+      "kind": "impl_fn",
+      "name": "find_upper_bound_edge",
+      "range": [
+        6348,
+        6797
+      ],
+      "signature_range": [
+        6421,
+        6617
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6801,
+        10821
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Looks up a given key in the node, without recursion.",
+          "path": "doc",
+          "range": [
+            6868,
+            6924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a `Found` with the handle of the matching KV, if any. Otherwise,",
+          "path": "doc",
+          "range": [
+            6929,
+            7005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns a `GoDown` with the handle of the edge where the key might be found",
+          "path": "doc",
+          "range": [
+            7010,
+            7089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (if the node is internal) or where the key can be inserted.",
+          "path": "doc",
+          "range": [
+            7094,
+            7157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7162,
+            7165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key, like the tree",
+          "path": "doc",
+          "range": [
+            7170,
+            7248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in a `BTreeMap` is.",
+          "path": "doc",
+          "range": [
+            7253,
+            7276
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7454,
+        7693
+      ],
+      "kind": "impl_fn",
+      "name": "search_node",
+      "range": [
+        6868,
+        7693
+      ],
+      "signature_range": [
+        7292,
+        7449
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns either the KV index in the node at which the key (or an equivalent)",
+          "path": "doc",
+          "range": [
+            7699,
+            7778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exists, or the edge index where the key belongs, starting from a particular index.",
+          "path": "doc",
+          "range": [
+            7783,
+            7869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7874,
+            7877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key, like the tree",
+          "path": "doc",
+          "range": [
+            7882,
+            7960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in a `BTreeMap` is.",
+          "path": "doc",
+          "range": [
+            7965,
+            7988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7993,
+            7996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            8001,
+            8013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `start_index` must be a valid edge index for the node.",
+          "path": "doc",
+          "range": [
+            8018,
+            8076
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8220,
+        8743
+      ],
+      "kind": "impl_fn",
+      "name": "find_key_index",
+      "range": [
+        7699,
+        8743
+      ],
+      "signature_range": [
+        8081,
+        8215
+      ]
+    },
+    {
+      "ancestors": [
+        15,
+        17
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8298,
+        8338
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds an edge index in the node delimiting the lower bound of a range.",
+          "path": "doc",
+          "range": [
+            8749,
+            8823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Also returns the lower bound to be used for continuing the search in",
+          "path": "doc",
+          "range": [
+            8828,
+            8900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the matching child node, if `self` is an internal node.",
+          "path": "doc",
+          "range": [
+            8905,
+            8964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8969,
+            8972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The result is meaningful only if the tree is ordered by key.",
+          "path": "doc",
+          "range": [
+            8977,
+            9041
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9228,
+        9784
+      ],
+      "kind": "impl_fn",
+      "name": "find_lower_bound_index",
+      "range": [
+        8749,
+        9784
+      ],
+      "signature_range": [
+        9046,
+        9223
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Mirror image of `find_lower_bound_index` for the upper bound,",
+          "path": "doc",
+          "range": [
+            9790,
+            9855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with an additional parameter to skip part of the key array.",
+          "path": "doc",
+          "range": [
+            9860,
+            9923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9928,
+            9931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            9936,
+            9948
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `start_index` must be a valid edge index for the node.",
+          "path": "doc",
+          "range": [
+            9953,
+            10011
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10233,
+        10819
+      ],
+      "kind": "impl_fn",
+      "name": "find_upper_bound_index",
+      "range": [
+        9790,
+        10819
+      ],
+      "signature_range": [
+        10016,
+        10228
+      ]
+    }
+  ],
+  "source_sha256": "687b99a6f5f146591738c8039371499d5c5ca9adfdb47b9519694aba62387021"
+}

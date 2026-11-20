@@ -1,0 +1,3038 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Used to tell an operation whether it should exit early or go on as usual.",
+          "path": "doc",
+          "range": [
+            57,
+            134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            135,
+            138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is used when exposing things (like graph traversals or visitors) where",
+          "path": "doc",
+          "range": [
+            139,
+            218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " you want the user to be able to choose whether to exit early.",
+          "path": "doc",
+          "range": [
+            219,
+            284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Having the enum makes it clearer -- no more wondering \"wait, what did `false`",
+          "path": "doc",
+          "range": [
+            285,
+            366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mean again?\" -- and allows including a value.",
+          "path": "doc",
+          "range": [
+            367,
+            416
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            417,
+            420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Similar to [`Option`] and [`Result`], this enum can be used with the `?` operator",
+          "path": "doc",
+          "range": [
+            421,
+            506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to return immediately if the [`Break`] variant is present or otherwise continue normally",
+          "path": "doc",
+          "range": [
+            507,
+            599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the value inside the [`Continue`] variant.",
+          "path": "doc",
+          "range": [
+            600,
+            651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            652,
+            655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            656,
+            670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            671,
+            674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Early-exiting from [`Iterator::try_for_each`]:",
+          "path": "doc",
+          "range": [
+            675,
+            725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            726,
+            733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            734,
+            764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            765,
+            768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let r = (2..100).try_for_each(|x| {",
+          "path": "doc",
+          "range": [
+            769,
+            808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if 403 % x == 0 {",
+          "path": "doc",
+          "range": [
+            809,
+            834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         return ControlFlow::Break(x)",
+          "path": "doc",
+          "range": [
+            835,
+            875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            876,
+            885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            886,
+            889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            890,
+            923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            924,
+            931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(r, ControlFlow::Break(13));",
+          "path": "doc",
+          "range": [
+            932,
+            974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            975,
+            982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            983,
+            986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A basic tree traversal:",
+          "path": "doc",
+          "range": [
+            987,
+            1014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1015,
+            1022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            1023,
+            1053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1054,
+            1057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub struct TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            1058,
+            1086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: T,",
+          "path": "doc",
+          "range": [
+            1087,
+            1104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            1105,
+            1144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            1145,
+            1185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1186,
+            1191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1192,
+            1195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T> TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            1196,
+            1221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pub fn traverse_inorder<B>(&self, f: &mut impl FnMut(&T) -> ControlFlow<B>) -> ControlFlow<B> {",
+          "path": "doc",
+          "range": [
+            1222,
+            1325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(left) = &self.left {",
+          "path": "doc",
+          "range": [
+            1326,
+            1370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             left.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            1371,
+            1413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1414,
+            1427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         f(&self.value)?;",
+          "path": "doc",
+          "range": [
+            1428,
+            1456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(right) = &self.right {",
+          "path": "doc",
+          "range": [
+            1457,
+            1503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             right.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            1504,
+            1547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1548,
+            1561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            1562,
+            1599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1600,
+            1609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn leaf(value: T) -> Option<Box<TreeNode<T>>> {",
+          "path": "doc",
+          "range": [
+            1610,
+            1665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(Box::new(Self { value, left: None, right: None }))",
+          "path": "doc",
+          "range": [
+            1666,
+            1733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1734,
+            1743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1744,
+            1749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1750,
+            1753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let node = TreeNode {",
+          "path": "doc",
+          "range": [
+            1754,
+            1779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: 0,",
+          "path": "doc",
+          "range": [
+            1780,
+            1797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: TreeNode::leaf(1),",
+          "path": "doc",
+          "range": [
+            1798,
+            1830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Some(Box::new(TreeNode {",
+          "path": "doc",
+          "range": [
+            1831,
+            1870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         value: -1,",
+          "path": "doc",
+          "range": [
+            1871,
+            1893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         left: TreeNode::leaf(5),",
+          "path": "doc",
+          "range": [
+            1894,
+            1930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         right: TreeNode::leaf(2),",
+          "path": "doc",
+          "range": [
+            1931,
+            1968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }))",
+          "path": "doc",
+          "range": [
+            1969,
+            1980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            1981,
+            1987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut sum = 0;",
+          "path": "doc",
+          "range": [
+            1988,
+            2008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2009,
+            2012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let res = node.traverse_inorder(&mut |val| {",
+          "path": "doc",
+          "range": [
+            2013,
+            2061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if *val < 0 {",
+          "path": "doc",
+          "range": [
+            2062,
+            2083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ControlFlow::Break(*val)",
+          "path": "doc",
+          "range": [
+            2084,
+            2120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            2121,
+            2137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         sum += *val;",
+          "path": "doc",
+          "range": [
+            2138,
+            2162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            2163,
+            2200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2201,
+            2210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            2211,
+            2218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(res, ControlFlow::Break(-1));",
+          "path": "doc",
+          "range": [
+            2219,
+            2263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(sum, 6);",
+          "path": "doc",
+          "range": [
+            2264,
+            2287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2288,
+            2295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2296,
+            2299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Break`]: ControlFlow::Break",
+          "path": "doc",
+          "range": [
+            2300,
+            2333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Continue`]: ControlFlow::Continue",
+          "path": "doc",
+          "range": [
+            2334,
+            2373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2374,
+            2437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            2438,
+            2478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2479,
+            2490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2642,
+            2670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive_const",
+          "range": [
+            2671,
+            2708
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "ControlFlow",
+      "range": [
+        57,
+        3289
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        3291,
+        3938
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        3940,
+        4514
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4516,
+            4579
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4516,
+        4689
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4691,
+        13298
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if this is a `Break` variant.",
+          "path": "doc",
+          "range": [
+            4726,
+            4774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4779,
+            4782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4787,
+            4801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4806,
+            4809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4814,
+            4821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            4826,
+            4856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4861,
+            4864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(ControlFlow::<&str, i32>::Break(\"Stop right there!\").is_break());",
+          "path": "doc",
+          "range": [
+            4869,
+            4946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!ControlFlow::<&str, i32>::Continue(3).is_break());",
+          "path": "doc",
+          "range": [
+            4951,
+            5014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5019,
+            5026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5031,
+            5040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5045,
+            5106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            5111,
+            5186
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5228,
+        5282
+      ],
+      "kind": "impl_fn",
+      "name": "is_break",
+      "range": [
+        4726,
+        5282
+      ],
+      "signature_range": [
+        5195,
+        5227
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        5
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5238,
+        5276
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if this is a `Continue` variant.",
+          "path": "doc",
+          "range": [
+            5288,
+            5339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5344,
+            5347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5352,
+            5366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5371,
+            5374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5379,
+            5386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            5391,
+            5421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5426,
+            5429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!ControlFlow::<&str, i32>::Break(\"Stop right there!\").is_continue());",
+          "path": "doc",
+          "range": [
+            5434,
+            5515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(ControlFlow::<&str, i32>::Continue(3).is_continue());",
+          "path": "doc",
+          "range": [
+            5520,
+            5585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5590,
+            5597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5602,
+            5611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5616,
+            5677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            5682,
+            5757
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5802,
+        5859
+      ],
+      "kind": "impl_fn",
+      "name": "is_continue",
+      "range": [
+        5288,
+        5859
+      ],
+      "signature_range": [
+        5766,
+        5801
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5812,
+        5853
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts the `ControlFlow` into an `Option` which is `Some` if the",
+          "path": "doc",
+          "range": [
+            5865,
+            5935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ControlFlow` was `Break` and `None` otherwise.",
+          "path": "doc",
+          "range": [
+            5940,
+            5991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5996,
+            5999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6004,
+            6018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6023,
+            6026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6031,
+            6038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            6043,
+            6073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6078,
+            6081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<&str, i32>::Break(\"Stop right there!\").break_value(), Some(\"Stop right there!\"));",
+          "path": "doc",
+          "range": [
+            6086,
+            6196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<&str, i32>::Continue(3).break_value(), None);",
+          "path": "doc",
+          "range": [
+            6201,
+            6275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6280,
+            6287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6292,
+            6301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6306,
+            6364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            6369,
+            6442
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6537,
+        6668
+      ],
+      "kind": "impl_fn",
+      "name": "break_value",
+      "range": [
+        5865,
+        6668
+      ],
+      "signature_range": [
+        6451,
+        6532
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts the `ControlFlow` into a `Result` which is `Ok` if the",
+          "path": "doc",
+          "range": [
+            6674,
+            6741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ControlFlow` was `Break` and `Err` if otherwise.",
+          "path": "doc",
+          "range": [
+            6746,
+            6799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6804,
+            6807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6812,
+            6826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6831,
+            6834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6839,
+            6846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(control_flow_ok)]",
+          "path": "doc",
+          "range": [
+            6851,
+            6883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6888,
+            6891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            6896,
+            6926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6931,
+            6934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            6939,
+            6963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: T,",
+          "path": "doc",
+          "range": [
+            6968,
+            6985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            6990,
+            7029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            7034,
+            7074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            7079,
+            7084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7089,
+            7092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T> TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            7097,
+            7122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn find<'a>(&'a self, mut predicate: impl FnMut(&T) -> bool) -> Result<&'a T, ()> {",
+          "path": "doc",
+          "range": [
+            7127,
+            7218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let mut f = |t: &'a T| -> ControlFlow<&'a T> {",
+          "path": "doc",
+          "range": [
+            7223,
+            7281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             if predicate(t) {",
+          "path": "doc",
+          "range": [
+            7286,
+            7319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 ControlFlow::Break(t)",
+          "path": "doc",
+          "range": [
+            7324,
+            7365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             } else {",
+          "path": "doc",
+          "range": [
+            7370,
+            7394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            7399,
+            7444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            7449,
+            7466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         };",
+          "path": "doc",
+          "range": [
+            7471,
+            7485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7490,
+            7493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.traverse_inorder(&mut f).break_ok()",
+          "path": "doc",
+          "range": [
+            7498,
+            7550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            7555,
+            7564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7569,
+            7572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn traverse_inorder<'a, B>(",
+          "path": "doc",
+          "range": [
+            7577,
+            7612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         &'a self,",
+          "path": "doc",
+          "range": [
+            7617,
+            7638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         f: &mut impl FnMut(&'a T) -> ControlFlow<B>,",
+          "path": "doc",
+          "range": [
+            7643,
+            7699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ) -> ControlFlow<B> {",
+          "path": "doc",
+          "range": [
+            7704,
+            7733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(left) = &self.left {",
+          "path": "doc",
+          "range": [
+            7738,
+            7782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             left.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            7787,
+            7829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            7834,
+            7847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         f(&self.value)?;",
+          "path": "doc",
+          "range": [
+            7852,
+            7880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(right) = &self.right {",
+          "path": "doc",
+          "range": [
+            7885,
+            7931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             right.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            7936,
+            7979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            7984,
+            7997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            8002,
+            8039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8044,
+            8053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8058,
+            8061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn leaf(value: T) -> Option<Box<TreeNode<T>>> {",
+          "path": "doc",
+          "range": [
+            8066,
+            8121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(Box::new(Self {",
+          "path": "doc",
+          "range": [
+            8126,
+            8158
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             value,",
+          "path": "doc",
+          "range": [
+            8163,
+            8185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             left: None,",
+          "path": "doc",
+          "range": [
+            8190,
+            8217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             right: None,",
+          "path": "doc",
+          "range": [
+            8222,
+            8250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }))",
+          "path": "doc",
+          "range": [
+            8255,
+            8270
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8275,
+            8284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            8289,
+            8294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8299,
+            8302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let node = TreeNode {",
+          "path": "doc",
+          "range": [
+            8307,
+            8332
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: 0,",
+          "path": "doc",
+          "range": [
+            8337,
+            8354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: TreeNode::leaf(1),",
+          "path": "doc",
+          "range": [
+            8359,
+            8391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Some(Box::new(TreeNode {",
+          "path": "doc",
+          "range": [
+            8396,
+            8435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         value: -1,",
+          "path": "doc",
+          "range": [
+            8440,
+            8462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         left: TreeNode::leaf(5),",
+          "path": "doc",
+          "range": [
+            8467,
+            8503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         right: TreeNode::leaf(2),",
+          "path": "doc",
+          "range": [
+            8508,
+            8545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })),",
+          "path": "doc",
+          "range": [
+            8550,
+            8562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            8567,
+            8573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8578,
+            8581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let res = node.find(|val: &i32| *val > 3);",
+          "path": "doc",
+          "range": [
+            8586,
+            8632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(res, Ok(&5));",
+          "path": "doc",
+          "range": [
+            8637,
+            8665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8670,
+            8677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8682,
+            8691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8696,
+            8754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            8759,
+            8829
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8878,
+        9008
+      ],
+      "kind": "impl_fn",
+      "name": "break_ok",
+      "range": [
+        6674,
+        9008
+      ],
+      "signature_range": [
+        8838,
+        8877
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Maps `ControlFlow<B, C>` to `ControlFlow<T, C>` by applying a function",
+          "path": "doc",
+          "range": [
+            9014,
+            9088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the break value in case it exists.",
+          "path": "doc",
+          "range": [
+            9093,
+            9134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9139,
+            9148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9153,
+            9211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            9216,
+            9289
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9424,
+        9591
+      ],
+      "kind": "impl_fn",
+      "name": "map_break",
+      "range": [
+        9014,
+        9591
+      ],
+      "signature_range": [
+        9298,
+        9419
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts the `ControlFlow` into an `Option` which is `Some` if the",
+          "path": "doc",
+          "range": [
+            9597,
+            9667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ControlFlow` was `Continue` and `None` otherwise.",
+          "path": "doc",
+          "range": [
+            9672,
+            9726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9731,
+            9734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9739,
+            9753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9758,
+            9761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9766,
+            9773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            9778,
+            9808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9813,
+            9816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<&str, i32>::Break(\"Stop right there!\").continue_value(), None);",
+          "path": "doc",
+          "range": [
+            9821,
+            9913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<&str, i32>::Continue(3).continue_value(), Some(3));",
+          "path": "doc",
+          "range": [
+            9918,
+            9998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10003,
+            10010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10015,
+            10024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10029,
+            10087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            10092,
+            10165
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10263,
+        10394
+      ],
+      "kind": "impl_fn",
+      "name": "continue_value",
+      "range": [
+        9597,
+        10394
+      ],
+      "signature_range": [
+        10174,
+        10258
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts the `ControlFlow` into a `Result` which is `Ok` if the",
+          "path": "doc",
+          "range": [
+            10400,
+            10467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ControlFlow` was `Continue` and `Err` if otherwise.",
+          "path": "doc",
+          "range": [
+            10472,
+            10528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10533,
+            10536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10541,
+            10555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10560,
+            10563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10568,
+            10575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(control_flow_ok)]",
+          "path": "doc",
+          "range": [
+            10580,
+            10612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10617,
+            10620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            10625,
+            10655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10660,
+            10663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            10668,
+            10692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: T,",
+          "path": "doc",
+          "range": [
+            10697,
+            10714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            10719,
+            10758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Option<Box<TreeNode<T>>>,",
+          "path": "doc",
+          "range": [
+            10763,
+            10803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10808,
+            10813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10818,
+            10821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl<T> TreeNode<T> {",
+          "path": "doc",
+          "range": [
+            10826,
+            10851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn validate<B>(&self, f: &mut impl FnMut(&T) -> ControlFlow<B>) -> Result<(), B> {",
+          "path": "doc",
+          "range": [
+            10856,
+            10946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         self.traverse_inorder(f).continue_ok()",
+          "path": "doc",
+          "range": [
+            10951,
+            11001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            11006,
+            11015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11020,
+            11023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn traverse_inorder<B>(&self, f: &mut impl FnMut(&T) -> ControlFlow<B>) -> ControlFlow<B> {",
+          "path": "doc",
+          "range": [
+            11028,
+            11127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(left) = &self.left {",
+          "path": "doc",
+          "range": [
+            11132,
+            11176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             left.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            11181,
+            11223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            11228,
+            11241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         f(&self.value)?;",
+          "path": "doc",
+          "range": [
+            11246,
+            11274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if let Some(right) = &self.right {",
+          "path": "doc",
+          "range": [
+            11279,
+            11325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             right.traverse_inorder(f)?;",
+          "path": "doc",
+          "range": [
+            11330,
+            11373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            11378,
+            11391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            11396,
+            11433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            11438,
+            11447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11452,
+            11455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn leaf(value: T) -> Option<Box<TreeNode<T>>> {",
+          "path": "doc",
+          "range": [
+            11460,
+            11515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(Box::new(Self {",
+          "path": "doc",
+          "range": [
+            11520,
+            11552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             value,",
+          "path": "doc",
+          "range": [
+            11557,
+            11579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             left: None,",
+          "path": "doc",
+          "range": [
+            11584,
+            11611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             right: None,",
+          "path": "doc",
+          "range": [
+            11616,
+            11644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }))",
+          "path": "doc",
+          "range": [
+            11649,
+            11664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            11669,
+            11678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            11683,
+            11688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11693,
+            11696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let node = TreeNode {",
+          "path": "doc",
+          "range": [
+            11701,
+            11726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     value: 0,",
+          "path": "doc",
+          "range": [
+            11731,
+            11748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     left: TreeNode::leaf(1),",
+          "path": "doc",
+          "range": [
+            11753,
+            11785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     right: Some(Box::new(TreeNode {",
+          "path": "doc",
+          "range": [
+            11790,
+            11829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         value: -1,",
+          "path": "doc",
+          "range": [
+            11834,
+            11856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         left: TreeNode::leaf(5),",
+          "path": "doc",
+          "range": [
+            11861,
+            11897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         right: TreeNode::leaf(2),",
+          "path": "doc",
+          "range": [
+            11902,
+            11939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })),",
+          "path": "doc",
+          "range": [
+            11944,
+            11956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            11961,
+            11967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11972,
+            11975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let res = node.validate(&mut |val| {",
+          "path": "doc",
+          "range": [
+            11980,
+            12020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if *val < 0 {",
+          "path": "doc",
+          "range": [
+            12025,
+            12046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         return ControlFlow::Break(\"negative value detected\");",
+          "path": "doc",
+          "range": [
+            12051,
+            12116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12121,
+            12130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12135,
+            12138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if *val > 4 {",
+          "path": "doc",
+          "range": [
+            12143,
+            12164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         return ControlFlow::Break(\"too big value detected\");",
+          "path": "doc",
+          "range": [
+            12169,
+            12233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12238,
+            12247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12252,
+            12255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ControlFlow::Continue(())",
+          "path": "doc",
+          "range": [
+            12260,
+            12293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            12298,
+            12305
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(res, Err(\"too big value detected\"));",
+          "path": "doc",
+          "range": [
+            12310,
+            12361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12366,
+            12373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12378,
+            12387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12392,
+            12450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            12455,
+            12525
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12577,
+        12707
+      ],
+      "kind": "impl_fn",
+      "name": "continue_ok",
+      "range": [
+        10400,
+        12707
+      ],
+      "signature_range": [
+        12534,
+        12576
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Maps `ControlFlow<B, C>` to `ControlFlow<B, T>` by applying a function",
+          "path": "doc",
+          "range": [
+            12713,
+            12787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the continue value in case it exists.",
+          "path": "doc",
+          "range": [
+            12792,
+            12836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12841,
+            12850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12855,
+            12913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            12918,
+            12991
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13129,
+        13296
+      ],
+      "kind": "impl_fn",
+      "name": "map_continue",
+      "range": [
+        12713,
+        13296
+      ],
+      "signature_range": [
+        13000,
+        13124
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        13300,
+        13981
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Extracts the value `T` that is wrapped by `ControlFlow<T, T>`.",
+          "path": "doc",
+          "range": [
+            13332,
+            13398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13403,
+            13406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13411,
+            13425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13430,
+            13433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13438,
+            13445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(control_flow_into_value)]",
+          "path": "doc",
+          "range": [
+            13450,
+            13490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ops::ControlFlow;",
+          "path": "doc",
+          "range": [
+            13495,
+            13525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13530,
+            13533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<i32, i32>::Break(1024).into_value(), 1024);",
+          "path": "doc",
+          "range": [
+            13538,
+            13610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ControlFlow::<i32, i32>::Continue(512).into_value(), 512);",
+          "path": "doc",
+          "range": [
+            13615,
+            13688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13693,
+            13700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13705,
+            13771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            13776,
+            13834
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13874,
+        13979
+      ],
+      "kind": "impl_fn",
+      "name": "into_value",
+      "range": [
+        13332,
+        13979
+      ],
+      "signature_range": [
+        13843,
+        13873
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14169,
+        14786
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a `ControlFlow` from any type implementing `Try`.",
+          "path": "doc",
+          "range": [
+            14219,
+            14280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14285,
+            14294
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14336,
+        14526
+      ],
+      "kind": "impl_fn",
+      "name": "from_try",
+      "range": [
+        14219,
+        14526
+      ],
+      "signature_range": [
+        14310,
+        14335
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts a `ControlFlow` into any type implementing `Try`.",
+          "path": "doc",
+          "range": [
+            14532,
+            14594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14599,
+            14608
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14647,
+        14784
+      ],
+      "kind": "impl_fn",
+      "name": "into_try",
+      "range": [
+        14532,
+        14784
+      ],
+      "signature_range": [
+        14624,
+        14646
+      ]
+    }
+  ],
+  "source_sha256": "3358a881c37cf833cd47d3ef5eff6fe732f2a0c31cb9a3a3cfd02564bc1739e1"
+}

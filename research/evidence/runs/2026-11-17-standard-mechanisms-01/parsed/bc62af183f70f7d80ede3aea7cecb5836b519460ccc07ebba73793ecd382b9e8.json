@@ -1,0 +1,1392 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        195,
+        1666
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator over the contiguous valid UTF-8 ranges of this",
+          "path": "doc",
+          "range": [
+            211,
+            281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " slice, and the non-UTF-8 fragments in between.",
+          "path": "doc",
+          "range": [
+            286,
+            336
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            341,
+            344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the [`Utf8Chunk`] type for documentation of the items yielded by this iterator.",
+          "path": "doc",
+          "range": [
+            349,
+            436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            441,
+            444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            449,
+            463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            468,
+            471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function formats arbitrary but mostly-UTF-8 bytes into Rust source",
+          "path": "doc",
+          "range": [
+            476,
+            551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " code in the form of a C-string literal (`c\"...\"`).",
+          "path": "doc",
+          "range": [
+            556,
+            610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            615,
+            618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            623,
+            630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::fmt::Write as _;",
+          "path": "doc",
+          "range": [
+            635,
+            664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            669,
+            672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub fn cstr_literal(bytes: &[u8]) -> String {",
+          "path": "doc",
+          "range": [
+            677,
+            726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut repr = String::new();",
+          "path": "doc",
+          "range": [
+            731,
+            768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     repr.push_str(\"c\\\"\");",
+          "path": "doc",
+          "range": [
+            773,
+            802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for chunk in bytes.utf8_chunks() {",
+          "path": "doc",
+          "range": [
+            807,
+            849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         for ch in chunk.valid().chars() {",
+          "path": "doc",
+          "range": [
+            854,
+            899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // Escapes \\0, \\t, \\r, \\n, \\\\, \\', \\\", and uses \\u{...} for non-printable characters.",
+          "path": "doc",
+          "range": [
+            904,
+            1005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             write!(repr, \"{}\", ch.escape_debug()).unwrap();",
+          "path": "doc",
+          "range": [
+            1010,
+            1073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1078,
+            1091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         for byte in chunk.invalid() {",
+          "path": "doc",
+          "range": [
+            1096,
+            1137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             write!(repr, \"\\\\x{:02X}\", byte).unwrap();",
+          "path": "doc",
+          "range": [
+            1142,
+            1199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1204,
+            1217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1222,
+            1231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     repr.push('\"');",
+          "path": "doc",
+          "range": [
+            1236,
+            1259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     repr",
+          "path": "doc",
+          "range": [
+            1264,
+            1276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1281,
+            1286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1291,
+            1294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            1299,
+            1314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let lit = cstr_literal(b\"\\xferris the \\xf0\\x9f\\xa6\\x80\\x07\");",
+          "path": "doc",
+          "range": [
+            1319,
+            1388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let expected = stringify!(c\"\\xFErris the 🦀\\u{7}\");",
+          "path": "doc",
+          "range": [
+            1393,
+            1454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(lit, expected);",
+          "path": "doc",
+          "range": [
+            1459,
+            1493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1498,
+            1503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1508,
+            1515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1520,
+            1572
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1621,
+        1664
+      ],
+      "kind": "impl_fn",
+      "name": "utf8_chunks",
+      "range": [
+        211,
+        1664
+      ],
+      "signature_range": [
+        1581,
+        1620
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An item returned by the [`Utf8Chunks`] iterator.",
+          "path": "doc",
+          "range": [
+            1668,
+            1720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1721,
+            1724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `Utf8Chunk` stores a sequence of [`u8`] up to the first broken character",
+          "path": "doc",
+          "range": [
+            1725,
+            1803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when decoding a UTF-8 string.",
+          "path": "doc",
+          "range": [
+            1804,
+            1837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1838,
+            1841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1842,
+            1856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1857,
+            1860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1861,
+            1868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // An invalid UTF-8 string",
+          "path": "doc",
+          "range": [
+            1869,
+            1899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let bytes = b\"foo\\xF1\\x80bar\";",
+          "path": "doc",
+          "range": [
+            1900,
+            1934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1935,
+            1938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Decode the first `Utf8Chunk`",
+          "path": "doc",
+          "range": [
+            1939,
+            1974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let chunk = bytes.utf8_chunks().next().unwrap();",
+          "path": "doc",
+          "range": [
+            1975,
+            2027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2028,
+            2031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // The first three characters are valid UTF-8",
+          "path": "doc",
+          "range": [
+            2032,
+            2081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"foo\", chunk.valid());",
+          "path": "doc",
+          "range": [
+            2082,
+            2119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2120,
+            2123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // The fourth character is broken",
+          "path": "doc",
+          "range": [
+            2124,
+            2161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(b\"\\xF1\\x80\", chunk.invalid());",
+          "path": "doc",
+          "range": [
+            2162,
+            2207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2208,
+            2215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2216,
+            2268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2269,
+            2307
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Utf8Chunk",
+      "range": [
+        1668,
+        2379
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2381,
+        3479
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the next validated UTF-8 substring.",
+          "path": "doc",
+          "range": [
+            2410,
+            2457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2462,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This substring can be empty at the start of the string or between",
+          "path": "doc",
+          "range": [
+            2470,
+            2539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " broken UTF-8 characters.",
+          "path": "doc",
+          "range": [
+            2544,
+            2572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2577,
+            2588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2593,
+            2645
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2681,
+        2707
+      ],
+      "kind": "impl_fn",
+      "name": "valid",
+      "range": [
+        2410,
+        2707
+      ],
+      "signature_range": [
+        2654,
+        2680
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the invalid sequence that caused a failure.",
+          "path": "doc",
+          "range": [
+            2713,
+            2768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2773,
+            2776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned slice will have a maximum length of 3 and starts after the",
+          "path": "doc",
+          "range": [
+            2781,
+            2856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " substring given by [`valid`]. Decoding will resume after this sequence.",
+          "path": "doc",
+          "range": [
+            2861,
+            2936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2941,
+            2944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If empty, this is the last chunk in the string. If non-empty, an",
+          "path": "doc",
+          "range": [
+            2949,
+            3017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unexpected byte was encountered or the end of the input was reached",
+          "path": "doc",
+          "range": [
+            3022,
+            3093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unexpectedly.",
+          "path": "doc",
+          "range": [
+            3098,
+            3115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3120,
+            3123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Lossy decoding would replace this sequence with [`U+FFFD REPLACEMENT",
+          "path": "doc",
+          "range": [
+            3128,
+            3200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " CHARACTER`].",
+          "path": "doc",
+          "range": [
+            3205,
+            3221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3226,
+            3229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`valid`]: Self::valid",
+          "path": "doc",
+          "range": [
+            3234,
+            3260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`U+FFFD REPLACEMENT CHARACTER`]: crate::char::REPLACEMENT_CHARACTER",
+          "path": "doc",
+          "range": [
+            3265,
+            3337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3342,
+            3353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3358,
+            3410
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3449,
+        3477
+      ],
+      "kind": "impl_fn",
+      "name": "invalid",
+      "range": [
+        2713,
+        3477
+      ],
+      "signature_range": [
+        3419,
+        3448
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3481,
+            3492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3493,
+            3547
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Debug",
+      "range": [
+        3481,
+        3579
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3581,
+            3635
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3581,
+        4935
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "body_range": [
+        3724,
+        4933
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        3672,
+        4933
+      ],
+      "signature_range": [
+        3672,
+        3723
+      ]
+    },
+    {
+      "ancestors": [
+        7,
+        8
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4849,
+        4874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator used to decode a slice of mostly UTF-8 bytes to string slices",
+          "path": "doc",
+          "range": [
+            4937,
+            5014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ([`&str`]) and byte slices ([`&[u8]`][byteslice]).",
+          "path": "doc",
+          "range": [
+            5015,
+            5069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5070,
+            5073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This struct is created by the [`utf8_chunks`] method on bytes slices.",
+          "path": "doc",
+          "range": [
+            5074,
+            5147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you want a simple conversion from UTF-8 byte slices to string slices,",
+          "path": "doc",
+          "range": [
+            5148,
+            5224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`from_utf8`] is easier to use.",
+          "path": "doc",
+          "range": [
+            5225,
+            5260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5261,
+            5264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the [`Utf8Chunk`] type for documentation of the items yielded by this iterator.",
+          "path": "doc",
+          "range": [
+            5265,
+            5352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5353,
+            5356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [byteslice]: slice",
+          "path": "doc",
+          "range": [
+            5357,
+            5379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`utf8_chunks`]: slice::utf8_chunks",
+          "path": "doc",
+          "range": [
+            5380,
+            5419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`from_utf8`]: super::from_utf8",
+          "path": "doc",
+          "range": [
+            5420,
+            5455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5456,
+            5459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5460,
+            5474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5475,
+            5478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can be used to create functionality similar to",
+          "path": "doc",
+          "range": [
+            5479,
+            5534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`String::from_utf8_lossy`] without allocating heap memory:",
+          "path": "doc",
+          "range": [
+            5535,
+            5598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5599,
+            5602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5603,
+            5610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn from_utf8_lossy<F>(input: &[u8], mut push: F) where F: FnMut(&str) {",
+          "path": "doc",
+          "range": [
+            5611,
+            5686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for chunk in input.utf8_chunks() {",
+          "path": "doc",
+          "range": [
+            5687,
+            5729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         push(chunk.valid());",
+          "path": "doc",
+          "range": [
+            5730,
+            5762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5763,
+            5766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if !chunk.invalid().is_empty() {",
+          "path": "doc",
+          "range": [
+            5767,
+            5811
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             push(\"\\u{FFFD}\");",
+          "path": "doc",
+          "range": [
+            5812,
+            5845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            5846,
+            5859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            5860,
+            5869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            5870,
+            5875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5876,
+            5883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5884,
+            5887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`String::from_utf8_lossy`]: ../../std/string/struct.String.html#method.from_utf8_lossy",
+          "path": "doc",
+          "range": [
+            5888,
+            5979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5980,
+            6045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6046,
+            6098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            6099,
+            6115
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Utf8Chunks",
+      "range": [
+        4937,
+        6167
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6169,
+        6346
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            6199,
+            6213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6218,
+            6272
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6310,
+        6344
+      ],
+      "kind": "impl_fn",
+      "name": "debug",
+      "range": [
+        6199,
+        6344
+      ],
+      "signature_range": [
+        6281,
+        6309
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6348,
+            6400
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6348,
+        10288
+      ]
+    },
+    {
+      "ancestors": [
+        13
+      ],
+      "attributes": [],
+      "body_range": [
+        6520,
+        10286
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        6476,
+        10286
+      ],
+      "signature_range": [
+        6476,
+        6519
+      ]
+    },
+    {
+      "ancestors": [
+        13,
+        14
+      ],
+      "attributes": [],
+      "body_range": [
+        6678,
+        6726
+      ],
+      "kind": "fn",
+      "name": "safe_get",
+      "range": [
+        6639,
+        6726
+      ],
+      "signature_range": [
+        6639,
+        6677
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10290,
+            10342
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10290,
+        10383
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10385,
+            10437
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10385,
+        10617
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        10531,
+        10615
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        10479,
+        10615
+      ],
+      "signature_range": [
+        10479,
+        10530
+      ]
+    }
+  ],
+  "source_sha256": "9b11eff024d0e51447aa7d68033fc6b82707bf19783a59e0bf9f3741e2e52a4e"
+}

@@ -1,0 +1,3275 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " The `ByteStr` and `ByteString` types and trait implementations.",
+      "path": "doc",
+      "range": [
+        0,
+        67
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "cfg",
+      "range": [
+        105,
+        141
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A wrapper for `Vec<u8>` representing a human-readable string that's conventionally, but not",
+          "path": "doc",
+          "range": [
+            784,
+            879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " always, UTF-8.",
+          "path": "doc",
+          "range": [
+            880,
+            898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            899,
+            902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike `String`, this type permits non-UTF-8 contents, making it suitable for user input,",
+          "path": "doc",
+          "range": [
+            903,
+            996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " non-native filenames (as `Path` only supports native filenames), and other applications that",
+          "path": "doc",
+          "range": [
+            997,
+            1093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " need to round-trip whatever data the user provides.",
+          "path": "doc",
+          "range": [
+            1094,
+            1149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1150,
+            1153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `ByteString` owns its contents and can grow and shrink, like a `Vec` or `String`. For a",
+          "path": "doc",
+          "range": [
+            1154,
+            1247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " borrowed byte string, see [`ByteStr`](../../std/bstr/struct.ByteStr.html).",
+          "path": "doc",
+          "range": [
+            1248,
+            1326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1327,
+            1330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ByteString` implements `Deref` to `&Vec<u8>`, so all methods available on `&Vec<u8>` are",
+          "path": "doc",
+          "range": [
+            1331,
+            1424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " available on `ByteString`. Similarly, `ByteString` implements `DerefMut` to `&mut Vec<u8>`,",
+          "path": "doc",
+          "range": [
+            1425,
+            1520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so you can modify a `ByteString` using any method available on `&mut Vec<u8>`.",
+          "path": "doc",
+          "range": [
+            1521,
+            1603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1604,
+            1607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `Debug` and `Display` implementations for `ByteString` are the same as those for `ByteStr`,",
+          "path": "doc",
+          "range": [
+            1608,
+            1707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " showing invalid UTF-8 as hex escapes or the Unicode replacement character, respectively.",
+          "path": "doc",
+          "range": [
+            1708,
+            1800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1801,
+            1848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            1849,
+            1869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1870,
+            1886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            1887,
+            1912
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "ByteString",
+      "range": [
+        784,
+        1948
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1950,
+        2279
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1972,
+            1981
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2025,
+        2048
+      ],
+      "kind": "impl_fn",
+      "name": "as_bytes",
+      "range": [
+        1972,
+        2048
+      ],
+      "signature_range": [
+        1997,
+        2024
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2054,
+            2063
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2112,
+        2149
+      ],
+      "kind": "impl_fn",
+      "name": "as_bytestr",
+      "range": [
+        2054,
+        2149
+      ],
+      "signature_range": [
+        2079,
+        2111
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2155,
+            2164
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2225,
+        2277
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut_bytestr",
+      "range": [
+        2155,
+        2277
+      ],
+      "signature_range": [
+        2180,
+        2224
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2281,
+            2328
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2281,
+        2461
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2389,
+            2398
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2436,
+        2459
+      ],
+      "kind": "impl_fn",
+      "name": "deref",
+      "range": [
+        2389,
+        2459
+      ],
+      "signature_range": [
+        2403,
+        2435
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2463,
+            2510
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2463,
+        2634
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2546,
+            2555
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2605,
+        2632
+      ],
+      "kind": "impl_fn",
+      "name": "deref_mut",
+      "range": [
+        2546,
+        2632
+      ],
+      "signature_range": [
+        2560,
+        2604
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2636,
+            2694
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2636,
+        2734
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2736,
+            2783
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2736,
+        2947
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2821,
+            2830
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2892,
+        2945
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2821,
+        2945
+      ],
+      "signature_range": [
+        2835,
+        2891
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2949,
+            2996
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2949,
+        3164
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3036,
+            3045
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3107,
+        3162
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        3036,
+        3162
+      ],
+      "signature_range": [
+        3050,
+        3106
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3166,
+            3213
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3166,
+        3317
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3252,
+            3261
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3292,
+        3315
+      ],
+      "kind": "impl_fn",
+      "name": "as_ref",
+      "range": [
+        3252,
+        3315
+      ],
+      "signature_range": [
+        3266,
+        3291
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3319,
+            3366
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3319,
+        3486
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3408,
+            3417
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3451,
+        3484
+      ],
+      "kind": "impl_fn",
+      "name": "as_ref",
+      "range": [
+        3408,
+        3484
+      ],
+      "signature_range": [
+        3422,
+        3450
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3488,
+            3535
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3488,
+        3651
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3574,
+            3583
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3622,
+        3649
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut",
+      "range": [
+        3574,
+        3649
+      ],
+      "signature_range": [
+        3588,
+        3621
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3653,
+            3700
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3653,
+        3832
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3742,
+            3751
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3793,
+        3830
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut",
+      "range": [
+        3742,
+        3830
+      ],
+      "signature_range": [
+        3756,
+        3792
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3834,
+            3881
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3834,
+        3986
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3921,
+            3930
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3961,
+        3984
+      ],
+      "kind": "impl_fn",
+      "name": "borrow",
+      "range": [
+        3921,
+        3984
+      ],
+      "signature_range": [
+        3935,
+        3960
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3988,
+            4035
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3988,
+        4156
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4078,
+            4087
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4121,
+        4154
+      ],
+      "kind": "impl_fn",
+      "name": "borrow",
+      "range": [
+        4078,
+        4154
+      ],
+      "signature_range": [
+        4092,
+        4120
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4306,
+            4353
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4306,
+        4477
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4396,
+            4405
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4448,
+        4475
+      ],
+      "kind": "impl_fn",
+      "name": "borrow_mut",
+      "range": [
+        4396,
+        4475
+      ],
+      "signature_range": [
+        4410,
+        4447
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4479,
+            4526
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4479,
+        4666
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4572,
+            4581
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4627,
+        4664
+      ],
+      "kind": "impl_fn",
+      "name": "borrow_mut",
+      "range": [
+        4572,
+        4664
+      ],
+      "signature_range": [
+        4586,
+        4626
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4746,
+            4793
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4746,
+        4889
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [],
+      "body_range": [
+        4849,
+        4887
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        4828,
+        4887
+      ],
+      "signature_range": [
+        4828,
+        4848
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5772,
+            5819
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5772,
+        5926
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5860,
+            5869
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5905,
+        5924
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        5860,
+        5924
+      ],
+      "signature_range": [
+        5874,
+        5904
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6373,
+            6420
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6373,
+        6557
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6469,
+            6478
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6515,
+        6555
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        6469,
+        6555
+      ],
+      "signature_range": [
+        6483,
+        6514
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6559,
+            6606
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6559,
+        6736
+      ]
+    },
+    {
+      "ancestors": [
+        36
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6660,
+            6669
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6705,
+        6734
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        6660,
+        6734
+      ],
+      "signature_range": [
+        6674,
+        6704
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6738,
+            6785
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6738,
+        6939
+      ]
+    },
+    {
+      "ancestors": [
+        38
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6843,
+            6852
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6892,
+        6937
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        6843,
+        6937
+      ],
+      "signature_range": [
+        6857,
+        6891
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6941,
+            6988
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6941,
+        7187
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7034,
+            7043
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7108,
+        7185
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        7034,
+        7185
+      ],
+      "signature_range": [
+        7048,
+        7107
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7189,
+            7236
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7189,
+        7408
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7280,
+            7289
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7352,
+        7406
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        7280,
+        7406
+      ],
+      "signature_range": [
+        7294,
+        7351
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7410,
+            7457
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7410,
+        7666
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7510,
+            7519
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7587,
+        7664
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        7510,
+        7664
+      ],
+      "signature_range": [
+        7524,
+        7586
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7668,
+            7715
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7668,
+        7986
+      ]
+    },
+    {
+      "ancestors": [
+        46
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7769,
+            7778
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7847,
+        7984
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        7769,
+        7984
+      ],
+      "signature_range": [
+        7783,
+        7846
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7988,
+            8035
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7988,
+        8315
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8092,
+            8101
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8173,
+        8313
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        8092,
+        8313
+      ],
+      "signature_range": [
+        8106,
+        8172
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8317,
+            8364
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8317,
+        8635
+      ]
+    },
+    {
+      "ancestors": [
+        50
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8416,
+            8425
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8496,
+        8633
+      ],
+      "kind": "impl_fn",
+      "name": "from_iter",
+      "range": [
+        8416,
+        8633
+      ],
+      "signature_range": [
+        8430,
+        8495
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8637,
+            8684
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8637,
+        8879
+      ]
+    },
+    {
+      "ancestors": [
+        52
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8762,
+            8771
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8824,
+        8877
+      ],
+      "kind": "impl_fn",
+      "name": "from_str",
+      "range": [
+        8762,
+        8877
+      ],
+      "signature_range": [
+        8776,
+        8823
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8881,
+            8928
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8881,
+        9070
+      ]
+    },
+    {
+      "ancestors": [
+        54
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8991,
+            9000
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9040,
+        9068
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        8991,
+        9068
+      ],
+      "signature_range": [
+        9005,
+        9039
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9072,
+            9119
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9072,
+        9282
+      ]
+    },
+    {
+      "ancestors": [
+        56
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9191,
+            9200
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9247,
+        9280
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        9191,
+        9280
+      ],
+      "signature_range": [
+        9205,
+        9246
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9284,
+            9331
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9284,
+        9514
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9406,
+            9415
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9465,
+        9512
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        9406,
+        9512
+      ],
+      "signature_range": [
+        9420,
+        9464
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9516,
+            9563
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9516,
+        9764
+      ]
+    },
+    {
+      "ancestors": [
+        60
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9647,
+            9656
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9715,
+        9762
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        9647,
+        9762
+      ],
+      "signature_range": [
+        9661,
+        9714
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9766,
+            9813
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9766,
+        10004
+      ]
+    },
+    {
+      "ancestors": [
+        62
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9892,
+            9901
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9955,
+        10002
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        9892,
+        10002
+      ],
+      "signature_range": [
+        9906,
+        9954
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10006,
+            10053
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10006,
+        10240
+      ]
+    },
+    {
+      "ancestors": [
+        64
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10130,
+            10139
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10191,
+        10238
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        10130,
+        10238
+      ],
+      "signature_range": [
+        10144,
+        10190
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10242,
+            10289
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10242,
+        10494
+      ]
+    },
+    {
+      "ancestors": [
+        66
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10375,
+            10384
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10445,
+        10492
+      ],
+      "kind": "impl_fn",
+      "name": "index",
+      "range": [
+        10375,
+        10492
+      ],
+      "signature_range": [
+        10389,
+        10444
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10496,
+            10543
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10496,
+        10681
+      ]
+    },
+    {
+      "ancestors": [
+        68
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10586,
+            10595
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10647,
+        10679
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        10586,
+        10679
+      ],
+      "signature_range": [
+        10600,
+        10646
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10683,
+            10730
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10683,
+        10884
+      ]
+    },
+    {
+      "ancestors": [
+        70
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10777,
+            10786
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10845,
+        10882
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        10777,
+        10882
+      ],
+      "signature_range": [
+        10791,
+        10844
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10886,
+            10933
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10886,
+        11111
+      ]
+    },
+    {
+      "ancestors": [
+        72
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10983,
+            10992
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11054,
+        11109
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        10983,
+        11109
+      ],
+      "signature_range": [
+        10997,
+        11053
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11113,
+            11160
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11113,
+        11356
+      ]
+    },
+    {
+      "ancestors": [
+        74
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11219,
+            11228
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11299,
+        11354
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        11219,
+        11354
+      ],
+      "signature_range": [
+        11233,
+        11298
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11358,
+            11405
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11358,
+        11591
+      ]
+    },
+    {
+      "ancestors": [
+        76
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11459,
+            11468
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11534,
+        11589
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        11459,
+        11589
+      ],
+      "signature_range": [
+        11473,
+        11533
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11593,
+            11640
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11593,
+        11822
+      ]
+    },
+    {
+      "ancestors": [
+        78
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11692,
+            11701
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11765,
+        11820
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        11692,
+        11820
+      ],
+      "signature_range": [
+        11706,
+        11764
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11824,
+            11871
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11824,
+        12071
+      ]
+    },
+    {
+      "ancestors": [
+        80
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11932,
+            11941
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12014,
+        12069
+      ],
+      "kind": "impl_fn",
+      "name": "index_mut",
+      "range": [
+        11932,
+        12069
+      ],
+      "signature_range": [
+        11946,
+        12013
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12073,
+            12120
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12073,
+        12256
+      ]
+    },
+    {
+      "ancestors": [
+        82
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12158,
+            12167
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12219,
+        12254
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        12158,
+        12254
+      ],
+      "signature_range": [
+        12172,
+        12218
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12258,
+            12305
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12258,
+        12331
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            12333,
+            12380
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12333,
+        12507
+      ]
+    },
+    {
+      "ancestors": [
+        85
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12417,
+            12426
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12472,
+        12505
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        12417,
+        12505
+      ],
+      "signature_range": [
+        12431,
+        12471
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12509,
+        13851
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        13918,
+        13955
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14019,
+        14053
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14118,
+        14153
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14219,
+        14255
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14318,
+        14351
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14415,
+        14449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14451,
+        14492
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14494,
+        14536
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14603,
+        14642
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14710,
+        14750
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14752,
+        14806
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14808,
+        14858
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14860,
+        14911
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14914,
+            14961
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14914,
+        15097
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14992,
+            15001
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15052,
+        15095
+      ],
+      "kind": "impl_fn",
+      "name": "cmp",
+      "range": [
+        14992,
+        15095
+      ],
+      "signature_range": [
+        15006,
+        15051
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15099,
+            15146
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15099,
+        15320
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15184,
+            15193
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15260,
+        15318
+      ],
+      "kind": "impl_fn",
+      "name": "partial_cmp",
+      "range": [
+        15184,
+        15318
+      ],
+      "signature_range": [
+        15198,
+        15259
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15322,
+            15369
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15322,
+        15523
+      ]
+    },
+    {
+      "ancestors": [
+        105
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15431,
+            15440
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15478,
+        15521
+      ],
+      "kind": "impl_fn",
+      "name": "to_owned",
+      "range": [
+        15431,
+        15521
+      ],
+      "signature_range": [
+        15445,
+        15477
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15525,
+            15572
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15525,
+        15773
+      ]
+    },
+    {
+      "ancestors": [
+        107
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15663,
+            15672
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15733,
+        15771
+      ],
+      "kind": "impl_fn",
+      "name": "try_from",
+      "range": [
+        15663,
+        15771
+      ],
+      "signature_range": [
+        15677,
+        15732
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15775,
+            15822
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15775,
+        16044
+      ]
+    },
+    {
+      "ancestors": [
+        109
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15915,
+            15924
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15989,
+        16042
+      ],
+      "kind": "impl_fn",
+      "name": "try_from",
+      "range": [
+        15915,
+        16042
+      ],
+      "signature_range": [
+        15929,
+        15988
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16114,
+            16161
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16114,
+        16290
+      ]
+    },
+    {
+      "ancestors": [
+        111
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16196,
+            16205
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16234,
+        16288
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        16196,
+        16288
+      ],
+      "signature_range": [
+        16210,
+        16233
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16292,
+            16339
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16292,
+        16474
+      ]
+    },
+    {
+      "ancestors": [
+        113
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16394,
+            16403
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16440,
+        16472
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        16394,
+        16472
+      ],
+      "signature_range": [
+        16408,
+        16439
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16476,
+            16523
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16476,
+        16754
+      ]
+    },
+    {
+      "ancestors": [
+        115
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16568,
+            16577
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16620,
+        16752
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        16568,
+        16752
+      ],
+      "signature_range": [
+        16582,
+        16619
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16756,
+            16803
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16756,
+        17034
+      ]
+    },
+    {
+      "ancestors": [
+        117
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16848,
+            16857
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16900,
+        17032
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        16848,
+        17032
+      ],
+      "signature_range": [
+        16862,
+        16899
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17036,
+            17083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            17084,
+            17102
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17036,
+        17327
+      ]
+    },
+    {
+      "ancestors": [
+        119
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17145,
+            17154
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17195,
+        17325
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        17145,
+        17325
+      ],
+      "signature_range": [
+        17159,
+        17194
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17329,
+            17376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            17377,
+            17395
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17329,
+        17620
+      ]
+    },
+    {
+      "ancestors": [
+        121
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17438,
+            17447
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17488,
+        17618
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        17438,
+        17618
+      ],
+      "signature_range": [
+        17452,
+        17487
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17622,
+            17669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            17670,
+            17734
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17622,
+        17965
+      ]
+    },
+    {
+      "ancestors": [
+        123
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17779,
+            17788
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17831,
+        17963
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        17779,
+        17963
+      ],
+      "signature_range": [
+        17793,
+        17830
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17967,
+            18014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            18015,
+            18079
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17967,
+        18310
+      ]
+    },
+    {
+      "ancestors": [
+        125
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18124,
+            18133
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18176,
+        18308
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        18124,
+        18308
+      ],
+      "signature_range": [
+        18138,
+        18175
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18377,
+        18411
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18477,
+        18510
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18512,
+        18564
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18566,
+        18614
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18616,
+        18665
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18668,
+            18715
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18668,
+        18930
+      ]
+    },
+    {
+      "ancestors": [
+        132
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18803,
+            18812
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18874,
+        18928
+      ],
+      "kind": "impl_fn",
+      "name": "try_from",
+      "range": [
+        18803,
+        18928
+      ],
+      "signature_range": [
+        18817,
+        18873
+      ]
+    }
+  ],
+  "source_sha256": "c31011c2c26e7c7d81374496affcc22107aa2c068b54e39968d76ec2390fe3b6"
+}

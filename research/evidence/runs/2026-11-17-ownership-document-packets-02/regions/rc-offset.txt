@@ -1,0 +1,5 @@
+#[inline]
+fn data_offset_alignment(alignment: Alignment) -> usize {
+    let layout = Layout::new::<RcInner<()>>();
+    layout.size() + layout.padding_needed_for(alignment)
+}

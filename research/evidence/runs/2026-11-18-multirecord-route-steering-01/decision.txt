@@ -1,0 +1,55 @@
+原工具多记录入口受阻时的目标驱动后备（2026-11-18）
+
+决定：Aroma/PAM若在当前工件预算内有原生输入及可运行入口，仍优先该独立方法准入；若缺运行环境/输入、需要大型平台，转向已有队列唯一后备：call-subset-review-01 case-004，Dentry::unlink_with / rmdir_with的同文件删除事务抽取确认。不重新筛队列、不再修前端toy或官方expected。不因原工具失败推断方法无效，也不保证后备会支持合并。
+
+读取与身份
+直接读2026-11-18-call-subset-discovery.md、2026-11-17-removal-event-controls.md、removal-event-baseline.md及confirmation专题相关段；回读固定case-004的完整源副本中dentry.rs:1138-1158、1208-1269。另从2026-11-05-rust-baseline-corpus-01/sources.zip只读提取node_dentry测试的目标段落及函数位置。固定提交7e3ac94431a0dbb376d2fc8d85098deeff1bba09；本次没有测试、编译、模型、网络或生产修改，未重复全量来源hash校验。
+
+为何是这一对
+来源已经固定为code排名7、call_set排名35的实际候选，非为某方法挑胜例；001 collector已完成且关闭，002/005已有构造共享、003拓扑差异、006残余格式化成本均不宜优先再造小补丁。004仍有可证伪的问题：能否集中“父/受害inode锁、正lookup、自别名拒绝、操作、成功清理”且不改变类型差异、错误顺序与锁/引用生命期。
+这不是已做RemovedEntry快照helper的重复：旧removal-factorial-02主要改mount.rs的删除前metadata快照，303通过及两个fallback变体失败验证的是快照政策；新对象是node/dentry.rs:1214-1236、1247-1269的删除事务。旧297/303测试可作回归入口，不是新helper已通过，也不证明双锁下所有回调义务已被观测。
+
+现有共享与最小候选边界
+原dentry.rs:1147-1158的with_locked_child只持父锁、允许负候选，不覆盖受害锁、正lookup与删除后清理，不能直接用它替换声称已等价。可研究一个私有remove helper持有parent/victim Arc与两把guard，在guard生命周期内调用一次操作闭包，再仅成功时mark_unlinked和forget_cache_entry。unlink/rmdir保留各自类型判断、may_*、后端操作，禁止Boolean模式通用框架或新公共trait。
+候选必须先静态检查闭包捕获/参数借用与局部析构顺序：parent检查先于name检查；正lookup先于victim；Arc::ptr_eq拒绝先于第二次加锁；类型检查先于may_*；后端成功后才mark/cache。闭包本身及其捕获值Drop可能引入顺序差异，不能凭字段顺序相同认定行为完全相同。rmdir非空裁定仍由后端负责，不能改用缓存子项数判断。
+
+可直接复用的真实测试入口
+fs/kvfs/ut-tests/node_dentry.rs:683 test_rmdir_uses_directory_removal_callback：计unlink=0、rmdir=1及父cache移除；虽构造cached child，现有断言没有证明全部递归清理，因此不能夸大覆盖。
+:704 test_unlink_validator_observes_callback_victim：校验victim身份，permission拒绝时后端调用0且cache保持。
+:851 test_remove_rejects_parent_inode_as_victim：两操作自别名均InvalidInput。
+同文件MockDirOps::unlink/rmdir在:317-332已有调用计数与can_remove成功/失败控制；复用它及现有make_removable_dir_entry(:416)等fixture，不新建通用mock平台。mount.rs:1157只作为只读挂载外围回归，不扩mount政策或通知端到端。
+
+冻结的确认义务（原/候选相同观测）
+1. 两操作正常成功：对应后端恰好一次、victim身份一致，mark和cache清理保持；rmdir对子项的既有清理语义用明确断言检查，不推断“测试创建过子项所以已覆盖”。
+2. 类型不符各自保持IsADirectory/NotADirectory，may和后端均未调用；负lookup、parent/victim同一inode、parent非法且name非法的组合保留错误优先级。
+3. may拒绝：一次指定回调、后端0、无显式成功清理；后端拒绝：may已发生、后端一次、无成功清理。只能要求这些可见状态，不承诺lookup/外部回调无副作用或自动rollback。
+4. 双guard在may/backend及清理期间的生命期、失败后释放、Arc/闭包捕获析构顺序由精确源码diff与适用的既有锁观测接口分开核。若实际namespace锁没有可用非阻塞观察接口，不新造锁/探针声称内核持锁已证明；保留静态依据和缺口。宿主Mutex不能替代这一义务。
+5. 同formatter比较局部/完整文件体量、helper接口/闭包复杂度、原包装可读性。行为观测通过不强制接受提取；若新增抽象成本遮蔽操作差异或净收益无依据，可拒绝生产建议。
+
+执行预算及可判别失败
+先冻结原件/候选/测试及一项负控制，再执行原版，原版新增断言不通过即停止。原和候选最多各一次同配置既有kvfs套件；可加一个固定负控制（把may拒绝误当成功继续调用后端），只要求既有validator身份/拒绝观测明确失败，不把编译/超时当杀死。合计最多3格、每格沿旧可用环境的300秒上限；只使用新的隔离副本，不编辑原baseline或生产。若离线环境已经不可用，保存阻断，不转大型重建/安装。至多一次编译接入修正且保留首失败，不能结果后改断言挽救候选。
+负控制不是新算法，更不是现实bug；若对应断言本来就存在，应如实称已有义务检验，不声称发现旧测试盲区。计数/错误码/对象身份和各测试ID必须记录；测试oracle来自原行为和明确差异，不能调用待测新helper生成期望。
+有用结果可以是“这一真实事务抽取在所测契约下保持、剩余义务明确”或“该接口/时序代价使这对不值得抽取”。不要求正结果、行数收益或性能结论，最多确认一个候选，不把code这一候选成功率对比call collector。
+
+停止与路线衔接
+原工具工件准入由主线程与Rawls并行处理，本文不重复下载，也不预断其失败。仅在两条原生入口均不适合有限运行或主线程明确按价值改选时启用此后备；它不是当前自动启动实验的记录。候选三格或明确阻断后关闭，不补并发交错、不泛化整个namespace、不重启time/Weak/词法绑定扩展。生产合入仍是独立决定；例行有界执行与拒绝由agent自主完成，不需用户逐项确认。
+
+删除事务Drop顺序准入门槛（2026-11-18）
+主线程决定采用case004；原工具资料取得情况另记，本审议不把Aroma列表/结果CSV或PAM原生ARFF取得当算法已运行。当前delete-transaction-admission-01仅见source-selection.json、evidence.json，尚无proposal/patch/witness；本轮重读原dentry.rs:1214-1269，给出条件gate，不冒称已审候选或已复现变化，不重复Huygens实现/测试。
+关键风险成立于特定候选形态：原may_*是函数参数，在未调用的类型拒绝路径上，函数局部的victim/parent guards先清理，未消费的callback随后清理。若新helper持两锁调用一个按值消费的操作闭包，该闭包已捕获may_*，并在闭包内进行类型拒绝，则未调用的may_*可能随已消费闭包的退出在helper两guard仍活着时析构。必须读实际捕获方式、调用点及Drop scope判定，不能仅看move字样或“所有语句顺序一样”。
+拒绝门槛：实际候选改变未调用callback在类型拒绝时相对于两guard的析构顺序，就不能以返回错误码相同、既有测试通过认定行为保持。FnOnce约束没有保证其捕获对象析构无副作用；任意捕获可持资源、取锁或记录状态。但不能因此宣称现实调用者已经死锁、可利用或此pair任何抽取都不可能。
+必须分开四类路径核对：（1）进helper前/正lookup前的早退；（2）同inode拒绝及错误类型，callback从未执行；（3）callback实际执行并返回Err；（4）backend失败或成功清理。原callback被消费执行时，捕获对象本来就可能在guard内析构，不能要求所有路径都统一“锁外drop”。此外核entry/victim/parent Arc与guard局部清理顺序，不把修callback问题当全部Drop问题已解决。
+候选准入资料只需精确diff和Huygens的有限见证记录：用带Drop记录的未调用callback捕获对象观测类型拒绝，并分别记回调是否执行、两锁状态/释放事件及最后析构时点；原/候选同输入、同错误。若用standalone/宿主锁，只支持Rust清理顺序及宿主观测，不冒充实际kernel锁或现实死锁。这里不要求新内核运行或另写并发测试。
+若见证确认上述变化，优先拒绝这个朴素候选并归档实际不等价义务，暂停原三格运行，不为补丁面子引入复杂Option持有器/自定义Drop/新框架。只有确有很小、可解释且不增加其他生命期变化的候选，才允许另一次静态准入；不自动授权不断修到等价。不要求用户例行批准拒绝，拒绝本身即可回答此具体复用方案不可直接采用，是有用研究结果。
+最终ACCEPT/REJECT须待实际proposal到达后核定；当前状态为candidate pending，非无条件批准执行。
+
+最终决定：REJECT朴素按值操作闭包方案（2026-11-18；替代上段pending状态）
+本轮直接读取delete-transaction-confirmation-01/protocol.json、witness.rs:39-68、report.txt、debug/与opt/的stdout、independent-output-check.json，并回读固定case-004/left-source.rs:1214-1269。未执行见证、未独立重算hash；checker的12观测核验属于主线程执行记录。本审议不替代Rawls对见证实现的审查。
+实际见证的original保留callback参数和两个局部guard，naive把callback移入helper消费的操作闭包。两个优化级别均在WrongType且may/backend未调用时观察到：original先victim_unlock、parent_unlock后may_drop；naive先may_drop后两次unlock。witness.rs:28-33记录捕获析构，:76-79通过实际捕获而非人工插入drop(may)产生该事件。该有限反例足以否定此所有权形态对任意允许的Drop-bearing FnOnce保持可观察清理顺序的主张。callback_error与success的各自轨迹相同，只覆盖所列场景，不能抵消反例或升级为其他路径普遍等价。
+结论对象是朴素抽取方案，不是unlink/rmdir没有共同机制，更不是现有kernel存在死锁或安全缺陷。见证省略实际Dentry/Arc/namespace锁与其他早退路径，WrongType合并两种操作错误；因此是与原源码对应的清理形态反例，不是生产补丁运行。这里没有完整生产candidate.diff可称已验证。实际调用者是否携带有影响的析构状态也未核实，不凭该缺口将泛型接口的顺序变化默认为可接受。
+接受本批作为有用的否定性确认结果：发现阶段提出真实共享事务假设，确认阶段拒绝其中一个具体实现。立即取消此前有条件的QEMU三格入口，冻结本机制；不实现Option持有器、不补自定义Drop、不跑并发/allocator/更多错误变体。前文允许另一次小候选准入的口子在本批关闭。没有生产收益、方法优越性或“所有抽取均不可能”的结论。
+
+下一批仅建议一项：固定429排名中的一次有限未审候选续审，而不是再造验证器。
+复用已冻结call-subset-ranking-01的code/call_set排名及固定源码，事先排除全部已审pair和已闭合确认机制；每路按原排序取至多3个尚未审的独有pair，保持3+3独立槽位、不足不回填，不重算权重或扩大top20。选择及排除清单必须在读新片段前冻结；不得保证有六个合格剩余项，也不得把同文件新pair称独立样本。
+判别问题是有限人工预算内是否还有未被现有helper覆盖、能指出共同状态/操作及必要差异的实际内核局部机制，而非让所有相似对都产出helper。每对限完整所在文件加直接相关已有helper/测试，输出已有共享、必要差异、可确认候选或证据不足；候选还须明确一项会改变采用决定的行为义务和现成验证入口。保留否定与未知，并记录阅读文件/步骤成本，不用模型共识制造真值。不在本批启动新确认工程。
+停止门槛：六槽或可用槽位用尽即结束；零个有具体义务和验证入口的新候选则关闭当前拼写/词元队列扩审，不继续翻后续排名、调k或补前端追正。有候选也只按预先顺序提出第一项下一次确认准入，不能按方法择优。该批是开发候选产出与审阅成本观察，不是准确率/召回率、独立盲测或对两路优劣的估计。原Aroma/PAM工件缺口另存，不用重复下载或原fixture调试充当本批进展。例行执行/停止不需用户确认。

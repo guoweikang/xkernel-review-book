@@ -1,0 +1,80 @@
+--- a/fs/kvfs/src/path.rs
++++ b/fs/kvfs/src/path.rs
+@@ -34,8 +34,7 @@
+         self.inner
+     }
+ 
+-    /// Returns the final component of the pathname, if there is one.
+-    pub fn file_name(&self) -> Option<&'a str> {
++    fn final_component_bounds(&self) -> Option<(usize, usize)> {
+         let mut end = self.inner.len();
+         loop {
+             while end > 0 && self.inner.as_bytes()[end - 1] == b'/' {
+@@ -48,46 +47,34 @@
+                 .rfind('/')
+                 .map(|index| index + 1)
+                 .unwrap_or(0);
+-            let name = &self.inner[start..end];
+-            if name == "." && start > 0 {
+-                end = if start == 1 { 0 } else { start - 1 };
++            if &self.inner[start..end] == "." && start > 0 {
++                end = start - 1;
+                 continue;
+             }
+-            return match name {
+-                "." | ".." => None,
+-                _ => Some(name),
+-            };
++            return Some((start, end));
++        }
++    }
++
++    /// Returns the final component of the pathname, if there is one.
++    pub fn file_name(&self) -> Option<&'a str> {
++        let (start, end) = self.final_component_bounds()?;
++        match &self.inner[start..end] {
++            "." | ".." => None,
++            name => Some(name),
+         }
+     }
+ 
+     /// Returns the pathname without its final component, if there is one.
+     pub fn parent(&self) -> Option<Pathname<'a>> {
+-        let mut end = self.inner.len();
+-        loop {
+-            while end > 0 && self.inner.as_bytes()[end - 1] == b'/' {
+-                end -= 1;
+-            }
+-            if end == 0 {
+-                return None;
+-            }
+-            let start = self.inner[..end]
+-                .rfind('/')
+-                .map(|index| index + 1)
+-                .unwrap_or(0);
+-            let name = &self.inner[start..end];
+-            if name == "." && start > 0 {
+-                end = if start == 1 { 0 } else { start - 1 };
+-                continue;
+-            }
+-            let parent_end = if start == 0 {
+-                0
+-            } else if start == 1 {
+-                1
+-            } else {
+-                start - 1
+-            };
+-            return Some(Pathname::new(&self.inner[..parent_end]));
+-        }
++        let (start, _) = self.final_component_bounds()?;
++        let parent_end = if start == 0 {
++            0
++        } else if start == 1 {
++            1
++        } else {
++            start - 1
++        };
++        Some(Pathname::new(&self.inner[..parent_end]))
+     }
+ 
+     /// Returns `true` if the pathname is absolute, i.e., if it is independent of

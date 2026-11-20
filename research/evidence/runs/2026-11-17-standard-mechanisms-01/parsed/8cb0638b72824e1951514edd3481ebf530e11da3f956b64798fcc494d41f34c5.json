@@ -1,0 +1,766 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Rotates the range `[mid-left, mid+right)` such that the element at `mid` becomes the first",
+          "path": "doc",
+          "range": [
+            98,
+            192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " element. Equivalently, rotates the range `left` elements to the left or `right` elements to the",
+          "path": "doc",
+          "range": [
+            193,
+            292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " right.",
+          "path": "doc",
+          "range": [
+            293,
+            303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            304,
+            307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            308,
+            320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            321,
+            324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The specified range must be valid for reading and writing.",
+          "path": "doc",
+          "range": [
+            325,
+            387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            388,
+            397
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        479,
+        1340
+      ],
+      "kind": "fn",
+      "name": "ptr_rotate",
+      "range": [
+        98,
+        1340
+      ],
+      "signature_range": [
+        409,
+        478
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        706,
+        741
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1006,
+        1041
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Algorithm 1 is used if `min(left, right)` is small enough to fit onto a stack buffer. The",
+          "path": "doc",
+          "range": [
+            1342,
+            1435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `min(left, right)` elements are copied onto the buffer, `memmove` is applied to the others, and",
+          "path": "doc",
+          "range": [
+            1436,
+            1535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the ones on the buffer are moved back into the hole on the opposite side of where they",
+          "path": "doc",
+          "range": [
+            1536,
+            1626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " originated.",
+          "path": "doc",
+          "range": [
+            1627,
+            1642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1643,
+            1646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            1647,
+            1659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1660,
+            1663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The specified range must be valid for reading and writing.",
+          "path": "doc",
+          "range": [
+            1664,
+            1726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1727,
+            1736
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1815,
+        3387
+      ],
+      "kind": "fn",
+      "name": "ptr_rotate_memmove",
+      "range": [
+        1342,
+        3387
+      ],
+      "signature_range": [
+        1737,
+        1814
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Algorithm 2 is used for small values of `left + right` or for large `T`. The elements",
+          "path": "doc",
+          "range": [
+            3389,
+            3478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are moved into their final positions one at a time starting at `mid - left` and advancing by",
+          "path": "doc",
+          "range": [
+            3479,
+            3575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `right` steps modulo `left + right`, such that only one temporary is needed. Eventually, we",
+          "path": "doc",
+          "range": [
+            3576,
+            3671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " arrive back at `mid - left`. However, if `gcd(left + right, right)` is not 1, the above steps",
+          "path": "doc",
+          "range": [
+            3672,
+            3769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " skipped over elements. For example:",
+          "path": "doc",
+          "range": [
+            3770,
+            3809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```text",
+          "path": "doc",
+          "range": [
+            3810,
+            3821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " left = 10, right = 6",
+          "path": "doc",
+          "range": [
+            3822,
+            3846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the `^` indicates an element in its final place",
+          "path": "doc",
+          "range": [
+            3847,
+            3898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 6 7 8 9 10 11 12 13 14 15 . 0 1 2 3 4 5",
+          "path": "doc",
+          "range": [
+            3899,
+            3942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " after using one step of the above algorithm (The X will be overwritten at the end of the round,",
+          "path": "doc",
+          "range": [
+            3943,
+            4042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and 12 is stored in a temporary):",
+          "path": "doc",
+          "range": [
+            4043,
+            4080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " X 7 8 9 10 11 6 13 14 15 . 0 1 2 3 4 5",
+          "path": "doc",
+          "range": [
+            4081,
+            4123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "               ^",
+          "path": "doc",
+          "range": [
+            4124,
+            4143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " after using another step (now 2 is in the temporary):",
+          "path": "doc",
+          "range": [
+            4144,
+            4201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " X 7 8 9 10 11 6 13 14 15 . 0 1 12 3 4 5",
+          "path": "doc",
+          "range": [
+            4202,
+            4245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "               ^                 ^",
+          "path": "doc",
+          "range": [
+            4246,
+            4283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " after the third step (the steps wrap around, and 8 is in the temporary):",
+          "path": "doc",
+          "range": [
+            4284,
+            4360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " X 7 2 9 10 11 6 13 14 15 . 0 1 12 3 4 5",
+          "path": "doc",
+          "range": [
+            4361,
+            4404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ^         ^                 ^",
+          "path": "doc",
+          "range": [
+            4405,
+            4442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " after 7 more steps, the round ends with the temporary 0 getting put in the X:",
+          "path": "doc",
+          "range": [
+            4443,
+            4524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0 7 2 9 4 11 6 13 8 15 . 10 1 12 3 14 5",
+          "path": "doc",
+          "range": [
+            4525,
+            4568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ^   ^   ^    ^    ^       ^    ^    ^",
+          "path": "doc",
+          "range": [
+            4569,
+            4610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4611,
+            4618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Fortunately, the number of skipped over elements between finalized elements is always equal, so",
+          "path": "doc",
+          "range": [
+            4619,
+            4718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " we can just offset our starting position and do more rounds (the total number of rounds is the",
+          "path": "doc",
+          "range": [
+            4719,
+            4817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `gcd(left + right, right)` value). The end result is that all elements are finalized once and",
+          "path": "doc",
+          "range": [
+            4818,
+            4915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " only once.",
+          "path": "doc",
+          "range": [
+            4916,
+            4930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4931,
+            4934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Algorithm 2 can be vectorized by chunking and performing many rounds at once, but there are too",
+          "path": "doc",
+          "range": [
+            4935,
+            5034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " few rounds on average until `left + right` is enormous, and the worst case of a single",
+          "path": "doc",
+          "range": [
+            5035,
+            5125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " round is always there.",
+          "path": "doc",
+          "range": [
+            5126,
+            5152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5153,
+            5156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            5157,
+            5169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5170,
+            5173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The specified range must be valid for reading and writing.",
+          "path": "doc",
+          "range": [
+            5174,
+            5236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5237,
+            5246
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5321,
+        9577
+      ],
+      "kind": "fn",
+      "name": "ptr_rotate_gcd",
+      "range": [
+        3389,
+        9577
+      ],
+      "signature_range": [
+        5247,
+        5320
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Algorithm 3 utilizes repeated swapping of `min(left, right)` elements.",
+          "path": "doc",
+          "range": [
+            9579,
+            9653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9654,
+            9657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            9658,
+            9665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```text",
+          "path": "doc",
+          "range": [
+            9666,
+            9677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " left = 11, right = 4",
+          "path": "doc",
+          "range": [
+            9678,
+            9702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [4 5 6 7 8 9 10 11 12 13 14 . 0 1 2 3]",
+          "path": "doc",
+          "range": [
+            9703,
+            9745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                  ^  ^  ^  ^   ^ ^ ^ ^ swapping the right most elements with elements to the left",
+          "path": "doc",
+          "range": [
+            9746,
+            9846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [4 5 6 7 8 9 10 . 0 1 2 3] 11 12 13 14",
+          "path": "doc",
+          "range": [
+            9847,
+            9889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "        ^ ^ ^  ^   ^ ^ ^ ^ swapping these",
+          "path": "doc",
+          "range": [
+            9890,
+            9934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [4 5 6 . 0 1 2 3] 7 8 9 10 11 12 13 14",
+          "path": "doc",
+          "range": [
+            9935,
+            9977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " we cannot swap any more, but a smaller rotation problem is left to solve",
+          "path": "doc",
+          "range": [
+            9978,
+            10054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10055,
+            10062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when `left < right` the swapping happens from the left instead.",
+          "path": "doc",
+          "range": [
+            10063,
+            10130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10131,
+            10134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            10135,
+            10147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10148,
+            10151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The specified range must be valid for reading and writing.",
+          "path": "doc",
+          "range": [
+            10152,
+            10214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10215,
+            10224
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10312,
+        11950
+      ],
+      "kind": "fn",
+      "name": "ptr_rotate_swap",
+      "range": [
+        9579,
+        11950
+      ],
+      "signature_range": [
+        10225,
+        10311
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        12066,
+        12113
+      ],
+      "kind": "fn",
+      "name": "const_min",
+      "range": [
+        12011,
+        12113
+      ],
+      "signature_range": [
+        12011,
+        12065
+      ]
+    }
+  ],
+  "source_sha256": "13e233660081d3b9a0f049905a69b552950a3058d278b53addbf7cb6238dc612"
+}

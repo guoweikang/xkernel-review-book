@@ -1,0 +1,153 @@
+rustc 1.95.0 (59807616e 2026-04-14)
+binary: rustc
+commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860
+commit-date: 2026-04-14
+host: x86_64-unknown-linux-gnu
+release: 1.95.0
+LLVM version: 22.1.2
+stable-x86_64-unknown-linux-gnu (active, default)
+nightly-2026-03-08-x86_64-unknown-linux-gnu
+nightly-2026-08-21-x86_64-unknown-linux-gnu
+nightly-2026-09-04-x86_64-unknown-linux-gnu
+1.95.0-x86_64-unknown-linux-gnu
+library
+src
+import hashlib
+import json
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DIST = ROOT / "dist"
+
+
+class Links(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.targets = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag not in {"a", "img", "script", "link", "iframe"}:
+            return
+        self.targets.extend(value for name, value in attrs if name in {"href", "src"} and value)
+
+
+def main():
+    if not (DIST / "index.html").exists():
+        raise SystemExit("Build the book first")
+    failures = []
+    html_files = list(DIST.rglob("*.html"))
+    for page in html_files:
+        parser = Links()
+        parser.feed(page.read_text())
+        for target in parser.targets:
+            parsed = urlsplit(target)
+            if parsed.scheme or parsed.netloc or not parsed.path:
+                continue
+            path = unquote(parsed.path)
+            candidate = DIST / path.lstrip("/") if path.startswith("/") else page.parent / path
+            if not candidate.resolve().is_relative_to(DIST.resolve()) or not candidate.exists():
+                failures.append(f"Broken link: {page.relative_to(DIST)} -> {target}")
+    publication_pdfs = {
+        DIST / "research/publications/2026-11-11-pilot-draft" / name
+        for name in ("paper.pdf", "slides.pdf")
+    }
+    publication_pdfs.add(
+        DIST / "research/publications/2026-11-11-research-briefing/research-briefing.pdf"
+    )
+    forbidden = [path for path in DIST.rglob("*") if path.is_file() and (
+        path.suffix in {".rs", ".py", ".toml"}
+        or (path.suffix == ".pdf" and path not in publication_pdfs)
+        or "originals" in path.parts or ".git" in path.parts
+    )]
+    failures.extend(f"Unexpected private/source artifact in site: {path}" for path in forbidden)
+    manifest = json.loads((ROOT / "research/evidence/manifest.json").read_text())
+    verified = 0
+    absent = 0
+    for record in manifest["records"]:
+        if record["status"] != "downloaded":
+            continue
+        path = ROOT / "research/evidence" / record["path"]
+        if not path.exists():
+            absent += 1
+            continue
+        data = path.read_bytes()
+        if len(data) != record["bytes"] or hashlib.sha256(data).hexdigest() != record["sha256"]:
+            failures.append(f"Archive checksum mismatch: {record['path']}")
+        verified += 1
+    if failures:
+        raise SystemExit("\n".join(failures))
+    print(f"PASS: {len(html_files)} HTML pages; local links; artifact isolation; {verified} archive checksums")
+    if absent:
+        print(f"NOTE: {absent} local-only originals absent; reference-only checkout is supported")
+
+
+if __name__ == "__main__":
+    main()
+import json
+import re
+import shutil
+import subprocess
+from pathlib import Path
+from urllib.parse import urlsplit
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STAGING = ROOT / ".build" / "src"
+RESEARCH = ROOT / "research"
+
+
+def validate_catalog(actual, catalog):
+    groups = catalog["groups"]
+    identifiers = [group["id"] for group in groups]
+    if len(identifiers) != len(set(identifiers)) or any(
+        not re.fullmatch(r"[a-z][a-z0-9-]*", identifier) for identifier in identifiers
+    ):
+        raise SystemExit("Invalid or duplicate research topic identifiers")
+    registered = [name for group in groups for name in group["documents"]]
+    if len(registered) != len(set(registered)):
+        raise SystemExit("Duplicate primary assignment in research/catalog.json")
+    if set(registered) != actual:
+        raise SystemExit(f"Research catalog mismatch: unassigned={sorted(actual - set(registered))}; missing={sorted(set(registered) - actual)}")
+
+
+def main():
+    local_binary = ROOT / ".tools" / "mdbook"
+    binary = str(local_binary) if local_binary.exists() else shutil.which("mdbook")
+    if not binary:
+        raise SystemExit("Install mdBook 0.5.4; see README.md")
+    version = subprocess.check_output([binary, "--version"], text=True).strip()
+    if version != "mdbook v0.5.4":
+        raise SystemExit(f"Expected mdbook v0.5.4, got {version}")
+    if STAGING.exists():
+        shutil.rmtree(STAGING)
+    shutil.copytree(ROOT / "chapters", STAGING)
+    manifest = json.loads((RESEARCH / "evidence" / "manifest.json").read_text())
+    evidence_urls = {
+        (RESEARCH / "evidence" / record["path"]).resolve(): record["source_url"]
+        for record in manifest["records"]
+        if record["status"] == "downloaded"
+    }
+    research_files = sorted(
+        source for source in RESEARCH.rglob("*.md")
+        if not source.is_relative_to(RESEARCH / "evidence" / "originals")
+        and not source.is_relative_to(RESEARCH / "evidence" / "runs")
+    )
+    catalog = json.loads((RESEARCH / "catalog.json").read_text())
+    actual = {source.relative_to(RESEARCH).as_posix() for source in research_files}
+    validate_catalog(actual, catalog)
+    for source in research_files:
+        destination = STAGING / "research" / source.relative_to(RESEARCH)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        content = source.read_text()
+
+        def replace_link(match):
+            target = match.group(1)
+            parsed = urlsplit(target)
+            if parsed.scheme or parsed.netloc or not parsed.path:
+                return match.group(0)
+            resolved = (source.parent / parsed.path).resolve()
+            depth = len(destination.relative_to(STAGING).parts) - 1
+            if not resolved.is_relative_to(RESEARCH.resolve()):

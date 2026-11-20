@@ -1,0 +1,844 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        0,
+        58
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Allows wrapped [references] and [boxes] to dangle.",
+          "path": "doc",
+          "range": [
+            84,
+            138
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            139,
+            142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <section class=\"warning\">",
+          "path": "doc",
+          "range": [
+            143,
+            172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type is not properly implemented yet, and the documentation below is thus not accurate.",
+          "path": "doc",
+          "range": [
+            173,
+            269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " </section>",
+          "path": "doc",
+          "range": [
+            270,
+            284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            285,
+            288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " That is, if a reference (or a `Box`) is wrapped in `MaybeDangling` (including when in a",
+          "path": "doc",
+          "range": [
+            289,
+            380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (nested) field of a compound type wrapped in `MaybeDangling`), it does not have to follow",
+          "path": "doc",
+          "range": [
+            381,
+            474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointer aliasing rules or be dereferenceable.",
+          "path": "doc",
+          "range": [
+            475,
+            524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            525,
+            528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can be useful when the value can become dangling while the function holding it is still",
+          "path": "doc",
+          "range": [
+            529,
+            625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " executing (particularly in concurrent code). As a somewhat absurd example, consider this code:",
+          "path": "doc",
+          "range": [
+            626,
+            724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            725,
+            728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust,no_run",
+          "path": "doc",
+          "range": [
+            729,
+            747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(box_as_ptr)]",
+          "path": "doc",
+          "range": [
+            748,
+            775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::alloc::{dealloc, Layout};",
+          "path": "doc",
+          "range": [
+            776,
+            816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::mem;",
+          "path": "doc",
+          "range": [
+            817,
+            836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            837,
+            840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut boxed = Box::new(0_u32);",
+          "path": "doc",
+          "range": [
+            841,
+            877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = Box::as_mut_ptr(&mut boxed);",
+          "path": "doc",
+          "range": [
+            878,
+            920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            921,
+            924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards",
+          "path": "doc",
+          "range": [
+            925,
+            1028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };",
+          "path": "doc",
+          "range": [
+            1029,
+            1086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1087,
+            1090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mem::forget(boxed); // <-- this is UB!",
+          "path": "doc",
+          "range": [
+            1091,
+            1133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1134,
+            1141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1142,
+            1145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Even though the `Box`'s destructor is not run (and thus we don't have a double free bug), this",
+          "path": "doc",
+          "range": [
+            1146,
+            1244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " code is still UB. This is because when moving `boxed` into `forget`, its validity invariants",
+          "path": "doc",
+          "range": [
+            1245,
+            1341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are asserted, causing UB since the `Box` is dangling. The safety comment is as such wrong, as",
+          "path": "doc",
+          "range": [
+            1342,
+            1439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " moving the `boxed` variable as part of the `forget` call *is* a use.",
+          "path": "doc",
+          "range": [
+            1440,
+            1512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1513,
+            1516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To fix this we could use `MaybeDangling`:",
+          "path": "doc",
+          "range": [
+            1517,
+            1562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1563,
+            1566
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust,no_run",
+          "path": "doc",
+          "range": [
+            1637,
+            1655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(maybe_dangling, box_as_ptr)]",
+          "path": "doc",
+          "range": [
+            1656,
+            1699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::alloc::{dealloc, Layout};",
+          "path": "doc",
+          "range": [
+            1700,
+            1740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::mem::{self, MaybeDangling};",
+          "path": "doc",
+          "range": [
+            1741,
+            1783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1784,
+            1787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut boxed = MaybeDangling::new(Box::new(0_u32));",
+          "path": "doc",
+          "range": [
+            1788,
+            1844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let ptr = Box::as_mut_ptr(boxed.as_mut());",
+          "path": "doc",
+          "range": [
+            1845,
+            1891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1892,
+            1895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards",
+          "path": "doc",
+          "range": [
+            1896,
+            1999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };",
+          "path": "doc",
+          "range": [
+            2000,
+            2057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2058,
+            2061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mem::forget(boxed); // <-- this is OK!",
+          "path": "doc",
+          "range": [
+            2062,
+            2104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2105,
+            2112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2113,
+            2116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the bit pattern must still be valid for the wrapped type. That is, [references]",
+          "path": "doc",
+          "range": [
+            2117,
+            2210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (and [boxes]) still must be aligned and non-null.",
+          "path": "doc",
+          "range": [
+            2211,
+            2264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2265,
+            2268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Additionally note that safe code can still assume that the inner value in a `MaybeDangling` is",
+          "path": "doc",
+          "range": [
+            2269,
+            2367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **not** dangling -- functions like [`as_ref`] and [`into_inner`] are safe. It is not sound to",
+          "path": "doc",
+          "range": [
+            2368,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " return a dangling reference in a `MaybeDangling` to safe code. However, it *is* sound",
+          "path": "doc",
+          "range": [
+            2466,
+            2555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to hold such values internally inside your code -- and there's no way to do that without",
+          "path": "doc",
+          "range": [
+            2556,
+            2648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this type. Note that other types can use this type and thus get the same effect; in particular,",
+          "path": "doc",
+          "range": [
+            2649,
+            2748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`ManuallyDrop`] will use `MaybeDangling`.",
+          "path": "doc",
+          "range": [
+            2749,
+            2795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2796,
+            2799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that `MaybeDangling` doesn't prevent drops from being run, which can lead to UB if the",
+          "path": "doc",
+          "range": [
+            2800,
+            2895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " drop observes a dangling value. If you need to prevent drops from being run use [`ManuallyDrop`]",
+          "path": "doc",
+          "range": [
+            2896,
+            2996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instead.",
+          "path": "doc",
+          "range": [
+            2997,
+            3009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3010,
+            3013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [references]: prim@reference",
+          "path": "doc",
+          "range": [
+            3014,
+            3046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [boxes]: ../../std/boxed/struct.Box.html",
+          "path": "doc",
+          "range": [
+            3047,
+            3091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`into_inner`]: MaybeDangling::into_inner",
+          "path": "doc",
+          "range": [
+            3092,
+            3137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`as_ref`]: MaybeDangling::as_ref",
+          "path": "doc",
+          "range": [
+            3138,
+            3175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`ManuallyDrop`]: crate::mem::ManuallyDrop",
+          "path": "doc",
+          "range": [
+            3176,
+            3222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            3223,
+            3243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_pub_transparent",
+          "range": [
+            3244,
+            3268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            3269,
+            3307
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "MaybeDangling",
+      "range": [
+        84,
+        3347
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3349,
+        4420
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Wraps a value in a `MaybeDangling`, allowing it to dangle.",
+          "path": "doc",
+          "range": [
+            3388,
+            3450
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3518,
+        3550
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        3388,
+        3550
+      ],
+      "signature_range": [
+        3459,
+        3513
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the inner value.",
+          "path": "doc",
+          "range": [
+            3556,
+            3599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3604,
+            3607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this is UB if the inner value is currently dangling.",
+          "path": "doc",
+          "range": [
+            3612,
+            3678
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3716,
+        3739
+      ],
+      "kind": "impl_fn",
+      "name": "as_ref",
+      "range": [
+        3556,
+        3739
+      ],
+      "signature_range": [
+        3687,
+        3715
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the inner value.",
+          "path": "doc",
+          "range": [
+            3745,
+            3796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3801,
+            3804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this is UB if the inner value is currently dangling.",
+          "path": "doc",
+          "range": [
+            3809,
+            3875
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3921,
+        3948
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut",
+      "range": [
+        3745,
+        3948
+      ],
+      "signature_range": [
+        3884,
+        3920
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Extracts the value from the `MaybeDangling` container.",
+          "path": "doc",
+          "range": [
+            3954,
+            4012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4017,
+            4020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this is UB if the inner value is currently dangling.",
+          "path": "doc",
+          "range": [
+            4025,
+            4091
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4163,
+        4418
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        3954,
+        4418
+      ],
+      "signature_range": [
+        4100,
+        4158
+      ]
+    }
+  ],
+  "source_sha256": "1cf24b2ec36fff143f329f2ef6db5b4d47cfa798da7f30d88b554b712c8f4b53"
+}

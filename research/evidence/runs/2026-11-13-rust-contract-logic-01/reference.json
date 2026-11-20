@@ -1,0 +1,296 @@
+[
+  {
+    "id": "condition/preserved",
+    "family": "condition",
+    "premise": "For this request, the handler is called only if payload collection succeeds.",
+    "hypothesis": "If the handler is called for this request, payload collection succeeds.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "C": false,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": true
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "condition/converse",
+    "family": "condition",
+    "premise": "For this request, the handler is called only if payload collection succeeds.",
+    "hypothesis": "If payload collection succeeds for this request, the handler is called.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "C": false,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "C": true,
+        "H": false
+      }
+    ]
+  },
+  {
+    "id": "condition/unconditional",
+    "family": "condition",
+    "premise": "For this request, the handler is called only if payload collection succeeds.",
+    "hypothesis": "The handler is called for this request.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "C": true,
+        "H": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "C": false,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": false
+      }
+    ]
+  },
+  {
+    "id": "condition/contrapositive",
+    "family": "condition",
+    "premise": "For this request, the handler is called only if payload collection succeeds.",
+    "hypothesis": "If payload collection does not succeed for this request, the handler is not called.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "C": false,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": false
+      },
+      {
+        "C": true,
+        "H": true
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "field_role/changed",
+    "family": "field_role",
+    "premise": "In this invocation, the permission bits change and the file-type bits do not change.",
+    "hypothesis": "In this invocation, the permission bits change.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "P": true,
+        "T": false
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "field_role/preserved",
+    "family": "field_role",
+    "premise": "In this invocation, the permission bits change and the file-type bits do not change.",
+    "hypothesis": "In this invocation, the file-type bits remain unchanged.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "P": true,
+        "T": false
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "field_role/swapped",
+    "family": "field_role",
+    "premise": "In this invocation, the permission bits change and the file-type bits do not change.",
+    "hypothesis": "In this invocation, the file-type bits change.",
+    "label": "contradiction",
+    "positive_worlds": [],
+    "counterexample_worlds": [
+      {
+        "P": true,
+        "T": false
+      }
+    ]
+  },
+  {
+    "id": "field_role/denied",
+    "family": "field_role",
+    "premise": "In this invocation, the permission bits change and the file-type bits do not change.",
+    "hypothesis": "In this invocation, the permission bits do not change.",
+    "label": "contradiction",
+    "positive_worlds": [],
+    "counterexample_worlds": [
+      {
+        "P": true,
+        "T": false
+      }
+    ]
+  },
+  {
+    "id": "document_report/report_preserved",
+    "family": "document_report",
+    "premise": "The documentation states that the module supports IRQ lookup.",
+    "hypothesis": "According to the documentation, IRQ lookup is supported by the module.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "A": false,
+        "D": true
+      },
+      {
+        "A": true,
+        "D": true
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "document_report/actual_promoted",
+    "family": "document_report",
+    "premise": "The documentation states that the module supports IRQ lookup.",
+    "hypothesis": "The module actually supports IRQ lookup.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "A": true,
+        "D": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "A": false,
+        "D": true
+      }
+    ]
+  },
+  {
+    "id": "document_report/actual_denied",
+    "family": "document_report",
+    "premise": "The documentation states that the module supports IRQ lookup.",
+    "hypothesis": "The module does not actually support IRQ lookup.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "A": false,
+        "D": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "A": true,
+        "D": true
+      }
+    ]
+  },
+  {
+    "id": "document_report/report_denied",
+    "family": "document_report",
+    "premise": "The documentation states that the module supports IRQ lookup.",
+    "hypothesis": "The documentation does not state that the module supports IRQ lookup.",
+    "label": "contradiction",
+    "positive_worlds": [],
+    "counterexample_worlds": [
+      {
+        "A": false,
+        "D": true
+      },
+      {
+        "A": true,
+        "D": true
+      }
+    ]
+  },
+  {
+    "id": "norm_vs_actual/norm_preserved",
+    "family": "norm_vs_actual",
+    "premise": "The architecture requires the firmware crate to decode node properties.",
+    "hypothesis": "Decoding node properties is required of the firmware crate by the architecture.",
+    "label": "entailment",
+    "positive_worlds": [
+      {
+        "A": false,
+        "N": true
+      },
+      {
+        "A": true,
+        "N": true
+      }
+    ],
+    "counterexample_worlds": []
+  },
+  {
+    "id": "norm_vs_actual/actual_promoted",
+    "family": "norm_vs_actual",
+    "premise": "The architecture requires the firmware crate to decode node properties.",
+    "hypothesis": "The firmware crate actually decodes node properties.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "A": true,
+        "N": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "A": false,
+        "N": true
+      }
+    ]
+  },
+  {
+    "id": "norm_vs_actual/actual_denied",
+    "family": "norm_vs_actual",
+    "premise": "The architecture requires the firmware crate to decode node properties.",
+    "hypothesis": "The firmware crate does not actually decode node properties.",
+    "label": "neutral",
+    "positive_worlds": [
+      {
+        "A": false,
+        "N": true
+      }
+    ],
+    "counterexample_worlds": [
+      {
+        "A": true,
+        "N": true
+      }
+    ]
+  },
+  {
+    "id": "norm_vs_actual/norm_denied",
+    "family": "norm_vs_actual",
+    "premise": "The architecture requires the firmware crate to decode node properties.",
+    "hypothesis": "The architecture does not require the firmware crate to decode node properties.",
+    "label": "contradiction",
+    "positive_worlds": [],
+    "counterexample_worlds": [
+      {
+        "A": false,
+        "N": true
+      },
+      {
+        "A": true,
+        "N": true
+      }
+    ]
+  }
+]

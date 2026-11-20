@@ -1,0 +1,3307 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator able to yield elements from both ends.",
+          "path": "doc",
+          "range": [
+            62,
+            116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            117,
+            120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Something that implements `DoubleEndedIterator` has one extra capability",
+          "path": "doc",
+          "range": [
+            121,
+            197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " over something that implements [`Iterator`]: the ability to also take",
+          "path": "doc",
+          "range": [
+            198,
+            271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Item`s from the back, as well as the front.",
+          "path": "doc",
+          "range": [
+            272,
+            320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            321,
+            324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is important to note that both back and forth work on the same range,",
+          "path": "doc",
+          "range": [
+            325,
+            401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and do not cross: iteration is over when they meet in the middle.",
+          "path": "doc",
+          "range": [
+            402,
+            471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            472,
+            475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In a similar fashion to the [`Iterator`] protocol, once a",
+          "path": "doc",
+          "range": [
+            476,
+            537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `DoubleEndedIterator` returns [`None`] from a [`next_back()`], calling it",
+          "path": "doc",
+          "range": [
+            538,
+            615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " again may or may not ever return [`Some`] again. [`next()`] and",
+          "path": "doc",
+          "range": [
+            616,
+            683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`next_back()`] are interchangeable for this purpose.",
+          "path": "doc",
+          "range": [
+            684,
+            741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            742,
+            745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`next_back()`]: DoubleEndedIterator::next_back",
+          "path": "doc",
+          "range": [
+            746,
+            797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`next()`]: Iterator::next",
+          "path": "doc",
+          "range": [
+            798,
+            828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            829,
+            832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            833,
+            847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            848,
+            851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            852,
+            868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            869,
+            872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            873,
+            880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let numbers = vec![1, 2, 3, 4, 5, 6];",
+          "path": "doc",
+          "range": [
+            881,
+            922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            923,
+            926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = numbers.iter();",
+          "path": "doc",
+          "range": [
+            927,
+            961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            962,
+            965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&1), iter.next());",
+          "path": "doc",
+          "range": [
+            966,
+            1004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&6), iter.next_back());",
+          "path": "doc",
+          "range": [
+            1005,
+            1048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&5), iter.next_back());",
+          "path": "doc",
+          "range": [
+            1049,
+            1092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&2), iter.next());",
+          "path": "doc",
+          "range": [
+            1093,
+            1131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&3), iter.next());",
+          "path": "doc",
+          "range": [
+            1132,
+            1170
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&4), iter.next());",
+          "path": "doc",
+          "range": [
+            1171,
+            1209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, iter.next());",
+          "path": "doc",
+          "range": [
+            1210,
+            1244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, iter.next_back());",
+          "path": "doc",
+          "range": [
+            1245,
+            1284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1285,
+            1292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1293,
+            1338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            1339,
+            1387
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "DoubleEndedIterator",
+      "range": [
+        62,
+        12891
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes and returns an element from the end of the iterator.",
+          "path": "doc",
+          "range": [
+            1434,
+            1498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1503,
+            1506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `None` when there are no more elements.",
+          "path": "doc",
+          "range": [
+            1511,
+            1562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1567,
+            1570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The [trait-level] docs contain more details.",
+          "path": "doc",
+          "range": [
+            1575,
+            1623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1628,
+            1631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [trait-level]: DoubleEndedIterator",
+          "path": "doc",
+          "range": [
+            1636,
+            1674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1679,
+            1682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1687,
+            1701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1706,
+            1709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            1714,
+            1730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1735,
+            1738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1743,
+            1750
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let numbers = vec![1, 2, 3, 4, 5, 6];",
+          "path": "doc",
+          "range": [
+            1755,
+            1796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1801,
+            1804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = numbers.iter();",
+          "path": "doc",
+          "range": [
+            1809,
+            1843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1848,
+            1851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&1), iter.next());",
+          "path": "doc",
+          "range": [
+            1856,
+            1894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&6), iter.next_back());",
+          "path": "doc",
+          "range": [
+            1899,
+            1942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&5), iter.next_back());",
+          "path": "doc",
+          "range": [
+            1947,
+            1990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&2), iter.next());",
+          "path": "doc",
+          "range": [
+            1995,
+            2033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&3), iter.next());",
+          "path": "doc",
+          "range": [
+            2038,
+            2076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Some(&4), iter.next());",
+          "path": "doc",
+          "range": [
+            2081,
+            2119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, iter.next());",
+          "path": "doc",
+          "range": [
+            2124,
+            2158
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(None, iter.next_back());",
+          "path": "doc",
+          "range": [
+            2163,
+            2202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2207,
+            2214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2219,
+            2222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Remarks",
+          "path": "doc",
+          "range": [
+            2227,
+            2240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2245,
+            2248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The elements yielded by `DoubleEndedIterator`'s methods may differ from",
+          "path": "doc",
+          "range": [
+            2253,
+            2328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the ones yielded by [`Iterator`]'s methods:",
+          "path": "doc",
+          "range": [
+            2333,
+            2380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2385,
+            2388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2393,
+            2400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let vec = vec![(1, 'a'), (1, 'b'), (1, 'c'), (2, 'a'), (2, 'b')];",
+          "path": "doc",
+          "range": [
+            2405,
+            2474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uniq_by_fst_comp = || {",
+          "path": "doc",
+          "range": [
+            2479,
+            2510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut seen = std::collections::HashSet::new();",
+          "path": "doc",
+          "range": [
+            2515,
+            2571
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     vec.iter().copied().filter(move |x| seen.insert(x.0))",
+          "path": "doc",
+          "range": [
+            2576,
+            2637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            2642,
+            2648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2653,
+            2656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(uniq_by_fst_comp().last(), Some((2, 'a')));",
+          "path": "doc",
+          "range": [
+            2661,
+            2719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(uniq_by_fst_comp().next_back(), Some((2, 'b')));",
+          "path": "doc",
+          "range": [
+            2724,
+            2787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2792,
+            2795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            2800,
+            2815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     uniq_by_fst_comp().fold(vec![], |mut v, x| {v.push(x); v}),",
+          "path": "doc",
+          "range": [
+            2820,
+            2887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     vec![(1, 'a'), (2, 'a')]",
+          "path": "doc",
+          "range": [
+            2892,
+            2924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            2929,
+            2935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            2940,
+            2955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     uniq_by_fst_comp().rfold(vec![], |mut v, x| {v.push(x); v}),",
+          "path": "doc",
+          "range": [
+            2960,
+            3028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     vec![(2, 'b'), (1, 'c')]",
+          "path": "doc",
+          "range": [
+            3033,
+            3065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            3070,
+            3076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3081,
+            3088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3093,
+            3138
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "next_back",
+      "range": [
+        1434,
+        3189
+      ],
+      "signature_range": [
+        3143,
+        3188
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Advances the iterator from the back by `n` elements.",
+          "path": "doc",
+          "range": [
+            3195,
+            3251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3256,
+            3259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `advance_back_by` is the reverse version of [`advance_by`]. This method will",
+          "path": "doc",
+          "range": [
+            3264,
+            3344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " eagerly skip `n` elements starting from the back by calling [`next_back`] up",
+          "path": "doc",
+          "range": [
+            3349,
+            3429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to `n` times until [`None`] is encountered.",
+          "path": "doc",
+          "range": [
+            3434,
+            3481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3486,
+            3489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `advance_back_by(n)` will return `Ok(())` if the iterator successfully advances by",
+          "path": "doc",
+          "range": [
+            3494,
+            3580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `n` elements, or a `Err(NonZero<usize>)` with value `k` if [`None`] is encountered, where `k`",
+          "path": "doc",
+          "range": [
+            3585,
+            3682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is remaining number of steps that could not be advanced because the iterator ran out.",
+          "path": "doc",
+          "range": [
+            3687,
+            3776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `self` is empty and `n` is non-zero, then this returns `Err(n)`.",
+          "path": "doc",
+          "range": [
+            3781,
+            3852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Otherwise, `k` is always less than `n`.",
+          "path": "doc",
+          "range": [
+            3857,
+            3900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3905,
+            3908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Calling `advance_back_by(0)` can do meaningful work, for example [`Flatten`] can advance its",
+          "path": "doc",
+          "range": [
+            3913,
+            4009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " outer iterator until it finds an inner iterator that is not empty, which then often",
+          "path": "doc",
+          "range": [
+            4014,
+            4101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allows it to return a more accurate `size_hint()` than in its initial state.",
+          "path": "doc",
+          "range": [
+            4106,
+            4186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4191,
+            4194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`advance_by`]: Iterator::advance_by",
+          "path": "doc",
+          "range": [
+            4199,
+            4239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Flatten`]: crate::iter::Flatten",
+          "path": "doc",
+          "range": [
+            4244,
+            4281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`next_back`]: DoubleEndedIterator::next_back",
+          "path": "doc",
+          "range": [
+            4286,
+            4335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4340,
+            4343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4348,
+            4362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4367,
+            4370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            4375,
+            4391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4396,
+            4399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4404,
+            4411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(iter_advance_by)]",
+          "path": "doc",
+          "range": [
+            4416,
+            4448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4453,
+            4456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::num::NonZero;",
+          "path": "doc",
+          "range": [
+            4461,
+            4487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4492,
+            4495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [3, 4, 5, 6];",
+          "path": "doc",
+          "range": [
+            4500,
+            4525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = a.iter();",
+          "path": "doc",
+          "range": [
+            4530,
+            4558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4563,
+            4566
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.advance_back_by(2), Ok(()));",
+          "path": "doc",
+          "range": [
+            4571,
+            4619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.next_back(), Some(&4));",
+          "path": "doc",
+          "range": [
+            4624,
+            4667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.advance_back_by(0), Ok(()));",
+          "path": "doc",
+          "range": [
+            4672,
+            4720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.advance_back_by(100), Err(NonZero::new(99).unwrap())); // only `&3` was skipped",
+          "path": "doc",
+          "range": [
+            4725,
+            4824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4829,
+            4836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4841,
+            4844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Ok(())`]: Ok",
+          "path": "doc",
+          "range": [
+            4849,
+            4867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Err(k)`]: Err",
+          "path": "doc",
+          "range": [
+            4872,
+            4891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4896,
+            4905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4910,
+            4967
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5042,
+        5282
+      ],
+      "kind": "trait_fn",
+      "name": "advance_back_by",
+      "range": [
+        3195,
+        5282
+      ],
+      "signature_range": [
+        4972,
+        5041
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the `n`th element from the end of the iterator.",
+          "path": "doc",
+          "range": [
+            5288,
+            5347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5352,
+            5355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is essentially the reversed version of [`Iterator::nth()`].",
+          "path": "doc",
+          "range": [
+            5360,
+            5428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Although like most indexing operations, the count starts from zero, so",
+          "path": "doc",
+          "range": [
+            5433,
+            5507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `nth_back(0)` returns the first value from the end, `nth_back(1)` the",
+          "path": "doc",
+          "range": [
+            5512,
+            5585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " second, and so on.",
+          "path": "doc",
+          "range": [
+            5590,
+            5612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5617,
+            5620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that all elements between the end and the returned element will be",
+          "path": "doc",
+          "range": [
+            5625,
+            5700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " consumed, including the returned element. This also means that calling",
+          "path": "doc",
+          "range": [
+            5705,
+            5779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `nth_back(0)` multiple times on the same iterator will return different",
+          "path": "doc",
+          "range": [
+            5784,
+            5859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements.",
+          "path": "doc",
+          "range": [
+            5864,
+            5877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5882,
+            5885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `nth_back()` will return [`None`] if `n` is greater than or equal to the",
+          "path": "doc",
+          "range": [
+            5890,
+            5966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " length of the iterator.",
+          "path": "doc",
+          "range": [
+            5971,
+            5998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6003,
+            6006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6011,
+            6025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6030,
+            6033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            6038,
+            6054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6059,
+            6062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6067,
+            6074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            6079,
+            6101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.iter().nth_back(2), Some(&1));",
+          "path": "doc",
+          "range": [
+            6106,
+            6153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6158,
+            6165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6170,
+            6173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Calling `nth_back()` multiple times doesn't rewind the iterator:",
+          "path": "doc",
+          "range": [
+            6178,
+            6246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6251,
+            6254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6259,
+            6266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            6271,
+            6293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6298,
+            6301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = a.iter();",
+          "path": "doc",
+          "range": [
+            6306,
+            6334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6339,
+            6342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.nth_back(1), Some(&2));",
+          "path": "doc",
+          "range": [
+            6347,
+            6390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.nth_back(1), None);",
+          "path": "doc",
+          "range": [
+            6395,
+            6434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6439,
+            6446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6451,
+            6454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returning `None` if there are less than `n + 1` elements:",
+          "path": "doc",
+          "range": [
+            6459,
+            6520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6525,
+            6528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6533,
+            6540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            6545,
+            6567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.iter().nth_back(10), None);",
+          "path": "doc",
+          "range": [
+            6572,
+            6616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6621,
+            6628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6633,
+            6642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6647,
+            6701
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6761,
+        6874
+      ],
+      "kind": "trait_fn",
+      "name": "nth_back",
+      "range": [
+        5288,
+        6874
+      ],
+      "signature_range": [
+        6706,
+        6760
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " This is the reverse version of [`Iterator::try_fold()`]: it takes",
+          "path": "doc",
+          "range": [
+            6880,
+            6949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " elements starting from the back of the iterator.",
+          "path": "doc",
+          "range": [
+            6954,
+            7006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7011,
+            7014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            7019,
+            7033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7038,
+            7041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            7046,
+            7062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7067,
+            7070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7075,
+            7082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [\"1\", \"2\", \"3\"];",
+          "path": "doc",
+          "range": [
+            7087,
+            7115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sum = a.iter()",
+          "path": "doc",
+          "range": [
+            7120,
+            7142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .map(|&s| s.parse::<i32>())",
+          "path": "doc",
+          "range": [
+            7147,
+            7182
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .try_rfold(0, |acc, x| x.and_then(|y| Ok(acc + y)));",
+          "path": "doc",
+          "range": [
+            7187,
+            7247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(sum, Ok(6));",
+          "path": "doc",
+          "range": [
+            7252,
+            7279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7284,
+            7291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7296,
+            7299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Short-circuiting:",
+          "path": "doc",
+          "range": [
+            7304,
+            7325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7330,
+            7333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7338,
+            7345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [\"1\", \"rust\", \"3\"];",
+          "path": "doc",
+          "range": [
+            7350,
+            7381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut it = a.iter();",
+          "path": "doc",
+          "range": [
+            7386,
+            7412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sum = it",
+          "path": "doc",
+          "range": [
+            7417,
+            7433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .by_ref()",
+          "path": "doc",
+          "range": [
+            7438,
+            7455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .map(|&s| s.parse::<i32>())",
+          "path": "doc",
+          "range": [
+            7460,
+            7495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     .try_rfold(0, |acc, x| x.and_then(|y| Ok(acc + y)));",
+          "path": "doc",
+          "range": [
+            7500,
+            7560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(sum.is_err());",
+          "path": "doc",
+          "range": [
+            7565,
+            7591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7596,
+            7599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Because it short-circuited, the remaining elements are still",
+          "path": "doc",
+          "range": [
+            7604,
+            7671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // available through the iterator.",
+          "path": "doc",
+          "range": [
+            7676,
+            7714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(it.next_back(), Some(&\"1\"));",
+          "path": "doc",
+          "range": [
+            7719,
+            7762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7767,
+            7774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7779,
+            7788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7793,
+            7851
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8014,
+        8164
+      ],
+      "kind": "trait_fn",
+      "name": "try_rfold",
+      "range": [
+        6880,
+        8164
+      ],
+      "signature_range": [
+        7856,
+        8009
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " An iterator method that reduces the iterator's elements to a single,",
+          "path": "doc",
+          "range": [
+            8170,
+            8242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " final value, starting from the back.",
+          "path": "doc",
+          "range": [
+            8247,
+            8287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8292,
+            8295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is the reverse version of [`Iterator::fold()`]: it takes elements",
+          "path": "doc",
+          "range": [
+            8300,
+            8374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " starting from the back of the iterator.",
+          "path": "doc",
+          "range": [
+            8379,
+            8422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8427,
+            8430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `rfold()` takes two arguments: an initial value, and a closure with two",
+          "path": "doc",
+          "range": [
+            8435,
+            8510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " arguments: an 'accumulator', and an element. The closure returns the value that",
+          "path": "doc",
+          "range": [
+            8515,
+            8598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the accumulator should have for the next iteration.",
+          "path": "doc",
+          "range": [
+            8603,
+            8658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8663,
+            8666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The initial value is the value the accumulator will have on the first",
+          "path": "doc",
+          "range": [
+            8671,
+            8744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " call.",
+          "path": "doc",
+          "range": [
+            8749,
+            8758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8763,
+            8766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " After applying this closure to every element of the iterator, `rfold()`",
+          "path": "doc",
+          "range": [
+            8771,
+            8846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns the accumulator.",
+          "path": "doc",
+          "range": [
+            8851,
+            8879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8884,
+            8887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This operation is sometimes called 'reduce' or 'inject'.",
+          "path": "doc",
+          "range": [
+            8892,
+            8952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8957,
+            8960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Folding is useful whenever you have a collection of something, and want",
+          "path": "doc",
+          "range": [
+            8965,
+            9040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to produce a single value from it.",
+          "path": "doc",
+          "range": [
+            9045,
+            9083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9088,
+            9091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note: `rfold()` combines elements in a *right-associative* fashion. For associative",
+          "path": "doc",
+          "range": [
+            9096,
+            9183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " operators like `+`, the order the elements are combined in is not important, but for non-associative",
+          "path": "doc",
+          "range": [
+            9188,
+            9292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " operators like `-` the order will affect the final result.",
+          "path": "doc",
+          "range": [
+            9297,
+            9359
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a *left-associative* version of `rfold()`, see [`Iterator::fold()`].",
+          "path": "doc",
+          "range": [
+            9364,
+            9440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9445,
+            9448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9453,
+            9467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9472,
+            9475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            9480,
+            9496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9501,
+            9504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9509,
+            9516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            9521,
+            9543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9548,
+            9551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // the sum of all of the elements of a",
+          "path": "doc",
+          "range": [
+            9556,
+            9598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sum = a.iter()",
+          "path": "doc",
+          "range": [
+            9603,
+            9625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "            .rfold(0, |acc, &x| acc + x);",
+          "path": "doc",
+          "range": [
+            9630,
+            9674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9679,
+            9682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(sum, 6);",
+          "path": "doc",
+          "range": [
+            9687,
+            9710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9715,
+            9722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9727,
+            9730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This example demonstrates the right-associative nature of `rfold()`:",
+          "path": "doc",
+          "range": [
+            9735,
+            9807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it builds a string, starting with an initial value",
+          "path": "doc",
+          "range": [
+            9812,
+            9866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and continuing with each element from the back until the front:",
+          "path": "doc",
+          "range": [
+            9871,
+            9938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9943,
+            9946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9951,
+            9958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let numbers = [1, 2, 3, 4, 5];",
+          "path": "doc",
+          "range": [
+            9963,
+            9997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10002,
+            10005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = \"0\".to_string();",
+          "path": "doc",
+          "range": [
+            10010,
+            10041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10046,
+            10049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let result = numbers.iter().rfold(zero, |acc, &x| {",
+          "path": "doc",
+          "range": [
+            10054,
+            10109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     format!(\"({x} + {acc})\")",
+          "path": "doc",
+          "range": [
+            10114,
+            10146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            10151,
+            10158
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10163,
+            10166
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(result, \"(1 + (2 + (3 + (4 + (5 + 0)))))\");",
+          "path": "doc",
+          "range": [
+            10171,
+            10229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10234,
+            10241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            10246,
+            10269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10274,
+            10283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10288,
+            10339
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10466,
+        10607
+      ],
+      "kind": "trait_fn",
+      "name": "rfold",
+      "range": [
+        8170,
+        10607
+      ],
+      "signature_range": [
+        10344,
+        10461
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Searches for an element of an iterator from the back that satisfies a predicate.",
+          "path": "doc",
+          "range": [
+            10613,
+            10697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10702,
+            10705
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `rfind()` takes a closure that returns `true` or `false`. It applies",
+          "path": "doc",
+          "range": [
+            10710,
+            10782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this closure to each element of the iterator, starting at the end, and if any",
+          "path": "doc",
+          "range": [
+            10787,
+            10868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of them return `true`, then `rfind()` returns [`Some(element)`]. If they all return",
+          "path": "doc",
+          "range": [
+            10873,
+            10960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `false`, it returns [`None`].",
+          "path": "doc",
+          "range": [
+            10965,
+            10998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11003,
+            11006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `rfind()` is short-circuiting; in other words, it will stop processing",
+          "path": "doc",
+          "range": [
+            11011,
+            11085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as soon as the closure returns `true`.",
+          "path": "doc",
+          "range": [
+            11090,
+            11132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11137,
+            11140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Because `rfind()` takes a reference, and many iterators iterate over",
+          "path": "doc",
+          "range": [
+            11145,
+            11217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " references, this leads to a possibly confusing situation where the",
+          "path": "doc",
+          "range": [
+            11222,
+            11292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " argument is a double reference. You can see this effect in the",
+          "path": "doc",
+          "range": [
+            11297,
+            11363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " examples below, with `&&x`.",
+          "path": "doc",
+          "range": [
+            11368,
+            11399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11404,
+            11407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Some(element)`]: Some",
+          "path": "doc",
+          "range": [
+            11412,
+            11439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11444,
+            11447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11452,
+            11466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11471,
+            11474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            11479,
+            11495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11500,
+            11503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11508,
+            11515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            11520,
+            11542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11547,
+            11550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.into_iter().rfind(|&x| x == 2), Some(2));",
+          "path": "doc",
+          "range": [
+            11555,
+            11613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.into_iter().rfind(|&x| x == 5), None);",
+          "path": "doc",
+          "range": [
+            11618,
+            11673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11678,
+            11685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11690,
+            11693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Iterating over references:",
+          "path": "doc",
+          "range": [
+            11698,
+            11728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11733,
+            11736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11741,
+            11748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            11753,
+            11775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11780,
+            11783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // `iter()` yields references i.e. `&i32` and `rfind()` takes a",
+          "path": "doc",
+          "range": [
+            11788,
+            11855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // reference to each element.",
+          "path": "doc",
+          "range": [
+            11860,
+            11893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.iter().rfind(|&&x| x == 2), Some(&2));",
+          "path": "doc",
+          "range": [
+            11898,
+            11953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(a.iter().rfind(|&&x| x == 5), None);",
+          "path": "doc",
+          "range": [
+            11958,
+            12009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12014,
+            12021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12026,
+            12029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Stopping at the first `true`:",
+          "path": "doc",
+          "range": [
+            12034,
+            12067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12072,
+            12075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12080,
+            12087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = [1, 2, 3];",
+          "path": "doc",
+          "range": [
+            12092,
+            12114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12119,
+            12122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut iter = a.iter();",
+          "path": "doc",
+          "range": [
+            12127,
+            12155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12160,
+            12163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.rfind(|&&x| x == 2), Some(&2));",
+          "path": "doc",
+          "range": [
+            12168,
+            12219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12224,
+            12227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // we can still use `iter`, as there are more elements.",
+          "path": "doc",
+          "range": [
+            12232,
+            12291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(iter.next_back(), Some(&1));",
+          "path": "doc",
+          "range": [
+            12296,
+            12339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12344,
+            12351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12356,
+            12365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12370,
+            12421
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12559,
+        12889
+      ],
+      "kind": "trait_fn",
+      "name": "rfind",
+      "range": [
+        10613,
+        12889
+      ],
+      "signature_range": [
+        12426,
+        12554
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12569,
+            12578
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12677,
+        12823
+      ],
+      "kind": "fn",
+      "name": "check",
+      "range": [
+        12569,
+        12823
+      ],
+      "signature_range": [
+        12587,
+        12676
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        6,
+        7
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        12691,
+        12813
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12893,
+            12938
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12893,
+        13633
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        13064,
+        13100
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        13021,
+        13100
+      ],
+      "signature_range": [
+        13021,
+        13063
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        13175,
+        13218
+      ],
+      "kind": "impl_fn",
+      "name": "advance_back_by",
+      "range": [
+        13105,
+        13218
+      ],
+      "signature_range": [
+        13105,
+        13174
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        13275,
+        13311
+      ],
+      "kind": "impl_fn",
+      "name": "nth_back",
+      "range": [
+        13223,
+        13311
+      ],
+      "signature_range": [
+        13223,
+        13274
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        13409,
+        13449
+      ],
+      "kind": "impl_fn",
+      "name": "rfold",
+      "range": [
+        13316,
+        13449
+      ],
+      "signature_range": [
+        13316,
+        13404
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        13587,
+        13631
+      ],
+      "kind": "impl_fn",
+      "name": "try_rfold",
+      "range": [
+        13454,
+        13631
+      ],
+      "signature_range": [
+        13454,
+        13582
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Helper trait to specialize `rfold` and `rtry_fold` for `&mut I where I: Sized`",
+          "path": "doc",
+          "range": [
+            13635,
+            13717
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "DoubleEndedIteratorRefSpec",
+      "range": [
+        13635,
+        14012
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_rfold",
+      "range": [
+        13778,
+        13871
+      ],
+      "signature_range": [
+        13778,
+        13870
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        13877,
+        14010
+      ],
+      "signature_range": [
+        13877,
+        14009
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14014,
+        14655
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [],
+      "body_range": [
+        14206,
+        14347
+      ],
+      "kind": "impl_fn",
+      "name": "spec_rfold",
+      "range": [
+        14096,
+        14347
+      ],
+      "signature_range": [
+        14104,
+        14201
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [],
+      "body_range": [
+        14503,
+        14653
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        14353,
+        14653
+      ],
+      "signature_range": [
+        14361,
+        14498
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14657,
+        14975
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        14730,
+        14786
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [],
+      "body_range": [
+        14930,
+        14973
+      ],
+      "kind": "impl_fn",
+      "name": "spec_try_rfold",
+      "range": [
+        14792,
+        14973
+      ],
+      "signature_range": [
+        14792,
+        14925
+      ]
+    }
+  ],
+  "source_sha256": "f9fba2b1b7741662492b406a4c89df2c11c4a4d58dba1cb926e8bc4c2bdb05eb"
+}

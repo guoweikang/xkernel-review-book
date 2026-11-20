@@ -1,0 +1,12 @@
+{
+  "kind": "derived-public-api-witness",
+  "question": "Does make_mut preserve the original three live components and clean the cloned prefix when the second component clone unwinds?",
+  "source_commit": "59807616e1fa2540724bfbac14d7976d7e4a3860",
+  "origin": "ownership-test-audit-01/original/library/coretests/tests/clone.rs:test_clone_to_uninit_slice_drops_on_panic",
+  "adaptations": ["Replace stack MaybeUninit and direct unstable clone_to_uninit with public Rc/Arc make_mut", "Create array in Rc/Arc then unsize without cloning; retain another strong owner", "Use AssertUnwindSafe for mutable owner", "Add unchanged pointer, strong count and staged owner-drop observations"],
+  "conditions": ["Rc clone panic", "Arc clone panic"],
+  "expectations": ["Exact intentional panic payload", "Three live original components after unwind", "Original owner pointer and strong count retained", "First owner drop retains three components; final owner drop leaves zero"],
+  "execution": "rustc +1.95.0 --edition=2024 --test; debug and opt-level=3; panic=unwind; each binary twice, test-threads=1; command timeout 60 seconds",
+  "stop": "Two conditions across four executions, record failures without changing expected observations",
+  "limits": ["Derived witness, not original harness reproduction", "Installed std, not archived source rebuilt", "Zero-sized components inherited from source", "No allocator counts, no concurrency proof, no abstractability or documentation-effect score"]
+}

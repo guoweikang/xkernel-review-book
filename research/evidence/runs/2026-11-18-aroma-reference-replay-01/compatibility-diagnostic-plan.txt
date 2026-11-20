@@ -1,0 +1,6 @@
+Frozen after initial failure, before sole permitted compatibility diagnostic.
+Command1 exit1: original official example_query.json is pretty-printed multi-line object, whereas original featurize_records_file calls json.loads per line. No upstream feature output produced.
+Initial command2 (-f against command1 cache) skipped because command1 made no valid index; preserve failed cache/ unchanged.
+Use the one permitted compatibility diagnostic: json.loads official fixture then json.dumps into a separate example_query.jsonl, verify parsed deep equality. This is explicit input-serialization adaptation, not original fixture-byte CLI success; no AST/token/metadata changes, no bespoke fallback tree, no source/parameter patches.
+Run same unmodified source via isolated driver with -c JSONL -d cache/diagnostic -f JSONL in ONE subprocess, timeout60s. Compare original feature outputs with original expected lines using frozen comparison rules. No further command if this fails.
+Original protocol and original raw fixture remain unchanged. If strict raw-byte replay alone is required, its verdict remains FAILED regardless of diagnostic outcome. Java frontend and Rust remain untested.

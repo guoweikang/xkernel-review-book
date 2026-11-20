@@ -1,0 +1,161 @@
+时间职责反事实候选构造记录
+状态：researcher-modified controlled input；非生产修复、非真实bug标签、非已运行实验。
+仅写本目录candidate/的两份全文件副本、candidate.patch、construction.txt。
+本批没有新helper/harness、权限改写、生产编辑、内核运行、编译、模型dispatch或commit/push。
+协议与最终结论由主线程负责。
+
+固定输入
+/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-18-time-responsibility-admission-01/originals/
+revision = cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247
+只以归档core/ktime/src/lib.rs、core/ksyscall/src/time/queries.rs构造，不以工作树替换输入。
+已逐字节比对固定Git对象，并对照admission manifest SHA256。
+
+修改范围与顺序
+1. core/ktime/src/lib.rs：
+   私有Timekeeper::set_realtime_checked删除原6行完整范围预检：
+   UNIX_EPOCH.checked_add(monotonic.span_since_origin())溢出拒绝；
+   sample < min_allowed下界拒绝；
+   sample.unix_seconds() >= MAX_SETTABLE_UNIX_SECONDS上界拒绝。
+   保留原签名、correlation = ClockCorrelation::new(monotonic, sample)及Ok(())。
+   公有set_realtime_checked全文不变：持写锁、重新monotonic采样、调用私有方法、
+   REALTIME_INITIALIZED、prepare_clock_update、publish、drop、notify/wake与Ok流程不变。
+   原私有上界常量仍保留，因为apply_sleeptime也使用它；未改注入休眠校验。
+2. core/ksyscall/src/time/queries.rs：
+   set_wall_time授权if原样保留；通过授权之后、调用ktime之前增加8行。
+   定义函数局部同名上界常量，取预检monotonic_time()样本，执行同一checked_add及上下界比较；
+   value替代原sample变量；错误直接映射KError::InvalidInput。
+   原ktime调用及map_err仍保留。未动NULL timeval早退、timezone拒绝、clock_id转换或用户指针读写路径。
+   原注释仍留在原语句相对次序，新增代码插在原范围注释与ktime调用之间。
+
+仅两文件可表达的依据（固定Git、只读检查）
+- ktime的MAX_SETTABLE_UNIX_SECONDS为私有常量，不能从syscall引用；没有把它改pub。
+- 在set_wall_time内复制相同上界公式：
+  const MAX_SETTABLE_UNIX_SECONDS: i64 = i64::MAX / ktime_types::NANOS_PER_SEC as i64;
+  这是局部常量，不新增函数/helper，不增加crate依赖。
+- util/ktime_types/src/units.rs:10定义pub const NANOS_PER_SEC: u64；
+  src/lib.rs:34-36公开重导出，SystemTime也公开重导出。
+- system_time.rs的UNIX_EPOCH、checked_add、unix_seconds均为公有；
+  SystemTime原本派生PartialOrd且Copy。instant.rs:53的span_since_origin为公有。
+- syscall原文件已导入SystemTime和monotonic_time，并已有KError::InvalidInput用法。
+  固定core/ksyscall/Cargo.toml已声明ktime_types、khal、ktime workspace依赖。
+- 不需触碰其他源码。此为源码可访问性检查，未编译、未证明全部feature/target闭包。
+
+注释/rustdoc策略
+两文件原有所有注释、rustdoc、属性与未修改代码均保留，不补新注释解释期待答案。
+修改仅限diff中的非注释语句；检查原/候选所有//行序列逐字节相同。
+原“单写锁、同一采样校验与提交、调用方仅权限检查”的文字在变体中成为可能过时的受控输入；
+这正是代码改变而文档不变的条件，不能伪装为自然修复或新提供者批准。
+许可/版权文本仅随全文件原件复制，未新造头部。
+
+该干预同时改变的因素（不能称单因素纯职责移动）
+- 实施位置/依赖知识：范围逻辑从ktime内部移到syscall；syscall新增上界公式知识，
+  并与ktime中休眠路径仍用的私有常量形成重复维护点。
+- 校验与提交的时间/同步边界：预检样本位于ktime写锁之外，提交仍用锁内新样本；
+  因此不再是该检查与提交共享同一个采样值。这里只确认可见结构变化，不声称已复现竞态。
+- 采样次数及工作位置：通过授权后增加一次monotonic采样；拒绝路径不进入ktime写锁；
+  成功路径多一次预检采样。未测锁竞争、延迟或性能。
+- 校验覆盖：通过set_wall_time的路径有预检，而其他直接调用ktime公有入口的调用者
+  不再经这项私有范围拒绝。未枚举调用者或验证配置可达，不能概括全系统影响。
+- 错误产生层次：这三个预检失败由syscall直接形成InvalidInput；
+  私有方法现固定返回Ok，公有Result签名和syscall原map_err均未改。
+  同一个采样输入的算式/阈值保留，不代表新旧真实执行或并发语义等价。
+- 文档一致性：普通注释/rustdoc不变而实现变化，增加文本与实现张力。
+- 仍未改变权限条件及顺序，未拆correlation写入，未更改发布通知流程；
+  不能因此声称全部并发不变量保持或出现真实可触发bug。
+
+核验结果（只读构造检查，非内核/行为测试）
+git apply --check --unsafe-paths --directory=<固定originals> candidate.patch 返回0，未实际应用。
+随后独立按统一diff各hunk校验旧区间、上下文、增删计数和新位置，在内存重建，
+2/2输出与candidate全文逐字节相同。公有包装及权限前缀逐字节不变。
+下面记录完整命令及输出，便于主线程只读复核；不是新增helper/harness文件。
+所有正式写入均经apply_patch。
+未运行仓库book构建（本任务仅准许指定目录写入）；未改变catalog/PROGRESS。
+
+核验命令
+git apply --check --unsafe-paths --directory='/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-18-time-responsibility-admission-01/originals' '/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-18-time-counterfactual-01/candidate.patch'
+python3 - <<'PY'
+import pathlib, hashlib, json, re, subprocess
+base=pathlib.Path('/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-18-time-counterfactual-01')
+original=pathlib.Path('/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-18-time-responsibility-admission-01/originals')
+revision='cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247'
+manifest=json.loads((original.parent/'manifest.json').read_text())
+paths=['core/ktime/src/lib.rs','core/ksyscall/src/time/queries.rs']
+for name in paths:
+    before=(original/name).read_bytes()
+    after=(base/'candidate'/name).read_bytes()
+    assert before==subprocess.check_output(['git','-C','/root/codes/x-kernel','show',revision+':'+name])
+    assert hashlib.sha256(before).hexdigest()==next(item['sha256'] for item in manifest['files'] if item['path']==name)
+    assert [line for line in before.splitlines() if line.lstrip().startswith(b'//')]==[line for line in after.splitlines() if line.lstrip().startswith(b'//')]
+    print('FILE',name,'original',hashlib.sha256(before).hexdigest(),'candidate',hashlib.sha256(after).hexdigest(),'bytes',len(before),len(after),'comments identical')
+patch=(base/'candidate.patch').read_bytes()
+sections=re.split(br'(?m)(?=^--- a/)',patch)
+rebuilt_count=0
+for section in sections:
+    if not section:
+        continue
+    lines=section.splitlines(keepends=True)
+    name=lines[0][6:].decode().strip()
+    assert lines[1]==('+++ b/'+name+'\n').encode()
+    before=(original/name).read_bytes().splitlines(keepends=True)
+    rebuilt=[]
+    cursor=0
+    position=2
+    while position<len(lines):
+        match=re.fullmatch(br'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[^\n]*\n',lines[position])
+        assert match
+        start=int(match[1])-1
+        assert start>=cursor
+        rebuilt.extend(before[cursor:start]); cursor=start; position+=1
+        assert len(rebuilt)==int(match[3])-1
+        old_count=new_count=0
+        while position<len(lines) and not lines[position].startswith(b'@@ '):
+            marker=lines[position][:1]; payload=lines[position][1:]
+            assert marker in (b' ',b'-',b'+')
+            if marker in (b' ',b'-'):
+                assert before[cursor]==payload
+                cursor+=1; old_count+=1
+            if marker in (b' ',b'+'):
+                rebuilt.append(payload); new_count+=1
+            position+=1
+        assert old_count==int(match[2] or b'1') and new_count==int(match[4] or b'1')
+    rebuilt.extend(before[cursor:])
+    assert b''.join(rebuilt)==(base/'candidate'/name).read_bytes()
+    rebuilt_count+=1
+print('PASS in-memory exact unified-diff reconstruction',rebuilt_count)
+assert rebuilt_count==2
+before=(original/paths[0]).read_text(); after=(base/'candidate'/paths[0]).read_text()
+wrapper=lambda text:text.split('pub fn set_realtime_checked(sample:',1)[1].split('\n#[inline]',1)[0]
+assert wrapper(before)==wrapper(after)
+before=(original/paths[1]).read_text(); after=(base/'candidate'/paths[1]).read_text()
+auth=lambda text:text.split('fn set_wall_time(value:',1)[1].split('    // Range validation',1)[0]
+assert auth(before)==auth(after)
+print('PASS public wrapper and permission prefix byte-identical')
+print('PATCH sha256',hashlib.sha256(patch).hexdigest())
+for name in ['core/ksyscall/Cargo.toml','util/ktime_types/src/lib.rs','util/ktime_types/src/units.rs','util/ktime_types/src/system_time.rs','util/ktime_types/src/instant.rs']:
+    data=subprocess.check_output(['git','-C','/root/codes/x-kernel','show',revision+':'+name])
+    print('ACCESSIBILITY SOURCE',name,hashlib.sha256(data).hexdigest())
+PY
+
+核验输出
+FILE core/ktime/src/lib.rs original abe073722dd2b528fe0f6e2b131b347d9f9d92ab848dc857d534bfd91b623dc9 candidate c8462704546f7701ea80eefaac61791484b4784993d1f5af086d15262093bcb9 bytes 15674 15386 comments identical
+FILE core/ksyscall/src/time/queries.rs original 9147074a3cb37b7aa3d8d746b701ea9a2afbd10d7d139b2488b493e4870c9deb candidate bb392e42f318bdff426747b2d936b6a7e511893c85e4a23c6f6786319d37cee0 bytes 4581 4974 comments identical
+PASS in-memory exact unified-diff reconstruction 2
+PASS public wrapper and permission prefix byte-identical
+PATCH sha256 60c5710016456ef018b096e4d48de5e7d980aab03b125084f9a4a35be52f66c0
+ACCESSIBILITY SOURCE core/ksyscall/Cargo.toml 9cd8a7c7dc2831801ec98b548ff13160e864c75dc1acd0180841dd03892f2c7f
+ACCESSIBILITY SOURCE util/ktime_types/src/lib.rs 45ab2fadee4214754378872b847433a53150f9b719b31cc341a5ac09b4fa849f
+ACCESSIBILITY SOURCE util/ktime_types/src/units.rs 2f79d943546d9ea267fa504110efbf737da13c68ee93e5996b364897e0b84e4b
+ACCESSIBILITY SOURCE util/ktime_types/src/system_time.rs 3ecb2ad273f7a2cce8e5bc032cb2461eada507dc15789e5f7426a2301acfee58
+ACCESSIBILITY SOURCE util/ktime_types/src/instant.rs 08a93a346099acb7b78c2c794f5f2ff816d1b33fb87fe11064c3dd5152fad206
+
+统一diff生成命令（对以下每个path执行，按顺序拼接stdout，经apply_patch保存candidate.patch）：
+diff -u --label a/<path> --label b/<path> <originals>/<path> <run>/candidate/<path>
+path顺序：core/ktime/src/lib.rs；core/ksyscall/src/time/queries.rs。
+diff退出1表示预期有差异；无时间戳，原件/候选/patch完整SHA256见上方核验输出。
+
+检索/失败边界
+已用research_lookup time-responsibility-admission --kind run --limit 2定位ledger/manifest，
+并打开固定原件和review.txt；宽命令组合的导航输出被截断，不以其证明完整检索。
+该admission目录没有sources.json；身份依其实际manifest与Git对象核对。
+所有常量/类型依据均来自上述同版Git对象，不用最新源替代。
+下一步只交主线程准入：评估多因素干预及过时文本是否符合协议；不自行派发或声称效果。

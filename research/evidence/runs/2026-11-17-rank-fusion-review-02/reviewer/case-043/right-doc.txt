@@ -1,0 +1,5 @@
+ File → pipe boundary: the pipe stages each chunk, the source fills it,
+ and the pipe publishes exactly the confirmed prefix. The input's
+ `Managed` position re-locks per step, so the lock never spans a
+ pipe-readiness wait; the pipe side itself is always `Managed` (an `At`
+ position on a stream was rejected upstream).

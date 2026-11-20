@@ -1,0 +1,208 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Representation of a float as the significant digits and exponent.",
+      "path": "doc",
+      "range": [
+        0,
+        69
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A floating point number with up to 64 bits of mantissa and an `i64` exponent.",
+          "path": "doc",
+          "range": [
+            426,
+            507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            508,
+            561
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Decimal",
+      "range": [
+        426,
+        681
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        683,
+        3202
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Detect if the float can be accurately reconstructed from native floats.",
+          "path": "doc",
+          "range": [
+            702,
+            777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            782,
+            791
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        845,
+        1062
+      ],
+      "kind": "impl_fn",
+      "name": "can_use_fast_path",
+      "range": [
+        702,
+        1062
+      ],
+      "signature_range": [
+        796,
+        844
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Try turning the decimal into an exact float representation, using machine-sized integers",
+          "path": "doc",
+          "range": [
+            1068,
+            1160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and floats.",
+          "path": "doc",
+          "range": [
+            1165,
+            1180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1185,
+            1188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is extracted into a separate function so that it can be attempted before constructing",
+          "path": "doc",
+          "range": [
+            1193,
+            1287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a Decimal. This only works if both the mantissa and the exponent",
+          "path": "doc",
+          "range": [
+            1292,
+            1360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can be exactly represented as a machine float, since IEE-754 guarantees",
+          "path": "doc",
+          "range": [
+            1365,
+            1440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " no rounding will occur.",
+          "path": "doc",
+          "range": [
+            1445,
+            1472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1477,
+            1480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There is an exception: disguised fast-path cases, where we can shift",
+          "path": "doc",
+          "range": [
+            1485,
+            1557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " powers-of-10 from the exponent to the significant digits.",
+          "path": "doc",
+          "range": [
+            1562,
+            1623
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1682,
+        3200
+      ],
+      "kind": "impl_fn",
+      "name": "try_fast_path",
+      "range": [
+        1068,
+        3200
+      ],
+      "signature_range": [
+        1632,
+        1681
+      ]
+    }
+  ],
+  "source_sha256": "9f6ef79c0059f78ae381abf662721f4b9d7e92ff20c05a8a7a8c81fb5f219d1c"
+}

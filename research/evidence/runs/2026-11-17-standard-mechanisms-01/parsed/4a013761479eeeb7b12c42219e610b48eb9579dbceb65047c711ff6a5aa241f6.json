@@ -1,0 +1,293 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Custom arbitrary-precision number (bignum) implementation.",
+      "path": "doc",
+      "range": [
+        0,
+        62
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        63,
+        66
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This is designed to avoid the heap allocation at expense of stack memory.",
+      "path": "doc",
+      "range": [
+        67,
+        144
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The most used bignum type, `Big32x40`, is limited by 32 × 40 = 1,280 bits",
+      "path": "doc",
+      "range": [
+        145,
+        223
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and will take at most 160 bytes of stack memory. This is more than enough",
+      "path": "doc",
+      "range": [
+        224,
+        301
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " for round-tripping all possible finite `f64` values.",
+      "path": "doc",
+      "range": [
+        302,
+        358
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        359,
+        362
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " In principle it is possible to have multiple bignum types for different",
+      "path": "doc",
+      "range": [
+        363,
+        438
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " inputs, but we don't do so to avoid the code bloat. Each bignum is still",
+      "path": "doc",
+      "range": [
+        439,
+        515
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " tracked for the actual usages, so it normally doesn't matter.",
+      "path": "doc",
+      "range": [
+        516,
+        581
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "doc",
+      "range": [
+        714,
+        729
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        730,
+        860
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "macro_use",
+      "range": [
+        861,
+        874
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Arithmetic operations required by bignums.",
+          "path": "doc",
+          "range": [
+            876,
+            922
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "FullOps",
+      "range": [
+        876,
+        1453
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `(carry', v')` such that `carry' * 2^W + v' = self * other + other2 + carry`,",
+          "path": "doc",
+          "range": [
+            954,
+            1043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where `W` is the number of bits in `Self`.",
+          "path": "doc",
+          "range": [
+            1048,
+            1094
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "full_mul_add",
+      "range": [
+        954,
+        1189
+      ],
+      "signature_range": [
+        1099,
+        1188
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `(quo, rem)` such that `borrow * 2^W + self = quo * other + rem`",
+          "path": "doc",
+          "range": [
+            1195,
+            1271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `0 <= rem < other`, where `W` is the number of bits in `Self`.",
+          "path": "doc",
+          "range": [
+            1276,
+            1346
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "full_div_rem",
+      "range": [
+        1195,
+        1451
+      ],
+      "signature_range": [
+        1351,
+        1450
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        1455,
+        2412
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2414,
+        2685
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2949,
+        15311
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15373,
+        15417
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            15458,
+            15472
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": true,
+      "kind": "mod",
+      "name": "tests",
+      "path_overrides": [],
+      "range": [
+        15458,
+        15532
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15493,
+        15529
+      ]
+    }
+  ],
+  "source_sha256": "3bd2fe8996f18a031d55ee151b1b0a9565c94f7a8ec48fb941292596fd770af3"
+}

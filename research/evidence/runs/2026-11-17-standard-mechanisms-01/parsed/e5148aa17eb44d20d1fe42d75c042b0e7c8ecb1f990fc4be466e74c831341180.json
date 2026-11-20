@@ -1,0 +1,7797 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        0,
+        51
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hints to compiler that affects how code should be emitted or optimized.",
+      "path": "doc",
+      "range": [
+        53,
+        128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        129,
+        132
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Hints may be compile time or runtime.",
+      "path": "doc",
+      "range": [
+        133,
+        174
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Informs the compiler that the site which is calling this function is not",
+          "path": "doc",
+          "range": [
+            271,
+            347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reachable, possibly enabling further optimizations.",
+          "path": "doc",
+          "range": [
+            348,
+            403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            404,
+            407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            408,
+            420
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            421,
+            424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Reaching this function is *Undefined Behavior*.",
+          "path": "doc",
+          "range": [
+            425,
+            476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            477,
+            480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As the compiler assumes that all forms of Undefined Behavior can never",
+          "path": "doc",
+          "range": [
+            481,
+            555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " happen, it will eliminate all branches in the surrounding code that it can",
+          "path": "doc",
+          "range": [
+            556,
+            634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " determine will invariably lead to a call to `unreachable_unchecked()`.",
+          "path": "doc",
+          "range": [
+            635,
+            709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            710,
+            713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the assumptions embedded in using this function turn out to be wrong -",
+          "path": "doc",
+          "range": [
+            714,
+            791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is, if the site which is calling `unreachable_unchecked()` is actually",
+          "path": "doc",
+          "range": [
+            792,
+            871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reachable at runtime - the compiler may have generated nonsensical machine",
+          "path": "doc",
+          "range": [
+            872,
+            950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instructions for this situation, including in seemingly unrelated code,",
+          "path": "doc",
+          "range": [
+            951,
+            1026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " causing difficult-to-debug problems.",
+          "path": "doc",
+          "range": [
+            1027,
+            1067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1068,
+            1071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Use this function sparingly. Consider using the [`unreachable!`] macro,",
+          "path": "doc",
+          "range": [
+            1072,
+            1147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which may prevent some optimizations but will safely panic in case it is",
+          "path": "doc",
+          "range": [
+            1148,
+            1224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually reached at runtime. Benchmark your code to find out if using",
+          "path": "doc",
+          "range": [
+            1225,
+            1298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `unreachable_unchecked()` comes with a performance benefit.",
+          "path": "doc",
+          "range": [
+            1299,
+            1362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1363,
+            1366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1367,
+            1381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1382,
+            1385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `unreachable_unchecked()` can be used in situations where the compiler",
+          "path": "doc",
+          "range": [
+            1386,
+            1460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can't prove invariants that were previously established. Such situations",
+          "path": "doc",
+          "range": [
+            1461,
+            1537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " have a higher chance of occurring if those invariants are upheld by",
+          "path": "doc",
+          "range": [
+            1538,
+            1609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " external code that the compiler can't analyze.",
+          "path": "doc",
+          "range": [
+            1610,
+            1660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1661,
+            1668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn prepare_inputs(divisors: &mut Vec<u32>) {",
+          "path": "doc",
+          "range": [
+            1669,
+            1717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Note to future-self when making changes: The invariant established",
+          "path": "doc",
+          "range": [
+            1718,
+            1795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // here is NOT checked in `do_computation()`; if this changes, you HAVE",
+          "path": "doc",
+          "range": [
+            1796,
+            1875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // to change `do_computation()`.",
+          "path": "doc",
+          "range": [
+            1876,
+            1916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     divisors.retain(|divisor| *divisor != 0)",
+          "path": "doc",
+          "range": [
+            1917,
+            1965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1966,
+            1971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1972,
+            1975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// # Safety",
+          "path": "doc",
+          "range": [
+            1976,
+            1992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// All elements of `divisor` must be non-zero.",
+          "path": "doc",
+          "range": [
+            1993,
+            2044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe fn do_computation(i: u32, divisors: &[u32]) -> u32 {",
+          "path": "doc",
+          "range": [
+            2045,
+            2108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     divisors.iter().fold(i, |acc, divisor| {",
+          "path": "doc",
+          "range": [
+            2109,
+            2157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Convince the compiler that a division by zero can't happen here",
+          "path": "doc",
+          "range": [
+            2158,
+            2236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // and a check is not needed below.",
+          "path": "doc",
+          "range": [
+            2237,
+            2284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         if *divisor == 0 {",
+          "path": "doc",
+          "range": [
+            2285,
+            2315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // Safety: `divisor` can't be zero because of `prepare_inputs`,",
+          "path": "doc",
+          "range": [
+            2316,
+            2395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // but the compiler does not know about this. We *promise*",
+          "path": "doc",
+          "range": [
+            2396,
+            2470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // that we always call `prepare_inputs`.",
+          "path": "doc",
+          "range": [
+            2471,
+            2527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             unsafe { std::hint::unreachable_unchecked() }",
+          "path": "doc",
+          "range": [
+            2528,
+            2589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            2590,
+            2603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // The compiler would normally introduce a check here that prevents",
+          "path": "doc",
+          "range": [
+            2604,
+            2683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // a division by zero. However, if `divisor` was zero, the branch",
+          "path": "doc",
+          "range": [
+            2684,
+            2761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // above would reach what we explicitly marked as unreachable.",
+          "path": "doc",
+          "range": [
+            2762,
+            2836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // The compiler concludes that `divisor` can't be zero at this point",
+          "path": "doc",
+          "range": [
+            2837,
+            2917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // and removes the - now proven useless - check.",
+          "path": "doc",
+          "range": [
+            2918,
+            2978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         acc / divisor",
+          "path": "doc",
+          "range": [
+            2979,
+            3004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            3005,
+            3015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            3016,
+            3021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3022,
+            3025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut divisors = vec![2, 0, 4];",
+          "path": "doc",
+          "range": [
+            3026,
+            3063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " prepare_inputs(&mut divisors);",
+          "path": "doc",
+          "range": [
+            3064,
+            3098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let result = unsafe {",
+          "path": "doc",
+          "range": [
+            3099,
+            3124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Safety: prepare_inputs() guarantees that divisors is non-zero",
+          "path": "doc",
+          "range": [
+            3125,
+            3197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     do_computation(100, &divisors)",
+          "path": "doc",
+          "range": [
+            3198,
+            3236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            3237,
+            3243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(result, 12);",
+          "path": "doc",
+          "range": [
+            3244,
+            3271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3272,
+            3275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3276,
+            3283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3284,
+            3287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While using `unreachable_unchecked()` is perfectly sound in the following",
+          "path": "doc",
+          "range": [
+            3288,
+            3365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " example, as the compiler is able to prove that a division by zero is not",
+          "path": "doc",
+          "range": [
+            3366,
+            3442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " possible, benchmarking reveals that `unreachable_unchecked()` provides",
+          "path": "doc",
+          "range": [
+            3443,
+            3517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " no benefit over using [`unreachable!`], while the latter does not introduce",
+          "path": "doc",
+          "range": [
+            3518,
+            3597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the possibility of Undefined Behavior.",
+          "path": "doc",
+          "range": [
+            3598,
+            3640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3641,
+            3644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3645,
+            3652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn div_1(a: u32, b: u32) -> u32 {",
+          "path": "doc",
+          "range": [
+            3653,
+            3690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use std::hint::unreachable_unchecked;",
+          "path": "doc",
+          "range": [
+            3691,
+            3736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3737,
+            3740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // `b.saturating_add(1)` is always positive (not zero),",
+          "path": "doc",
+          "range": [
+            3741,
+            3804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // hence `checked_div` will never return `None`.",
+          "path": "doc",
+          "range": [
+            3805,
+            3861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Therefore, the else branch is unreachable.",
+          "path": "doc",
+          "range": [
+            3862,
+            3915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     a.checked_div(b.saturating_add(1))",
+          "path": "doc",
+          "range": [
+            3916,
+            3958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         .unwrap_or_else(|| unsafe { unreachable_unchecked() })",
+          "path": "doc",
+          "range": [
+            3959,
+            4025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4026,
+            4031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4032,
+            4035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(div_1(7, 0), 7);",
+          "path": "doc",
+          "range": [
+            4036,
+            4067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(div_1(9, 1), 4);",
+          "path": "doc",
+          "range": [
+            4068,
+            4099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(div_1(11, u32::MAX), 0);",
+          "path": "doc",
+          "range": [
+            4100,
+            4139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4140,
+            4147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4148,
+            4157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4158,
+            4210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            4211,
+            4291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            4292,
+            4307
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4357,
+        4662
+      ],
+      "kind": "fn",
+      "name": "unreachable_unchecked",
+      "range": [
+        271,
+        4662
+      ],
+      "signature_range": [
+        4312,
+        4356
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4363,
+        4516
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Makes a *soundness* promise to the compiler that `cond` holds.",
+          "path": "doc",
+          "range": [
+            4664,
+            4730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4731,
+            4734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This may allow the optimizer to simplify things, but it might also make the generated code",
+          "path": "doc",
+          "range": [
+            4735,
+            4829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " slower. Either way, calling it will most likely make compilation take longer.",
+          "path": "doc",
+          "range": [
+            4830,
+            4911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4912,
+            4915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You may know this from other places as",
+          "path": "doc",
+          "range": [
+            4916,
+            4958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`llvm.assume`](https://llvm.org/docs/LangRef.html#llvm-assume-intrinsic) or, in C,",
+          "path": "doc",
+          "range": [
+            4959,
+            5046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`__builtin_assume`](https://clang.llvm.org/docs/LanguageExtensions.html#builtin-assume).",
+          "path": "doc",
+          "range": [
+            5047,
+            5140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5141,
+            5144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This promotes a correctness requirement to a soundness requirement. Don't do that without",
+          "path": "doc",
+          "range": [
+            5145,
+            5238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " very good reason.",
+          "path": "doc",
+          "range": [
+            5239,
+            5260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5261,
+            5264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Usage",
+          "path": "doc",
+          "range": [
+            5265,
+            5276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5277,
+            5280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a situational tool for micro-optimization, and is allowed to do nothing. Any use",
+          "path": "doc",
+          "range": [
+            5281,
+            5373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should come with a repeatable benchmark to show the value, with the expectation to drop it",
+          "path": "doc",
+          "range": [
+            5374,
+            5468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " later should the optimizer get smarter and no longer need it.",
+          "path": "doc",
+          "range": [
+            5469,
+            5534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5535,
+            5538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The more complicated the condition, the less likely this is to be useful. For example,",
+          "path": "doc",
+          "range": [
+            5539,
+            5629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `assert_unchecked(foo.is_sorted())` is a complex enough value that the compiler is unlikely",
+          "path": "doc",
+          "range": [
+            5630,
+            5725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to be able to take advantage of it.",
+          "path": "doc",
+          "range": [
+            5726,
+            5765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5766,
+            5769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There's also no need to `assert_unchecked` basic properties of things.  For example, the",
+          "path": "doc",
+          "range": [
+            5770,
+            5862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compiler already knows the range of `count_ones`, so there is no benefit to",
+          "path": "doc",
+          "range": [
+            5863,
+            5942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `let n = u32::count_ones(x); assert_unchecked(n <= u32::BITS);`.",
+          "path": "doc",
+          "range": [
+            5943,
+            6011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6012,
+            6015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `assert_unchecked` is logically equivalent to `if !cond { unreachable_unchecked(); }`. If",
+          "path": "doc",
+          "range": [
+            6016,
+            6109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ever you are tempted to write `assert_unchecked(false)`, you should instead use",
+          "path": "doc",
+          "range": [
+            6110,
+            6193
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`unreachable_unchecked()`] directly.",
+          "path": "doc",
+          "range": [
+            6194,
+            6235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6236,
+            6239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            6240,
+            6252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6253,
+            6256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `cond` must be `true`. It is immediate UB to call this with `false`.",
+          "path": "doc",
+          "range": [
+            6257,
+            6329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6330,
+            6333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            6334,
+            6347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6348,
+            6351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6352,
+            6359
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::hint;",
+          "path": "doc",
+          "range": [
+            6360,
+            6379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6380,
+            6383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// # Safety",
+          "path": "doc",
+          "range": [
+            6384,
+            6400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            6401,
+            6408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// `p` must be nonnull and valid",
+          "path": "doc",
+          "range": [
+            6409,
+            6446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub unsafe fn next_value(p: *const i32) -> i32 {",
+          "path": "doc",
+          "range": [
+            6447,
+            6499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // SAFETY: caller invariants guarantee that `p` is not null",
+          "path": "doc",
+          "range": [
+            6500,
+            6567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unsafe { hint::assert_unchecked(!p.is_null()) }",
+          "path": "doc",
+          "range": [
+            6568,
+            6623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6624,
+            6627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if p.is_null() {",
+          "path": "doc",
+          "range": [
+            6628,
+            6652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         return -1;",
+          "path": "doc",
+          "range": [
+            6653,
+            6675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            6676,
+            6692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // SAFETY: caller invariants guarantee that `p` is valid",
+          "path": "doc",
+          "range": [
+            6693,
+            6761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         unsafe { *p + 1 }",
+          "path": "doc",
+          "range": [
+            6762,
+            6791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            6792,
+            6801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            6802,
+            6807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6808,
+            6815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6816,
+            6819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Without the `assert_unchecked`, the above function produces the following with optimizations",
+          "path": "doc",
+          "range": [
+            6820,
+            6916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " enabled:",
+          "path": "doc",
+          "range": [
+            6917,
+            6929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6930,
+            6933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```asm",
+          "path": "doc",
+          "range": [
+            6934,
+            6944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " next_value:",
+          "path": "doc",
+          "range": [
+            6945,
+            6960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         test    rdi, rdi",
+          "path": "doc",
+          "range": [
+            6961,
+            6989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         je      .LBB0_1",
+          "path": "doc",
+          "range": [
+            6990,
+            7017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         mov     eax, dword ptr [rdi]",
+          "path": "doc",
+          "range": [
+            7018,
+            7058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         inc     eax",
+          "path": "doc",
+          "range": [
+            7059,
+            7082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ret",
+          "path": "doc",
+          "range": [
+            7083,
+            7098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " .LBB0_1:",
+          "path": "doc",
+          "range": [
+            7099,
+            7111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         mov     eax, -1",
+          "path": "doc",
+          "range": [
+            7112,
+            7139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ret",
+          "path": "doc",
+          "range": [
+            7140,
+            7155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7156,
+            7163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7164,
+            7167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Adding the assertion allows the optimizer to remove the extra check:",
+          "path": "doc",
+          "range": [
+            7168,
+            7240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7241,
+            7244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```asm",
+          "path": "doc",
+          "range": [
+            7245,
+            7255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " next_value:",
+          "path": "doc",
+          "range": [
+            7256,
+            7271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         mov     eax, dword ptr [rdi]",
+          "path": "doc",
+          "range": [
+            7272,
+            7312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         inc     eax",
+          "path": "doc",
+          "range": [
+            7313,
+            7336
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ret",
+          "path": "doc",
+          "range": [
+            7337,
+            7352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7353,
+            7360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7361,
+            7364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This example is quite unlike anything that would be used in the real world: it is redundant",
+          "path": "doc",
+          "range": [
+            7365,
+            7460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to put an assertion right next to code that checks the same thing, and dereferencing a",
+          "path": "doc",
+          "range": [
+            7461,
+            7551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointer already has the builtin assumption that it is nonnull. However, it illustrates the",
+          "path": "doc",
+          "range": [
+            7552,
+            7646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " kind of changes the optimizer can make even when the behavior is less obviously related.",
+          "path": "doc",
+          "range": [
+            7647,
+            7739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            7740,
+            7755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7756,
+            7773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            7774,
+            7798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7799,
+            7861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            7862,
+            7936
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7986,
+        8318
+      ],
+      "kind": "fn",
+      "name": "assert_unchecked",
+      "range": [
+        4664,
+        8318
+      ],
+      "signature_range": [
+        7941,
+        7985
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8060,
+        8268
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Emits a machine instruction to signal the processor that it is running in",
+          "path": "doc",
+          "range": [
+            8320,
+            8397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a busy-wait spin-loop (\"spin lock\").",
+          "path": "doc",
+          "range": [
+            8398,
+            8438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8439,
+            8442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Upon receiving the spin-loop signal the processor can optimize its behavior by,",
+          "path": "doc",
+          "range": [
+            8443,
+            8526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for example, saving power or switching hyper-threads.",
+          "path": "doc",
+          "range": [
+            8527,
+            8584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8585,
+            8588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is different from [`thread::yield_now`] which directly",
+          "path": "doc",
+          "range": [
+            8589,
+            8661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " yields to the system's scheduler, whereas `spin_loop` does not interact",
+          "path": "doc",
+          "range": [
+            8662,
+            8737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the operating system.",
+          "path": "doc",
+          "range": [
+            8738,
+            8768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8769,
+            8772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A common use case for `spin_loop` is implementing bounded optimistic",
+          "path": "doc",
+          "range": [
+            8773,
+            8845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " spinning in a CAS loop in synchronization primitives. To avoid problems",
+          "path": "doc",
+          "range": [
+            8846,
+            8921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " like priority inversion, it is strongly recommended that the spin loop is",
+          "path": "doc",
+          "range": [
+            8922,
+            8999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " terminated after a finite amount of iterations and an appropriate blocking",
+          "path": "doc",
+          "range": [
+            9000,
+            9078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " syscall is made.",
+          "path": "doc",
+          "range": [
+            9079,
+            9099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9100,
+            9103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " **Note**: On platforms that do not support receiving spin-loop hints this",
+          "path": "doc",
+          "range": [
+            9104,
+            9181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function does not do anything at all.",
+          "path": "doc",
+          "range": [
+            9182,
+            9223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9224,
+            9227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9228,
+            9242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9243,
+            9246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```ignore-wasm",
+          "path": "doc",
+          "range": [
+            9247,
+            9265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::sync::atomic::{AtomicBool, Ordering};",
+          "path": "doc",
+          "range": [
+            9266,
+            9316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::sync::Arc;",
+          "path": "doc",
+          "range": [
+            9317,
+            9340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::{hint, thread};",
+          "path": "doc",
+          "range": [
+            9341,
+            9369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9370,
+            9373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // A shared atomic value that threads will use to coordinate",
+          "path": "doc",
+          "range": [
+            9374,
+            9438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let live = Arc::new(AtomicBool::new(false));",
+          "path": "doc",
+          "range": [
+            9439,
+            9487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9488,
+            9491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // In a background thread we'll eventually set the value",
+          "path": "doc",
+          "range": [
+            9492,
+            9552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let bg_work = {",
+          "path": "doc",
+          "range": [
+            9553,
+            9572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let live = live.clone();",
+          "path": "doc",
+          "range": [
+            9573,
+            9605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     thread::spawn(move || {",
+          "path": "doc",
+          "range": [
+            9606,
+            9637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Do some work, then make the value live",
+          "path": "doc",
+          "range": [
+            9638,
+            9691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         do_some_work();",
+          "path": "doc",
+          "range": [
+            9692,
+            9719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         live.store(true, Ordering::Release);",
+          "path": "doc",
+          "range": [
+            9720,
+            9768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            9769,
+            9779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            9780,
+            9786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9787,
+            9790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Back on our current thread, we wait for the value to be set",
+          "path": "doc",
+          "range": [
+            9791,
+            9857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " while !live.load(Ordering::Acquire) {",
+          "path": "doc",
+          "range": [
+            9858,
+            9899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // The spin loop is a hint to the CPU that we're waiting, but probably",
+          "path": "doc",
+          "range": [
+            9900,
+            9978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // not for very long",
+          "path": "doc",
+          "range": [
+            9979,
+            10007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     hint::spin_loop();",
+          "path": "doc",
+          "range": [
+            10008,
+            10034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10035,
+            10040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10041,
+            10044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // The value is now set",
+          "path": "doc",
+          "range": [
+            10045,
+            10072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn do_some_work() {}",
+          "path": "doc",
+          "range": [
+            10073,
+            10099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " do_some_work();",
+          "path": "doc",
+          "range": [
+            10100,
+            10119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bg_work.join()?;",
+          "path": "doc",
+          "range": [
+            10120,
+            10140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Ok::<(), Box<dyn core::any::Any + Send + 'static>>(())",
+          "path": "doc",
+          "range": [
+            10141,
+            10201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10202,
+            10209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10210,
+            10213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`thread::yield_now`]: ../../std/thread/fn.yield_now.html",
+          "path": "doc",
+          "range": [
+            10214,
+            10275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10276,
+            10293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10294,
+            10352
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10372,
+        12283
+      ],
+      "kind": "fn",
+      "name": "spin_loop",
+      "range": [
+        8320,
+        12283
+      ],
+      "signature_range": [
+        10357,
+        10371
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10378,
+        12281
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An identity function that *__hints__* to the compiler to be maximally pessimistic about what",
+          "path": "doc",
+          "range": [
+            12285,
+            12381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `black_box` could do.",
+          "path": "doc",
+          "range": [
+            12382,
+            12407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12408,
+            12411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike [`std::convert::identity`], a Rust compiler is encouraged to assume that `black_box` can",
+          "path": "doc",
+          "range": [
+            12412,
+            12511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use `dummy` in any possible valid way that Rust code is allowed to without introducing undefined",
+          "path": "doc",
+          "range": [
+            12512,
+            12612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behavior in the calling code. This property makes `black_box` useful for writing code in which",
+          "path": "doc",
+          "range": [
+            12613,
+            12711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " certain optimizations are not desired, such as benchmarks.",
+          "path": "doc",
+          "range": [
+            12712,
+            12774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12775,
+            12778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <div class=\"warning\">",
+          "path": "doc",
+          "range": [
+            12779,
+            12804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12805,
+            12808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note however, that `black_box` is only (and can only be) provided on a \"best-effort\" basis. The",
+          "path": "doc",
+          "range": [
+            12809,
+            12908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " extent to which it can block optimisations may vary depending upon the platform and code-gen",
+          "path": "doc",
+          "range": [
+            12909,
+            13005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " backend used. Programs cannot rely on `black_box` for *correctness*, beyond it behaving as the",
+          "path": "doc",
+          "range": [
+            13006,
+            13104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " identity function. As such, it **must not be relied upon to control critical program behavior.**",
+          "path": "doc",
+          "range": [
+            13105,
+            13205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This also means that this function does not offer any guarantees for cryptographic or security",
+          "path": "doc",
+          "range": [
+            13206,
+            13304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " purposes.",
+          "path": "doc",
+          "range": [
+            13305,
+            13318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13319,
+            13322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This limitation is not specific to `black_box`; there is no mechanism in the entire Rust",
+          "path": "doc",
+          "range": [
+            13323,
+            13415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " language that can provide the guarantees required for constant-time cryptography.",
+          "path": "doc",
+          "range": [
+            13416,
+            13501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (There is also no such mechanism in LLVM, so the same is true for every other LLVM-based compiler.)",
+          "path": "doc",
+          "range": [
+            13502,
+            13605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13606,
+            13609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " </div>",
+          "path": "doc",
+          "range": [
+            13610,
+            13620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13621,
+            13624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::convert::identity`]: crate::convert::identity",
+          "path": "doc",
+          "range": [
+            13625,
+            13681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13682,
+            13685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # When is this useful?",
+          "path": "doc",
+          "range": [
+            13686,
+            13712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13713,
+            13716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While not suitable in those mission-critical cases, `black_box`'s functionality can generally be",
+          "path": "doc",
+          "range": [
+            13717,
+            13817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " relied upon for benchmarking, and should be used there. It will try to ensure that the",
+          "path": "doc",
+          "range": [
+            13818,
+            13908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compiler doesn't optimize away part of the intended test code based on context. For",
+          "path": "doc",
+          "range": [
+            13909,
+            13996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " example:",
+          "path": "doc",
+          "range": [
+            13997,
+            14009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14010,
+            14013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14014,
+            14021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn contains(haystack: &[&str], needle: &str) -> bool {",
+          "path": "doc",
+          "range": [
+            14022,
+            14080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     haystack.iter().any(|x| x == &needle)",
+          "path": "doc",
+          "range": [
+            14081,
+            14126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            14127,
+            14132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14133,
+            14136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub fn benchmark() {",
+          "path": "doc",
+          "range": [
+            14137,
+            14161
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let haystack = vec![\"abc\", \"def\", \"ghi\", \"jkl\", \"mno\"];",
+          "path": "doc",
+          "range": [
+            14162,
+            14225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let needle = \"ghi\";",
+          "path": "doc",
+          "range": [
+            14226,
+            14253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for _ in 0..10 {",
+          "path": "doc",
+          "range": [
+            14254,
+            14278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         contains(&haystack, needle);",
+          "path": "doc",
+          "range": [
+            14279,
+            14319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            14320,
+            14329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            14330,
+            14335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14336,
+            14343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14344,
+            14347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The compiler could theoretically make optimizations like the following:",
+          "path": "doc",
+          "range": [
+            14348,
+            14423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14424,
+            14427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The `needle` and `haystack` do not change, move the call to `contains` outside the loop and",
+          "path": "doc",
+          "range": [
+            14428,
+            14525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   delete the loop",
+          "path": "doc",
+          "range": [
+            14526,
+            14547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Inline `contains`",
+          "path": "doc",
+          "range": [
+            14548,
+            14571
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `needle` and `haystack` have values known at compile time, `contains` is always true. Remove",
+          "path": "doc",
+          "range": [
+            14572,
+            14670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the call and replace with `true`",
+          "path": "doc",
+          "range": [
+            14671,
+            14709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Nothing is done with the result of `contains`: delete this function call entirely",
+          "path": "doc",
+          "range": [
+            14710,
+            14797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `benchmark` now has no purpose: delete this function",
+          "path": "doc",
+          "range": [
+            14798,
+            14856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14857,
+            14860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is not likely that all of the above happens, but the compiler is definitely able to make some",
+          "path": "doc",
+          "range": [
+            14861,
+            14961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " optimizations that could result in a very inaccurate benchmark. This is where `black_box` comes",
+          "path": "doc",
+          "range": [
+            14962,
+            15061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in:",
+          "path": "doc",
+          "range": [
+            15062,
+            15069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15070,
+            15073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15074,
+            15081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::black_box;",
+          "path": "doc",
+          "range": [
+            15082,
+            15111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15112,
+            15115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Same `contains` function.",
+          "path": "doc",
+          "range": [
+            15116,
+            15148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn contains(haystack: &[&str], needle: &str) -> bool {",
+          "path": "doc",
+          "range": [
+            15149,
+            15207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     haystack.iter().any(|x| x == &needle)",
+          "path": "doc",
+          "range": [
+            15208,
+            15253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15254,
+            15259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15260,
+            15263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub fn benchmark() {",
+          "path": "doc",
+          "range": [
+            15264,
+            15288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let haystack = vec![\"abc\", \"def\", \"ghi\", \"jkl\", \"mno\"];",
+          "path": "doc",
+          "range": [
+            15289,
+            15352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let needle = \"ghi\";",
+          "path": "doc",
+          "range": [
+            15353,
+            15380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for _ in 0..10 {",
+          "path": "doc",
+          "range": [
+            15381,
+            15405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Force the compiler to run `contains`, even though it is a pure function whose",
+          "path": "doc",
+          "range": [
+            15406,
+            15498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // results are unused.",
+          "path": "doc",
+          "range": [
+            15499,
+            15533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         black_box(contains(",
+          "path": "doc",
+          "range": [
+            15534,
+            15565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             // Prevent the compiler from making assumptions about the input.",
+          "path": "doc",
+          "range": [
+            15566,
+            15646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             black_box(&haystack),",
+          "path": "doc",
+          "range": [
+            15647,
+            15684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             black_box(needle),",
+          "path": "doc",
+          "range": [
+            15685,
+            15719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         ));",
+          "path": "doc",
+          "range": [
+            15720,
+            15735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            15736,
+            15745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15746,
+            15751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15752,
+            15759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15760,
+            15763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This essentially tells the compiler to block optimizations across any calls to `black_box`. So,",
+          "path": "doc",
+          "range": [
+            15764,
+            15863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it now:",
+          "path": "doc",
+          "range": [
+            15864,
+            15875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15876,
+            15879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Treats both arguments to `contains` as unpredictable: the body of `contains` can no longer be",
+          "path": "doc",
+          "range": [
+            15880,
+            15979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   optimized based on argument values",
+          "path": "doc",
+          "range": [
+            15980,
+            16020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Treats the call to `contains` and its result as volatile: the body of `benchmark` cannot",
+          "path": "doc",
+          "range": [
+            16021,
+            16115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   optimize this away",
+          "path": "doc",
+          "range": [
+            16116,
+            16140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16141,
+            16144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This makes our benchmark much more realistic to how the function would actually be used, where",
+          "path": "doc",
+          "range": [
+            16145,
+            16243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " arguments are usually not known at compile time and the result is used in some way.",
+          "path": "doc",
+          "range": [
+            16244,
+            16331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16332,
+            16335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # How to use this",
+          "path": "doc",
+          "range": [
+            16336,
+            16357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16358,
+            16361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In practice, `black_box` serves two purposes:",
+          "path": "doc",
+          "range": [
+            16362,
+            16411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16412,
+            16415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 1. It prevents the compiler from making optimizations related to the value returned by `black_box`",
+          "path": "doc",
+          "range": [
+            16416,
+            16518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 2. It forces the value passed to `black_box` to be calculated, even if the return value of `black_box` is unused",
+          "path": "doc",
+          "range": [
+            16519,
+            16635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16636,
+            16639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16640,
+            16647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::black_box;",
+          "path": "doc",
+          "range": [
+            16648,
+            16677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16678,
+            16681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = 0;",
+          "path": "doc",
+          "range": [
+            16682,
+            16699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let five = 5;",
+          "path": "doc",
+          "range": [
+            16700,
+            16717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16718,
+            16721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // The compiler will see this and remove the `* five` call, because it knows that multiplying",
+          "path": "doc",
+          "range": [
+            16722,
+            16819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // any integer by 0 will result in 0.",
+          "path": "doc",
+          "range": [
+            16820,
+            16861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let c = zero * five;",
+          "path": "doc",
+          "range": [
+            16862,
+            16886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16887,
+            16890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Adding `black_box` here disables the compiler's ability to reason about the first operand in the multiplication.",
+          "path": "doc",
+          "range": [
+            16891,
+            17010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // It is forced to assume that it can be any possible number, so it cannot remove the `* five`",
+          "path": "doc",
+          "range": [
+            17011,
+            17109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // operation.",
+          "path": "doc",
+          "range": [
+            17110,
+            17127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let c = black_box(zero) * five;",
+          "path": "doc",
+          "range": [
+            17128,
+            17163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17164,
+            17171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17172,
+            17175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While most cases will not be as clear-cut as the above example, it still illustrates how",
+          "path": "doc",
+          "range": [
+            17176,
+            17268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `black_box` can be used. When benchmarking a function, you usually want to wrap its inputs in",
+          "path": "doc",
+          "range": [
+            17269,
+            17366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `black_box` so the compiler cannot make optimizations that would be unrealistic in real-life",
+          "path": "doc",
+          "range": [
+            17367,
+            17463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use.",
+          "path": "doc",
+          "range": [
+            17464,
+            17472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17473,
+            17476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17477,
+            17484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::black_box;",
+          "path": "doc",
+          "range": [
+            17485,
+            17514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17515,
+            17518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // This is a simple function that increments its input by 1. Note that it is pure, meaning it",
+          "path": "doc",
+          "range": [
+            17519,
+            17616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // has no side-effects. This function has no effect if its result is unused. (An example of a",
+          "path": "doc",
+          "range": [
+            17617,
+            17714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // function *with* side-effects is `println!()`.)",
+          "path": "doc",
+          "range": [
+            17715,
+            17768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn increment(x: u8) -> u8 {",
+          "path": "doc",
+          "range": [
+            17769,
+            17800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     x + 1",
+          "path": "doc",
+          "range": [
+            17801,
+            17814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            17815,
+            17820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17821,
+            17824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Here, we call `increment` but discard its result. The compiler, seeing this and knowing that",
+          "path": "doc",
+          "range": [
+            17825,
+            17924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // `increment` is pure, will eliminate this function call entirely. This may not be desired,",
+          "path": "doc",
+          "range": [
+            17925,
+            18021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // though, especially if we're trying to track how much time `increment` takes to execute.",
+          "path": "doc",
+          "range": [
+            18022,
+            18116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = increment(black_box(5));",
+          "path": "doc",
+          "range": [
+            18117,
+            18153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18154,
+            18157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Here, we force `increment` to be executed. This is because the compiler treats `black_box`",
+          "path": "doc",
+          "range": [
+            18158,
+            18255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // as if it has side-effects, and thus must compute its input.",
+          "path": "doc",
+          "range": [
+            18256,
+            18322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = black_box(increment(black_box(5)));",
+          "path": "doc",
+          "range": [
+            18323,
+            18370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18371,
+            18378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18379,
+            18382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " There may be additional situations where you want to wrap the result of a function in",
+          "path": "doc",
+          "range": [
+            18383,
+            18472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `black_box` to force its execution. This is situational though, and may not have any effect",
+          "path": "doc",
+          "range": [
+            18473,
+            18568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (such as when the function returns a zero-sized type such as [`()` unit][unit]).",
+          "path": "doc",
+          "range": [
+            18569,
+            18653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18654,
+            18657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that `black_box` has no effect on how its input is treated, only its output. As such,",
+          "path": "doc",
+          "range": [
+            18658,
+            18752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " expressions passed to `black_box` may still be optimized:",
+          "path": "doc",
+          "range": [
+            18753,
+            18814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18815,
+            18818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18819,
+            18826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::black_box;",
+          "path": "doc",
+          "range": [
+            18827,
+            18856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18857,
+            18860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // The compiler sees this...",
+          "path": "doc",
+          "range": [
+            18861,
+            18893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let y = black_box(5 * 10);",
+          "path": "doc",
+          "range": [
+            18894,
+            18924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18925,
+            18928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // ...as this. As such, it will likely simplify `5 * 10` to just `50`.",
+          "path": "doc",
+          "range": [
+            18929,
+            19003
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _0 = 5 * 10;",
+          "path": "doc",
+          "range": [
+            19004,
+            19024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let y = black_box(_0);",
+          "path": "doc",
+          "range": [
+            19025,
+            19051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19052,
+            19059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19060,
+            19063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In the above example, the `5 * 10` expression is considered distinct from the `black_box` call,",
+          "path": "doc",
+          "range": [
+            19064,
+            19163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and thus is still optimized by the compiler. You can prevent this by moving the multiplication",
+          "path": "doc",
+          "range": [
+            19164,
+            19262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " operation outside of `black_box`:",
+          "path": "doc",
+          "range": [
+            19263,
+            19300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19301,
+            19304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19305,
+            19312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::black_box;",
+          "path": "doc",
+          "range": [
+            19313,
+            19342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19343,
+            19346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // No assumptions can be made about either operand, so the multiplication is not optimized out.",
+          "path": "doc",
+          "range": [
+            19347,
+            19446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let y = black_box(5) * black_box(10);",
+          "path": "doc",
+          "range": [
+            19447,
+            19488
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19489,
+            19496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19497,
+            19500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " During constant evaluation, `black_box` is treated as a no-op.",
+          "path": "doc",
+          "range": [
+            19501,
+            19567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19568,
+            19577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            19578,
+            19634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            19635,
+            19703
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19745,
+        19788
+      ],
+      "kind": "fn",
+      "name": "black_box",
+      "range": [
+        12285,
+        19788
+      ],
+      "signature_range": [
+        19708,
+        19744
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An identity function that causes an `unused_must_use` warning to be",
+          "path": "doc",
+          "range": [
+            19790,
+            19861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " triggered if the given value is not used (returned, stored in a variable,",
+          "path": "doc",
+          "range": [
+            19862,
+            19939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " etc) by the caller.",
+          "path": "doc",
+          "range": [
+            19940,
+            19963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19964,
+            19967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is primarily intended for use in macro-generated code, in which a",
+          "path": "doc",
+          "range": [
+            19968,
+            20042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`#[must_use]` attribute][must_use] either on a type or a function would not",
+          "path": "doc",
+          "range": [
+            20043,
+            20123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be convenient.",
+          "path": "doc",
+          "range": [
+            20124,
+            20142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20143,
+            20146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [must_use]: https://doc.rust-lang.org/reference/attributes/diagnostics.html#the-must_use-attribute",
+          "path": "doc",
+          "range": [
+            20147,
+            20249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20250,
+            20253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            20254,
+            20267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20268,
+            20271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20272,
+            20279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(hint_must_use)]",
+          "path": "doc",
+          "range": [
+            20280,
+            20310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20311,
+            20314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::fmt;",
+          "path": "doc",
+          "range": [
+            20315,
+            20333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20334,
+            20337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub struct Error(/* ... */);",
+          "path": "doc",
+          "range": [
+            20338,
+            20370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20371,
+            20374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[macro_export]",
+          "path": "doc",
+          "range": [
+            20375,
+            20394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " macro_rules! make_error {",
+          "path": "doc",
+          "range": [
+            20395,
+            20424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ($($args:expr),*) => {",
+          "path": "doc",
+          "range": [
+            20425,
+            20455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         core::hint::must_use({",
+          "path": "doc",
+          "range": [
+            20456,
+            20490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             let error = $crate::make_error(core::format_args!($($args),*));",
+          "path": "doc",
+          "range": [
+            20491,
+            20570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             error",
+          "path": "doc",
+          "range": [
+            20571,
+            20592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         })",
+          "path": "doc",
+          "range": [
+            20593,
+            20607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     };",
+          "path": "doc",
+          "range": [
+            20608,
+            20618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            20619,
+            20624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20625,
+            20628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Implementation detail of make_error! macro.",
+          "path": "doc",
+          "range": [
+            20629,
+            20679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[doc(hidden)]",
+          "path": "doc",
+          "range": [
+            20680,
+            20698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub fn make_error(args: fmt::Arguments<'_>) -> Error {",
+          "path": "doc",
+          "range": [
+            20699,
+            20757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Error(/* ... */)",
+          "path": "doc",
+          "range": [
+            20758,
+            20782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            20783,
+            20788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20789,
+            20792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn demo() -> Option<Error> {",
+          "path": "doc",
+          "range": [
+            20793,
+            20825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if true {",
+          "path": "doc",
+          "range": [
+            20826,
+            20843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // Oops, meant to write `return Some(make_error!(\"...\"));`",
+          "path": "doc",
+          "range": [
+            20844,
+            20914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(make_error!(\"...\"));",
+          "path": "doc",
+          "range": [
+            20915,
+            20952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            20953,
+            20962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     None",
+          "path": "doc",
+          "range": [
+            20963,
+            20975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            20976,
+            20981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #",
+          "path": "doc",
+          "range": [
+            20982,
+            20987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # // Make rustdoc not wrap the whole snippet in fn main, so that $crate::make_error works",
+          "path": "doc",
+          "range": [
+            20988,
+            21081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # fn main() {}",
+          "path": "doc",
+          "range": [
+            21082,
+            21100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21101,
+            21108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21109,
+            21112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In the above example, we'd like an `unused_must_use` lint to apply to the",
+          "path": "doc",
+          "range": [
+            21113,
+            21190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " value created by `make_error!`. However, neither `#[must_use]` on a struct",
+          "path": "doc",
+          "range": [
+            21191,
+            21269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " nor `#[must_use]` on a function is appropriate here, so the macro expands",
+          "path": "doc",
+          "range": [
+            21270,
+            21347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " using `core::hint::must_use` instead.",
+          "path": "doc",
+          "range": [
+            21348,
+            21389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21390,
+            21393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - We wouldn't want `#[must_use]` on the `struct Error` because that would",
+          "path": "doc",
+          "range": [
+            21394,
+            21471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   make the following unproblematic code trigger a warning:",
+          "path": "doc",
+          "range": [
+            21472,
+            21534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21535,
+            21538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```",
+          "path": "doc",
+          "range": [
+            21539,
+            21548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # struct Error;",
+          "path": "doc",
+          "range": [
+            21549,
+            21570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            21571,
+            21578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   fn f(arg: &str) -> Result<(), Error>",
+          "path": "doc",
+          "range": [
+            21579,
+            21621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # { Ok(()) }",
+          "path": "doc",
+          "range": [
+            21622,
+            21640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21641,
+            21644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #[test]",
+          "path": "doc",
+          "range": [
+            21645,
+            21658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   fn t() {",
+          "path": "doc",
+          "range": [
+            21659,
+            21673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // Assert that `f` returns error if passed an empty string.",
+          "path": "doc",
+          "range": [
+            21674,
+            21743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // A value of type `Error` is unused here but that's not a problem.",
+          "path": "doc",
+          "range": [
+            21744,
+            21821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       f(\"\").unwrap_err();",
+          "path": "doc",
+          "range": [
+            21822,
+            21851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   }",
+          "path": "doc",
+          "range": [
+            21852,
+            21859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```",
+          "path": "doc",
+          "range": [
+            21860,
+            21869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21870,
+            21873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Using `#[must_use]` on `fn make_error` can't help because the return value",
+          "path": "doc",
+          "range": [
+            21874,
+            21954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   *is* used, as the right-hand side of a `let` statement. The `let`",
+          "path": "doc",
+          "range": [
+            21955,
+            22026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   statement looks useless but is in fact necessary for ensuring that",
+          "path": "doc",
+          "range": [
+            22027,
+            22099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   temporaries within the `format_args` expansion are not kept alive past the",
+          "path": "doc",
+          "range": [
+            22100,
+            22180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   creation of the `Error`, as keeping them alive past that point can cause",
+          "path": "doc",
+          "range": [
+            22181,
+            22259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   autotrait issues in async code:",
+          "path": "doc",
+          "range": [
+            22260,
+            22297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22298,
+            22301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```",
+          "path": "doc",
+          "range": [
+            22302,
+            22311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # #![feature(hint_must_use)]",
+          "path": "doc",
+          "range": [
+            22312,
+            22346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            22347,
+            22354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # struct Error;",
+          "path": "doc",
+          "range": [
+            22355,
+            22376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            22377,
+            22384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # macro_rules! make_error {",
+          "path": "doc",
+          "range": [
+            22385,
+            22418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #     ($($args:expr),*) => {",
+          "path": "doc",
+          "range": [
+            22419,
+            22453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #         core::hint::must_use({",
+          "path": "doc",
+          "range": [
+            22454,
+            22492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #             // If `let` isn't used, then `f()` produces a non-Send future.",
+          "path": "doc",
+          "range": [
+            22493,
+            22575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #             let error = make_error(core::format_args!($($args),*));",
+          "path": "doc",
+          "range": [
+            22576,
+            22651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #             error",
+          "path": "doc",
+          "range": [
+            22652,
+            22677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #         })",
+          "path": "doc",
+          "range": [
+            22678,
+            22696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #     };",
+          "path": "doc",
+          "range": [
+            22697,
+            22711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # }",
+          "path": "doc",
+          "range": [
+            22712,
+            22721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            22722,
+            22729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # fn make_error(args: core::fmt::Arguments<'_>) -> Error {",
+          "path": "doc",
+          "range": [
+            22730,
+            22794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #     Error",
+          "path": "doc",
+          "range": [
+            22795,
+            22812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # }",
+          "path": "doc",
+          "range": [
+            22813,
+            22822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            22823,
+            22830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   async fn f() {",
+          "path": "doc",
+          "range": [
+            22831,
+            22851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // Using `let` inside the make_error expansion causes temporaries like",
+          "path": "doc",
+          "range": [
+            22852,
+            22932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // `unsync()` to drop at the semicolon of that `let` statement, which",
+          "path": "doc",
+          "range": [
+            22933,
+            23012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // is prior to the await point. They would otherwise stay around until",
+          "path": "doc",
+          "range": [
+            23013,
+            23093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // the semicolon on *this* statement, which is after the await point,",
+          "path": "doc",
+          "range": [
+            23094,
+            23173
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       // and the enclosing Future would not implement Send.",
+          "path": "doc",
+          "range": [
+            23174,
+            23237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       log(make_error!(\"look: {:p}\", unsync())).await;",
+          "path": "doc",
+          "range": [
+            23238,
+            23295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   }",
+          "path": "doc",
+          "range": [
+            23296,
+            23303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23304,
+            23307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   async fn log(error: Error) {/* ... */}",
+          "path": "doc",
+          "range": [
+            23308,
+            23352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23353,
+            23356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   // Returns something without a Sync impl.",
+          "path": "doc",
+          "range": [
+            23357,
+            23404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   fn unsync() -> *const () {",
+          "path": "doc",
+          "range": [
+            23405,
+            23437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       0 as *const ()",
+          "path": "doc",
+          "range": [
+            23438,
+            23462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   }",
+          "path": "doc",
+          "range": [
+            23463,
+            23470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #",
+          "path": "doc",
+          "range": [
+            23471,
+            23478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # fn test() {",
+          "path": "doc",
+          "range": [
+            23479,
+            23498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #     fn assert_send(_: impl Send) {}",
+          "path": "doc",
+          "range": [
+            23499,
+            23542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   #     assert_send(f());",
+          "path": "doc",
+          "range": [
+            23543,
+            23572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   # }",
+          "path": "doc",
+          "range": [
+            23573,
+            23582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   ```",
+          "path": "doc",
+          "range": [
+            23583,
+            23592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            23593,
+            23648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            23649,
+            23660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23671,
+            23688
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23729,
+        23742
+      ],
+      "kind": "fn",
+      "name": "must_use",
+      "range": [
+        19790,
+        23742
+      ],
+      "signature_range": [
+        23693,
+        23728
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that a branch condition is likely to be true.",
+          "path": "doc",
+          "range": [
+            23744,
+            23815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the value passed to it.",
+          "path": "doc",
+          "range": [
+            23816,
+            23851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23852,
+            23855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can be used with `if` or boolean `match` expressions.",
+          "path": "doc",
+          "range": [
+            23856,
+            23916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23917,
+            23920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When used outside of a branch condition, it may still influence a nearby branch, but",
+          "path": "doc",
+          "range": [
+            23921,
+            24009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " probably will not have any effect.",
+          "path": "doc",
+          "range": [
+            24010,
+            24048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24049,
+            24052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to",
+          "path": "doc",
+          "range": [
+            24053,
+            24146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compound expressions, such as `likely(a && b)`. When applied to compound expressions, it has",
+          "path": "doc",
+          "range": [
+            24147,
+            24243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the following effect:",
+          "path": "doc",
+          "range": [
+            24244,
+            24269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```text",
+          "path": "doc",
+          "range": [
+            24270,
+            24281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     likely(!a) => !unlikely(a)",
+          "path": "doc",
+          "range": [
+            24282,
+            24316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     likely(a && b) => likely(a) && likely(b)",
+          "path": "doc",
+          "range": [
+            24317,
+            24365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     likely(a || b) => a || likely(b)",
+          "path": "doc",
+          "range": [
+            24366,
+            24406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24407,
+            24414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24415,
+            24418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.",
+          "path": "doc",
+          "range": [
+            24419,
+            24515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24516,
+            24519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            24520,
+            24534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24535,
+            24538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24539,
+            24546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(likely_unlikely)]",
+          "path": "doc",
+          "range": [
+            24547,
+            24579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::hint::likely;",
+          "path": "doc",
+          "range": [
+            24580,
+            24607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24608,
+            24611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn foo(x: i32) {",
+          "path": "doc",
+          "range": [
+            24612,
+            24632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if likely(x > 0) {",
+          "path": "doc",
+          "range": [
+            24633,
+            24659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is likely to be taken\");",
+          "path": "doc",
+          "range": [
+            24660,
+            24718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            24719,
+            24735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is unlikely to be taken\");",
+          "path": "doc",
+          "range": [
+            24736,
+            24796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            24797,
+            24806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24807,
+            24810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match likely(x > 0) {",
+          "path": "doc",
+          "range": [
+            24811,
+            24840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         true => println!(\"this branch is likely to be taken\"),",
+          "path": "doc",
+          "range": [
+            24841,
+            24907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         false => println!(\"this branch is unlikely to be taken\"),",
+          "path": "doc",
+          "range": [
+            24908,
+            24977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            24978,
+            24987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24988,
+            24991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Use outside of a branch condition may still influence a nearby branch",
+          "path": "doc",
+          "range": [
+            24992,
+            25072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let cond = likely(x != 0);",
+          "path": "doc",
+          "range": [
+            25073,
+            25107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if cond {",
+          "path": "doc",
+          "range": [
+            25108,
+            25125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is likely to be taken\");",
+          "path": "doc",
+          "range": [
+            25126,
+            25184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            25185,
+            25194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            25195,
+            25200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            25201,
+            25208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            25209,
+            25267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25268,
+            25285
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25323,
+        25359
+      ],
+      "kind": "fn",
+      "name": "likely",
+      "range": [
+        23744,
+        25359
+      ],
+      "signature_range": [
+        25290,
+        25322
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that a branch condition is unlikely to be true.",
+          "path": "doc",
+          "range": [
+            25361,
+            25434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns the value passed to it.",
+          "path": "doc",
+          "range": [
+            25435,
+            25470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25471,
+            25474
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can be used with `if` or boolean `match` expressions.",
+          "path": "doc",
+          "range": [
+            25475,
+            25535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25536,
+            25539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When used outside of a branch condition, it may still influence a nearby branch, but",
+          "path": "doc",
+          "range": [
+            25540,
+            25628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " probably will not have any effect.",
+          "path": "doc",
+          "range": [
+            25629,
+            25667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25668,
+            25671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to",
+          "path": "doc",
+          "range": [
+            25672,
+            25765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compound expressions, such as `unlikely(a && b)`. When applied to compound expressions, it has",
+          "path": "doc",
+          "range": [
+            25766,
+            25864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the following effect:",
+          "path": "doc",
+          "range": [
+            25865,
+            25890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```text",
+          "path": "doc",
+          "range": [
+            25891,
+            25902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unlikely(!a) => !likely(a)",
+          "path": "doc",
+          "range": [
+            25903,
+            25937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unlikely(a && b) => a && unlikely(b)",
+          "path": "doc",
+          "range": [
+            25938,
+            25982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     unlikely(a || b) => unlikely(a) || unlikely(b)",
+          "path": "doc",
+          "range": [
+            25983,
+            26037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26038,
+            26045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26046,
+            26049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.",
+          "path": "doc",
+          "range": [
+            26050,
+            26146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26147,
+            26150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            26151,
+            26165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26166,
+            26169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26170,
+            26177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(likely_unlikely)]",
+          "path": "doc",
+          "range": [
+            26178,
+            26210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::hint::unlikely;",
+          "path": "doc",
+          "range": [
+            26211,
+            26240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26241,
+            26244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn foo(x: i32) {",
+          "path": "doc",
+          "range": [
+            26245,
+            26265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if unlikely(x > 0) {",
+          "path": "doc",
+          "range": [
+            26266,
+            26294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is unlikely to be taken\");",
+          "path": "doc",
+          "range": [
+            26295,
+            26355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            26356,
+            26372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is likely to be taken\");",
+          "path": "doc",
+          "range": [
+            26373,
+            26431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26432,
+            26441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26442,
+            26445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match unlikely(x > 0) {",
+          "path": "doc",
+          "range": [
+            26446,
+            26477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         true => println!(\"this branch is unlikely to be taken\"),",
+          "path": "doc",
+          "range": [
+            26478,
+            26546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         false => println!(\"this branch is likely to be taken\"),",
+          "path": "doc",
+          "range": [
+            26547,
+            26614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26615,
+            26624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26625,
+            26628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Use outside of a branch condition may still influence a nearby branch",
+          "path": "doc",
+          "range": [
+            26629,
+            26709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let cond = unlikely(x != 0);",
+          "path": "doc",
+          "range": [
+            26710,
+            26746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if cond {",
+          "path": "doc",
+          "range": [
+            26747,
+            26764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is likely to be taken\");",
+          "path": "doc",
+          "range": [
+            26765,
+            26823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            26824,
+            26833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26834,
+            26839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26840,
+            26847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            26848,
+            26906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26907,
+            26924
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26964,
+        27002
+      ],
+      "kind": "fn",
+      "name": "unlikely",
+      "range": [
+        25361,
+        27002
+      ],
+      "signature_range": [
+        26929,
+        26963
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Hints to the compiler that given path is cold, i.e., unlikely to be taken. The compiler may",
+          "path": "doc",
+          "range": [
+            27004,
+            27099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " choose to optimize paths that are not cold at the expense of paths that are cold.",
+          "path": "doc",
+          "range": [
+            27100,
+            27185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27186,
+            27189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that like all hints, the exact effect to codegen is not guaranteed. Using `cold_path`",
+          "path": "doc",
+          "range": [
+            27190,
+            27284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can actually *decrease* performance if the branch is called more than expected. It is advisable",
+          "path": "doc",
+          "range": [
+            27285,
+            27384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to perform benchmarks to tell if this function is useful.",
+          "path": "doc",
+          "range": [
+            27385,
+            27446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27447,
+            27450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            27451,
+            27465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27466,
+            27469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27470,
+            27477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::hint::cold_path;",
+          "path": "doc",
+          "range": [
+            27478,
+            27508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27509,
+            27512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn foo(x: &[i32]) {",
+          "path": "doc",
+          "range": [
+            27513,
+            27536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(first) = x.get(0) {",
+          "path": "doc",
+          "range": [
+            27537,
+            27576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // this is the fast path",
+          "path": "doc",
+          "range": [
+            27577,
+            27613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            27614,
+            27630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // this path is unlikely",
+          "path": "doc",
+          "range": [
+            27631,
+            27667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         cold_path();",
+          "path": "doc",
+          "range": [
+            27668,
+            27692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            27693,
+            27702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            27703,
+            27708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27709,
+            27712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn bar(x: i32) -> i32 {",
+          "path": "doc",
+          "range": [
+            27713,
+            27740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     match x {",
+          "path": "doc",
+          "range": [
+            27741,
+            27758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         1 => 10,",
+          "path": "doc",
+          "range": [
+            27759,
+            27779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         2 => 100,",
+          "path": "doc",
+          "range": [
+            27780,
+            27801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         3 => { cold_path(); 1000 }, // this branch is unlikely",
+          "path": "doc",
+          "range": [
+            27802,
+            27868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         _ => { cold_path(); 10000 }, // this is also unlikely",
+          "path": "doc",
+          "range": [
+            27869,
+            27934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            27935,
+            27944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            27945,
+            27950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27951,
+            27958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27959,
+            27962
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can also be used to implement `likely` and `unlikely` helpers to hint the condition rather",
+          "path": "doc",
+          "range": [
+            27963,
+            28062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " than the branch:",
+          "path": "doc",
+          "range": [
+            28063,
+            28083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28084,
+            28087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28088,
+            28095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::hint::cold_path;",
+          "path": "doc",
+          "range": [
+            28096,
+            28126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28127,
+            28130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[inline(always)]",
+          "path": "doc",
+          "range": [
+            28131,
+            28152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub const fn likely(b: bool) -> bool {",
+          "path": "doc",
+          "range": [
+            28153,
+            28195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if !b {",
+          "path": "doc",
+          "range": [
+            28196,
+            28211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         cold_path();",
+          "path": "doc",
+          "range": [
+            28212,
+            28236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            28237,
+            28246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     b",
+          "path": "doc",
+          "range": [
+            28247,
+            28256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28257,
+            28262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28263,
+            28266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[inline(always)]",
+          "path": "doc",
+          "range": [
+            28267,
+            28288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub const fn unlikely(b: bool) -> bool {",
+          "path": "doc",
+          "range": [
+            28289,
+            28333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if b {",
+          "path": "doc",
+          "range": [
+            28334,
+            28348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         cold_path();",
+          "path": "doc",
+          "range": [
+            28349,
+            28373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            28374,
+            28383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     b",
+          "path": "doc",
+          "range": [
+            28384,
+            28393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28394,
+            28399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28400,
+            28403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn foo(x: i32) {",
+          "path": "doc",
+          "range": [
+            28404,
+            28424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if likely(x > 0) {",
+          "path": "doc",
+          "range": [
+            28425,
+            28451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is likely to be taken\");",
+          "path": "doc",
+          "range": [
+            28452,
+            28510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            28511,
+            28527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"this branch is unlikely to be taken\");",
+          "path": "doc",
+          "range": [
+            28528,
+            28588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            28589,
+            28598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            28599,
+            28604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28605,
+            28612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            28613,
+            28663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            28664,
+            28726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28727,
+            28744
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28770,
+        28808
+      ],
+      "kind": "fn",
+      "name": "cold_path",
+      "range": [
+        27004,
+        28808
+      ],
+      "signature_range": [
+        28749,
+        28769
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns either `true_val` or `false_val` depending on the value of",
+          "path": "doc",
+          "range": [
+            28810,
+            28880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `condition`, with a hint to the compiler that `condition` is unlikely to be",
+          "path": "doc",
+          "range": [
+            28881,
+            28960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " correctly predicted by a CPU’s branch predictor.",
+          "path": "doc",
+          "range": [
+            28961,
+            29015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29016,
+            29019
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method is functionally equivalent to",
+          "path": "doc",
+          "range": [
+            29020,
+            29065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```ignore (this is just for illustrative purposes)",
+          "path": "doc",
+          "range": [
+            29066,
+            29120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn select_unpredictable<T>(b: bool, true_val: T, false_val: T) -> T {",
+          "path": "doc",
+          "range": [
+            29121,
+            29194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if b { true_val } else { false_val }",
+          "path": "doc",
+          "range": [
+            29195,
+            29239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            29240,
+            29245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            29246,
+            29253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but might generate different assembly. In particular, on platforms with",
+          "path": "doc",
+          "range": [
+            29254,
+            29329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a conditional move or select instruction (like `cmov` on x86 or `csel`",
+          "path": "doc",
+          "range": [
+            29330,
+            29404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " on ARM) the optimizer might use these instructions to avoid branches,",
+          "path": "doc",
+          "range": [
+            29405,
+            29478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which can benefit performance if the branch predictor is struggling",
+          "path": "doc",
+          "range": [
+            29479,
+            29550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with predicting `condition`, such as in an implementation of binary",
+          "path": "doc",
+          "range": [
+            29551,
+            29622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " search.",
+          "path": "doc",
+          "range": [
+            29623,
+            29634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29635,
+            29638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note however that this lowering is not guaranteed (on any platform) and",
+          "path": "doc",
+          "range": [
+            29639,
+            29714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should not be relied upon when trying to write cryptographic constant-time",
+          "path": "doc",
+          "range": [
+            29715,
+            29793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " code. Also be aware that this lowering might *decrease* performance if",
+          "path": "doc",
+          "range": [
+            29794,
+            29868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `condition` is well-predictable. It is advisable to perform benchmarks to",
+          "path": "doc",
+          "range": [
+            29869,
+            29946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " tell if this function is useful.",
+          "path": "doc",
+          "range": [
+            29947,
+            29983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29984,
+            29987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            29988,
+            30002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30003,
+            30006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Distribute values evenly between two buckets:",
+          "path": "doc",
+          "range": [
+            30007,
+            30056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30057,
+            30064
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hash::BuildHasher;",
+          "path": "doc",
+          "range": [
+            30065,
+            30096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint;",
+          "path": "doc",
+          "range": [
+            30097,
+            30115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30116,
+            30119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn append<H: BuildHasher>(hasher: &H, v: i32, bucket_one: &mut Vec<i32>, bucket_two: &mut Vec<i32>) {",
+          "path": "doc",
+          "range": [
+            30120,
+            30225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let hash = hasher.hash_one(&v);",
+          "path": "doc",
+          "range": [
+            30226,
+            30265
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let bucket = hint::select_unpredictable(hash % 2 == 0, bucket_one, bucket_two);",
+          "path": "doc",
+          "range": [
+            30266,
+            30353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     bucket.push(v);",
+          "path": "doc",
+          "range": [
+            30354,
+            30377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            30378,
+            30383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let hasher = std::collections::hash_map::RandomState::new();",
+          "path": "doc",
+          "range": [
+            30384,
+            30450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let mut bucket_one = Vec::new();",
+          "path": "doc",
+          "range": [
+            30451,
+            30489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let mut bucket_two = Vec::new();",
+          "path": "doc",
+          "range": [
+            30490,
+            30528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # append(&hasher, 42, &mut bucket_one, &mut bucket_two);",
+          "path": "doc",
+          "range": [
+            30529,
+            30589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # assert_eq!(bucket_one.len() + bucket_two.len(), 1);",
+          "path": "doc",
+          "range": [
+            30590,
+            30647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30648,
+            30655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            30656,
+            30673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            30674,
+            30735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            30736,
+            30817
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30935,
+        33216
+      ],
+      "kind": "fn",
+      "name": "select_unpredictable",
+      "range": [
+        28810,
+        33216
+      ],
+      "signature_range": [
+        30822,
+        30934
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "DropOnPanic",
+      "range": [
+        31172,
+        31370
+      ]
+    },
+    {
+      "ancestors": [
+        11
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31376,
+        31591
+      ]
+    },
+    {
+      "ancestors": [
+        11,
+        13
+      ],
+      "attributes": [],
+      "body_range": [
+        31437,
+        31585
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        31418,
+        31585
+      ],
+      "signature_range": [
+        31418,
+        31436
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The expected temporal locality of a memory prefetch operation.",
+          "path": "doc",
+          "range": [
+            33218,
+            33284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33285,
+            33288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Locality expresses how likely the prefetched data is to be reused soon,",
+          "path": "doc",
+          "range": [
+            33289,
+            33364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and therefore which level of cache it should be brought into.",
+          "path": "doc",
+          "range": [
+            33365,
+            33430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33431,
+            33434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The locality is just a hint, and may be ignored on some targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            33435,
+            33522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33523,
+            33526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Used with functions like [`prefetch_read`] and [`prefetch_write`].",
+          "path": "doc",
+          "range": [
+            33527,
+            33597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33598,
+            33601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`prefetch_read`]: crate::hint::prefetch_read",
+          "path": "doc",
+          "range": [
+            33602,
+            33651
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`prefetch_write`]: crate::hint::prefetch_write",
+          "path": "doc",
+          "range": [
+            33652,
+            33703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            33704,
+            33760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "non_exhaustive",
+          "range": [
+            33761,
+            33778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            33779,
+            33829
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "Locality",
+      "range": [
+        33218,
+        34213
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34215,
+        34456
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": " Convert to the constant that LLVM associates with a locality.",
+          "path": "doc",
+          "range": [
+            34235,
+            34300
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34335,
+        34454
+      ],
+      "kind": "impl_fn",
+      "name": "to_llvm",
+      "range": [
+        34235,
+        34454
+      ],
+      "signature_range": [
+        34305,
+        34334
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Prefetch the cache line containing `ptr` for a future read.",
+          "path": "doc",
+          "range": [
+            34458,
+            34521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34522,
+            34525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A strategically placed prefetch can reduce cache miss latency if the data is accessed",
+          "path": "doc",
+          "range": [
+            34526,
+            34615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " soon after, but may also increase bandwidth usage or evict other cache lines.",
+          "path": "doc",
+          "range": [
+            34616,
+            34697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34698,
+            34701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A prefetch is a *hint*, and may be ignored on certain targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            34702,
+            34787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34788,
+            34791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a dangling or invalid pointer is permitted: the memory will not",
+          "path": "doc",
+          "range": [
+            34792,
+            34867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually be dereferenced, and no faults are raised.",
+          "path": "doc",
+          "range": [
+            34868,
+            34923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34924,
+            34927
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            34928,
+            34942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34943,
+            34946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            34947,
+            34954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(hint_prefetch)]",
+          "path": "doc",
+          "range": [
+            34955,
+            34985
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::hint::{Locality, prefetch_read};",
+          "path": "doc",
+          "range": [
+            34986,
+            35031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::mem::size_of_val;",
+          "path": "doc",
+          "range": [
+            35032,
+            35062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35063,
+            35066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Prefetch all of `slice` into the L1 cache.",
+          "path": "doc",
+          "range": [
+            35067,
+            35116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn prefetch_slice<T>(slice: &[T]) {",
+          "path": "doc",
+          "range": [
+            35117,
+            35156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // On most systems the cache line size is 64 bytes.",
+          "path": "doc",
+          "range": [
+            35157,
+            35216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for offset in (0..size_of_val(slice)).step_by(64) {",
+          "path": "doc",
+          "range": [
+            35217,
+            35276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         prefetch_read(slice.as_ptr().wrapping_add(offset), Locality::L1);",
+          "path": "doc",
+          "range": [
+            35277,
+            35354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            35355,
+            35364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            35365,
+            35370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            35371,
+            35378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35379,
+            35396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            35397,
+            35453
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35519,
+        35831
+      ],
+      "kind": "fn",
+      "name": "prefetch_read",
+      "range": [
+        34458,
+        35831
+      ],
+      "signature_range": [
+        35458,
+        35518
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Prefetch the cache line containing `ptr` for a single future read, but attempt to avoid",
+          "path": "doc",
+          "range": [
+            35833,
+            35924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " polluting the cache.",
+          "path": "doc",
+          "range": [
+            35925,
+            35949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35950,
+            35953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A strategically placed prefetch can reduce cache miss latency if the data is accessed",
+          "path": "doc",
+          "range": [
+            35954,
+            36043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " soon after, but may also increase bandwidth usage or evict other cache lines.",
+          "path": "doc",
+          "range": [
+            36044,
+            36125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36126,
+            36129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A prefetch is a *hint*, and may be ignored on certain targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            36130,
+            36215
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36216,
+            36219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a dangling or invalid pointer is permitted: the memory will not",
+          "path": "doc",
+          "range": [
+            36220,
+            36295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually be dereferenced, and no faults are raised.",
+          "path": "doc",
+          "range": [
+            36296,
+            36351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36352,
+            36369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36370,
+            36426
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36505,
+        36656
+      ],
+      "kind": "fn",
+      "name": "prefetch_read_non_temporal",
+      "range": [
+        35833,
+        36656
+      ],
+      "signature_range": [
+        36431,
+        36504
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Prefetch the cache line containing `ptr` for a future write.",
+          "path": "doc",
+          "range": [
+            36658,
+            36722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36723,
+            36726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A strategically placed prefetch can reduce cache miss latency if the data is accessed",
+          "path": "doc",
+          "range": [
+            36727,
+            36816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " soon after, but may also increase bandwidth usage or evict other cache lines.",
+          "path": "doc",
+          "range": [
+            36817,
+            36898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36899,
+            36902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A prefetch is a *hint*, and may be ignored on certain targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            36903,
+            36988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36989,
+            36992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a dangling or invalid pointer is permitted: the memory will not",
+          "path": "doc",
+          "range": [
+            36993,
+            37068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually be dereferenced, and no faults are raised.",
+          "path": "doc",
+          "range": [
+            37069,
+            37124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37125,
+            37142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            37143,
+            37199
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37264,
+        37579
+      ],
+      "kind": "fn",
+      "name": "prefetch_write",
+      "range": [
+        36658,
+        37579
+      ],
+      "signature_range": [
+        37204,
+        37263
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Prefetch the cache line containing `ptr` for a single future write, but attempt to avoid",
+          "path": "doc",
+          "range": [
+            37581,
+            37673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " polluting the cache.",
+          "path": "doc",
+          "range": [
+            37674,
+            37698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37699,
+            37702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A strategically placed prefetch can reduce cache miss latency if the data is accessed",
+          "path": "doc",
+          "range": [
+            37703,
+            37792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " soon after, but may also increase bandwidth usage or evict other cache lines.",
+          "path": "doc",
+          "range": [
+            37793,
+            37874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37875,
+            37878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A prefetch is a *hint*, and may be ignored on certain targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            37879,
+            37964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37965,
+            37968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a dangling or invalid pointer is permitted: the memory will not",
+          "path": "doc",
+          "range": [
+            37969,
+            38044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually be dereferenced, and no faults are raised.",
+          "path": "doc",
+          "range": [
+            38045,
+            38100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38101,
+            38118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            38119,
+            38175
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38255,
+        38407
+      ],
+      "kind": "fn",
+      "name": "prefetch_write_non_temporal",
+      "range": [
+        37581,
+        38407
+      ],
+      "signature_range": [
+        38180,
+        38254
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Prefetch the cache line containing `ptr` into the instruction cache for a future read.",
+          "path": "doc",
+          "range": [
+            38409,
+            38499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38500,
+            38503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A strategically placed prefetch can reduce cache miss latency if the instructions are",
+          "path": "doc",
+          "range": [
+            38504,
+            38593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accessed soon after, but may also increase bandwidth usage or evict other cache lines.",
+          "path": "doc",
+          "range": [
+            38594,
+            38684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38685,
+            38688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A prefetch is a *hint*, and may be ignored on certain targets or by the hardware.",
+          "path": "doc",
+          "range": [
+            38689,
+            38774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38775,
+            38778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Passing a dangling or invalid pointer is permitted: the memory will not",
+          "path": "doc",
+          "range": [
+            38779,
+            38854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " actually be dereferenced, and no faults are raised.",
+          "path": "doc",
+          "range": [
+            38855,
+            38910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38911,
+            38928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            38929,
+            38985
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39063,
+        39396
+      ],
+      "kind": "fn",
+      "name": "prefetch_read_instruction",
+      "range": [
+        38409,
+        39396
+      ],
+      "signature_range": [
+        38990,
+        39062
+      ]
+    }
+  ],
+  "source_sha256": "27311ac1d9c5ced624d810ff01c4d0d78dee23f3daa7e088a3eb780b1127a834"
+}

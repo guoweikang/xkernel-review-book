@@ -1,0 +1,49 @@
+仅据所给同版材料；源码定位采用“固定实体路径＋符号”。普通注释与 rustdoc 均作为证据，但职责约定、未来计划、状态陈述与实现事实分别判断。以下不认定架构最优或真实违规，也不把历史测试数量视为本批结果。
+
+**R01**
+
+1. `property.rs::FdtNode::is_available`：严格读取本节点 `status`；缺失、`ok/okay` 为真，其余合法字符串为假，重复或畸形报错。
+2. 职责依据：迁移文档“Agreed ownership”将状态解释归于 DT 库；方法 rustdoc 明确不施加祖先、设备创建策略。
+3. 建议：type 保留 `FdtNode`；mod 可保留 `property`；crate 保留 `rs_fdtree`，条件是仅解释 DT 状态。没有强制具体模块名的规范。
+4. 可用不代表驱动就绪；`of::is_enabled_cpu_node` 仅排除 disabled，不能直接视为等价接口。
+5. 缺调用闭包；下一步限定核对该 CPU 筛选器的直接调用者是否需要相同状态语义。
+
+**R02**
+
+1. `dtb.rs::DtBackend::mmio_resource`：查节点，调用 `mmio_resources`，按索引复制 base/size/name，并映射错误；此处不执行映射或资源获取。
+2. `dtb.rs` 模块 rustdoc 与迁移文档约定：DT 地址解释归核心，适配层转换契约类型；这是职责依据，非目录即规范。
+3. 建议：type 保留 `DtBackend`，mod 保留适配层，crate 可留 `rs_fdtree`；条件是地址算法仍由核心承担。
+4. 越界取值返回 None；但前置解析可能先失败。地址翻译不同于 MMIO 映射；`address_error` 还可能返回 Missing。
+5. 未提供 `address.rs`，不能确认翻译及完整校验行为；下一步仅检查 `mmio_resources` 的缺失、越界与错误语义。
+
+**R03**
+
+1. `fwnode/src/lib.rs::{FwNodeId,FwNodeOps,FwNode}`：ID 封装 u32；句柄持 ID 与后端引用，相等比较二者；`FwNode::mmio_resource` 仅委派。
+2. crate rustdoc、设计文档“Type Roles/Contract Boundary”规定中立词汇、后端访问与无内核策略。
+3. 建议：保留三个 type 的角色；mod 可留 `lib.rs`；crate 保留独立契约。物理父目录应否调整为 unknown：设计文档称位于 util，却又列出 firmware 路径，证据冲突。
+4. 无分配契约不保证后端调用无分配；已翻译物理地址不代表已映射。
+5. 缺依赖闭包；下一步限定检查该 crate 的清单及直接依赖，核对中立边界。
+
+**R04**
+
+1. `of/src/lib.rs::{FDT,fdt,init_device_tree_ptr}`：全局保存静态 `LinuxFdt`；读取调用 `get`；初始化经 `from_ptr` 校验后调用 `init_once`。
+2. 迁移文档约定启动 DTB 持有、初始化暂留宿主集成；移除 OF 是未来方向，不能据此要求立即搬迁。
+3. 建议：type 暂沿用借用视图与初始化容器；mod 可留 crate 根；crate 可暂留 `of`。迁移条件是确定新的启动集成所有者及生命周期契约。
+4. 持有视图不等于拥有字节存储；调用者承担长期可读且不可变义务。空指针包装为 BadDeviceTree，非 MissingDeviceTreePtr。
+5. 缺 `LazyInit` 与启动调用链；下一步仅核对重复初始化行为及唯一启动调用点。
+
+**R05**
+
+1. `gic/firmware.rs` 指定实体：遍历句柄，先查控制器声明，再识别版本、检查状态；读取资源，按 v2/v3 寄存器角色构造配置，并保留控制器句柄。
+2. 迁移文档职责约定及模块 rustdoc 将 GIC 绑定解释归驱动；`GicSelection` rustdoc 要求保留实例身份。MADT/static 同类入口是计划。
+3. 建议：type 保留配置关联入口与选择结果，mod 保留 `gic::firmware`，crate 保留 IRQ 驱动，条件是承担 GIC 专属解释。
+4. 声明错误可在兼容匹配前中止；配置解码不等于硬件初始化。`descendants` 实现未保存子树边界。
+5. 缺初始化实现；下一步仅核对其对多区域、stride 的接受条件，不能把文档状态当作已验证实现。
+
+**R06**
+
+1. `dtb.rs::DtBackend::irq_spec`：查节点，委派 `irq_spec_with`；无结果返回 None，否则转换控制器句柄与最多16个原始 cells，并映射错误。
+2. 模块 rustdoc、fwnode 契约规定：通用 DT 解析归核心，绑定含义归控制器。迁移文档“仍 Unsupported”是与当前包装实现不符的状态陈述，非禁止实现的规范。
+3. 建议：type 保留 `DtBackend` 方法，mod 保留适配层，crate 可留 `rs_fdtree`；条件是核心只解析 DT 关系，不承担控制器编号解释。
+4. 返回 spec 不等于执行 xlate、建立 domain 或完成 IRQ 映射。
+5. 缺 `reference.rs`，不能断言支持全部继承或路由；下一步仅检查 `irq_spec_with` 的支持范围及错误分支。

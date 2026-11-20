@@ -1,0 +1,78 @@
+[
+  {
+    "id": "debug-compile",
+    "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-ownership-upstream-tests-01",
+    "argv": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "60s",
+      "rustc",
+      "+1.95.0",
+      "--edition=2024",
+      "--test",
+      "upstream_tests.rs",
+      "-C",
+      "panic=unwind",
+      "-C",
+      "opt-level=0",
+      "-C",
+      "debug-assertions=yes",
+      "-C",
+      "overflow-checks=yes",
+      "-o",
+      "debug-tests"
+    ]
+  },
+  {
+    "id": "debug-run",
+    "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-ownership-upstream-tests-01",
+    "argv": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "30s",
+      "./debug-tests",
+      "--test-threads=1"
+    ],
+    "condition": "only if corresponding compile succeeds"
+  },
+  {
+    "id": "release-compile",
+    "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-ownership-upstream-tests-01",
+    "argv": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "60s",
+      "rustc",
+      "+1.95.0",
+      "--edition=2024",
+      "--test",
+      "upstream_tests.rs",
+      "-C",
+      "panic=unwind",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-C",
+      "overflow-checks=no",
+      "-o",
+      "release-tests"
+    ]
+  },
+  {
+    "id": "release-run",
+    "cwd": "/root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-ownership-upstream-tests-01",
+    "argv": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=5s",
+      "30s",
+      "./release-tests",
+      "--test-threads=1"
+    ],
+    "condition": "only if corresponding compile succeeds"
+  }
+]

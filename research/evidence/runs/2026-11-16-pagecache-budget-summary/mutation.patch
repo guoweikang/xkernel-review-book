@@ -1,0 +1,15 @@
+--- original-old/implementation.rs
++++ accepted-old/implementation.rs
+@@ -401,8 +401,10 @@
+             pages_skipped,
+             max_bytes,
+             &mut |batch, budget| {
+-                *budget -= batch.completion.folios.len();
+-                submit(batch)
++                let submitted_folios = batch.completion.folios.len();
++                submit(batch)?;
++                *budget -= submitted_folios;
++                Ok(())
+             },
+         )
+     }

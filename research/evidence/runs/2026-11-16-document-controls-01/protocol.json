@@ -1,0 +1,18 @@
+{
+  "schema": "document-discovery-controls/1",
+  "split": "researcher-authored-development",
+  "question": "Does compliant documentation change top3 discovery of equal finite-domain behavior compared with code tokens?",
+  "domain": "All integer inputs 0..255, scalar u16 output; no effects, no performance equivalence",
+  "fields": ["purpose", "input", "output", "effects"],
+  "arms": ["complete", "no_docs", "without_output", "wrong_output"],
+  "methods": ["code", "doc", "mean_fusion"],
+  "budget": 3,
+  "repeats": 2,
+  "representation": "Lowercased Unicode word tokens of length >=2; raw count times smoothed IDF; L2 norm; cosine. Code uses body only. Doc uses field values only.",
+  "fit": "Code fit on all eight bodies; docs fit on all eight complete documents. Same vocabulary and IDF retained for every intervention.",
+  "fusion": "0.5*code_cosine + 0.5*doc_cosine; untuned diagnostic reference, not a calibrated new method",
+  "ranking": "Positive scores rounded to 12 decimals descending, sorted ID pair ascending for ties; unordered unique pairs",
+  "truth": "Equality of complete 256-value output vectors after each implementation passes its formula oracle. Labels never used by ranker. Not refactoring desirability.",
+  "stop": "Rust runs twice identically, all formula checks pass, all 24 condition-repeat outputs archived, input hashes verified; retain negative results without tuning",
+  "limits": "Synthetic small development corpus designed by same researcher; code/doc formulations can bias retrieval; not independent holdout, whole-repo accuracy, architecture or optimization evidence"
+}

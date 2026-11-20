@@ -1,0 +1,38 @@
+固件职责输入审计 — 2026-11-18
+
+定位
+本批回答“行为/结构体放在哪个type、module、crate；职责是否外散；解释、适配、策略与资源获取的抽象层次”，不要求两段代码相似。旧discovery-resumption-01及其12对成果保留，本批未继续任何一对的后续。
+只做输入审计：6张卡，分类器0、模型问答0、测试/内核运行0、网络0。不是规范判定实验、真实违规发现或设计优劣评价。
+
+输入身份与历史
+实现事实全部锁定 cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247（旧firmware-boundary-01的before）。8份全文原件通过apply_patch归档到originals/，均逐字节对上本地固定Git对象；4份另与旧before摘要一致。全文hash、原路径、阅读范围在sources.json。全文归档不等于逐行完整审计。
+history/history-report.json保留旧before/after/current标签；after 20c6ead060376cf628b9ba3fcbb60fd8ad64e44a只作CPU历史引用，不混入本批行为事实。旧报告中current是当时归档标签，不是2026-11-18的HEAD。没有用更新实现修补旧快照。
+history/authority-audit.json保留既有授权核查边界：Git作者、Agreed ownership标题都不是提供者专门确认，未取得PR评审裁定。历史CPU is_enabled_cpu_node单点只引用2026-11-16-conditional-location-01/audit.json及其hash，不复跑、不再作为新卡或违规标签。
+
+六条真实职责单元
+细字段和精确行号见cards.json，各卡明确分开implementation_evidence与norm_evidence；true_violation全部null。
+R01 FdtNode::is_available（rs_fdtree::property）：本节点status解码在DT库；不等同祖先/设备枚举策略或driver就绪。限定源码与历史职责陈述相容，不认证最优放置。
+R02 DtBackend::mmio_resource（rs_fdtree::fwnode_backend::dtb）：调用DT核心资源解释后装配中立资源事实，属于适配单元；不是MMIO映射/分配，也不是第二套解析器。feature带alloc，不能把early-boot构造说明泛化成全部查询零分配。
+R03 FwNode/FwNodeOps/FwNodeId（fwnode）：句柄身份、provider借用与访问委托是中立契约；类型表示和委托可见。物理crate放置依据仍unknown：同版design.md:12写lives under util，而实际路径及其自身Scope树均为drivers/firmware/fwnode。保留原文差异，不推导必须搬到util或现在架构违规。
+R04 OF::init_device_tree_ptr/FDT：验证后登记全局DTB视图，合理留在上层host integration的明确过渡例外。代码只保有句柄；终身可读内存由调用方保证，不能偷换成该函数拥有或分配DTB字节。
+R05 GicConfig/GicSelection及gicv2_config/gicv3_config（Rust crate irq_driver，package irq-driver，gic::firmware）：资源槽的GICD/GICC/GICR角色、redistributor属性解释与选择输出留在driver，属于合理上层binding职责。不因它读取属性就全部下沉DT库。实际保留controller句柄，不将早期“只输出配置”措辞硬套到当前结构；最终gic::init及硬件支持未核验。
+R06 DtBackend::irq_spec：源码有查询并返回controller+params的路径；同版方向文档仍称Unsupported，并保留OF interrupt helper。迁移状态、例外适用性及运行完整性unknown；只能记能力状态陈述与实现路径不一致，不称真实职责违规。
+因此“至少一个合理上层行为”和“至少一个unknown”均有实际材料，未制造对照。六卡不是六个独立样本或六项已确认标签。
+
+完整保留的迁移限定
+所有卡必须连同完整 originals/drivers/firmware/of/docs/firmware-node-direction.md 阅读，不能只取5-9行owner句：
+- 11-16：中立接口隐藏DT布局；资源解释与获取分开；首个消费者可仅DT，不为接口发明ACPI/动态registry。
+- 18-22：OF是过渡集成；boot DTB ownership/初始化在迁移前保留host；按caller逐步替换，不靠改名完成抽象。
+- 26-38：alloc分界、早期GIC私有适配器、IRQ/PCI/boot helper留作单独债务；PR #1291仅限定能力迁移，不是全框架。
+- 40-43：分支验证/抽取顺序及保留无关能力，不授权整目录覆盖。
+- 65-94：后续中立contract首slice、可选fwnode feature、OF IRQ保留、khal发布关系、driver输出、ACPI/static计划与多region/stride限制。早期状态段与后续段不可折叠成同一时点的所有事实。
+方向文档47-59记载的测试/验证数字仅是历史原文，本批未重新核验，也不移作本批通过数量。对R06及fwnode物理目录的不一致不静默修文档，不借后续版本替它圆场。
+
+证据可用性与下一步边界
+本批能提供实体级行为、真实文件/type/method归属、项目原文职责/非职责及例外定位；可供主线程随后决定如何研究职责映射。不能提供独立架构真值、自动语义归类准确率、全面调用图、cfg实际运行状态、所有上层外散实例或维护收益。
+没有补写规范文档；researcher_normative_supplement全部null。卡中的“合理”“相容”“unknown”是本次研究者对选定历史规范的输入审计判断，不是提供者确认。以后若补规范必须单列researcher hypothetical，不混进原文，也不把owner声明符合性冒充owner预测或最优设计。
+最小待核事项不是恢复相似检索：先确认有效职责规范版本/迁移例外适用范围，尤其IRQ状态和fwnode物理层次；已有代码即可承载类型级职责单元，不必先找到相似pair。是否进入任何后续模型/分类研究由主线程另行审议，本run停止于输入准备。
+
+交付
+manifest.json（先冻结）、cards.json（6卡）、sources.json（原路径/版本/全文hash/阅读范围）、retrieval.json（lookup实测摘要）、source-inspection.log（原件查看记录）、originals/（8份完整固定原件）、history/（2份旧记录）、validation.txt、checksums.sha256及本report.txt。
+research_lookup实际命中8、返回6、省略2；仅字面导航，不称全量召回。查阅慢时等待到完成，没有网络获取失败、猜版本或换快照。独立run以外没有写入；未改共享文档/进度/生产，未commit/push。

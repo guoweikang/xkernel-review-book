@@ -1,0 +1,91 @@
+PATH entries
+JAVA_HOME=
+M2_HOME=
+absent /usr/lib/jvm
+absent /opt/java
+absent /opt/jdk
+absent /root/.m2/repository
+-----------
+
+PAM uses a probabilistic model to determine which API patterns are the most interesting in a given dataset.  
+
+#### Mining API Patterns 
+
+Main class *apimining.pam.main.PAM* mines API patterns from a specified API call sequence file. It has the following command line options:
+
+* **-f**  &nbsp;  API call sequence file to mine (in [ARFF](https://weka.wikispaces.com/ARFF+%28stable+version%29) format, see below)
+* **-o**  &nbsp;  output file
+* **-i**  &nbsp;  max. no. iterations
+* **-s**  &nbsp;  max. no. structure steps
+* **-r**  &nbsp;  max. runtime (min)
+* **-l**  &nbsp;  log level (INFO/FINE/FINER/FINEST)
+* **-v**  &nbsp;  log to console instead of log file   
+
+See the individual file javadocs in *apimining.pam.main.PAM* for information on the Java interface.
+In Eclipse you can set command line arguments for the PAM interface using the *Run Configurations...* menu option. 
+
+#### Example Usage
+
+A complete example using the command line interface on a runnable jar. We can mine the provided dataset ```netty.arff``` as follows: 
+
+  ```sh 
+  $ java -jar api-mining/target/api-mining-1.0.jar -i 1000 -f datasets/calls/all/netty.arff -o patterns.txt -v 
+  ```
+
+which will write the mined API patterns to ```patterns.txt```. Omitting the ```-v``` flag will redirect logging to a log file in ```/tmp/```. 
+
+Input/Output Formats
+--------------------
+
+#### Input Format
+
+PAM takes as input a list of API call sequences in [ARFF](https://weka.wikispaces.com/ARFF+%28stable+version%29) file format
+The ARFF format is very simple and best illustrated by example. The first few lines from ```netty.arff``` are:
+
+```text
+@relation netty
+
+@attribute fqCaller string
+@attribute fqCalls string
+
+@data
+'com.torrent4j.net.peerwire.AbstractPeerWireMessage.write','io.netty.buffer.ChannelBuffer.writeByte'
+'com.torrent4j.net.peerwire.messages.BitFieldMessage.writeImpl','io.netty.buffer.ChannelBuffer.writeByte'
+'com.torrent4j.net.peerwire.messages.BitFieldMessage.readImpl','io.netty.buffer.ChannelBuffer.readable io.netty.buffer.ChannelBuffer.readByte'
+'com.torrent4j.net.peerwire.messages.BlockMessage.writeImpl','io.netty.buffer.ChannelBuffer.writeInt io.netty.buffer.ChannelBuffer.writeInt io.netty.buffer.ChannelBuffer.writeBytes'
+'com.torrent4j.net.peerwire.messages.BlockMessage.readImpl','io.netty.buffer.ChannelBuffer.readInt io.netty.buffer.ChannelBuffer.readInt io.netty.buffer.ChannelBuffer.readableBytes io.netty.buffer.ChannelBuffer.readBytes'
+```
+
+The ```@relation``` declaration names the dataset and the following two ```@attribute``` statements declare that the dataset consists of two comma separated attributes:   
+* ```fqCaller``` &nbsp; the fully-qualified name of the client method, enclosed in single quotes  
+* ```fqCalls``` &nbsp; a space-separated list of fully-qualified names of API method calls, enclosed in single quotes.
+
+The dataset is listed after the ```@data``` relation: each line contains a specific method (```fqCaller```) and its API call 
+sequence (```fqCalls```). Note that the ```fqCaller``` attribute can be empty for PAM and UPMiner, it is only required for MAPO (see below).
+
+Note that while this example uses Java, PAM is language agnostic and can use API call sequences from *any* language.
+
+#### Output Format
+
+PAM outputs a list of the most interesting API call patterns (i.e. subsequences of the original API call sequences) ordered by their probability under the model. 
+For example, the first few lines in the output file ```patterns.txt``` for the usage example above are:
+
+```text
+prob: 0.04878
+[io.netty.channel.Channel.write]
+
+prob: 0.04065
+[io.netty.channel.ExceptionEvent.getCause, io.netty.channel.ExceptionEvent.getChannel]
+
+prob: 0.04065
+[io.netty.channel.ChannelHandlerContext.getChannel]
+
+prob: 0.03252
+[io.netty.channel.Channel.close]
+```
+
+See the accompanying [paper](http://arxiv.org/abs/1512.05558) for details.
+
+
+Java API Call Extractor
+-----------------------

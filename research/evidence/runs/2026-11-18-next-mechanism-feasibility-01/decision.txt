@@ -1,0 +1,59 @@
+2026-11-18 NEXT MECHANISM FEASIBILITY — bounded contingency, not execution
+结论
+条件性选择 Aroma 的“局部变量使用上下文 + 树剪枝/局部共同片段”原机制回放入口；不选择新的调用拼写调参。主线程指出既有.build/doc-retrieval-env后，已实际确认其依赖导入成功，未改Aroma脚本--help成功。因此Python入口可运行，不能再称其被系统Python缺依赖阻断；官方JSON fixture尚未归档、实际机制回放未执行。Java全前端及Rust适配仍未就绪。429子集结果尚未用于本判断，不改其排序、阈值或预算；是否转向由主线程决定。
+
+仅用已有三篇/工件：Aroma e8d8beeb99255d8929874c156fd65aac74d21508；PAM f8829c3b699356bfdfc3648e11ffecadd3300ca6；MAPO ECOOP2009论文。固定原件相对路径、完整SHA256及Aroma函数行范围在 evidence-refs.json。旧源码归档全部通过校验；旧checksum中唯一失败项是归档目录外共享笔记，不修它，也不以它为原论文依据。主线程已说明原因：把未发布run资产的开头链接改为inline code；这是提供者说明，原失配记录仍保留，未重写旧manifest/checksum。
+
+1. 首选：Aroma reference pipeline，而非仅用其名字的词袋
+原实现证据：
+- aroma-similar.py.txt:253–344 collect_features_aux：叶token、最多3层parent、前一sibling、最多2个同名局部变量的既往使用上下文（Config:80–107）。被标var且首字母非大写时规范成#VAR；var_siblings仍用原token拼写作键，并非编译器绑定ID。
+- get_var_context:246–250还特判Java成员访问标签#.#。因此“替换parser即可保留一切语义”的说法不成立。Java converter:42–44用语法上下文列举localVarContexts；232–284构造var/leaf和token，不做Rust名称解析。同名shadowing、别名、receiver及宏都是实际边界。
+- counter_vectorize:351–358是二值CountVectorizer；find_indices_similar_to_features:769–782用内积并对query自身分数阈值过滤，局部变量名cosine_similarities不等于实际做了标准cosine。
+- find_similar:846–872先检索，再prune_second_jd/prune_last_jd重排。后者791–827贪心选叶子提高特征Jaccard，prune_ast:480–503把其余叶替为省略。get_completions3:689–748约束扩簇并求交，限制top_n；重复元组抑制不是语义family去重。
+- 这给出可以检查的“哪些局部节点及变量使用关系共同出现”的证据，超过同API集合。但它不追踪callee实现，不判定已有委托，不生成可编译提取函数、不计算类型化替换。未在这三份工件里发现可直接调用的Rust anti-unification入口；Aroma交集不能改称least-general-generalization。
+
+输入/输出真实合同：
+ConvertJava.dumpMethodAst（185–205）逐行输出JSON对象：path,class,method,beginline,endline,ast。ast是以结构标签开头的嵌套数组与叶字典；叶含token/leading/trailing/line及可选leaf,var。不是通用Rust AST JSON。
+similar.py -c CORPUS.jsonl -d WORK：建立vocab.pkl/features.json/tfidf.pkl；-f QUERY.json -d WORK：读首行query AST，stdout打印相似体及共同片段。setup会mkdir并写缓存，所以不是读源码即可零写运行；反序列化pickle应只用此次自产缓存，不用不可信下载缓存。
+Config当前NUM_SIMILARS=100、MIN_SIMILARITY_SCORE=.4、MIN_PRUNED_SCORE=.65、THRESHOLD1=.9、THRESHOLD2=1.5、TOP_N=5。不将其调成能命中已有答案。get_record_part内的tests路径过滤只作用于抽样query，不能当作全语料非测试过滤。论文抽样5行与本参考代码SAMPLE_METHOD_MAX_LINES=7也不应混为逐项相同配置。
+
+最小诚实原工具复现（只提出，未执行）：
+A. 最小Python原机制回放先取得同commit官方reference/data/example_query.json与example_features.txt（README已定位，当前尚未归档）。已有.build/doc-retrieval-env满足已测导入；不必先取得Java闭包。完整前端烟测另需example_query.java、Java/Maven/ANTLR grammar和pom。缺官方fixture时停止，不用手工造AST冒充官方fixture。
+B. 未改similar.py --help已在既有环境成功（20s外层timeout，exit0）；没有创建WORK或执行特征函数。下一批若授权，可直接用未改CLI以官方JSON为小语料和query，在临时WORK执行-c与-f，检查成功解析、特征/跨度可回溯、输出及配置归档。即使只有一个官方例子、没有多成员簇，空cluster也必须保留；此步叫原机制回放/序列化检索烟测，self-match不是发现性能，example_features的词汇ID也不能脱离相同词表直接逐字比较。优先未改CLI，避免为单独import函数改掉文件底部执行入口。
+C. Java入口依照原test.sh，以ConvertJava compilationUnit OUT.json INPUT.java处理同一个官方Java例子，对照官方JSON的结构/元数据（路径字段环境差异单列）。依赖获取/构建并未获本批授权。最小烟测不要求克隆5339仓库，也不宣称论文评测复现。
+D. 要测“共同局部实现”必须另冻结多个独立原方法及独立query，保留其完整必要上下文，才有cluster/intersection可审。无相应官方小语料时停止烟测，不把挑选的自制positive当原基准。此阶段也尚无授权。
+
+Rust适配是独立准入，不是原工具复现：
+保留Python后端原样，需Rust前端输出上述标签/叶/行号合同；声明是未展开还是展开的宏/cfg、处理哪些语法、如何对scope/shadowing作映射。若用binding ID替换原同名键，这是算法/表示变化，另记差异，不伪称忠实原算法。先做源码到叶到输出跨度核查；拒绝或单列无法解析/映射的单位，不以空树混入。
+就当前固定内核子集而言，推荐未来仅问：共同片段是否含双方自己实现的状态变换/分支/局部值计算，还是仅双方调用同一个现成机制？结构节点能定位这个问题，不能独自回答。
+
+鉴别测量（拟议，不是新增检测器或已冻结新实验）：
+在主线程另定的等预算候选上，固定候选次序并隐藏方法来源，记录可回溯共同局部跨度、局部变量使用对应证据、两端相关callee/owner的已有实现位置；分开“两个本地实现”“已委托同一实现”“只同API”“证据不足”，允许重叠/未知而不把审核词条变真值。
+主要计数是能形成具体、可证伪抽取义务的非测试独立候选数/已审候选数及审读成本；辅计ties、自匹配、原样复制和family重复占位；不把文档/测试路径筛选包装成算法改善。
+抽取义务至少要指到：共同计算及输入输出差异、状态/错误/清理/锁语义是否可参数化、既有callee是否已承担该机制、剩余不同职责在哪。后续真实改动和行为/成本验证才可能支持收益。
+失败：只返回薄包装/通用循环，宏与绑定无法对齐，跨API结构丢失，片段省略了关键drop/授权/锁；或只有高相似自匹配、没有新增独立义务。失败即不继续微调成第四种词袋。
+
+2. 备选：PAM概率子序列模式（有官方算法，但对本任务次于Aroma）
+证据：pam-README.txt 的Input/Output Formats、Java API Call Extractor、Datasets；pam-extractor.java.txt；pam-paper.txt §3–5。
+输入是ARFF fqCaller/fqCalls字符串；输出概率排序API子序列，无局部变量绑定、树片段或代码抽取替换。README的输出例子包含singleton，而论文算法§4.6称移除singleton：本批未归档PAM主实现，无法核定此差异，不能凭README断言实际过滤行为。
+官方Java/Maven工程具有-i迭代、-s结构步数、-r分钟预算入口。最小原工具烟测应是完整同commit构建/现成可信JAR配官方小ARFF，而非先开发Rust extractor；未来用独立外层timeout并保留完整结果，程序自身时间参数不当作硬截止。
+元数据核验train/netty.arff是12618字节；原文件未下载，本批也无JAR、PAM main源码闭包或Java。不能把README五行示例视为完整官方评测fixture。数据tar和测试树存在仅是元数据可达证据，未跑。
+Java提取器含硬编码历史目录；论文明确AST深度优先序列把条件两支连写，且省略部分super/cast。Rust按真实binding抽取序列是新适配；不应将词法顺序包装成执行路径。
+可判别：按模式子序列在独立文件上的precision/recall与较大模式包含较小模式的冗余，另审模式对应本地实现还是已有委托。但这个模式没有保留局部实现结构，所以对“同API巧合”改善有限，容易学出正常调用协议而不是可共享实现。概率有趣≠抽取有益；文件随机切分不是held-out family。
+失败/成本：模式爆炸或迭代成本、短序列/普遍协议占榜、误绑定、分支扁平化、只发现正确使用同一库。故不优先。
+
+3. 不选：原MAPO / PAM内MAPO重实现
+原MAPO论文§4.1–4.3是JDT路径序列选择+调用者方法名/类名/API集合相似度+Matlab层次聚类+簇内SPAM。可减少多分支方法的路径权重偏置，模式索引支持第一和第二匹配，不是提取共同实现。
+原作者ECOOP2009可运行闭包/固定fixture未核验；不能提出本机立即可跑“原MAPO”。
+唯一已读代码pam-mapo-clusterer.java.txt属于PAM作者重实现：Weka HierarchicalClusterer、NewickTreeParser、MAPOSimilarity；README明确from scratch且警告慢/模式爆炸。换为它只能叫作者基线重实现烟测，不能叫原MAPO复现。它仍需Java/Maven，未就绪。
+鉴别量是模式浏览首/次匹配成本、模式数量及路径偏置；方法/类名相似仍可能重新引入拼写偏好，不能提供局部变量与计算证据。为本问题迁移复杂度高而增量机制弱，淘汰。
+
+依赖/运行/数据 readiness 总表
+Aroma：官方Python/Java核心可检查；本地仅归档核心文件；官方JSON/grammar/pom缺。系统Python无scipy/sklearn，但既有.build/doc-retrieval-env的Python3.13.5实际导入sklearn1.7.2/scipy1.18.1/numpy2.5.4成功，上游--help成功。Java/Maven不在PATH。状态=Python依赖/CLI准入通过，官方fixture及机制回放待做，Java端不ready；小语料运行复杂度仍须实测，不能由--help推断算法兼容性或论文效果。
+PAM：官方README+提取器+数据元数据；完整算法/JAR和ARFF未归档；无Java/Maven；统计迭代有成本，现有分钟选项可用于未来界定。状态=可追溯工件，不ready，目标较弱。
+MAPO：原实现未知；可追溯的后续重实现并非原版、也缺运行闭包；Weka成本和pattern explosion已被作者警告。状态=不选，不以重实现混身份。
+
+执行记录与停止
+实际执行本地lookup、原文/源码只读审计、环境路径/module-spec探测、显式既有环境三库导入、静态AST函数定位、hash校验；上游--help=1且通过，fixture=0，模型=0，安装/网络=0，生产修改=0。--help带-B和PYTHONDONTWRITEBYTECODE=1，未执行setup。没有模拟sklearn或新写parser/helper。
+evidence-refs.json按原件SHA256定位；runtime-inspection.txt保留探测及旧共享笔记checksum失败。AST定位首次Python3.13输出invalid escape SyntaxWarning，造成临时JSON前缀不合法，已仅在本run删除该warning并重新验证；不是执行上游Python。
+最小建议：若429批仍无内核收益，主线程先决定是否获取Aroma同commit官方JSON/feature fixture，直接复用现有Python环境做原机制回放，不先补Java闭包。其后才独立决定Java前端复现或Rust结构前端准入，不能将Python成功提升成Rust适用。不要现在搭新框架，也不要因“算法语言无关”直接跑Rust全库。若不愿承担Rust结构映射成本，本批没有可立即替代拼写路线的成熟Rust工件可推荐。到此停止，等待主线程选择。

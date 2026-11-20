@@ -1,0 +1,27 @@
+impl<T: fmt::Debug, F> fmt::Debug for Lazy<T, F> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Build debug representation as tuple structure
+        let mut debug_builder = f.debug_tuple("LazyValue");
+
+        // Display content based on initialization state
+        let debug_builder = match self.value_storage.get() {
+            Some(content) => debug_builder.field(&content),
+            None => debug_builder.field(&format_args!("<uninit>")),
+        };
+
+        debug_builder.finish()
+    }
+}
+
+impl<T: fmt::Debug> fmt::Debug for Once<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // Build debug representation based on current state
+        let mut formatter = f.debug_tuple("OnceCell");
+
+        let formatter = match self.get() {
+            Some(value) => formatter.field(&value),
+            None => formatter.field(&format_args!("<not-ready>")),
+        };
+        formatter.finish()
+    }
+}

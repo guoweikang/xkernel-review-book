@@ -1,0 +1,15 @@
+{
+  "schema": "confirmation-tool-recovery/1",
+  "version": "0.68.0",
+  "parent_run": "2026-11-17-kani-preflight-01",
+  "question": "Can the fixed verifier finish setup using the already downloaded bundle and execute the unchanged official controls?",
+  "budget": {"setup_seconds": 600, "each_control_seconds": 120},
+  "cache_policy": "Repack previously extracted release files as a local installation bundle; record this as local repack, not original release archive. Continue cached fixed nightly download, never switch versions.",
+  "toolchain": "nightly-2026-08-21-x86_64-unknown-linux-gnu",
+  "scope": "Environment recovery and two official assertion controls; no equivalence or document-effect result",
+  "controls": [
+    {"id": "false", "assertion": "1 == 2", "expected": "VERIFICATION:- FAILED"},
+    {"id": "true", "assertion": "1 == 1", "expected": "VERIFICATION:- SUCCESSFUL"}
+  ],
+  "completion": "Setup success then both controls, or preserved environment blocker. No third installation attempt within this batch. On success inspect existing path candidate without extending example repertoire."
+}

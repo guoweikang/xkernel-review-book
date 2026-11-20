@@ -1,0 +1,6400 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " This uses the name `AsciiChar`, even though it's not exposed that way right now,",
+      "path": "doc",
+      "range": [
+        0,
+        84
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " because it avoids a whole bunch of \"are you sure you didn't mean `char`?\"",
+      "path": "doc",
+      "range": [
+        85,
+        162
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " suggestions from rustc if you get anything slightly wrong in here, and overall",
+      "path": "doc",
+      "range": [
+        163,
+        245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " helps with clarity as we're also referring to `char` intentionally in here.",
+      "path": "doc",
+      "range": [
+        246,
+        325
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " One of the 128 Unicode characters from U+0000 through U+007F,",
+          "path": "doc",
+          "range": [
+            401,
+            466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " often known as the [ASCII] subset.",
+          "path": "doc",
+          "range": [
+            467,
+            505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            506,
+            509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Officially, this is the first [block] in Unicode, _Basic Latin_.",
+          "path": "doc",
+          "range": [
+            510,
+            578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For details, see the [*C0 Controls and Basic Latin*][chart] code chart.",
+          "path": "doc",
+          "range": [
+            579,
+            654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            655,
+            658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This block was based on older 7-bit character code standards such as",
+          "path": "doc",
+          "range": [
+            659,
+            731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ANSI X3.4-1977, ISO 646-1973, and [NIST FIPS 1-2].",
+          "path": "doc",
+          "range": [
+            732,
+            786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            787,
+            790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # When to use this",
+          "path": "doc",
+          "range": [
+            791,
+            813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            814,
+            817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The main advantage of this subset is that it's always valid UTF-8.  As such,",
+          "path": "doc",
+          "range": [
+            818,
+            898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the `&[ascii::Char]` -> `&str` conversion function (as well as other related",
+          "path": "doc",
+          "range": [
+            899,
+            979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ones) are O(1): *no* runtime checks are needed.",
+          "path": "doc",
+          "range": [
+            980,
+            1031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1032,
+            1035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you're consuming strings, you should usually handle Unicode and thus",
+          "path": "doc",
+          "range": [
+            1036,
+            1111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accept `str`s, not limit yourself to `ascii::Char`s.",
+          "path": "doc",
+          "range": [
+            1112,
+            1168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1169,
+            1172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However, certain formats are intentionally designed to produce ASCII-only",
+          "path": "doc",
+          "range": [
+            1173,
+            1250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " output in order to be 8-bit-clean.  In those cases, it can be simpler and",
+          "path": "doc",
+          "range": [
+            1251,
+            1328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " faster to generate `ascii::Char`s instead of dealing with the variable width",
+          "path": "doc",
+          "range": [
+            1329,
+            1409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " properties of general UTF-8 encoded strings, while still allowing the result",
+          "path": "doc",
+          "range": [
+            1410,
+            1490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to be used freely with other Rust things that deal in general `str`s.",
+          "path": "doc",
+          "range": [
+            1491,
+            1564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1565,
+            1568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, a UUID library might offer a way to produce the string",
+          "path": "doc",
+          "range": [
+            1569,
+            1640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " representation of a UUID as an `[ascii::Char; 36]` to avoid memory",
+          "path": "doc",
+          "range": [
+            1641,
+            1711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocation yet still allow it to be used as UTF-8 via `as_str` without",
+          "path": "doc",
+          "range": [
+            1712,
+            1786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " paying for validation (or needing `unsafe` code) the way it would if it",
+          "path": "doc",
+          "range": [
+            1787,
+            1862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " were provided as a `[u8; 36]`.",
+          "path": "doc",
+          "range": [
+            1863,
+            1897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1898,
+            1901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Layout",
+          "path": "doc",
+          "range": [
+            1902,
+            1914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1915,
+            1918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type is guaranteed to have a size and alignment of 1 byte.",
+          "path": "doc",
+          "range": [
+            1919,
+            1986
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1987,
+            1990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Names",
+          "path": "doc",
+          "range": [
+            1991,
+            2002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2003,
+            2006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The variants on this type are [Unicode names][NamesList] of the characters",
+          "path": "doc",
+          "range": [
+            2007,
+            2085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in upper camel case, with a few tweaks:",
+          "path": "doc",
+          "range": [
+            2086,
+            2129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - For `<control>` characters, the primary alias name is used.",
+          "path": "doc",
+          "range": [
+            2130,
+            2195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `LATIN` is dropped, as this block has no non-latin letters.",
+          "path": "doc",
+          "range": [
+            2196,
+            2261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `LETTER` is dropped, as `CAPITAL`/`SMALL` suffices in this block.",
+          "path": "doc",
+          "range": [
+            2262,
+            2333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `DIGIT`s use a single digit rather than writing out `ZERO`, `ONE`, etc.",
+          "path": "doc",
+          "range": [
+            2334,
+            2411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2412,
+            2415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [ASCII]: https://www.unicode.org/glossary/index.html#ASCII",
+          "path": "doc",
+          "range": [
+            2416,
+            2478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [block]: https://www.unicode.org/glossary/index.html#block",
+          "path": "doc",
+          "range": [
+            2479,
+            2541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [chart]: https://www.unicode.org/charts/PDF/U0000.pdf",
+          "path": "doc",
+          "range": [
+            2542,
+            2599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [NIST FIPS 1-2]: https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub1-2-1977.pdf",
+          "path": "doc",
+          "range": [
+            2600,
+            2686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [NamesList]: https://www.unicode.org/Public/15.0.0/ucd/NamesList.txt",
+          "path": "doc",
+          "range": [
+            2687,
+            2759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2760,
+            2781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive_const",
+          "range": [
+            2782,
+            2836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2837,
+            2890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            2891,
+            2902
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "AsciiChar",
+      "range": [
+        401,
+        16097
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16099,
+        39732
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an ASCII character from the byte `b`,",
+          "path": "doc",
+          "range": [
+            16417,
+            16466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or returns `None` if it's too large.",
+          "path": "doc",
+          "range": [
+            16471,
+            16511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16516,
+            16569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16574,
+            16583
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16632,
+        16818
+      ],
+      "kind": "impl_fn",
+      "name": "from_u8",
+      "range": [
+        16417,
+        16818
+      ],
+      "signature_range": [
+        16592,
+        16631
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an ASCII character from the byte `b`,",
+          "path": "doc",
+          "range": [
+            16824,
+            16873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without checking whether it's valid.",
+          "path": "doc",
+          "range": [
+            16878,
+            16918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16923,
+            16926
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            16931,
+            16943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16948,
+            16951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `b` must be in `0..=127`, or else this is UB.",
+          "path": "doc",
+          "range": [
+            16956,
+            17005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17010,
+            17063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17068,
+            17077
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17135,
+        17242
+      ],
+      "kind": "impl_fn",
+      "name": "from_u8_unchecked",
+      "range": [
+        16824,
+        17242
+      ],
+      "signature_range": [
+        17086,
+        17134
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " When passed the *number* `0`, `1`, …, `9`, returns the *character*",
+          "path": "doc",
+          "range": [
+            17248,
+            17320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `'0'`, `'1'`, …, `'9'` respectively.",
+          "path": "doc",
+          "range": [
+            17325,
+            17367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17372,
+            17375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `d >= 10`, returns `None`.",
+          "path": "doc",
+          "range": [
+            17380,
+            17413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17418,
+            17471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17476,
+            17485
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17532,
+        17708
+      ],
+      "kind": "impl_fn",
+      "name": "digit",
+      "range": [
+        17248,
+        17708
+      ],
+      "signature_range": [
+        17494,
+        17531
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " When passed the *number* `0`, `1`, …, `9`, returns the *character*",
+          "path": "doc",
+          "range": [
+            17714,
+            17786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `'0'`, `'1'`, …, `'9'` respectively, without checking that it's in-range.",
+          "path": "doc",
+          "range": [
+            17791,
+            17870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17875,
+            17878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            17883,
+            17895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17900,
+            17903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is immediate UB if called with `d > 64`.",
+          "path": "doc",
+          "range": [
+            17908,
+            17957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17962,
+            17965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `d >= 10` and `d <= 64`, this is allowed to return any value or panic.",
+          "path": "doc",
+          "range": [
+            17970,
+            18047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Notably, it should not be expected to return hex digits, or any other",
+          "path": "doc",
+          "range": [
+            18052,
+            18125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reasonable extension of the decimal digits.",
+          "path": "doc",
+          "range": [
+            18130,
+            18177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18182,
+            18185
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (This loose safety condition is intended to simplify soundness proofs",
+          "path": "doc",
+          "range": [
+            18190,
+            18263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " when writing code using this method, since the implementation doesn't",
+          "path": "doc",
+          "range": [
+            18268,
+            18341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " need something really specific, not to make those other arguments do",
+          "path": "doc",
+          "range": [
+            18346,
+            18418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " something useful. It might be tightened before stabilization.)",
+          "path": "doc",
+          "range": [
+            18423,
+            18489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18494,
+            18547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18552,
+            18561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            18566,
+            18581
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18637,
+        19162
+      ],
+      "kind": "impl_fn",
+      "name": "digit_unchecked",
+      "range": [
+        17714,
+        19162
+      ],
+      "signature_range": [
+        18590,
+        18636
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        5
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        18647,
+        18818
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets this ASCII character as a byte.",
+          "path": "doc",
+          "range": [
+            19168,
+            19208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            19213,
+            19266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19271,
+            19280
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19316,
+        19342
+      ],
+      "kind": "impl_fn",
+      "name": "to_u8",
+      "range": [
+        19168,
+        19342
+      ],
+      "signature_range": [
+        19289,
+        19315
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets this ASCII character as a `char` Unicode Scalar Value.",
+          "path": "doc",
+          "range": [
+            19348,
+            19411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            19416,
+            19469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19474,
+            19483
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19523,
+        19557
+      ],
+      "kind": "impl_fn",
+      "name": "to_char",
+      "range": [
+        19348,
+        19557
+      ],
+      "signature_range": [
+        19492,
+        19522
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Views this ASCII character as a one-code-unit UTF-8 `str`.",
+          "path": "doc",
+          "range": [
+            19563,
+            19625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            19630,
+            19683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19688,
+            19697
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19737,
+        19790
+      ],
+      "kind": "impl_fn",
+      "name": "as_str",
+      "range": [
+        19563,
+        19790
+      ],
+      "signature_range": [
+        19706,
+        19736
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Makes a copy of the value in its upper case equivalent.",
+          "path": "doc",
+          "range": [
+            19796,
+            19855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19860,
+            19863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Letters 'a' to 'z' are mapped to 'A' to 'Z'.",
+          "path": "doc",
+          "range": [
+            19868,
+            19916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19921,
+            19924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To uppercase the value in-place, use [`make_uppercase`].",
+          "path": "doc",
+          "range": [
+            19929,
+            19989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19994,
+            19997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20002,
+            20016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20021,
+            20024
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20029,
+            20036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            20041,
+            20089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            20094,
+            20113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20118,
+            20121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lowercase_a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            20126,
+            20168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20173,
+            20176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            20181,
+            20196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ascii::Char::CapitalA,",
+          "path": "doc",
+          "range": [
+            20201,
+            20231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     lowercase_a.to_uppercase(),",
+          "path": "doc",
+          "range": [
+            20236,
+            20271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            20276,
+            20282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20287,
+            20294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20299,
+            20302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_uppercase`]: Self::make_uppercase",
+          "path": "doc",
+          "range": [
+            20307,
+            20351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            20356,
+            20427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            20432,
+            20485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            20490,
+            20499
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20544,
+        20748
+      ],
+      "kind": "impl_fn",
+      "name": "to_uppercase",
+      "range": [
+        19796,
+        20748
+      ],
+      "signature_range": [
+        20508,
+        20543
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Makes a copy of the value in its lower case equivalent.",
+          "path": "doc",
+          "range": [
+            20754,
+            20813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20818,
+            20821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Letters 'A' to 'Z' are mapped to 'a' to 'z'.",
+          "path": "doc",
+          "range": [
+            20826,
+            20874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20879,
+            20882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To lowercase the value in-place, use [`make_lowercase`].",
+          "path": "doc",
+          "range": [
+            20887,
+            20947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20952,
+            20955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20960,
+            20974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20979,
+            20982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20987,
+            20994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            20999,
+            21047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            21052,
+            21071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21076,
+            21079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            21084,
+            21128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21133,
+            21136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            21141,
+            21156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ascii::Char::SmallA,",
+          "path": "doc",
+          "range": [
+            21161,
+            21189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     uppercase_a.to_lowercase(),",
+          "path": "doc",
+          "range": [
+            21194,
+            21229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            21234,
+            21240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21245,
+            21252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21257,
+            21260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`make_lowercase`]: Self::make_lowercase",
+          "path": "doc",
+          "range": [
+            21265,
+            21309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            21314,
+            21385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            21390,
+            21443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21448,
+            21457
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21502,
+        21705
+      ],
+      "kind": "impl_fn",
+      "name": "to_lowercase",
+      "range": [
+        20754,
+        21705
+      ],
+      "signature_range": [
+        21466,
+        21501
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks that two values are a case-insensitive match.",
+          "path": "doc",
+          "range": [
+            21711,
+            21767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21772,
+            21775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is equivalent to `to_lowercase(a) == to_lowercase(b)`.",
+          "path": "doc",
+          "range": [
+            21780,
+            21843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21848,
+            21851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21856,
+            21870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21875,
+            21878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21883,
+            21890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            21895,
+            21943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            21948,
+            21967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21972,
+            21975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lowercase_a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            21980,
+            22022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            22027,
+            22071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22076,
+            22079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(lowercase_a.eq_ignore_case(uppercase_a));",
+          "path": "doc",
+          "range": [
+            22084,
+            22137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22142,
+            22149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            22154,
+            22207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22212,
+            22221
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22281,
+        22505
+      ],
+      "kind": "impl_fn",
+      "name": "eq_ignore_case",
+      "range": [
+        21711,
+        22505
+      ],
+      "signature_range": [
+        22230,
+        22280
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts this value to its upper case equivalent in-place.",
+          "path": "doc",
+          "range": [
+            22511,
+            22573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22578,
+            22581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Letters 'a' to 'z' are mapped to 'A' to 'Z'.",
+          "path": "doc",
+          "range": [
+            22586,
+            22634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22639,
+            22642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To return a new uppercased value without modifying the existing one, use",
+          "path": "doc",
+          "range": [
+            22647,
+            22723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`to_uppercase`].",
+          "path": "doc",
+          "range": [
+            22728,
+            22749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22754,
+            22757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            22762,
+            22776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22781,
+            22784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22789,
+            22796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            22801,
+            22849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            22854,
+            22873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22878,
+            22881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut letter_a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            22886,
+            22929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22934,
+            22937
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " letter_a.make_uppercase();",
+          "path": "doc",
+          "range": [
+            22942,
+            22972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22977,
+            22980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ascii::Char::CapitalA, letter_a);",
+          "path": "doc",
+          "range": [
+            22985,
+            23033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23038,
+            23045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23050,
+            23053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`to_uppercase`]: Self::to_uppercase",
+          "path": "doc",
+          "range": [
+            23058,
+            23098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            23103,
+            23156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23161,
+            23170
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23214,
+        23258
+      ],
+      "kind": "impl_fn",
+      "name": "make_uppercase",
+      "range": [
+        22511,
+        23258
+      ],
+      "signature_range": [
+        23179,
+        23213
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Converts this value to its lower case equivalent in-place.",
+          "path": "doc",
+          "range": [
+            23264,
+            23326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23331,
+            23334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Letters 'A' to 'Z' are mapped to 'a' to 'z'.",
+          "path": "doc",
+          "range": [
+            23339,
+            23387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23392,
+            23395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To return a new lowercased value without modifying the existing one, use",
+          "path": "doc",
+          "range": [
+            23400,
+            23476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`to_lowercase`].",
+          "path": "doc",
+          "range": [
+            23481,
+            23502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23507,
+            23510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            23515,
+            23529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23534,
+            23537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23542,
+            23549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            23554,
+            23602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            23607,
+            23626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23631,
+            23634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut letter_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            23639,
+            23684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23689,
+            23692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " letter_a.make_lowercase();",
+          "path": "doc",
+          "range": [
+            23697,
+            23727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23732,
+            23735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(ascii::Char::SmallA, letter_a);",
+          "path": "doc",
+          "range": [
+            23740,
+            23786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23791,
+            23798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23803,
+            23806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`to_lowercase`]: Self::to_lowercase",
+          "path": "doc",
+          "range": [
+            23811,
+            23851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            23856,
+            23909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23914,
+            23923
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23967,
+        24011
+      ],
+      "kind": "impl_fn",
+      "name": "make_lowercase",
+      "range": [
+        23264,
+        24011
+      ],
+      "signature_range": [
+        23932,
+        23966
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is an alphabetic character:",
+          "path": "doc",
+          "range": [
+            24017,
+            24068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24073,
+            24076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x41 'A' ..= 0x5A 'Z', or",
+          "path": "doc",
+          "range": [
+            24081,
+            24112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x61 'a' ..= 0x7A 'z'.",
+          "path": "doc",
+          "range": [
+            24117,
+            24145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24150,
+            24153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            24158,
+            24172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24177,
+            24180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            24185,
+            24192
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            24197,
+            24245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            24250,
+            24269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24274,
+            24277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            24282,
+            24326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            24331,
+            24375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            24380,
+            24412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            24417,
+            24449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            24454,
+            24489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            24494,
+            24537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            24542,
+            24577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            24582,
+            24617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            24622,
+            24656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24661,
+            24664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_a.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24669,
+            24710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_g.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24715,
+            24756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(a.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24761,
+            24792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(g.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24797,
+            24828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24833,
+            24868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24873,
+            24911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24916,
+            24952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24957,
+            24990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_alphabetic());",
+          "path": "doc",
+          "range": [
+            24995,
+            25029
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            25034,
+            25041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            25046,
+            25057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            25062,
+            25115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25120,
+            25129
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25175,
+        25225
+      ],
+      "kind": "impl_fn",
+      "name": "is_alphabetic",
+      "range": [
+        24017,
+        25225
+      ],
+      "signature_range": [
+        25138,
+        25174
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is an uppercase character:",
+          "path": "doc",
+          "range": [
+            25231,
+            25281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x41 'A' ..= 0x5A 'Z'.",
+          "path": "doc",
+          "range": [
+            25286,
+            25312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25317,
+            25320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            25325,
+            25339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25344,
+            25347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            25352,
+            25359
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            25364,
+            25412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            25417,
+            25436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25441,
+            25444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            25449,
+            25493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            25498,
+            25542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            25547,
+            25579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            25584,
+            25616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            25621,
+            25656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            25661,
+            25704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            25709,
+            25744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            25749,
+            25784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            25789,
+            25823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25828,
+            25831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_a.is_uppercase());",
+          "path": "doc",
+          "range": [
+            25836,
+            25876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_g.is_uppercase());",
+          "path": "doc",
+          "range": [
+            25881,
+            25921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_uppercase());",
+          "path": "doc",
+          "range": [
+            25926,
+            25957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_uppercase());",
+          "path": "doc",
+          "range": [
+            25962,
+            25993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_uppercase());",
+          "path": "doc",
+          "range": [
+            25998,
+            26032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_uppercase());",
+          "path": "doc",
+          "range": [
+            26037,
+            26074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_uppercase());",
+          "path": "doc",
+          "range": [
+            26079,
+            26114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_uppercase());",
+          "path": "doc",
+          "range": [
+            26119,
+            26151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_uppercase());",
+          "path": "doc",
+          "range": [
+            26156,
+            26189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26194,
+            26201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            26206,
+            26217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            26222,
+            26275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26280,
+            26289
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26334,
+        26383
+      ],
+      "kind": "impl_fn",
+      "name": "is_uppercase",
+      "range": [
+        25231,
+        26383
+      ],
+      "signature_range": [
+        26298,
+        26333
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a lowercase character:",
+          "path": "doc",
+          "range": [
+            26389,
+            26438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x61 'a' ..= 0x7A 'z'.",
+          "path": "doc",
+          "range": [
+            26443,
+            26469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26474,
+            26477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            26482,
+            26496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26501,
+            26504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26509,
+            26516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            26521,
+            26569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            26574,
+            26593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26598,
+            26601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            26606,
+            26650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            26655,
+            26699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            26704,
+            26736
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            26741,
+            26773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            26778,
+            26813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            26818,
+            26861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            26866,
+            26901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            26906,
+            26941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            26946,
+            26980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26985,
+            26988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_lowercase());",
+          "path": "doc",
+          "range": [
+            26993,
+            27034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27039,
+            27080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(a.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27085,
+            27115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(g.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27120,
+            27150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27155,
+            27189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27194,
+            27231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27236,
+            27271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27276,
+            27308
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_lowercase());",
+          "path": "doc",
+          "range": [
+            27313,
+            27346
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27351,
+            27358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            27363,
+            27374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            27379,
+            27432
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            27437,
+            27446
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27491,
+        27540
+      ],
+      "kind": "impl_fn",
+      "name": "is_lowercase",
+      "range": [
+        26389,
+        27540
+      ],
+      "signature_range": [
+        27455,
+        27490
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is an alphanumeric character:",
+          "path": "doc",
+          "range": [
+            27546,
+            27599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27604,
+            27607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x41 'A' ..= 0x5A 'Z', or",
+          "path": "doc",
+          "range": [
+            27612,
+            27643
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x61 'a' ..= 0x7A 'z', or",
+          "path": "doc",
+          "range": [
+            27648,
+            27679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x30 '0' ..= 0x39 '9'.",
+          "path": "doc",
+          "range": [
+            27684,
+            27712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27717,
+            27720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            27725,
+            27739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27744,
+            27747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27752,
+            27759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            27764,
+            27812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            27817,
+            27836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27841,
+            27844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            27849,
+            27893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            27898,
+            27942
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            27947,
+            27979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            27984,
+            28016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            28021,
+            28056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            28061,
+            28104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            28109,
+            28144
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            28149,
+            28184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            28189,
+            28223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28228,
+            28231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_a.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28236,
+            28279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_g.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28284,
+            28327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(a.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28332,
+            28365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(g.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28370,
+            28403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(zero.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28408,
+            28444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28449,
+            28489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28494,
+            28532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28537,
+            28572
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_alphanumeric());",
+          "path": "doc",
+          "range": [
+            28577,
+            28613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28618,
+            28625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            28630,
+            28641
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28646,
+            28699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            28704,
+            28713
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28761,
+        28813
+      ],
+      "kind": "impl_fn",
+      "name": "is_alphanumeric",
+      "range": [
+        27546,
+        28813
+      ],
+      "signature_range": [
+        28722,
+        28760
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a decimal digit:",
+          "path": "doc",
+          "range": [
+            28819,
+            28862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x30 '0' ..= 0x39 '9'.",
+          "path": "doc",
+          "range": [
+            28867,
+            28893
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28898,
+            28901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            28906,
+            28920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28925,
+            28928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28933,
+            28940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            28945,
+            28993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            28998,
+            29017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29022,
+            29025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            29030,
+            29074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            29079,
+            29123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            29128,
+            29160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            29165,
+            29197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            29202,
+            29237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            29242,
+            29285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            29290,
+            29325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            29330,
+            29365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            29370,
+            29404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29409,
+            29412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_digit());",
+          "path": "doc",
+          "range": [
+            29417,
+            29454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_digit());",
+          "path": "doc",
+          "range": [
+            29459,
+            29496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_digit());",
+          "path": "doc",
+          "range": [
+            29501,
+            29528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_digit());",
+          "path": "doc",
+          "range": [
+            29533,
+            29560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(zero.is_digit());",
+          "path": "doc",
+          "range": [
+            29565,
+            29594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_digit());",
+          "path": "doc",
+          "range": [
+            29599,
+            29632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_digit());",
+          "path": "doc",
+          "range": [
+            29637,
+            29668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_digit());",
+          "path": "doc",
+          "range": [
+            29673,
+            29701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_digit());",
+          "path": "doc",
+          "range": [
+            29706,
+            29735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            29740,
+            29747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            29752,
+            29763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            29768,
+            29821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29826,
+            29835
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29876,
+        29921
+      ],
+      "kind": "impl_fn",
+      "name": "is_digit",
+      "range": [
+        28819,
+        29921
+      ],
+      "signature_range": [
+        29844,
+        29875
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is an octal digit:",
+          "path": "doc",
+          "range": [
+            29927,
+            29969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x30 '0' ..= 0x37 '7'.",
+          "path": "doc",
+          "range": [
+            29974,
+            30000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30005,
+            30008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            30013,
+            30027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30032,
+            30035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30040,
+            30047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            30052,
+            30100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30105,
+            30108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            30113,
+            30132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30137,
+            30140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            30145,
+            30189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            30194,
+            30226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            30231,
+            30266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let seven = ascii::Char::Digit7;",
+          "path": "doc",
+          "range": [
+            30271,
+            30307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let eight = ascii::Char::Digit8;",
+          "path": "doc",
+          "range": [
+            30312,
+            30348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            30353,
+            30396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            30401,
+            30436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            30441,
+            30475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30480,
+            30483
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30488,
+            30528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30533,
+            30563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(zero.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30568,
+            30600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(seven.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30605,
+            30638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!eight.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30643,
+            30677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30682,
+            30718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30723,
+            30754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_octdigit());",
+          "path": "doc",
+          "range": [
+            30759,
+            30791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30796,
+            30803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            30808,
+            30819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            30952,
+            31005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            31078,
+            31087
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31131,
+        31179
+      ],
+      "kind": "impl_fn",
+      "name": "is_octdigit",
+      "range": [
+        29927,
+        31179
+      ],
+      "signature_range": [
+        31096,
+        31130
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a hexadecimal digit:",
+          "path": "doc",
+          "range": [
+            31185,
+            31232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31237,
+            31240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x30 '0' ..= 0x39 '9', or",
+          "path": "doc",
+          "range": [
+            31245,
+            31276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x41 'A' ..= 0x46 'F', or",
+          "path": "doc",
+          "range": [
+            31281,
+            31312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x61 'a' ..= 0x66 'f'.",
+          "path": "doc",
+          "range": [
+            31317,
+            31345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31350,
+            31353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            31358,
+            31372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31377,
+            31380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            31385,
+            31392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            31397,
+            31445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            31450,
+            31469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31474,
+            31477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            31482,
+            31526
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            31531,
+            31575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            31580,
+            31612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            31617,
+            31649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            31654,
+            31689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            31694,
+            31737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            31742,
+            31777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            31782,
+            31817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            31822,
+            31856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31861,
+            31864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_a.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            31869,
+            31908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            31913,
+            31953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(a.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            31958,
+            31987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            31992,
+            32022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(zero.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            32027,
+            32059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            32064,
+            32100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            32105,
+            32139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            32144,
+            32175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_hexdigit());",
+          "path": "doc",
+          "range": [
+            32180,
+            32212
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            32217,
+            32224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            32229,
+            32240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            32245,
+            32298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            32303,
+            32312
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32356,
+        32404
+      ],
+      "kind": "impl_fn",
+      "name": "is_hexdigit",
+      "range": [
+        31185,
+        32404
+      ],
+      "signature_range": [
+        32321,
+        32355
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a punctuation character:",
+          "path": "doc",
+          "range": [
+            32410,
+            32461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32466,
+            32469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x21 ..= 0x2F `! \" # $ % & ' ( ) * + , - . /`, or",
+          "path": "doc",
+          "range": [
+            32474,
+            32529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x3A ..= 0x40 `: ; < = > ? @`, or",
+          "path": "doc",
+          "range": [
+            32534,
+            32573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x5B ..= 0x60 `` [ \\ ] ^ _ ` ``, or",
+          "path": "doc",
+          "range": [
+            32578,
+            32619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - 0x7B ..= 0x7E `{ | } ~`",
+          "path": "doc",
+          "range": [
+            32624,
+            32653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32658,
+            32661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            32666,
+            32680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32685,
+            32688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            32693,
+            32700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            32705,
+            32753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            32758,
+            32777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32782,
+            32785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            32790,
+            32834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            32839,
+            32883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            32888,
+            32920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            32925,
+            32957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            32962,
+            32997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            33002,
+            33045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            33050,
+            33085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            33090,
+            33125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            33130,
+            33164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33169,
+            33172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33177,
+            33220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33225,
+            33268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33273,
+            33306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33311,
+            33344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33349,
+            33385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(percent.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33390,
+            33428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33433,
+            33470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33475,
+            33509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_punctuation());",
+          "path": "doc",
+          "range": [
+            33514,
+            33549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            33554,
+            33561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            33566,
+            33577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            33582,
+            33635
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            33640,
+            33649
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33696,
+        33747
+      ],
+      "kind": "impl_fn",
+      "name": "is_punctuation",
+      "range": [
+        32410,
+        33747
+      ],
+      "signature_range": [
+        33658,
+        33695
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a graphic character:",
+          "path": "doc",
+          "range": [
+            33753,
+            33800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x21 '!' ..= 0x7E '~'.",
+          "path": "doc",
+          "range": [
+            33805,
+            33831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33836,
+            33839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            33844,
+            33858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33863,
+            33866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            33871,
+            33878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            33883,
+            33931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            33936,
+            33955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33960,
+            33963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            33968,
+            34012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            34017,
+            34061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            34066,
+            34098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            34103,
+            34135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            34140,
+            34175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            34180,
+            34223
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            34228,
+            34263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            34268,
+            34303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            34308,
+            34342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34347,
+            34350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_a.is_graphic());",
+          "path": "doc",
+          "range": [
+            34355,
+            34393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(uppercase_g.is_graphic());",
+          "path": "doc",
+          "range": [
+            34398,
+            34436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(a.is_graphic());",
+          "path": "doc",
+          "range": [
+            34441,
+            34469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(g.is_graphic());",
+          "path": "doc",
+          "range": [
+            34474,
+            34502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(zero.is_graphic());",
+          "path": "doc",
+          "range": [
+            34507,
+            34538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(percent.is_graphic());",
+          "path": "doc",
+          "range": [
+            34543,
+            34577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_graphic());",
+          "path": "doc",
+          "range": [
+            34582,
+            34615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!lf.is_graphic());",
+          "path": "doc",
+          "range": [
+            34620,
+            34650
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_graphic());",
+          "path": "doc",
+          "range": [
+            34655,
+            34686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            34691,
+            34698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            34703,
+            34714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            34719,
+            34772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            34777,
+            34786
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34829,
+        34876
+      ],
+      "kind": "impl_fn",
+      "name": "is_graphic",
+      "range": [
+        33753,
+        34876
+      ],
+      "signature_range": [
+        34795,
+        34828
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a whitespace character:",
+          "path": "doc",
+          "range": [
+            34882,
+            34932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x20 SPACE, 0x09 HORIZONTAL TAB, 0x0A LINE FEED,",
+          "path": "doc",
+          "range": [
+            34937,
+            34989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x0C FORM FEED, or 0x0D CARRIAGE RETURN.",
+          "path": "doc",
+          "range": [
+            34994,
+            35038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35043,
+            35046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Rust uses the WhatWG Infra Standard's [definition of ASCII",
+          "path": "doc",
+          "range": [
+            35051,
+            35113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " whitespace][infra-aw]. There are several other definitions in",
+          "path": "doc",
+          "range": [
+            35118,
+            35183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " wide use. For instance, [the POSIX locale][pct] includes",
+          "path": "doc",
+          "range": [
+            35188,
+            35248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x0B VERTICAL TAB as well as all the above characters,",
+          "path": "doc",
+          "range": [
+            35253,
+            35311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but—from the very same specification—[the default rule for",
+          "path": "doc",
+          "range": [
+            35316,
+            35382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " \"field splitting\" in the Bourne shell][bfs] considers *only*",
+          "path": "doc",
+          "range": [
+            35387,
+            35451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " SPACE, HORIZONTAL TAB, and LINE FEED as whitespace.",
+          "path": "doc",
+          "range": [
+            35456,
+            35511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35516,
+            35519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you are writing a program that will process an existing",
+          "path": "doc",
+          "range": [
+            35524,
+            35586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " file format, check what that format's definition of whitespace is",
+          "path": "doc",
+          "range": [
+            35591,
+            35660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " before using this function.",
+          "path": "doc",
+          "range": [
+            35665,
+            35696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35701,
+            35704
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [infra-aw]: https://infra.spec.whatwg.org/#ascii-whitespace",
+          "path": "doc",
+          "range": [
+            35709,
+            35772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [pct]: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap07.html#tag_07_03_01",
+          "path": "doc",
+          "range": [
+            35777,
+            35873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [bfs]: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_05",
+          "path": "doc",
+          "range": [
+            35878,
+            35975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35980,
+            35983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            35988,
+            36002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36007,
+            36010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            36015,
+            36022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            36027,
+            36075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            36080,
+            36099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36104,
+            36107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            36112,
+            36156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            36161,
+            36205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            36210,
+            36242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            36247,
+            36279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            36284,
+            36319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            36324,
+            36367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            36372,
+            36407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            36412,
+            36447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            36452,
+            36486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36491,
+            36494
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36499,
+            36541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36546,
+            36588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36593,
+            36625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36630,
+            36662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36667,
+            36702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36707,
+            36745
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(space.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36750,
+            36785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(lf.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36790,
+            36822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!esc.is_whitespace());",
+          "path": "doc",
+          "range": [
+            36827,
+            36861
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            36866,
+            36873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            36878,
+            36889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36894,
+            36947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36952,
+            36961
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37007,
+        37057
+      ],
+      "kind": "impl_fn",
+      "name": "is_whitespace",
+      "range": [
+        34882,
+        37057
+      ],
+      "signature_range": [
+        36970,
+        37006
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the value is a control character:",
+          "path": "doc",
+          "range": [
+            37063,
+            37110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 0x00 NUL ..= 0x1F UNIT SEPARATOR, or 0x7F DELETE.",
+          "path": "doc",
+          "range": [
+            37115,
+            37168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that most whitespace characters are control",
+          "path": "doc",
+          "range": [
+            37173,
+            37225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " characters, but SPACE is not.",
+          "path": "doc",
+          "range": [
+            37230,
+            37263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37268,
+            37271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            37276,
+            37290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37295,
+            37298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            37303,
+            37310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            37315,
+            37363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            37368,
+            37387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37392,
+            37395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_a = ascii::Char::CapitalA;",
+          "path": "doc",
+          "range": [
+            37400,
+            37444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let uppercase_g = ascii::Char::CapitalG;",
+          "path": "doc",
+          "range": [
+            37449,
+            37493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let a = ascii::Char::SmallA;",
+          "path": "doc",
+          "range": [
+            37498,
+            37530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let g = ascii::Char::SmallG;",
+          "path": "doc",
+          "range": [
+            37535,
+            37567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            37572,
+            37607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let percent = ascii::Char::PercentSign;",
+          "path": "doc",
+          "range": [
+            37612,
+            37655
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let space = ascii::Char::Space;",
+          "path": "doc",
+          "range": [
+            37660,
+            37695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            37700,
+            37735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let esc = ascii::Char::Escape;",
+          "path": "doc",
+          "range": [
+            37740,
+            37774
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            37779,
+            37782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_a.is_control());",
+          "path": "doc",
+          "range": [
+            37787,
+            37826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!uppercase_g.is_control());",
+          "path": "doc",
+          "range": [
+            37831,
+            37870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!a.is_control());",
+          "path": "doc",
+          "range": [
+            37875,
+            37904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!g.is_control());",
+          "path": "doc",
+          "range": [
+            37909,
+            37938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!zero.is_control());",
+          "path": "doc",
+          "range": [
+            37943,
+            37975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!percent.is_control());",
+          "path": "doc",
+          "range": [
+            37980,
+            38015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!space.is_control());",
+          "path": "doc",
+          "range": [
+            38020,
+            38053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(lf.is_control());",
+          "path": "doc",
+          "range": [
+            38058,
+            38087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(esc.is_control());",
+          "path": "doc",
+          "range": [
+            38092,
+            38122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            38127,
+            38134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            38139,
+            38150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            38155,
+            38208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38213,
+            38222
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38265,
+        38312
+      ],
+      "kind": "impl_fn",
+      "name": "is_control",
+      "range": [
+        37063,
+        38312
+      ],
+      "signature_range": [
+        38231,
+        38264
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns an iterator that produces an escaped version of a",
+          "path": "doc",
+          "range": [
+            38318,
+            38379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " character.",
+          "path": "doc",
+          "range": [
+            38384,
+            38398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38403,
+            38406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The behavior is identical to",
+          "path": "doc",
+          "range": [
+            38411,
+            38443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`ascii::escape_default`](crate::ascii::escape_default).",
+          "path": "doc",
+          "range": [
+            38448,
+            38508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38513,
+            38516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            38521,
+            38535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38540,
+            38543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            38548,
+            38555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ascii_char, ascii_char_variants)]",
+          "path": "doc",
+          "range": [
+            38560,
+            38608
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::ascii;",
+          "path": "doc",
+          "range": [
+            38613,
+            38632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38637,
+            38640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let zero = ascii::Char::Digit0;",
+          "path": "doc",
+          "range": [
+            38645,
+            38680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let tab = ascii::Char::CharacterTabulation;",
+          "path": "doc",
+          "range": [
+            38685,
+            38732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let cr = ascii::Char::CarriageReturn;",
+          "path": "doc",
+          "range": [
+            38737,
+            38778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lf = ascii::Char::LineFeed;",
+          "path": "doc",
+          "range": [
+            38783,
+            38818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let apostrophe = ascii::Char::Apostrophe;",
+          "path": "doc",
+          "range": [
+            38823,
+            38868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let double_quote = ascii::Char::QuotationMark;",
+          "path": "doc",
+          "range": [
+            38873,
+            38923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let backslash = ascii::Char::ReverseSolidus;",
+          "path": "doc",
+          "range": [
+            38928,
+            38976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            38981,
+            38984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"0\", zero.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            38989,
+            39042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\t\", tab.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39047,
+            39101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\r\", cr.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39106,
+            39159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\n\", lf.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39164,
+            39217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\'\", apostrophe.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39222,
+            39283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\\\\"\", double_quote.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39288,
+            39352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"\\\\\\\\\", backslash.escape_ascii().to_string());",
+          "path": "doc",
+          "range": [
+            39357,
+            39418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            39423,
+            39430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            39435,
+            39552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            39557,
+            39610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            39615,
+            39624
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39679,
+        39730
+      ],
+      "kind": "impl_fn",
+      "name": "escape_ascii",
+      "range": [
+        38318,
+        39730
+      ],
+      "signature_range": [
+        39633,
+        39678
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        39734,
+        40154
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        40156,
+        40196
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        40199,
+        40888
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": " Views this slice of ASCII characters as a UTF-8 `str`.",
+          "path": "doc",
+          "range": [
+            40222,
+            40280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            40285,
+            40338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            40343,
+            40352
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        40392,
+        40659
+      ],
+      "kind": "impl_fn",
+      "name": "as_str",
+      "range": [
+        40222,
+        40659
+      ],
+      "signature_range": [
+        40361,
+        40391
+      ]
+    },
+    {
+      "ancestors": [
+        29
+      ],
+      "attributes": [
+        {
+          "doc_text": " Views this slice of ASCII characters as a slice of `u8` bytes.",
+          "path": "doc",
+          "range": [
+            40665,
+            40731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            40736,
+            40789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            40794,
+            40803
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        40846,
+        40886
+      ],
+      "kind": "impl_fn",
+      "name": "as_bytes",
+      "range": [
+        40665,
+        40886
+      ],
+      "signature_range": [
+        40812,
+        40845
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            40890,
+            40943
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        40890,
+        41101
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [],
+      "body_range": [
+        41039,
+        41099
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        40982,
+        41099
+      ],
+      "signature_range": [
+        40982,
+        41038
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            41103,
+            41156
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        41103,
+        42473
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "body_range": [
+        41250,
+        42471
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        41193,
+        42471
+      ],
+      "signature_range": [
+        41193,
+        41249
+      ]
+    },
+    {
+      "ancestors": [
+        34,
+        35
+      ],
+      "attributes": [],
+      "body_range": [
+        41387,
+        41466
+      ],
+      "kind": "fn",
+      "name": "backslash",
+      "range": [
+        41333,
+        41466
+      ],
+      "signature_range": [
+        41333,
+        41386
+      ]
+    }
+  ],
+  "source_sha256": "2df341c56fdba65a445dc21ef3e968a2397b7f3cc1fefab188afd3da2bfbf152"
+}

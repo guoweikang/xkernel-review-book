@@ -1,0 +1,38 @@
+{
+  "status": "manually_located_source_evidence_not_automatic_semantic_extraction",
+  "reference_authority": "Historical same-revision documentation; not newly provider-confirmed",
+  "rows": [
+    {
+      "id": "T01",
+      "behavior": "The syscall helper checks CAP_SYS_TIME before delegating and maps the returned error.",
+      "implementation": {"path":"core/ksyscall/src/time/queries.rs","start":59,"end":68,"required_text":["has_cap(kcred::CAP_SYS_TIME)","ktime::set_realtime_checked(value)"]},
+      "norm": {"path":"core/ktime/docs/design.md","start":53,"end":56,"required_text":["不内置授权检查","调用者（syscall 层）"]},
+      "unknown": "Credential implementation, complete dispatch and all callers were not audited. This is not proof of global authorization correctness."
+    },
+    {
+      "id": "T02",
+      "behavior": "The private timekeeper method validates bounds before assigning the correlation; its public wrapper calls it after acquiring the write lock and sampling monotonic time.",
+      "implementation": {"path":"core/ktime/src/lib.rs","start":121,"end":133,"required_text":["sample < min_allowed","self.correlation = ClockCorrelation::new"]},
+      "context": {"path":"core/ktime/src/lib.rs","start":249,"end":262,"required_text":["TIMEKEEPER.write()","let monotonic_base = monotonic_time()","timekeeper.set_realtime_checked"]},
+      "norm": {"path":"core/ktime/src/lib.rs","start":230,"end":247,"required_text":["same","write lock","Syscall layers keep only the privilege check"]},
+      "unknown": "Static local structure, not an executed concurrency proof or proof of all clock invariants."
+    },
+    {
+      "id": "T03",
+      "behavior": "The null-timeval branch returns without changing time or calling set_wall_time.",
+      "implementation": {"path":"core/ksyscall/src/time/queries.rs","start":70,"end":87,"required_text":["check_non_null() else","return Ok(0)","set_wall_time"]},
+      "norm": {"path":"core/ksyscall/src/time/queries.rs","start":79,"end":82,"required_text":["needs no privilege check"]},
+      "unknown": "The Linux-equivalence comment is preserved but not independently checked against Linux in this batch. Do not label the no-op branch a bypass."
+    },
+    {
+      "id": "T04",
+      "behavior": "Responsibility statements are already present in ordinary code comments and rustdoc, not only external design documentation.",
+      "implementation": {"path":"core/ksyscall/src/time/queries.rs","start":63,"end":66,"required_text":["enforced atomically inside the timekeeper"]},
+      "norm": {"path":"core/ktime/src/lib.rs","start":230,"end":247,"required_text":["Syscall layers keep only the privilege check"]},
+      "unknown": "This is an input-information overlap control, not evidence that external documents never help."
+    }
+  ],
+  "semantic_review": "Principal source inspection plus Goodall independent local-source review; not independent human labels",
+  "actual_violation_reference_count": 0,
+  "effectiveness_model_runs": 0
+}

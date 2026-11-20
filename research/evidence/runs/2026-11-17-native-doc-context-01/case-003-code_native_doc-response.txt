@@ -1,0 +1,22 @@
+- **共享机制或弃权理由**：可提议抽取两入口的共同前置流程：检查挂载可写→取得 inode→以 `Write` 检查权限→取得数据写锁→执行具体操作。证据是展示代码的相同调用顺序，而非函数名。
+
+- **必须保留的差异**：设置传递 `value`、`flags` 并调用 `inode.set_xattr`；删除调用 `inode.remove_xattr`。两者均传递原 `name` 和 `self.dentry()`；不得合并底层操作语义。
+
+- **已有委托**：挂载检查已委托给 `check_writable_mount`，权限策略已集中在 `check_xattr_permission`，加锁由 `lock_data` 完成；inode 两个操作再分别转发到 `inode_operations`。新抽取仅组织流程，不复制这些策略。
+
+- **最小接口草案**：同一实现块内的私有方法：
+  ```rust
+  fn with_xattr_write(
+      &self,
+      name: &XattrName,
+      cred: &Cred,
+      op: impl FnOnce(&VfsInode, &Dentry) -> VfsResult<()>,
+  ) -> VfsResult<()>
+  ```
+  方法执行共同前置流程，在具名 guard 存活期间调用 `op`；闭包捕获各自参数。
+
+- **约束及其来源(code/doc/unknown)**：`code`：每个 `?` 失败即返回，权限检查在加锁前，guard 覆盖具体操作；只读分支返回 `ReadOnlyFilesystem`；写权限先检查 `IMMUTABLE | APPEND_ONLY`。`SECURITY_PREFIX` 分支依赖 `has_sys_admin()`，`SYSTEM_PREFIX` 直接放行，其他分支仍须保持原策略。`doc`：设置被描述为创建或替换；两文档声明安全命名空间变更要求有效 `CAP_SYS_ADMIN`，直至具备 LSM 授权钩子。`unknown`：该声明与凭据实现的对应关系、LSM 状态、底层操作效果。
+
+- **一条可反驳提案的验证义务**：对照抽取前后的调用轨迹、错误和锁生命周期；若任一前置失败仍调用后续步骤、参数改变或具体操作结束前释放 guard，即否定该草案的等价性。
+
+- **缺失上下文**：外围类型及实现块、项目抽取惯例、锁与凭据等深层实现、底层操作及现有测试；接口能否编译仍待验证。

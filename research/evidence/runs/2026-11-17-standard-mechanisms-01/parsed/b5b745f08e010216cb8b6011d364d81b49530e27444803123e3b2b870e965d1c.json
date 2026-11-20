@@ -1,0 +1,3725 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " # Experimental replacement range types",
+      "path": "doc",
+      "range": [
+        0,
+        42
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        43,
+        46
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The types within this module are meant to replace the existing",
+      "path": "doc",
+      "range": [
+        47,
+        113
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `Range`, `RangeInclusive`, and `RangeFrom` types in a future edition.",
+      "path": "doc",
+      "range": [
+        114,
+        187
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        188,
+        191
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        192,
+        199
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #![feature(new_range_api)]",
+      "path": "doc",
+      "range": [
+        200,
+        230
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use core::range::{Range, RangeFrom, RangeInclusive};",
+      "path": "doc",
+      "range": [
+        231,
+        287
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        288,
+        291
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let arr = [0, 1, 2, 3, 4];",
+      "path": "doc",
+      "range": [
+        292,
+        322
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[                      ..   ], [0, 1, 2, 3, 4]);",
+      "path": "doc",
+      "range": [
+        323,
+        389
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[                      .. 3 ], [0, 1, 2      ]);",
+      "path": "doc",
+      "range": [
+        390,
+        456
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[                      ..=3 ], [0, 1, 2, 3   ]);",
+      "path": "doc",
+      "range": [
+        457,
+        523
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[     RangeFrom::from(1..  )], [   1, 2, 3, 4]);",
+      "path": "doc",
+      "range": [
+        524,
+        590
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[         Range::from(1..3 )], [   1, 2      ]);",
+      "path": "doc",
+      "range": [
+        591,
+        657
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(arr[RangeInclusive::from(1..=3)], [   1, 2, 3   ]);",
+      "path": "doc",
+      "range": [
+        658,
+        724
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        725,
+        732
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "iter",
+      "path_overrides": [],
+      "range": [
+        774,
+        783
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            785,
+            841
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "legacy",
+      "path_overrides": [],
+      "range": [
+        785,
+        857
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A (half-open) range bounded inclusively below and exclusively above.",
+          "path": "doc",
+          "range": [
+            1654,
+            1726
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1727,
+            1730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `Range` contains all values with `start <= x < end`.",
+          "path": "doc",
+          "range": [
+            1731,
+            1791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is empty if `start >= end`.",
+          "path": "doc",
+          "range": [
+            1792,
+            1826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1827,
+            1830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1831,
+            1845
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1846,
+            1849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1850,
+            1857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            1858,
+            1888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::Range;",
+          "path": "doc",
+          "range": [
+            1889,
+            1916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1917,
+            1920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(Range::from(3..5), Range { start: 3, end: 5 });",
+          "path": "doc",
+          "range": [
+            1921,
+            1983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(3 + 4 + 5, Range::from(3..6).into_iter().sum());",
+          "path": "doc",
+          "range": [
+            1984,
+            2047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2048,
+            2055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2056,
+            2059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Edition notes",
+          "path": "doc",
+          "range": [
+            2060,
+            2079
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2080,
+            2083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is planned that the syntax `start..end` will construct this",
+          "path": "doc",
+          "range": [
+            2084,
+            2150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type in a future edition, but it does not do so today.",
+          "path": "doc",
+          "range": [
+            2151,
+            2209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            2210,
+            2231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            2232,
+            2253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive_const",
+          "range": [
+            2254,
+            2300
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2301,
+            2357
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Range",
+      "range": [
+        1654,
+        2643
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2645,
+            2701
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2645,
+        2925
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "body_range": [
+        2815,
+        2923
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        2756,
+        2923
+      ],
+      "signature_range": [
+        2756,
+        2814
+      ]
+    },
+    {
+      "ancestors": [
+        3,
+        4
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2855,
+        2872
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2927,
+        3544
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator over the elements within this range.",
+          "path": "doc",
+          "range": [
+            2960,
+            3020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3025,
+            3028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Shorthand for `.clone().into_iter()`",
+          "path": "doc",
+          "range": [
+            3033,
+            3073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3078,
+            3081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3086,
+            3100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3105,
+            3108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3113,
+            3120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            3125,
+            3155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::Range;",
+          "path": "doc",
+          "range": [
+            3160,
+            3187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3192,
+            3195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut i = Range::from(3..9).iter().map(|n| n*n);",
+          "path": "doc",
+          "range": [
+            3200,
+            3254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(9));",
+          "path": "doc",
+          "range": [
+            3259,
+            3293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(16));",
+          "path": "doc",
+          "range": [
+            3298,
+            3333
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(25));",
+          "path": "doc",
+          "range": [
+            3338,
+            3373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3378,
+            3385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3390,
+            3446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3451,
+            3460
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3502,
+        3542
+      ],
+      "kind": "impl_fn",
+      "name": "iter",
+      "range": [
+        2960,
+        3542
+      ],
+      "signature_range": [
+        3469,
+        3501
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3546,
+        5641
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if `item` is contained in the range.",
+          "path": "doc",
+          "range": [
+            3590,
+            3645
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3650,
+            3653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3658,
+            3672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3677,
+            3680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3685,
+            3692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            3697,
+            3727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::Range;",
+          "path": "doc",
+          "range": [
+            3732,
+            3759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3764,
+            3767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3..5).contains(&2));",
+          "path": "doc",
+          "range": [
+            3772,
+            3817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(3..5).contains(&3));",
+          "path": "doc",
+          "range": [
+            3822,
+            3867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(3..5).contains(&4));",
+          "path": "doc",
+          "range": [
+            3872,
+            3917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3..5).contains(&5));",
+          "path": "doc",
+          "range": [
+            3922,
+            3967
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3972,
+            3975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3..3).contains(&3));",
+          "path": "doc",
+          "range": [
+            3980,
+            4025
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3..2).contains(&3));",
+          "path": "doc",
+          "range": [
+            4030,
+            4075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4080,
+            4083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(0.0..1.0).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            4088,
+            4139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(0.0..1.0).contains(&f32::NAN));",
+          "path": "doc",
+          "range": [
+            4144,
+            4200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(0.0..f32::NAN).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            4205,
+            4261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(f32::NAN..1.0).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            4266,
+            4322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4327,
+            4334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4339,
+            4348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4353,
+            4409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            4414,
+            4478
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4628,
+        4692
+      ],
+      "kind": "impl_fn",
+      "name": "contains",
+      "range": [
+        3590,
+        4692
+      ],
+      "signature_range": [
+        4487,
+        4623
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if the range contains no items.",
+          "path": "doc",
+          "range": [
+            4698,
+            4748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4753,
+            4756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4761,
+            4775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4780,
+            4783
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4788,
+            4795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            4800,
+            4830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::Range;",
+          "path": "doc",
+          "range": [
+            4835,
+            4862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4867,
+            4870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3..5).is_empty());",
+          "path": "doc",
+          "range": [
+            4875,
+            4918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(3..3).is_empty());",
+          "path": "doc",
+          "range": [
+            4923,
+            4966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(3..2).is_empty());",
+          "path": "doc",
+          "range": [
+            4971,
+            5014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5019,
+            5026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5031,
+            5034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The range is empty if either side is incomparable:",
+          "path": "doc",
+          "range": [
+            5039,
+            5093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5098,
+            5101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5106,
+            5113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            5118,
+            5148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::Range;",
+          "path": "doc",
+          "range": [
+            5153,
+            5180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5185,
+            5188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!Range::from(3.0..5.0).is_empty());",
+          "path": "doc",
+          "range": [
+            5193,
+            5240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(3.0..f32::NAN).is_empty());",
+          "path": "doc",
+          "range": [
+            5245,
+            5297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( Range::from(f32::NAN..5.0).is_empty());",
+          "path": "doc",
+          "range": [
+            5302,
+            5354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5359,
+            5366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5371,
+            5380
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5385,
+            5441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            5446,
+            5510
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5599,
+        5639
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        4698,
+        5639
+      ],
+      "signature_range": [
+        5519,
+        5594
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5643,
+        5960
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6094,
+        6641
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6707,
+        6981
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6983,
+        7273
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7275,
+        7573
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A range bounded inclusively below and above.",
+          "path": "doc",
+          "range": [
+            7575,
+            7623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7624,
+            7627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `RangeInclusive` contains all values with `x >= start`",
+          "path": "doc",
+          "range": [
+            7628,
+            7690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `x <= last`. It is empty unless `start <= last`.",
+          "path": "doc",
+          "range": [
+            7691,
+            7747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7748,
+            7751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            7752,
+            7766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7767,
+            7770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7771,
+            7778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeInclusive;",
+          "path": "doc",
+          "range": [
+            7779,
+            7815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7816,
+            7819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(RangeInclusive::from(3..=5), RangeInclusive { start: 3, last: 5 });",
+          "path": "doc",
+          "range": [
+            7820,
+            7902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(3 + 4 + 5, RangeInclusive::from(3..=5).into_iter().sum());",
+          "path": "doc",
+          "range": [
+            7903,
+            7976
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7977,
+            7984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7985,
+            7988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Edition notes",
+          "path": "doc",
+          "range": [
+            7989,
+            8008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8009,
+            8012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is planned that the syntax  `start..=last` will construct this",
+          "path": "doc",
+          "range": [
+            8013,
+            8082
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type in a future edition, but it does not do so today.",
+          "path": "doc",
+          "range": [
+            8083,
+            8141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            8142,
+            8172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            8173,
+            8216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8217,
+            8281
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RangeInclusive",
+      "range": [
+        7575,
+        8593
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8595,
+            8659
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8595,
+        8894
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        8782,
+        8892
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        8723,
+        8892
+      ],
+      "signature_range": [
+        8723,
+        8781
+      ]
+    },
+    {
+      "ancestors": [
+        17,
+        18
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8822,
+        8840
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8896,
+        11160
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if `item` is contained in the range.",
+          "path": "doc",
+          "range": [
+            8949,
+            9004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9009,
+            9012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9017,
+            9031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9036,
+            9039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9044,
+            9051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeInclusive;",
+          "path": "doc",
+          "range": [
+            9056,
+            9092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9097,
+            9100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3..=5).contains(&2));",
+          "path": "doc",
+          "range": [
+            9105,
+            9160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3..=5).contains(&3));",
+          "path": "doc",
+          "range": [
+            9165,
+            9220
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3..=5).contains(&4));",
+          "path": "doc",
+          "range": [
+            9225,
+            9280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3..=5).contains(&5));",
+          "path": "doc",
+          "range": [
+            9285,
+            9340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3..=5).contains(&6));",
+          "path": "doc",
+          "range": [
+            9345,
+            9400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9405,
+            9408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3..=3).contains(&3));",
+          "path": "doc",
+          "range": [
+            9413,
+            9468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3..=2).contains(&3));",
+          "path": "doc",
+          "range": [
+            9473,
+            9528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9533,
+            9536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(0.0..=1.0).contains(&1.0));",
+          "path": "doc",
+          "range": [
+            9541,
+            9602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(0.0..=1.0).contains(&f32::NAN));",
+          "path": "doc",
+          "range": [
+            9607,
+            9673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(0.0..=f32::NAN).contains(&0.0));",
+          "path": "doc",
+          "range": [
+            9678,
+            9744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(f32::NAN..=1.0).contains(&1.0));",
+          "path": "doc",
+          "range": [
+            9749,
+            9815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9820,
+            9827
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9832,
+            9841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9846,
+            9910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            9915,
+            9979
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10129,
+        10193
+      ],
+      "kind": "impl_fn",
+      "name": "contains",
+      "range": [
+        8949,
+        10193
+      ],
+      "signature_range": [
+        9988,
+        10124
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if the range contains no items.",
+          "path": "doc",
+          "range": [
+            10199,
+            10249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10254,
+            10257
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10262,
+            10276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10281,
+            10284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10289,
+            10296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeInclusive;",
+          "path": "doc",
+          "range": [
+            10301,
+            10337
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10342,
+            10345
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3..=5).is_empty());",
+          "path": "doc",
+          "range": [
+            10350,
+            10403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3..=3).is_empty());",
+          "path": "doc",
+          "range": [
+            10408,
+            10461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3..=2).is_empty());",
+          "path": "doc",
+          "range": [
+            10466,
+            10519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10524,
+            10531
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10536,
+            10539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The range is empty if either side is incomparable:",
+          "path": "doc",
+          "range": [
+            10544,
+            10598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10603,
+            10606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10611,
+            10618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeInclusive;",
+          "path": "doc",
+          "range": [
+            10623,
+            10659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10664,
+            10667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeInclusive::from(3.0..=5.0).is_empty());",
+          "path": "doc",
+          "range": [
+            10672,
+            10729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(3.0..=f32::NAN).is_empty());",
+          "path": "doc",
+          "range": [
+            10734,
+            10796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeInclusive::from(f32::NAN..=5.0).is_empty());",
+          "path": "doc",
+          "range": [
+            10801,
+            10863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10868,
+            10875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10880,
+            10944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10949,
+            10958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            10963,
+            11027
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11116,
+        11158
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        10199,
+        11158
+      ],
+      "signature_range": [
+        11036,
+        11111
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11162,
+        11789
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator over the elements within this range.",
+          "path": "doc",
+          "range": [
+            11204,
+            11264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11269,
+            11272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Shorthand for `.clone().into_iter()`",
+          "path": "doc",
+          "range": [
+            11277,
+            11317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11322,
+            11325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11330,
+            11344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11349,
+            11352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11357,
+            11364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeInclusive;",
+          "path": "doc",
+          "range": [
+            11369,
+            11405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11410,
+            11413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut i = RangeInclusive::from(3..=8).iter().map(|n| n*n);",
+          "path": "doc",
+          "range": [
+            11418,
+            11482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(9));",
+          "path": "doc",
+          "range": [
+            11487,
+            11521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(16));",
+          "path": "doc",
+          "range": [
+            11526,
+            11561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(25));",
+          "path": "doc",
+          "range": [
+            11566,
+            11601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11606,
+            11613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11618,
+            11682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11687,
+            11696
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11747,
+        11787
+      ],
+      "kind": "impl_fn",
+      "name": "iter",
+      "range": [
+        11204,
+        11787
+      ],
+      "signature_range": [
+        11705,
+        11746
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11791,
+        12126
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        12260,
+        12826
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        12896,
+        13184
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        13186,
+        13502
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        13503,
+        14031
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A range only bounded inclusively below.",
+          "path": "doc",
+          "range": [
+            14033,
+            14076
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14077,
+            14080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `RangeFrom` contains all values with `x >= start`.",
+          "path": "doc",
+          "range": [
+            14081,
+            14139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14140,
+            14143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *Note*: Overflow in the [`Iterator`] implementation (when the contained",
+          "path": "doc",
+          "range": [
+            14144,
+            14219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " data type reaches its numerical limit) is allowed to panic, wrap, or",
+          "path": "doc",
+          "range": [
+            14220,
+            14292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " saturate. This behavior is defined by the implementation of the [`Step`]",
+          "path": "doc",
+          "range": [
+            14293,
+            14369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trait. For primitive integers, this follows the normal rules, and respects",
+          "path": "doc",
+          "range": [
+            14370,
+            14448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the overflow checks profile (panic in debug, wrap in release). Note also",
+          "path": "doc",
+          "range": [
+            14449,
+            14525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that overflow happens earlier than you might assume: the overflow happens",
+          "path": "doc",
+          "range": [
+            14526,
+            14603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in the call to `next` that yields the maximum value, as the range must be",
+          "path": "doc",
+          "range": [
+            14604,
+            14681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " set to a state to yield the next value.",
+          "path": "doc",
+          "range": [
+            14682,
+            14725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14726,
+            14729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Step`]: crate::iter::Step",
+          "path": "doc",
+          "range": [
+            14730,
+            14761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14762,
+            14765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14766,
+            14780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14781,
+            14784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14785,
+            14792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            14793,
+            14823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeFrom;",
+          "path": "doc",
+          "range": [
+            14824,
+            14855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14856,
+            14859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(RangeFrom::from(2..), core::range::RangeFrom { start: 2 });",
+          "path": "doc",
+          "range": [
+            14860,
+            14934
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(2 + 3 + 4, RangeFrom::from(2..).into_iter().take(3).sum());",
+          "path": "doc",
+          "range": [
+            14935,
+            15009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15010,
+            15017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15018,
+            15021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Edition notes",
+          "path": "doc",
+          "range": [
+            15022,
+            15041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15042,
+            15045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is planned that the syntax  `start..` will construct this",
+          "path": "doc",
+          "range": [
+            15046,
+            15110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type in a future edition, but it does not do so today.",
+          "path": "doc",
+          "range": [
+            15111,
+            15169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            15170,
+            15195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            15196,
+            15217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive_const",
+          "range": [
+            15218,
+            15255
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15256,
+            15312
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RangeFrom",
+      "range": [
+        14033,
+        15473
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15475,
+            15531
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15475,
+        15731
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [],
+      "body_range": [
+        15649,
+        15729
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        15590,
+        15729
+      ],
+      "signature_range": [
+        15590,
+        15648
+      ]
+    },
+    {
+      "ancestors": [
+        31,
+        32
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15689,
+        15706
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15733,
+        16365
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an iterator over the elements within this range.",
+          "path": "doc",
+          "range": [
+            15770,
+            15830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15835,
+            15838
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Shorthand for `.clone().into_iter()`",
+          "path": "doc",
+          "range": [
+            15843,
+            15883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15888,
+            15891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            15896,
+            15910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15915,
+            15918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15923,
+            15930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            15935,
+            15965
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeFrom;",
+          "path": "doc",
+          "range": [
+            15970,
+            16001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16006,
+            16009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut i = RangeFrom::from(3..).iter().map(|n| n*n);",
+          "path": "doc",
+          "range": [
+            16014,
+            16071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(9));",
+          "path": "doc",
+          "range": [
+            16076,
+            16110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(16));",
+          "path": "doc",
+          "range": [
+            16115,
+            16150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(i.next(), Some(25));",
+          "path": "doc",
+          "range": [
+            16155,
+            16190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16195,
+            16202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16207,
+            16263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16268,
+            16277
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16323,
+        16363
+      ],
+      "kind": "impl_fn",
+      "name": "iter",
+      "range": [
+        15770,
+        16363
+      ],
+      "signature_range": [
+        16286,
+        16322
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16367,
+        17328
+      ]
+    },
+    {
+      "ancestors": [
+        36
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if `item` is contained in the range.",
+          "path": "doc",
+          "range": [
+            16415,
+            16470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16475,
+            16478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            16483,
+            16497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16502,
+            16505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16510,
+            16517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            16522,
+            16552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::range::RangeFrom;",
+          "path": "doc",
+          "range": [
+            16557,
+            16588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16593,
+            16596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeFrom::from(3..).contains(&2));",
+          "path": "doc",
+          "range": [
+            16601,
+            16649
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeFrom::from(3..).contains(&3));",
+          "path": "doc",
+          "range": [
+            16654,
+            16702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeFrom::from(3..).contains(&1_000_000_000));",
+          "path": "doc",
+          "range": [
+            16707,
+            16767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16772,
+            16775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( RangeFrom::from(0.0..).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            16780,
+            16832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeFrom::from(0.0..).contains(&f32::NAN));",
+          "path": "doc",
+          "range": [
+            16837,
+            16894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!RangeFrom::from(f32::NAN..).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            16899,
+            16956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16961,
+            16968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16973,
+            16982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            16987,
+            17043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            17048,
+            17112
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17262,
+        17326
+      ],
+      "kind": "impl_fn",
+      "name": "contains",
+      "range": [
+        16415,
+        17326
+      ],
+      "signature_range": [
+        17121,
+        17257
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        17330,
+        17641
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        17775,
+        18310
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        18376,
+        18645
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        18647,
+        18931
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        18932,
+        19224
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A range only bounded inclusively above.",
+          "path": "doc",
+          "range": [
+            19226,
+            19269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19270,
+            19273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The `RangeToInclusive` contains all values with `x <= last`.",
+          "path": "doc",
+          "range": [
+            19274,
+            19338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It cannot serve as an [`Iterator`] because it doesn't have a starting point.",
+          "path": "doc",
+          "range": [
+            19339,
+            19419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19420,
+            19423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            19424,
+            19438
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19439,
+            19442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19443,
+            19450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range_api)]",
+          "path": "doc",
+          "range": [
+            19451,
+            19481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(new_range)]",
+          "path": "doc",
+          "range": [
+            19482,
+            19508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!((..=5), std::range::RangeToInclusive{ last: 5 });",
+          "path": "doc",
+          "range": [
+            19509,
+            19573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19574,
+            19581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19582,
+            19585
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It does not have an [`IntoIterator`] implementation, so you can't use it in a",
+          "path": "doc",
+          "range": [
+            19586,
+            19667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `for` loop directly. This won't compile:",
+          "path": "doc",
+          "range": [
+            19668,
+            19712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19713,
+            19716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```compile_fail,E0277",
+          "path": "doc",
+          "range": [
+            19717,
+            19742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // error[E0277]: the trait bound `std::range::RangeToInclusive<{integer}>:",
+          "path": "doc",
+          "range": [
+            19743,
+            19821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // std::iter::Iterator` is not satisfied",
+          "path": "doc",
+          "range": [
+            19822,
+            19866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for i in ..=5 {",
+          "path": "doc",
+          "range": [
+            19867,
+            19886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // ...",
+          "path": "doc",
+          "range": [
+            19887,
+            19901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            19902,
+            19907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19908,
+            19915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19916,
+            19919
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When used as a [slicing index], `RangeToInclusive` produces a slice of all",
+          "path": "doc",
+          "range": [
+            19920,
+            19998
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " array elements up to and including the index indicated by `last`.",
+          "path": "doc",
+          "range": [
+            19999,
+            20068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20069,
+            20072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20073,
+            20080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let arr = [0, 1, 2, 3, 4];",
+          "path": "doc",
+          "range": [
+            20081,
+            20111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[ ..  ], [0, 1, 2, 3, 4]);",
+          "path": "doc",
+          "range": [
+            20112,
+            20156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[ .. 3], [0, 1, 2      ]);",
+          "path": "doc",
+          "range": [
+            20157,
+            20201
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[ ..=3], [0, 1, 2, 3   ]); // This is a `RangeToInclusive`",
+          "path": "doc",
+          "range": [
+            20202,
+            20278
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[1..  ], [   1, 2, 3, 4]);",
+          "path": "doc",
+          "range": [
+            20279,
+            20323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[1.. 3], [   1, 2      ]);",
+          "path": "doc",
+          "range": [
+            20324,
+            20368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(arr[1..=3], [   1, 2, 3   ]);",
+          "path": "doc",
+          "range": [
+            20369,
+            20413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            20414,
+            20421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20422,
+            20425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [slicing index]: crate::slice::SliceIndex",
+          "path": "doc",
+          "range": [
+            20426,
+            20471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20472,
+            20475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Edition notes",
+          "path": "doc",
+          "range": [
+            20476,
+            20495
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20496,
+            20499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is planned that the syntax  `..=last` will construct this",
+          "path": "doc",
+          "range": [
+            20500,
+            20564
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type in a future edition, but it does not do so today.",
+          "path": "doc",
+          "range": [
+            20565,
+            20623
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            20624,
+            20656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            20657,
+            20678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            20679,
+            20722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            20723,
+            20779
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "RangeToInclusive",
+      "range": [
+        19226,
+        20945
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            20947,
+            21003
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        20947,
+        21210
+      ]
+    },
+    {
+      "ancestors": [
+        44
+      ],
+      "attributes": [],
+      "body_range": [
+        21128,
+        21208
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        21069,
+        21208
+      ],
+      "signature_range": [
+        21069,
+        21127
+      ]
+    },
+    {
+      "ancestors": [
+        44,
+        45
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        21138,
+        21156
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        21212,
+        22018
+      ]
+    },
+    {
+      "ancestors": [
+        47
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if `item` is contained in the range.",
+          "path": "doc",
+          "range": [
+            21267,
+            21322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21327,
+            21330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            21335,
+            21349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21354,
+            21357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21362,
+            21369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( (..=5).contains(&-1_000_000_000));",
+          "path": "doc",
+          "range": [
+            21374,
+            21421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( (..=5).contains(&5));",
+          "path": "doc",
+          "range": [
+            21426,
+            21460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!(..=5).contains(&6));",
+          "path": "doc",
+          "range": [
+            21465,
+            21499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21504,
+            21507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!( (..=1.0).contains(&1.0));",
+          "path": "doc",
+          "range": [
+            21512,
+            21550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!(..=1.0).contains(&f32::NAN));",
+          "path": "doc",
+          "range": [
+            21555,
+            21598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!(..=f32::NAN).contains(&0.5));",
+          "path": "doc",
+          "range": [
+            21603,
+            21646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21651,
+            21658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            21663,
+            21672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            21677,
+            21733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            21738,
+            21802
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21952,
+        22016
+      ],
+      "kind": "impl_fn",
+      "name": "contains",
+      "range": [
+        21267,
+        22016
+      ],
+      "signature_range": [
+        21811,
+        21947
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            22020,
+            22076
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22020,
+        22243
+      ]
+    },
+    {
+      "ancestors": [
+        49
+      ],
+      "attributes": [],
+      "body_range": [
+        22201,
+        22241
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        22149,
+        22241
+      ],
+      "signature_range": [
+        22149,
+        22200
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            22244,
+            22300
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22244,
+        22459
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [],
+      "body_range": [
+        22417,
+        22457
+      ],
+      "kind": "impl_fn",
+      "name": "from",
+      "range": [
+        22373,
+        22457
+      ],
+      "signature_range": [
+        22373,
+        22416
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        22575,
+        22892
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        22894,
+        23173
+      ]
+    }
+  ],
+  "source_sha256": "68dc3324bfaeba96d0352561ceddf6326f4fe0b7245fb9bf8ec7ce819ccc4d9f"
+}

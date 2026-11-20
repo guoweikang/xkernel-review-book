@@ -1,0 +1,55 @@
+impl<T: ?Sized> Arc<T> {
+    /// Allocates an `ArcInner<T>` with sufficient space for
+    /// a possibly-unsized inner value where the value has the layout provided.
+    ///
+    /// The function `mem_to_arcinner` is called with the data pointer
+    /// and must return back a (potentially fat)-pointer for the `ArcInner<T>`.
+    #[cfg(not(no_global_oom_handling))]
+    unsafe fn allocate_for_layout(
+        value_layout: Layout,
+        allocate: impl FnOnce(Layout) -> Result<NonNull<[u8]>, AllocError>,
+        mem_to_arcinner: impl FnOnce(*mut u8) -> *mut ArcInner<T>,
+    ) -> *mut ArcInner<T> {
+        let layout = arcinner_layout_for_value_layout(value_layout);
+
+        let ptr = allocate(layout).unwrap_or_else(|_| handle_alloc_error(layout));
+
+        unsafe { Self::initialize_arcinner(ptr, layout, mem_to_arcinner) }
+    }
+
+    /// Allocates an `ArcInner<T>` with sufficient space for
+    /// a possibly-unsized inner value where the value has the layout provided,
+    /// returning an error if allocation fails.
+    ///
+    /// The function `mem_to_arcinner` is called with the data pointer
+    /// and must return back a (potentially fat)-pointer for the `ArcInner<T>`.
+    unsafe fn try_allocate_for_layout(
+        value_layout: Layout,
+        allocate: impl FnOnce(Layout) -> Result<NonNull<[u8]>, AllocError>,
+        mem_to_arcinner: impl FnOnce(*mut u8) -> *mut ArcInner<T>,
+    ) -> Result<*mut ArcInner<T>, AllocError> {
+        let layout = arcinner_layout_for_value_layout(value_layout);
+
+        let ptr = allocate(layout)?;
+
+        let inner = unsafe { Self::initialize_arcinner(ptr, layout, mem_to_arcinner) };
+
+        Ok(inner)
+    }
+
+    unsafe fn initialize_arcinner(
+        ptr: NonNull<[u8]>,
+        layout: Layout,
+        mem_to_arcinner: impl FnOnce(*mut u8) -> *mut ArcInner<T>,
+    ) -> *mut ArcInner<T> {
+        let inner = mem_to_arcinner(ptr.as_non_null_ptr().as_ptr());
+        debug_assert_eq!(unsafe { Layout::for_value_raw(inner) }, layout);
+
+        unsafe {
+            (&raw mut (*inner).strong).write(atomic::AtomicUsize::new(1));
+            (&raw mut (*inner).weak).write(atomic::AtomicUsize::new(1));
+        }
+
+        inner
+    }
+}

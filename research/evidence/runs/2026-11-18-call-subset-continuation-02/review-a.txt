@@ -1,0 +1,152 @@
+Independent bounded SOURCE REVIEW — review A
+
+Scope and method
+Reviewed case-001, case-002, case-003 only. Required source revision:
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09. All three selected metadata records
+declare that revision. This is developer analysis with two method/ranking labels
+withheld, not gold labels or a blind trial. No method/ranking inference made.
+Repository AGENTS.md read; explicit task scope supersedes its research-resume,
+catalog, progress, and build workflow. No production changes or helper creation.
+
+Integrity
+The supplied full-source artifacts are named left-source.rs/right-source.rs in
+cases.json (not literally full-source.rs). For all six members, SHA-256 of the
+full file equals source_sha256, SHA-256 of the snippet equals sha256, and the
+zero-based, half-open full-source byte slice equals the entire snippet exactly.
+Computed start/end lines also equal metadata. Snippets begin at fn, after pub.
+This verifies artifact consistency with the declared revision, not an independent
+Git provenance attestation. No current checkout source was substituted.
+
+case-001: fs/kvfs/src/node/inode.rs
+Full-source SHA-256 (both sides):
+7f4bd4545f7e152eec40400f1b62d1f6867970146a659d1921a43b8fadb312c0
+Left: bytes [47686,48390), lines 1524-1544; snippet SHA-256:
+949c0d70c8f8a42d747b3b8d752ea08f36d47b460819f95e525a3b55d57a49eb
+Right: bytes [46854,47590), lines 1501-1521; snippet SHA-256:
+bb4c67eb6e27e8c1084ce322b4ba6fd3909ba1fa710ed0b633b62acdedd2a42d
+
+case-002: fs/kvfs/src/node/dentry.rs
+Full-source SHA-256 (both sides):
+5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7
+Left: bytes [30279,30919), lines 933-949; snippet SHA-256:
+9843c3c72c8adb7dc1307158d8c4c5b5612bdde2cffab635ea2db67e635958d6
+Right: bytes [26624,27174), lines 831-845; snippet SHA-256:
+5616cfa0c0c5e136c9b048c5e3451402dc004c156d56e303a1565bc988946da2
+
+case-003: fs/kvfs/src/super_block.rs
+Full-source SHA-256 (both sides):
+7e5edfffdcd7ad1f2a109f811d7940cffd02913f854acc69853ecb5d4a1d5e5b
+Left: bytes [28815,29146), lines 773-781; snippet SHA-256:
+7f94546c670e33f4d34c68adc3d4c2e6531d776504da0c0a263d6cd660a243cb
+Right: bytes [29472,29991), lines 787-806; snippet SHA-256:
+cc38a575ac9c254cf30b18041071b01258b48fa0d6c627c5a8ad9779b8595953
+
+case-001 — already_shared
+The file and symlink constructors already delegate to the same mechanism:
+fs/kvfs/src/node/inode.rs:1513-1520 and :1536-1543 call
+new_file_with_address_space_operations, defined at :1656-1674. That helper
+assembles InodeParts and delegates through from_parts (:1676-1680) to shared
+allocation/address-space construction (:1701-1728).
+Residual Arc trait-object conversions are adapters, not independent inode
+construction mechanisms. Preserve the file's FileOperations bound and Some
+operation table (:1508-1516), versus the symlink's weaker bound, symlink-mode
+assertion, and None table (:1531-1539). None becomes no_open_file_operations
+at :1719. Both preserve supplied flags, address-space operations and init;
+neither exposes a fallible result. Do not impose FileOperations on symlink
+implementations merely to merge the wrappers. No confirmation candidate.
+
+case-002 — confirmation_candidate (partial overlap only)
+Independent common mechanism exists at fs/kvfs/src/node/dentry.rs:832-840
+and :935-943: lock the parent's children map, upgrade an existing weak entry,
+return a live winner, otherwise replace/insert a weak reference, then unlock.
+Both subsequently retain the inserted entry through SuperBlock::cache_dentry
+(:841-843 / :944-946). Shared use of Arc/map primitives and cache_dentry is
+already delegation at a lower level; the conditional map transaction itself
+is independently implemented twice.
+
+Smallest proposed boundary: only that locked live-winner-or-weak-insert
+transaction, returning Option<Dentry> and releasing the children lock before
+return. Keep eligibility checks and superblock retention in the wrappers.
+The boundary must accept the existing owned String without copying it, while
+materializing the borrowed lookup name only on insertion, as today; an owned/
+borrowed name carrier is sufficient conceptually. It must borrow the candidate
+without adding a strong clone. This is a proposed boundary, not implemented code.
+
+Necessary differences: insert_cache consumes String and Dentry and gates on
+can_cache_children AND can_cache_as_child (:933-934; definitions :799-806).
+The latter honors PERSISTENT despite DONTCACHE. cache_lookup_candidate borrows
+both inputs and intentionally bypasses those gates: lookup_locked installs a
+PAR_LOOKUP negative candidate while holding its lookup mutex (:1079-1088), even
+for a non-cacheable parent. Final admission/retraction belongs to lookup_locked
+(:1091-1134). Its error propagation and filesystem lookup callback must stay
+outside this boundary. Ordinary lookup_cache_entry filters PAR_LOOKUP (:820-828);
+the proposed insertion transaction must NOT use that filtered result to decide
+absence. Preserve consumed-versus-cloned dentry retention in the wrappers and
+the unlock-before-superblock-cache ordering. cache_dentry itself takes another
+cache lock and drops any replaced owner afterwards (fs/kvfs/src/super_block.rs:
+1178-1183), so widening the children-lock lifetime is not neutral.
+
+ONE adoption-changing obligation: demonstrate that both wrappers retain the
+same atomic live-winner/expired-slot replacement behavior, including a live
+PAR_LOOKUP winner, without moving superblock retention under the children lock.
+A failure of that transaction-equivalence obligation rejects adoption.
+Exact existing verification entry: no suitable entry establishing that full
+obligation was identified in the permitted inspection. Directly registered test
+module is fs/kvfs/src/node/dentry.rs:1657 -> fs/kvfs/ut-tests/node_dentry.rs.
+Nearby existing entry test_parallel_lookup_candidate_does_not_escape_cache_snapshot
+at fs/kvfs/ut-tests/node_dentry.rs:1147-1160 checks snapshot filtering, but does
+not exercise a competing live winner, expired-slot replacement, or lock ordering.
+Other inspected tests (:1127-1144, :1163-1193, :1196-1213) cover non-cacheable
+retraction and candidate completion, not that complete obligation. This is a
+conditional confirmation candidate, not a validated refactoring recommendation.
+
+case-003 — already_shared
+fs/kvfs/src/super_block.rs:780 and :798-805 already call initialize_inner
+(:808-851). The common mechanism checks nascent/once-only state and block size,
+installs operations/private state/limits, invokes the root callback, and publishes
+only its successful result. There is no second independently implemented
+initialization sequence in these wrappers.
+Preserve the typed KBox<T> ownership transfer and Any + Send + Sync + 'static
+bound (:787-801), versus no private owner (:780). Both keep generic error E and
+FnOnce(&Arc<Self>) -> Result<Dentry,E>. Private state is installed before callback
+execution (:840-848); callback failure propagates before publish_root (:848-849)
+and does not roll private state back, consistent with :783-786. No allocation
+policy, callback timing, error mapping, or lifecycle-lock expansion is warranted
+to remove these necessary wrapper differences. No confirmation candidate.
+
+Actual read scope and limits
+Content read: root AGENTS.md; cases.json (parsed as a whole, only selected three
+records emitted/reviewed); all six selected snippets; all six selected source
+files read in full for byte/hash verification. Each left/right source pair is
+identical by hash; semantic context was displayed from the left copy only.
+Source context displayed with line numbers:
+  case-001/left-source.rs:1410-1650,1656-1740.
+  case-002/left-source.rs:690-1010,1060-1103,1100-1280.
+  case-003/left-source.rs:768-895,1170-1195.
+Full-file targeted rg searches additionally examined constructor/address-space/
+test references in case-001; cache/lookup/test references in case-002; and
+initialization/private/test/cache_dentry references in case-003. Those searches
+scanned the full files but displayed matching lines only.
+All paths above are under this run's reviewer/ directory. Original source paths
+and line references in verdicts refer to the verified supplied source bytes.
+
+Only archive dependency read: sources.zip at
+research/evidence/runs/2026-11-05-rust-baseline-corpus-01/sources.zip, member
+fs/kvfs/ut-tests/node_dentry.rs, directly named by dentry.rs:1657. The member was
+streamed through rg for function/cache/flag references across the full file;
+semantic bodies displayed were exactly lines 1105-1215. Archive member names
+were listed to locate that exact member. No extraction to disk or extraction-all.
+No additional helper/test dependency bodies were read.
+
+An initial repository filename-only discovery listed snippet/cases paths from
+other runs and cases; none of their contents were opened or judged. No PROGRESS,
+ranking, prior-review, analyst, catalog, or current production-source contents
+were read. Applicable ancestor/nested AGENTS.md existence checks found only the
+root repository instruction file. No network, build, test execution, or broad
+research workflow. Only this review-a.txt is written.
+
+Wall time: approximately 3 minutes overall including recording (first recorded
+UTC timestamp 08:50:58; substantive reads finished around 08:52:02 on 2026-11-18).
+Cases were interleaved, so no artificial additive per-case timing is claimed;
+each case's elapsed review span is bounded by this overall duration, below
+15 minutes. Exactly three cases judged. No token-use estimate.

@@ -1,0 +1,1141 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " This type provides a way to entirely opt-out of typical aliasing rules;",
+          "path": "doc",
+          "range": [
+            150,
+            225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " specifically, `&mut UnsafePinned<T>` is not guaranteed to be a unique pointer.",
+          "path": "doc",
+          "range": [
+            226,
+            308
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This also subsumes the effects of `UnsafeCell`, i.e., `&UnsafePinned<T>` may point to data",
+          "path": "doc",
+          "range": [
+            309,
+            403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is being mutated.",
+          "path": "doc",
+          "range": [
+            404,
+            430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            431,
+            434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However, even if you define your type like `pub struct Wrapper(UnsafePinned<...>)`, it is still",
+          "path": "doc",
+          "range": [
+            435,
+            534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " very risky to have an `&mut Wrapper` that aliases anything else. Many functions that work",
+          "path": "doc",
+          "range": [
+            535,
+            628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " generically on `&mut T` assume that the memory that stores `T` is uniquely owned (such as",
+          "path": "doc",
+          "range": [
+            629,
+            722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `mem::swap`). In other words, while having aliasing with `&mut Wrapper` is not immediate",
+          "path": "doc",
+          "range": [
+            723,
+            815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Undefined Behavior, it is still unsound to expose such a mutable reference to code you do not",
+          "path": "doc",
+          "range": [
+            816,
+            913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " control! Techniques such as pinning via [`Pin`] are needed to ensure soundness.",
+          "path": "doc",
+          "range": [
+            914,
+            997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            998,
+            1001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Similar to [`UnsafeCell`](crate::cell::UnsafeCell), `UnsafePinned` will not usually show up in",
+          "path": "doc",
+          "range": [
+            1002,
+            1100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the public API of a library. It is an internal implementation detail of libraries that need to",
+          "path": "doc",
+          "range": [
+            1101,
+            1199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " support aliasing mutable references.",
+          "path": "doc",
+          "range": [
+            1200,
+            1240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1241,
+            1244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type blocks niches the same way `UnsafeCell` does.",
+          "path": "doc",
+          "range": [
+            1245,
+            1304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1305,
+            1330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            1331,
+            1351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1352,
+            1408
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "UnsafePinned",
+      "range": [
+        150,
+        1473
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1523,
+            1579
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1523,
+        1637
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " When this type is used, that almost certainly means safe APIs need to use pinning to avoid the",
+          "path": "doc",
+          "range": [
+            1639,
+            1737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " aliases from becoming invalidated. Therefore let's mark this as `!Unpin`. You can always opt",
+          "path": "doc",
+          "range": [
+            1738,
+            1834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " back in to `Unpin` with an `impl` block, provided your API is still sound while unpinned.",
+          "path": "doc",
+          "range": [
+            1835,
+            1928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1929,
+            1985
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1639,
+        2031
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2397,
+        3176
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a new instance of `UnsafePinned` which will wrap the specified value.",
+          "path": "doc",
+          "range": [
+            2427,
+            2511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2516,
+            2519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All access to the inner value through `&UnsafePinned<T>` or `&mut UnsafePinned<T>` or",
+          "path": "doc",
+          "range": [
+            2524,
+            2613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Pin<&mut UnsafePinned<T>>` requires `unsafe` code.",
+          "path": "doc",
+          "range": [
+            2618,
+            2673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2678,
+            2695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2700,
+            2711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2716,
+            2772
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2812,
+        2874
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        2427,
+        2874
+      ],
+      "signature_range": [
+        2781,
+        2811
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unwraps the value, consuming this `UnsafePinned`.",
+          "path": "doc",
+          "range": [
+            2880,
+            2933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2938,
+            2955
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2960,
+            2971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2976,
+            3032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_allow_const_fn_unstable",
+          "range": [
+            3037,
+            3095
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3135,
+        3174
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        2880,
+        3174
+      ],
+      "signature_range": [
+        3104,
+        3134
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3178,
+        5852
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Get read-write access to the contents of a pinned `UnsafePinned`.",
+          "path": "doc",
+          "range": [
+            3216,
+            3285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3290,
+            3307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3312,
+            3323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3328,
+            3384
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3449,
+        3593
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut_pinned",
+      "range": [
+        3216,
+        3593
+      ],
+      "signature_range": [
+        3393,
+        3448
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Get read-write access to the contents of an `UnsafePinned`.",
+          "path": "doc",
+          "range": [
+            3599,
+            3662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3667,
+            3670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You should usually be using `get_mut_pinned` instead to explicitly track the fact that this",
+          "path": "doc",
+          "range": [
+            3675,
+            3770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " memory is \"pinned\" due to there being aliases.",
+          "path": "doc",
+          "range": [
+            3775,
+            3825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3830,
+            3847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3852,
+            3863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3868,
+            3924
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3981,
+        4026
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut_unchecked",
+      "range": [
+        3599,
+        4026
+      ],
+      "signature_range": [
+        3933,
+        3980
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Get mutable access to the contents of a shared `UnsafePinned`.",
+          "path": "doc",
+          "range": [
+            4032,
+            4098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4103,
+            4106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can be cast to a pointer of any kind. When creating references, you must uphold the",
+          "path": "doc",
+          "range": [
+            4111,
+            4203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " aliasing rules; see [`UnsafeCell`] for more discussion and caveats.",
+          "path": "doc",
+          "range": [
+            4208,
+            4279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4284,
+            4287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`UnsafeCell`]: crate::cell::UnsafeCell#aliasing-rules",
+          "path": "doc",
+          "range": [
+            4292,
+            4350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4355,
+            4358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust,no_run",
+          "path": "doc",
+          "range": [
+            4363,
+            4381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(unsafe_pinned)]",
+          "path": "doc",
+          "range": [
+            4386,
+            4416
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::pin::UnsafePinned;",
+          "path": "doc",
+          "range": [
+            4421,
+            4452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4457,
+            4460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            4465,
+            4477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut x = UnsafePinned::new(0);",
+          "path": "doc",
+          "range": [
+            4482,
+            4523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let ptr = x.get();",
+          "path": "doc",
+          "range": [
+            4528,
+            4554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     x.get_mut_unchecked().write(1);",
+          "path": "doc",
+          "range": [
+            4559,
+            4598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(ptr.read(), 1);",
+          "path": "doc",
+          "range": [
+            4603,
+            4637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4642,
+            4647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4652,
+            4659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4664,
+            4681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4686,
+            4697
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4702,
+            4758
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4797,
+        4829
+      ],
+      "kind": "impl_fn",
+      "name": "get",
+      "range": [
+        4032,
+        4829
+      ],
+      "signature_range": [
+        4767,
+        4796
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets an immutable pointer to the wrapped value.",
+          "path": "doc",
+          "range": [
+            4835,
+            4886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4891,
+            4894
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The difference from [`get`] is that this function accepts a raw pointer, which is useful to",
+          "path": "doc",
+          "range": [
+            4899,
+            4994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " avoid the creation of temporary references.",
+          "path": "doc",
+          "range": [
+            4999,
+            5046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5051,
+            5054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`get`]: UnsafePinned::get",
+          "path": "doc",
+          "range": [
+            5059,
+            5089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5094,
+            5111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5116,
+            5127
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5132,
+            5188
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5243,
+        5285
+      ],
+      "kind": "impl_fn",
+      "name": "raw_get",
+      "range": [
+        4835,
+        5285
+      ],
+      "signature_range": [
+        5197,
+        5242
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets a mutable pointer to the wrapped value.",
+          "path": "doc",
+          "range": [
+            5291,
+            5339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5344,
+            5347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The difference from [`get_mut_pinned`] and [`get_mut_unchecked`] is that this function",
+          "path": "doc",
+          "range": [
+            5352,
+            5442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accepts a raw pointer, which is useful to avoid the creation of temporary references.",
+          "path": "doc",
+          "range": [
+            5447,
+            5536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5541,
+            5544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`get_mut_pinned`]: UnsafePinned::get_mut_pinned",
+          "path": "doc",
+          "range": [
+            5549,
+            5601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`get_mut_unchecked`]: UnsafePinned::get_mut_unchecked",
+          "path": "doc",
+          "range": [
+            5606,
+            5664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5669,
+            5686
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5691,
+            5702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5707,
+            5763
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5820,
+        5850
+      ],
+      "kind": "impl_fn",
+      "name": "raw_get_mut",
+      "range": [
+        5291,
+        5850
+      ],
+      "signature_range": [
+        5772,
+        5819
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5854,
+            5910
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5854,
+        6099
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates an `UnsafePinned`, with the `Default` value for T.",
+          "path": "doc",
+          "range": [
+            5962,
+            6024
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6050,
+        6097
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        5962,
+        6097
+      ],
+      "signature_range": [
+        6029,
+        6049
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        6101,
+        6411
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6413,
+            6469
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6413,
+        6652
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [],
+      "body_range": [
+        6580,
+        6650
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        6523,
+        6650
+      ],
+      "signature_range": [
+        6523,
+        6579
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6654,
+            6710
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6654,
+        6853
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7280,
+            7338
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7280,
+        7485
+      ]
+    }
+  ],
+  "source_sha256": "29cab8fdd3e94266bb8f7b890e83abc237486defeda676e00e0b7ffe9f9c406c"
+}

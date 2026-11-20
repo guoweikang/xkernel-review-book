@@ -1,0 +1,50 @@
+[
+  {
+    "id": "unit_01", "oracle": "clamp",
+    "body": "if value > 63 { 63 } else { value }",
+    "fields": {"purpose": "Limit a numeric reading to a ceiling.", "input": "Unsigned value from zero through 255.", "output": "The smaller of value and 63; large readings saturate at 63.", "effects": "Pure calculation without allocation or external state."},
+    "wrong_output": "The larger of value and 63; small readings increase to 63."
+  },
+  {
+    "id": "unit_02", "oracle": "clamp",
+    "body": "let mut result = 0; while result < value && result < 63 { result += 1; } result",
+    "fields": {"purpose": "Bound a sample in a fixed numeric range.", "input": "An integer value in the inclusive interval 0 to 255.", "output": "Returns value unchanged up to 63, and saturates to 63 above that ceiling.", "effects": "No observable effects other than the return value."},
+    "wrong_output": "Returns 63 up to that ceiling, and value unchanged above it."
+  },
+  {
+    "id": "unit_03", "oracle": "remainder",
+    "body": "value & 15",
+    "fields": {"purpose": "Locate a byte within a fixed size block.", "input": "Unsigned byte position from zero through 255; block size is 16.", "output": "Remainder after division of value by 16, an offset in 0 through 15.", "effects": "Pure calculation without allocation or external state."},
+    "wrong_output": "Quotient after division of value by 16, a block number in 0 through 15."
+  },
+  {
+    "id": "unit_04", "oracle": "remainder",
+    "body": "let mut remaining = value; while remaining >= 16 { remaining -= 16; } remaining",
+    "fields": {"purpose": "Calculate the intra block displacement of an address.", "input": "A nonnegative address value at most 255, with sixteen bytes per block.", "output": "The offset left after removing complete blocks, equal to value modulo 16.", "effects": "No observable effects other than the return value."},
+    "wrong_output": "The count of complete blocks before the address, equal to value divided by 16."
+  },
+  {
+    "id": "unit_05", "oracle": "quotient",
+    "body": "value >> 4",
+    "fields": {"purpose": "Locate the block containing a byte position.", "input": "Unsigned byte position from zero through 255; block size is 16.", "output": "Quotient after division of value by 16, a block number in 0 through 15.", "effects": "Pure calculation without allocation or external state."},
+    "wrong_output": "Remainder after division of value by 16, an offset in 0 through 15."
+  },
+  {
+    "id": "unit_06", "oracle": "quotient",
+    "body": "let mut remaining = value; let mut count = 0; while remaining >= 16 { remaining -= 16; count += 1; } count",
+    "fields": {"purpose": "Calculate the block index of an address.", "input": "A nonnegative address value at most 255, with sixteen bytes per block.", "output": "The count of complete blocks before the address, equal to value divided by 16.", "effects": "No observable effects other than the return value."},
+    "wrong_output": "The offset left after removing complete blocks, equal to value modulo 16."
+  },
+  {
+    "id": "unit_07", "oracle": "aligned",
+    "body": "value & 240",
+    "fields": {"purpose": "Find the beginning of the block containing an address.", "input": "Unsigned byte position from zero through 255; block size is 16.", "output": "The largest multiple of 16 not exceeding value, a byte address rather than a block number.", "effects": "Pure calculation without allocation or external state."},
+    "wrong_output": "The smallest multiple of 16 not less than value."
+  },
+  {
+    "id": "unit_08", "oracle": "predicate",
+    "body": "if value >= 16 { 1 } else { 0 }",
+    "fields": {"purpose": "Test whether an address lies beyond the first block.", "input": "A nonnegative address value at most 255, with sixteen bytes per block.", "output": "Returns one when value is at least 16, otherwise zero; not an offset or block number.", "effects": "No observable effects other than the return value."},
+    "wrong_output": "Returns zero when value is at least 16, otherwise one."
+  }
+]

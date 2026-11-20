@@ -1,0 +1,252 @@
+[
+  {
+    "claim": "role-change",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/types.rs::with_permission",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "a2ba4e5374655b5148dfdf918166f5de771d65592f956823845eca5df44249b4",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "field_update",
+      "conditions": [],
+      "effect": {
+        "replace": [
+          "permission_bits"
+        ],
+        "preserve": [
+          "file_type_bits"
+        ],
+        "result": "new_value"
+      }
+    },
+    "clauses": [
+      {
+        "text": "Return a mode with replacement permission bits while retaining original file-type bits",
+        "fields": [
+          "effect.replace",
+          "effect.preserve",
+          "effect.result"
+        ],
+        "status": "manual_partial_alignment"
+      },
+      {
+        "text": "this does not establish that those bits denote a valid NodeType.",
+        "fields": [],
+        "status": "no_dedicated_field"
+      }
+    ],
+    "review_questions": [
+      "Replacement value input binding is supplied by the obligation adapter, not by the short natural-language clause",
+      "A lack of validity guarantee is not an assertion that the result is invalid",
+      "Do not inject responsibility.owner or unconditionality as new knowledge only on the structured side"
+    ],
+    "admission": "not_admitted_pending_content_alignment",
+    "claim_text": "Return a mode with replacement permission bits while retaining original file-type bits; this does not establish that those bits denote a valid NodeType.",
+    "kind": "source_observation",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "clause_alignment": [
+      {
+        "text": "Return a mode with replacement permission bits while retaining original file-type bits",
+        "fields": [
+          "effect.replace",
+          "effect.preserve",
+          "effect.result"
+        ],
+        "status": "manual_partial_alignment",
+        "character_range": [
+          0,
+          86
+        ]
+      },
+      {
+        "text": "this does not establish that those bits denote a valid NodeType.",
+        "fields": [],
+        "status": "no_dedicated_field",
+        "character_range": [
+          88,
+          152
+        ]
+      }
+    ],
+    "schema_checks": [
+      "accepted",
+      "accepted"
+    ],
+    "semantic_equivalence": "not_established",
+    "mapping_origin": "analyst",
+    "human_authoring_minutes": null
+  },
+  {
+    "claim": "command-boundary",
+    "contract": {
+      "schema": "crate-contract/0",
+      "entity": "fs/kvfs/src/simple_file.rs::CommandFile::write_iter",
+      "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "configuration": {
+        "status": "unknown",
+        "expression": null
+      },
+      "responsibility": {
+        "owner": "kvfs",
+        "basis": "declared"
+      },
+      "kind": "callback",
+      "conditions": [
+        {
+          "subject": "input_length",
+          "operator": "gt",
+          "value": 0
+        },
+        {
+          "subject": "input_length",
+          "operator": "le",
+          "value": 4096
+        }
+      ],
+      "effect": {
+        "target": "self.write",
+        "count": 1,
+        "payload": "whole",
+        "after": "whole_collection",
+        "on_collection_failure": "no_callback"
+      }
+    },
+    "clauses": [
+      {
+        "text": "For nonempty input of at most 4096 bytes",
+        "fields": [
+          "conditions"
+        ],
+        "status": "manual_partial_alignment"
+      },
+      {
+        "text": "invoke self.write once only after the whole payload has been collected successfully",
+        "fields": [
+          "effect.target",
+          "effect.count",
+          "effect.after",
+          "effect.payload"
+        ],
+        "status": "condition_direction_requires_review"
+      },
+      {
+        "text": "a collection error or zero progress invokes no handler.",
+        "fields": [
+          "effect.on_collection_failure"
+        ],
+        "status": "requires_explicit_failure_definition"
+      }
+    ],
+    "review_questions": [
+      "Only-after imposes a necessary temporal precondition, not by itself an unconditional liveness promise",
+      "The existing evaluator includes zero progress in collection failure; that definition must be equally available to both arms",
+      "count=1 is evaluated after complete collection in the old adapter; do not silently attribute adapter assumptions to the text"
+    ],
+    "admission": "not_admitted_pending_content_alignment",
+    "claim_text": "For nonempty input of at most 4096 bytes, invoke self.write once only after the whole payload has been collected successfully; a collection error or zero progress invokes no handler.",
+    "kind": "source_observation",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "clause_alignment": [
+      {
+        "text": "For nonempty input of at most 4096 bytes",
+        "fields": [
+          "conditions"
+        ],
+        "status": "manual_partial_alignment",
+        "character_range": [
+          0,
+          40
+        ]
+      },
+      {
+        "text": "invoke self.write once only after the whole payload has been collected successfully",
+        "fields": [
+          "effect.target",
+          "effect.count",
+          "effect.after",
+          "effect.payload"
+        ],
+        "status": "condition_direction_requires_review",
+        "character_range": [
+          42,
+          125
+        ]
+      },
+      {
+        "text": "a collection error or zero progress invokes no handler.",
+        "fields": [
+          "effect.on_collection_failure"
+        ],
+        "status": "requires_explicit_failure_definition",
+        "character_range": [
+          127,
+          182
+        ]
+      }
+    ],
+    "schema_checks": [
+      "accepted",
+      "accepted"
+    ],
+    "semantic_equivalence": "not_established",
+    "mapping_origin": "analyst",
+    "human_authoring_minutes": null
+  },
+  {
+    "claim": "firmware-transition",
+    "contract": null,
+    "clauses": [
+      {
+        "text": "Keep boot DTB ownership in host integration until migrated",
+        "fields": [],
+        "status": "unsupported_normative_temporal_scope"
+      },
+      {
+        "text": "helpers outside the scoped migration remain separately tracked debt.",
+        "fields": [],
+        "status": "unsupported_exception_scope"
+      }
+    ],
+    "review_questions": [
+      "No actual migration completion or implementation ownership follows from a prescription",
+      "The migrated event and scoped helpers are not resolved here",
+      "An owner string does not encode the temporal transition and separate debt statement"
+    ],
+    "admission": "no_existing_counterpart",
+    "claim_text": "Keep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.",
+    "kind": "normative_responsibility",
+    "revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+    "clause_alignment": [
+      {
+        "text": "Keep boot DTB ownership in host integration until migrated",
+        "fields": [],
+        "status": "unsupported_normative_temporal_scope",
+        "character_range": [
+          0,
+          58
+        ]
+      },
+      {
+        "text": "helpers outside the scoped migration remain separately tracked debt.",
+        "fields": [],
+        "status": "unsupported_exception_scope",
+        "character_range": [
+          60,
+          128
+        ]
+      }
+    ],
+    "schema_checks": [],
+    "semantic_equivalence": "not_established",
+    "mapping_origin": "analyst",
+    "human_authoring_minutes": null
+  }
+]

@@ -1,0 +1,637 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Implementations for `uN::extract_bits` and `uN::deposit_bits`",
+      "path": "doc",
+      "range": [
+        0,
+        65
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        66,
+        69
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For the purposes of this implementation, the operations can be thought",
+      "path": "doc",
+      "range": [
+        70,
+        144
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " of as operating on the input bits as a list, starting from the least",
+      "path": "doc",
+      "range": [
+        145,
+        217
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " significant bit. Extraction is like `Vec::retain` that deletes bits",
+      "path": "doc",
+      "range": [
+        218,
+        289
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " where the mask has a zero. Deposition is like doing the inverse by",
+      "path": "doc",
+      "range": [
+        290,
+        360
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " inserting the zeros that extraction would delete.",
+      "path": "doc",
+      "range": [
+        361,
+        414
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        415,
+        418
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Key observation: Each extracted or deposited bit needs to be",
+      "path": "doc",
+      "range": [
+        419,
+        483
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " shifted by the count of zeros up to the corresponding mask bit.",
+      "path": "doc",
+      "range": [
+        484,
+        551
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        552,
+        555
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " With that in mind, the general idea is to decompose the operation into",
+      "path": "doc",
+      "range": [
+        556,
+        630
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " a sequence of stages in `0..log2(BITS)`, where each stage shifts some",
+      "path": "doc",
+      "range": [
+        631,
+        704
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " of the bits by `n = 1 << stage`. The masks for each stage are computed",
+      "path": "doc",
+      "range": [
+        705,
+        779
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " via prefix counts of zeros in the mask.",
+      "path": "doc",
+      "range": [
+        780,
+        823
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        824,
+        827
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Extraction",
+      "path": "doc",
+      "range": [
+        828,
+        844
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        845,
+        848
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Consider the input as a sequence of runs of data (bitstrings A,B,C,...),",
+      "path": "doc",
+      "range": [
+        849,
+        925
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " split by fixed-width groups of zeros ('.'), initially at width `n = 1`.",
+      "path": "doc",
+      "range": [
+        926,
+        1001
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Counting the groups of zeros, each stage shifts the odd-indexed runs of",
+      "path": "doc",
+      "range": [
+        1002,
+        1077
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " data right by `n`, effectively swapping them with the preceding zeros.",
+      "path": "doc",
+      "range": [
+        1078,
+        1152
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For the next stage, `n` is doubled as all the zeros are now paired.",
+      "path": "doc",
+      "range": [
+        1153,
+        1224
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        1225,
+        1236
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " .A.B.C.D.E.F.G.H",
+      "path": "doc",
+      "range": [
+        1237,
+        1257
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ..AB..CD..EF..GH",
+      "path": "doc",
+      "range": [
+        1258,
+        1278
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ....ABCD....EFGH",
+      "path": "doc",
+      "range": [
+        1279,
+        1299
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ........ABCDEFGH",
+      "path": "doc",
+      "range": [
+        1300,
+        1320
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1321,
+        1328
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " What makes this nontrivial is that the lengths of the bitstrings are not",
+      "path": "doc",
+      "range": [
+        1329,
+        1405
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the same. Using lowercase for individual bits, the above might look like",
+      "path": "doc",
+      "range": [
+        1406,
+        1482
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        1483,
+        1494
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " .a.bbb.ccccc.dd.e..g.hh",
+      "path": "doc",
+      "range": [
+        1495,
+        1522
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ..abbb..cccccdd..e..ghh",
+      "path": "doc",
+      "range": [
+        1523,
+        1550
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ....abbbcccccdd....eghh",
+      "path": "doc",
+      "range": [
+        1551,
+        1578
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ........abbbcccccddeghh",
+      "path": "doc",
+      "range": [
+        1579,
+        1606
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1607,
+        1614
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1615,
+        1618
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Deposition",
+      "path": "doc",
+      "range": [
+        1619,
+        1635
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1636,
+        1639
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For `deposit_bits`, the stages are reversed. We start with a single run of",
+      "path": "doc",
+      "range": [
+        1640,
+        1718
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " data in the low bits. Each stage then splits each run of data in two by",
+      "path": "doc",
+      "range": [
+        1719,
+        1794
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " shifting part of it left by `n`, which is halved each stage.",
+      "path": "doc",
+      "range": [
+        1795,
+        1859
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        1860,
+        1871
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ........ABCDEFGH",
+      "path": "doc",
+      "range": [
+        1872,
+        1892
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ....ABCD....EFGH",
+      "path": "doc",
+      "range": [
+        1893,
+        1913
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ..AB..CD..EF..GH",
+      "path": "doc",
+      "range": [
+        1914,
+        1934
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " .A.B.C.D.E.F.G.H",
+      "path": "doc",
+      "range": [
+        1935,
+        1955
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1956,
+        1963
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1964,
+        1967
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Stage masks",
+      "path": "doc",
+      "range": [
+        1968,
+        1985
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1986,
+        1989
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " To facilitate the shifts at each stage, we compute a mask that covers both",
+      "path": "doc",
+      "range": [
+        1990,
+        2068
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the bitstrings to shift, and the zeros they shift into.",
+      "path": "doc",
+      "range": [
+        2069,
+        2128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```text",
+      "path": "doc",
+      "range": [
+        2129,
+        2140
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " .A.B.C.D.E.F.G.H",
+      "path": "doc",
+      "range": [
+        2141,
+        2161
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "  ##  ##  ##  ##",
+      "path": "doc",
+      "range": [
+        2162,
+        2181
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ..AB..CD..EF..GH",
+      "path": "doc",
+      "range": [
+        2182,
+        2202
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "   ####    ####",
+      "path": "doc",
+      "range": [
+        2203,
+        2221
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ....ABCD....EFGH",
+      "path": "doc",
+      "range": [
+        2222,
+        2242
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     ########",
+      "path": "doc",
+      "range": [
+        2243,
+        2259
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ........ABCDEFGH",
+      "path": "doc",
+      "range": [
+        2260,
+        2280
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        2281,
+        2288
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        2290,
+        6790
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6792,
+        6806
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6808,
+        6823
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6825,
+        6840
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6842,
+        6857
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6859,
+        6875
+      ]
+    }
+  ],
+  "source_sha256": "f105406ce0633fdaf07f5c29d8b2428db0741c62fcd06943707f62cd4bf26159"
+}

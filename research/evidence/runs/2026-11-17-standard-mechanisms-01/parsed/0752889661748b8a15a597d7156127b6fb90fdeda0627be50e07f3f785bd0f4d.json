@@ -1,0 +1,7675 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Utilities for dynamic typing or type reflection.",
+      "path": "doc",
+      "range": [
+        0,
+        52
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        53,
+        56
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # `Any` and `TypeId`",
+      "path": "doc",
+      "range": [
+        57,
+        81
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        82,
+        85
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " `Any` itself can be used to get a `TypeId`, and has more features when used",
+      "path": "doc",
+      "range": [
+        86,
+        165
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " as a trait object. As `&dyn Any` (a borrowed trait object), it has the `is`",
+      "path": "doc",
+      "range": [
+        166,
+        245
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and `downcast_ref` methods, to test if the contained value is of a given type,",
+      "path": "doc",
+      "range": [
+        246,
+        328
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and to get a reference to the inner value as a type. As `&mut dyn Any`, there",
+      "path": "doc",
+      "range": [
+        329,
+        410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is also the `downcast_mut` method, for getting a mutable reference to the",
+      "path": "doc",
+      "range": [
+        411,
+        488
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " inner value. `Box<dyn Any>` adds the `downcast` method, which attempts to",
+      "path": "doc",
+      "range": [
+        489,
+        566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " convert to a `Box<T>`. See the [`Box`] documentation for the full details.",
+      "path": "doc",
+      "range": [
+        567,
+        645
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        646,
+        649
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Note that `&dyn Any` is limited to testing whether a value is of a specified",
+      "path": "doc",
+      "range": [
+        650,
+        730
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " concrete type, and cannot be used to test whether a type implements a trait.",
+      "path": "doc",
+      "range": [
+        731,
+        811
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        812,
+        815
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Box`]: ../../std/boxed/struct.Box.html",
+      "path": "doc",
+      "range": [
+        816,
+        860
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        861,
+        864
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Smart pointers and `dyn Any`",
+      "path": "doc",
+      "range": [
+        865,
+        899
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        900,
+        903
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " One piece of behavior to keep in mind when using `Any` as a trait object,",
+      "path": "doc",
+      "range": [
+        904,
+        981
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " especially with types like `Box<dyn Any>` or `Arc<dyn Any>`, is that simply",
+      "path": "doc",
+      "range": [
+        982,
+        1061
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " calling `.type_id()` on the value will produce the `TypeId` of the",
+      "path": "doc",
+      "range": [
+        1062,
+        1132
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " *container*, not the underlying trait object. This can be avoided by",
+      "path": "doc",
+      "range": [
+        1133,
+        1205
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " converting the smart pointer into a `&dyn Any` instead, which will return",
+      "path": "doc",
+      "range": [
+        1206,
+        1283
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " the object's `TypeId`. For example:",
+      "path": "doc",
+      "range": [
+        1284,
+        1323
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1324,
+        1327
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1328,
+        1335
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::any::{Any, TypeId};",
+      "path": "doc",
+      "range": [
+        1336,
+        1368
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1369,
+        1372
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let boxed: Box<dyn Any> = Box::new(3_i32);",
+      "path": "doc",
+      "range": [
+        1373,
+        1419
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1420,
+        1423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // You're more likely to want this:",
+      "path": "doc",
+      "range": [
+        1424,
+        1463
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let actual_id = (&*boxed).type_id();",
+      "path": "doc",
+      "range": [
+        1464,
+        1504
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // ... than this:",
+      "path": "doc",
+      "range": [
+        1505,
+        1526
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let boxed_id = boxed.type_id();",
+      "path": "doc",
+      "range": [
+        1527,
+        1562
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1563,
+        1566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(actual_id, TypeId::of::<i32>());",
+      "path": "doc",
+      "range": [
+        1567,
+        1614
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(boxed_id, TypeId::of::<Box<dyn Any>>());",
+      "path": "doc",
+      "range": [
+        1615,
+        1670
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1671,
+        1678
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1679,
+        1682
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ## Examples",
+      "path": "doc",
+      "range": [
+        1683,
+        1698
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1699,
+        1702
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Consider a situation where we want to log a value passed to a function.",
+      "path": "doc",
+      "range": [
+        1703,
+        1778
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " We know the value we're working on implements `Debug`, but we don't know its",
+      "path": "doc",
+      "range": [
+        1779,
+        1859
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " concrete type. We want to give special treatment to certain types: in this",
+      "path": "doc",
+      "range": [
+        1860,
+        1938
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " case printing out the length of `String` values prior to their value.",
+      "path": "doc",
+      "range": [
+        1939,
+        2012
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " We don't know the concrete type of our value at compile time, so we need to",
+      "path": "doc",
+      "range": [
+        2013,
+        2092
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use runtime reflection instead.",
+      "path": "doc",
+      "range": [
+        2093,
+        2128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2129,
+        2132
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        2133,
+        2144
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::fmt::Debug;",
+      "path": "doc",
+      "range": [
+        2145,
+        2169
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::any::Any;",
+      "path": "doc",
+      "range": [
+        2170,
+        2192
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2193,
+        2196
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // Logger function for any type that implements `Debug`.",
+      "path": "doc",
+      "range": [
+        2197,
+        2257
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn log<T: Any + Debug>(value: &T) {",
+      "path": "doc",
+      "range": [
+        2258,
+        2297
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let value_any = value as &dyn Any;",
+      "path": "doc",
+      "range": [
+        2298,
+        2340
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2341,
+        2344
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // Try to convert our value to a `String`. If successful, we want to",
+      "path": "doc",
+      "range": [
+        2345,
+        2421
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // output the `String`'s length as well as its value. If not, it's a",
+      "path": "doc",
+      "range": [
+        2422,
+        2498
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // different type: just print it out unadorned.",
+      "path": "doc",
+      "range": [
+        2499,
+        2554
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     match value_any.downcast_ref::<String>() {",
+      "path": "doc",
+      "range": [
+        2555,
+        2605
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Some(as_string) => {",
+      "path": "doc",
+      "range": [
+        2606,
+        2638
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             println!(\"String ({}): {}\", as_string.len(), as_string);",
+      "path": "doc",
+      "range": [
+        2639,
+        2711
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        2712,
+        2725
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         None => {",
+      "path": "doc",
+      "range": [
+        2726,
+        2747
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "             println!(\"{value:?}\");",
+      "path": "doc",
+      "range": [
+        2748,
+        2786
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         }",
+      "path": "doc",
+      "range": [
+        2787,
+        2800
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        2801,
+        2810
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        2811,
+        2816
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2817,
+        2820
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // This function wants to log its parameter out prior to doing work with it.",
+      "path": "doc",
+      "range": [
+        2821,
+        2901
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn do_work<T: Any + Debug>(value: &T) {",
+      "path": "doc",
+      "range": [
+        2902,
+        2945
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     log(value);",
+      "path": "doc",
+      "range": [
+        2946,
+        2965
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // ...do some other work",
+      "path": "doc",
+      "range": [
+        2966,
+        2998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        2999,
+        3004
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3005,
+        3008
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn main() {",
+      "path": "doc",
+      "range": [
+        3009,
+        3024
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let my_string = \"Hello World\".to_string();",
+      "path": "doc",
+      "range": [
+        3025,
+        3075
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     do_work(&my_string);",
+      "path": "doc",
+      "range": [
+        3076,
+        3104
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3105,
+        3108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let my_i8: i8 = 100;",
+      "path": "doc",
+      "range": [
+        3109,
+        3137
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     do_work(&my_i8);",
+      "path": "doc",
+      "range": [
+        3138,
+        3162
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3163,
+        3168
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3169,
+        3176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3177,
+        3180
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        3182,
+        3228
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A trait to emulate dynamic typing.",
+          "path": "doc",
+          "range": [
+            3558,
+            3596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3597,
+            3600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Most types implement `Any`. However, any type which contains a non-`'static` reference does not.",
+          "path": "doc",
+          "range": [
+            3601,
+            3701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the [module-level documentation][mod] for more details.",
+          "path": "doc",
+          "range": [
+            3702,
+            3765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3766,
+            3769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [mod]: crate::any",
+          "path": "doc",
+          "range": [
+            3770,
+            3791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4453,
+            4498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            4499,
+            4531
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Any",
+      "range": [
+        3558,
+        5222
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the `TypeId` of `self`.",
+          "path": "doc",
+          "range": [
+            4561,
+            4593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4598,
+            4601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If called on a `dyn Any` trait object",
+          "path": "doc",
+          "range": [
+            4606,
+            4647
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (or a trait object of a subtrait of `Any`),",
+          "path": "doc",
+          "range": [
+            4652,
+            4699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this returns the `TypeId` of the underlying",
+          "path": "doc",
+          "range": [
+            4704,
+            4751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " concrete type, not that of `dyn Any` itself.",
+          "path": "doc",
+          "range": [
+            4756,
+            4804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4809,
+            4812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4817,
+            4831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4836,
+            4839
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4844,
+            4851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::{Any, TypeId};",
+          "path": "doc",
+          "range": [
+            4856,
+            4888
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4893,
+            4896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn is_string(s: &dyn Any) -> bool {",
+          "path": "doc",
+          "range": [
+            4901,
+            4940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     TypeId::of::<String>() == s.type_id()",
+          "path": "doc",
+          "range": [
+            4945,
+            4990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            4995,
+            5000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5005,
+            5008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(is_string(&0), false);",
+          "path": "doc",
+          "range": [
+            5013,
+            5050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(is_string(&\"cookie monster\".to_string()), true);",
+          "path": "doc",
+          "range": [
+            5055,
+            5118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5123,
+            5130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5135,
+            5187
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "type_id",
+      "range": [
+        4561,
+        5220
+      ],
+      "signature_range": [
+        5192,
+        5219
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5224,
+            5269
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5224,
+        5375
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [],
+      "body_range": [
+        5340,
+        5373
+      ],
+      "kind": "impl_fn",
+      "name": "type_id",
+      "range": [
+        5312,
+        5373
+      ],
+      "signature_range": [
+        5312,
+        5339
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5582,
+            5627
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5582,
+        5782
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        5719,
+        5780
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        5662,
+        5780
+      ],
+      "signature_range": [
+        5662,
+        5718
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5956,
+            6001
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5956,
+        6163
+      ]
+    },
+    {
+      "ancestors": [
+        6
+      ],
+      "attributes": [],
+      "body_range": [
+        6100,
+        6161
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        6043,
+        6161
+      ],
+      "signature_range": [
+        6043,
+        6099
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6165,
+            6227
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6165,
+        6396
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [],
+      "body_range": [
+        6333,
+        6394
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        6276,
+        6394
+      ],
+      "signature_range": [
+        6276,
+        6332
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6398,
+        11171
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if the inner type is the same as `T`.",
+          "path": "doc",
+          "range": [
+            6417,
+            6473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6478,
+            6481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            6486,
+            6500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6505,
+            6508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6513,
+            6520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            6525,
+            6547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6552,
+            6555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn is_string(s: &dyn Any) {",
+          "path": "doc",
+          "range": [
+            6560,
+            6591
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if s.is::<String>() {",
+          "path": "doc",
+          "range": [
+            6596,
+            6625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string!\");",
+          "path": "doc",
+          "range": [
+            6630,
+            6669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            6674,
+            6690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            6695,
+            6735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            6740,
+            6749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            6754,
+            6759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6764,
+            6767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&0);",
+          "path": "doc",
+          "range": [
+            6772,
+            6790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            6795,
+            6840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6845,
+            6852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            6857,
+            6902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6907,
+            6916
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6954,
+        7244
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        6417,
+        7244
+      ],
+      "signature_range": [
+        6925,
+        6953
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some reference to the inner value if it is of type `T`, or",
+          "path": "doc",
+          "range": [
+            7250,
+            7320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `None` if it isn't.",
+          "path": "doc",
+          "range": [
+            7325,
+            7348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7353,
+            7356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            7361,
+            7375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7380,
+            7383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7388,
+            7395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            7400,
+            7422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7427,
+            7430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(s: &dyn Any) {",
+          "path": "doc",
+          "range": [
+            7435,
+            7472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(string) = s.downcast_ref::<String>() {",
+          "path": "doc",
+          "range": [
+            7477,
+            7535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string({}): '{}'\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            7540,
+            7610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            7615,
+            7631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            7636,
+            7676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            7681,
+            7690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            7695,
+            7700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7705,
+            7708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&0);",
+          "path": "doc",
+          "range": [
+            7713,
+            7737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            7742,
+            7793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7798,
+            7805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7810,
+            7855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7860,
+            7869
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7923,
+        8330
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        7250,
+        8330
+      ],
+      "signature_range": [
+        7878,
+        7922
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns some mutable reference to the inner value if it is of type `T`, or",
+          "path": "doc",
+          "range": [
+            8336,
+            8414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `None` if it isn't.",
+          "path": "doc",
+          "range": [
+            8419,
+            8442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8447,
+            8450
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            8455,
+            8469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8474,
+            8477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8482,
+            8489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            8494,
+            8516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8521,
+            8524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn modify_if_u32(s: &mut dyn Any) {",
+          "path": "doc",
+          "range": [
+            8529,
+            8568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(num) = s.downcast_mut::<u32>() {",
+          "path": "doc",
+          "range": [
+            8573,
+            8625
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         *num = 42;",
+          "path": "doc",
+          "range": [
+            8630,
+            8652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            8657,
+            8666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            8671,
+            8676
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8681,
+            8684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x = 10u32;",
+          "path": "doc",
+          "range": [
+            8689,
+            8711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut s = \"starlord\".to_string();",
+          "path": "doc",
+          "range": [
+            8716,
+            8755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8760,
+            8763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut x);",
+          "path": "doc",
+          "range": [
+            8768,
+            8794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut s);",
+          "path": "doc",
+          "range": [
+            8799,
+            8825
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8830,
+            8833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(x, 42);",
+          "path": "doc",
+          "range": [
+            8838,
+            8860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&s, \"starlord\");",
+          "path": "doc",
+          "range": [
+            8865,
+            8896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            8901,
+            8908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8913,
+            8958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8963,
+            8972
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9034,
+        9441
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        8336,
+        9441
+      ],
+      "signature_range": [
+        8981,
+        9033
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the inner value as type `dyn T`.",
+          "path": "doc",
+          "range": [
+            9447,
+            9506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9511,
+            9514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9519,
+            9533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9538,
+            9541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9546,
+            9553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            9558,
+            9593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9598,
+            9601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            9606,
+            9628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9633,
+            9636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            9641,
+            9685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9690,
+            9693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            9698,
+            9710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked_ref::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            9715,
+            9775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            9780,
+            9785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9790,
+            9797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9802,
+            9805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            9810,
+            9822
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9827,
+            9830
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            9835,
+            9899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            9904,
+            9956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            9961,
+            10021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10026,
+            10035
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10098,
+        10266
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_ref",
+      "range": [
+        9447,
+        10266
+      ],
+      "signature_range": [
+        10044,
+        10097
+      ]
+    },
+    {
+      "ancestors": [
+        10,
+        14
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        10108,
+        10137
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the inner value as type `dyn T`.",
+          "path": "doc",
+          "range": [
+            10272,
+            10339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10344,
+            10347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10352,
+            10366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10371,
+            10374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10379,
+            10386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            10391,
+            10426
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10431,
+            10434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            10439,
+            10461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10466,
+            10469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            10474,
+            10522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10527,
+            10530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            10535,
+            10547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     *x.downcast_unchecked_mut::<usize>() += 1;",
+          "path": "doc",
+          "range": [
+            10552,
+            10602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            10607,
+            10612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10617,
+            10620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*x.downcast_ref::<usize>().unwrap(), 2);",
+          "path": "doc",
+          "range": [
+            10625,
+            10680
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10685,
+            10692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10697,
+            10700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            10705,
+            10717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10722,
+            10725
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            10730,
+            10794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            10799,
+            10851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10856,
+            10916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10921,
+            10930
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11001,
+        11169
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_mut",
+      "range": [
+        10272,
+        11169
+      ],
+      "signature_range": [
+        10939,
+        11000
+      ]
+    },
+    {
+      "ancestors": [
+        10,
+        16
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        11011,
+        11040
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11173,
+        14801
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Any`.",
+          "path": "doc",
+          "range": [
+            11199,
+            11256
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11261,
+            11264
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11269,
+            11283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11288,
+            11291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11296,
+            11303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            11308,
+            11330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11335,
+            11338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn is_string(s: &(dyn Any + Send)) {",
+          "path": "doc",
+          "range": [
+            11343,
+            11383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if s.is::<String>() {",
+          "path": "doc",
+          "range": [
+            11388,
+            11417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string!\");",
+          "path": "doc",
+          "range": [
+            11422,
+            11461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            11466,
+            11482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            11487,
+            11527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            11532,
+            11541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            11546,
+            11551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11556,
+            11559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&0);",
+          "path": "doc",
+          "range": [
+            11564,
+            11582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            11587,
+            11632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11637,
+            11644
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11649,
+            11694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11699,
+            11708
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11746,
+        11786
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        11199,
+        11786
+      ],
+      "signature_range": [
+        11717,
+        11745
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Any`.",
+          "path": "doc",
+          "range": [
+            11792,
+            11849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11854,
+            11857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            11862,
+            11876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11881,
+            11884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            11889,
+            11896
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            11901,
+            11923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11928,
+            11931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(s: &(dyn Any + Send)) {",
+          "path": "doc",
+          "range": [
+            11936,
+            11982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(string) = s.downcast_ref::<String>() {",
+          "path": "doc",
+          "range": [
+            11987,
+            12045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string({}): '{}'\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            12050,
+            12120
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            12125,
+            12141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            12146,
+            12186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12191,
+            12200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12205,
+            12210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12215,
+            12218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&0);",
+          "path": "doc",
+          "range": [
+            12223,
+            12247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            12252,
+            12303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12308,
+            12315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12320,
+            12365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12370,
+            12379
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12433,
+        12483
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        11792,
+        12483
+      ],
+      "signature_range": [
+        12388,
+        12432
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Any`.",
+          "path": "doc",
+          "range": [
+            12489,
+            12546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12551,
+            12554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            12559,
+            12573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12578,
+            12581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            12586,
+            12593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            12598,
+            12620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12625,
+            12628
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn modify_if_u32(s: &mut (dyn Any + Send)) {",
+          "path": "doc",
+          "range": [
+            12633,
+            12681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(num) = s.downcast_mut::<u32>() {",
+          "path": "doc",
+          "range": [
+            12686,
+            12738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         *num = 42;",
+          "path": "doc",
+          "range": [
+            12743,
+            12765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            12770,
+            12779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            12784,
+            12789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12794,
+            12797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x = 10u32;",
+          "path": "doc",
+          "range": [
+            12802,
+            12824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut s = \"starlord\".to_string();",
+          "path": "doc",
+          "range": [
+            12829,
+            12868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12873,
+            12876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut x);",
+          "path": "doc",
+          "range": [
+            12881,
+            12907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut s);",
+          "path": "doc",
+          "range": [
+            12912,
+            12938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12943,
+            12946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(x, 42);",
+          "path": "doc",
+          "range": [
+            12951,
+            12973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&s, \"starlord\");",
+          "path": "doc",
+          "range": [
+            12978,
+            13009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13014,
+            13021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            13026,
+            13071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13076,
+            13085
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13147,
+        13197
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        12489,
+        13197
+      ],
+      "signature_range": [
+        13094,
+        13146
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Any`.",
+          "path": "doc",
+          "range": [
+            13203,
+            13260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13265,
+            13268
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13273,
+            13287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13292,
+            13295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13300,
+            13307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            13312,
+            13347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13352,
+            13355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            13360,
+            13382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13387,
+            13390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            13395,
+            13439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13444,
+            13447
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            13452,
+            13464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked_ref::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            13469,
+            13529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            13534,
+            13539
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            13544,
+            13551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13556,
+            13559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            13564,
+            13576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13581,
+            13584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            13589,
+            13653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            13658,
+            13710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13715,
+            13775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13780,
+            13789
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13852,
+        13963
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_ref",
+      "range": [
+        13203,
+        13963
+      ],
+      "signature_range": [
+        13798,
+        13851
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `dyn Any`.",
+          "path": "doc",
+          "range": [
+            13969,
+            14026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14031,
+            14034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14039,
+            14053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14058,
+            14061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14066,
+            14073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            14078,
+            14113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14118,
+            14121
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            14126,
+            14148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14153,
+            14156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            14161,
+            14209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14214,
+            14217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            14222,
+            14234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     *x.downcast_unchecked_mut::<usize>() += 1;",
+          "path": "doc",
+          "range": [
+            14239,
+            14289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            14294,
+            14299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14304,
+            14307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*x.downcast_ref::<usize>().unwrap(), 2);",
+          "path": "doc",
+          "range": [
+            14312,
+            14367
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14372,
+            14379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14384,
+            14387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            14392,
+            14404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14409,
+            14412
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            14417,
+            14481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            14486,
+            14538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14543,
+            14603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14608,
+            14617
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14688,
+        14799
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_mut",
+      "range": [
+        13969,
+        14799
+      ],
+      "signature_range": [
+        14626,
+        14687
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14803,
+        18474
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `Any`.",
+          "path": "doc",
+          "range": [
+            14836,
+            14889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14894,
+            14897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            14902,
+            14916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14921,
+            14924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14929,
+            14936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            14941,
+            14963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14968,
+            14971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn is_string(s: &(dyn Any + Send + Sync)) {",
+          "path": "doc",
+          "range": [
+            14976,
+            15023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if s.is::<String>() {",
+          "path": "doc",
+          "range": [
+            15028,
+            15057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string!\");",
+          "path": "doc",
+          "range": [
+            15062,
+            15101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            15106,
+            15122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            15127,
+            15167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            15172,
+            15181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15186,
+            15191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15196,
+            15199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&0);",
+          "path": "doc",
+          "range": [
+            15204,
+            15222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            15227,
+            15272
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15277,
+            15284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            15289,
+            15351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15356,
+            15365
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15403,
+        15443
+      ],
+      "kind": "impl_fn",
+      "name": "is",
+      "range": [
+        14836,
+        15443
+      ],
+      "signature_range": [
+        15374,
+        15402
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `Any`.",
+          "path": "doc",
+          "range": [
+            15449,
+            15502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15507,
+            15510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            15515,
+            15529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15534,
+            15537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15542,
+            15549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            15554,
+            15576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15581,
+            15584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn print_if_string(s: &(dyn Any + Send + Sync)) {",
+          "path": "doc",
+          "range": [
+            15589,
+            15642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(string) = s.downcast_ref::<String>() {",
+          "path": "doc",
+          "range": [
+            15647,
+            15705
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"It's a string({}): '{}'\", string.len(), string);",
+          "path": "doc",
+          "range": [
+            15710,
+            15780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            15785,
+            15801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         println!(\"Not a string...\");",
+          "path": "doc",
+          "range": [
+            15806,
+            15846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            15851,
+            15860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            15865,
+            15870
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15875,
+            15878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&0);",
+          "path": "doc",
+          "range": [
+            15883,
+            15907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " print_if_string(&\"cookie monster\".to_string());",
+          "path": "doc",
+          "range": [
+            15912,
+            15963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            15968,
+            15975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            15980,
+            16042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16047,
+            16056
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16110,
+        16160
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_ref",
+      "range": [
+        15449,
+        16160
+      ],
+      "signature_range": [
+        16065,
+        16109
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `Any`.",
+          "path": "doc",
+          "range": [
+            16166,
+            16219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16224,
+            16227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            16232,
+            16246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16251,
+            16254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16259,
+            16266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            16271,
+            16293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16298,
+            16301
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn modify_if_u32(s: &mut (dyn Any + Send + Sync)) {",
+          "path": "doc",
+          "range": [
+            16306,
+            16361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if let Some(num) = s.downcast_mut::<u32>() {",
+          "path": "doc",
+          "range": [
+            16366,
+            16418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         *num = 42;",
+          "path": "doc",
+          "range": [
+            16423,
+            16445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            16450,
+            16459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            16464,
+            16469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16474,
+            16477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x = 10u32;",
+          "path": "doc",
+          "range": [
+            16482,
+            16504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut s = \"starlord\".to_string();",
+          "path": "doc",
+          "range": [
+            16509,
+            16548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16553,
+            16556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut x);",
+          "path": "doc",
+          "range": [
+            16561,
+            16587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " modify_if_u32(&mut s);",
+          "path": "doc",
+          "range": [
+            16592,
+            16618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16623,
+            16626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(x, 42);",
+          "path": "doc",
+          "range": [
+            16631,
+            16653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&s, \"starlord\");",
+          "path": "doc",
+          "range": [
+            16658,
+            16689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16694,
+            16701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16706,
+            16768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16773,
+            16782
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16844,
+        16894
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_mut",
+      "range": [
+        16166,
+        16894
+      ],
+      "signature_range": [
+        16791,
+        16843
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `Any`.",
+          "path": "doc",
+          "range": [
+            16900,
+            16953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16958,
+            16961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            16966,
+            16980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16985,
+            16988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            16993,
+            17000
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            17005,
+            17040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17045,
+            17048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            17053,
+            17075
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17080,
+            17083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            17088,
+            17132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17137,
+            17140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            17145,
+            17157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(*x.downcast_unchecked_ref::<usize>(), 1);",
+          "path": "doc",
+          "range": [
+            17162,
+            17222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            17227,
+            17232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17237,
+            17244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            17249,
+            17261
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17266,
+            17269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            17274,
+            17338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            17343,
+            17395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            17400,
+            17460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            17465,
+            17474
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17537,
+        17648
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_ref",
+      "range": [
+        16900,
+        17648
+      ],
+      "signature_range": [
+        17483,
+        17536
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forwards to the method defined on the type `Any`.",
+          "path": "doc",
+          "range": [
+            17654,
+            17707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17712,
+            17715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            17720,
+            17734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17739,
+            17742
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            17747,
+            17754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(downcast_unchecked)]",
+          "path": "doc",
+          "range": [
+            17759,
+            17794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17799,
+            17802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::Any;",
+          "path": "doc",
+          "range": [
+            17807,
+            17829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17834,
+            17837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut x: Box<dyn Any> = Box::new(1_usize);",
+          "path": "doc",
+          "range": [
+            17842,
+            17890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17895,
+            17898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe {",
+          "path": "doc",
+          "range": [
+            17903,
+            17915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     *x.downcast_unchecked_mut::<usize>() += 1;",
+          "path": "doc",
+          "range": [
+            17920,
+            17970
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            17975,
+            17980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17985,
+            17988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*x.downcast_ref::<usize>().unwrap(), 2);",
+          "path": "doc",
+          "range": [
+            17993,
+            18048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18053,
+            18060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            18065,
+            18077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18082,
+            18085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The contained value must be of type `T`. Calling this method",
+          "path": "doc",
+          "range": [
+            18090,
+            18154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with the incorrect type is *undefined behavior*.",
+          "path": "doc",
+          "range": [
+            18159,
+            18211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            18216,
+            18276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            18281,
+            18290
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18361,
+        18472
+      ],
+      "kind": "impl_fn",
+      "name": "downcast_unchecked_mut",
+      "range": [
+        17654,
+        18472
+      ],
+      "signature_range": [
+        18299,
+        18360
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A `TypeId` represents a globally unique identifier for a type.",
+          "path": "doc",
+          "range": [
+            18663,
+            18729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18730,
+            18733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Each `TypeId` is an opaque object which does not allow inspection of what's",
+          "path": "doc",
+          "range": [
+            18734,
+            18813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " inside but does allow basic operations such as cloning, comparison,",
+          "path": "doc",
+          "range": [
+            18814,
+            18885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " printing, and showing.",
+          "path": "doc",
+          "range": [
+            18886,
+            18912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18913,
+            18916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `TypeId` is currently only available for types which ascribe to `'static`,",
+          "path": "doc",
+          "range": [
+            18917,
+            18997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but this limitation may be removed in the future.",
+          "path": "doc",
+          "range": [
+            18998,
+            19051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19052,
+            19055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " While `TypeId` implements `Hash`, `PartialOrd`, and `Ord`, it is worth",
+          "path": "doc",
+          "range": [
+            19056,
+            19130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " noting that the hashes and ordering will vary between Rust releases. Beware",
+          "path": "doc",
+          "range": [
+            19131,
+            19210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of relying on them inside of your code!",
+          "path": "doc",
+          "range": [
+            19211,
+            19254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19255,
+            19258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Layout",
+          "path": "doc",
+          "range": [
+            19259,
+            19271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19272,
+            19275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Like other [`Rust`-representation][repr-rust] types, `TypeId`'s size and layout are unstable.",
+          "path": "doc",
+          "range": [
+            19276,
+            19373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In particular, this means that you cannot rely on the size and layout of `TypeId` remaining the",
+          "path": "doc",
+          "range": [
+            19374,
+            19473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " same between Rust releases; they are subject to change without prior notice between Rust",
+          "path": "doc",
+          "range": [
+            19474,
+            19566
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " releases.",
+          "path": "doc",
+          "range": [
+            19567,
+            19580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19581,
+            19584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [repr-rust]: https://doc.rust-lang.org/reference/type-layout.html#r-layout.repr.rust.unspecified",
+          "path": "doc",
+          "range": [
+            19585,
+            19685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19686,
+            19689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Danger of Improper Variance",
+          "path": "doc",
+          "range": [
+            19690,
+            19723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19724,
+            19727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You might think that subtyping is impossible between two static types,",
+          "path": "doc",
+          "range": [
+            19728,
+            19802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " but this is false; there exists a static type with a static subtype.",
+          "path": "doc",
+          "range": [
+            19803,
+            19875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To wit, `fn(&str)`, which is short for `for<'any> fn(&'any str)`, and",
+          "path": "doc",
+          "range": [
+            19876,
+            19949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `fn(&'static str)`, are two distinct, static types, and yet,",
+          "path": "doc",
+          "range": [
+            19950,
+            20014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `fn(&str)` is a subtype of `fn(&'static str)`, since any value of type",
+          "path": "doc",
+          "range": [
+            20015,
+            20089
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `fn(&str)` can be used where a value of type `fn(&'static str)` is needed.",
+          "path": "doc",
+          "range": [
+            20090,
+            20168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20169,
+            20172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This means that abstractions around `TypeId`, despite its",
+          "path": "doc",
+          "range": [
+            20173,
+            20234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `'static` bound on arguments, still need to worry about unnecessary",
+          "path": "doc",
+          "range": [
+            20235,
+            20306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and improper variance: it is advisable to strive for invariance",
+          "path": "doc",
+          "range": [
+            20307,
+            20374
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " first. The usability impact will be negligible, while the reduction",
+          "path": "doc",
+          "range": [
+            20375,
+            20446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in the risk of unsoundness will be most welcome.",
+          "path": "doc",
+          "range": [
+            20447,
+            20499
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20500,
+            20503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Examples",
+          "path": "doc",
+          "range": [
+            20504,
+            20519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20520,
+            20523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Suppose `SubType` is a subtype of `SuperType`, that is,",
+          "path": "doc",
+          "range": [
+            20524,
+            20583
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a value of type `SubType` can be used wherever",
+          "path": "doc",
+          "range": [
+            20584,
+            20634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a value of type `SuperType` is expected.",
+          "path": "doc",
+          "range": [
+            20635,
+            20679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Suppose also that `CoVar<T>` is a generic type, which is covariant over `T`",
+          "path": "doc",
+          "range": [
+            20680,
+            20759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (like many other types, including `PhantomData<T>` and `Vec<T>`).",
+          "path": "doc",
+          "range": [
+            20760,
+            20829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20830,
+            20833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Then, by covariance, `CoVar<SubType>` is a subtype of `CoVar<SuperType>`,",
+          "path": "doc",
+          "range": [
+            20834,
+            20911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is, a value of type `CoVar<SubType>` can be used wherever",
+          "path": "doc",
+          "range": [
+            20912,
+            20978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a value of type `CoVar<SuperType>` is expected.",
+          "path": "doc",
+          "range": [
+            20979,
+            21030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21031,
+            21034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Then if `CoVar<SuperType>` relies on `TypeId::of::<SuperType>()` to uphold any invariants,",
+          "path": "doc",
+          "range": [
+            21035,
+            21129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " those invariants may be broken because a value of type `CoVar<SuperType>` can be created",
+          "path": "doc",
+          "range": [
+            21130,
+            21222
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without going through any of its methods, like so:",
+          "path": "doc",
+          "range": [
+            21223,
+            21277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21278,
+            21285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type SubType = fn(&());",
+          "path": "doc",
+          "range": [
+            21286,
+            21313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type SuperType = fn(&'static ());",
+          "path": "doc",
+          "range": [
+            21314,
+            21351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type CoVar<T> = Vec<T>; // imagine something more complicated",
+          "path": "doc",
+          "range": [
+            21352,
+            21417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21418,
+            21421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sub: CoVar<SubType> = CoVar::new();",
+          "path": "doc",
+          "range": [
+            21422,
+            21465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // we have a `CoVar<SuperType>` instance without",
+          "path": "doc",
+          "range": [
+            21466,
+            21518
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // *ever* having called `CoVar::<SuperType>::new()`!",
+          "path": "doc",
+          "range": [
+            21519,
+            21575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let fake_super: CoVar<SuperType> = sub;",
+          "path": "doc",
+          "range": [
+            21576,
+            21619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21620,
+            21627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21628,
+            21631
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The following is an example program that tries to use `TypeId::of` to",
+          "path": "doc",
+          "range": [
+            21632,
+            21705
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement a generic type `Unique<T>` that guarantees unique instances for each `Unique<T>`,",
+          "path": "doc",
+          "range": [
+            21706,
+            21801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that is, and for each type `T` there can be at most one value of type `Unique<T>` at any time.",
+          "path": "doc",
+          "range": [
+            21802,
+            21900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21901,
+            21904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21905,
+            21912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " mod unique {",
+          "path": "doc",
+          "range": [
+            21913,
+            21929
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use std::any::TypeId;",
+          "path": "doc",
+          "range": [
+            21930,
+            21959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use std::collections::BTreeSet;",
+          "path": "doc",
+          "range": [
+            21960,
+            21999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use std::marker::PhantomData;",
+          "path": "doc",
+          "range": [
+            22000,
+            22037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use std::sync::Mutex;",
+          "path": "doc",
+          "range": [
+            22038,
+            22067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22068,
+            22071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     static ID_SET: Mutex<BTreeSet<TypeId>> = Mutex::new(BTreeSet::new());",
+          "path": "doc",
+          "range": [
+            22072,
+            22149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22150,
+            22153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // TypeId has only covariant uses, which makes Unique covariant over TypeAsId 🚨",
+          "path": "doc",
+          "range": [
+            22154,
+            22244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     #[derive(Debug, PartialEq)]",
+          "path": "doc",
+          "range": [
+            22245,
+            22280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pub struct Unique<TypeAsId: 'static>(",
+          "path": "doc",
+          "range": [
+            22281,
+            22326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // private field prevents creation without `new` outside this module",
+          "path": "doc",
+          "range": [
+            22327,
+            22407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         PhantomData<TypeAsId>,",
+          "path": "doc",
+          "range": [
+            22408,
+            22442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     );",
+          "path": "doc",
+          "range": [
+            22443,
+            22453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22454,
+            22457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     impl<TypeAsId: 'static> Unique<TypeAsId> {",
+          "path": "doc",
+          "range": [
+            22458,
+            22508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         pub fn new() -> Option<Self> {",
+          "path": "doc",
+          "range": [
+            22509,
+            22551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             let mut set = ID_SET.lock().unwrap();",
+          "path": "doc",
+          "range": [
+            22552,
+            22605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             (set.insert(TypeId::of::<TypeAsId>())).then(|| Self(PhantomData))",
+          "path": "doc",
+          "range": [
+            22606,
+            22687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            22688,
+            22701
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            22702,
+            22711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22712,
+            22715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     impl<TypeAsId: 'static> Drop for Unique<TypeAsId> {",
+          "path": "doc",
+          "range": [
+            22716,
+            22775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         fn drop(&mut self) {",
+          "path": "doc",
+          "range": [
+            22776,
+            22808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             let mut set = ID_SET.lock().unwrap();",
+          "path": "doc",
+          "range": [
+            22809,
+            22862
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             (!set.remove(&TypeId::of::<TypeAsId>())).then(|| panic!(\"duplicity detected\"));",
+          "path": "doc",
+          "range": [
+            22863,
+            22958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            22959,
+            22972
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            22973,
+            22982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            22983,
+            22988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22989,
+            22992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use unique::Unique;",
+          "path": "doc",
+          "range": [
+            22993,
+            23016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23017,
+            23020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // `OtherRing` is a subtype of `TheOneRing`. Both are 'static, and thus have a TypeId.",
+          "path": "doc",
+          "range": [
+            23021,
+            23111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type TheOneRing = fn(&'static ());",
+          "path": "doc",
+          "range": [
+            23112,
+            23150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type OtherRing = fn(&());",
+          "path": "doc",
+          "range": [
+            23151,
+            23180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23181,
+            23184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn main() {",
+          "path": "doc",
+          "range": [
+            23185,
+            23200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let the_one_ring: Unique<TheOneRing> = Unique::new().unwrap();",
+          "path": "doc",
+          "range": [
+            23201,
+            23271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(Unique::<TheOneRing>::new(), None);",
+          "path": "doc",
+          "range": [
+            23272,
+            23326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23327,
+            23330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let other_ring: Unique<OtherRing> = Unique::new().unwrap();",
+          "path": "doc",
+          "range": [
+            23331,
+            23398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Use that `Unique<OtherRing>` is a subtype of `Unique<TheOneRing>` 🚨",
+          "path": "doc",
+          "range": [
+            23399,
+            23480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let fake_one_ring: Unique<TheOneRing> = other_ring;",
+          "path": "doc",
+          "range": [
+            23481,
+            23540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assert_eq!(fake_one_ring, the_one_ring);",
+          "path": "doc",
+          "range": [
+            23541,
+            23589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23590,
+            23593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     std::mem::forget(fake_one_ring);",
+          "path": "doc",
+          "range": [
+            23594,
+            23634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            23635,
+            23640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            23641,
+            23648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            23649,
+            23681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive_const",
+          "range": [
+            23682,
+            23708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23709,
+            23754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            23755,
+            23774
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "TypeId",
+      "range": [
+        18663,
+        24241
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24291,
+            24336
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24291,
+        24367
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24416,
+            24461
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24416,
+        24492
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        24494,
+        25956
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25958,
+        29520
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the `TypeId` of the generic type parameter.",
+          "path": "doc",
+          "range": [
+            25976,
+            26031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26036,
+            26039
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            26044,
+            26058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26063,
+            26066
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26071,
+            26078
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::{Any, TypeId};",
+          "path": "doc",
+          "range": [
+            26083,
+            26115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26120,
+            26123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn is_string<T: ?Sized + Any>(_s: &T) -> bool {",
+          "path": "doc",
+          "range": [
+            26128,
+            26179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     TypeId::of::<String>() == TypeId::of::<T>()",
+          "path": "doc",
+          "range": [
+            26184,
+            26235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            26240,
+            26245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26250,
+            26253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(is_string(&0), false);",
+          "path": "doc",
+          "range": [
+            26258,
+            26295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(is_string(&\"cookie monster\".to_string()), true);",
+          "path": "doc",
+          "range": [
+            26300,
+            26363
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26368,
+            26375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            26380,
+            26391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            26396,
+            26441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            26446,
+            26512
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26566,
+        26618
+      ],
+      "kind": "impl_fn",
+      "name": "of",
+      "range": [
+        25976,
+        26618
+      ],
+      "signature_range": [
+        26521,
+        26565
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the [TypeId] implements the trait. If it does it returns [TraitImpl] which can be used to build a fat pointer.",
+          "path": "doc",
+          "range": [
+            26624,
+            26748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can only be called at compile time. `self` must be the [TypeId] of a sized type or None will be returned.",
+          "path": "doc",
+          "range": [
+            26753,
+            26865
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26870,
+            26873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            26878,
+            26892
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26897,
+            26900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            26905,
+            26912
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(type_info)]",
+          "path": "doc",
+          "range": [
+            26917,
+            26943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::{TypeId};",
+          "path": "doc",
+          "range": [
+            26948,
+            26975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26980,
+            26983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub trait Blah {}",
+          "path": "doc",
+          "range": [
+            26988,
+            27009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Blah for u8 {}",
+          "path": "doc",
+          "range": [
+            27014,
+            27037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27042,
+            27045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(const { TypeId::of::<u8>().trait_info_of::<dyn Blah>() }.is_some());",
+          "path": "doc",
+          "range": [
+            27050,
+            27130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(const { TypeId::of::<u16>().trait_info_of::<dyn Blah>() }.is_none());",
+          "path": "doc",
+          "range": [
+            27135,
+            27216
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            27221,
+            27228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            27233,
+            27285
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            27290,
+            27354
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27514,
+        27806
+      ],
+      "kind": "impl_fn",
+      "name": "trait_info_of",
+      "range": [
+        26624,
+        27806
+      ],
+      "signature_range": [
+        27363,
+        27513
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks if the [TypeId] implements the trait of `trait_represented_by_type_id`. If it does it returns [TraitImpl] which can be used to build a fat pointer.",
+          "path": "doc",
+          "range": [
+            27812,
+            27970
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can only be called at compile time. `self` must be the [TypeId] of a sized type or None will be returned.",
+          "path": "doc",
+          "range": [
+            27975,
+            28087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28092,
+            28095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            28100,
+            28114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28119,
+            28122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28127,
+            28134
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(type_info)]",
+          "path": "doc",
+          "range": [
+            28139,
+            28165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::{TypeId};",
+          "path": "doc",
+          "range": [
+            28170,
+            28197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28202,
+            28205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub trait Blah {}",
+          "path": "doc",
+          "range": [
+            28210,
+            28231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Blah for u8 {}",
+          "path": "doc",
+          "range": [
+            28236,
+            28259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28264,
+            28267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(const { TypeId::of::<u8>().trait_info_of_trait_type_id(TypeId::of::<dyn Blah>()) }.is_some());",
+          "path": "doc",
+          "range": [
+            28272,
+            28378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(const { TypeId::of::<u16>().trait_info_of_trait_type_id(TypeId::of::<dyn Blah>()) }.is_none());",
+          "path": "doc",
+          "range": [
+            28383,
+            28490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            28495,
+            28502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            28507,
+            28559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            28564,
+            28628
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28773,
+        29119
+      ],
+      "kind": "impl_fn",
+      "name": "trait_info_of_trait_type_id",
+      "range": [
+        27812,
+        29119
+      ],
+      "signature_range": [
+        28637,
+        28772
+      ]
+    },
+    {
+      "ancestors": [
+        34,
+        37
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        28862,
+        28935
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "body_range": [
+        29150,
+        29518
+      ],
+      "kind": "impl_fn",
+      "name": "as_u128",
+      "range": [
+        29125,
+        29518
+      ],
+      "signature_range": [
+        29125,
+        29149
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            29522,
+            29567
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29522,
+        30850
+      ]
+    },
+    {
+      "ancestors": [
+        40
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            29601,
+            29610
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29662,
+        30848
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        29601,
+        30848
+      ],
+      "signature_range": [
+        29615,
+        29661
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            30852,
+            30897
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30852,
+        31062
+      ]
+    },
+    {
+      "ancestors": [
+        42
+      ],
+      "attributes": [],
+      "body_range": [
+        30999,
+        31060
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        30931,
+        31060
+      ],
+      "signature_range": [
+        30931,
+        30998
+      ]
+    },
+    {
+      "ancestors": [
+        42,
+        43
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31009,
+        31054
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the name of a type as a string slice.",
+          "path": "doc",
+          "range": [
+            31064,
+            31113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31114,
+            31117
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note",
+          "path": "doc",
+          "range": [
+            31118,
+            31128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31129,
+            31132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is intended for diagnostic use. The exact contents and format of the",
+          "path": "doc",
+          "range": [
+            31133,
+            31210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " string returned are not specified, other than being a best-effort",
+          "path": "doc",
+          "range": [
+            31211,
+            31280
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " description of the type. For example, amongst the strings",
+          "path": "doc",
+          "range": [
+            31281,
+            31342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that `type_name::<Option<String>>()` might return are `\"Option<String>\"` and",
+          "path": "doc",
+          "range": [
+            31343,
+            31423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `\"std::option::Option<std::string::String>\"`.",
+          "path": "doc",
+          "range": [
+            31424,
+            31473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31474,
+            31477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned string must not be considered to be a unique identifier of a",
+          "path": "doc",
+          "range": [
+            31478,
+            31555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type as multiple types may map to the same type name. Similarly, there is no",
+          "path": "doc",
+          "range": [
+            31556,
+            31636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guarantee that all parts of a type will appear in the returned string. In",
+          "path": "doc",
+          "range": [
+            31637,
+            31714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " addition, the output may change between versions of the compiler. For",
+          "path": "doc",
+          "range": [
+            31715,
+            31788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " example, lifetime specifiers were omitted in some earlier versions.",
+          "path": "doc",
+          "range": [
+            31789,
+            31860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31861,
+            31864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The current implementation uses the same infrastructure as compiler",
+          "path": "doc",
+          "range": [
+            31865,
+            31936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " diagnostics and debuginfo, but this is not guaranteed.",
+          "path": "doc",
+          "range": [
+            31937,
+            31995
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            31996,
+            31999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            32000,
+            32014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32015,
+            32018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            32019,
+            32030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            32031,
+            32046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     std::any::type_name::<Option<String>>(),",
+          "path": "doc",
+          "range": [
+            32047,
+            32095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     \"core::option::Option<alloc::string::String>\",",
+          "path": "doc",
+          "range": [
+            32096,
+            32150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            32151,
+            32157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            32158,
+            32165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            32166,
+            32177
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            32178,
+            32228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            32229,
+            32298
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32351,
+        32397
+      ],
+      "kind": "fn",
+      "name": "type_name",
+      "range": [
+        31064,
+        32397
+      ],
+      "signature_range": [
+        32303,
+        32350
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns the type name of the pointed-to value as a string slice.",
+          "path": "doc",
+          "range": [
+            32399,
+            32467
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32468,
+            32471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is the same as `type_name::<T>()`, but can be used where the type of a",
+          "path": "doc",
+          "range": [
+            32472,
+            32551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " variable is not easily available.",
+          "path": "doc",
+          "range": [
+            32552,
+            32589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32590,
+            32593
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note",
+          "path": "doc",
+          "range": [
+            32594,
+            32604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32605,
+            32608
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Like [`type_name`], this is intended for diagnostic use and the exact output is not",
+          "path": "doc",
+          "range": [
+            32609,
+            32696
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed. It provides a best-effort description, but the output may change between",
+          "path": "doc",
+          "range": [
+            32697,
+            32785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " versions of the compiler.",
+          "path": "doc",
+          "range": [
+            32786,
+            32815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32816,
+            32819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In short: use this for debugging, avoid using the output to affect program behavior. More",
+          "path": "doc",
+          "range": [
+            32820,
+            32913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " information is available at [`type_name`].",
+          "path": "doc",
+          "range": [
+            32914,
+            32960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32961,
+            32964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Additionally, this function does not resolve trait objects. This means that",
+          "path": "doc",
+          "range": [
+            32965,
+            33044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `type_name_of_val(&7u32 as &dyn Debug)` may return `\"dyn Debug\"`, but will not return `\"u32\"`",
+          "path": "doc",
+          "range": [
+            33045,
+            33142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " at this time.",
+          "path": "doc",
+          "range": [
+            33143,
+            33160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33161,
+            33164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            33165,
+            33179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33180,
+            33183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prints the default integer and float types.",
+          "path": "doc",
+          "range": [
+            33184,
+            33231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33232,
+            33235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            33236,
+            33247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::any::type_name_of_val;",
+          "path": "doc",
+          "range": [
+            33248,
+            33283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33284,
+            33287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let s = \"foo\";",
+          "path": "doc",
+          "range": [
+            33288,
+            33306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let x: i32 = 1;",
+          "path": "doc",
+          "range": [
+            33307,
+            33326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let y: f32 = 1.0;",
+          "path": "doc",
+          "range": [
+            33327,
+            33348
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33349,
+            33352
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(type_name_of_val(&s).contains(\"str\"));",
+          "path": "doc",
+          "range": [
+            33353,
+            33403
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(type_name_of_val(&x).contains(\"i32\"));",
+          "path": "doc",
+          "range": [
+            33404,
+            33454
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(type_name_of_val(&y).contains(\"f32\"));",
+          "path": "doc",
+          "range": [
+            33455,
+            33505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            33506,
+            33513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            33514,
+            33525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            33526,
+            33583
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            33584,
+            33653
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33721,
+        33745
+      ],
+      "kind": "fn",
+      "name": "type_name_of_val",
+      "range": [
+        32399,
+        33745
+      ],
+      "signature_range": [
+        33658,
+        33720
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns `Some(&U)` if `T` can be coerced to the trait object type `U`. Otherwise, it returns `None`.",
+          "path": "doc",
+          "range": [
+            33747,
+            33851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33852,
+            33855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Compile-time failures",
+          "path": "doc",
+          "range": [
+            33856,
+            33883
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Determining whether `T` can be coerced to the trait object type `U` requires compiler trait resolution.",
+          "path": "doc",
+          "range": [
+            33884,
+            33991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In some cases, that resolution can exceed the recursion limit,",
+          "path": "doc",
+          "range": [
+            33992,
+            34058
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and compilation will fail instead of this function returning `None`.",
+          "path": "doc",
+          "range": [
+            34059,
+            34131
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            34132,
+            34146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34147,
+            34150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            34151,
+            34162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(try_as_dyn)]",
+          "path": "doc",
+          "range": [
+            34163,
+            34190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34191,
+            34194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::any::try_as_dyn;",
+          "path": "doc",
+          "range": [
+            34195,
+            34225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34226,
+            34229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trait Animal {",
+          "path": "doc",
+          "range": [
+            34230,
+            34248
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn speak(&self) -> &'static str;",
+          "path": "doc",
+          "range": [
+            34249,
+            34289
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            34290,
+            34295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34296,
+            34299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Dog;",
+          "path": "doc",
+          "range": [
+            34300,
+            34315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Animal for Dog {",
+          "path": "doc",
+          "range": [
+            34316,
+            34341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn speak(&self) -> &'static str { \"woof\" }",
+          "path": "doc",
+          "range": [
+            34342,
+            34392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            34393,
+            34398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34399,
+            34402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Rock; // does not implement Animal",
+          "path": "doc",
+          "range": [
+            34403,
+            34448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34449,
+            34452
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let dog = Dog;",
+          "path": "doc",
+          "range": [
+            34453,
+            34471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let rock = Rock;",
+          "path": "doc",
+          "range": [
+            34472,
+            34492
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34493,
+            34496
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let as_animal: Option<&dyn Animal> = try_as_dyn::<Dog, dyn Animal>(&dog);",
+          "path": "doc",
+          "range": [
+            34497,
+            34574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(as_animal.unwrap().speak(), \"woof\");",
+          "path": "doc",
+          "range": [
+            34575,
+            34626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34627,
+            34630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let not_an_animal: Option<&dyn Animal> = try_as_dyn::<Rock, dyn Animal>(&rock);",
+          "path": "doc",
+          "range": [
+            34631,
+            34714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(not_an_animal.is_none());",
+          "path": "doc",
+          "range": [
+            34715,
+            34752
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            34753,
+            34760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            34761,
+            34772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            34773,
+            34826
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34976,
+        35468
+      ],
+      "kind": "fn",
+      "name": "try_as_dyn",
+      "range": [
+        33747,
+        35468
+      ],
+      "signature_range": [
+        34831,
+        34975
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Returns `Some(&mut U)` if `T` can be coerced to the trait object type `U`. Otherwise, it returns `None`.",
+          "path": "doc",
+          "range": [
+            35470,
+            35578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35579,
+            35582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Compile-time failures",
+          "path": "doc",
+          "range": [
+            35583,
+            35610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Determining whether `T` can be coerced to the trait object type `U` requires compiler trait resolution.",
+          "path": "doc",
+          "range": [
+            35611,
+            35718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In some cases, that resolution can exceed the recursion limit,",
+          "path": "doc",
+          "range": [
+            35719,
+            35785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and compilation will fail instead of this function returning `None`.",
+          "path": "doc",
+          "range": [
+            35786,
+            35858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            35859,
+            35873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35874,
+            35877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            35878,
+            35889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(try_as_dyn)]",
+          "path": "doc",
+          "range": [
+            35890,
+            35917
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35918,
+            35921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::any::try_as_dyn_mut;",
+          "path": "doc",
+          "range": [
+            35922,
+            35956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35957,
+            35960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trait Animal {",
+          "path": "doc",
+          "range": [
+            35961,
+            35979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn speak(&self) -> &'static str;",
+          "path": "doc",
+          "range": [
+            35980,
+            36020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            36021,
+            36026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36027,
+            36030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Dog;",
+          "path": "doc",
+          "range": [
+            36031,
+            36046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl Animal for Dog {",
+          "path": "doc",
+          "range": [
+            36047,
+            36072
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn speak(&self) -> &'static str { \"woof\" }",
+          "path": "doc",
+          "range": [
+            36073,
+            36123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            36124,
+            36129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36130,
+            36133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Rock; // does not implement Animal",
+          "path": "doc",
+          "range": [
+            36134,
+            36179
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36180,
+            36183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut dog = Dog;",
+          "path": "doc",
+          "range": [
+            36184,
+            36206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut rock = Rock;",
+          "path": "doc",
+          "range": [
+            36207,
+            36231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36232,
+            36235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let as_animal: Option<&mut dyn Animal> = try_as_dyn_mut::<Dog, dyn Animal>(&mut dog);",
+          "path": "doc",
+          "range": [
+            36236,
+            36325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(as_animal.unwrap().speak(), \"woof\");",
+          "path": "doc",
+          "range": [
+            36326,
+            36377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36378,
+            36381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let not_an_animal: Option<&mut dyn Animal> = try_as_dyn_mut::<Rock, dyn Animal>(&mut rock);",
+          "path": "doc",
+          "range": [
+            36382,
+            36477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(not_an_animal.is_none());",
+          "path": "doc",
+          "range": [
+            36478,
+            36515
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            36516,
+            36523
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            36524,
+            36535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            36536,
+            36589
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36751,
+        37251
+      ],
+      "kind": "fn",
+      "name": "try_as_dyn_mut",
+      "range": [
+        35470,
+        37251
+      ],
+      "signature_range": [
+        36594,
+        36750
+      ]
+    }
+  ],
+  "source_sha256": "ba6d26900407a210835a944402e2d81bb48728cbf4031814d096bdac165fc275"
+}

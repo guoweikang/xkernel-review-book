@@ -1,0 +1,7 @@
+Reviewer: Goodall, read-only final source audit; no execution, not human adjudication.
+Decision: source-level admission only; failure-path experiment not ready.
+Confirmed normative levels against core/src/clone.rs:528 onward.
+Do not read/drop concerns destination value after panic, not deallocation of its storage or cleanup of known initialized components during unwinding.
+Allocation cleanup is optional at this trait-contract layer, but existing Rc/Arc guards implement it. Removing implemented cleanup is not automatically behavior-preserving.
+Next responsibility table must distinguish mandatory contract, recommendation, concrete implementation behavior, and executed observation; normal return, unwind, and abort scopes must be explicit.
+No new family, proposal or verifier before existing failure-test and responsibility-handoff evidence is checked.

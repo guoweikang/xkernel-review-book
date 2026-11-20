@@ -1,0 +1,275 @@
+[
+  {
+    "unit": {
+      "id": "30714f5cda223e0c8ca6e7cbb2ecc8ff3d77b7a5392535155ce32977015ed85b",
+      "path": "library/core/src/mem/mod.rs",
+      "package": "core",
+      "source_sha256": "39ffeb29f3e4eea995833e246d672b9e1c62b19dfcaa3f80555f1c9535797e83",
+      "sha256": "514890a78a077f0a9c891a1a34a5390f16501bc81b7769e230c579b91f85fe6d",
+      "syntax_index": 6,
+      "name": "forget",
+      "kind": "fn",
+      "range": [
+        6722,
+        6784
+      ],
+      "body_range": [
+        6747,
+        6784
+      ],
+      "start_line": 160,
+      "end_line": 162,
+      "ancestors": [],
+      "direct_doc_attributes": 112,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Takes ownership and \"forgets\" about the value **without running its destructor**.\n\n Any resources the value manages, such as heap memory or a file handle, will linger\n forever in an unreachable state. However, it does not guarantee that pointers\n to this memory will remain valid.\n\n * If you want to leak memory, see [`Box::leak`].\n * If you want to obtain a raw pointer to the memory, see [`Box::into_raw`].\n * If you want to dispose of a value properly, running its destructor, see\n   [`mem::drop`].\n\n # Safety\n\n `forget` is not marked as `unsafe`, because Rust's safety guarantees\n do not include a guarantee that destructors will always run. For example,\n a program can create a reference cycle using [`Rc`][rc], or call\n [`process::exit`][exit] to exit without running destructors. Thus, allowing\n `mem::forget` from safe code does not fundamentally change Rust's safety\n guarantees.\n\n That said, leaking resources such as memory or I/O objects is usually undesirable.\n The need comes up in some specialized use cases for FFI or unsafe code, but even\n then, [`ManuallyDrop`] is typically preferred.\n\n Because forgetting a value is allowed, any `unsafe` code you write must\n allow for this possibility. You cannot return a value and expect that the\n caller will necessarily run the value's destructor.\n\n [rc]: ../../std/rc/struct.Rc.html\n [exit]: ../../std/process/fn.exit.html\n\n # Examples\n\n The canonical safe use of `mem::forget` is to circumvent a value's destructor\n implemented by the `Drop` trait. For example, this will leak a `File`, i.e. reclaim\n the space taken by the variable but never close the underlying system resource:\n\n ```no_run\n use std::mem;\n use std::fs::File;\n\n let file = File::open(\"foo.txt\").unwrap();\n mem::forget(file);\n ```\n\n This is useful when the ownership of the underlying resource was previously\n transferred to code outside of Rust, for example by transmitting the raw\n file descriptor to C code.\n\n # Relationship with `ManuallyDrop`\n\n While `mem::forget` can also be used to transfer *memory* ownership, doing so is error-prone.\n [`ManuallyDrop`] should be used instead. Consider, for example, this code:\n\n ```\n use std::mem;\n\n let mut v = vec![65, 122];\n // Build a `String` using the contents of `v`\n let s = unsafe { String::from_raw_parts(v.as_mut_ptr(), v.len(), v.capacity()) };\n // leak `v` because its memory is now managed by `s`\n mem::forget(v);  // ERROR - v is invalid and must not be passed to a function\n assert_eq!(s, \"Az\");\n // `s` is implicitly dropped and its memory deallocated.\n ```\n\n There are two issues with the above example:\n\n * If more code were added between the construction of `String` and the invocation of\n   `mem::forget()`, a panic within it would cause a double free because the same memory\n   is handled by both `v` and `s`.\n * After calling `v.as_mut_ptr()` and transmitting the ownership of the data to `s`,\n   the `v` value is invalid. Even when a value is just moved to `mem::forget` (which won't\n   inspect it), some types have strict requirements on their values that\n   make them invalid when dangling or no longer owned. Using invalid values in any\n   way, including passing them to or returning them from functions, constitutes\n   undefined behavior and may break the assumptions made by the compiler.\n\n Switching to `ManuallyDrop` avoids both issues:\n\n ```\n use std::mem::ManuallyDrop;\n\n let v = vec![65, 122];\n // Before we disassemble `v` into its raw parts, make sure it\n // does not get dropped!\n let mut v = ManuallyDrop::new(v);\n // Now disassemble `v`. These operations cannot panic, so there cannot be a leak.\n let (ptr, len, cap) = (v.as_mut_ptr(), v.len(), v.capacity());\n // Finally, build a `String`.\n let s = unsafe { String::from_raw_parts(ptr, len, cap) };\n assert_eq!(s, \"Az\");\n // `s` is implicitly dropped and its memory deallocated.\n ```\n\n `ManuallyDrop` robustly prevents double-free because we disable `v`'s destructor\n before doing anything else. `mem::forget()` doesn't allow this because it consumes its\n argument, forcing us to call it only after extracting anything we need from `v`. Even\n if a panic were introduced between construction of `ManuallyDrop` and building the\n string (which cannot happen in the code as shown), it would result in a leak and not a\n double free. In other words, `ManuallyDrop` errs on the side of leaking instead of\n erring on the side of (double-)dropping.\n\n Also, `ManuallyDrop` prevents us from having to \"touch\" `v` after transferring the\n ownership to `s` \u2014 the final step of interacting with `v` to dispose of it without\n running its destructor is entirely avoided.\n\n [`Box`]: ../../std/boxed/struct.Box.html\n [`Box::leak`]: ../../std/boxed/struct.Box.html#method.leak\n [`Box::into_raw`]: ../../std/boxed/struct.Box.html#method.into_raw\n [`mem::drop`]: drop\n [ub]: ../../reference/behavior-considered-undefined.html",
+    "doc_sha256": "846b451e1549c03b99bf6de69c44b6cab7495306b299b15573649490041380b5",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "375b0324c933c9ad215a95d604f54a042b4de147f9f5d6251daa0248c4263a0a",
+      "path": "library/alloc/src/rc.rs",
+      "package": "alloc",
+      "source_sha256": "5d6b531711d05b3d81db6ba0c674c541ca2ab2d6f12f9ae89582e11bf3dc6ce9",
+      "sha256": "77a09c5706796a30f6c0628a53b9d82eebf43464f502493f515fa602bff6e1b6",
+      "syntax_index": 92,
+      "name": "make_mut",
+      "kind": "impl_fn",
+      "range": [
+        72284,
+        74195
+      ],
+      "body_range": [
+        72323,
+        74195
+      ],
+      "start_line": 2065,
+      "end_line": 2102,
+      "ancestors": [
+        91
+      ],
+      "direct_doc_attributes": 50,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Makes a mutable reference into the given `Rc`.\n\n If there are other `Rc` pointers to the same allocation, then `make_mut` will\n [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also\n referred to as clone-on-write.\n\n However, if there are no other `Rc` pointers to this allocation, but some [`Weak`]\n pointers, then the [`Weak`] pointers will be disassociated and the inner value will not\n be cloned.\n\n See also [`get_mut`], which will fail rather than cloning the inner value\n or disassociating [`Weak`] pointers.\n\n [`clone`]: Clone::clone\n [`get_mut`]: Rc::get_mut\n\n # Examples\n\n ```\n use std::rc::Rc;\n\n let mut data = Rc::new(5);\n\n *Rc::make_mut(&mut data) += 1;         // Won't clone anything\n let mut other_data = Rc::clone(&data); // Won't clone inner data\n *Rc::make_mut(&mut data) += 1;         // Clones inner data\n *Rc::make_mut(&mut data) += 1;         // Won't clone anything\n *Rc::make_mut(&mut other_data) *= 2;   // Won't clone anything\n\n // Now `data` and `other_data` point to different allocations.\n assert_eq!(*data, 8);\n assert_eq!(*other_data, 12);\n ```\n\n [`Weak`] pointers will be disassociated:\n\n ```\n use std::rc::Rc;\n\n let mut data = Rc::new(75);\n let weak = Rc::downgrade(&data);\n\n assert!(75 == *data);\n assert!(75 == *weak.upgrade().unwrap());\n\n *Rc::make_mut(&mut data) += 1;\n\n assert!(76 == *data);\n assert!(weak.upgrade().is_none());\n ```",
+    "doc_sha256": "5b89ca4924cb2763ed9d18b3577c4bba43a003240bc9cdd9128856aea1018c23",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "55e143100c4dbf2ce9daf289b4361ebf35b3626d938fea35167d5127a264a1c3",
+      "path": "library/core/src/mem/mod.rs",
+      "package": "core",
+      "source_sha256": "39ffeb29f3e4eea995833e246d672b9e1c62b19dfcaa3f80555f1c9535797e83",
+      "sha256": "9a591babcc69505d6bd90629871c73a6af2d01f1654eee9c4da40c81e32e4e99",
+      "syntax_index": 21,
+      "name": "take",
+      "kind": "fn",
+      "range": [
+        29597,
+        29685
+      ],
+      "body_range": [
+        29650,
+        29685
+      ],
+      "start_line": 820,
+      "end_line": 822,
+      "ancestors": [],
+      "direct_doc_attributes": 55,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Replaces `dest` with the default value of `T`, returning the previous `dest` value.\n\n * If you want to replace the values of two variables, see [`swap`].\n * If you want to replace with a passed value instead of the default value, see [`replace`].\n\n # Examples\n\n A simple example:\n\n ```\n use std::mem;\n\n let mut v: Vec<i32> = vec![1, 2];\n\n let old_v = mem::take(&mut v);\n assert_eq!(vec![1, 2], old_v);\n assert!(v.is_empty());\n ```\n\n `take` allows taking ownership of a struct field by replacing it with an \"empty\" value.\n Without `take` you can run into issues like these:\n\n ```compile_fail,E0507\n struct Buffer<T> { buf: Vec<T> }\n\n impl<T> Buffer<T> {\n     fn get_and_reset(&mut self) -> Vec<T> {\n         // error: cannot move out of dereference of `&mut`-pointer\n         let buf = self.buf;\n         self.buf = Vec::new();\n         buf\n     }\n }\n ```\n\n Note that `T` does not necessarily implement [`Clone`], so it can't even clone and reset\n `self.buf`. But `take` can be used to disassociate the original value of `self.buf` from\n `self`, allowing it to be returned:\n\n ```\n use std::mem;\n\n # struct Buffer<T> { buf: Vec<T> }\n impl<T> Buffer<T> {\n     fn get_and_reset(&mut self) -> Vec<T> {\n         mem::take(&mut self.buf)\n     }\n }\n\n let mut buffer = Buffer { buf: vec![0, 1] };\n assert_eq!(buffer.buf.len(), 2);\n\n assert_eq!(buffer.get_and_reset(), vec![0, 1]);\n assert_eq!(buffer.buf.len(), 0);\n ```",
+    "doc_sha256": "a185c2312f6eca66a75f69d7bb16a75f2c81dece5553207d641a15cd6bcd72ed",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "5dd67667bf73dff68b2b5e9848ca5a78da33d471d84e3dfb6542288e8af049db",
+      "path": "library/core/src/result.rs",
+      "package": "core",
+      "source_sha256": "fc9cedba2ca1bb3d07b07d0f15160ed0277ed9a9cbc91fa5045125a73cdacb1d",
+      "sha256": "79aa185d3282feed3e5e992c5e0bce240dd48de3ac84fc886e4c365c3cb0256d",
+      "syntax_index": 6,
+      "name": "is_err_and",
+      "kind": "impl_fn",
+      "range": [
+        25282,
+        25548
+      ],
+      "body_range": [
+        25454,
+        25548
+      ],
+      "start_line": 674,
+      "end_line": 684,
+      "ancestors": [
+        1
+      ],
+      "direct_doc_attributes": 20,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Returns `true` if the result is [`Err`] and the value inside of it matches a predicate.\n\n # Examples\n\n ```\n use std::io::{Error, ErrorKind};\n\n let x: Result<u32, Error> = Err(Error::new(ErrorKind::NotFound, \"!\"));\n assert_eq!(x.is_err_and(|x| x.kind() == ErrorKind::NotFound), true);\n\n let x: Result<u32, Error> = Err(Error::new(ErrorKind::PermissionDenied, \"!\"));\n assert_eq!(x.is_err_and(|x| x.kind() == ErrorKind::NotFound), false);\n\n let x: Result<u32, Error> = Ok(123);\n assert_eq!(x.is_err_and(|x| x.kind() == ErrorKind::NotFound), false);\n\n let x: Result<u32, String> = Err(\"ownership\".to_string());\n assert_eq!(x.as_ref().is_err_and(|x| x.len() > 1), true);\n println!(\"still alive {:?}\", x);\n ```",
+    "doc_sha256": "85728c016e19bad1031b42a3b8cb1d5dbc0531371d05caabe110e6a8ea8a2e9d",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "5f8a18fa13e70fb4a6f7f33ef37b1bccd1b78ae2bb589509359b9b4d57b084ca",
+      "path": "library/core/src/alloc/global.rs",
+      "package": "core",
+      "source_sha256": "d497414acb43282c4b281b27b7dcbfb945b71be4219b816eca2ebfa55d646de3",
+      "sha256": "8b2b5db7c7db5b1a0bd61b847ff6b79726a8b20ad020735ef84036d14de989b8",
+      "syntax_index": 4,
+      "name": "realloc",
+      "kind": "trait_fn",
+      "range": [
+        12258,
+        13173
+      ],
+      "body_range": [
+        12341,
+        13173
+      ],
+      "start_line": 286,
+      "end_line": 302,
+      "ancestors": [
+        0
+      ],
+      "direct_doc_attributes": 57,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Shrinks or grows a block of memory to the given `new_size` in bytes.\n The block is described by the given `ptr` pointer and `layout`.\n\n If this returns a non-null pointer, then ownership of the memory block\n referenced by `ptr` has been transferred to this allocator.\n Any access to the old `ptr` is Undefined Behavior, even if the\n allocation remained in-place. The newly returned pointer is the only valid pointer\n for accessing this memory now.\n\n The new memory block is allocated with `layout`,\n but with the `size` updated to `new_size` in bytes.\n This new layout must be used when deallocating the new memory block with `dealloc`.\n The range `0..min(layout.size(), new_size)` of the new memory block is\n guaranteed to have the same values as the original block.\n\n If this method returns null, then ownership of the memory\n block has not been transferred to this allocator, and the\n contents of the memory block are unaltered.\n\n # Safety\n\n The caller must ensure that:\n\n * `ptr` is allocated via this allocator,\n\n * `layout` is the same layout that was used\n   to allocate that block of memory,\n\n * `new_size` is greater than zero.\n\n * `new_size`, when rounded up to the nearest multiple of `layout.align()`,\n   does not overflow `isize` (i.e., the rounded value must be less than or\n   equal to `isize::MAX`).\n\n If these are not followed, the behavior is undefined.\n\n (Extension subtraits might provide more specific bounds on\n behavior, e.g., guarantee a sentinel address or a null pointer\n in response to a zero-size allocation request.)\n\n # Errors\n\n Returns null if the new layout does not meet the size\n and alignment constraints of the allocator, or if reallocation\n otherwise fails.\n\n Implementations are encouraged to return null on memory\n exhaustion rather than panicking or aborting, but this is not\n a strict requirement. (Specifically: it is *legal* to\n implement this trait atop an underlying native allocation\n library that aborts on memory exhaustion.)\n\n Clients wishing to abort computation in response to a\n reallocation error are encouraged to call the [`handle_alloc_error`] function,\n rather than directly invoking `panic!` or similar.\n\n [`handle_alloc_error`]: ../../alloc/alloc/fn.handle_alloc_error.html",
+    "doc_sha256": "47a12da087914e47320b35fd76e2a177d54e6ac0bd5ec2c59bc4a447bf274331",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "5fa209a83e0d5327a8b6def9724c1d1715caae8b315ec79c26bf9253f3cf37d4",
+      "path": "library/alloc/src/ffi/c_str.rs",
+      "package": "alloc",
+      "source_sha256": "82d3df675156221c737c069393efc3396ae6f580fbc0e900512824aaf9b5222f",
+      "sha256": "fc17db1eb835ba5bf957f33f973e5c028c4cc0922e92200995a92d2817413a21",
+      "syntax_index": 26,
+      "name": "into_string",
+      "kind": "impl_fn",
+      "range": [
+        17817,
+        18074
+      ],
+      "body_range": [
+        17873,
+        18074
+      ],
+      "start_line": 474,
+      "end_line": 479,
+      "ancestors": [
+        8
+      ],
+      "direct_doc_attributes": 18,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Converts the `CString` into a [`String`] if it contains valid UTF-8 data.\n\n On failure, ownership of the original `CString` is returned.\n\n # Examples\n\n ```\n use std::ffi::CString;\n\n let valid_utf8 = vec![b'f', b'o', b'o'];\n let cstring = CString::new(valid_utf8).expect(\"CString::new failed\");\n assert_eq!(cstring.into_string().expect(\"into_string() call failed\"), \"foo\");\n\n let invalid_utf8 = vec![b'f', 0xff, b'o', b'o'];\n let cstring = CString::new(invalid_utf8).expect(\"CString::new failed\");\n let err = cstring.into_string().err().expect(\"into_string().err() failed\");\n assert_eq!(err.utf8_error().valid_up_to(), 1);\n ```",
+    "doc_sha256": "5cca0c471f59667b835fc7b9d718ffa894b6a2f7f3b427ee63da7447a746ad7c",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "7aa93548ecbbecaa2efa8dcffc238b5c1192148e9400072493581df4678d5180",
+      "path": "library/core/src/ptr/mod.rs",
+      "package": "core",
+      "source_sha256": "235e257e5a5491f90716fdb73af537b604c716486be04240371885eea58e3601",
+      "sha256": "d861439125c67c6aa0c557cb1e25354b51e52693017ba491fcd4555e9f485fd5",
+      "syntax_index": 40,
+      "name": "read",
+      "kind": "fn",
+      "range": [
+        73631,
+        76032
+      ],
+      "body_range": [
+        73675,
+        76032
+      ],
+      "start_line": 1678,
+      "end_line": 1719,
+      "ancestors": [],
+      "direct_doc_attributes": 105,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Reads the value from `src` without moving it. This leaves the\n memory in `src` unchanged.\n\n # Safety\n\n Behavior is undefined if any of the following conditions are violated:\n\n * `src` must be [valid] for reads.\n\n * `src` must be properly aligned. Use [`read_unaligned`] if this is not the\n   case.\n\n * `src` must point to a properly initialized value of type `T`.\n\n Note that even if `T` has size `0`, the pointer must be properly aligned.\n\n # Examples\n\n Basic usage:\n\n ```\n let x = 12;\n let y = &x as *const i32;\n\n unsafe {\n     assert_eq!(std::ptr::read(y), 12);\n }\n ```\n\n Manually implement [`mem::swap`]:\n\n ```\n use std::ptr;\n\n fn swap<T>(a: &mut T, b: &mut T) {\n     unsafe {\n         // Create a bitwise copy of the value at `a` in `tmp`.\n         let tmp = ptr::read(a);\n\n         // Exiting at this point (either by explicitly returning or by\n         // calling a function which panics) would cause the value in `tmp` to\n         // be dropped while the same value is still referenced by `a`. This\n         // could trigger undefined behavior if `T` is not `Copy`.\n\n         // Create a bitwise copy of the value at `b` in `a`.\n         // This is safe because mutable references cannot alias.\n         ptr::copy_nonoverlapping(b, a, 1);\n\n         // As above, exiting here could trigger undefined behavior because\n         // the same value is referenced by `a` and `b`.\n\n         // Move `tmp` into `b`.\n         ptr::write(b, tmp);\n\n         // `tmp` has been moved (`write` takes ownership of its second argument),\n         // so nothing is dropped implicitly here.\n     }\n }\n\n let mut foo = \"foo\".to_owned();\n let mut bar = \"bar\".to_owned();\n\n swap(&mut foo, &mut bar);\n\n assert_eq!(foo, \"bar\");\n assert_eq!(bar, \"foo\");\n ```\n\n ## Ownership of the Returned Value\n\n `read` creates a bitwise copy of `T`, regardless of whether `T` is [`Copy`].\n If `T` is not [`Copy`], using both the returned value and the value at\n `*src` can violate memory safety. Note that assigning to `*src` counts as a\n use because it will attempt to drop the value at `*src`.\n\n [`write()`] can be used to overwrite data without causing it to be dropped.\n\n ```\n use std::ptr;\n\n let mut s = String::from(\"foo\");\n unsafe {\n     // `s2` now points to the same underlying memory as `s`.\n     let mut s2: String = ptr::read(&s);\n\n     assert_eq!(s2, \"foo\");\n\n     // Assigning to `s2` causes its original value to be dropped. Beyond\n     // this point, `s` must no longer be used, as the underlying memory has\n     // been freed.\n     s2 = String::default();\n     assert_eq!(s2, \"\");\n\n     // Assigning to `s` would cause the old value to be dropped again,\n     // resulting in undefined behavior.\n     // s = String::from(\"bar\"); // ERROR\n\n     // `ptr::write` can be used to overwrite a value without dropping it.\n     ptr::write(&mut s, String::from(\"bar\"));\n }\n\n assert_eq!(s, \"bar\");\n ```\n\n [valid]: self#safety",
+    "doc_sha256": "9ae787e9d1bda08952d2e581593c242f06f800d342f5edb132a5cd6582c427f6",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "c3a93c5d8b5a448bdd7d0c47d7fad913c3231ba186305737504432ef0370ccb3",
+      "path": "library/alloc/src/sync.rs",
+      "package": "alloc",
+      "source_sha256": "428c037ce6557d87cfb388ca596fcf24fdfb3341e2cfb6be8199a30c16739fb8",
+      "sha256": "c1a500ddb5c236b1284bedbc7b2e023c81ecda76cccc6aa1c4157a613dcd97b2",
+      "syntax_index": 145,
+      "name": "make_mut",
+      "kind": "impl_fn",
+      "range": [
+        90423,
+        93378
+      ],
+      "body_range": [
+        90462,
+        93378
+      ],
+      "start_line": 2492,
+      "end_line": 2550,
+      "ancestors": [
+        144
+      ],
+      "direct_doc_attributes": 50,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Makes a mutable reference into the given `Arc`.\n\n If there are other `Arc` pointers to the same allocation, then `make_mut` will\n [`clone`] the inner value to a new allocation to ensure unique ownership.  This is also\n referred to as clone-on-write.\n\n However, if there are no other `Arc` pointers to this allocation, but some [`Weak`]\n pointers, then the [`Weak`] pointers will be dissociated and the inner value will not\n be cloned.\n\n See also [`get_mut`], which will fail rather than cloning the inner value\n or dissociating [`Weak`] pointers.\n\n [`clone`]: Clone::clone\n [`get_mut`]: Arc::get_mut\n\n # Examples\n\n ```\n use std::sync::Arc;\n\n let mut data = Arc::new(5);\n\n *Arc::make_mut(&mut data) += 1;         // Won't clone anything\n let mut other_data = Arc::clone(&data); // Won't clone inner data\n *Arc::make_mut(&mut data) += 1;         // Clones inner data\n *Arc::make_mut(&mut data) += 1;         // Won't clone anything\n *Arc::make_mut(&mut other_data) *= 2;   // Won't clone anything\n\n // Now `data` and `other_data` point to different allocations.\n assert_eq!(*data, 8);\n assert_eq!(*other_data, 12);\n ```\n\n [`Weak`] pointers will be dissociated:\n\n ```\n use std::sync::Arc;\n\n let mut data = Arc::new(75);\n let weak = Arc::downgrade(&data);\n\n assert!(75 == *data);\n assert!(75 == *weak.upgrade().unwrap());\n\n *Arc::make_mut(&mut data) += 1;\n\n assert!(76 == *data);\n assert!(weak.upgrade().is_none());\n ```",
+    "doc_sha256": "75bd950ab25797aaf7230ad0bd6b82e671fc876b30b23d8a8721301cf4e0cd39",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  },
+  {
+    "unit": {
+      "id": "d3bcbf1879f2049e6e5b3eaf8879bd148a9ebd8404f5a415cf936f23c69e4889",
+      "path": "library/alloc/src/ffi/c_str.rs",
+      "package": "alloc",
+      "source_sha256": "82d3df675156221c737c069393efc3396ae6f580fbc0e900512824aaf9b5222f",
+      "sha256": "ef3323bde11786e8ffc97316c2adfa865956ead547bfded3323e4750dd2e6d4d",
+      "syntax_index": 25,
+      "name": "into_raw",
+      "kind": "impl_fn",
+      "range": [
+        16900,
+        16996
+      ],
+      "body_range": [
+        16933,
+        16996
+      ],
+      "start_line": 451,
+      "end_line": 453,
+      "ancestors": [
+        8
+      ],
+      "direct_doc_attributes": 33,
+      "direct_cfg_attributes": 0,
+      "independent_test_eligible": false
+    },
+    "doc_text": " Consumes the `CString` and transfers ownership of the string to a C caller.\n\n The pointer which this function returns must be returned to Rust and reconstituted using\n [`CString::from_raw`] to be properly deallocated. Specifically, one\n should *not* use the standard C `free()` function to deallocate\n this string.\n\n Failure to call [`CString::from_raw`] will lead to a memory leak.\n\n The C side must **not** modify the length of the string (by writing a\n nul byte somewhere inside the string or removing the final one) before\n it makes it back into Rust using [`CString::from_raw`]. See the safety section\n in [`CString::from_raw`].\n\n # Examples\n\n ```\n use std::ffi::CString;\n\n let c_string = CString::from(c\"foo\");\n\n let ptr = c_string.into_raw();\n\n unsafe {\n     assert_eq!(b'f', *ptr as u8);\n     assert_eq!(b'o', *ptr.add(1) as u8);\n     assert_eq!(b'o', *ptr.add(2) as u8);\n     assert_eq!(b'\\0', *ptr.add(3) as u8);\n\n     // retake pointer to free memory\n     let _ = CString::from_raw(ptr);\n }\n ```",
+    "doc_sha256": "4b3a49160210b9abb293e41655afd7419dc47e98f6d3c51a3f463c0fbffcb706",
+    "status": "lexical-match-only; source admission and historical exposure pending"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "status": "audited-with-explicit-qualifications",
+  "quote_policy": "Exact substrings of preserved responses",
+  "rows": [
+    {"id":"O1","original":"source_supported","candidate":"source_supported","original_quote":"先检查 `CAP_SYS_TIME`，再委托 `ktime::set_realtime_checked`","candidate_quote":"检查 `CAP_SYS_TIME`，并自行检查单调下界及秒数上界，再委托 `ktime`","sources":["original and candidate core/ksyscall/src/time/queries.rs set_wall_time"],"scope":"Only this helper's visible authorization and delegation, not global privilege enforcement."},
+    {"id":"O2","original":"source_supported","candidate":"source_supported","original_quote":"设置在写锁内采样单调时间，检查墙钟不早于 epoch＋monotonic","candidate_quote":"内部 `set_realtime_checked` 直接赋值并返回成功，没有范围判断；外层也未补查","sources":["original core/ktime/src/lib.rs:121-133,249-262","candidate core/ktime/src/lib.rs:121-128,243-256","candidate core/ksyscall/src/time/queries.rs:66-75"],"scope":"Static local change tracked correctly; not executed concurrency or numeric-bound validation."},
+    {"id":"O3","original":"source_supported","candidate":"source_supported","original_quote":"`ktime` 持有关联、累计睡眠及暂停事务状态","candidate_quote":"`ktime` 持有关联、累计睡眠和暂停状态","sources":["both core/ktime/src/lib.rs:95-106 and public setter"],"scope":"State ownership remains in ktime; responsibility change is not a claim that syscall owns the correlation."},
+    {"id":"O4","original":"source_supported","candidate":"source_supported","original_quote":"授权归 syscall、范围和关联归 `ktime`，与 T:53–55 一致","candidate_quote":"故原子的是关联更新，而非“校验与更新”","sources":["core/ktime/docs/design.md:53-56","candidate core/ktime/src/lib.rs:121-128,224-256","candidate core/ksyscall/src/time/queries.rs:63-75"],"scope":"Candidate distinguishes retained documentation from changed statements; original assessment covers only the stated setter boundary."},
+    {"id":"O5","original":"source_supported","candidate":"source_supported","original_quote":"仅 timezone 为空且 timeval 为空时无操作成功、不鉴权","candidate_quote":"双空指针无操作且不查权限","sources":["original core/ksyscall/src/time/queries.rs:70-87","candidate core/ksyscall/src/time/queries.rs:78-95"],"scope":"Both retain no-op exception and state missing dependencies; runtime/global safety remains unproven."}
+  ],
+  "supplementary_claims": [
+    {"claim":"Original answer reports stale set_realtime name and BOOTTIME alias sentence","assessment":"Text and visible boottime addition support bounded discrepancy, but the answer's ONLY-zero-sleep phrasing is too strong as an iff theorem without considering saturation. Retain the supported zero-sleep sufficient condition and reject a general iff claim. Do not count this as a new responsibility violation or branch into uptime correctness.","sources":["core/ksyscall/docs/design.md:206,633","core/ktime/src/lib.rs:109-117"]},
+    {"claim":"Candidate answer gives near-boundary stale-sample risk","assessment":"Conditional inference from two distinct sample sites and missing owner validation, not an executed witness. Depends on a feasible sample value and time progression; actual triggering/configuration unknown.","sources":["candidate core/ksyscall/src/time/queries.rs:67-75","candidate core/ktime/src/lib.rs:243-256"]},
+    {"claim":"Candidate says direct kernel callers are not protected by removed validation","assessment":"This public entry no longer performs that check. Existence, preconditions and reachability of other callers remain unknown, as answer states.","sources":["candidate core/ktime/src/lib.rs:121-128,243-256"]},
+    {"claim":"Both discuss initialization and notification","assessment":"Visible initialization flag and post-unlock calls support local ordering, not complete bootstrap, observer or suspend correctness.","sources":["original core/ktime/src/lib.rs:203-219,249-262","candidate corresponding unchanged bodies"]}
+  ],
+  "O5_subclaims": {"no_op_path":"source_supported in both", "executed_compile_or_test_claim":"not asserted by either", "candidate_runtime_risk":"conditional inference; actual triggering insufficient_evidence", "all_caller_safety_or_optimality":"not asserted, not validated; no blanket pass"},
+  "review_resolution": "Accept independent audit's saturation qualification and separate O5 subclaims. Reject reviewer's claim that ClockCorrelation::new is absent: both complete packets contain its field-only constructor at lib.rs:77-82; review correction requested and retained separately.",
+  "interpretation": "One paired diagnostic shows distinct source-grounded reasoning after the planted implementation change. Selected core claims are supported, not the entire response. No proof of average model ability, document benefit, discovery recall, architectural quality or reproducible runtime failure.",
+  "model_responses": 2,
+  "true_project_violation_reference_count": 0,
+  "production_changes": 0,
+  "kernel_tests": 0,
+  "stop": "Close this development case after audit; no prompt revisions or variants"
+}

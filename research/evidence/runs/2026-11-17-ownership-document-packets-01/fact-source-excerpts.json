@@ -1,0 +1,197 @@
+{
+  "scope": "audit-only; never append this ledger to model input",
+  "facts": [
+    {
+      "id": "RC01",
+      "endpoint": "Rc::clone_from_ref_in",
+      "text": "先调用 UniqueRcUninit::new(value, alloc)，然后把 data_ptr 转为 *mut u8 传给 value.clone_to_uninit；调用返回后才调用 into_rc 并返回该 Rc。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 1345,
+        "end": 1359
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "code-explicit; native entry doc only states clone construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "ac4ebc8f9a2e4efb1b4dc3d3b63f9369f74f19418ebefee1c18f543b5c6af17a",
+      "source_excerpt": "    pub fn clone_from_ref_in(value: &T, alloc: A) -> Rc<T, A> {\n        // `in_progress` drops the allocation if we panic before finishing initializing it.\n        let mut in_progress: UniqueRcUninit<T, A> = UniqueRcUninit::new(value, alloc);\n\n        // Initialize with clone of value.\n        let initialized_clone = unsafe {\n            // Clone. If the clone panics, `in_progress` will be dropped and clean up.\n            value.clone_to_uninit(in_progress.data_ptr().cast());\n            // Cast type of pointer, now that it is initialized.\n            in_progress.into_rc()\n        };\n\n        initialized_clone\n    }\n\n"
+    },
+    {
+      "id": "RC02",
+      "endpoint": "UniqueRcUninit::new / try_new",
+      "text": "保存 Layout::for_value(for_value) 和 Some(alloc)；分配时用 for_value 的指针元数据形成 RcInner<T> 指针。try_new 用 ? 返回分配错误。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4450,
+        "end": 4477
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of layout, metadata and fallible construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "726cc5981d2c2b027c6e6a6194eb0aac79c71e17bd1d072c5e4388246ad83b9f",
+      "source_excerpt": "impl<T: ?Sized, A: Allocator> UniqueRcUninit<T, A> {\n    /// Allocates a RcInner with layout suitable to contain `for_value` or a clone of it.\n    #[cfg(not(no_global_oom_handling))]\n    fn new(for_value: &T, alloc: A) -> UniqueRcUninit<T, A> {\n        let layout = Layout::for_value(for_value);\n        let ptr = unsafe {\n            Rc::allocate_for_layout(\n                layout,\n                |layout_for_rc_inner| alloc.allocate(layout_for_rc_inner),\n                |mem| mem.with_metadata_of(ptr::from_ref(for_value) as *const RcInner<T>),\n            )\n        };\n        Self { ptr: NonNull::new(ptr).unwrap(), layout_for_value: layout, alloc: Some(alloc) }\n    }\n\n    /// Allocates a RcInner with layout suitable to contain `for_value` or a clone of it,\n    /// returning an error if allocation fails.\n    fn try_new(for_value: &T, alloc: A) -> Result<UniqueRcUninit<T, A>, AllocError> {\n        let layout = Layout::for_value(for_value);\n        let ptr = unsafe {\n            Rc::try_allocate_for_layout(\n                layout,\n                |layout_for_rc_inner| alloc.allocate(layout_for_rc_inner),\n                |mem| mem.with_metadata_of(ptr::from_ref(for_value) as *const RcInner<T>),\n            )?\n        };\n        Ok(Self { ptr: NonNull::new(ptr).unwrap(), layout_for_value: layout, alloc: Some(alloc) })\n    }\n"
+    },
+    {
+      "id": "RC03",
+      "endpoint": "UniqueRcUninit::data_ptr / into_rc",
+      "text": "data_ptr 按保存的值布局计算偏移。into_rc 用 ManuallyDrop 包装守卫，从 Option 中取出分配器，再通过 Rc::from_ptr_in 构造返回值。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4480,
+        "end": 4498
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of offset and transfer operations; safety precondition already native",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "baef0ec235035f813415b7cc3a91142b7c492922d469a6ffed92ea87091b6ddd",
+      "source_excerpt": "    fn data_ptr(&mut self) -> *mut T {\n        let offset = data_offset_alignment(self.layout_for_value.alignment());\n        unsafe { self.ptr.as_ptr().byte_add(offset) as *mut T }\n    }\n\n    /// Upgrade this into a normal [`Rc`].\n    ///\n    /// # Safety\n    ///\n    /// The data must have been initialized (by writing to [`Self::data_ptr()`]).\n    unsafe fn into_rc(self) -> Rc<T, A> {\n        let mut this = ManuallyDrop::new(self);\n        let ptr = this.ptr;\n        let alloc = this.alloc.take().unwrap();\n\n        // SAFETY: The pointer is valid as per `UniqueRcUninit::new`, and the caller is responsible\n        // for having initialized the data.\n        unsafe { Rc::from_ptr_in(ptr.as_ptr(), alloc) }\n    }\n"
+    },
+    {
+      "id": "RC04",
+      "endpoint": "UniqueRcUninit::drop",
+      "text": "Drop 取出保存的分配器，使用 rc_inner_layout_for_value_layout(layout_for_value) 释放 ptr 指向的分配；该函数体没有对 T 调用 drop_in_place。",
+      "source": {
+        "path": "library/alloc/src/rc.rs",
+        "start": 4501,
+        "end": 4513
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native already states deallocation without value drop; addition identifies concrete allocator/layout operations",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "9fd7f0524446e6e284dd8fd32c8d432efdb6ea162d42862672e81778372aa1de",
+      "source_excerpt": "impl<T: ?Sized, A: Allocator> Drop for UniqueRcUninit<T, A> {\n    fn drop(&mut self) {\n        // SAFETY:\n        // * new() produced a pointer safe to deallocate.\n        // * We own the pointer unless into_rc() was called, which forgets us.\n        unsafe {\n            self.alloc.take().unwrap().deallocate(\n                self.ptr.cast(),\n                rc_inner_layout_for_value_layout(self.layout_for_value),\n            );\n        }\n    }\n}\n"
+    },
+    {
+      "id": "ARC01",
+      "endpoint": "Arc::clone_from_ref_in",
+      "text": "先调用 UniqueArcUninit::new(value, alloc)，再以 data_ptr 转换出的 *mut u8 调用 value.clone_to_uninit；调用返回后才执行 into_arc 并返回该 Arc。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 1495,
+        "end": 1509
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "code-explicit; native entry doc only states clone construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "042282ea354934832a37bd4a5afbb832b54bef62c63c505056f8485c3e783426",
+      "source_excerpt": "    pub fn clone_from_ref_in(value: &T, alloc: A) -> Arc<T, A> {\n        // `in_progress` drops the allocation if we panic before finishing initializing it.\n        let mut in_progress: UniqueArcUninit<T, A> = UniqueArcUninit::new(value, alloc);\n\n        // Initialize with clone of value.\n        let initialized_clone = unsafe {\n            // Clone. If the clone panics, `in_progress` will be dropped and clean up.\n            value.clone_to_uninit(in_progress.data_ptr().cast());\n            // Cast type of pointer, now that it is initialized.\n            in_progress.into_arc()\n        };\n\n        initialized_clone\n    }\n\n"
+    },
+    {
+      "id": "ARC02",
+      "endpoint": "UniqueArcUninit::new / try_new",
+      "text": "保存值布局及 Some(alloc)，通过带 for_value 元数据的 ArcInner<T> 指针建立守卫。try_new 在分配失败时通过 ? 返回错误。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4230,
+        "end": 4257
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of layout, metadata and fallible construction",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "69c7a46bfdf70f075a48b8172e97dad3ff8e92d7567cbf47960924fc3c4c0676",
+      "source_excerpt": "impl<T: ?Sized, A: Allocator> UniqueArcUninit<T, A> {\n    /// Allocates an ArcInner with layout suitable to contain `for_value` or a clone of it.\n    #[cfg(not(no_global_oom_handling))]\n    fn new(for_value: &T, alloc: A) -> UniqueArcUninit<T, A> {\n        let layout = Layout::for_value(for_value);\n        let ptr = unsafe {\n            Arc::allocate_for_layout(\n                layout,\n                |layout_for_arcinner| alloc.allocate(layout_for_arcinner),\n                |mem| mem.with_metadata_of(ptr::from_ref(for_value) as *const ArcInner<T>),\n            )\n        };\n        Self { ptr: NonNull::new(ptr).unwrap(), layout_for_value: layout, alloc: Some(alloc) }\n    }\n\n    /// Allocates an ArcInner with layout suitable to contain `for_value` or a clone of it,\n    /// returning an error if allocation fails.\n    fn try_new(for_value: &T, alloc: A) -> Result<UniqueArcUninit<T, A>, AllocError> {\n        let layout = Layout::for_value(for_value);\n        let ptr = unsafe {\n            Arc::try_allocate_for_layout(\n                layout,\n                |layout_for_arcinner| alloc.allocate(layout_for_arcinner),\n                |mem| mem.with_metadata_of(ptr::from_ref(for_value) as *const ArcInner<T>),\n            )?\n        };\n        Ok(Self { ptr: NonNull::new(ptr).unwrap(), layout_for_value: layout, alloc: Some(alloc) })\n    }\n"
+    },
+    {
+      "id": "ARC03",
+      "endpoint": "UniqueArcUninit::data_ptr / into_arc",
+      "text": "data_ptr 根据保存的值布局计算偏移。into_arc 通过 ManuallyDrop 包装守卫，取出分配器和指针后调用 Arc::from_ptr_in。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4260,
+        "end": 4279
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of offset and transfer operations; safety precondition already native",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "f89197cfd18137947a55807932ee8187a994b7d1ed6a59e764f8365fcde8a094",
+      "source_excerpt": "    fn data_ptr(&mut self) -> *mut T {\n        let offset = data_offset_alignment(self.layout_for_value.alignment());\n        unsafe { self.ptr.as_ptr().byte_add(offset) as *mut T }\n    }\n\n    /// Upgrade this into a normal [`Arc`].\n    ///\n    /// # Safety\n    ///\n    /// The data must have been initialized (by writing to [`Self::data_ptr()`]).\n    unsafe fn into_arc(self) -> Arc<T, A> {\n        let mut this = ManuallyDrop::new(self);\n        let ptr = this.ptr.as_ptr();\n        let alloc = this.alloc.take().unwrap();\n\n        // SAFETY: The pointer is valid as per `UniqueArcUninit::new`, and the caller is responsible\n        // for having initialized the data.\n        unsafe { Arc::from_ptr_in(ptr, alloc) }\n    }\n}\n"
+    },
+    {
+      "id": "ARC04",
+      "endpoint": "UniqueArcUninit::drop",
+      "text": "在 not(no_global_oom_handling) 配置下，Drop 用取出的分配器及 arcinner_layout_for_value_layout(layout_for_value) 执行 deallocate；函数体没有对 T 调用 drop_in_place。",
+      "source": {
+        "path": "library/alloc/src/sync.rs",
+        "start": 4281,
+        "end": 4294
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native already states deallocation without value drop; addition identifies cfg and allocator/layout",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "542bc0294b15ea27b2c60a2010dc15fcf841b001ee336992935db57ca4039b9e",
+      "source_excerpt": "#[cfg(not(no_global_oom_handling))]\nimpl<T: ?Sized, A: Allocator> Drop for UniqueArcUninit<T, A> {\n    fn drop(&mut self) {\n        // SAFETY:\n        // * new() produced a pointer safe to deallocate.\n        // * We own the pointer unless into_arc() was called, which forgets us.\n        unsafe {\n            self.alloc.take().unwrap().deallocate(\n                self.ptr.cast(),\n                arcinner_layout_for_value_layout(self.layout_for_value),\n            );\n        }\n    }\n}\n"
+    },
+    {
+      "id": "CORE01",
+      "endpoint": "CloneToUninit for [T]",
+      "text": "slice 实现以 self 的元数据建立目标 *mut [T]，随后调用 T 的 CopySpec::clone_slice。",
+      "source": {
+        "path": "library/core/src/clone.rs",
+        "start": 555,
+        "end": 564
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of metadata adaptation and dispatch",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "5e517d106bfc3cd400c47624358ee29abe77aaca4cb5f2ed273dd440cdc009ed",
+      "source_excerpt": "#[unstable(feature = \"clone_to_uninit\", issue = \"126799\")]\nunsafe impl<T: Clone> CloneToUninit for [T] {\n    #[inline]\n    #[cfg_attr(debug_assertions, track_caller)]\n    unsafe fn clone_to_uninit(&self, dest: *mut u8) {\n        let dest: *mut [T] = dest.with_metadata_of(self);\n        // SAFETY: we're calling a specialization with the same contract\n        unsafe { <T as self::uninit::CopySpec>::clone_slice(self, dest) }\n    }\n}\n"
+    },
+    {
+      "id": "CORE02",
+      "endpoint": "CopySpec::clone_slice for T: Clone",
+      "text": "默认实现把目标借用为 [MaybeUninit<T>]，通过 InitializingSlice 逐项接收 element_ref.clone() 的结果；全部完成后 mem::forget(initializing)。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 24,
+        "end": 50
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new external documentation of operations already visible in code/internal comments",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "2346fc6d3e4238cd93f1538c0f92e2de27120f63e4900aa77ef0ea2c4e5cfacc",
+      "source_excerpt": "    #[inline]\n    #[cfg_attr(debug_assertions, track_caller)]\n    default unsafe fn clone_slice(src: &[Self], dst: *mut [Self]) {\n        let len = src.len();\n        // This is the most likely mistake to make, so check it as a debug assertion.\n        debug_assert_eq!(\n            len,\n            dst.len(),\n            \"clone_to_uninit() source and destination must have equal lengths\",\n        );\n\n        // SAFETY: The produced `&mut` is valid because:\n        // * The caller is obligated to provide a pointer which is valid for writes.\n        // * All bytes pointed to are in MaybeUninit, so we don't care about the memory's\n        //   initialization status.\n        let uninit_ref = unsafe { &mut *(dst as *mut [MaybeUninit<T>]) };\n\n        // Copy the elements\n        let mut initializing = InitializingSlice::from_fully_uninit(uninit_ref);\n        for element_ref in src {\n            // If the clone() panics, `initializing` will take care of the cleanup.\n            initializing.push(element_ref.clone());\n        }\n        // If we reach here, then the entire slice is initialized, and we've satisfied our\n        // responsibilities to the caller. Disarm the cleanup guard by forgetting it.\n        mem::forget(initializing);\n    }\n"
+    },
+    {
+      "id": "CORE03",
+      "endpoint": "InitializingSlice",
+      "text": "该对象保存借用的 [MaybeUninit<T>] 和 initialized_len。push 写入元素后才递增计数；Drop 对 data[..initialized_len] 调用 assume_init_drop，没有释放底层存储的操作。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 84,
+        "end": 123
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "native describes non-owned storage and unwind cleanup; addition spells out counter transition and exact prefix operation",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "af8445059d0949ccd7e4fd9f685330a0bbbd4f2e4e912ae5467e3c3eaa2549e1",
+      "source_excerpt": "/// Ownership of a collection of values stored in a non-owned `[MaybeUninit<T>]`, some of which\n/// are not yet initialized. This is sort of like a `Vec` that doesn't own its allocation.\n/// Its responsibility is to provide cleanup on unwind by dropping the values that *are*\n/// initialized, unless disarmed by forgetting.\n///\n/// This is a helper for `impl<T: Clone> CloneToUninit for [T]`.\nstruct InitializingSlice<'a, T> {\n    data: &'a mut [MaybeUninit<T>],\n    /// Number of elements of `*self.data` that are initialized.\n    initialized_len: usize,\n}\n\nimpl<'a, T> InitializingSlice<'a, T> {\n    #[inline]\n    fn from_fully_uninit(data: &'a mut [MaybeUninit<T>]) -> Self {\n        Self { data, initialized_len: 0 }\n    }\n\n    /// Push a value onto the end of the initialized part of the slice.\n    ///\n    /// # Panics\n    ///\n    /// Panics if the slice is already fully initialized.\n    #[inline]\n    fn push(&mut self, value: T) {\n        MaybeUninit::write(&mut self.data[self.initialized_len], value);\n        self.initialized_len += 1;\n    }\n}\n\nimpl<'a, T> Drop for InitializingSlice<'a, T> {\n    #[cold] // will only be invoked on unwind\n    fn drop(&mut self) {\n        // SAFETY:\n        // * the pointer is valid because it was made from a mutable reference\n        // * `initialized_len` counts the initialized elements as an invariant of this type,\n        //   so each of the pointed-to elements is initialized and may be dropped.\n        unsafe { self.data[..self.initialized_len].assume_init_drop() };\n    }\n}\n"
+    },
+    {
+      "id": "CORE04",
+      "endpoint": "CopySpec for T: TrivialClone",
+      "text": "该特化的 clone_one 与 clone_slice 调用 ptr::copy_nonoverlapping；slice 路径先 debug_assert_eq 两侧长度。",
+      "source": {
+        "path": "library/core/src/clone/uninit.rs",
+        "start": 53,
+        "end": 82
+      },
+      "status": "source-derived implementation fact, not a new normative requirement",
+      "delta_vs_native": "new explicit documentation of retained specialization; not a claim about all Clone implementations",
+      "available_in_code_arm": true,
+      "model_visible": "text and per-fact source only; delta/status ledger excluded",
+      "source_excerpt_sha256": "c1b3676f19e677e3e9666c7011d413bdc570ca5e0822c286f8ca8b54346c5bba",
+      "source_excerpt": "// Specialized implementation for types that are [`TrivialClone`], not just [`Clone`],\n// and can therefore be copied bitwise.\nunsafe impl<T: TrivialClone> CopySpec for T {\n    #[inline]\n    unsafe fn clone_one(src: &Self, dst: *mut Self) {\n        // SAFETY: The safety conditions of clone_to_uninit() are a superset of those of\n        // ptr::copy_nonoverlapping().\n        unsafe {\n            ptr::copy_nonoverlapping(src, dst, 1);\n        }\n    }\n\n    #[inline]\n    #[cfg_attr(debug_assertions, track_caller)]\n    unsafe fn clone_slice(src: &[Self], dst: *mut [Self]) {\n        let len = src.len();\n        // This is the most likely mistake to make, so check it as a debug assertion.\n        debug_assert_eq!(\n            len,\n            dst.len(),\n            \"clone_to_uninit() source and destination must have equal lengths\",\n        );\n\n        // SAFETY: The safety conditions of clone_to_uninit() are a superset of those of\n        // ptr::copy_nonoverlapping().\n        unsafe {\n            ptr::copy_nonoverlapping(src.as_ptr(), dst.as_mut_ptr(), len);\n        }\n    }\n}\n"
+    }
+  ]
+}

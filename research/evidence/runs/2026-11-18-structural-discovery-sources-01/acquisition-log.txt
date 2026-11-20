@@ -1,0 +1,22 @@
+Raw PDF download: curl -fL --max-time 45 --retry 1 --retry-max-time 55 -sS -o NAME.pdf -w 'http=%{http_code} size=%{size_download} url=%{url_effective}\n' URL
+Small source download: curl -fLsS --max-time 25 URL; stdout archived with apply_patch.
+Text extraction: pdftotext -layout NAME.pdf -; stdout archived with apply_patch.
+Validation: pdfinfo for all four PDFs; sha256sum *.pdf. No source builds/test execution.
+Text archiving normalizes trailing whitespace/newlines at file end; hashes identify archived UTF-8 text, not a promise of remote-byte equality.
+Full recursive PAM tree output was too large for transport; narrowed JSON selects source dataset metadata and one test, retaining SHA256 of complete fetched response. Selected metadata is not raw full response.
+Background agent unavailable in tool inventory; no independent review claimed.
+Successful bounded retry output:
+http=200 size=1574119 url=https://people.eecs.berkeley.edu/~ksen/papers/aroma.pdf
+exit=0
+/usr/bin/bash: line 1: file: command not found
+90687a54d3d24be472bc73e59b35455171308cafa726e26b50a7f55e6e936c7f  aroma.pdf
+FETCH mapo https://taoxiease.github.io/publications/ecoop09-mapo.pdf
+http=200 size=384675 url=https://taoxiease.github.io/publications/ecoop09-mapo.pdf
+exit=0
+/usr/bin/bash: line 1: file: command not found
+cf4f5ab010fc0d71ee8d67c9530c09eac200c0408dc2f66fff9b530ee34e8a16  mapo.pdf
+FETCH pam https://people.maths.ox.ac.uk/fowkes/papers/fse2016.pdf
+http=200 size=420835 url=https://people.maths.ox.ac.uk/fowkes/papers/fse2016.pdf
+exit=0
+/usr/bin/bash: line 1: file: command not found
+ef729adfacdf9e33fcca5f5e9050c75827b2186b72cab44cc74dac16f0999bce  pam.pdf

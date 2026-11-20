@@ -1,0 +1,95 @@
+PREPARE ONLY: retained case005 exclusive delegation fixture
+
+Authority: research/protocols/exclusive-delegation-v1.json and this run's
+input-freeze.json. Fixed revision 7e3ac94431a0dbb376d2fc8d85098deeff1bba09.
+This is not cache redesign. Static admission is Main's independent critical path;
+these tests may remain unused if the sole delegation proposal is refused. No
+candidate implementation, new mutant, callback-destructor model or source change
+is included. No build or test execution is claimed.
+
+Artifact: fixture.rs, exactly six appended def_test functions for the existing
+registered node_dentry test module. No new helpers, imports or public interfaces.
+Existing descendant access permits private Dentry::instantiate (:461-479) and
+super::LookupCreateResult (:258-261). Reuse make_dir_entry,
+make_dir_entry_with_parent, MockFileOps::new and inode_init from baseline-test.rs.
+These fixtures use real Dentry/VfsInode; filesystem operations are the existing
+module's test fixtures. No host transaction replacement or extra dependencies.
+
+Explicit oracle per entry:
+1 positive_rejects_before_callback: seed a live positive directory child;
+  create_exclusive_with must return AlreadyExists, callback count zero, same
+  child still in parent cache. A directory is intentionally sufficient to test
+  the inode-attached positive predicate; creation must reject any positive child.
+2 callback_error_unchanged: seed a live negative child; callback returns NotFound
+  (distinct from AlreadyExists and InvalidInput). Require that exact error,
+  callback once on the seeded pointer, unchanged negative/no-inode state and
+  unchanged cached identity. This does not assert rollback of callback mutations;
+  this callback intentionally performs no state mutation.
+3 ok_without_instantiation: callback returns Ok without attaching an inode;
+  require InvalidInput, callback once on seeded identity, negative/no-inode state
+  and cached identity preserved.
+4 success_preserves_identity: callback attaches a prepared regular-file inode
+  using the real private instantiate method. Require callback once, callback and
+  returned Dentry equal the original negative pointer, now inode-attached and
+  no longer negative, with unchanged cache identity.
+5 nonexclusive_existing: directly exercise the UNMODIFIED general method with
+  exclusive=false and a positive child. Require Existing(original pointer) and
+  zero callbacks. Reject Created or any error explicitly by enum matching.
+6 nonexclusive_created: directly exercise the UNMODIFIED general method with
+  exclusive=false and a seeded negative child. Require Created(original pointer),
+  callback once, same callback pointer, and attached positive state/cache identity.
+
+The first four oracles do not call lookup_or_create_with for expected answers.
+The last two test that general method itself against explicit enum expectations;
+they are regression guards, not differential oracles for the exclusive method.
+No expected answer is computed by a proposed adapter/helper.
+
+Each test holds an explicit child owner and uses a fresh unbound directory parent.
+Seeding uses insert_cache, with a setup assertion that no prior entry exists.
+The setup keeps weak cache entries alive without a superblock or filesystem
+lookup callback. No PAR_LOOKUP state is installed, no lookup mutex is manually
+held, and no concurrent worker waits. Callback counters/identity booleans use
+local mutable captures compatible with FnOnce. Inodes are prepared outside the
+callback and moved into instantiate; no recursive parent namespace operation is
+called from the callback. Post-call cache probes occur after method return.
+
+Source rationale (original fs/kvfs/src/node/dentry.rs line numbers):
+with_locked_child :1147-1158 validates directory/name, holds namespace-exclusive
+guard around lookup and callback. Exclusive :1165-1179 rejects is_really_positive,
+propagates callback error, rejects is_negative after success, returns child clone.
+General :1182-1206 has the corresponding exclusive branch and Existing/Created
+payloads. Predicates :538-555 distinguish type flags from attached inode; tests
+observe both rather than treating them as synonymous. Enum :258-261 and real
+instantiate :461-479 support in-module construction and ownership observations.
+Existing test_create_instantiates_cached_lookup_miss at baseline-test.rs:541-564
+is an identity/instantiation precedent; this fixture uses direct instantiate to
+avoid requiring credential or filesystem-create plumbing for callback semantics.
+
+Limitations: sequential ordinary-state observations do not prove guard lifetime,
+callback capture/destructor drop order, allocation/clone budget, panic/unwind,
+concurrency or performance. Static admission must assess the exact owned enum
+adapter and ownership/guard changes independently. No malformed flag/inode state,
+callback mutation followed by error, aliasing race or new callback model is added.
+No test pass or refactoring adoption claim can be made from artifact preparation.
+
+Freeze/run handoff: Main freezes fixture bytes/hash, sole proposal, baseline and
+commands BEFORE either execution cell. Same appended section must be used for
+original and admitted candidate. General method must stay byte-identical. Stop
+under the protocol if static admission fails or baseline assertions fail; do not
+change oracle or add a new candidate. Runner and execution remain Main's work.
+
+Read scope: frozen protocol, input-freeze.json, and only fixture-01's
+baseline-dentry.rs / baseline-test.rs content. Source semantic ranges read:
+258-261 (display included 250-265),450-480,538-555,1147-1206, plus targeted enum/
+instantiate/method-name matches. Test ranges:1-25,43-68,281-307,376-406,432-446,
+528-567, plus targeted helper/creation matches. Both full baselines and protocol
+were read for hash verification; all hashes matched input-freeze.json:
+ dentry 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7
+ tests c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b
+ protocol a624619c71ec80493d3e1d7e984e5f2b61ff618afbedcde9dfcc018f37ba9a19
+Run directories were listed for file location; their other content was not read.
+No restored-/tmp dependency file needed (zero of the six-file allowance).
+Only exclusive-delegation-01/fixture.rs and fixture-design.txt written. No
+production/temp-source edits, builds, tests or network. Formatting check passed;
+this is not a compile or execution check. Preparation approximately two minutes,
+beginning around 09:52:55 UTC on 2026-11-18; under fifteen minutes.

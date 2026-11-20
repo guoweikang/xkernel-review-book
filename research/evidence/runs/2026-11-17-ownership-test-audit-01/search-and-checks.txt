@@ -1,0 +1,47 @@
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:212:fn panic_no_leak() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:524:    assert!(75 == *Rc::make_mut(&mut cow0));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:525:    assert!(75 == *Rc::make_mut(&mut cow1));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:526:    assert!(75 == *Rc::make_mut(&mut cow2));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:528:    *Rc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:529:    *Rc::make_mut(&mut cow1) += 2;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:530:    *Rc::make_mut(&mut cow2) += 3;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:552:    *Rc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:573:    *Rc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:579:/// This is similar to the doc-test for `Rc::make_mut()`, but on an unsized type (slice).
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:586:    Rc::make_mut(&mut data)[0] += 1; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:588:    Rc::make_mut(&mut data)[1] += 1; // Clones inner data
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:589:    Rc::make_mut(&mut data)[2] += 1; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:590:    Rc::make_mut(&mut other_data)[0] *= 10; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/rc.rs:677:fn test_clone_from_slice_panic() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:91:type Rc<T, A = std::alloc::Global> = Arc<T, A>;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:215:fn panic_no_leak() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:248:/// This is similar to the doc-test for `Arc::make_mut()`, but on an unsized type (slice).
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:250:fn make_mut_unsized() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:255:    Arc::make_mut(&mut data)[0] += 1; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:257:    Arc::make_mut(&mut data)[1] += 1; // Clones inner data
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:258:    Arc::make_mut(&mut data)[2] += 1; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/arc.rs:259:    Arc::make_mut(&mut other_data)[0] *= 10; // Won't clone anything
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:245:fn test_cowarc_clone_make_mut() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:250:    assert!(75 == *Arc::make_mut(&mut cow0));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:251:    assert!(75 == *Arc::make_mut(&mut cow1));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:252:    assert!(75 == *Arc::make_mut(&mut cow2));
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:254:    *Arc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:255:    *Arc::make_mut(&mut cow1) += 2;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:256:    *Arc::make_mut(&mut cow2) += 3;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:278:    *Arc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:298:    *Arc::make_mut(&mut cow0) += 1;
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloctests/tests/sync.rs:506:fn test_clone_from_slice_panic() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:24:fn test_clone_to_uninit_slice_success() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:31:        a[..].clone_to_uninit(storage.as_mut_ptr().cast());
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:39:#[cfg(panic = "unwind")]
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:40:fn test_clone_to_uninit_slice_drops_on_panic() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:73:            a[..].clone_to_uninit(storage.as_mut_ptr().cast());
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:88:fn test_clone_to_uninit_str() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:92:    unsafe { a.clone_to_uninit(storage.as_mut_ptr().cast()) };
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:98:    unsafe { a.clone_to_uninit(ptr::from_mut::<str>(&mut b).cast()) };
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:103:fn test_clone_to_uninit_cstr() {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:107:    unsafe { a.clone_to_uninit(storage.as_mut_ptr().cast()) };
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs:113:    unsafe { a.clone_to_uninit(ptr::from_mut::<CStr>(&mut b).cast()) };
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/lib.rs:15:#![feature(clone_to_uninit)]
+PASS: 232 documents, 10 topics; five negative controls
+PASS: 280 HTML pages; local links; artifact isolation; 87 archive checksums

@@ -1,0 +1,23 @@
+DECISIVE HOST WITNESS: naive moved-callback helper fails Drop-order preservation.
+Frozen protocol; Rust1.95.0 edition2024, opt-level0 and opt-level3. Two successful
+builds, two executions, six observations each; zero repairs, zero kernel/QEMU runs.
+
+Type mismatch: both return WrongType, no may/backend invocation.
+Original: parent_lock -> victim_lock -> type_check -> victim_unlock -> parent_unlock -> may_drop.
+Naive: parent_lock -> victim_lock -> type_check -> may_drop -> victim_unlock -> parent_unlock.
+The naive may-capture destructor executes while helper guards remain alive.
+Debug and opt traces are identical.
+
+CallbackErr: both PermissionDenied; may_call -> may_drop -> victim_unlock -> parent_unlock,
+with no backend/mark/forget. Success: both Ok; may_call -> may_drop -> backend -> mark
+-> forget -> victim_unlock -> parent_unlock. Equality is limited to these observations.
+
+Guards are instrumented RAII stand-ins, not ksync locks. This is an ownership-shape
+counterexample, not production execution, a filesystem bug or an all-closures claim.
+No explicit drop(may) inserted; capture destruction is natural FnOnce destruction.
+It rejects unconditional equivalence for Drop-bearing callbacks. results.json passed
+means expected event checks passed, NOT candidate accepted.
+
+STOP: naive candidate gate rejected. Kernel preparation paused; no Option redesign,
+no replacement candidate, production edit, ranking or model call.
+See research/notes/2026-11-18-delete-transaction-admission.md for source obligations.

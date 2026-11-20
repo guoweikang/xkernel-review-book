@@ -1,0 +1,18 @@
+{
+  "schema":"runtime-accounting-trace-study/1",
+  "revision":"7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "question":"Can the known rejected-handoff budget relation be evaluated from independently recorded callback events and observed budget, with explicit source/configuration/window identity and loss rejection?",
+  "test_path":"mm/pagecache/ut-tests/writeback_unittest.rs",
+  "implementation_path":"mm/pagecache/src/writeback.rs",
+  "focal_test":"rejected_submission_redirties_its_batch_without_ending_prior_io",
+  "window":"pc-reject-v1",
+  "instrumentation":"Only test fixture: begin record; callback handoff logs actual batch.data().len(); accept/reject branch records; end record after original cleanup with actual remaining budget and producer sequence total. Production implementation unchanged. No new budget assertion; evaluator owns comparison.",
+  "unit_binding":"Fixture has two full 4096-byte folios and max_bytes=4096; require each logged handoff length exactly 4096 before mapping to one folio. Not a generic bytes-to-folio conversion.",
+  "identity":"Compiled include_str receipt is SHA256 of canonical host manifest: revision, original implementation hash, instrumented test hash, .config hash, protocol hash, parser hash, command and fixed toolchain/environment. Host additionally archives built ELF hashes and serial logs. Not remote attestation or malicious-writer authentication.",
+  "command":"make unittest UNITTEST_CRATE=pagecache ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g DISK_IMG=<source>/research-root.ext4",
+  "runs":2,
+  "timeout_seconds_per_run":600,
+  "controls":["drop_handoff","drop_end","drop_window","duplicate_event","swap_events","wrong_receipt","wrong_manifest_revision","wrong_manifest_config","wrong_window","wrong_page_length"],
+  "evaluation":"Require one expected window, receipt on each record, contiguous producer sequence, complete end count, legal handoff/outcome pairing and full-page binding. Missing or corrupted log must not yield contract consistency. Compare two normalized captures; do not demand byte-identical kernel logs.",
+  "limits":"Known development case only. Completeness is relative to declared instrumentation sites and expected fixture, not proof no semantic events went uninstrumented. Instrumentation changes timing. No performance, new discovery, generalization or novelty claim. No network instrumentation in this batch."
+}

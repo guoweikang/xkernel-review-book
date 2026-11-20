@@ -1,0 +1,7 @@
+- **共享机制或弃权理由**：两入口都将同一个 `Arc<T>` 克隆为 `Arc<dyn Any + Send + Sync>`，再将原值转换为 `Arc<dyn InodeOperations>`，交给同一被调函数。可消除重复，不必新增抽取函数：让 `new_dir` 委托 `new_dir_with_flags`。
+- **必须保留的差异**：`new_dir` 传入 `NodeFlags::empty()`；`new_dir_with_flags` 传入调用者提供的 `flags`。保留两个入口的签名、泛型约束和 `init` 传递。
+- **已有委托**：二者已共享 `new_dir_with_inode_operations`。所示实现检查目录类型并执行 `debug_assert!`，随后以 `file_operations: None`、`empty_address_space_operations()` 的返回值及其余参数组装 `InodeParts`，交给 `Self::from_parts`。更深层语义未展示。
+- **最小接口草案**：无需新增接口；仅建议将 `new_dir` 函数体改为 `Self::new_dir_with_flags(node, NodeFlags::empty(), init)`，保留另一入口现有实现。本回答不修改代码。
+- **约束及其来源(code/doc/unknown)**：code：`T: Any + Send + Sync + InodeOperations`；两个 trait 对象共享原 `Arc` 的底层分配；目录检查使用调试断言，不能视为无条件拒绝非目录输入。doc：两个入口均声明“构造不带目录文件操作的目录 inode”；code 仅直接支持传给 `from_parts` 的字段为 `None`。unknown：最终对象是否保持该字段、地址空间操作实际行为。
+- **一条可反驳提案的验证义务**：核对委托改写前后，在相同输入下，`from_parts` 接收的全部字段、两个 trait 对象的底层分配关系，以及到达该调用前的断言与副作用是否一致；发现任一差异即反驳行为等价提案。
+- **缺失上下文**：`NodeFlags::empty()`、`node_type()`、`empty_address_space_operations()`、`from_parts` 的实现，以及调用点和对调用栈等可观察行为的要求。

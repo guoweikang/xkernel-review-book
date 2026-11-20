@@ -1,0 +1,209 @@
+Candidate002 cache transaction equivalence — test-construction protocol draft
+
+Status and fixed identity
+Design only. No tests constructed or executed, no measured results, and no
+positive refactoring conclusion. Parent must freeze a separate protocol and
+implementation identities before any result measurement. This is a new task,
+not a relabeling of review-a.txt. Candidate002 means case-002 by supplied slot
+order, NOT candidate005. Fixed revision:
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09.
+Pair: fs/kvfs/src/node/dentry.rs:933-949 insert_cache and :831-845
+cache_lookup_candidate. Both supplied source files were rehashed and match:
+5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7.
+Prior report records verified slices [30279,30919) and [26624,27174).
+
+1. Construction boundary and oracle
+Model only the shared locked transaction: inspect raw weak map entry, upgrade
+and return a live winner, else insert a weak candidate reference, then unlock.
+Retain wrapper-specific eligibility, name ownership and superblock retention
+outside it. Do not incorporate lookup completion, waiting, filesystem callbacks,
+candidate replacement, or retraction into this proposed common boundary.
+
+Construct a small host harness later with two independent baseline wrapper
+translations faithful to :831-845/:933-949, one proposed factored translation,
+and the two deliberate faulty variants below. Maintain a source-to-model line
+map. State the model's substitutions explicitly: host Arc/Weak, map, instrumented
+lock guard, flags and optional retention sink. A host map is not hashbrown/kernel
+equivalence evidence. Use the explicit table below as the oracle, not merely
+agreement between baseline and proposed implementations.
+
+Fixtures use a nonempty name, a distinct candidate identity C, and winner W.
+Absent: key truly absent. Expired: raw key present with a Weak whose final strong
+owner has been dropped and upgrade verified to fail. Live normal: retain W,
+PAR_LOOKUP clear. Live PAR_LOOKUP: retain W with that bit set. Keep candidate C
+alive during the call as required by each wrapper; remove setup owners only at
+declared teardown checkpoints. Never inspect slot state through lookup_cache_entry:
+it removes stale slots and filters PAR_LOOKUP (:820-828), changing the fixture.
+Use raw map/weak observations without accidentally retaining upgraded Arcs.
+
+2. One parameterized matrix
+Enumerate 128 deterministic rows:
+  4 slot states x 2 wrapper/name modes x 2 parent eligibility values
+  x 4 child flag combinations x 2 superblock-presence values.
+Wrapper/name modes are coupled: insert_cache consumes an owned String and Dentry;
+cache_lookup_candidate borrows &str and &Dentry. Do not invent unsupported public
+wrapper signatures. Exercise each name arm of the proposed internal boundary.
+Child combinations: neither DONTCACHE nor PERSISTENT; DONTCACHE only;
+PERSISTENT only; both. Parent eligibility is !NON_CACHEABLE.
+
+Admission truth table:
+  insert_cache: parent eligible AND (!DONTCACHE OR PERSISTENT).
+  cache_lookup_candidate: always enters the transaction for all these flags.
+When admission is false, return None, leave the raw map unchanged (including
+an expired entry), perform no children-lock acquisition or retention call,
+and consume/drop owned wrapper arguments normally. None must not be interpreted
+as proof of insertion; the wrapper gate is essential (:933-948).
+
+For admitted rows, apply this slot oracle:
+  Slot           Return       Raw slot after transaction   Retention
+  absent         None         weak C                      C iff SB present
+  expired        None         weak C                      C iff SB present
+  live normal    Some(W)      same weak W                 none
+  live PAR       Some(W)      same weak W, PAR unchanged  none
+Returned identity is pointer/owner identity, not name or inode equality. Insertion
+must not clear flags, mutate C/W metadata, or touch an unrelated sentinel key.
+On a hit, verify the map still identifies W even if C has the same name. The
+PAR winner is returned by insertion despite being hidden by ordinary cache
+snapshot lookup; its caller handles waiting/retry (:1079-1088).
+
+3. Trace and ownership assertions
+For an admitted miss, require the partial order:
+  children-lock acquire -> raw lookup/failed upgrade -> weak insertion
+  -> children-lock release -> optional retention-sink entry -> return None.
+For a hit: upgrade W and release the guard before returning Some(W); no insertion
+or retention. For rejected admission: no transaction events. Retention's sink
+must record the exact identity and observe children-lock depth zero. Use a
+nonblocking guard-state assertion, not a blocking recursive lock that could hang
+the host test. Test both SB-present and SB-absent paths explicitly.
+
+At retention entry, C must still have a strong owner. For insert_cache the
+owned Dentry is moved to retention; for cache_lookup_candidate exactly the
+explicit candidate.clone() at :842 supplies the retained owner. The shared
+transaction itself must not clone C. A live Weak upgrade legitimately acquires
+a strong owner for returned W; do not count that as an illicit candidate clone.
+Track explicit clone/move events and controlled owner lifetimes, not unadjusted
+global strong counts contaminated by probes, fixtures, or retention logs.
+Logs should store stable scalar IDs, not additional strong references.
+
+After caller owners are dropped, SB-present inserted C should remain alive in
+the model sink until eviction; without retention it may expire. On hits, the
+rejected owned C may be destroyed at wrapper exit, while a borrowed C remains
+owned by its caller. Drop each returned W handle at a specified checkpoint.
+Reset fixtures and evict retained entries between rows so cycles or leaked
+test references cannot mask failures.
+
+Name budget is semantic, not a total allocator-call claim:
+  owned mode: no new name copy inside the transaction; move the input String;
+  borrowed mode: no name materialization on a live hit, one to_owned-equivalent
+  on absent/expired insertion, under the children lock as in :839.
+Setup name allocation is outside the measured region. Map growth, key replacement
+and allocator behavior are accounted separately; never assert zero total heap
+allocations merely because the name is owned. Existing equal-key insertion may
+retain the old key and dispose of the incoming key; pointer equality of the map
+key is not a valid universal ownership oracle. Prefer logical materialization
+events plus explicit ownership tracking. Any later allocator instrumentation
+requires its own frozen accounting rules; do not infer real allocation cost
+from model events. Retention allocations are outside the proposed transaction.
+
+4. Two required deliberate bad controls
+A. Filtered-live control: inside an otherwise single locked transaction, treat
+a successfully upgraded PAR_LOOKUP W as absent, mimicking :828's inappropriate
+filter at this boundary. This must fail admitted live-PAR rows: expected Some(W)
+and unchanged W slot, observed replacement by C/None and possibly retention.
+Keeping the rest of the model unchanged isolates the filtered-live error from
+a separate split-lock race. Do not call the locking lookup_cache_entry while
+already holding the children lock.
+B. Retention-under-lock control: on an admitted miss with SB present, call the
+sink before releasing the guard. This must fail the sink's lock-depth/order
+assertion even if return value, identity and final map contents match baseline.
+It should not be detected solely through a timeout or a deliberately deadlocking
+kernel run. No-retention rows are not expected to distinguish this control.
+If either fault survives its discriminating rows, classify the harness as
+insensitive; do not count proposed-implementation passes as equivalence evidence.
+
+5. RAII/drop audit required alongside the model
+Factoring changes Rust scopes even with identical map operations. Record guard,
+owned-name, candidate, returned-winner and replaced-Weak lifetimes on all exits.
+In particular, an owned argument captured by a lazy name closure can be dropped
+unused on a hit; if that closure is destroyed while a caller-owned guard is
+still live, deallocation/drop timing differs from the original wrapper. A helper
+that owns its own guard differs from one borrowing an outer guard. Neither an
+implicit temporary lifetime nor a tail expression is sufficient evidence of
+unlock-before-retention: inspect the chosen concrete Rust scopes before freeze.
+
+Returning a guard-bearing object, moving retention into an insertion closure,
+or letting an outer guard live across the helper return can widen the lock.
+Conversely, moving Weak/key replacement cleanup outside the lock may change
+baseline drop order. Replacing an expired Weak may free its control block;
+disposing of an unused String may invoke allocation machinery under a lock.
+Do not impose a blanket 'all drops outside lock' rule: baseline map insertion
+already performs replacement work there. Preserve the baseline partial order
+or explicitly document and review any intentional change before measurement.
+Avoid extra strong C clones that keep rejected entries alive and mask destructor
+behavior. Never execute filesystem callbacks or final Dentry destruction under
+new lock scopes merely for a shorter helper signature.
+Normal-return host traces do not establish unwind/OOM safety. Kernel allocation
+failure policy, actual destructors and panic strategy are unexamined here; any
+panic-injection experiment needs separate applicability justification.
+
+6. Existing frozen test anchors and gaps
+Direct registration: fs/kvfs/src/node/dentry.rs:1657 names
+fs/kvfs/ut-tests/node_dentry.rs in the frozen sources.zip.
+Existing entries suitable as future integration anchors, not executed here:
+  :1014-1041 test_dentry_cache_retains_hashed_children_and_preserves_parent_lifetime
+    covers retained lifetime and eviction, not insertion lock ordering.
+  :1127-1144 test_lookup_non_cacheable_positive_retracts
+    covers cleanup after a positive non-cacheable lookup.
+  :1147-1160 test_parallel_lookup_candidate_does_not_escape_cache_snapshot
+    covers hiding a candidate, not collision with an existing PAR winner.
+  :1163-1177 test_parallel_lookup_replacement_publishes_only_completed_entry
+    covers replacement/publication in the separate replacement routine.
+  :1180-1193 test_completed_negative_lookup_remains_cacheable
+    covers completion visibility.
+  :1196-1213 test_lookup_non_cacheable_negative_retracts
+    covers negative cleanup and repeated lookup.
+No inspected existing entry establishes the full transaction matrix, clone/name
+budget or unlock-before-retention obligation. New tests would be required; names
+and placement must be frozen by the parent before constructing/measuring them.
+Do not extend this factoring to replace_lookup_candidate: :847-859 visibly has
+a different retention/lock sequence. That difference is outside this candidate.
+
+7. Evidence tiers and acceptance rules for the later frozen protocol
+Host-feasible: table outcomes, identity, eligibility dispatch, explicit name/
+clone budgets, owner survival/drop checkpoints, and instrumented lock/retention
+partial order. A source-mapped model can expose incorrect proposed logic; it
+cannot prove equivalence of production code that was never run.
+Both baseline translations must satisfy the table; the proposed translation
+must satisfy it and both negative controls must fail their specified assertions.
+A discrepancy triggers investigation of oracle/model fidelity or proposal,
+not retroactive oracle changes. Record all 128 rows, expected and observed
+events, distinct failure reasons and model/source hashes. Keep mutation-control
+outcomes separate from proposed-implementation outcomes. No performance or
+refactor-adoption inference follows from host success alone.
+
+Unknown kernel/concurrency obligations remain: real mutex type and scheduling,
+flag/location/dcache lock interactions, callbacks/destructors, memory ordering,
+allocator behavior and actual concurrent last-owner drops. The source's single
+children-lock section motivates atomic winner selection but sequential rows do
+not prove it. A future separately frozen concurrency test could stage two
+same-name contenders, keep the first winner strongly alive, and verify exactly
+one installs while the other returns that identity; a PAR winner must not be
+overwritten. Scheduler/barrier instrumentation must not introduce new locking
+semantics. The gap after unlock and before retention is present in baseline;
+do not silently claim atomicity across both caches or repair it in this protocol.
+Parallel lookup waiting/retry and failure retraction (:1073-1134) require real
+integration validation beyond the isolated host transaction. Existing test anchors
+are leads for that work, not proof of thread/concurrency coverage.
+
+Read/write/time accounting
+This task read only prior review-a.txt; supplied case-002 left-source.rs ranges
+1-85,790-950,1060-1136,1648-1658; both case-002 full source files for SHA-256;
+and archived fs/kvfs/ut-tests/node_dentry.rs ranges 1013-1043 and 1105-1213.
+Archive access streamed that single named member through line selection, with
+no extraction or broad search. Archive:
+research/evidence/runs/2026-11-05-rust-baseline-corpus-01/sources.zip.
+No metadata reread, other cases' source reads, production edits, builds, test
+execution, network, or new helpers. Only this verification-design.txt written.
+Approximately three minutes for reading/design/writing, starting around 08:56:56
+UTC on 2026-11-18; under the ten-minute cap. No token-use estimate. This document
+is an input to the parent's later protocol freeze, not that freeze or a result.

@@ -1,0 +1,31 @@
+{
+  "schema": "governed-doc-claims/2",
+  "status": "critical_claim_slice_not_complete_contract",
+  "parent_run": "research/evidence/runs/2026-11-12-governed-doc-packets-01",
+  "audit_run": "research/evidence/runs/2026-11-12-doc-field-evidence-01",
+  "scope": "Researcher-authored, already-seen development cases; no provider validation or independent effectiveness labels",
+  "claims": [
+    {"id":"role-change","packet":"permission-role","kind":"source_observation","text":"Return a mode with replacement permission bits while retaining original file-type bits; this does not establish that those bits denote a valid NodeType.","source":"packet","lines":[145,148]},
+    {"id":"role-effects","packet":"permission-role","kind":"source_observation","text":"This function body computes a value without allocation, locking or external callbacks; caller execution requirements are outside this observation.","source":"packet","lines":[145,148]},
+    {"id":"role-config","packet":"permission-role","kind":"unknown","text":"The resolved build configuration for this item has not been collected."},
+    {"id":"command-entry","packet":"complete-command","kind":"source_observation","text":"Empty input returns zero; requests exceeding 4096 bytes are rejected before copying or invoking the write handler.","source":"packet","lines":[87,95]},
+    {"id":"command-boundary","packet":"complete-command","kind":"source_observation","text":"For nonempty input of at most 4096 bytes, invoke self.write once only after the whole payload has been collected successfully; a collection error or zero progress invokes no handler.","source":"packet","lines":[87,118]},
+    {"id":"command-result","packet":"complete-command","kind":"source_observation","text":"The concrete CommandFile::write method returns the entire supplied byte count if its handler succeeds; its handler does not return a short byte count.","source":"packet","lines":[72,85]},
+    {"id":"command-position","packet":"complete-command","kind":"source_observation","text":"Advance file position only after write completion and successful rewind checks; a rewind error can return early and does not undo arbitrary handler side effects.","source":"packet","lines":[112,128]},
+    {"id":"command-config","packet":"complete-command","kind":"unknown","text":"The resolved build configuration and concrete iterator execution context have not been verified."},
+    {"id":"firmware-owner","packet":"firmware-ownership","kind":"normative_responsibility","text":"The device-tree backend owns structural access, property decoding, node status and device-tree address translation.","source":"packet","lines":[5,9]},
+    {"id":"firmware-exclusion","packet":"firmware-ownership","kind":"normative_responsibility","text":"Kernel registration, IRQ mapping, MMIO mapping and DMA allocation remain outside the device-tree library's responsibility.","source":"packet","lines":[5,9]},
+    {"id":"firmware-transition","packet":"firmware-ownership","kind":"normative_responsibility","text":"Keep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.","source":"packet","lines":[18,38]},
+    {"id":"firmware-reported-gap","packet":"firmware-ownership","kind":"document_report","text":"The frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.","source":"packet","lines":[92,94]},
+    {"id":"firmware-observed-path","packet":"firmware-ownership","kind":"source_observation","text":"In the same revision, DtBackend::irq_spec calls irq_spec_with and constructs FwIrqSpec for a returned specification; this is not proof that every IRQ form or runtime configuration works.","source":"backend","lines":[217,229]},
+    {"id":"firmware-feature","packet":"firmware-ownership","kind":"source_observation","text":"The manifest declares fwnode as including alloc and optional fwnode/lazyinit dependencies; actual project feature activation is not established.","source":"manifest","lines":[16,19]},
+    {"id":"firmware-planned","packet":"firmware-ownership","kind":"planned_capability","text":"The design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.","source":"packet","lines":[84,90]}
+  ],
+  "interventions": {
+    "permission-role": {"claim":"role-change","text":"Return a mode with replacement file-type bits while retaining original permission bits; this does not establish that those bits denote a valid NodeType."},
+    "complete-command": {"claim":"command-boundary","text":"For nonempty input of at most 4096 bytes, invoke self.write after each successfully copied fragment rather than waiting for the whole payload; earlier handlers may have run before a later collection error."},
+    "firmware-ownership": {"claim":"firmware-exclusion","text":"Kernel registration, IRQ mapping, MMIO mapping and DMA allocation belong within the device-tree library's responsibility."}
+  },
+  "rules": ["No old packet overwrite", "Keep claim kinds and evidence on evaluation side", "D3 changes exactly one statement, not its scope metadata", "No metadata verdicts or evidence paths in detector text", "Do not label document_report as implementation proof", "Development sensitivity only; no independent scores"],
+  "next_gate": "Freeze equal-input comparison on this critical slice; compare content additions separately from formatting and evidence-side checks"
+}

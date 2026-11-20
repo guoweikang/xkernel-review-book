@@ -1,0 +1,1815 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Marks that `Src` is transmutable into `Self`.",
+          "path": "doc",
+          "range": [
+            35,
+            84
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            85,
+            88
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Implementation",
+          "path": "doc",
+          "range": [
+            89,
+            109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            110,
+            113
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait cannot be implemented explicitly. It is implemented on-the-fly by",
+          "path": "doc",
+          "range": [
+            114,
+            194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the compiler for all types `Src` and `Self` such that, given a set of safety",
+          "path": "doc",
+          "range": [
+            195,
+            275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " obligations on the programmer (see [`Assume`]), the compiler has proved that",
+          "path": "doc",
+          "range": [
+            276,
+            356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the bits of a value of type `Src` can be soundly reinterpreted as a `Self`.",
+          "path": "doc",
+          "range": [
+            357,
+            436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            437,
+            440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            441,
+            453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            454,
+            457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `Dst: TransmuteFrom<Src, ASSUMPTIONS>`, the compiler guarantees that",
+          "path": "doc",
+          "range": [
+            458,
+            533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Src` is soundly *union-transmutable* into a value of type `Dst`, provided",
+          "path": "doc",
+          "range": [
+            534,
+            612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that the programmer has guaranteed that the given [`ASSUMPTIONS`](Assume)",
+          "path": "doc",
+          "range": [
+            613,
+            690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are satisfied.",
+          "path": "doc",
+          "range": [
+            691,
+            709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            710,
+            713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A union-transmute is any bit-reinterpretation conversion in the form of:",
+          "path": "doc",
+          "range": [
+            714,
+            790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            791,
+            794
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            795,
+            806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub unsafe fn transmute_via_union<Src, Dst>(src: Src) -> Dst {",
+          "path": "doc",
+          "range": [
+            807,
+            873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     use core::mem::ManuallyDrop;",
+          "path": "doc",
+          "range": [
+            874,
+            910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            911,
+            914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     #[repr(C)]",
+          "path": "doc",
+          "range": [
+            915,
+            933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     union Transmute<Src, Dst> {",
+          "path": "doc",
+          "range": [
+            934,
+            969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         src: ManuallyDrop<Src>,",
+          "path": "doc",
+          "range": [
+            970,
+            1005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         dst: ManuallyDrop<Dst>,",
+          "path": "doc",
+          "range": [
+            1006,
+            1041
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1042,
+            1051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1052,
+            1055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let transmute = Transmute {",
+          "path": "doc",
+          "range": [
+            1056,
+            1091
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         src: ManuallyDrop::new(src),",
+          "path": "doc",
+          "range": [
+            1092,
+            1132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     };",
+          "path": "doc",
+          "range": [
+            1133,
+            1143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1144,
+            1147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let dst = unsafe { transmute.dst };",
+          "path": "doc",
+          "range": [
+            1148,
+            1191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1192,
+            1195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     ManuallyDrop::into_inner(dst)",
+          "path": "doc",
+          "range": [
+            1196,
+            1233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1234,
+            1239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1240,
+            1247
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1248,
+            1251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this construction is more permissive than",
+          "path": "doc",
+          "range": [
+            1252,
+            1307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`mem::transmute_copy`](super::transmute_copy); union-transmutes permit",
+          "path": "doc",
+          "range": [
+            1308,
+            1383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " conversions that extend the bits of `Src` with trailing padding to fill",
+          "path": "doc",
+          "range": [
+            1384,
+            1459
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trailing uninitialized bytes of `Self`; e.g.:",
+          "path": "doc",
+          "range": [
+            1460,
+            1509
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1510,
+            1513
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            1514,
+            1525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(transmutability)]",
+          "path": "doc",
+          "range": [
+            1526,
+            1558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1559,
+            1562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::mem::{Assume, TransmuteFrom};",
+          "path": "doc",
+          "range": [
+            1563,
+            1606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1607,
+            1610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let src = 42u8; // size = 1",
+          "path": "doc",
+          "range": [
+            1611,
+            1642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1643,
+            1646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #[repr(C, align(2))]",
+          "path": "doc",
+          "range": [
+            1647,
+            1671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " struct Dst(u8); // size = 2",
+          "path": "doc",
+          "range": [
+            1672,
+            1703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = unsafe {",
+          "path": "doc",
+          "range": [
+            1707,
+            1727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     <Dst as TransmuteFrom<u8, { Assume::SAFETY }>>::transmute(src)",
+          "path": "doc",
+          "range": [
+            1728,
+            1798
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            1799,
+            1805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1806,
+            1813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1814,
+            1817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Caveats",
+          "path": "doc",
+          "range": [
+            1818,
+            1831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1832,
+            1835
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Portability",
+          "path": "doc",
+          "range": [
+            1836,
+            1854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1855,
+            1858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementations of this trait do not provide any guarantee of portability",
+          "path": "doc",
+          "range": [
+            1859,
+            1936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " across toolchains, targets or compilations. This trait may be implemented",
+          "path": "doc",
+          "range": [
+            1937,
+            2014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for certain combinations of `Src`, `Self` and `ASSUME` on some toolchains,",
+          "path": "doc",
+          "range": [
+            2015,
+            2093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " targets or compilations, but not others. For example, if the layouts of",
+          "path": "doc",
+          "range": [
+            2094,
+            2169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Src` or `Self` are non-deterministic, the presence or absence of an",
+          "path": "doc",
+          "range": [
+            2170,
+            2242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation of this trait may also be non-deterministic. Even if `Src`",
+          "path": "doc",
+          "range": [
+            2243,
+            2320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and `Self` have deterministic layouts (e.g., they are `repr(C)` structs),",
+          "path": "doc",
+          "range": [
+            2321,
+            2398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Rust does not specify the alignments of its primitive integer types, and",
+          "path": "doc",
+          "range": [
+            2399,
+            2475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " layouts that involve these types may vary across toolchains, targets or",
+          "path": "doc",
+          "range": [
+            2476,
+            2551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compilations.",
+          "path": "doc",
+          "range": [
+            2552,
+            2569
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2570,
+            2573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Stability",
+          "path": "doc",
+          "range": [
+            2574,
+            2590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2591,
+            2594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementations of this trait do not provide any guarantee of SemVer",
+          "path": "doc",
+          "range": [
+            2595,
+            2667
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " stability across the crate versions that define the `Src` and `Self` types.",
+          "path": "doc",
+          "range": [
+            2668,
+            2747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If SemVer stability is crucial to your application, you must consult the",
+          "path": "doc",
+          "range": [
+            2748,
+            2824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " documentation of `Src` and `Self`s' defining crates. Note that the presence",
+          "path": "doc",
+          "range": [
+            2825,
+            2904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of `repr(C)`, alone, does not carry a safety invariant of SemVer stability.",
+          "path": "doc",
+          "range": [
+            2905,
+            2984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Furthermore, stability does not imply portability. For example, the size of",
+          "path": "doc",
+          "range": [
+            2985,
+            3064
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `usize` is stable, but not portable.",
+          "path": "doc",
+          "range": [
+            3065,
+            3105
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3106,
+            3163
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable_feature_bound",
+          "range": [
+            3164,
+            3206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            3207,
+            3234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_deny_explicit_impl",
+          "range": [
+            3235,
+            3262
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_dyn_incompatible_trait",
+          "range": [
+            3263,
+            3294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_coinductive",
+          "range": [
+            3295,
+            3315
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "TransmuteFrom",
+      "range": [
+        35,
+        5551
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Transmutes a `Src` value into a `Self`.",
+          "path": "doc",
+          "range": [
+            3425,
+            3468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3473,
+            3476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            3481,
+            3493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3498,
+            3501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The safety obligations of the caller depend on the value of `ASSUME`:",
+          "path": "doc",
+          "range": [
+            3506,
+            3579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If [`ASSUME.alignment`](Assume::alignment), the caller must guarantee",
+          "path": "doc",
+          "range": [
+            3584,
+            3659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   that the addresses of references in the returned `Self` satisfy the",
+          "path": "doc",
+          "range": [
+            3664,
+            3737
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   alignment requirements of their referent types.",
+          "path": "doc",
+          "range": [
+            3742,
+            3795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If [`ASSUME.lifetimes`](Assume::lifetimes), the caller must guarantee",
+          "path": "doc",
+          "range": [
+            3800,
+            3875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   that references in the returned `Self` will not outlive their",
+          "path": "doc",
+          "range": [
+            3880,
+            3947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   referents.",
+          "path": "doc",
+          "range": [
+            3952,
+            3968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If [`ASSUME.safety`](Assume::safety), the returned value might not",
+          "path": "doc",
+          "range": [
+            3973,
+            4045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   satisfy the library safety invariants of `Self`, and the caller must",
+          "path": "doc",
+          "range": [
+            4050,
+            4124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   guarantee that undefined behavior does not arise from uses of the",
+          "path": "doc",
+          "range": [
+            4129,
+            4200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   returned value.",
+          "path": "doc",
+          "range": [
+            4205,
+            4226
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If [`ASSUME.validity`](Assume::validity), the caller must guarantee",
+          "path": "doc",
+          "range": [
+            4231,
+            4304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   that `src` is a bit-valid instance of `Self`.",
+          "path": "doc",
+          "range": [
+            4309,
+            4360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4365,
+            4368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When satisfying the above obligations (if any), the caller must *not*",
+          "path": "doc",
+          "range": [
+            4373,
+            4446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assume that this trait provides any inherent guarantee of layout",
+          "path": "doc",
+          "range": [
+            4451,
+            4519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [portability](#portability) or [stability](#stability).",
+          "path": "doc",
+          "range": [
+            4524,
+            4583
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4681,
+        5549
+      ],
+      "kind": "trait_fn",
+      "name": "transmute",
+      "range": [
+        3425,
+        5549
+      ],
+      "signature_range": [
+        4588,
+        4676
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Configurable proof assumptions of [`TransmuteFrom`].",
+          "path": "doc",
+          "range": [
+            5553,
+            5609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5610,
+            5613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When `false`, the respective proof obligation belongs to the compiler. When",
+          "path": "doc",
+          "range": [
+            5614,
+            5693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `true`, the onus of the safety proof belongs to the programmer.",
+          "path": "doc",
+          "range": [
+            5694,
+            5761
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            5762,
+            5819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            5820,
+            5846
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            5847,
+            5891
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Assume",
+      "range": [
+        5553,
+        10384
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10386,
+            10443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable_feature_bound",
+          "range": [
+            10444,
+            10486
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10386,
+        10519
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10521,
+        15340
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Combine the assumptions of `self` and `other_assumptions`.",
+          "path": "doc",
+          "range": [
+            12281,
+            12343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12348,
+            12351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is especially useful for extending [`Assume`] in generic contexts;",
+          "path": "doc",
+          "range": [
+            12356,
+            12431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " e.g.:",
+          "path": "doc",
+          "range": [
+            12436,
+            12445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12450,
+            12453
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            12458,
+            12469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(",
+          "path": "doc",
+          "range": [
+            12474,
+            12489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     adt_const_params,",
+          "path": "doc",
+          "range": [
+            12494,
+            12519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     generic_const_exprs,",
+          "path": "doc",
+          "range": [
+            12524,
+            12552
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     pointer_is_aligned_to,",
+          "path": "doc",
+          "range": [
+            12557,
+            12587
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     transmutability,",
+          "path": "doc",
+          "range": [
+            12592,
+            12616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " )]",
+          "path": "doc",
+          "range": [
+            12621,
+            12627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![allow(incomplete_features)]",
+          "path": "doc",
+          "range": [
+            12632,
+            12666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::mem::{Assume, TransmuteFrom};",
+          "path": "doc",
+          "range": [
+            12671,
+            12714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12719,
+            12722
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Attempts to transmute `src` to `&Dst`.",
+          "path": "doc",
+          "range": [
+            12727,
+            12773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            12778,
+            12785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// Returns `None` if `src` violates the alignment requirements of `&Dst`.",
+          "path": "doc",
+          "range": [
+            12790,
+            12868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            12873,
+            12880
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// # Safety",
+          "path": "doc",
+          "range": [
+            12885,
+            12901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ///",
+          "path": "doc",
+          "range": [
+            12906,
+            12913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// The caller guarantees that the obligations required by `ASSUME`, except",
+          "path": "doc",
+          "range": [
+            12918,
+            12997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " /// alignment, are satisfied.",
+          "path": "doc",
+          "range": [
+            13002,
+            13035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unsafe fn try_transmute_ref<'a, Src, Dst, const ASSUME: Assume>(src: &'a Src) -> Option<&'a Dst>",
+          "path": "doc",
+          "range": [
+            13040,
+            13140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where",
+          "path": "doc",
+          "range": [
+            13145,
+            13154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     &'a Dst: TransmuteFrom<&'a Src, { ASSUME.and(Assume::ALIGNMENT) }>,",
+          "path": "doc",
+          "range": [
+            13159,
+            13234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " {",
+          "path": "doc",
+          "range": [
+            13239,
+            13244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     if <*const _>::is_aligned_to(src, align_of::<Dst>()) {",
+          "path": "doc",
+          "range": [
+            13249,
+            13311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // SAFETY: By the above dynamic check, we have ensured that the address",
+          "path": "doc",
+          "range": [
+            13316,
+            13399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // of `src` satisfies the alignment requirements of `&Dst`. By contract",
+          "path": "doc",
+          "range": [
+            13404,
+            13487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // on the caller, the safety obligations required by `ASSUME` have also",
+          "path": "doc",
+          "range": [
+            13492,
+            13575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         // been satisfied.",
+          "path": "doc",
+          "range": [
+            13580,
+            13610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         Some(unsafe {",
+          "path": "doc",
+          "range": [
+            13615,
+            13640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             <_ as TransmuteFrom<_, { ASSUME.and(Assume::ALIGNMENT) }>>::transmute(src)",
+          "path": "doc",
+          "range": [
+            13645,
+            13735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         })",
+          "path": "doc",
+          "range": [
+            13740,
+            13754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     } else {",
+          "path": "doc",
+          "range": [
+            13759,
+            13775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         None",
+          "path": "doc",
+          "range": [
+            13780,
+            13796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            13801,
+            13810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            13815,
+            13820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13825,
+            13828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let src: &[u8; 2] = &[0xFF, 0xFF];",
+          "path": "doc",
+          "range": [
+            13833,
+            13871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13876,
+            13879
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // SAFETY: No safety obligations.",
+          "path": "doc",
+          "range": [
+            13884,
+            13921
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let maybe_dst: Option<&u16> = unsafe {",
+          "path": "doc",
+          "range": [
+            13926,
+            13968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     try_transmute_ref::<_, _, { Assume::NOTHING }>(src)",
+          "path": "doc",
+          "range": [
+            13973,
+            14032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            14037,
+            14043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "```",
+          "path": "doc",
+          "range": [
+            14048,
+            14054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14059,
+            14116
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14177,
+        14477
+      ],
+      "kind": "impl_fn",
+      "name": "and",
+      "range": [
+        12281,
+        14477
+      ],
+      "signature_range": [
+        14125,
+        14176
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [
+        {
+          "doc_text": " Remove `other_assumptions` the obligations of `self`; e.g.:",
+          "path": "doc",
+          "range": [
+            14483,
+            14546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14551,
+            14554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            14559,
+            14570
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(transmutability)]",
+          "path": "doc",
+          "range": [
+            14575,
+            14607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use core::mem::Assume;",
+          "path": "doc",
+          "range": [
+            14612,
+            14638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14643,
+            14646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let assumptions = Assume::ALIGNMENT.and(Assume::SAFETY);",
+          "path": "doc",
+          "range": [
+            14651,
+            14711
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let to_be_removed = Assume::SAFETY.and(Assume::VALIDITY);",
+          "path": "doc",
+          "range": [
+            14716,
+            14777
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14782,
+            14785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(",
+          "path": "doc",
+          "range": [
+            14790,
+            14805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     assumptions.but_not(to_be_removed),",
+          "path": "doc",
+          "range": [
+            14810,
+            14853
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Assume::ALIGNMENT,",
+          "path": "doc",
+          "range": [
+            14858,
+            14884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " );",
+          "path": "doc",
+          "range": [
+            14889,
+            14895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            14900,
+            14907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14912,
+            14969
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15034,
+        15338
+      ],
+      "kind": "impl_fn",
+      "name": "but_not",
+      "range": [
+        14483,
+        15338
+      ],
+      "signature_range": [
+        14978,
+        15033
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15477,
+            15534
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15477,
+        15694
+      ]
+    },
+    {
+      "ancestors": [
+        7
+      ],
+      "attributes": [],
+      "body_range": [
+        15649,
+        15692
+      ],
+      "kind": "impl_fn",
+      "name": "add",
+      "range": [
+        15599,
+        15692
+      ],
+      "signature_range": [
+        15599,
+        15648
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            15831,
+            15888
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15831,
+        16052
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        16003,
+        16050
+      ],
+      "kind": "impl_fn",
+      "name": "sub",
+      "range": [
+        15953,
+        16050
+      ],
+      "signature_range": [
+        15953,
+        16002
+      ]
+    }
+  ],
+  "source_sha256": "a7d3f1cb03f911d0aae4b2bf9044b7c505764cc78faa7df22e556a634e02a445"
+}

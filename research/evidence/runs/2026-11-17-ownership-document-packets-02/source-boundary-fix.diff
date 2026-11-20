@@ -1,0 +1,22 @@
+--- 01/common-code.txt
++++ 02/common-code.txt
+@@ -36,7 +36,8 @@
+     }
+ }
+ 
+-library/alloc/src/rc.rs:2012-2103
++library/alloc/src/rc.rs:2011-2103
++#[cfg(not(no_global_oom_handling))]
+ impl<T: ?Sized + CloneToUninit, A: Allocator + Clone> Rc<T, A> {
+     #[inline]
+     #[stable(feature = "rc_unique", since = "1.4.0")]
+@@ -259,7 +260,8 @@
+     }
+ }
+ 
+-library/alloc/src/sync.rs:2439-2551
++library/alloc/src/sync.rs:2438-2551
++#[cfg(not(no_global_oom_handling))]
+ impl<T: ?Sized + CloneToUninit, A: Allocator + Clone> Arc<T, A> {
+     #[inline]
+     #[stable(feature = "arc_unique", since = "1.4.0")]

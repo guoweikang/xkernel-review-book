@@ -1,0 +1,73 @@
+[
+  {
+    "id": "DEV-DOC-PARAMETER-ROLE",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "members": [
+      {
+        "id": "1e47f18423f5ef03f1a749c8e391918f26a09c9ae3d3d8c228242ac871145e3d",
+        "name": "with_permission",
+        "path": "fs/kvfs/src/types.rs"
+      },
+      {
+        "id": "7e95c9646b9b8f4be26cfd2f9a701641d86f9342d1d11226dde9763f66420422",
+        "name": "with_node_type",
+        "path": "fs/kvfs/src/types.rs"
+      }
+    ],
+    "token_set_jaccard": 0.5862068965517241,
+    "contracts": [
+      {
+        "replace": "permission_bits",
+        "preserve": "file_type_bits"
+      },
+      {
+        "replace": "file_type_bits",
+        "preserve": "permission_bits"
+      }
+    ],
+    "common_domain": null,
+    "gap": "No frozen cross-type input correspondence between NodePermission and NodeType; separate setter tests are not pair equivalence evidence."
+  },
+  {
+    "id": "DEV-STREAM-COMMAND",
+    "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+    "members": [
+      {
+        "id": "a712a50903fb5b2e1c5d0300954f6f3b945982ad5272fd86e395a2e601124a5c",
+        "name": "scalar_write_iter",
+        "path": "fs/kvfs/src/file.rs"
+      },
+      {
+        "id": "3aea8d8fc63cef286a400029580a58c8a53033d2d27cb7600032ebb10a542b3c",
+        "name": "write_iter",
+        "path": "fs/kvfs/src/simple_file.rs"
+      }
+    ],
+    "token_set_jaccard": 0.6621621621621622,
+    "contracts": [
+      {
+        "payload": "fragment",
+        "callback_boundary": "per_successful_fragment"
+      },
+      {
+        "payload": "whole",
+        "callback_boundary": "after_whole_collection"
+      }
+    ],
+    "common_domain": {
+      "scenario": "short_success",
+      "input_length": 4,
+      "payload": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "copy_plan": [
+        2,
+        2
+      ]
+    },
+    "gap": "Modeled dependencies, not kernel integration; local sharing and benefit remain unknown."
+  }
+]

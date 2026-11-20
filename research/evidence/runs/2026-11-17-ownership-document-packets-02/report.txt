@@ -1,0 +1,54 @@
+ownership-document-packets-02：Goodall阻断项最小修正，待主线程核验后决定dispatch。
+01目录保持不动，其原39项checksum全部重新核验通过。
+
+发现与修正
+Goodall指出01遗漏make_mut外层 #[cfg(not(no_global_oom_handling))]。
+Rc区域从rc.rs:2012前扩至2011，终点2103不变。
+Arc区域从sync.rs:2439前扩至2438，终点2551不变。
+完整区域、三包CODE段及相关hash已重建。
+source-boundary-fix.diff证明代码差异仅两行cfg和对应两处范围标头。
+未改变函数体、内部注释或其他15个区域；未做新实验。
+
+属性邻接核查
+逐个读取全部17个区域开始位置之前最多6行及开头；记录见boundary-audit.json。
+除上述两处外，没有发现仍在区域之前而属于该定义的相邻外层属性。
+rc/arc commit-constructors从已有#[inline]开始；
+另读取其父impl声明：Rc rc.rs:361、Arc sync.rs:301处无外层属性。
+guard连续区域保留内部new等方法属性，Arc guard的Drop前cfg也已包含。
+这是人工局部源码边界核查，不是整个库配置依赖闭包或通用属性解析器证明。
+
+不变材料
+task.txt、native-doc.txt、completed-additions.txt、facts-ledger.json、
+fact-source-excerpts.json、native-doc-ledger.json、protocol.snapshot.json、
+rebuild_packets.py与01逐字一致。
+来源root仍为同级../2026-11-17-ownership-test-audit-01/original，
+固定commit及4份源hash不变。manifest注明此次修复和解释边界。
+三包代码SHA-256：
+21621979676235911733d13ea166ae51a9ad7c7234cc905d4157dd0f246fec0e
+完整包SHA见packet-hashes.json，精确范围/区域SHA见manifest与region-index。
+
+completed的解释纠正
+12条completed实现事实在code_only代码及其内部注释中已经可得。
+干预主要将这些事实显式外部化、强调、定位；不是代码臂缺少的独占新增事实。
+facts-ledger中的available_in_code_arm=true始终如此；其delta_vs_native描述的是
+相对原生外部文档的增补/重述，不得解释为相对代码的独占事实增量。
+依然不是纯格式变化：文字长度、语言、重复、强调和检索便利性均可能产生影响。
+本修复没有改动已冻结的task或文档内容，没有按预期模型答案调整措辞。
+
+baseline与泄露边界
+普通内部注释在所有臂保留，code_only不是无文档baseline。
+native原文及示例按臂加入；“代码一致”指生产源码CODE区域。
+原生比较提示和研究者已暴露的选择偏差仍在；01报告中的风险仍适用。
+评分表、运行结果、责任矩阵与共享建议仍不在模型包内。
+
+核验与复建
+python3 rebuild_packets.py --check：27件派生产物逐字一致。
+validation.json检查01未变、不变文档、两行最小修正及三臂代码/包hash。
+FILELIST/checksums为02独立封存，checksums不包含自身。
+本次未跑Rust测试、未dispatch模型，不修改共享笔记/生产/commit/push。
+
+操作异常记录
+首次apply_patch使用相对路径，把6个种子文件写到工作区根的临时research路径，
+导致后续在目标cwd启动命令失败。已使用apply_patch将同内容创建到正确02目录、
+删除误置文件，并移除空目录；未执行错误路径脚本，01从未改动。
+这是文件定位错误，非输入设计或模型结果驱动修订。

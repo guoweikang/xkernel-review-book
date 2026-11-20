@@ -1,0 +1,50 @@
+Independent outcome audit — 2026-11-18
+Verdict: LIMITED ADMIT, designated mutation detected by the required named assertion. Input review remains unchanged in independent-audit.txt. This closes its pending outcome check, not a refactor-equivalence claim.
+
+Scope / evidence inspected
+Finite read-only inspection after main's completion notification. No builds, tests, runner invocation, source changes or independent fixture. Read protocol/freeze, both complete raw run.log files as bytes and decoded lines, both report.json and command.json, fixture/baseline/mutant source artifacts, verified-results.json, and scripts/check_cache_transaction_fixture.py. Recomputed input/log identities and parsed every RESULT record independently; did not rely on test-results.txt or merely on exit codes. Read/hash-checked restored two isolated files and .config without writing them. Only this separate outcome audit is authored.
+All paths below are relative to research/evidence/runs/2026-11-18-cache-transaction-fixture-01 unless stated otherwise.
+
+Frozen inputs / source correspondence
+Current protocol SHA256 d1762f70c656690f27abe1b6abecfbe52ed2d1e76b00c0d1adc521f7c9373dd7, scripts/run_cache_transaction_fixture.py dd8debab4dcb919bcffa61bc0daa76bdb31c2b1e10922d99018f9a8b998471d7, fixture.rs eff6801d6ae9ce23a1e6542609003cb1cf8adca462f533c5149e7f35b268becd all match freeze.research_inputs.
+baseline-test.rs bytes + one newline + fixture.rs bytes hash to bae16c14d8b67251bb33dc8b3c441f8d119f44efed521081906a346d676753d4, the same frozen test input for both cells. Combined line1334 is exactly assert!(par_winner_identity);. It lies in test_cache_fixture_live_par_winner after saved measurements and end_parallel_lookup/raw-slot removal, so the required diagnostic is source-resolved rather than inferred from generic failure.
+Whole-file diff reconfirmed: mutant-dentry.rs adds only .filter(|entry| !entry.is_parallel_lookup()) to cache_lookup_candidate's live weak-upgrade branch. No owned-wrapper or oracle change. Frozen baseline dentry SHA256 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7; mutant e8803b09451f3f7e4e542e674ea864646bbd36974aa90698d48ce29ceaf567fb. Each report's source_hashes_after equals its frozen cell map; configuration_unchanged true. These recorded pre/post checks do not constitute continuous observation of source throughout compilation.
+
+Actual commands / completion
+Both command.json files specify make unittest UNITTEST_CRATE=kvfs ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g in /tmp/xkernel-pagecache-n1y2__y3, with distinct original/mutant disk paths; toolchain1.95.0/offline environment overrides match freeze, 300s declared timeout. Original report exit0, timeout false; mutant exit2, timeout false. Complete guest result/status markers are present in both logs. Mutant tail explains error exit via guest unit tests did not pass followed by make error propagation, not a compilation failure.
+
+Independent full-log accounting
+original/run.log: 65,398 bytes, 795 decoded lines, SHA256 de974847f17d77879c257c7f3e57f73d53203b2956667188b0a684f54f4ea1ef; matches original/report.json.
+mutant/run.log: 65,237 bytes, 797 decoded lines, SHA256 670d0694a3cf49788a627e458e9151712c1b4394a61bd52e80f11633bed89379; matches mutant/report.json.
+Both contain exactly 303 RESULT records with 303 distinct fully qualified names. Name populations match exactly. Original: 303 ok / 0 FAILED. Mutant: 302 ok / 1 FAILED. All six fixture entries appear once per cell; other 297 tests report ok in each cell.
+Fixture results original / mutant:
+test_cache_fixture_live_normal_winner: ok / ok
+test_cache_fixture_live_par_winner: ok / FAILED
+test_cache_fixture_absent_and_expired: ok / ok
+test_cache_fixture_non_cacheable_parent: ok / ok
+test_cache_fixture_child_cache_policy: ok / ok
+test_cache_fixture_superblock_retention: ok / ok
+
+Exact designated failure (not any panic)
+mutant/run.log line533:
+assert! failed at fs/kvfs/src/node/../../ut-tests/node_dentry.rs:1334: par_winner_identity
+line535:
+      RESULT kvfs::node::dentry::tests_dentry::test_cache_fixture_live_par_winner ... FAILED
+This is the only assert! failed diagnostic; original has none. No panicked marker found in either complete decoded log. Mutant lines789–790 report 302 passed, 1 failed, 0 ignored, 303 total and UNITTEST_STATUS: TESTS_FAILED; original lines788–789 report 303 passed, 0 failed, 0 ignored, 303 total and ALL_TESTS_PASSED. Thus classification depends on the named oracle plus complete population/status, not merely exit2 or any failure.
+As input review established, unittest::assert! logs the expression and returns Failed; it need not panic. The unchanged first owned iteration is followed by the borrowed iteration affected by the only mutation. Failure is consistent with the borrowed live-PAR collision returning None rather than the winner. Logs do not separately label loop iterations or print the actual Option value; exact branch/value attribution remains source-grounded inference. The failing first identity assertion means mutant slot_unchanged and par_preserved assertions are NOT executed; their saved measurements and cleanup precede it. Do not claim those later assertions independently failed or passed in the mutant iteration.
+
+Restoration / independent versus producer verification
+Main supplied verified-results.json reports 3634 archive regular-file contents equal and configuration_restored true. Inspected check_cache_transaction_fixture.py: its --check-restored-source path hashes each regular member of source/source.tar against the corresponding live file, checks .config and rejects absolute/traversal archive paths. It compares archive members, not absence of extra generated files. This reviewer did not rerun its full3634-file sweep or re-establish archive provenance; that broad result is producer verification, consistent with prior preflight identity rather than an independent full-tree attestation.
+Independently read current /tmp/xkernel-pagecache-n1y2__y3/fs/kvfs/ut-tests/node_dentry.rs: SHA256 c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b, identical to archived baseline-test.rs (fixture removed).
+Independently read current fs/kvfs/src/node/dentry.rs: SHA256 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7, identical to baseline-dentry.rs (mutation removed).
+Current isolated .config hash equals freeze.configuration_sha256 d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6. This observes restored state; it does not independently witness the claimed finally execution or apply_patch invocation history.
+
+Record SHA256 at review
+freeze.json e360b977c9494fd14972533f3009342d644f43407ee2fa2f4a6b98ccc9bdd765
+original/report.json 9e9fffd985e0a72a93ff5ea80080497950d9eb136b2ecc24ac605a17cf9d4e36
+mutant/report.json 8118fb2020cdb17460bfba396eac631f81b3aa510138eed40ade4f8451938dd2
+verified-results.json 32f7e916149236bc49d2670a9962c2ec30c7c9f52cc880b36e9f588f5b92e293
+
+Conclusion / limits
+The existing registered kernel child test module successfully executed private Dentry operations, with six added fixture entries passing on baseline. The one deliberately wrong PAR-filter insertion is detected by the exact frozen par_winner_identity oracle; unchanged test population and all other results bound the observed difference. Main's verification agrees with independently decoded records. No outcome blocker found.
+This is limited fixture sensitivity to one specified mutation using real kernel cache code plus existing filesystem test doubles. Individual fixture state transitions are sequential even though harness test starts interleave and SMP=2 is configured. It does not establish concurrent linearizability, unlock timing, allocation/clone budgets, arbitrary destructor behavior, full filesystem correctness, refactor equivalence, net sharing benefit or method superiority. Six entries contain multiple subcases, not six independently exhaustive contracts. No further execution recommended or authorized by this audit.

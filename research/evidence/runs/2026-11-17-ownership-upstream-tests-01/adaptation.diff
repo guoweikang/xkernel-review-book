@@ -1,0 +1,27 @@
+--- original-functions/rc.rs+sync.rs+arc.rs
++++ upstream_tests.rs
+@@ -1,3 +1,8 @@
++extern crate alloc;
++
++mod rc_tests {
++use std::rc::Rc;
++
+ #[test]
+ fn test_cowrc_clone_make_unique() {
+     let mut cow0 = Rc::new(75);
+@@ -109,6 +114,10 @@
+     // Should panic, but not cause memory corruption
+     let _r: Rc<[Fail]> = Rc::from(s);
+ }
++}
++
++mod arc_tests {
++use std::sync::Arc;
+ 
+ #[test]
+ fn test_cowarc_clone_make_mut() {
+@@ -220,3 +229,4 @@
+     assert_eq!(*data, [11, 21, 31]);
+     assert_eq!(*other_data, [110, 20, 30]);
+ }
++}

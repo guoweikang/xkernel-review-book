@@ -1,0 +1,2291 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "State",
+      "range": [
+        122,
+        184
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A value which is initialized on the first access.",
+          "path": "doc",
+          "range": [
+            186,
+            239
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            240,
+            243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For a thread-safe version of this struct, see [`std::sync::LazyLock`].",
+          "path": "doc",
+          "range": [
+            244,
+            318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            319,
+            322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::LazyLock`]: ../../std/sync/struct.LazyLock.html",
+          "path": "doc",
+          "range": [
+            323,
+            387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            388,
+            391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Poisoning",
+          "path": "doc",
+          "range": [
+            392,
+            407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            408,
+            411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the initialization closure passed to [`LazyCell::new`] panics, the cell will be poisoned.",
+          "path": "doc",
+          "range": [
+            412,
+            508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Once the cell is poisoned, any threads that attempt to access this cell (via a dereference",
+          "path": "doc",
+          "range": [
+            509,
+            603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or via an explicit call to [`force()`]) will panic.",
+          "path": "doc",
+          "range": [
+            604,
+            659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            660,
+            663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This concept is similar to that of poisoning in the [`std::sync::poison`] module. A key",
+          "path": "doc",
+          "range": [
+            664,
+            755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " difference, however, is that poisoning in `LazyCell` is _unrecoverable_. All future accesses of",
+          "path": "doc",
+          "range": [
+            756,
+            855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the cell from other threads will panic, whereas a type in [`std::sync::poison`] like",
+          "path": "doc",
+          "range": [
+            856,
+            944
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::poison::Mutex`] allows recovery via [`PoisonError::into_inner()`].",
+          "path": "doc",
+          "range": [
+            945,
+            1028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1029,
+            1032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`force()`]: LazyCell::force",
+          "path": "doc",
+          "range": [
+            1033,
+            1065
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::poison`]: ../../std/sync/poison/index.html",
+          "path": "doc",
+          "range": [
+            1066,
+            1125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`std::sync::poison::Mutex`]: ../../std/sync/poison/struct.Mutex.html",
+          "path": "doc",
+          "range": [
+            1126,
+            1199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`PoisonError::into_inner()`]: ../../std/sync/poison/struct.PoisonError.html#method.into_inner",
+          "path": "doc",
+          "range": [
+            1200,
+            1298
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1299,
+            1302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1303,
+            1317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1318,
+            1321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1322,
+            1329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            1330,
+            1358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1359,
+            1362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lazy: LazyCell<i32> = LazyCell::new(|| {",
+          "path": "doc",
+          "range": [
+            1363,
+            1411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     println!(\"initializing\");",
+          "path": "doc",
+          "range": [
+            1412,
+            1445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     92",
+          "path": "doc",
+          "range": [
+            1446,
+            1456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " });",
+          "path": "doc",
+          "range": [
+            1457,
+            1464
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"ready\");",
+          "path": "doc",
+          "range": [
+            1465,
+            1487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{}\", *lazy);",
+          "path": "doc",
+          "range": [
+            1488,
+            1514
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " println!(\"{}\", *lazy);",
+          "path": "doc",
+          "range": [
+            1515,
+            1541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1542,
+            1545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Prints:",
+          "path": "doc",
+          "range": [
+            1546,
+            1560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " //   ready",
+          "path": "doc",
+          "range": [
+            1561,
+            1575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " //   initializing",
+          "path": "doc",
+          "range": [
+            1576,
+            1597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " //   92",
+          "path": "doc",
+          "range": [
+            1598,
+            1609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " //   92",
+          "path": "doc",
+          "range": [
+            1610,
+            1621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1622,
+            1629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1630,
+            1680
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "LazyCell",
+      "range": [
+        186,
+        1758
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1760,
+        9360
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new lazy value with the given initializing function.",
+          "path": "doc",
+          "range": [
+            1807,
+            1873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1878,
+            1881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1886,
+            1900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1905,
+            1908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1913,
+            1920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            1925,
+            1953
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1958,
+            1961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let hello = \"Hello, World!\".to_string();",
+          "path": "doc",
+          "range": [
+            1966,
+            2010
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2015,
+            2018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lazy = LazyCell::new(|| hello.to_uppercase());",
+          "path": "doc",
+          "range": [
+            2023,
+            2077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2082,
+            2085
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&*lazy, \"HELLO, WORLD!\");",
+          "path": "doc",
+          "range": [
+            2090,
+            2130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2135,
+            2142
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2147,
+            2156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2161,
+            2211
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            2216,
+            2278
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2324,
+        2393
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        1807,
+        2393
+      ],
+      "signature_range": [
+        2287,
+        2323
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Consumes this `LazyCell` returning the stored value.",
+          "path": "doc",
+          "range": [
+            2399,
+            2455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2460,
+            2463
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `Ok(value)` if `Lazy` is initialized and `Err(f)` otherwise.",
+          "path": "doc",
+          "range": [
+            2468,
+            2540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2545,
+            2548
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            2553,
+            2565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2570,
+            2573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if the cell is poisoned.",
+          "path": "doc",
+          "range": [
+            2578,
+            2613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2618,
+            2621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2626,
+            2640
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2645,
+            2648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2653,
+            2660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(lazy_cell_into_inner)]",
+          "path": "doc",
+          "range": [
+            2665,
+            2702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2707,
+            2710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            2715,
+            2743
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2748,
+            2751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let hello = \"Hello, World!\".to_string();",
+          "path": "doc",
+          "range": [
+            2756,
+            2800
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2805,
+            2808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lazy = LazyCell::new(|| hello.to_uppercase());",
+          "path": "doc",
+          "range": [
+            2813,
+            2867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2872,
+            2875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&*lazy, \"HELLO, WORLD!\");",
+          "path": "doc",
+          "range": [
+            2880,
+            2920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(LazyCell::into_inner(lazy).ok(), Some(\"HELLO, WORLD!\".to_string()));",
+          "path": "doc",
+          "range": [
+            2925,
+            3008
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3013,
+            3020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3025,
+            3088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_unstable",
+          "range": [
+            3093,
+            3168
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3225,
+        3414
+      ],
+      "kind": "impl_fn",
+      "name": "into_inner",
+      "range": [
+        2399,
+        3414
+      ],
+      "signature_range": [
+        3177,
+        3224
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forces the evaluation of this lazy value and returns a reference to",
+          "path": "doc",
+          "range": [
+            3420,
+            3491
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the result.",
+          "path": "doc",
+          "range": [
+            3496,
+            3511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3516,
+            3519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is equivalent to the `Deref` impl, but is explicit.",
+          "path": "doc",
+          "range": [
+            3524,
+            3584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3589,
+            3592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            3597,
+            3609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3614,
+            3617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the initialization closure panics (the one that is passed to the [`new()`] method), the",
+          "path": "doc",
+          "range": [
+            3622,
+            3716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic is propagated to the caller, and the cell becomes poisoned. This will cause all future",
+          "path": "doc",
+          "range": [
+            3721,
+            3817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accesses of the cell (via [`force()`] or a dereference) to panic.",
+          "path": "doc",
+          "range": [
+            3822,
+            3891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3896,
+            3899
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`new()`]: LazyCell::new",
+          "path": "doc",
+          "range": [
+            3904,
+            3932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`force()`]: LazyCell::force",
+          "path": "doc",
+          "range": [
+            3937,
+            3969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3974,
+            3977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3982,
+            3996
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4001,
+            4004
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4009,
+            4016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            4021,
+            4049
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4054,
+            4057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lazy = LazyCell::new(|| 92);",
+          "path": "doc",
+          "range": [
+            4062,
+            4098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4103,
+            4106
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(LazyCell::force(&lazy), &92);",
+          "path": "doc",
+          "range": [
+            4111,
+            4155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(&*lazy, &92);",
+          "path": "doc",
+          "range": [
+            4160,
+            4188
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4193,
+            4200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4205,
+            4214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4219,
+            4269
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_should_not_be_called_on_const_items",
+          "range": [
+            4274,
+            4318
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4365,
+        5003
+      ],
+      "kind": "impl_fn",
+      "name": "force",
+      "range": [
+        3420,
+        5003
+      ],
+      "signature_range": [
+        4327,
+        4364
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " Forces the evaluation of this lazy value and returns a mutable reference to",
+          "path": "doc",
+          "range": [
+            5009,
+            5088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the result.",
+          "path": "doc",
+          "range": [
+            5093,
+            5108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5113,
+            5116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            5121,
+            5133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5138,
+            5141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the initialization closure panics (the one that is passed to the [`new()`] method), the",
+          "path": "doc",
+          "range": [
+            5146,
+            5240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic is propagated to the caller, and the cell becomes poisoned. This will cause all future",
+          "path": "doc",
+          "range": [
+            5245,
+            5341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accesses of the cell (via [`force()`] or a dereference) to panic.",
+          "path": "doc",
+          "range": [
+            5346,
+            5415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5420,
+            5423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`new()`]: LazyCell::new",
+          "path": "doc",
+          "range": [
+            5428,
+            5456
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`force()`]: LazyCell::force",
+          "path": "doc",
+          "range": [
+            5461,
+            5493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5498,
+            5501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5506,
+            5520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5525,
+            5528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5533,
+            5540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            5545,
+            5573
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5578,
+            5581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut lazy = LazyCell::new(|| 92);",
+          "path": "doc",
+          "range": [
+            5586,
+            5626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5631,
+            5634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let p = LazyCell::force_mut(&mut lazy);",
+          "path": "doc",
+          "range": [
+            5639,
+            5682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*p, 92);",
+          "path": "doc",
+          "range": [
+            5687,
+            5710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *p = 44;",
+          "path": "doc",
+          "range": [
+            5715,
+            5727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*lazy, 44);",
+          "path": "doc",
+          "range": [
+            5732,
+            5758
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            5763,
+            5770
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5775,
+            5784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5789,
+            5838
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5897,
+        7845
+      ],
+      "kind": "impl_fn",
+      "name": "force_mut",
+      "range": [
+        5009,
+        7845
+      ],
+      "signature_range": [
+        5847,
+        5896
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        6
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            5907,
+            5914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            5923,
+            5935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May only be called when the state is `Uninit`.",
+          "path": "doc",
+          "range": [
+            5944,
+            5994
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6085,
+        7565
+      ],
+      "kind": "fn",
+      "name": "really_init_mut",
+      "range": [
+        5907,
+        7565
+      ],
+      "signature_range": [
+        6003,
+        6084
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        6,
+        7
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "PoisonOnPanic",
+      "range": [
+        6173,
+        6218
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        6,
+        7
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6231,
+        6567
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        6,
+        7,
+        9
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6289,
+            6298
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6334,
+        6553
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        6289,
+        6553
+      ],
+      "signature_range": [
+        6315,
+        6333
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        6,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        7521,
+        7535
+      ]
+    },
+    {
+      "ancestors": [
+        2
+      ],
+      "attributes": [
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            7851,
+            7863
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " May only be called when the state is `Uninit`.",
+          "path": "doc",
+          "range": [
+            7868,
+            7918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            7923,
+            7930
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7986,
+        9358
+      ],
+      "kind": "impl_fn",
+      "name": "really_init",
+      "range": [
+        7851,
+        9358
+      ],
+      "signature_range": [
+        7935,
+        7985
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        12
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        8508,
+        8522
+      ]
+    },
+    {
+      "ancestors": [
+        2,
+        12
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        9322,
+        9336
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9362,
+        11077
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a mutable reference to the value if initialized. Otherwise (if uninitialized or",
+          "path": "doc",
+          "range": [
+            9394,
+            9485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " poisoned), returns `None`.",
+          "path": "doc",
+          "range": [
+            9490,
+            9520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9525,
+            9528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            9533,
+            9547
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9552,
+            9555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9560,
+            9567
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            9572,
+            9600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9605,
+            9608
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut lazy = LazyCell::new(|| 92);",
+          "path": "doc",
+          "range": [
+            9613,
+            9653
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9658,
+            9661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(LazyCell::get_mut(&mut lazy), None);",
+          "path": "doc",
+          "range": [
+            9666,
+            9717
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = LazyCell::force(&lazy);",
+          "path": "doc",
+          "range": [
+            9722,
+            9757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *LazyCell::get_mut(&mut lazy).unwrap() = 44;",
+          "path": "doc",
+          "range": [
+            9762,
+            9810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(*lazy, 44);",
+          "path": "doc",
+          "range": [
+            9815,
+            9841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            9846,
+            9853
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9858,
+            9867
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9872,
+            9921
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9986,
+        10135
+      ],
+      "kind": "impl_fn",
+      "name": "get_mut",
+      "range": [
+        9394,
+        10135
+      ],
+      "signature_range": [
+        9930,
+        9985
+      ]
+    },
+    {
+      "ancestors": [
+        15
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a reference to the value if initialized. Otherwise (if uninitialized or poisoned),",
+          "path": "doc",
+          "range": [
+            10141,
+            10235
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns `None`.",
+          "path": "doc",
+          "range": [
+            10240,
+            10259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10264,
+            10267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            10272,
+            10286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10291,
+            10294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10299,
+            10306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::cell::LazyCell;",
+          "path": "doc",
+          "range": [
+            10311,
+            10339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10344,
+            10347
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let lazy = LazyCell::new(|| 92);",
+          "path": "doc",
+          "range": [
+            10352,
+            10388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10393,
+            10396
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(LazyCell::get(&lazy), None);",
+          "path": "doc",
+          "range": [
+            10401,
+            10444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = LazyCell::force(&lazy);",
+          "path": "doc",
+          "range": [
+            10449,
+            10484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(LazyCell::get(&lazy), Some(&92));",
+          "path": "doc",
+          "range": [
+            10489,
+            10537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            10542,
+            10549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10554,
+            10563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10568,
+            10617
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10670,
+        11075
+      ],
+      "kind": "impl_fn",
+      "name": "get",
+      "range": [
+        10141,
+        11075
+      ],
+      "signature_range": [
+        10626,
+        10669
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11079,
+            11129
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11079,
+        11661
+      ]
+    },
+    {
+      "ancestors": [
+        18
+      ],
+      "attributes": [
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            11209,
+            11221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11226,
+            11229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the initialization closure panics (the one that is passed to the [`new()`] method), the",
+          "path": "doc",
+          "range": [
+            11234,
+            11328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic is propagated to the caller, and the cell becomes poisoned. This will cause all future",
+          "path": "doc",
+          "range": [
+            11333,
+            11429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accesses of the cell (via [`force()`] or a dereference) to panic.",
+          "path": "doc",
+          "range": [
+            11434,
+            11503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11508,
+            11511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`new()`]: LazyCell::new",
+          "path": "doc",
+          "range": [
+            11516,
+            11544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`force()`]: LazyCell::force",
+          "path": "doc",
+          "range": [
+            11549,
+            11581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11586,
+            11595
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11622,
+        11659
+      ],
+      "kind": "impl_fn",
+      "name": "deref",
+      "range": [
+        11209,
+        11659
+      ],
+      "signature_range": [
+        11600,
+        11621
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11663,
+            11718
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11663,
+        12247
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " # Panics",
+          "path": "doc",
+          "range": [
+            11779,
+            11791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11796,
+            11799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the initialization closure panics (the one that is passed to the [`new()`] method), the",
+          "path": "doc",
+          "range": [
+            11804,
+            11898
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic is propagated to the caller, and the cell becomes poisoned. This will cause all future",
+          "path": "doc",
+          "range": [
+            11903,
+            11999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " accesses of the cell (via [`force()`] or a dereference) to panic.",
+          "path": "doc",
+          "range": [
+            12004,
+            12073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12078,
+            12081
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`new()`]: LazyCell::new",
+          "path": "doc",
+          "range": [
+            12086,
+            12114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`force()`]: LazyCell::force",
+          "path": "doc",
+          "range": [
+            12119,
+            12151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12156,
+            12165
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12204,
+        12245
+      ],
+      "kind": "impl_fn",
+      "name": "deref_mut",
+      "range": [
+        11779,
+        12245
+      ],
+      "signature_range": [
+        12170,
+        12203
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12249,
+            12299
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12249,
+        12511
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new lazy value using `Default` as the initializing function.",
+          "path": "doc",
+          "range": [
+            12347,
+            12421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12426,
+            12435
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12468,
+        12509
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        12347,
+        12509
+      ],
+      "signature_range": [
+        12440,
+        12467
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12513,
+            12563
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12513,
+        12899
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [],
+      "body_range": [
+        12680,
+        12897
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        12623,
+        12897
+      ],
+      "signature_range": [
+        12623,
+        12679
+      ]
+    },
+    {
+      "ancestors": [
+        24,
+        25
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12835,
+        12859
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            12901,
+            12908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12909,
+            12925
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12957,
+        13021
+      ],
+      "kind": "fn",
+      "name": "panic_poisoned",
+      "range": [
+        12901,
+        13021
+      ],
+      "signature_range": [
+        12926,
+        12956
+      ]
+    },
+    {
+      "ancestors": [
+        27
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12963,
+        13019
+      ]
+    }
+  ],
+  "source_sha256": "68df299c053ab17c69f3c6462f390b60ea284f83fa102fa2e6d5a4b4afea10a5"
+}

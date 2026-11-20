@@ -1,0 +1,472 @@
+{
+  "id": "firmware-ownership",
+  "task": "architecture_conformance",
+  "level": "crate",
+  "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+  "entity_identity": {
+    "path": "drivers/firmware/of/docs/firmware-node-direction.md",
+    "name": "rs_fdtree responsibility contract, stored in OF migration design"
+  },
+  "native_kind": "design_document_not_rustdoc",
+  "source_sha256": "ac331032d676747f9c69f10cd35f76787db9e4552584e4b6357fb72f1a4bcbb9",
+  "provider": "researcher",
+  "review_status": "provider_validation_unavailable",
+  "author_exposure": "seen_cases_and_previous_results_not_blind",
+  "evaluation_eligible": false,
+  "split": "development",
+  "native_text": "# Firmware node migration direction\n\n## Agreed ownership\n\nrs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n\nA future fwnode contract sits above backends. Its public handles, property\noperations, parent/child relations, availability and parameterized references\nmust not expose FdtNode, LinuxFdt or DT cell layout. Resource interpretation is\nseparate from ordinary properties; resource acquisition remains in the existing\nOS provider contracts. The initial real consumer can be DT only. Do not invent\nACPI support or a dynamic backend registry to justify the interface.\n\nExisting OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\nReplace OF callers incrementally, then remove OF; do not rename the current\ncrate and claim that a generic node abstraction exists.\n\n## Current correction\n\nThe scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\ninclusive maximum-address bounds. GIC consumes these DT backend methods.\nIt still uses a DT-specific private discovery adapter; backend-independent\ndriver discovery is a later change, not an accomplished claim here.\n\nRemove the moved OF implementations and forwarding entry points together.\nNo duplicate interpreter or new fwnode wrapper is retained. Existing IRQ/PCI\nor boot helpers not included in this slice remain separately tracked debt.\nPR #1291 must contain only this DT capability move and its GIC consumer, not\nthe full firmware-node framework.\n\nImplementation order: update and validate the full driver development branch,\nthen the OF/IRQ development branch, then extract the validated delta to the\nindependent PR branch. Preserve each branch's unrelated capabilities; do not\nreplace directories from one branch with another.\n\n## Validation of this extraction\n\nThe correction was first validated on both development branches: AArch64\nselected guest suites passed 200 cases (six ignored) and 129 cases (five\nignored), respectively. The intermediate branch also passed 44 RISC-V cases.\n\nOn this independent PR branch, parser host tests passed without alloc (25)\nand with alloc (34, including nine address cases). AArch64 make clippy\nUNITTEST=y passed; selected OF/GIC guest tests passed 47 cases and exported\ncoverage. The ten status/address cases now run on the host rather than in\nthe guest, so guest totals are not directly comparable to the earlier PR.\nGICv3 boot is exercised; GICv2 remains fixture-only coverage.\nThe independent branch also passed UNITTEST-enabled Clippy on RISC-V, x86_64\nand LoongArch; this is compile validation, not guest execution on those targets.\nRead-only review found no code blockers.\n\nThat extraction landed without a generic fwnode API. The first fwnode slice is\nrecorded below.\n\n## Implemented neutral contract (first slice)\n\n`drivers/firmware/fwnode` defines the backend-neutral contract:\n`FwNodeId`, opaque `FwNode<'a>` handles over a `FwNodeOps<'a>` provider,\n`FwProperty`/`FwPropertyValue`, `FwMmioResource`, and\n`FwIrqSpec`/`FwParams`. Handles are comparable across backends and carry no\n`FdtNode`, `LinuxFdt` or cell-layout types.\n\n`rs_fdtree` implements the contract as `DtBackend` behind its optional\n`fwnode` feature. Structure, availability, compatible strings and translated\nMMIO resources come from the existing strict DT interpretation. Generic DT\ninterrupt translation is still `Unsupported`: it moves into the backend only\nwhen controller `xlate`/`irq_domain` work makes the mapping well defined.\nExisting `of` interrupt helpers remain in place for other consumers.\n\n`khal::firmware` publishes the root after `of` validates and installs the DTB:\n`fwnode_root() -> Option<FwNode<'static>>`. Platform bring-up no longer reaches\ninto `of` for GIC discovery; `kplat-aarch64` passes this root to\n`irq_driver::gic::init_from_fwnode`.\n\nThe controller keeps its own common output rather than exposing firmware\ntypes. `GicConfig` now retains multiple GICv3 redistributor regions and\n`redistributor-stride`; `GicConfig::from_fwnode` is the DT producer, and\n`from_madt` (ACPI) and `from_static` (board table) are the planned peers that\nfeed the same `gic::init(config)`. The vendored GIC driver still supports only a\nsingle contiguous redistributor frame array with architectural stride, so\n`init` validates and rejects other layouts instead of misprogramming them.\n\nNot included in this slice: an ACPI fwnode backend, device-to-controller IRQ\nlookup through `FwIrqSpec` (still `Unsupported` in `DtBackend`), a dynamic\n`irq_domain`, and multi-region/custom-stride redistributor programming.\n",
+  "arms": {
+    "D0": {
+      "text": ""
+    },
+    "D1": {
+      "text": "# Firmware node migration direction\n\n## Agreed ownership\n\nrs_fdtree is the DT backend library, not merely a token reader. It owns\nstructural access, property decoding, node status and DT address translation.\nGIC/PLIC controller-specific register roles and interrupt encodings belong to\ntheir drivers. No kernel registration, IRQ mapping, MMIO mapping or DMA\nallocation belongs in the DT library.\n\nA future fwnode contract sits above backends. Its public handles, property\noperations, parent/child relations, availability and parameterized references\nmust not expose FdtNode, LinuxFdt or DT cell layout. Resource interpretation is\nseparate from ordinary properties; resource acquisition remains in the existing\nOS provider contracts. The initial real consumer can be DT only. Do not invent\nACPI support or a dynamic backend registry to justify the interface.\n\nExisting OF is transitional integration, not that generic contract. Move DT\ninterpretation into rs_fdtree, retain boot DTB ownership/initialization in host\nintegration until migrated, and move device-specific policy to drivers.\nReplace OF callers incrementally, then remove OF; do not rename the current\ncrate and claim that a generic node abstraction exists.\n\n## Current correction\n\nThe scoped change moves status and numeric reg/ranges interpretation to\nFdtNode methods implemented inside rs_fdtree. Address collection is gated by\nthe optional alloc feature; borrowed structural/status access remains usable\nwithout allocation. Host tests exercise the same public methods, including\ninclusive maximum-address bounds. GIC consumes these DT backend methods.\nIt still uses a DT-specific private discovery adapter; backend-independent\ndriver discovery is a later change, not an accomplished claim here.\n\nRemove the moved OF implementations and forwarding entry points together.\nNo duplicate interpreter or new fwnode wrapper is retained. Existing IRQ/PCI\nor boot helpers not included in this slice remain separately tracked debt.\nPR #1291 must contain only this DT capability move and its GIC consumer, not\nthe full firmware-node framework.\n\nImplementation order: update and validate the full driver development branch,\nthen the OF/IRQ development branch, then extract the validated delta to the\nindependent PR branch. Preserve each branch's unrelated capabilities; do not\nreplace directories from one branch with another.\n\n## Validation of this extraction\n\nThe correction was first validated on both development branches: AArch64\nselected guest suites passed 200 cases (six ignored) and 129 cases (five\nignored), respectively. The intermediate branch also passed 44 RISC-V cases.\n\nOn this independent PR branch, parser host tests passed without alloc (25)\nand with alloc (34, including nine address cases). AArch64 make clippy\nUNITTEST=y passed; selected OF/GIC guest tests passed 47 cases and exported\ncoverage. The ten status/address cases now run on the host rather than in\nthe guest, so guest totals are not directly comparable to the earlier PR.\nGICv3 boot is exercised; GICv2 remains fixture-only coverage.\nThe independent branch also passed UNITTEST-enabled Clippy on RISC-V, x86_64\nand LoongArch; this is compile validation, not guest execution on those targets.\nRead-only review found no code blockers.\n\nThat extraction landed without a generic fwnode API. The first fwnode slice is\nrecorded below.\n\n## Implemented neutral contract (first slice)\n\n`drivers/firmware/fwnode` defines the backend-neutral contract:\n`FwNodeId`, opaque `FwNode<'a>` handles over a `FwNodeOps<'a>` provider,\n`FwProperty`/`FwPropertyValue`, `FwMmioResource`, and\n`FwIrqSpec`/`FwParams`. Handles are comparable across backends and carry no\n`FdtNode`, `LinuxFdt` or cell-layout types.\n\n`rs_fdtree` implements the contract as `DtBackend` behind its optional\n`fwnode` feature. Structure, availability, compatible strings and translated\nMMIO resources come from the existing strict DT interpretation. Generic DT\ninterrupt translation is still `Unsupported`: it moves into the backend only\nwhen controller `xlate`/`irq_domain` work makes the mapping well defined.\nExisting `of` interrupt helpers remain in place for other consumers.\n\n`khal::firmware` publishes the root after `of` validates and installs the DTB:\n`fwnode_root() -> Option<FwNode<'static>>`. Platform bring-up no longer reaches\ninto `of` for GIC discovery; `kplat-aarch64` passes this root to\n`irq_driver::gic::init_from_fwnode`.\n\nThe controller keeps its own common output rather than exposing firmware\ntypes. `GicConfig` now retains multiple GICv3 redistributor regions and\n`redistributor-stride`; `GicConfig::from_fwnode` is the DT producer, and\n`from_madt` (ACPI) and `from_static` (board table) are the planned peers that\nfeed the same `gic::init(config)`. The vendored GIC driver still supports only a\nsingle contiguous redistributor frame array with architectural stride, so\n`init` validates and rejects other layouts instead of misprogramming them.\n\nNot included in this slice: an ACPI fwnode backend, device-to-controller IRQ\nlookup through `FwIrqSpec` (still `Unsupported` in `DtBackend`), a dynamic\n`irq_domain`, and multi-region/custom-stride redistributor programming.\n"
+    },
+    "D2_candidate": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "D3": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Own kernel registration, IRQ mapping, MMIO mapping and DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "paraphrase": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Supply structural access and property interpretation for the device-tree backend.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_purpose": {
+      "fields": {
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_owned_capabilities": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_non_goals": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_invariants_and_resources": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_dependency_direction": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_delegation_interfaces": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_configuration": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "exceptions": {
+          "status": "content",
+          "text": "OF/IRQ/PCI and boot helpers outside the scoped migration remain tracked debt; their existence is not blanket approval for new interpretation duplication.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    },
+    "without_exceptions": {
+      "fields": {
+        "purpose": {
+          "status": "content",
+          "text": "Provide the device-tree backend's structural and property interpretation capabilities.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "owned_capabilities": {
+          "status": "content",
+          "text": "Own structural access, property decoding, node status and device-tree address translation.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "non_goals": {
+          "status": "content",
+          "text": "Do not own kernel registration, IRQ mapping, MMIO mapping or DMA allocation; controller-specific register roles and interrupt encodings belong to drivers.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "invariants_and_resources": {
+          "status": "content",
+          "text": "Interpret firmware data separately from OS resource acquisition; boot DTB ownership and initialization remain in host integration until migrated.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "dependency_direction": {
+          "status": "content",
+          "text": "Keep OS resource acquisition in existing provider contracts rather than importing those responsibilities into the device-tree library.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "delegation_interfaces": {
+          "status": "content",
+          "text": "The historical design names FdtNode interpretation methods and the backend-neutral FwNodeOps contract; do not infer a CPU-specific interface from later changes.",
+          "assertion_kind": "normative_responsibility"
+        },
+        "configuration": {
+          "status": "content",
+          "text": "The design describes optional alloc for address collection and an optional fwnode backend feature; the complete build feature closure has not been validated here.",
+          "assertion_kind": "normative_responsibility"
+        }
+      }
+    }
+  },
+  "corruption_field": "non_goals",
+  "paraphrase_field": "purpose"
+}

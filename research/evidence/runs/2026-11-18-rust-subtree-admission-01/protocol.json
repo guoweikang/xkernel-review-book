@@ -1,0 +1,10 @@
+{
+  "question": "Can the frozen eight partially supported functions supply nontrivial closed local syntax, and repeated lexical-candidate uses, without extending the frontend?",
+  "input": "../2026-11-18-rust-structure-prototype-01/corpus/*.stdout",
+  "identities": "Use exactly the eight source IDs and hashes in the prototype protocol and final manifest; do not replace any input.",
+  "selection": "Within body descendants, closed roots of kind call, method_call, binary, unary, assign, reference, field, index, tuple, array, return, block_expression or let, with at least three descendant nodes including root. Keep only maximal eligible subtrees (no eligible ancestor). Threshold is a descriptive nontriviality rule, not a retrieval score.",
+  "measurements": ["All eight per-unit counts, including zero", "Selected root IDs/ranges and node counts", "Per-subtree local-use statuses", "Repeated same-binder candidate groups (two or more local-use occurrences), not raw name groups", "Unknown local-use presence reported separately from syntax closure"],
+  "limits": "No rerun of exporter, no syntax expansion, no models, ranking, code changes or new source selection. A closed subtree is only closed under exported subset. Binding candidates remain unresolved by compiler. Missing ancestors and opaque interiors cannot be inferred.",
+  "decision": "If no useful repeated-use structure is observed, do not claim readiness for a variable-use feature comparison; distinguish syntax-only opportunity from binding evidence. Do not tune the threshold to obtain a positive result.",
+  "stop": "One deterministic census, repeat equality check, independent steering decision. Retain unfavorable outcomes."
+}

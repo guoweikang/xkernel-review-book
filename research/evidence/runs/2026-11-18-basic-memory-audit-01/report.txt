@@ -1,0 +1,84 @@
+Basic Memory 本机源码只读审计
+日期：2026-11-18 UTC
+对象：/root/.local/venvs/basic-memory
+版本：basic-memory 1.0.0
+版本证据：/root/.local/venvs/basic-memory/lib/python3.13/site-packages/basic_memory-1.0.0.dist-info/METADATA:2（Name）、:3（Version）。
+
+范围和方法
+仅静态读取已安装 Python 源码及发行包 METADATA，未导入/启动 Basic Memory，未调用搜索、索引、写笔记或模型接口；未读取用户笔记、数据库、运行时配置。唯一写入为本报告。官方 docs 与本机实际配置由主线程另核。本报告描述这份已安装代码，不声称与某上游 tag 完全一致，也不声称任何功能在本机已经开启。
+未运行实验、未测量用户笔记重复率、未改共享 PROGRESS/catalog。此为用户明确指定的独立证据交付，不是书籍研究批次续跑。
+
+路径约定
+下列 P/ 均精确展开为 /root/.local/venvs/basic-memory/lib/python3.13/site-packages/basic_memory/ 。所有冒号后数字为源码行号。
+
+1. 核心结论：没有依据把这里的 score 叫作“投影重复率”
+确认存在：新建笔记后的相似笔记建议、Markdown-aware 分块、embedding 向量检索、可选重排、混合检索分数融合、派生索引/视图 projection。
+在实际检查的写入—相似建议—检索—向量同步链路中，没有计算全文重复字数/比例、重复概率或重复百分比的步骤。全包 *.py 搜索 semantic...projection / projection...semantic 及 duplicate/duplication...rate/percent，未找到“重复率”实现；这属于有限静态检索的否定证据，不是对所有可能扩展的绝对断言。
+
+2. write 相似提示：在创建成功后发生，建议而非阻断/自动合并
+P/mcp/tools/write.py:292-298：仅 action == "created" 调用 _similar_notes；覆盖已有笔记不走此提示分支。
+P/mcp/tools/write.py:407-438：注释明确 advisory only。发往目标项目的 SearchClient；本地项目应用本地模型对应门槛，Cloud 路由使用服务端门槛。捕获 ToolError 返回空建议，笔记已写入，不因探测失败撤销写入。
+P/mcp/similar_notes.py:191-203：HTTP 400（如语义检索关闭/无 provider）识别为服务端拒绝探测。
+P/mcp/similar_notes.py:29-40：最多 3 条，探测长度 900 字符；默认模型的建议门槛 0.70。
+P/mcp/similar_notes.py:57-60：移除 frontmatter，用 title + 两换行 + body，截取前 900 字符。不是全文两两比较；也不是将整篇笔记所有 chunk 比较后计算覆盖率。
+P/mcp/similar_notes.py:95-109：retrieval_mode=VECTOR，仅 ENTITY，metadata_filters={"generated": None} 排除声明 generated 的候选。
+P/mcp/similar_notes.py:145-188：查询 page_size=3+1+已考虑链接数，最多解析前 10 个不同 wikilink。
+P/mcp/similar_notes.py:112-142：排除刚写入自身、已解析链接的目标；按 file_path 折叠结果后保留最多 3 条。向量后台发布，新笔记未必已在索引中。
+P/mcp/similar_notes.py:68-92：0.70 只适用于与默认 FastEmbed 配置 embedding identity 完全一致的设置；identity 涵盖模型、维度、文档/查询前缀，其他设置返回 None，交给服务端 semantic_min_similarity；默认设置取 max(用户门槛,0.70)。注释的 0.55、0.37 等是源码提供的背景/测量说明，不是本次实测，也不是跨模型通用尺度。
+P/mcp/similar_notes.py:218-220：明确故意不展示 similarity scores，因为近似重复与仅相关笔记落在同一分数区间，数字会暗示不存在的精度。
+P/mcp/similar_notes.py:48-54、P/mcp/tools/write.py:310-314：JSON similar_notes 也只有 title/permalink/file_path，没有分数。
+P/mcp/similar_notes.py:228-240：提示原文“Did you mean to write to one of these?”，分 same topic / related but distinct / unrelated。
+P/mcp/tools/write.py:441-455：same topic 分支仅渲染字符串，建议调用 bm_edit(... command='append' ...) 后 bm_delete(...)；此处没有执行 edit/delete，也不自动综合、合并或删除内容。调用方是否另行照做，是后续 agent 行为。
+
+3. semantic chunking 是规则分块，不是生成模型总结
+P/repository/semantic_chunking.py:12-15：900 字符预算；120 字符 overlap 参数；Markdown 标题正则。
+P/repository/semantic_chunking.py:71-96：ENTITY 嵌入源由 title、permalink、content_snippet 组成；OBSERVATION 另加 category；RELATION 另加 relation_type。注意相似建议 probe 与入库源文本形状近似但并不完全相同，probe 不含 permalink。
+P/repository/semantic_chunking.py:178-227：按 Markdown 标题分节，再在预算内拼块；列表项不会一条一个 chunk，观察/关系来自独立搜索行。
+P/repository/semantic_chunking.py:230-266：超长节优先按行打包，只有单行本身超过 900 字符才走字符窗口并携带 overlap；不能说所有相邻块都重叠 120 字符。
+P/repository/semantic_chunking.py:99-150：chunk_key = source_type:SHA256(chunk_text):occurrence。同一实体重复文本保留不同 occurrence；duplicate_chunk_keys 统计同一 (row.type,row.id,chunk_index) 输入位置的重复行，防止 SQLite FTS5 的重复逻辑行重复计数。这个诊断计数不是重复笔记数量，更不是重复率。
+P/repository/semantic_chunking.py:154-175：entity fingerprint 对派生 chunk 输入及位置作 SHA256，用于失效判断。
+P/repository/semantic_vector_sync.py:1057-1082、:1104-1113：指纹/模型/已有 embedding 条件可快跳；文本不变时可复用 embedding，仅更新位置。不是跨笔记相似合并。
+P/repository/semantic_vector_sync.py:1388-1407：批量 embed_documents 后持久化 vectors。
+
+4. embedding、distance、score 的准确含义
+P/repository/embedding_provider.py:39-49：provider 返回单位向量；L2 距离转 cosine 的前提是单位范数。
+P/repository/sqlite_vec_index.py:416-441：向量近邻按 distance 升序；similarity = max(0,min(1,1-distance^2/2))。
+P/repository/pgvector_index.py:488、:521-540：使用 cosine distance 运算符 <=>，similarity=1-distance，裁剪到 [0,1]。
+P/repository/search_reader.py:1155-1157：embed_query(query_text)。
+P/repository/search_reader.py:1320-1351：同一 (type,row id) 多个命中 chunk 取最大 similarity，再用 min_similarity 过滤；不是平均全文相似，也没有按重复 chunk 数除以总 chunk 数。
+因此即便向量 score=0.8，也不能读作“80% 内容重复”或“80% 概率为重复笔记”。它是特定模型、预处理与匹配 chunk 下的排序信号。
+
+5. score fusion：仅混合检索，不能套到 write 的 VECTOR 建议上
+P/repository/search_reader.py:77-79、:305-349：FTS 按 abs(raw_score)/当次候选最大绝对值归一化；SQLite 原始 BM25 为负，Postgres ts_rank 为正。vector score 不再按当前最高向量分数归一化。
+融合公式 = max(v,f) + 0.3*min(v,f)；双路范围 [0,1.3]，单路 [0,1]。按 (type,id) 合并检索结果，不是合并原笔记，也不是 RRF。
+例如 v=0.8、归一化 f=0.6，融合值 0.98；v=f=1 得 1.3。这里的 0.98 或 1.3 均为排名分数，不是 98% / 130% 重复。
+write 建议显式 VECTOR（P/mcp/similar_notes.py:105），不会用这套 FTS+vector 融合。
+但 VECTOR 不等于永远只按原始 cosine 排序：P/repository/search_reader.py:1076-1113 表明若配置 reranker，向量检索也可重排。
+P/repository/search_reader.py:389-391、:761-784：重排调用 provider.rerank，候选前缀的 score 被重排相关性分数替换，尾部另降分；不能把所有搜索输出 score 都称为原始 cosine。
+
+6. 是否调用生成式 LLM
+本链路中未见 chat/completions、Responses 或“让 LLM 判断重复/生成合并正文”的调用。存在神经网络模型推理，不等于调用生成式 LLM。
+P/repository/fastembed_provider.py:38、:79-102、:279-321：本地 ONNX FastEmbed TextEmbedding，model.embed；输出单位化向量。
+P/repository/openai_provider.py:119：client.embeddings.create；是 embedding API。
+P/repository/litellm_provider.py:197：litellm.aembedding；是 embedding API。
+P/repository/fastembed_rerank_provider.py:148-162：TextCrossEncoder.rerank，raw logits 经 sigmoid 成相关性分数。
+P/repository/litellm_rerank_provider.py:72：litellm.arerank；是可选远程重排 API。
+可选 API provider 会产生网络请求，不能据“无生成式 LLM”推断完全离线；本机到底使用哪一个、是否开启语义检索/重排，留主线程查配置。本次审计未执行任何模型调用。
+
+7. projection 术语边界
+P/repository/search_repository_base.py:176-193：search_index projection 指实体对应的派生搜索行；缺失时可重建。
+P/indexing/relation_persistence.py:1-10：图表被明确称为 eventually consistent projections，可能落后于 accepted write。
+P/indexing/batch_indexer.py:793-811：唯一检索到的直接“semantic projections”措辞出现在清理 Markdown 退化为资源的状态方法，具体清理 observations、temporal、sections、relations、note_content 等派生状态。这里不是计算相似度或降维百分比。
+P/indexing/wiki_projector.py:1、:20-26、:277-282：另有 deterministic Wiki Projector，规划 index.md/log.md 写入，无 I/O 的纯规划函数。这是不同的 projection，不能与重复检测混为一谈。
+可对用户说：系统从笔记派生结构化搜索行和向量索引，再以向量近邻提示可能相关/重复的已有笔记；没有证据支持“投影重复率计算”这一产品术语。
+
+复核身份（SHA256）
+P/mcp/similar_notes.py
+85a32bf81c98490e88b22f3c14db7e6bc41dbfb18aca8389bff6ec1ab07efc52
+P/repository/semantic_chunking.py
+2e7055891b62ee4748aa6f0d016e8bedf478d5bac65f18bfc1aad3c20dfda319
+P/repository/search_reader.py
+06dd2233984b0078083b7849ed0aa5867b03ecf9b829a834a8526ba9bc508b65
+
+限制
+静态源码证据不证明运行时已开启、索引完整、网络 provider 实际响应或具体笔记命中表现。未访问用户数据，不能判断用户库实际重复程度。版本号来自本机发行元数据；源码身份以本报告 SHA256 为准。独立报告未新增 Markdown、未更新书籍进度/catalog，未运行书籍全量构建。

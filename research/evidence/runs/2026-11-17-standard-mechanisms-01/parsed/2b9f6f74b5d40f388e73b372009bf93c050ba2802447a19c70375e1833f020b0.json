@@ -1,0 +1,1359 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An iterator that knows its exact length.",
+          "path": "doc",
+          "range": [
+            0,
+            44
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            45,
+            48
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Many [`Iterator`]s don't know how many times they will iterate, but some do.",
+          "path": "doc",
+          "range": [
+            49,
+            129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an iterator knows how many times it can iterate, providing access to",
+          "path": "doc",
+          "range": [
+            130,
+            205
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that information can be useful. For example, if you want to iterate",
+          "path": "doc",
+          "range": [
+            206,
+            277
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " backwards, a good start is to know where the end is.",
+          "path": "doc",
+          "range": [
+            278,
+            334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            335,
+            338
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When implementing an `ExactSizeIterator`, you must also implement",
+          "path": "doc",
+          "range": [
+            339,
+            408
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Iterator`]. When doing so, the implementation of [`Iterator::size_hint`]",
+          "path": "doc",
+          "range": [
+            409,
+            487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " *must* return the exact size of the iterator.",
+          "path": "doc",
+          "range": [
+            488,
+            537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            538,
+            541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The [`len`] method has a default implementation, so you usually shouldn't",
+          "path": "doc",
+          "range": [
+            542,
+            619
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement it. However, you may be able to provide a more performant",
+          "path": "doc",
+          "range": [
+            620,
+            691
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation than the default, so overriding it in this case makes sense.",
+          "path": "doc",
+          "range": [
+            692,
+            771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            772,
+            775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this trait is a safe trait and as such does *not* and *cannot*",
+          "path": "doc",
+          "range": [
+            776,
+            852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guarantee that the returned length is correct. This means that `unsafe`",
+          "path": "doc",
+          "range": [
+            853,
+            928
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " code **must not** rely on the correctness of [`Iterator::size_hint`]. The",
+          "path": "doc",
+          "range": [
+            929,
+            1006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unstable and unsafe [`TrustedLen`](super::marker::TrustedLen) trait gives",
+          "path": "doc",
+          "range": [
+            1007,
+            1084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this additional guarantee.",
+          "path": "doc",
+          "range": [
+            1085,
+            1115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1116,
+            1119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`len`]: ExactSizeIterator::len",
+          "path": "doc",
+          "range": [
+            1120,
+            1155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1156,
+            1159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # When *shouldn't* an adapter be `ExactSizeIterator`?",
+          "path": "doc",
+          "range": [
+            1160,
+            1217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1218,
+            1221
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an adapter makes an iterator *longer*, then it's usually incorrect for",
+          "path": "doc",
+          "range": [
+            1222,
+            1299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that adapter to implement `ExactSizeIterator`.  The inner exact-sized",
+          "path": "doc",
+          "range": [
+            1300,
+            1373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " iterator might already be `usize::MAX`-long, and thus the length of the",
+          "path": "doc",
+          "range": [
+            1374,
+            1449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " longer adapted iterator would no longer be exactly representable in `usize`.",
+          "path": "doc",
+          "range": [
+            1450,
+            1530
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1531,
+            1534
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is why [`Chain<A, B>`](crate::iter::Chain) isn't `ExactSizeIterator`,",
+          "path": "doc",
+          "range": [
+            1535,
+            1613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " even when `A` and `B` are both `ExactSizeIterator`.",
+          "path": "doc",
+          "range": [
+            1614,
+            1669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1670,
+            1673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1674,
+            1688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1689,
+            1692
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            1693,
+            1709
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1710,
+            1713
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1714,
+            1721
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // a finite range knows exactly how many times it will iterate",
+          "path": "doc",
+          "range": [
+            1722,
+            1788
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let five = 0..5;",
+          "path": "doc",
+          "range": [
+            1789,
+            1809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1810,
+            1813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(5, five.len());",
+          "path": "doc",
+          "range": [
+            1814,
+            1844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1845,
+            1852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1853,
+            1856
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In the [module-level docs], we implemented an [`Iterator`], `Counter`.",
+          "path": "doc",
+          "range": [
+            1857,
+            1931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Let's implement `ExactSizeIterator` for it as well:",
+          "path": "doc",
+          "range": [
+            1932,
+            1987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1988,
+            1991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [module-level docs]: crate::iter",
+          "path": "doc",
+          "range": [
+            1992,
+            2028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2029,
+            2032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2033,
+            2040
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # struct Counter {",
+          "path": "doc",
+          "range": [
+            2041,
+            2063
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     count: usize,",
+          "path": "doc",
+          "range": [
+            2064,
+            2087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            2088,
+            2095
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl Counter {",
+          "path": "doc",
+          "range": [
+            2096,
+            2116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn new() -> Counter {",
+          "path": "doc",
+          "range": [
+            2117,
+            2148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         Counter { count: 0 }",
+          "path": "doc",
+          "range": [
+            2149,
+            2183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     }",
+          "path": "doc",
+          "range": [
+            2184,
+            2195
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            2196,
+            2203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # impl Iterator for Counter {",
+          "path": "doc",
+          "range": [
+            2204,
+            2237
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     type Item = usize;",
+          "path": "doc",
+          "range": [
+            2238,
+            2266
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     fn next(&mut self) -> Option<Self::Item> {",
+          "path": "doc",
+          "range": [
+            2267,
+            2319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         self.count += 1;",
+          "path": "doc",
+          "range": [
+            2320,
+            2350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         if self.count < 6 {",
+          "path": "doc",
+          "range": [
+            2351,
+            2384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #             Some(self.count)",
+          "path": "doc",
+          "range": [
+            2385,
+            2419
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         } else {",
+          "path": "doc",
+          "range": [
+            2420,
+            2442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #             None",
+          "path": "doc",
+          "range": [
+            2443,
+            2465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #         }",
+          "path": "doc",
+          "range": [
+            2466,
+            2481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #     }",
+          "path": "doc",
+          "range": [
+            2482,
+            2493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # }",
+          "path": "doc",
+          "range": [
+            2494,
+            2501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " impl ExactSizeIterator for Counter {",
+          "path": "doc",
+          "range": [
+            2502,
+            2542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // We can easily calculate the remaining number of iterations.",
+          "path": "doc",
+          "range": [
+            2543,
+            2613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     fn len(&self) -> usize {",
+          "path": "doc",
+          "range": [
+            2614,
+            2646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         5 - self.count",
+          "path": "doc",
+          "range": [
+            2647,
+            2673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            2674,
+            2683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            2684,
+            2689
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2690,
+            2693
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // And now we can use it!",
+          "path": "doc",
+          "range": [
+            2694,
+            2723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2724,
+            2727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut counter = Counter::new();",
+          "path": "doc",
+          "range": [
+            2728,
+            2765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2766,
+            2769
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(5, counter.len());",
+          "path": "doc",
+          "range": [
+            2770,
+            2803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = counter.next();",
+          "path": "doc",
+          "range": [
+            2804,
+            2831
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(4, counter.len());",
+          "path": "doc",
+          "range": [
+            2832,
+            2865
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2866,
+            2873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2874,
+            2919
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "ExactSizeIterator",
+      "range": [
+        0,
+        5080
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the exact remaining length of the iterator.",
+          "path": "doc",
+          "range": [
+            2964,
+            3019
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3024,
+            3027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The implementation ensures that the iterator will return exactly `len()`",
+          "path": "doc",
+          "range": [
+            3032,
+            3108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " more times a [`Some(T)`] value, before returning [`None`].",
+          "path": "doc",
+          "range": [
+            3113,
+            3175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method has a default implementation, so you usually should not",
+          "path": "doc",
+          "range": [
+            3180,
+            3251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implement it directly. However, if you can provide a more efficient",
+          "path": "doc",
+          "range": [
+            3256,
+            3327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implementation, you can do so. See the [trait-level] docs for an",
+          "path": "doc",
+          "range": [
+            3332,
+            3400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " example.",
+          "path": "doc",
+          "range": [
+            3405,
+            3417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3422,
+            3425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function has the same safety guarantees as the",
+          "path": "doc",
+          "range": [
+            3430,
+            3485
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Iterator::size_hint`] function.",
+          "path": "doc",
+          "range": [
+            3490,
+            3527
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3532,
+            3535
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [trait-level]: ExactSizeIterator",
+          "path": "doc",
+          "range": [
+            3540,
+            3576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Some(T)`]: Some",
+          "path": "doc",
+          "range": [
+            3581,
+            3602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3607,
+            3610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            3615,
+            3629
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3634,
+            3637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            3642,
+            3658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3663,
+            3666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3671,
+            3678
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // a finite range knows exactly how many times it will iterate",
+          "path": "doc",
+          "range": [
+            3683,
+            3749
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut range = 0..5;",
+          "path": "doc",
+          "range": [
+            3754,
+            3779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3784,
+            3787
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(5, range.len());",
+          "path": "doc",
+          "range": [
+            3792,
+            3823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let _ = range.next();",
+          "path": "doc",
+          "range": [
+            3828,
+            3853
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(4, range.len());",
+          "path": "doc",
+          "range": [
+            3858,
+            3889
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3894,
+            3901
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3906,
+            3915
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3920,
+            3965
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3993,
+        4359
+      ],
+      "kind": "trait_fn",
+      "name": "len",
+      "range": [
+        2964,
+        4359
+      ],
+      "signature_range": [
+        3970,
+        3992
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        1
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4308,
+        4338
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns `true` if the iterator is empty.",
+          "path": "doc",
+          "range": [
+            4365,
+            4409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4414,
+            4417
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This method has a default implementation using",
+          "path": "doc",
+          "range": [
+            4422,
+            4472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`ExactSizeIterator::len()`], so you don't need to implement it yourself.",
+          "path": "doc",
+          "range": [
+            4477,
+            4554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4559,
+            4562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            4567,
+            4581
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4586,
+            4589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            4594,
+            4610
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4615,
+            4618
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4623,
+            4630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(exact_size_is_empty)]",
+          "path": "doc",
+          "range": [
+            4635,
+            4671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4676,
+            4679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut one_element = std::iter::once(0);",
+          "path": "doc",
+          "range": [
+            4684,
+            4729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(!one_element.is_empty());",
+          "path": "doc",
+          "range": [
+            4734,
+            4771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4776,
+            4779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(one_element.next(), Some(0));",
+          "path": "doc",
+          "range": [
+            4784,
+            4828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert!(one_element.is_empty());",
+          "path": "doc",
+          "range": [
+            4833,
+            4869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4874,
+            4877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(one_element.next(), None);",
+          "path": "doc",
+          "range": [
+            4882,
+            4923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            4928,
+            4935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4940,
+            4949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4954,
+            5015
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5047,
+        5078
+      ],
+      "kind": "trait_fn",
+      "name": "is_empty",
+      "range": [
+        4365,
+        5078
+      ],
+      "signature_range": [
+        5020,
+        5046
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5082,
+            5127
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        5082,
+        5321
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        5222,
+        5252
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        5199,
+        5252
+      ],
+      "signature_range": [
+        5199,
+        5221
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        5284,
+        5319
+      ],
+      "kind": "impl_fn",
+      "name": "is_empty",
+      "range": [
+        5257,
+        5319
+      ],
+      "signature_range": [
+        5257,
+        5283
+      ]
+    }
+  ],
+  "source_sha256": "dc571034e322a6899c3c60eedcb0521b2b04fb1c9478c83ca51a134adc653a95"
+}

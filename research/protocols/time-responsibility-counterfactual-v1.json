@@ -1,0 +1,29 @@
+{
+  "status": "closed-after-two-responses-and-source-audit",
+  "question": "Does review distinguish actual implementation responsibility from unchanged documented responsibility when validation moves across the syscall/timekeeper boundary?",
+  "scope": "One developer-exposed, researcher-modified counterfactual; behavioral diagnostic only, not document benefit, real violation detection, architectural optimality or reconstruction of a historical bug",
+  "source_revision": "cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247",
+  "original_archive": "2026-11-18-time-responsibility-admission-01",
+  "candidate_archive": "2026-11-18-time-counterfactual-01",
+  "intervention": "Move the private Timekeeper range validation to the syscall helper after its authorization check; keep owner state update, locked fresh sample and notification path. Retain original comments as potentially stale evidence. Only archived copies may change.",
+  "confounds": ["Validation location and monotonic sampling relationship both change", "Other direct timekeeper callers lose private validation", "Original documentation may no longer describe candidate implementation", "Private upper-bound formula is duplicated in the syscall helper", "No full build or runtime reachability proof"],
+  "admission": ["Two-file actual diff reconstructs from archived originals", "Authorization and no-op branch unchanged", "Range expression and failure mapping are accounted for", "No unavailable helper invented", "Reviewer audits actual patch, not intended change", "No runtime bug or production violation oracle inferred"],
+  "conditional_execution": {
+    "gate": "Independent candidate review permits a source-grounding diagnostic; otherwise close without model responses",
+    "responses": 2,
+    "agents": "Fresh non-forked reviewers, one original and one candidate, no follow-up or correction",
+    "common_inputs": "Same seven source/document paths, same neutral task, same file boundaries and ordinary comments",
+    "excluded": ["counterfactual patch", "construction rationale", "reference ledger", "expected findings", "review report", "original/candidate identity label", "other response"],
+    "output": ["observed behavior and location", "source-backed delegation and state ownership", "documented responsibilities and any contradiction", "unknowns and bounded validation needs"],
+    "limits": "Instructions prohibit tools; not an enforced sandbox. Agent identity and packet hashes recorded before dispatch. No equal-compute claim."
+  },
+  "evaluation": {
+    "source_grounding": "Does each central behavior claim match the supplied function bodies rather than merely comments?",
+    "responsibility": "Does review distinguish authorization, range validation, state update and delegation?",
+    "condition_preservation": "Does it avoid treating NULL no-op as a required authorization path?",
+    "change_obligation": "Candidate reasoning must not repeat the original same-lock validation claim without qualifying the actual code conflict",
+    "uncertainty": "Does it separate static structure from executed race, compile success or globally proven safety?",
+    "reporting": "Per-claim evidence and unsupported claims; no weighted score or general detection accuracy"
+  },
+  "stop": "One candidate admission and at most two responses. No variants, prompt tuning, retry seeds, concurrency harness or production fixes. Preserve rejection and failed controls."
+}

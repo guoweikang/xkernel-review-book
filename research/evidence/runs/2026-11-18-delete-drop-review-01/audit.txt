@@ -1,0 +1,47 @@
+Independent delete capture-drop witness review — 2026-11-18
+Verdict: LIMITED ADMIT for the host ownership-shape counterexample. No source/result defect found within this scope. Not kernel equivalence, a real deadlock, or evidence of refactoring benefit.
+
+Scope and procedure
+Read-only review of existing case004 and producer's newly available witness. No compilation, witness execution, kernel execution, redesign, new conditions, or independent test creation. Only this audit is authored. Read AGENTS.md, research-execution skill and current PROGRESS; lookup command: python3 scripts/research_lookup.py delete-transaction-confirmation case004 --limit 5 (26 literal hits, 5 returned). Opened original source/snippets rather than treating retrieval or admission prose as proof.
+
+Evidence roots (paths relative to repository)
+C = research/evidence/runs/2026-11-18-call-subset-review-01/reviewer/case-004/
+A = research/evidence/runs/2026-11-18-delete-transaction-admission-01/
+W = research/evidence/runs/2026-11-18-delete-transaction-confirmation-01/
+Opened A/report.txt, A/source-selection.json, relevant admission note and evidence.json; C/left-source.rs, right/left snippets; W/protocol.json, freeze.json, witness.rs (all 86 lines), run.py, results.json, debug/opt compile.json, execute.json, execute.stdout, observations.json and rustc-version.stdout. Independently read/hash-checked bytes, including stderr and binaries; did not execute them.
+
+Source identity and correspondence
+Fixed xkernel commit recorded by admission: 7e3ac94431a0dbb376d2fc8d85098deeff1bba09, fs/kvfs/src/node/dentry.rs. C/left-source.rs and right-source.rs both independently SHA256 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7.
+C/left-snippet.rs SHA256 0a952a3c053a8c670045baf98be1f7acc765b7dc69c7451a62b03764283bb7e9; right-snippet.rs 3655389bd0cb89991cfd65f291e67da03e8fbd7d856dd609c2d7e3c363d8c39d.
+Original unlink_with lines1214–1236 and rmdir_with lines1247–1269 own F as a parameter, acquire parent then victim guard, reject inappropriate entry type before calling F, propagate F/backend error, then mark/forget. Nearby cfg(unittest) applies to convenience wrappers, not these methods.
+W/witness.rs:39–49 preserves the relevant F-parameter/local-guard/type-check/call order. Lines51–68 implement the proposed naive shape, not an existing production helper: wrapper moves may into operation; helper owns guards and invokes operation. On type rejection the invoked operation's uncalled may capture is destroyed before operation returns to helper; helper guards are still live. Original parameter remains until local guards have been destroyed.
+This is a deliberate abstraction, not extracted production execution: FnOnce(&Dentry) becomes FnOnce(), distinct IsADirectory/NotADirectory become WrongType, real type checks become Condition, namespace locks become logging Guard, backend/mark/forget become events. Parent validation, name checks, lookup/cache effects, Arc alias check, actual entry/inode values and their destruction, backend failure/location locks, concurrency and panic are omitted. The correspondence is to the suffix reached after successful lookup/alias checks and victim acquisition, not all method paths. Both unlink and rmdir have this ownership order, but the witness does not separately execute their production bodies.
+
+Challenge: is the reported drop real or scripted?
+Guard::drop lines22–26 and Capture::drop lines30–34 generate the release/drop events. Algorithms never explicitly drop may or directly emit may_drop. Lines74–80 construct an owning move closure; black_box(&capture) references the entire Drop-bearing Capture, preventing an accidental field-only capture that could omit its destructor. It does not explicitly destroy it. The separate callback_trace logs invocation. Actual RAII Drop, not manually placed may_drop events, distinguishes the branches. The callback can implement Fn as well as FnOnce; accepting and invoking it by value through the generic FnOnce bound is sufficient for this ownership example, and does not invalidate it.
+
+Independent output checks (not reruns)
+Read raw TSV stdout, decoded all six unique (condition,variant) rows in each build, checked identity/outcomes/event lists against results.json and per-build observations.json. Both stdout files are byte-identical: 687 bytes, SHA256 1128763f1b636b112b11a6ad22ebd951da69c2b2da96878b7860bf271edc4196. Thus 12 recorded observations, six per build, all match the frozen expected arrays. This is not 12 independent production tests.
+Recorded compiler: rustc 1.95.0, commit 59807616e1fa2540724bfbac14d7976d7e4a3860, x86_64-unknown-linux-gnu, edition2024; opt-level=0 and 3. Both compile and execute records exit0; compile/execute stderr empty. Runner specifies 30s compile / 5s execution limits. No repair recorded. Freeze mechanism hashes inputs before compilation and verifies after; current hashes match. This review cannot independently prove wall-clock authorship order of the earlier expected protocol from file contents alone.
+
+Actual sequences (both optimization levels)
+type_mismatch/original: parent_lock,victim_lock,type_check,victim_unlock,parent_unlock,may_drop -> WrongType
+type_mismatch/naive: parent_lock,victim_lock,type_check,may_drop,victim_unlock,parent_unlock -> WrongType
+callback_error/both: parent_lock,victim_lock,type_check,may_call,may_drop,victim_unlock,parent_unlock -> PermissionDenied
+success/both: parent_lock,victim_lock,type_check,may_call,may_drop,backend,mark,forget,victim_unlock,parent_unlock -> Ok
+No callback invocation/backend/cleanup on type rejection. Callback error invokes once and skips backend/cleanup. Success invokes once and reaches backend then cleanup. When callback is consumed, its capture naturally drops inside guards in BOTH variants; after-unlock destruction is not a blanket requirement. Same error on rejection does not imply observational equivalence.
+
+Verified SHA256 identities
+W/protocol.json 74f1af28695a0ef097b9e7e835d62f528b1c2fa426e886d941c96871df4cea8b
+W/witness.rs 6473288df4d10ed2f82b37871524af4d5f11185b4faf64e280f8bb1e7c45132c
+W/run.py 2a6785001a8375cc7c3d3810fd7a8173cbea609b0fae5465994f07b119f68289
+W/freeze.json 1b1f2ea35f57123d159c0d0ae0ecfcc700bb69fb6ed1fce345c6f64ed6eb243b
+W/results.json 88dbc22c702b39646cb7bbdb375ddbb56592a0ecbea3bd06dec21bf931683210
+W/rustc-version.stdout 4fdff2578428e9c5c08ddd7a0d3079c1a106b1cdaa46e73e46f7cd32b0fb9cad
+W/debug/witness 74a9b88aa4ad77b19e8671214a3abcc97d701b35dc0f66c61f97e9b5dc075ea2
+W/opt/witness 33e7ad2222784b024182df758d5e5f386a4b4067ae0b75642712a8cd69226ed0
+Both binary hashes independently match results.json; files were present at review time. They remain producer-owned; this reviewer has not moved or changed them. For repository hygiene the producer/main should retain reproducible commands/hashes and move build outputs to an ignored build location, recording relocation without rewriting execution history.
+
+Decision boundary / handoff
+Final producer report.txt also read after publication: its trace claims and distinction between expected-check success and naive-candidate rejection agree with the independently inspected source/records. Its STOP does not claim production execution or an all-closures result. No additional fixture or test was created.
+Admit the narrow conclusion: moving F into the invoked operation closure can change capture destructor order relative to guards on type rejection; therefore unconditional equivalence of this naive ownership shape is refuted for allowed Drop-bearing callbacks. Do not present the host sequence as an observed kernel deadlock, an existing caller bug, a refactoring impossibility, or a successful production transformation. Real locks, actual callback capture effects, omitted paths and alternative designs remain untested. No broader execution is requested by this review; main owns the next decision.

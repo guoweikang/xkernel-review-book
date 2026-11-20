@@ -1,0 +1,33 @@
+Main static admission for the sole direct-delegation proposal
+
+Fixed source: cache-transaction-fixture-01/baseline-dentry.rs, revision
+7e3ac94431a0dbb376d2fc8d85098deeff1bba09. Targets1165–1180 and1182–1206;
+with_locked_child1147–1158; LookupCreateResult258–261; predicates538–555.
+
+Both original narrow closure and general closure in exclusive=true reject
+is_really_positive before consuming create_fn, propagate its exact error,
+check is_negative after success, and clone the same candidate once. These
+predicates deliberately inspect different aspects and are not substituted.
+with_locked_child remains the one directory/name/namespace/lookup mechanism.
+
+Original create_fn moves into the operation closure passed to with_locked_child.
+Proposed create_fn first moves into lookup_or_create_with and then its operation
+closure. Neither introduces a new Drop-bearing callback capture wrapper or a
+closure invoked outside with_locked_child. On lookup/precondition failure,
+operation_fn is still a parameter of with_locked_child and is released after its
+local guard. On successful callback invocation FnOnce consumption still occurs
+inside the same namespace guard. This is ordinary-return static reasoning, not
+unwind or dynamic guard instrumentation evidence.
+
+The enum adapter moves an already owned Dentry out of Existing or Created. No
+new clone, allocation, panic or error is explicit. Existing is not reachable
+on a successful exclusive=true branch of the fixed general implementation;
+matching both payloads avoids making a new panic policy. Positive-child tests
+must independently assert AlreadyExists rather than accept an Existing payload.
+General-method source and nonexclusive behavior must remain unchanged.
+
+ADMIT a bounded original-versus-candidate kernel comparison if independent
+review agrees and the same explicit fixture is frozen before both runs.
+Do not infer adoption, performance improvement, full equivalence or cross-crate
+reuse. One concrete adapter, no redesign and no extra helper. Candidate code
+has not yet compiled or executed at this admission point.

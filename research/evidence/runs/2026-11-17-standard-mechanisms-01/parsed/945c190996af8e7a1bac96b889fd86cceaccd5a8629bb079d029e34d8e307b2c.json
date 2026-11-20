@@ -1,0 +1,1067 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Defines utf8 error type.",
+      "path": "doc",
+      "range": [
+        0,
+        28
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Errors which can occur when attempting to interpret a sequence of [`u8`]",
+          "path": "doc",
+          "range": [
+            72,
+            148
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as a string.",
+          "path": "doc",
+          "range": [
+            149,
+            165
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            166,
+            169
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As such, the `from_utf8` family of functions and methods for both [`String`]s",
+          "path": "doc",
+          "range": [
+            170,
+            251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and [`&str`]s make use of this error, for example.",
+          "path": "doc",
+          "range": [
+            252,
+            306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            307,
+            310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`String`]: ../../std/string/struct.String.html#method.from_utf8",
+          "path": "doc",
+          "range": [
+            311,
+            379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`&str`]: super::from_utf8",
+          "path": "doc",
+          "range": [
+            380,
+            410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            411,
+            414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            415,
+            429
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            430,
+            433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This error type’s methods can be used to create functionality",
+          "path": "doc",
+          "range": [
+            434,
+            501
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " similar to `String::from_utf8_lossy` without allocating heap memory:",
+          "path": "doc",
+          "range": [
+            502,
+            574
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            575,
+            578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            579,
+            586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " fn from_utf8_lossy<F>(mut input: &[u8], mut push: F) where F: FnMut(&str) {",
+          "path": "doc",
+          "range": [
+            587,
+            666
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     loop {",
+          "path": "doc",
+          "range": [
+            667,
+            681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         match std::str::from_utf8(input) {",
+          "path": "doc",
+          "range": [
+            682,
+            728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Ok(valid) => {",
+          "path": "doc",
+          "range": [
+            729,
+            759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 push(valid);",
+          "path": "doc",
+          "range": [
+            760,
+            792
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 break",
+          "path": "doc",
+          "range": [
+            793,
+            818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            819,
+            836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             Err(error) => {",
+          "path": "doc",
+          "range": [
+            837,
+            868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 let (valid, after_valid) = input.split_at(error.valid_up_to());",
+          "path": "doc",
+          "range": [
+            869,
+            952
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 unsafe {",
+          "path": "doc",
+          "range": [
+            953,
+            981
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                     push(std::str::from_utf8_unchecked(valid))",
+          "path": "doc",
+          "range": [
+            982,
+            1048
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 }",
+          "path": "doc",
+          "range": [
+            1049,
+            1070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 push(\"\\u{FFFD}\");",
+          "path": "doc",
+          "range": [
+            1071,
+            1108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1109,
+            1112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 if let Some(invalid_sequence_length) = error.error_len() {",
+          "path": "doc",
+          "range": [
+            1113,
+            1191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                     input = &after_valid[invalid_sequence_length..]",
+          "path": "doc",
+          "range": [
+            1192,
+            1263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 } else {",
+          "path": "doc",
+          "range": [
+            1264,
+            1292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                     break",
+          "path": "doc",
+          "range": [
+            1293,
+            1322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "                 }",
+          "path": "doc",
+          "range": [
+            1323,
+            1344
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "             }",
+          "path": "doc",
+          "range": [
+            1345,
+            1362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         }",
+          "path": "doc",
+          "range": [
+            1363,
+            1376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            1377,
+            1386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            1387,
+            1392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1393,
+            1400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1401,
+            1445
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1446,
+            1491
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Utf8Error",
+      "range": [
+        72,
+        1589
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1591,
+        3744
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the index in the given string up to which valid UTF-8 was",
+          "path": "doc",
+          "range": [
+            1612,
+            1681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " verified.",
+          "path": "doc",
+          "range": [
+            1686,
+            1699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1704,
+            1707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is the maximum index such that `from_utf8(&input[..index])`",
+          "path": "doc",
+          "range": [
+            1712,
+            1778
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " would return `Ok(_)`.",
+          "path": "doc",
+          "range": [
+            1783,
+            1808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1813,
+            1816
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            1821,
+            1835
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1840,
+            1843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Basic usage:",
+          "path": "doc",
+          "range": [
+            1848,
+            1864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1869,
+            1872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            1877,
+            1884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::str;",
+          "path": "doc",
+          "range": [
+            1889,
+            1906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1911,
+            1914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // some invalid bytes, in a vector",
+          "path": "doc",
+          "range": [
+            1919,
+            1957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let sparkle_heart = vec![0, 159, 146, 150];",
+          "path": "doc",
+          "range": [
+            1962,
+            2009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2014,
+            2017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // std::str::from_utf8 returns a Utf8Error",
+          "path": "doc",
+          "range": [
+            2022,
+            2068
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let error = str::from_utf8(&sparkle_heart).unwrap_err();",
+          "path": "doc",
+          "range": [
+            2073,
+            2133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2138,
+            2141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // the second byte is invalid here",
+          "path": "doc",
+          "range": [
+            2146,
+            2184
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(1, error.valid_up_to());",
+          "path": "doc",
+          "range": [
+            2189,
+            2228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2233,
+            2240
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2245,
+            2295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            2300,
+            2379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            2384,
+            2395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2400,
+            2409
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2455,
+        2487
+      ],
+      "kind": "impl_fn",
+      "name": "valid_up_to",
+      "range": [
+        1612,
+        2487
+      ],
+      "signature_range": [
+        2418,
+        2454
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Provides more information about the failure:",
+          "path": "doc",
+          "range": [
+            2493,
+            2541
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2546,
+            2549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `None`: the end of the input was reached unexpectedly.",
+          "path": "doc",
+          "range": [
+            2554,
+            2614
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `self.valid_up_to()` is 1 to 3 bytes from the end of the input.",
+          "path": "doc",
+          "range": [
+            2619,
+            2688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   If a byte stream (such as a file or a network socket) is being decoded incrementally,",
+          "path": "doc",
+          "range": [
+            2693,
+            2784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   this could be a valid `char` whose UTF-8 byte sequence is spanning multiple chunks.",
+          "path": "doc",
+          "range": [
+            2789,
+            2878
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2883,
+            2886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `Some(len)`: an unexpected byte was encountered.",
+          "path": "doc",
+          "range": [
+            2891,
+            2945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   The length provided is that of the invalid byte sequence",
+          "path": "doc",
+          "range": [
+            2950,
+            3012
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   that starts at the index given by `valid_up_to()`.",
+          "path": "doc",
+          "range": [
+            3017,
+            3073
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Decoding should resume after that sequence",
+          "path": "doc",
+          "range": [
+            3078,
+            3126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   (after inserting a [`U+FFFD REPLACEMENT CHARACTER`][U+FFFD]) in case of",
+          "path": "doc",
+          "range": [
+            3131,
+            3208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   lossy decoding.",
+          "path": "doc",
+          "range": [
+            3213,
+            3234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3239,
+            3242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [U+FFFD]: ../../std/char/constant.REPLACEMENT_CHARACTER.html",
+          "path": "doc",
+          "range": [
+            3247,
+            3311
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3316,
+            3377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            3382,
+            3461
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3466,
+            3477
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3482,
+            3491
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3543,
+        3742
+      ],
+      "kind": "impl_fn",
+      "name": "error_len",
+      "range": [
+        2493,
+        3742
+      ],
+      "signature_range": [
+        3500,
+        3542
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            3746,
+            3791
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3746,
+        4226
+      ]
+    },
+    {
+      "ancestors": [
+        4
+      ],
+      "attributes": [],
+      "body_range": [
+        3887,
+        4224
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        3830,
+        4224
+      ],
+      "signature_range": [
+        3830,
+        3886
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        5
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        3951,
+        4103
+      ]
+    },
+    {
+      "ancestors": [
+        4,
+        5
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4133,
+        4208
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4228,
+            4273
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4228,
+        4301
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An error returned when parsing a `bool` using [`from_str`] fails",
+          "path": "doc",
+          "range": [
+            4303,
+            4371
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4372,
+            4375
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`from_str`]: super::FromStr::from_str",
+          "path": "doc",
+          "range": [
+            4376,
+            4418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            4419,
+            4457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "non_exhaustive",
+          "range": [
+            4458,
+            4475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4476,
+            4521
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "ParseBoolError",
+      "range": [
+        4303,
+        4548
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4550,
+            4595
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4550,
+        4764
+      ]
+    },
+    {
+      "ancestors": [
+        10
+      ],
+      "attributes": [],
+      "body_range": [
+        4696,
+        4762
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        4639,
+        4762
+      ],
+      "signature_range": [
+        4639,
+        4695
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4766,
+            4811
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4766,
+        4844
+      ]
+    }
+  ],
+  "source_sha256": "f85d9bc2f78615bd24509dc7c3441859e69569768552307e71109d597ac5192a"
+}

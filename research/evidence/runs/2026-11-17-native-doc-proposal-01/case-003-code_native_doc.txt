@@ -1,0 +1,41 @@
+你是Rust代码研究提案助手。这是一个独立文本任务，不要使用任何工具，不读取文件或其他会话，只使用本消息材料。不要修改代码。不能从函数名推定未展示实现的语义。允许证据不足而不提出抽取。请用不超过900汉字（代码标识符除外）给出一次回答，分列：共享机制或弃权理由、必须保留的差异、已有委托、最小接口草案、约束及其来源(code/doc/unknown)、一条可反驳提案的验证义务、缺失上下文。文档只能作为声明，不能自动当作实现事实。不要报告置信度分数或宣称已经测试。
+
+left: fs/kvfs/src/xattr.rs:239
+```rust
+fn set_xattr(
+        &self,
+        name: &XattrName,
+        value: &[u8],
+        flags: XattrSetFlags,
+        cred: &Cred,
+    ) -> VfsResult<()> {
+        self.check_writable_mount()?;
+        let inode = self.inode();
+        check_xattr_permission(&inode, name, XattrAccess::Write, cred)?;
+        let _data_guard = inode.lock_data();
+        inode.set_xattr(self.dentry(), name, value, flags)
+    }
+```
+
+right: fs/kvfs/src/xattr.rs:257
+```rust
+fn remove_xattr(&self, name: &XattrName, cred: &Cred) -> VfsResult<()> {
+        self.check_writable_mount()?;
+        let inode = self.inode();
+        check_xattr_permission(&inode, name, XattrAccess::Write, cred)?;
+        let _data_guard = inode.lock_data();
+        inode.remove_xattr(self.dentry(), name)
+    }
+```
+
+left native documentation:
+ Creates or replaces one extended attribute.
+
+ Mutating `security.*` requires effective `CAP_SYS_ADMIN` until KVFS has
+ an LSM authorization hook.
+
+right native documentation:
+ Removes one extended attribute.
+
+ Removing `security.*` requires effective `CAP_SYS_ADMIN` until KVFS has
+ an LSM authorization hook.

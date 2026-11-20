@@ -1,0 +1,49 @@
+仅据所给同版材料审阅；源码定位采用“文件＋符号”。以下建议均有条件，不代表架构最优或真实违规；未执行测试，也不假定依赖、宏、cfg、调用图已闭包。
+
+**R01**
+
+1. 实现：`drivers/firmware/rs-fdtree/src/property.rs` 的 `FdtNode::is_available` 严读本节点 `status`；缺失、`ok/okay` 为真，其余字符串为假，重复或畸形返回错误。
+2. 规范：方法 rustdoc 排除祖先、设备创建及就绪策略；后端模块 rustdoc 将通用 DT 解释归核心。代码支持这些局部契约，并非未来计划。
+3. 建议：保留 type 方法及 `rs_fdtree` crate；`property` mod 可留，是否另分语义模块缺规范。
+4. 区分：可用不等于驱动就绪；`of::is_enabled_cpu_node` 仅排除 `disabled`，不能视作同义接口。
+5. 缺调用方策略证据；下一步仅核对上述两个入口的直接调用点及状态预期。
+
+**R02**
+
+1. 实现：`drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs` 的 `DtBackend::mmio_resource` 校验 ID，调用 `mmio_resources`，按索引取结果并转换字段、错误。
+2. 规范：该模块 rustdoc 要求通用 DT 解释留核心、适配层转换结果；`FwNodeOps` 规定越界为 `None`。这是职责契约，非迁移计划。
+3. 建议：若底层负责翻译，保留在 `DtBackend` type／后端 mod／`rs_fdtree` crate；不应仅因返回中立类型就迁入 `fwnode`。
+4. 区分：地址翻译不等于内核映射；映射器还可能返回 `Missing`，不能把所有缺失等同越界。
+5. 缺 `mmio_resources` 实现；下一步只查其缺失、越界及翻译错误路径。
+
+**R03**
+
+1. 实现：`drivers/firmware/fwnode/src/lib.rs` 的 `FwNode` 持有 ops 与 ID，相等比较二者；`FwNodeId` 封装后端编码，`FwNodeOps` 定义接口，`FwNode::mmio_resource` 仅转发。
+2. 规范：crate rustdoc 明定中立、无分配接口，不含固件解析器及内核映射策略；ID rustdoc 禁止消费者解释编码。它们是契约，代码是局部实现证据。
+3. 建议：这些 type 留 `fwnode` crate；规模需要时可拆 mod，材料无强制拆分依据。
+4. 区分：无分配接口不保证后端无分配；属性访问器解码字节不等于完整固件解析；ID 单独不是全局身份。
+5. 缺消费者使用证据；下一步仅查 `FwNodeId::raw` 直接调用点是否越过后端边界。
+
+**R04**
+
+1. 实现：`drivers/firmware/of/src/lib.rs` 的 `FDT` 保存全局句柄；`fdt` 调用 `get`；`init_device_tree_ptr` 经 `LinuxFdt::from_ptr` 验证后调用 `init_once`。
+2. 规范：函数 rustdoc 规定指针生命周期及错误；crate 简介仅称 DT 辅助，缺全局启动状态归属规范。`decode_irq_cells` 的迁移文字是其他职责的未来计划。
+3. 建议：暂留 `of` crate 的自由函数／静态项；若明确统一管理启动固件，可考虑专门 mod；跨 crate 归属 unknown。
+4. 区分：空指针包装为 `BadDeviceTree`，不产生 `MissingDeviceTreePtr`；结构验证不能证明内存可读及永久有效。
+5. 缺 `LazyInit` 与启动调用链；下一步仅核对 `init_once` 重入语义和初始化入口。
+
+**R05**
+
+1. 实现：`drivers/platform/irq/src/gic/firmware.rs` 的 `from_fwnode` 按遍历顺序筛控制器、版本、可用性；v2/v3 辅助函数解释区域及属性，`GicSelection` 保留节点。
+2. 规范：模块 rustdoc 指定 GIC 选择及绑定解码；`GicSelection` 要求保留实例身份；`fwnode` 将控制器解释交驱动。
+3. 建议：保留 `GicConfig` 入口、选择 type、`gic::firmware` mod 及平台 IRQ crate；仅有独立复用需求时再评估拆分。
+4. 区分：这里不映射硬件；控制器声明错误可在匹配版本前中止。连续区域限制是文档状态描述，未见初始化实现；非根起点的遍历边界也不能照单接受。
+5. 缺调用起点；下一步只查 `from_fwnode` 调用点是否保证整树根。
+
+**R06**
+
+1. 实现：`drivers/firmware/rs-fdtree/src/fwnode_backend/dtb.rs` 的 `DtBackend::irq_spec` 校验 ID，委托 `irq_spec_with`，将控制器转句柄、cells 转最多16项参数，并映射错误。
+2. 规范：后端 rustdoc 将 DT 中断继承归核心；`FwNodeOps::irq_spec` 与 crate rustdoc 要求返回原始事实，由控制器驱动解释、映射。这是契约，非未来计划。
+3. 建议：保留在后端 type／mod／`rs_fdtree` crate，条件是这里只适配、不解释控制器绑定。
+4. 区分：查找控制器不等于 IRQ 域映射；除容量错误外，当前引用错误统一映射为 `InvalidValue`，不能据此断言完整支持路由。
+5. 缺 `irq_spec_with` 实现；下一步仅查其继承、扩展中断及不支持拓扑的分支。

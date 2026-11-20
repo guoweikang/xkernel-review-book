@@ -1,0 +1,1554 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        0,
+        55
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Provides the pointer metadata type of any pointed-to type.",
+          "path": "doc",
+          "range": [
+            265,
+            327
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            328,
+            331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Pointer metadata",
+          "path": "doc",
+          "range": [
+            332,
+            354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            355,
+            358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Raw pointer types and reference types in Rust can be thought of as made of two parts:",
+          "path": "doc",
+          "range": [
+            359,
+            448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a data pointer that contains the memory address of the value, and some metadata.",
+          "path": "doc",
+          "range": [
+            449,
+            533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            534,
+            537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For statically-sized types (that implement the `Sized` traits)",
+          "path": "doc",
+          "range": [
+            538,
+            604
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as well as for `extern` types,",
+          "path": "doc",
+          "range": [
+            605,
+            639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointers are said to be “thin”: metadata is zero-sized and its type is `()`.",
+          "path": "doc",
+          "range": [
+            640,
+            724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            725,
+            728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Pointers to [dynamically-sized types][dst] are said to be “wide” or “fat”,",
+          "path": "doc",
+          "range": [
+            729,
+            815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " they have non-zero-sized metadata:",
+          "path": "doc",
+          "range": [
+            816,
+            854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            855,
+            858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * For structs whose last field is a DST, metadata is the metadata for the last field",
+          "path": "doc",
+          "range": [
+            859,
+            947
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * For the `str` type, metadata is the length in bytes as `usize`",
+          "path": "doc",
+          "range": [
+            948,
+            1016
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * For slice types like `[T]`, metadata is the length in items as `usize`",
+          "path": "doc",
+          "range": [
+            1017,
+            1093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * For trait objects like `dyn SomeTrait`, metadata is [`DynMetadata<Self>`][DynMetadata]",
+          "path": "doc",
+          "range": [
+            1094,
+            1186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   (e.g. `DynMetadata<dyn SomeTrait>`)",
+          "path": "doc",
+          "range": [
+            1187,
+            1228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1229,
+            1232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In the future, the Rust language may gain new kinds of types",
+          "path": "doc",
+          "range": [
+            1233,
+            1297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that have different pointer metadata.",
+          "path": "doc",
+          "range": [
+            1298,
+            1339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1340,
+            1343
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [dst]: https://doc.rust-lang.org/nomicon/exotic-sizes.html#dynamically-sized-types-dsts",
+          "path": "doc",
+          "range": [
+            1344,
+            1435
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1436,
+            1439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1440,
+            1443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # The `Pointee` trait",
+          "path": "doc",
+          "range": [
+            1444,
+            1469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1470,
+            1473
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The point of this trait is its `Metadata` associated type,",
+          "path": "doc",
+          "range": [
+            1474,
+            1536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which is `()` or `usize` or `DynMetadata<_>` as described above.",
+          "path": "doc",
+          "range": [
+            1537,
+            1605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is automatically implemented for every type.",
+          "path": "doc",
+          "range": [
+            1606,
+            1657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It can be assumed to be implemented in a generic context, even without a corresponding bound.",
+          "path": "doc",
+          "range": [
+            1658,
+            1755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1756,
+            1759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1760,
+            1763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Usage",
+          "path": "doc",
+          "range": [
+            1764,
+            1775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1776,
+            1779
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Raw pointers can be decomposed into the data pointer and metadata components",
+          "path": "doc",
+          "range": [
+            1780,
+            1860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with their [`to_raw_parts`] method.",
+          "path": "doc",
+          "range": [
+            1861,
+            1900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1901,
+            1904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Alternatively, metadata alone can be extracted with the [`metadata`] function.",
+          "path": "doc",
+          "range": [
+            1905,
+            1987
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A reference can be passed to [`metadata`] and implicitly coerced.",
+          "path": "doc",
+          "range": [
+            1988,
+            2057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2058,
+            2061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A (possibly-wide) pointer can be put back together from its data pointer and metadata",
+          "path": "doc",
+          "range": [
+            2062,
+            2151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " with [`from_raw_parts`] or [`from_raw_parts_mut`].",
+          "path": "doc",
+          "range": [
+            2152,
+            2206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2207,
+            2210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`to_raw_parts`]: *const::to_raw_parts",
+          "path": "doc",
+          "range": [
+            2211,
+            2253
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            2254,
+            2279
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_deny_explicit_impl",
+          "range": [
+            2280,
+            2307
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_dyn_incompatible_trait",
+          "range": [
+            2308,
+            2339
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Pointee",
+      "range": [
+        265,
+        2837
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Extracts the metadata component of a pointer.",
+          "path": "doc",
+          "range": [
+            3353,
+            3402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3403,
+            3406
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Values of type `*mut T`, `&T`, or `&mut T` can be passed directly to this function",
+          "path": "doc",
+          "range": [
+            3407,
+            3493
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as they implicitly coerce to `*const T`.",
+          "path": "doc",
+          "range": [
+            3494,
+            3538
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3539,
+            3542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Example",
+          "path": "doc",
+          "range": [
+            3543,
+            3556
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3557,
+            3560
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3561,
+            3568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " #![feature(ptr_metadata)]",
+          "path": "doc",
+          "range": [
+            3569,
+            3598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3599,
+            3602
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(std::ptr::metadata(\"foo\"), 3_usize);",
+          "path": "doc",
+          "range": [
+            3603,
+            3654
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3655,
+            3662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3663,
+            3672
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3755,
+        3780
+      ],
+      "kind": "fn",
+      "name": "metadata",
+      "range": [
+        3353,
+        3780
+      ],
+      "signature_range": [
+        3677,
+        3754
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Forms a (possibly-wide) raw pointer from a data pointer and metadata.",
+          "path": "doc",
+          "range": [
+            3782,
+            3855
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3856,
+            3859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is safe but the returned pointer is not necessarily safe to dereference.",
+          "path": "doc",
+          "range": [
+            3860,
+            3950
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For slices, see the documentation of [`slice::from_raw_parts`] for safety requirements.",
+          "path": "doc",
+          "range": [
+            3951,
+            4042
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For trait objects, the metadata must come from a pointer to the same underlying erased type.",
+          "path": "doc",
+          "range": [
+            4043,
+            4139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4140,
+            4143
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you are attempting to deconstruct a DST in a generic context to be reconstructed later,",
+          "path": "doc",
+          "range": [
+            4144,
+            4238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a thin pointer can always be obtained by casting `*const T` to `*const ()`.",
+          "path": "doc",
+          "range": [
+            4239,
+            4318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4319,
+            4322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`slice::from_raw_parts`]: crate::slice::from_raw_parts",
+          "path": "doc",
+          "range": [
+            4323,
+            4382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4383,
+            4437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4438,
+            4447
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4584,
+        4633
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts",
+      "range": [
+        3782,
+        4633
+      ],
+      "signature_range": [
+        4452,
+        4583
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Performs the same functionality as [`from_raw_parts`], except that a",
+          "path": "doc",
+          "range": [
+            4635,
+            4707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " raw `*mut` pointer is returned, as opposed to a raw `*const` pointer.",
+          "path": "doc",
+          "range": [
+            4708,
+            4781
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4782,
+            4785
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See the documentation of [`from_raw_parts`] for more details.",
+          "path": "doc",
+          "range": [
+            4786,
+            4851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4852,
+            4906
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4907,
+            4916
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5053,
+        5102
+      ],
+      "kind": "fn",
+      "name": "from_raw_parts_mut",
+      "range": [
+        4635,
+        5102
+      ],
+      "signature_range": [
+        4921,
+        5052
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The metadata for a `Dyn = dyn SomeTrait` trait object type.",
+          "path": "doc",
+          "range": [
+            5104,
+            5167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5168,
+            5171
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is a pointer to a vtable (virtual call table)",
+          "path": "doc",
+          "range": [
+            5172,
+            5224
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that represents all the necessary information",
+          "path": "doc",
+          "range": [
+            5225,
+            5274
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to manipulate the concrete type stored inside a trait object.",
+          "path": "doc",
+          "range": [
+            5275,
+            5340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The vtable notably contains:",
+          "path": "doc",
+          "range": [
+            5341,
+            5373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5374,
+            5377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * type size",
+          "path": "doc",
+          "range": [
+            5378,
+            5393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * type alignment",
+          "path": "doc",
+          "range": [
+            5394,
+            5414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * a pointer to the type’s `drop_in_place` impl (may be a no-op for plain-old-data)",
+          "path": "doc",
+          "range": [
+            5415,
+            5503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * pointers to all the methods for the type’s implementation of the trait",
+          "path": "doc",
+          "range": [
+            5504,
+            5582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5583,
+            5586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the first three are special because they’re necessary to allocate, drop,",
+          "path": "doc",
+          "range": [
+            5587,
+            5675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and deallocate any trait object.",
+          "path": "doc",
+          "range": [
+            5676,
+            5712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5713,
+            5716
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is possible to name this struct with a type parameter that is not a `dyn` trait object",
+          "path": "doc",
+          "range": [
+            5717,
+            5810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (for example `DynMetadata<u64>`) but not to obtain a meaningful value of that struct.",
+          "path": "doc",
+          "range": [
+            5811,
+            5900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5901,
+            5904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that while this type implements `PartialEq`, comparing vtable pointers is unreliable:",
+          "path": "doc",
+          "range": [
+            5905,
+            5999
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointers to vtables of the same type for the same trait can compare inequal (because vtables are",
+          "path": "doc",
+          "range": [
+            6000,
+            6100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " duplicated in multiple codegen units), and pointers to vtables of *different* types/traits can",
+          "path": "doc",
+          "range": [
+            6101,
+            6199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compare equal (since identical vtables can be deduplicated within a codegen unit).",
+          "path": "doc",
+          "range": [
+            6200,
+            6286
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            6287,
+            6311
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "DynMetadata",
+      "range": [
+        5104,
+        6438
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6692,
+        8813
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " When `DynMetadata` appears as the metadata field of a wide pointer, the rustc_middle layout",
+          "path": "doc",
+          "range": [
+            6739,
+            6834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " computation does magic and the resulting layout is *not* a `FieldsShape::Aggregate`, instead",
+          "path": "doc",
+          "range": [
+            6839,
+            6935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it is a `FieldsShape::Primitive`. This means that the same type can have different layout",
+          "path": "doc",
+          "range": [
+            6940,
+            7033
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " depending on whether it appears as the metadata field of a wide pointer or as a stand-alone",
+          "path": "doc",
+          "range": [
+            7038,
+            7133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " type, which understandably confuses codegen and leads to ICEs when trying to project to a",
+          "path": "doc",
+          "range": [
+            7138,
+            7231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " field of `DynMetadata`. To work around that issue, we use `transmute` instead of using a",
+          "path": "doc",
+          "range": [
+            7236,
+            7328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " field projection.",
+          "path": "doc",
+          "range": [
+            7333,
+            7354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7359,
+            7368
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7410,
+        7633
+      ],
+      "kind": "impl_fn",
+      "name": "vtable_ptr",
+      "range": [
+        6739,
+        7633
+      ],
+      "signature_range": [
+        7373,
+        7409
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the size of the type associated with this vtable.",
+          "path": "doc",
+          "range": [
+            7639,
+            7700
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7705,
+            7714
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7749,
+        8127
+      ],
+      "kind": "impl_fn",
+      "name": "size_of",
+      "range": [
+        7639,
+        8127
+      ],
+      "signature_range": [
+        7723,
+        7748
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the alignment of the type associated with this vtable.",
+          "path": "doc",
+          "range": [
+            8133,
+            8199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8204,
+            8213
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8249,
+        8409
+      ],
+      "kind": "impl_fn",
+      "name": "align_of",
+      "range": [
+        8133,
+        8409
+      ],
+      "signature_range": [
+        8222,
+        8248
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the size and alignment together as a `Layout`",
+          "path": "doc",
+          "range": [
+            8415,
+            8472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8477,
+            8486
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8535,
+        8811
+      ],
+      "kind": "impl_fn",
+      "name": "layout",
+      "range": [
+        8415,
+        8811
+      ],
+      "signature_range": [
+        8495,
+        8534
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8815,
+        8874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8875,
+        8934
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8936,
+        9136
+      ]
+    },
+    {
+      "ancestors": [
+        12
+      ],
+      "attributes": [],
+      "body_range": [
+        9055,
+        9134
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        8998,
+        9134
+      ],
+      "signature_range": [
+        8998,
+        9054
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9193,
+        9246
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9248,
+        9300
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9302,
+        9420
+      ]
+    },
+    {
+      "ancestors": [
+        16
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9359,
+            9368
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9397,
+        9418
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        9359,
+        9418
+      ],
+      "signature_range": [
+        9373,
+        9396
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            9422,
+            9436
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9422,
+        9504
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9506,
+        9556
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9558,
+        9749
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9619,
+            9628
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9668,
+        9747
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        9619,
+        9747
+      ],
+      "signature_range": [
+        9633,
+        9667
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9751,
+        10000
+      ]
+    },
+    {
+      "ancestors": [
+        22
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9806,
+            9815
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "allow",
+          "range": [
+            9820,
+            9864
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9921,
+        9998
+      ],
+      "kind": "impl_fn",
+      "name": "cmp",
+      "range": [
+        9806,
+        9998
+      ],
+      "signature_range": [
+        9869,
+        9920
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10002,
+        10185
+      ]
+    },
+    {
+      "ancestors": [
+        24
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10064,
+            10073
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10146,
+        10183
+      ],
+      "kind": "impl_fn",
+      "name": "partial_cmp",
+      "range": [
+        10064,
+        10183
+      ],
+      "signature_range": [
+        10078,
+        10145
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10187,
+        10373
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10243,
+            10252
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10299,
+        10371
+      ],
+      "kind": "impl_fn",
+      "name": "hash",
+      "range": [
+        10243,
+        10371
+      ],
+      "signature_range": [
+        10257,
+        10298
+      ]
+    }
+  ],
+  "source_sha256": "90be519b27b46064f0bec607170ffce37aa9afb160a1edfab9c51641c8af15e2"
+}

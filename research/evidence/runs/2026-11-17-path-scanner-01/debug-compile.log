@@ -1,0 +1,25 @@
+error[E0624]: method `file_name` is private
+  --> /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-path-scanner-01/fixture.rs:59:31
+   |
+59 |         let reference = (path.file_name(), path.parent().map(|parent| parent.as_str()));
+   |                               ^^^^^^^^^ private method
+   |
+  ::: /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-path-scanner-01/original.rs:5:1
+   |
+ 5 | fn file_name(&self) -> Option<&'a str> {
+   | -------------------------------------- private method defined here
+
+error[E0624]: method `parent` is private
+  --> /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-path-scanner-01/fixture.rs:59:49
+   |
+59 |         let reference = (path.file_name(), path.parent().map(|parent| parent.as_str()));
+   |                                                 ^^^^^^ private method
+   |
+  ::: /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-17-path-scanner-01/original.rs:29:1
+   |
+29 | fn parent(&self) -> Option<Pathname<'a>> {
+   | ---------------------------------------- private method defined here
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0624`.

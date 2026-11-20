@@ -1,0 +1,8 @@
+ Publishes bytes read from a non-pipe source only after reserving space.
+ Runs in sleepable task context under this pipe's mutex. `read_fn` must
+ not reenter a pipe. Callers must not hold file-position locks; the callback
+ may lock its non-pipe source position. A positive result is
+ fully accepted, including short reads; source errors do not trigger a
+ wait for destination space.
+ An oversized callback result returns EIO without publishing pipe data;
+ side effects in the source cannot be rolled back.

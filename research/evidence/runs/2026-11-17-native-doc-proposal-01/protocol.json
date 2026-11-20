@@ -1,0 +1,17 @@
+{
+  "schema": "proposal-feasibility-pilot/1",
+  "parent_run": "2026-11-17-rank-fusion-review-02",
+  "question": "Does providing native method documentation lead to a concrete source-checkable constraint in proposals for existing candidate pairs?",
+  "selection": "case_id ascending; exclude ut-tests paths, path.rs, getattr/inode_init and unlink/rmdir methods; require at least one nonempty native method document; select first two cases without reusing any source path from previously selected cases",
+  "source_family_caveat": "Distinct source files are not certified semantic independence; both cases remain exposed development data",
+  "contexts": "Exact two archived function snippets plus path and source line metadata; reject snippets containing comments or doc attributes instead of inventing a stripping frontend. Full files reserved for post-output evidence binding, not agents.",
+  "arms": ["code_only", "code_native_doc"],
+  "agent_policy": "Four fresh non-forked agent contexts, same inherited parent model, no tools requested/allowed in task instructions, no old labels/ranks/results, one response per context, at most 900 Chinese characters excluding code identifiers",
+  "isolation_limit": "Instruction-level no-tools constraint, not OS sandbox isolation; exact inference token budget, seed and model revision are not controlled. Do not describe this as equal-compute causal evaluation.",
+  "dispatch_order": ["first/code_only", "second/code_native_doc", "first/code_native_doc", "second/code_only"],
+  "outputs": ["shared mechanism proposal or reasoned abstention", "necessary differences", "existing delegation", "minimal interface sketch", "constraint with evidence source code/doc/unknown", "one falsifiable obligation", "missing context"],
+  "measurement": "Retain four raw outputs; manually bind concrete claims to fixed full source after outputs. Separate code-visible constraints, documentation-only declarations, source-supported additions, unsupported inferences and unknowns. No accuracy denominator or weighted quality score.",
+  "budget": {"total_seconds": 3600, "responses": 4, "revisions": 0},
+  "stop": "Four responses and evidence binding, including zero-increment or no-proposal outcomes; no prompt tuning, replacement cases, or new verifier development.",
+  "limits": ["not discovery ranking experiment", "not Librarian reproduction", "not independent human adjudication", "not held-out generalization", "not behavior equivalence or adoption benefit", "native-doc effect is not completed-contract-doc effect"]
+}

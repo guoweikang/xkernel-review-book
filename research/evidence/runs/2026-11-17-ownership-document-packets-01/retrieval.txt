@@ -1,0 +1,444 @@
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/core/src/clone.rs:283:pub const unsafe trait TrivialClone: [const] Clone {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:292:fn rc_inner_layout_for_value_layout(layout: Layout) -> Layout {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:1293:impl<T: ?Sized + CloneToUninit> Rc<T> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:1329:impl<T: ?Sized + CloneToUninit, A: Allocator> Rc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:2012:impl<T: ?Sized + CloneToUninit, A: Allocator + Clone> Rc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3854:fn data_offset_alignment(alignment: Alignment) -> usize {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3913:impl<T: ?Sized, A: Allocator> !Send for UniqueRc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3919:impl<T: ?Sized, A: Allocator> !Sync for UniqueRc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3922:impl<T: ?Sized + Unsize<U>, U: ?Sized, A: Allocator> CoerceUnsized<UniqueRc<U, A>>
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3929:impl<T: ?Sized + Unsize<U>, U: ?Sized> DispatchFromDyn<UniqueRc<U>> for UniqueRc<T> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3932:impl<T: ?Sized + fmt::Display, A: Allocator> fmt::Display for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3939:impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3946:impl<T: ?Sized, A: Allocator> fmt::Pointer for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3953:impl<T: ?Sized, A: Allocator> borrow::Borrow<T> for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3960:impl<T: ?Sized, A: Allocator> borrow::BorrowMut<T> for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3967:impl<T: ?Sized, A: Allocator> AsRef<T> for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3974:impl<T: ?Sized, A: Allocator> AsMut<T> for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3981:impl<T: ?Sized, A: Allocator> Unpin for UniqueRc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:3984:impl<T: ?Sized + PartialEq, A: Allocator> PartialEq for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4025:impl<T: ?Sized + PartialOrd, A: Allocator> PartialOrd for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4124:impl<T: ?Sized + Ord, A: Allocator> Ord for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4147:impl<T: ?Sized + Eq, A: Allocator> Eq for UniqueRc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4150:impl<T: ?Sized + Hash, A: Allocator> Hash for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4270:impl<T: ?Sized> UniqueRc<T> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4317:impl<T: ?Sized, A: Allocator> UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4377:impl<T: ?Sized, A: Allocator + Clone> UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4402:impl<T: ?Sized, A: Allocator> Deref for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4412:impl<T: ?Sized, A: Allocator> DerefMut for UniqueRc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4438:/// A unique owning pointer to a [`RcInner`] **that does not imply the contents are initialized,**
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4444:struct UniqueRcUninit<T: ?Sized, A: Allocator> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4450:impl<T: ?Sized, A: Allocator> UniqueRcUninit<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs:4501:impl<T: ?Sized, A: Allocator> Drop for UniqueRcUninit<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:395:fn arcinner_layout_for_value_layout(layout: Layout) -> Layout {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:1443:impl<T: ?Sized + CloneToUninit> Arc<T> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:1479:impl<T: ?Sized + CloneToUninit, A: Allocator> Arc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:2439:impl<T: ?Sized + CloneToUninit, A: Allocator + Clone> Arc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4215:fn data_offset_alignment(alignment: Alignment) -> usize {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4220:/// A unique owning pointer to an [`ArcInner`] **that does not imply the contents are initialized,**
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4224:struct UniqueArcUninit<T: ?Sized, A: Allocator> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4230:impl<T: ?Sized, A: Allocator> UniqueArcUninit<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4282:impl<T: ?Sized, A: Allocator> Drop for UniqueArcUninit<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4369:impl<T: ?Sized + Unsize<U>, U: ?Sized, A: Allocator> CoerceUnsized<UniqueArc<U, A>>
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4376:impl<T: ?Sized + Unsize<U>, U: ?Sized> DispatchFromDyn<UniqueArc<U>> for UniqueArc<T> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4379:impl<T: ?Sized + fmt::Display, A: Allocator> fmt::Display for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4386:impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4393:impl<T: ?Sized, A: Allocator> fmt::Pointer for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4400:impl<T: ?Sized, A: Allocator> borrow::Borrow<T> for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4407:impl<T: ?Sized, A: Allocator> borrow::BorrowMut<T> for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4414:impl<T: ?Sized, A: Allocator> AsRef<T> for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4421:impl<T: ?Sized, A: Allocator> AsMut<T> for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4428:impl<T: ?Sized, A: Allocator> Unpin for UniqueArc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4431:impl<T: ?Sized + PartialEq, A: Allocator> PartialEq for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4453:impl<T: ?Sized + PartialOrd, A: Allocator> PartialOrd for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4552:impl<T: ?Sized + Ord, A: Allocator> Ord for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4575:impl<T: ?Sized + Eq, A: Allocator> Eq for UniqueArc<T, A> {}
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4578:impl<T: ?Sized + Hash, A: Allocator> Hash for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4698:impl<T: ?Sized> UniqueArc<T> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4747:impl<T: ?Sized, A: Allocator> UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4808:impl<T: ?Sized, A: Allocator + Clone> UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4845:impl<T: ?Sized, A: Allocator> Deref for UniqueArc<T, A> {
+research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs:4859:impl<T: ?Sized, A: Allocator> DerefMut for UniqueArc<T, A> {
+        unsafe { &mut (*this.ptr.as_ptr()).value }
+    }
+
+    #[inline]
+    #[stable(feature = "ptr_eq", since = "1.17.0")]
+    /// Returns `true` if the two `Rc`s point to the same allocation in a vein similar to
+    /// [`ptr::eq`]. This function ignores the metadata of  `dyn Trait` pointers.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::rc::Rc;
+    ///
+    /// let five = Rc::new(5);
+    /// let same_five = Rc::clone(&five);
+    /// let other_five = Rc::new(5);
+    ///
+    /// assert!(Rc::ptr_eq(&five, &same_five));
+    /// assert!(!Rc::ptr_eq(&five, &other_five));
+
+        unsafe { Self::from_inner_in(self.ptr, self.alloc.clone()) }
+    }
+}
+
+#[unstable(feature = "ergonomic_clones", issue = "132290")]
+impl<T: ?Sized, A: Allocator + Clone> UseCloned for Arc<T, A> {}
+
+#[stable(feature = "rust1", since = "1.0.0")]
+impl<T: ?Sized, A: Allocator> Deref for Arc<T, A> {
+    type Target = T;
+
+    #[inline]
+    fn deref(&self) -> &T {
+        &self.inner().data
+    }
+}
+
+#[unstable(feature = "pin_coerce_unsized_trait", issue = "150112")]
+unsafe impl<T: ?Sized, A: Allocator> PinCoerceUnsized for Arc<T, A> {}
+
+    /// - For smart pointers like [`Arc`] or [`Rc`], this increments the reference count
+    ///   but still points to the same underlying data
+    ///
+    /// [`Arc`]: ../../std/sync/struct.Arc.html
+    /// [`Rc`]: ../../std/rc/struct.Rc.html
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # #![allow(noop_method_call)]
+    /// let hello = "Hello"; // &str implements Clone
+    ///
+    /// assert_eq!("Hello", hello.clone());
+    /// ```
+    ///
+    /// Example with a reference-counted type:
+    ///
+    /// ```
+    /// use std::sync::{Arc, Mutex};
+    ///
+    /// let data = Arc::new(Mutex::new(vec![1, 2, 3]));
+    /// let data_clone = data.clone(); // Creates another Arc pointing to the same Mutex
+    ///
+    /// {
+    ///     let mut lock = data.lock().unwrap();
+    ///     lock.push(4);
+    /// }
+    ///
+    /// // Changes are visible through the clone because they share the same underlying data
+    /// assert_eq!(*data_clone.lock().unwrap(), vec![1, 2, 3, 4]);
+    /// ```
+    #[stable(feature = "rust1", since = "1.0.0")]
+    #[must_use = "cloning is often expensive and is not expected to have side effects"]
+    // Clone::clone is special because the compiler generates MIR to implement it for some types.
+    // See InstanceKind::CloneShim.
+    #[lang = "clone_fn"]
+    fn clone(&self) -> Self;
+
+    /// Performs copy-assignment from `source`.
+    ///
+    /// `a.clone_from(&b)` is equivalent to `a = b.clone()` in functionality,
+    /// but can be overridden to reuse the resources of `a` to avoid unnecessary
+    /// allocations.
+    #[inline]
+    #[stable(feature = "rust1", since = "1.0.0")]
+    fn clone_from(&mut self, source: &Self)
+    where
+        Self: [const] Destruct,
+    {
+        *self = source.clone()
+    }
+}
+
+/// Indicates that the `Clone` implementation is identical to copying the value.
+///
+/// This is used for some optimizations in the standard library, which specializes
+/// on this trait to select faster implementations of functions such as
+/// [`clone_from_slice`](slice::clone_from_slice). It is automatically implemented
+/// when using `#[derive(Clone, Copy)]`.
+///
+/// Note that this trait does not imply that the type is `Copy`, because e.g.
+/// `core::ops::Range<i32>` could soundly implement this trait.
+///
+/// # Safety
+/// `Clone::clone` must be equivalent to copying the value, otherwise calling functions
+/// such as `slice::clone_from_slice` can have undefined behaviour.
+{
+  "schema": "research-lookup/1",
+  "query": {
+    "terms": [
+      "ownership-document-pilot",
+      "ownership-test-audit-01",
+      "CloneToUninit"
+    ],
+    "require_all": false,
+    "topic": "",
+    "kind": "",
+    "limit": 8,
+    "inventory": false
+  },
+  "assets": 5383,
+  "coverage": {
+    "text": 4081,
+    "metadata-only-format": 1286,
+    "metadata-only-size": 13,
+    "no-local-path": 3
+  },
+  "navigation_gaps": {
+    "run_ids_not_mentioned_in_documents": [
+      "2026-11-05-alignment-codegen-01",
+      "2026-11-05-alignment-codegen-02",
+      "2026-11-05-arceos-reading-scope-01",
+      "2026-11-05-metadata-fixture-patch-01",
+      "2026-11-12-governed-doc-packets-02",
+      "2026-11-12-inmap-factorial-01-o0-1",
+      "2026-11-12-inmap-factorial-01-o0-2",
+      "2026-11-12-inmap-factorial-01-od-1",
+      "2026-11-12-inmap-factorial-01-od-2",
+      "2026-11-12-inmap-factorial-01-u0-1",
+      "2026-11-12-inmap-factorial-01-u0-2",
+      "2026-11-12-inmap-factorial-01-ud-1",
+      "2026-11-12-inmap-factorial-01-ud-2",
+      "2026-11-12-inmap-factorial-02-o0-1",
+      "2026-11-12-inmap-factorial-02-o0-2",
+      "2026-11-12-inmap-factorial-02-od-1",
+      "2026-11-12-inmap-factorial-02-od-2",
+      "2026-11-12-inmap-factorial-02-u0-1",
+      "2026-11-12-inmap-factorial-02-u0-2",
+      "2026-11-12-inmap-factorial-02-ud-1",
+      "2026-11-12-inmap-factorial-02-ud-2",
+      "2026-11-12-inmap-retrieval-01-declared-842-1",
+      "2026-11-12-inmap-retrieval-01-declared-842-2",
+      "2026-11-12-inmap-retrieval-01-declared-843-1",
+      "2026-11-12-inmap-retrieval-01-declared-843-2",
+      "2026-11-12-inmap-retrieval-01-zero-842-1",
+      "2026-11-12-inmap-retrieval-01-zero-842-2",
+      "2026-11-12-inmap-retrieval-01-zero-843-1",
+      "2026-11-12-inmap-retrieval-01-zero-843-2",
+      "2026-11-12-inmap-snapshots-01-empty-declared-1",
+      "2026-11-12-inmap-snapshots-01-empty-declared-2",
+      "2026-11-12-inmap-snapshots-01-empty-zero-1",
+      "2026-11-12-inmap-snapshots-01-empty-zero-2",
+      "2026-11-12-inmap-snapshots-01-first-declared-1",
+      "2026-11-12-inmap-snapshots-01-first-declared-2",
+      "2026-11-12-inmap-snapshots-01-first-zero-1",
+      "2026-11-12-inmap-snapshots-01-first-zero-2",
+      "2026-11-12-inmap-snapshots-01-last-declared-1",
+      "2026-11-12-inmap-snapshots-01-last-declared-2",
+      "2026-11-12-inmap-snapshots-01-last-zero-1",
+      "2026-11-12-inmap-snapshots-01-last-zero-2",
+      "2026-11-13-contract-extraction-boundary-02",
+      "2026-11-13-hanlp-assets-02",
+      "2026-11-16-pagecache-budget-accepted-observed",
+      "2026-11-16-pagecache-budget-accepted-old",
+      "2026-11-16-pagecache-budget-original-observed",
+      "2026-11-16-pagecache-budget-original-old",
+      "2026-11-17-path-scanner-03",
+      "2026-11-17-rank-fusion-repeat-01",
+      "2026-11-17-rank-fusion-review-01"
+    ],
+    "tool_names_not_mentioned_in_documents": [
+      "scripts/fetch_hanlp_range_assets.py",
+      "scripts/fetch_inmap_smoke_inputs.py",
+      "scripts/fetch_nli_preflight.py",
+      "scripts/probe_existing_delegation.py",
+      "scripts/repair_hanlp_asset_tail.py",
+      "scripts/run_pagecache_disk_control.py",
+      "scripts/run_pagecache_original_tests.py",
+      "scripts/scc_namespace.sh",
+      "scripts/screen_relation_sources.py",
+      "scripts/screen_standard_mechanisms.py"
+    ]
+  },
+  "limits": [
+    "Literal retrieval, not semantic recall or scientific verification.",
+    "Topics apply only to catalog documents, not inferred run/source topics.",
+    "Originals only enumerated via evidence/manifest.json; PDFs are metadata-only.",
+    ".build, .tools, dist, external repos and unregistered originals are excluded.",
+    "No cache; current files are read each invocation, not an atomic snapshot.",
+    "Manifest hashes/statuses are declarations, not reverified by this command."
+  ],
+  "total_hits": 44,
+  "returned": 8,
+  "omitted_hits": 36,
+  "hits": [
+    {
+      "path": "research/PROGRESS.md",
+      "kind": "document",
+      "topic": "maintenance",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 13,
+          "text": "采用审议门槛：只形成共享边界问题、责任表和既有测试覆盖映射，不扩大为一般内存安全研究。下一入口是ownership-test-audit-01的实际测试覆盖及可运行性，随后自主选择忠实有界执行或标记缺口；不要求用户再次批准，不重启Kani安装。后续三臂评价尚未执行。"
+        },
+        {
+          "line": 23,
+          "text": "/2026-11-17-ownership-family-admission.md)：九项按顺序审阅，首个入口Rc::make_mut与Arc::make_mut配对；主线程回读克隆初始化guard及CloneToUninit。区分panic后不得drop目标、实现should清理组件、调用方可选防泄漏，禁止升级规范强度。只达到源码级准备，未跑panic或并发验证。下一确定入口是同一族的既有失败测试／有界执行证据及责任表，再冻结代码／原生／补齐文档三臂；不再扩前两例或Kani安装。"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/lookup-identity.json",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 5,
+          "text": "      \"CloneToUninit\","
+        },
+        {
+          "line": 106,
+          "text": "        \"clonetouninit\","
+        },
+        {
+          "line": 112,
+          "text": "ion\\\": \\\"Goodall read-only review of ordered nine entries; main verified selected family source and CloneToUninit contract\\\",\""
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/lookup-question.json",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 112,
+          "text": "ion.md)从固定标准库9个词法匹配中，选择Rc／Arc make_mut及其克隆初始化guard作源码级准备。关注的是成功交出所有权、失败时分配回收与部分初始化值的责任分离，不是合并引用计数协议。CloneToUninit的must-not、should和可选防泄漏责任需分层，尚无新运行或可共享标签。\""
+        },
+        {
+          "line": 175,
+          "text": "/2026-11-17-ownership-family-admission.md)：九项按顺序审阅，首个入口Rc::make_mut与Arc::make_mut配对；主线程回读克隆初始化guard及CloneToUninit。区分panic后不得drop目标、实现should清理组件、调用方可选防泄漏，禁止升级规范强度。只达到源码级准备，未跑panic或并发验证。下一确定入口是同一族的既有失败测试／有界执行证据及责任表，再冻结代码／原生／补齐文档三臂；不再扩前两例或Kani安装。\""
+        },
+        {
+          "line": 272,
+          "text": "      \"path\": \"research/evidence/runs/2026-11-17-ownership-test-audit-01/manifest.json\","
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/rc.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 248,
+          "text": "use core::clone::{CloneToUninit, UseCloned};"
+        },
+        {
+          "line": 1293,
+          "text": "impl<T: ?Sized + CloneToUninit> Rc<T> {"
+        },
+        {
+          "line": 1329,
+          "text": "impl<T: ?Sized + CloneToUninit, A: Allocator> Rc<T, A> {"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/alloc/src/sync.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 15,
+          "text": "use core::clone::{CloneToUninit, UseCloned};"
+        },
+        {
+          "line": 1443,
+          "text": "impl<T: ?Sized + CloneToUninit> Arc<T> {"
+        },
+        {
+          "line": 1479,
+          "text": "impl<T: ?Sized + CloneToUninit, A: Allocator> Arc<T, A> {"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/core/src/clone.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 382,
+          "text": "/// or when implementing `CloneToUninit` itself."
+        },
+        {
+          "line": 391,
+          "text": "// FIXME(#126799): when `Box::clone` allows use of `CloneToUninit`, rewrite these examples with it"
+        },
+        {
+          "line": 394,
+          "text": "/// If you are defining a trait, you can add `CloneToUninit` as a supertrait to enable cloning of"
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/core/src/clone/uninit.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 5,
+          "text": "/// Private specialization trait used by CloneToUninit, as per"
+        },
+        {
+          "line": 89,
+          "text": "/// This is a helper for `impl<T: Clone> CloneToUninit for [T]`."
+        }
+      ]
+    },
+    {
+      "path": "research/evidence/runs/2026-11-17-ownership-test-audit-01/original/library/coretests/tests/clone.rs",
+      "kind": "run",
+      "topic": "",
+      "status": "text",
+      "matched_terms": [
+        "ownership-test-audit-01",
+        "clonetouninit"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "use core::clone::CloneToUninit;"
+        }
+      ]
+    }
+  ]
+}

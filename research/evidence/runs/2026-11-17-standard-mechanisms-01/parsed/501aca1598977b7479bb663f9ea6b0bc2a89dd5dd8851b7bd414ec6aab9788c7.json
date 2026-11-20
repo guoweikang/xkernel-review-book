@@ -1,0 +1,5629 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " The string Pattern API.",
+      "path": "doc",
+      "range": [
+        0,
+        27
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        28,
+        31
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The Pattern API provides a generic mechanism for using different pattern",
+      "path": "doc",
+      "range": [
+        32,
+        108
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " types when searching through a string.",
+      "path": "doc",
+      "range": [
+        109,
+        151
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        152,
+        155
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " For more details, see the traits [`Pattern`], [`Searcher`],",
+      "path": "doc",
+      "range": [
+        156,
+        219
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`ReverseSearcher`], and [`DoubleEndedSearcher`].",
+      "path": "doc",
+      "range": [
+        220,
+        273
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        274,
+        277
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Although this API is unstable, it is exposed via stable APIs on the",
+      "path": "doc",
+      "range": [
+        278,
+        349
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`str`] type.",
+      "path": "doc",
+      "range": [
+        350,
+        367
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        368,
+        371
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Examples",
+      "path": "doc",
+      "range": [
+        372,
+        386
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        387,
+        390
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Pattern`] is [implemented][pattern-impls] in the stable API for",
+      "path": "doc",
+      "range": [
+        391,
+        460
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`&str`][`str`], [`char`], slices of [`char`], and functions and closures",
+      "path": "doc",
+      "range": [
+        461,
+        538
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " implementing `FnMut(char) -> bool`.",
+      "path": "doc",
+      "range": [
+        539,
+        578
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        579,
+        582
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        583,
+        590
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let s = \"Can you find a needle in a haystack?\";",
+      "path": "doc",
+      "range": [
+        591,
+        642
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        643,
+        646
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // &str pattern",
+      "path": "doc",
+      "range": [
+        647,
+        666
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(s.find(\"you\"), Some(4));",
+      "path": "doc",
+      "range": [
+        667,
+        706
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // char pattern",
+      "path": "doc",
+      "range": [
+        707,
+        726
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(s.find('n'), Some(2));",
+      "path": "doc",
+      "range": [
+        727,
+        764
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // array of chars pattern",
+      "path": "doc",
+      "range": [
+        765,
+        794
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(s.find(&['a', 'e', 'i', 'o', 'u']), Some(1));",
+      "path": "doc",
+      "range": [
+        795,
+        855
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // slice of chars pattern",
+      "path": "doc",
+      "range": [
+        856,
+        885
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(s.find(&['a', 'e', 'i', 'o', 'u'][..]), Some(1));",
+      "path": "doc",
+      "range": [
+        886,
+        950
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // closure pattern",
+      "path": "doc",
+      "range": [
+        951,
+        973
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(s.find(|c: char| c.is_ascii_punctuation()), Some(35));",
+      "path": "doc",
+      "range": [
+        974,
+        1043
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        1044,
+        1051
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1052,
+        1055
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [pattern-impls]: Pattern#implementors",
+      "path": "doc",
+      "range": [
+        1056,
+        1097
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "unstable",
+      "range": [
+        1099,
+        1228
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A string pattern.",
+          "path": "doc",
+          "range": [
+            1352,
+            1373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1374,
+            1377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A `Pattern` expresses that the implementing type",
+          "path": "doc",
+          "range": [
+            1378,
+            1430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can be used as a string pattern for searching in a [`&str`][str].",
+          "path": "doc",
+          "range": [
+            1431,
+            1500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1501,
+            1504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For example, both `'a'` and `\"aa\"` are patterns that",
+          "path": "doc",
+          "range": [
+            1505,
+            1561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " would match at index `1` in the string `\"baaaab\"`.",
+          "path": "doc",
+          "range": [
+            1562,
+            1616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1617,
+            1620
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The trait itself acts as a builder for an associated",
+          "path": "doc",
+          "range": [
+            1621,
+            1677
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Searcher`] type, which does the actual work of finding",
+          "path": "doc",
+          "range": [
+            1678,
+            1738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " occurrences of the pattern in a string.",
+          "path": "doc",
+          "range": [
+            1739,
+            1782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1783,
+            1786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Depending on the type of the pattern, the behavior of methods like",
+          "path": "doc",
+          "range": [
+            1787,
+            1857
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`str::find`] and [`str::contains`] can change. The table below describes",
+          "path": "doc",
+          "range": [
+            1858,
+            1935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " some of those behaviors.",
+          "path": "doc",
+          "range": [
+            1936,
+            1964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1965,
+            1968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | Pattern type             | Match condition                           |",
+          "path": "doc",
+          "range": [
+            1969,
+            2045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " |--------------------------|-------------------------------------------|",
+          "path": "doc",
+          "range": [
+            2046,
+            2122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `&str`                   | is substring                              |",
+          "path": "doc",
+          "range": [
+            2123,
+            2199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `char`                   | is contained in string                    |",
+          "path": "doc",
+          "range": [
+            2200,
+            2276
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `&[char]`                | any char in slice is contained in string  |",
+          "path": "doc",
+          "range": [
+            2277,
+            2353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `F: FnMut(char) -> bool` | `F` returns `true` for a char in string   |",
+          "path": "doc",
+          "range": [
+            2354,
+            2430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `&&str`                  | is substring                              |",
+          "path": "doc",
+          "range": [
+            2431,
+            2507
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " | `&String`                | is substring                              |",
+          "path": "doc",
+          "range": [
+            2508,
+            2584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2585,
+            2588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            2589,
+            2603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2604,
+            2607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            2608,
+            2615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // &str",
+          "path": "doc",
+          "range": [
+            2616,
+            2627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(\"ba\"), Some(1));",
+          "path": "doc",
+          "range": [
+            2628,
+            2672
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(\"bac\"), None);",
+          "path": "doc",
+          "range": [
+            2673,
+            2715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2716,
+            2719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // char",
+          "path": "doc",
+          "range": [
+            2720,
+            2731
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find('a'), Some(0));",
+          "path": "doc",
+          "range": [
+            2732,
+            2775
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find('b'), Some(1));",
+          "path": "doc",
+          "range": [
+            2776,
+            2819
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find('c'), None);",
+          "path": "doc",
+          "range": [
+            2820,
+            2860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2861,
+            2864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // &[char; N]",
+          "path": "doc",
+          "range": [
+            2865,
+            2882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"ab\".find(&['b', 'a']), Some(0));",
+          "path": "doc",
+          "range": [
+            2883,
+            2931
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(&['a', 'z']), Some(0));",
+          "path": "doc",
+          "range": [
+            2932,
+            2983
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(&['c', 'd']), None);",
+          "path": "doc",
+          "range": [
+            2984,
+            3032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3033,
+            3036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // &[char]",
+          "path": "doc",
+          "range": [
+            3037,
+            3051
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"ab\".find(&['b', 'a'][..]), Some(0));",
+          "path": "doc",
+          "range": [
+            3052,
+            3104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(&['a', 'z'][..]), Some(0));",
+          "path": "doc",
+          "range": [
+            3105,
+            3160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abaaa\".find(&['c', 'd'][..]), None);",
+          "path": "doc",
+          "range": [
+            3161,
+            3213
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3214,
+            3217
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // FnMut(char) -> bool",
+          "path": "doc",
+          "range": [
+            3218,
+            3244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abcdef_z\".find(|ch| ch > 'd' && ch < 'y'), Some(4));",
+          "path": "doc",
+          "range": [
+            3245,
+            3313
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"abcddd_z\".find(|ch| ch > 'd' && ch < 'y'), None);",
+          "path": "doc",
+          "range": [
+            3314,
+            3379
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            3380,
+            3387
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Pattern",
+      "range": [
+        1352,
+        5833
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs the associated searcher from",
+          "path": "doc",
+          "range": [
+            3502,
+            3545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `self` and the `haystack` to search in.",
+          "path": "doc",
+          "range": [
+            3550,
+            3593
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "into_searcher",
+      "range": [
+        3502,
+        3659
+      ],
+      "signature_range": [
+        3598,
+        3658
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches anywhere in the haystack",
+          "path": "doc",
+          "range": [
+            3665,
+            3728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3733,
+            3742
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3796,
+        3863
+      ],
+      "kind": "trait_fn",
+      "name": "is_contained_in",
+      "range": [
+        3665,
+        3863
+      ],
+      "signature_range": [
+        3747,
+        3795
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches at the front of the haystack",
+          "path": "doc",
+          "range": [
+            3869,
+            3936
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3941,
+            3950
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4001,
+        4087
+      ],
+      "kind": "trait_fn",
+      "name": "is_prefix_of",
+      "range": [
+        3869,
+        4087
+      ],
+      "signature_range": [
+        3955,
+        4000
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4011,
+        4081
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches at the back of the haystack",
+          "path": "doc",
+          "range": [
+            4093,
+            4159
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4164,
+            4173
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4294,
+        4408
+      ],
+      "kind": "trait_fn",
+      "name": "is_suffix_of",
+      "range": [
+        4093,
+        4408
+      ],
+      "signature_range": [
+        4178,
+        4289
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        5
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4304,
+        4402
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the pattern from the front of haystack, if it matches.",
+          "path": "doc",
+          "range": [
+            4414,
+            4480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4485,
+            4494
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4556,
+        4996
+      ],
+      "kind": "trait_fn",
+      "name": "strip_prefix_of",
+      "range": [
+        4414,
+        4996
+      ],
+      "signature_range": [
+        4499,
+        4555
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        4655,
+        4818
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the pattern from the back of haystack, if it matches.",
+          "path": "doc",
+          "range": [
+            5002,
+            5067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5072,
+            5081
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5216,
+        5696
+      ],
+      "kind": "trait_fn",
+      "name": "strip_suffix_of",
+      "range": [
+        5002,
+        5696
+      ],
+      "signature_range": [
+        5086,
+        5211
+      ]
+    },
+    {
+      "ancestors": [
+        0,
+        9
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5320,
+        5516
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the pattern as utf-8 bytes if possible.",
+          "path": "doc",
+          "range": [
+            5702,
+            5753
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5811,
+        5831
+      ],
+      "kind": "trait_fn",
+      "name": "as_utf8_pattern",
+      "range": [
+        5702,
+        5831
+      ],
+      "signature_range": [
+        5758,
+        5810
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Result of calling [`Pattern::as_utf8_pattern()`].",
+          "path": "doc",
+          "range": [
+            5834,
+            5887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Can be used for inspecting the contents of a [`Pattern`] in cases",
+          "path": "doc",
+          "range": [
+            5888,
+            5957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where the underlying representation can be represented as UTF-8.",
+          "path": "doc",
+          "range": [
+            5958,
+            6026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            6027,
+            6071
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "Utf8Pattern",
+      "range": [
+        5834,
+        6236
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Result of calling [`Searcher::next()`] or [`ReverseSearcher::next_back()`].",
+          "path": "doc",
+          "range": [
+            6251,
+            6330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            6331,
+            6375
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "SearchStep",
+      "range": [
+        6251,
+        6903
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A searcher for a string pattern.",
+          "path": "doc",
+          "range": [
+            6905,
+            6941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6942,
+            6945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait provides methods for searching for non-overlapping",
+          "path": "doc",
+          "range": [
+            6946,
+            7011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " matches of a pattern starting from the front (left) of a string.",
+          "path": "doc",
+          "range": [
+            7012,
+            7080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7081,
+            7084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It will be implemented by associated `Searcher`",
+          "path": "doc",
+          "range": [
+            7085,
+            7136
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " types of the [`Pattern`] trait.",
+          "path": "doc",
+          "range": [
+            7137,
+            7172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7173,
+            7176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The trait is marked unsafe because the indices returned by the",
+          "path": "doc",
+          "range": [
+            7177,
+            7243
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`next()`][Searcher::next] methods are required to lie on valid utf8",
+          "path": "doc",
+          "range": [
+            7244,
+            7316
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " boundaries in the haystack. This enables consumers of this trait to",
+          "path": "doc",
+          "range": [
+            7317,
+            7388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " slice the haystack without additional runtime checks.",
+          "path": "doc",
+          "range": [
+            7389,
+            7446
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "Searcher",
+      "range": [
+        6905,
+        10130
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Getter for the underlying string to be searched in",
+          "path": "doc",
+          "range": [
+            7483,
+            7537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7542,
+            7545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Will always return the same [`&str`][str].",
+          "path": "doc",
+          "range": [
+            7550,
+            7596
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "haystack",
+      "range": [
+        7483,
+        7631
+      ],
+      "signature_range": [
+        7601,
+        7630
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Performs the next search step starting from the front.",
+          "path": "doc",
+          "range": [
+            7637,
+            7695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7700,
+            7703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Match(a, b)`][SearchStep::Match] if `haystack[a..b]` matches",
+          "path": "doc",
+          "range": [
+            7708,
+            7784
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the pattern.",
+          "path": "doc",
+          "range": [
+            7789,
+            7807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Reject(a, b)`][SearchStep::Reject] if `haystack[a..b]` can",
+          "path": "doc",
+          "range": [
+            7812,
+            7886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   not match the pattern, even partially.",
+          "path": "doc",
+          "range": [
+            7891,
+            7935
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Done`][SearchStep::Done] if every byte of the haystack has",
+          "path": "doc",
+          "range": [
+            7940,
+            8014
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   been visited.",
+          "path": "doc",
+          "range": [
+            8019,
+            8038
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8043,
+            8046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stream of [`Match`][SearchStep::Match] and",
+          "path": "doc",
+          "range": [
+            8051,
+            8101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Reject`][SearchStep::Reject] values up to a [`Done`][SearchStep::Done]",
+          "path": "doc",
+          "range": [
+            8106,
+            8182
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will contain index ranges that are adjacent, non-overlapping,",
+          "path": "doc",
+          "range": [
+            8187,
+            8252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " covering the whole haystack, and laying on utf8 boundaries.",
+          "path": "doc",
+          "range": [
+            8257,
+            8320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8325,
+            8328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A [`Match`][SearchStep::Match] result needs to contain the whole matched",
+          "path": "doc",
+          "range": [
+            8333,
+            8409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pattern, however [`Reject`][SearchStep::Reject] results may be split up",
+          "path": "doc",
+          "range": [
+            8414,
+            8489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " into arbitrary many adjacent fragments. Both ranges may have zero length.",
+          "path": "doc",
+          "range": [
+            8494,
+            8571
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8576,
+            8579
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As an example, the pattern `\"aaa\"` and the haystack `\"cbaaaaab\"`",
+          "path": "doc",
+          "range": [
+            8584,
+            8652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " might produce the stream",
+          "path": "doc",
+          "range": [
+            8657,
+            8685
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[Reject(0, 1), Reject(1, 2), Match(2, 5), Reject(5, 8)]`",
+          "path": "doc",
+          "range": [
+            8690,
+            8751
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "next",
+      "range": [
+        7637,
+        8789
+      ],
+      "signature_range": [
+        8756,
+        8788
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the next [`Match`][SearchStep::Match] result. See [`next()`][Searcher::next].",
+          "path": "doc",
+          "range": [
+            8795,
+            8882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8887,
+            8890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike [`next()`][Searcher::next], there is no guarantee that the returned ranges",
+          "path": "doc",
+          "range": [
+            8895,
+            8980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of this and [`next_reject`][Searcher::next_reject] will overlap. This will return",
+          "path": "doc",
+          "range": [
+            8985,
+            9070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `(start_match, end_match)`, where start_match is the index of where",
+          "path": "doc",
+          "range": [
+            9075,
+            9146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the match begins, and end_match is the index after the end of the match.",
+          "path": "doc",
+          "range": [
+            9151,
+            9227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9232,
+            9241
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9297,
+        9519
+      ],
+      "kind": "trait_fn",
+      "name": "next_match",
+      "range": [
+        8795,
+        9519
+      ],
+      "signature_range": [
+        9246,
+        9296
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the next [`Reject`][SearchStep::Reject] result. See [`next()`][Searcher::next]",
+          "path": "doc",
+          "range": [
+            9525,
+            9613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and [`next_match()`][Searcher::next_match].",
+          "path": "doc",
+          "range": [
+            9618,
+            9665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9670,
+            9673
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike [`next()`][Searcher::next], there is no guarantee that the returned ranges",
+          "path": "doc",
+          "range": [
+            9678,
+            9763
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of this and [`next_match`][Searcher::next_match] will overlap.",
+          "path": "doc",
+          "range": [
+            9768,
+            9834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            9839,
+            9848
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        9905,
+        10128
+      ],
+      "kind": "trait_fn",
+      "name": "next_reject",
+      "range": [
+        9525,
+        10128
+      ],
+      "signature_range": [
+        9853,
+        9904
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A reverse searcher for a string pattern.",
+          "path": "doc",
+          "range": [
+            10132,
+            10176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10177,
+            10180
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait provides methods for searching for non-overlapping",
+          "path": "doc",
+          "range": [
+            10181,
+            10246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " matches of a pattern starting from the back (right) of a string.",
+          "path": "doc",
+          "range": [
+            10247,
+            10315
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10316,
+            10319
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It will be implemented by associated [`Searcher`]",
+          "path": "doc",
+          "range": [
+            10320,
+            10373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " types of the [`Pattern`] trait if the pattern supports searching",
+          "path": "doc",
+          "range": [
+            10374,
+            10442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for it from the back.",
+          "path": "doc",
+          "range": [
+            10443,
+            10468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10469,
+            10472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The index ranges returned by this trait are not required",
+          "path": "doc",
+          "range": [
+            10473,
+            10533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to exactly match those of the forward search in reverse.",
+          "path": "doc",
+          "range": [
+            10534,
+            10594
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10595,
+            10598
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For the reason why this trait is marked unsafe, see the",
+          "path": "doc",
+          "range": [
+            10599,
+            10658
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " parent trait [`Searcher`].",
+          "path": "doc",
+          "range": [
+            10659,
+            10689
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "ReverseSearcher",
+      "range": [
+        10132,
+        12749
+      ]
+    },
+    {
+      "ancestors": [
+        19
+      ],
+      "attributes": [
+        {
+          "doc_text": " Performs the next search step starting from the back.",
+          "path": "doc",
+          "range": [
+            10747,
+            10804
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10809,
+            10812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Match(a, b)`][SearchStep::Match] if `haystack[a..b]`",
+          "path": "doc",
+          "range": [
+            10817,
+            10885
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   matches the pattern.",
+          "path": "doc",
+          "range": [
+            10890,
+            10916
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Reject(a, b)`][SearchStep::Reject] if `haystack[a..b]`",
+          "path": "doc",
+          "range": [
+            10921,
+            10991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   can not match the pattern, even partially.",
+          "path": "doc",
+          "range": [
+            10996,
+            11044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Returns [`Done`][SearchStep::Done] if every byte of the haystack",
+          "path": "doc",
+          "range": [
+            11049,
+            11119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   has been visited",
+          "path": "doc",
+          "range": [
+            11124,
+            11146
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11151,
+            11154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The stream of [`Match`][SearchStep::Match] and",
+          "path": "doc",
+          "range": [
+            11159,
+            11209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Reject`][SearchStep::Reject] values up to a [`Done`][SearchStep::Done]",
+          "path": "doc",
+          "range": [
+            11214,
+            11290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will contain index ranges that are adjacent, non-overlapping,",
+          "path": "doc",
+          "range": [
+            11295,
+            11360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " covering the whole haystack, and laying on utf8 boundaries.",
+          "path": "doc",
+          "range": [
+            11365,
+            11428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11433,
+            11436
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A [`Match`][SearchStep::Match] result needs to contain the whole matched",
+          "path": "doc",
+          "range": [
+            11441,
+            11517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pattern, however [`Reject`][SearchStep::Reject] results may be split up",
+          "path": "doc",
+          "range": [
+            11522,
+            11597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " into arbitrary many adjacent fragments. Both ranges may have zero length.",
+          "path": "doc",
+          "range": [
+            11602,
+            11679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11684,
+            11687
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As an example, the pattern `\"aaa\"` and the haystack `\"cbaaaaab\"`",
+          "path": "doc",
+          "range": [
+            11692,
+            11760
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " might produce the stream",
+          "path": "doc",
+          "range": [
+            11765,
+            11793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `[Reject(7, 8), Match(4, 7), Reject(1, 4), Reject(0, 1)]`.",
+          "path": "doc",
+          "range": [
+            11798,
+            11860
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "next_back",
+      "range": [
+        10747,
+        11903
+      ],
+      "signature_range": [
+        11865,
+        11902
+      ]
+    },
+    {
+      "ancestors": [
+        19
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the next [`Match`][SearchStep::Match] result.",
+          "path": "doc",
+          "range": [
+            11909,
+            11964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`next_back()`][ReverseSearcher::next_back].",
+          "path": "doc",
+          "range": [
+            11969,
+            12021
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12026,
+            12035
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12096,
+        12323
+      ],
+      "kind": "trait_fn",
+      "name": "next_match_back",
+      "range": [
+        11909,
+        12323
+      ],
+      "signature_range": [
+        12040,
+        12095
+      ]
+    },
+    {
+      "ancestors": [
+        19
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the next [`Reject`][SearchStep::Reject] result.",
+          "path": "doc",
+          "range": [
+            12329,
+            12386
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See [`next_back()`][ReverseSearcher::next_back].",
+          "path": "doc",
+          "range": [
+            12391,
+            12443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12448,
+            12457
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12519,
+        12747
+      ],
+      "kind": "trait_fn",
+      "name": "next_reject_back",
+      "range": [
+        12329,
+        12747
+      ],
+      "signature_range": [
+        12462,
+        12518
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A marker trait to express that a [`ReverseSearcher`]",
+          "path": "doc",
+          "range": [
+            12751,
+            12807
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " can be used for a [`DoubleEndedIterator`] implementation.",
+          "path": "doc",
+          "range": [
+            12808,
+            12869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12870,
+            12873
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For this, the impl of [`Searcher`] and [`ReverseSearcher`] need",
+          "path": "doc",
+          "range": [
+            12874,
+            12941
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to follow these conditions:",
+          "path": "doc",
+          "range": [
+            12942,
+            12973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12974,
+            12977
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - All results of `next()` need to be identical",
+          "path": "doc",
+          "range": [
+            12978,
+            13028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   to the results of `next_back()` in reverse order.",
+          "path": "doc",
+          "range": [
+            13029,
+            13084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `next()` and `next_back()` need to behave as",
+          "path": "doc",
+          "range": [
+            13085,
+            13135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the two ends of a range of values, that is they",
+          "path": "doc",
+          "range": [
+            13136,
+            13189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   can not \"walk past each other\".",
+          "path": "doc",
+          "range": [
+            13190,
+            13227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13228,
+            13231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            13232,
+            13246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13247,
+            13250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `char::Searcher` is a `DoubleEndedSearcher` because searching for a",
+          "path": "doc",
+          "range": [
+            13251,
+            13322
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`char`] only requires looking at one at a time, which behaves the same",
+          "path": "doc",
+          "range": [
+            13323,
+            13398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " from both ends.",
+          "path": "doc",
+          "range": [
+            13399,
+            13418
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13419,
+            13422
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `(&str)::Searcher` is not a `DoubleEndedSearcher` because",
+          "path": "doc",
+          "range": [
+            13423,
+            13484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the pattern `\"aa\"` in the haystack `\"aaa\"` matches as either",
+          "path": "doc",
+          "range": [
+            13485,
+            13549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `\"[aa]a\"` or `\"a[aa]\"`, depending on which side it is searched.",
+          "path": "doc",
+          "range": [
+            13550,
+            13617
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "DoubleEndedSearcher",
+      "range": [
+        12751,
+        13675
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Associated type for `<char as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            13851,
+            13909
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            13910,
+            13933
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CharSearcher",
+      "range": [
+        13851,
+        15108
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15110,
+        15206
+      ]
+    },
+    {
+      "ancestors": [
+        25
+      ],
+      "attributes": [],
+      "body_range": [
+        15167,
+        15204
+      ],
+      "kind": "impl_fn",
+      "name": "utf8_size",
+      "range": [
+        15138,
+        15204
+      ],
+      "signature_range": [
+        15138,
+        15166
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        15208,
+        18951
+      ]
+    },
+    {
+      "ancestors": [
+        27
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15264,
+            15273
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15308,
+        15337
+      ],
+      "kind": "impl_fn",
+      "name": "haystack",
+      "range": [
+        15264,
+        15337
+      ],
+      "signature_range": [
+        15278,
+        15307
+      ]
+    },
+    {
+      "ancestors": [
+        27
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15342,
+            15351
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15389,
+        16554
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        15342,
+        16554
+      ],
+      "signature_range": [
+        15356,
+        15388
+      ]
+    },
+    {
+      "ancestors": [
+        27
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16559,
+            16568
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16624,
+        18870
+      ],
+      "kind": "impl_fn",
+      "name": "next_match",
+      "range": [
+        16559,
+        18870
+      ],
+      "signature_range": [
+        16573,
+        16623
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18953,
+        22692
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19016,
+            19025
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19068,
+        19792
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        19016,
+        19792
+      ],
+      "signature_range": [
+        19030,
+        19067
+      ]
+    },
+    {
+      "ancestors": [
+        31
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19797,
+            19806
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19867,
+        22606
+      ],
+      "kind": "impl_fn",
+      "name": "next_match_back",
+      "range": [
+        19797,
+        22606
+      ],
+      "signature_range": [
+        19811,
+        19866
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22694,
+        22750
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Searches for chars that are equal to a given [`char`].",
+          "path": "doc",
+          "range": [
+            22752,
+            22810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22811,
+            22814
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            22815,
+            22829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22830,
+            22833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22834,
+            22841
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find('o'), Some(4));",
+          "path": "doc",
+          "range": [
+            22842,
+            22891
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            22892,
+            22899
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22752,
+        24626
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22971,
+            22980
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23053,
+        23484
+      ],
+      "kind": "impl_fn",
+      "name": "into_searcher",
+      "range": [
+        22971,
+        23484
+      ],
+      "signature_range": [
+        22985,
+        23052
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23490,
+            23499
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23553,
+        23783
+      ],
+      "kind": "impl_fn",
+      "name": "is_contained_in",
+      "range": [
+        23490,
+        23783
+      ],
+      "signature_range": [
+        23504,
+        23552
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23789,
+            23798
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23849,
+        23919
+      ],
+      "kind": "impl_fn",
+      "name": "is_prefix_of",
+      "range": [
+        23789,
+        23919
+      ],
+      "signature_range": [
+        23803,
+        23848
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23925,
+            23934
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23996,
+        24069
+      ],
+      "kind": "impl_fn",
+      "name": "strip_prefix_of",
+      "range": [
+        23925,
+        24069
+      ],
+      "signature_range": [
+        23939,
+        23995
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24075,
+            24084
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24205,
+        24275
+      ],
+      "kind": "impl_fn",
+      "name": "is_suffix_of",
+      "range": [
+        24075,
+        24275
+      ],
+      "signature_range": [
+        24089,
+        24200
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24281,
+            24290
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24425,
+        24498
+      ],
+      "kind": "impl_fn",
+      "name": "strip_suffix_of",
+      "range": [
+        24281,
+        24498
+      ],
+      "signature_range": [
+        24295,
+        24420
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24504,
+            24513
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24571,
+        24624
+      ],
+      "kind": "impl_fn",
+      "name": "as_utf8_pattern",
+      "range": [
+        24504,
+        24624
+      ],
+      "signature_range": [
+        24518,
+        24570
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            24819,
+            24833
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "MultiCharEq",
+      "range": [
+        24819,
+        24899
+      ]
+    },
+    {
+      "ancestors": [
+        43
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "matches",
+      "range": [
+        24858,
+        24897
+      ],
+      "signature_range": [
+        24858,
+        24896
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24901,
+        25048
+      ]
+    },
+    {
+      "ancestors": [
+        45
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24967,
+            24976
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25020,
+        25046
+      ],
+      "kind": "impl_fn",
+      "name": "matches",
+      "range": [
+        24967,
+        25046
+      ],
+      "signature_range": [
+        24981,
+        25019
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25050,
+        25191
+      ]
+    },
+    {
+      "ancestors": [
+        47
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25103,
+            25112
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25156,
+        25189
+      ],
+      "kind": "impl_fn",
+      "name": "matches",
+      "range": [
+        25103,
+        25189
+      ],
+      "signature_range": [
+        25117,
+        25155
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25193,
+        25335
+      ]
+    },
+    {
+      "ancestors": [
+        49
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25247,
+            25256
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25300,
+        25333
+      ],
+      "kind": "impl_fn",
+      "name": "matches",
+      "range": [
+        25247,
+        25333
+      ],
+      "signature_range": [
+        25261,
+        25299
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25337,
+        25460
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25372,
+            25381
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25425,
+        25458
+      ],
+      "kind": "impl_fn",
+      "name": "matches",
+      "range": [
+        25372,
+        25458
+      ],
+      "signature_range": [
+        25386,
+        25424
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "struct",
+      "name": "MultiCharEqPattern",
+      "range": [
+        25462,
+        25507
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            25509,
+            25532
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "MultiCharEqSearcher",
+      "range": [
+        25509,
+        25664
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25666,
+        25969
+      ]
+    },
+    {
+      "ancestors": [
+        55
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25780,
+            25789
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25863,
+        25967
+      ],
+      "kind": "impl_fn",
+      "name": "into_searcher",
+      "range": [
+        25780,
+        25967
+      ],
+      "signature_range": [
+        25794,
+        25862
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25971,
+        26728
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26053,
+            26062
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26097,
+        26126
+      ],
+      "kind": "impl_fn",
+      "name": "haystack",
+      "range": [
+        26053,
+        26126
+      ],
+      "signature_range": [
+        26067,
+        26096
+      ]
+    },
+    {
+      "ancestors": [
+        57
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26132,
+            26141
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26179,
+        26726
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        26132,
+        26726
+      ],
+      "signature_range": [
+        26146,
+        26178
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        26730,
+        27425
+      ]
+    },
+    {
+      "ancestors": [
+        60
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            26819,
+            26828
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26871,
+        27423
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        26819,
+        27423
+      ],
+      "signature_range": [
+        26833,
+        26870
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27427,
+        27509
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27590,
+        28728
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        28730,
+        29625
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Associated type for `<[char; N] as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            29627,
+            29690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            29691,
+            29714
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CharArraySearcher",
+      "range": [
+        29627,
+        29829
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Associated type for `<&[char; N] as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            29831,
+            29895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            29896,
+            29919
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CharArrayRefSearcher",
+      "range": [
+        29831,
+        30045
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Searches for chars that are equal to any of the [`char`]s in the array.",
+          "path": "doc",
+          "range": [
+            30047,
+            30122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30123,
+            30126
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            30127,
+            30141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30142,
+            30145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30146,
+            30153
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(['o', 'l']), Some(2));",
+          "path": "doc",
+          "range": [
+            30154,
+            30210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(['h', 'w']), Some(6));",
+          "path": "doc",
+          "range": [
+            30211,
+            30267
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30268,
+            30275
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30047,
+        30413
+      ]
+    },
+    {
+      "ancestors": [
+        67
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30325,
+        30410
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30415,
+        30524
+      ]
+    },
+    {
+      "ancestors": [
+        69
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30495,
+        30521
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30526,
+        30642
+      ]
+    },
+    {
+      "ancestors": [
+        71
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30613,
+        30639
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30644,
+        30724
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Searches for chars that are equal to any of the [`char`]s in the array.",
+          "path": "doc",
+          "range": [
+            30726,
+            30801
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30802,
+            30805
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            30806,
+            30820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            30821,
+            30824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30825,
+            30832
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(&['o', 'l']), Some(2));",
+          "path": "doc",
+          "range": [
+            30833,
+            30890
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(&['h', 'w']), Some(6));",
+          "path": "doc",
+          "range": [
+            30891,
+            30948
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            30949,
+            30956
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30726,
+        31112
+      ]
+    },
+    {
+      "ancestors": [
+        74
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31014,
+        31109
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31114,
+        31234
+      ]
+    },
+    {
+      "ancestors": [
+        76
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31205,
+        31231
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31236,
+        31363
+      ]
+    },
+    {
+      "ancestors": [
+        78
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31334,
+        31360
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31365,
+        31456
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Associated type for `<&[char] as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            31690,
+            31751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            31752,
+            31775
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CharSliceSearcher",
+      "range": [
+        31690,
+        31872
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31874,
+        31972
+      ]
+    },
+    {
+      "ancestors": [
+        82
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        31943,
+        31969
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31974,
+        32079
+      ]
+    },
+    {
+      "ancestors": [
+        84
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        32050,
+        32076
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32081,
+        32150
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Searches for chars that are equal to any of the [`char`]s in the slice.",
+          "path": "doc",
+          "range": [
+            32152,
+            32227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32228,
+            32231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            32232,
+            32246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            32247,
+            32250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            32251,
+            32258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(&['o', 'l'][..]), Some(2));",
+          "path": "doc",
+          "range": [
+            32259,
+            32320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(&['h', 'w'][..]), Some(6));",
+          "path": "doc",
+          "range": [
+            32321,
+            32382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            32383,
+            32390
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32152,
+        32518
+      ]
+    },
+    {
+      "ancestors": [
+        87
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        32429,
+        32515
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Associated type for `<F as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            32712,
+            32767
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            32768,
+            32784
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "CharPredicateSearcher",
+      "range": [
+        32712,
+        32908
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32910,
+        33244
+      ]
+    },
+    {
+      "ancestors": [
+        90
+      ],
+      "attributes": [],
+      "body_range": [
+        33059,
+        33242
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        33002,
+        33242
+      ],
+      "signature_range": [
+        33002,
+        33058
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33245,
+        33379
+      ]
+    },
+    {
+      "ancestors": [
+        92
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        33350,
+        33376
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33381,
+        33522
+      ]
+    },
+    {
+      "ancestors": [
+        94
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        33493,
+        33519
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33524,
+        33624
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Searches for [`char`]s that match the given predicate.",
+          "path": "doc",
+          "range": [
+            33626,
+            33684
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33685,
+            33688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            33689,
+            33703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33704,
+            33707
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            33708,
+            33715
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(char::is_uppercase), Some(0));",
+          "path": "doc",
+          "range": [
+            33716,
+            33780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(|c| \"aeiou\".contains(c)), Some(1));",
+          "path": "doc",
+          "range": [
+            33781,
+            33850
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            33851,
+            33858
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33626,
+        34017
+      ]
+    },
+    {
+      "ancestors": [
+        97
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        33921,
+        34014
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Delegates to the `&str` impl.",
+          "path": "doc",
+          "range": [
+            34194,
+            34227
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34194,
+        34330
+      ]
+    },
+    {
+      "ancestors": [
+        99
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        34271,
+        34327
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Non-allocating substring search.",
+          "path": "doc",
+          "range": [
+            34506,
+            34542
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34543,
+            34546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Will handle the pattern `\"\"` as returning empty matches at each character",
+          "path": "doc",
+          "range": [
+            34547,
+            34624
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " boundary.",
+          "path": "doc",
+          "range": [
+            34625,
+            34638
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34639,
+            34642
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            34643,
+            34657
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            34658,
+            34661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            34662,
+            34669
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(\"Hello world\".find(\"world\"), Some(6));",
+          "path": "doc",
+          "range": [
+            34670,
+            34723
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            34724,
+            34731
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34506,
+        37427
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            34813,
+            34822
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34889,
+        34937
+      ],
+      "kind": "impl_fn",
+      "name": "into_searcher",
+      "range": [
+        34813,
+        34937
+      ],
+      "signature_range": [
+        34827,
+        34888
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches at the front of the haystack.",
+          "path": "doc",
+          "range": [
+            34943,
+            35011
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35016,
+            35025
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35076,
+        35140
+      ],
+      "kind": "impl_fn",
+      "name": "is_prefix_of",
+      "range": [
+        34943,
+        35140
+      ],
+      "signature_range": [
+        35030,
+        35075
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches anywhere in the haystack",
+          "path": "doc",
+          "range": [
+            35146,
+            35209
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            35214,
+            35223
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35277,
+        36155
+      ],
+      "kind": "impl_fn",
+      "name": "is_contained_in",
+      "range": [
+        35146,
+        36155
+      ],
+      "signature_range": [
+        35228,
+        35276
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the pattern from the front of haystack, if it matches.",
+          "path": "doc",
+          "range": [
+            36161,
+            36227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36232,
+            36241
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36303,
+        36530
+      ],
+      "kind": "impl_fn",
+      "name": "strip_prefix_of",
+      "range": [
+        36161,
+        36530
+      ],
+      "signature_range": [
+        36246,
+        36302
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the pattern matches at the back of the haystack.",
+          "path": "doc",
+          "range": [
+            36536,
+            36603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36608,
+            36617
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36738,
+        36800
+      ],
+      "kind": "impl_fn",
+      "name": "is_suffix_of",
+      "range": [
+        36536,
+        36800
+      ],
+      "signature_range": [
+        36622,
+        36733
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the pattern from the back of haystack, if it matches.",
+          "path": "doc",
+          "range": [
+            36806,
+            36871
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            36876,
+            36885
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37020,
+        37287
+      ],
+      "kind": "impl_fn",
+      "name": "strip_suffix_of",
+      "range": [
+        36806,
+        37287
+      ],
+      "signature_range": [
+        36890,
+        37015
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            37293,
+            37302
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37360,
+        37425
+      ],
+      "kind": "impl_fn",
+      "name": "as_utf8_pattern",
+      "range": [
+        37293,
+        37425
+      ],
+      "signature_range": [
+        37307,
+        37359
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            37616,
+            37639
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Associated type for `<&str as Pattern>::Searcher<'a>`.",
+          "path": "doc",
+          "range": [
+            37640,
+            37698
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "StrSearcher",
+      "range": [
+        37616,
+        37809
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            37811,
+            37834
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "StrSearcherImpl",
+      "range": [
+        37811,
+        37911
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            37913,
+            37936
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "EmptyNeedle",
+      "range": [
+        37913,
+        38120
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38122,
+        38915
+      ]
+    },
+    {
+      "ancestors": [
+        112
+      ],
+      "attributes": [],
+      "body_range": [
+        38227,
+        38913
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        38161,
+        38913
+      ],
+      "signature_range": [
+        38161,
+        38226
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        38917,
+        42505
+      ]
+    },
+    {
+      "ancestors": [
+        114
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            38980,
+            38989
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39024,
+        39053
+      ],
+      "kind": "impl_fn",
+      "name": "haystack",
+      "range": [
+        38980,
+        39053
+      ],
+      "signature_range": [
+        38994,
+        39023
+      ]
+    },
+    {
+      "ancestors": [
+        114
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            39059,
+            39068
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39106,
+        41355
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        39059,
+        41355
+      ],
+      "signature_range": [
+        39073,
+        39105
+      ]
+    },
+    {
+      "ancestors": [
+        114
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            41361,
+            41370
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        41426,
+        42503
+      ],
+      "kind": "impl_fn",
+      "name": "next_match",
+      "range": [
+        41361,
+        42503
+      ],
+      "signature_range": [
+        41375,
+        41425
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        42507,
+        45445
+      ]
+    },
+    {
+      "ancestors": [
+        118
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            42577,
+            42586
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        42629,
+        44347
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        42577,
+        44347
+      ],
+      "signature_range": [
+        42591,
+        42628
+      ]
+    },
+    {
+      "ancestors": [
+        118
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            44353,
+            44362
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        44423,
+        45443
+      ],
+      "kind": "impl_fn",
+      "name": "next_match_back",
+      "range": [
+        44353,
+        45443
+      ],
+      "signature_range": [
+        44367,
+        44422
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The internal state of the two-way substring search algorithm.",
+          "path": "doc",
+          "range": [
+            45447,
+            45512
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            45513,
+            45536
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "TwoWaySearcher",
+      "range": [
+        45447,
+        46175
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        49541,
+        63160
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [],
+      "body_range": [
+        49619,
+        52526
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        49567,
+        52526
+      ],
+      "signature_range": [
+        49567,
+        49618
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            52532,
+            52541
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        52585,
+        52652
+      ],
+      "kind": "impl_fn",
+      "name": "byteset_create",
+      "range": [
+        52532,
+        52652
+      ],
+      "signature_range": [
+        52546,
+        52584
+      ]
+    },
+    {
+      "ancestors": [
+        122,
+        124
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        52616,
+        52645
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            52658,
+            52667
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        52717,
+        52784
+      ],
+      "kind": "impl_fn",
+      "name": "byteset_contains",
+      "range": [
+        52658,
+        52784
+      ],
+      "signature_range": [
+        52672,
+        52716
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            53174,
+            53183
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        53315,
+        55826
+      ],
+      "kind": "impl_fn",
+      "name": "next",
+      "range": [
+        53174,
+        55826
+      ],
+      "signature_range": [
+        53188,
+        53310
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            56483,
+            56492
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        56629,
+        59271
+      ],
+      "kind": "impl_fn",
+      "name": "next_back",
+      "range": [
+        56483,
+        59271
+      ],
+      "signature_range": [
+        56497,
+        56624
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            59788,
+            59797
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        59871,
+        61117
+      ],
+      "kind": "impl_fn",
+      "name": "maximal_suffix",
+      "range": [
+        59788,
+        61117
+      ],
+      "signature_range": [
+        59802,
+        59870
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [],
+      "body_range": [
+        61786,
+        63158
+      ],
+      "kind": "impl_fn",
+      "name": "reverse_maximal_suffix",
+      "range": [
+        61697,
+        63158
+      ],
+      "signature_range": [
+        61697,
+        61785
+      ]
+    },
+    {
+      "ancestors": [
+        122,
+        130
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        63101,
+        63138
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "trait",
+      "name": "TwoWayStrategy",
+      "range": [
+        63319,
+        63502
+      ]
+    },
+    {
+      "ancestors": [
+        132
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "use_early_reject",
+      "range": [
+        63363,
+        63393
+      ],
+      "signature_range": [
+        63363,
+        63392
+      ]
+    },
+    {
+      "ancestors": [
+        132
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "rejecting",
+      "range": [
+        63398,
+        63447
+      ],
+      "signature_range": [
+        63398,
+        63446
+      ]
+    },
+    {
+      "ancestors": [
+        132
+      ],
+      "attributes": [],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "matching",
+      "range": [
+        63452,
+        63500
+      ],
+      "signature_range": [
+        63452,
+        63499
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Skip to match intervals as quickly as possible",
+          "path": "doc",
+          "range": [
+            63504,
+            63554
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "MatchOnly",
+      "range": [
+        63504,
+        63572
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        63574,
+        63909
+      ]
+    },
+    {
+      "ancestors": [
+        137
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            63657,
+            63666
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        63701,
+        63722
+      ],
+      "kind": "impl_fn",
+      "name": "use_early_reject",
+      "range": [
+        63657,
+        63722
+      ],
+      "signature_range": [
+        63671,
+        63700
+      ]
+    },
+    {
+      "ancestors": [
+        137
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            63727,
+            63736
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        63792,
+        63812
+      ],
+      "kind": "impl_fn",
+      "name": "rejecting",
+      "range": [
+        63727,
+        63812
+      ],
+      "signature_range": [
+        63741,
+        63791
+      ]
+    },
+    {
+      "ancestors": [
+        137
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            63817,
+            63826
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        63879,
+        63907
+      ],
+      "kind": "impl_fn",
+      "name": "matching",
+      "range": [
+        63817,
+        63907
+      ],
+      "signature_range": [
+        63831,
+        63878
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Emit Rejects regularly",
+          "path": "doc",
+          "range": [
+            63911,
+            63937
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "enum",
+      "name": "RejectAndMatch",
+      "range": [
+        63911,
+        63960
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        63962,
+        64318
+      ]
+    },
+    {
+      "ancestors": [
+        142
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            64038,
+            64047
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        64082,
+        64102
+      ],
+      "kind": "impl_fn",
+      "name": "use_early_reject",
+      "range": [
+        64038,
+        64102
+      ],
+      "signature_range": [
+        64052,
+        64081
+      ]
+    },
+    {
+      "ancestors": [
+        142
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            64107,
+            64116
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        64170,
+        64210
+      ],
+      "kind": "impl_fn",
+      "name": "rejecting",
+      "range": [
+        64107,
+        64210
+      ],
+      "signature_range": [
+        64121,
+        64169
+      ]
+    },
+    {
+      "ancestors": [
+        142
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            64215,
+            64224
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        64277,
+        64316
+      ],
+      "kind": "impl_fn",
+      "name": "matching",
+      "range": [
+        64215,
+        64316
+      ],
+      "signature_range": [
+        64229,
+        64276
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " SIMD search for short needles based on",
+          "path": "doc",
+          "range": [
+            64320,
+            64362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Wojciech Muła's \"SIMD-friendly algorithms for substring searching\"[0]",
+          "path": "doc",
+          "range": [
+            64363,
+            64437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            64438,
+            64441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It skips ahead by the vector width on each iteration (rather than the needle length as two-way",
+          "path": "doc",
+          "range": [
+            64442,
+            64540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " does) by probing the first and last byte of the needle for the whole vector width",
+          "path": "doc",
+          "range": [
+            64541,
+            64626
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and only doing full needle comparisons when the vectorized probe indicated potential matches.",
+          "path": "doc",
+          "range": [
+            64627,
+            64724
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            64725,
+            64728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Since the x86_64 baseline only offers SSE2 we only use u8x16 here.",
+          "path": "doc",
+          "range": [
+            64729,
+            64799
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If we ever ship std with for x86-64-v3 or adapt this for other platforms then wider vectors",
+          "path": "doc",
+          "range": [
+            64800,
+            64895
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should be evaluated.",
+          "path": "doc",
+          "range": [
+            64896,
+            64920
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            64921,
+            64924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Similarly, on LoongArch the 128-bit LSX vector extension is the baseline,",
+          "path": "doc",
+          "range": [
+            64925,
+            65002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " so we also use `u8x16` there. Wider vector widths may be considered",
+          "path": "doc",
+          "range": [
+            65003,
+            65074
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for future LoongArch extensions (e.g., LASX).",
+          "path": "doc",
+          "range": [
+            65075,
+            65124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            65125,
+            65128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For haystacks smaller than vector-size + needle length it falls back to",
+          "path": "doc",
+          "range": [
+            65129,
+            65204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a naive O(n*m) search so this implementation should not be called on larger needles.",
+          "path": "doc",
+          "range": [
+            65205,
+            65293
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            65294,
+            65297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [0]: http://0x80.pl/articles/simd-strfind.html#sse-avx2",
+          "path": "doc",
+          "range": [
+            65298,
+            65357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            65358,
+            65550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            65551,
+            65560
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        65624,
+        70189
+      ],
+      "kind": "fn",
+      "name": "simd_contains",
+      "range": [
+        64320,
+        70189
+      ],
+      "signature_range": [
+        65561,
+        65623
+      ]
+    },
+    {
+      "ancestors": [
+        146
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        65707,
+        65738
+      ]
+    },
+    {
+      "ancestors": [
+        146
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        66377,
+        66410
+      ]
+    },
+    {
+      "ancestors": [
+        146
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        66823,
+        66838
+      ]
+    },
+    {
+      "ancestors": [
+        146
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cold",
+          "range": [
+            67229,
+            67236
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        67229,
+        68083
+      ]
+    },
+    {
+      "ancestors": [
+        146
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        68107,
+        68797
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Compares short slices for equality.",
+          "path": "doc",
+          "range": [
+            70191,
+            70230
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70231,
+            70234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It avoids a call to libc's memcmp which is faster on long slices",
+          "path": "doc",
+          "range": [
+            70235,
+            70303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " due to SIMD optimizations but it incurs a function call overhead.",
+          "path": "doc",
+          "range": [
+            70304,
+            70373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70374,
+            70377
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            70378,
+            70390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            70391,
+            70394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Both slices must have the same length.",
+          "path": "doc",
+          "range": [
+            70395,
+            70437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            70438,
+            70630
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            70631,
+            70640
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        70694,
+        73163
+      ],
+      "kind": "fn",
+      "name": "small_slice_eq",
+      "range": [
+        70191,
+        73163
+      ],
+      "signature_range": [
+        70641,
+        70693
+      ]
+    },
+    {
+      "ancestors": [
+        152
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        70700,
+        70734
+      ]
+    }
+  ],
+  "source_sha256": "2b463002282828eb4b5494bfb3900943e1a818e688f3ec01424f83432c452e88"
+}

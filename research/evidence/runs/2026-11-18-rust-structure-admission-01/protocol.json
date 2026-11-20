@@ -1,0 +1,60 @@
+{
+  "schema": "rust-structure-admission/1",
+  "question": "Can existing frozen Rust outputs alone support tree labels, parent/leaf ordering and local-variable-use input without a new frontend?",
+  "scope": "Existing source/archive read-only; call probe only, six explicit synthetic syntax controls; not compiler or semantic validation.",
+  "binary": ".build/rust-call-probe/debug/rust-call-probe",
+  "binary_sha256": "dc1b5b93d71deb6954528a2cf5170209b89fc01cff9450350ba0f3752d5bd1c3",
+  "source": "research/tools/rust-syntax-probe/src/bin/rust-call-probe.rs",
+  "source_sha256": "f5d9bfa5a6a1d90765c6153e3c5166b59506fc758e355d597eba0624149c5e3c",
+  "controls": [
+    {
+      "id": "01",
+      "source": "fn sample(value: T) { consume(value); consume(value); }\n",
+      "purpose": "Same spelling repeated; no identifier-use or declaration IDs expected."
+    },
+    {
+      "id": "02",
+      "source": "fn sample(value: T) { consume(value); { let value = other; consume(value); } }\n",
+      "purpose": "Shadowing counterpart; same call projection, distinct lexical scope facts explicitly present in source, no resolved binding expected."
+    },
+    {
+      "id": "03",
+      "source": "fn sample(value: T) { outer(inner(value)); value.touch(); other.touch(); }\n",
+      "purpose": "Nested call vs receiver identity: retained call names/ranges but no expression-parent/argument/receiver fields."
+    },
+    {
+      "id": "04",
+      "source": "fn sample() { #[cfg(any())] hidden(); wrap!(inside()); let 字 = 1; consume(字); }\n",
+      "purpose": "cfg unevaluated, opaque macro body, UTF8 byte ranges; not executable behavior."
+    },
+    {
+      "id": "05",
+      "source": "fn sample() { let closure = || later(); let future = async { pending(); }; fn local() { nested(); } now(); }\n",
+      "purpose": "deferred depth retained, not capture identity or execution order."
+    },
+    {
+      "id": "06",
+      "source": "fn sample( { broken(); }\n",
+      "purpose": "Malformed syntax; rejected with empty sites; preserve rejection and stderr."
+    }
+  ],
+  "execution": {
+    "max_invocations": 6,
+    "timeout_seconds_each": 10,
+    "repetitions": 1,
+    "no_retry": true,
+    "no_build": true,
+    "no_install": true,
+    "no_model": true,
+    "no_rankings": true
+  },
+  "checks": [
+    "Freeze protocol SHA before first binary invocation; hash source and binary before/after",
+    "Archive exact source/stdout/stderr/exit/elapsed for all six, including errors/timeouts",
+    "Decode returned byte ranges as UTF8; record all returned keys and sites",
+    "Record observed parse statuses; compare 01/02 kind,name,deferred_depth only, not ranges",
+    "Never infer binding, type, cfg activity or full tree from name/offset; no post-outcome control changes"
+  ],
+  "decision_rule": "YES only for lossless adapters of existing unit hierarchy/call sites/token delimiter sequence; NO for full structural/variable-use representation if needed AST/leaf/use identity is absent. Raw source can enable a future parser, not a present field-only adapter. Original Aroma expected-feature mismatch remains separate.",
+  "stop": "After all six and archive/schema audit, deliver admission note and stop. No frontend edits, corpus extraction/ranks or Weak reopening."
+}

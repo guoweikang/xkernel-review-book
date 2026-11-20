@@ -1,0 +1,153 @@
+职责规范适用判断：受控合成开发输入
+run: 2026-11-18-responsibility-controlled-inputs-01
+date: 2026-11-18
+status: closed_regression_material_only
+adoption: not_admitted_for_method_effectiveness_run
+交付：cases.json、report.txt。没有改共享文件、进度、catalog、协议或生产代码。
+
+一、任务与证据身份
+本批仅准备八个开发案例，由研究者规定合成职责规范，并直接给定合成行为事实。
+规范不是 xkernel 或任何真实项目的规定；行为不是从代码、AST、调用图或执行轨迹抽取的结果。
+参考答案仅是这些题内前提的条件性规范应用答案，不是独立真实项目 gold labels。
+没有真实代码、Rust 可执行验证、性能测量、架构最优或拆分收益声明。
+没有运行被测模型、派发评审代理、调用推理 API、生成预测或伪造效果结果。
+
+这些“显式给定事实 + 简单规则”可能只是规则应用控制，不支持文档理解、工程定位、行为抽取或职责检测效能的结论。
+即使后续模型全部回答正确，也不能据此推论对真实代码的有效性、泛化能力或独立验证通过。
+不额外增加难度追求模型失败；不新增案例或引入真实源码以营造挑战。
+是否准入、如何设计 baseline、是否运行、如何隔离评价，由主线程决定。可以否决输入并如实记为未采用，不必挽救本批以得到结果。
+
+二、文件结构与分层
+cases.json.input_contract：共同任务、声明类型、四标签释义、分轴输出及派生显示定义。
+cases.json.cases：八个中性 case ID、机制族 ID、input。
+每个 input 有 subject、question、evidence；各例自包含，不需要其他例的事实。
+每例七项声明：
+  R1：机制实现归属与通常禁止范围。
+  R2：另一方的策略职责，以及调用/委托不等于自行实现的规则。
+  F1：被指定机制方已有且可用的实现。
+  F2：另一方明确允许的策略行为。
+  F3：实际由另一方委托还是自行实现机制。
+  E1：覆盖 F3 的显式迁移许可，唯一适用条件引用 C1。
+  C1：行为发生时迁移窗口开放状态，value 为 true / false / unknown。
+R/F/E/C 的来源全部是研究者题内规定，不冒充维护者确认或独立工程证据。
+证据 ID 在单个案例内解析；跨例应使用 case_id#evidence_id。不存在一个全局 R1 可被任意跨例引用的约定。
+
+cases.json.evaluation_answers 是完全独立的评价字段：
+  每例包含 case_id、reference、派生 label、rationale、required_evidence_ids、
+  conditional_branches、missing_evidence_ids。
+unknown 的缺失证据 ID 指向“已明确记录状态未知”的 C1，并非悬空引用或暗示条件已证实。
+required_evidence_ids 是判定应使用的题内声明，不是对现实事实的真实性证明，也不声明最小充分证据集。
+
+三、采纳用户转述的 Goodall 分轴建议
+reference.base_rule = allowed | forbidden | unknown
+reference.exception = applies | not_applicable | unknown | no_clause
+reference.real_project_violation = not_evaluated
+
+通常规则与例外分开评估：迁移许可不会把通常规则 forbidden 改写为 allowed。
+四标签 conforming / divergent / exception / unknown 仅作 reference 的派生显示，不能替代三轴或代表真实项目违规。
+在本批的状态域内：
+  allowed -> conforming；
+  forbidden + applies -> exception；
+  forbidden + not_applicable/no_clause -> divergent；
+  base_rule unknown 或 forbidden + exception unknown -> unknown。
+本批每例都有 E1，因此不出现 no_clause；通常规则和行为均给定，因此没有 base_rule=unknown 的实例。
+不为覆盖全部枚举而扩充超过八例。两个 unknown 测的是 exception=unknown，不是职责规则缺失。
+unknown 的两条分支也有完整三轴 reference，real_project_violation 始终 not_evaluated。
+Goodall 建议来自用户转述，未声称已独立读到审议原件，也未把建议采纳当成输入准入通过。
+
+四、八例清单（评价侧信息，不得发往被测模型）
+case-01 / family-01：allowed / not_applicable / not_evaluated -> conforming
+case-02 / family-01：forbidden / not_applicable / not_evaluated -> divergent
+case-03 / family-01：forbidden / applies / not_evaluated -> exception
+case-04 / family-01：forbidden / unknown / not_evaluated -> unknown
+case-05 / family-02：allowed / not_applicable / not_evaluated -> conforming
+case-06 / family-02：forbidden / not_applicable / not_evaluated -> divergent
+case-07 / family-02：forbidden / applies / not_evaluated -> exception
+case-08 / family-02：forbidden / unknown / not_evaluated -> unknown
+
+family-01 是“资源描述解释 vs 驱动策略”：
+R1 指定 U17 实现字段宽度、字节序、缺省值及区间边界解释；
+R2 指定 U28 按设备模式选择启用区间，允许调用 U17。
+family-02 是“缓冲区管理 vs 调用方策略”：
+R1 指定 U43 实现空闲表、分配归还、占用计数及相应不变量维护；
+R2 指定 U56 选择批量上限及等待/拒绝策略，允许调用 U43。
+名称 U17/U28/U43/U56 是无语义标识，不用模块名字判断答案。
+规范按实际“实现判断/维护状态”区分职责，与“调用接口/传参/使用返回值”分开；
+仍调用指定实现方也不能豁免本地另行实现，但本批不新增混合调用案例。
+本题不评价缓冲区算法安全性、资源解释正确性或指定归属本身是否合理。
+
+五、最小干预
+各族 R1/R2/F1/F2/E1 的完整声明在四例中完全相同。
+明确符合 -> 明确越界：只变 F3，委托改为自行实现；C1 保持 false。
+明确越界 -> 显式例外：仅变 C1.value，false 改 true。
+明确越界 -> 条件未知：仅变 C1.value，false 改 unknown。
+除 case ID 外，同族 subject/question 不变；家族 ID 固定。
+E1 的存在不等于例外适用，窗口关闭不等于没有条款。
+unknown 保留同样的确定行为，不以行为提取不全人为制造未知：
+  C1=true -> exception（通常规则仍 forbidden）；
+  C1=false -> divergent；
+  当前 C1=unknown -> unknown。
+本设计有意不增加额外日期计算、范围匹配、规则冲突、性能条件或模型失败诱因。
+
+六、后续打包必须去除答案
+cases.json 是带参考答案的研究者开发归档，不是可直接派发的输入文件。
+后续打包必须从 allowlist 重建：input_contract + 单例 cases[selected].input。
+evaluation_answers 全部必须留在评价侧，包括 reference 三轴、label、rationale、
+required_evidence_ids、conditional_branches 的答案、missing_evidence_ids。
+report.txt、family 说明、provenance/status/packaging_contract 等开发信息也不进入模型包。
+输入中的共同四标签释义不是逐例答案；R/F/E/C 是任务前提，必须保留。
+当前案例编号和顺序按四状态排列，主线程打包时应独立重编码/安排顺序，避免顺序成为标签捷径。
+本批只声明该接口边界，没有创建模型包、baseline、评价器或隔离措施，也不声称技术隔离已实现。
+其他既有暴露与主线程审议可能使这些材料不适合后续使用；允许记录未采用。
+
+七、实际执行的检查（非模型/语义效能结果）
+仅用 Python 标准库读取 cases.json，在内存检查，不写额外脚本或结果文件：
+- JSON 可解析；重复 JSON key 为 0。
+- 8 case、2 family，每族 4 case；8 个评价答案与 case ID 一一对应。
+- 四个派生标签各 2 例，每族各有四标签；标签属于指定集合。
+- 56 项 R/F/E/C 声明；每例 ID 唯一、kind 与 ID 前缀对应。
+- E1 条件及规则引用有效；C1 值在 true/false/unknown 域内。
+- 主答案与条件分支合计 68 次 required_evidence_ids 引用均在本例解析；
+  missing_evidence_ids、条件引用也均可解析。
+- 8 主答案与 4 条条件分支的 reference 枚举合法、派生 label 一致，
+  real_project_violation 全部为 not_evaluated。
+- 2 个 unknown 各保留 true/false 两条条件分支，合计 4 条。
+- 每族证据变化集合符合 F3 / C1 / C1 的最小变更设计。
+退出码 0。上述只是 JSON、结构、引用及标签映射完整性核对，不是自动证明自然语言蕴含或独立核准标签。
+semantic_validity_evaluated=false；model_runs=0；Rust 执行次数=0。
+未运行共享 catalog 校验、书籍构建、旧模型流水线或生产测试，符合本次仅输入完整性检查的范围。
+
+八、接续材料与检索边界
+已读取：
+- AGENTS.md 和 .agents/skills/research-execution/SKILL.md；
+- research/PROGRESS.md 顶部当前职责定位记录（也读取了末尾历史记录，以顶部新记录为准）；
+- chapters/research-topics/responsibility.md；
+- research/notes/2026-11-16-resource-retrieval.md；
+- research/protocols/responsibility-location-pilot-v1.json；
+- research/protocols/firmware-conditional-location-v1.json；
+- research/notes/2026-11-18-responsibility-track.md；
+- research/evidence/runs/2026-11-18-responsibility-tool-reuse-01/report.txt。
+末两文件合并工具输出曾截断，只将实际可见的范围/限制作为接续背景，不声称逐字审计全部内容。
+
+运行了只读本地字面检索：
+python3 scripts/research_lookup.py 职责 responsibility controlled-inputs firmware-conditional-location --limit 6
+报告 total_hits=334、returned=6、omitted_hits=328；工具显示层还出现截断，未穷尽全部命中。
+当时清点 5580 项：4271 文本、1293 仅格式元数据、13 仅大小元数据、3 无本地路径。
+python3 scripts/research_lookup.py 受控 synthetic responsibility-location-pilot --kind document --limit 3
+通过 tail 查看尾部，报告 total_hits=58、returned=3、omitted_hits=55。
+支持背景：真实职责 pilot 不具真实违规分母；规范适用、工程归属合理性和拆分收益应分开；
+显式研究者规范可作条件推理材料，不能升级为 xkernel 违规标签。
+不复用既有 CPU 单点真实标签，不把原真实源码协议冒充本组合成数据的准入依据。
+上述检索是背景定位，不是查新或穷尽资料审计；未读命中和原件保持未审计。
+本次用户明确要求的新合成输入与只写独立目录优先于旧协议的真实案例限制，
+没有修改或倒写旧协议、共享研究进度及 catalog。
+
+九、停止与交接
+八例交付完成。主线程已读取 case-01 输入，采纳 Goodall 退化停止决定：完全显式规范与已给事实
+仅保留为回归素材，不准入方法效能运行。baseline、模型执行与评测隔离均未执行，不再扩充或润色。
+两个领域共享相同条件规则模板：指定实现方、允许委托、迁移窗口 true/false/unknown；
+它们是同一规则模板的两种领域实例，并非两个独立机制，也不能作为两份独立机制效能证据。
+保留 cases.json 生成内容及既有验证；其中 draft/pending/undecided 是构造时状态，最终采用决定以本节为准。
+本报告前文“待主线程决定/允许否决”记录构造时边界，不覆盖本节已经作出的停止决定。
+输入完整性检查不等于语义效能验证；不得将 completed inputs 误写成 completed experiment、
+方法有效或真实职责检测成功。

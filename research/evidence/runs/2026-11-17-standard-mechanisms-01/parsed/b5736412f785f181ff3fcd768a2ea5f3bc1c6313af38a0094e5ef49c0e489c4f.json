@@ -1,0 +1,1420 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Overloadable operators.",
+      "path": "doc",
+      "range": [
+        0,
+        27
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        28,
+        31
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Implementing these traits allows you to overload certain operators.",
+      "path": "doc",
+      "range": [
+        32,
+        103
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        104,
+        107
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Some of these traits are imported by the prelude, so they are available in",
+      "path": "doc",
+      "range": [
+        108,
+        186
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " every Rust program. Only operators backed by traits can be overloaded. For",
+      "path": "doc",
+      "range": [
+        187,
+        265
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " example, the addition operator (`+`) can be overloaded through the [`Add`]",
+      "path": "doc",
+      "range": [
+        266,
+        344
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " trait, but since the assignment operator (`=`) has no backing trait, there",
+      "path": "doc",
+      "range": [
+        345,
+        423
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " is no way of overloading its semantics. Additionally, this module does not",
+      "path": "doc",
+      "range": [
+        424,
+        502
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " provide any mechanism to create new operators. If traitless overloading or",
+      "path": "doc",
+      "range": [
+        503,
+        581
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " custom operators are required, you should look toward macros to extend",
+      "path": "doc",
+      "range": [
+        582,
+        656
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Rust's syntax.",
+      "path": "doc",
+      "range": [
+        657,
+        675
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        676,
+        679
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Implementations of operator traits should be unsurprising in their",
+      "path": "doc",
+      "range": [
+        680,
+        750
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " respective contexts, keeping in mind their usual meanings and",
+      "path": "doc",
+      "range": [
+        751,
+        816
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [operator precedence]. For example, when implementing [`Mul`], the operation",
+      "path": "doc",
+      "range": [
+        817,
+        897
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " should have some resemblance to multiplication (and share expected",
+      "path": "doc",
+      "range": [
+        898,
+        968
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " properties like associativity).",
+      "path": "doc",
+      "range": [
+        969,
+        1004
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1005,
+        1008
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Note that the `&&` and `||` operators are currently not supported for",
+      "path": "doc",
+      "range": [
+        1009,
+        1082
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " overloading. Due to their short circuiting nature, they require a different",
+      "path": "doc",
+      "range": [
+        1083,
+        1162
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " design from traits for other operators like [`BitAnd`]. Designs for them are",
+      "path": "doc",
+      "range": [
+        1163,
+        1243
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " under discussion.",
+      "path": "doc",
+      "range": [
+        1244,
+        1265
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        1266,
+        1269
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Many of the operators take their operands by value. In non-generic",
+      "path": "doc",
+      "range": [
+        1270,
+        1340
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " contexts involving built-in types, this is usually not a problem.",
+      "path": "doc",
+      "range": [
+        1341,
+        1410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " However, using these operators in generic code, requires some",
+      "path": "doc",
+      "range": [
+        1411,
+        1476
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " attention if values have to be reused as opposed to letting the operators",
+      "path": "doc",
+      "range": [
+        1477,
+        1554
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " consume them. One option is to occasionally use [`clone`].",
+      "path": "doc",
+      "range": [
+        1555,
+        1617
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Another option is to rely on the types involved providing additional",
+      "path": "doc",
+      "range": [
+        1618,
+        1690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " operator implementations for references. For example, for a user-defined",
+      "path": "doc",
+      "range": [
+        1691,
+        1767
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " type `T` which is supposed to support addition, it is probably a good",
+      "path": "doc",
+      "range": [
+        1768,
+        1841
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " idea to have both `T` and `&T` implement the traits [`Add<T>`][`Add`] and",
+      "path": "doc",
+      "range": [
+        1842,
+        1919
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`Add<&T>`][`Add`] so that generic code can be written without unnecessary",
+      "path": "doc",
+      "range": [
+        1920,
+        1998
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " cloning.",
+      "path": "doc",
+      "range": [
+        1999,
+        2011
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2012,
+        2015
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " # Examples",
+      "path": "doc",
+      "range": [
+        2016,
+        2030
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2031,
+        2034
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " This example creates a `Point` struct that implements [`Add`] and [`Sub`],",
+      "path": "doc",
+      "range": [
+        2035,
+        2113
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " and then demonstrates adding and subtracting two `Point`s.",
+      "path": "doc",
+      "range": [
+        2114,
+        2176
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2177,
+        2180
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        2181,
+        2192
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " use std::ops::{Add, Sub};",
+      "path": "doc",
+      "range": [
+        2193,
+        2222
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2223,
+        2226
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " #[derive(Debug, Copy, Clone, PartialEq)]",
+      "path": "doc",
+      "range": [
+        2227,
+        2271
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " struct Point {",
+      "path": "doc",
+      "range": [
+        2272,
+        2290
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     x: i32,",
+      "path": "doc",
+      "range": [
+        2291,
+        2306
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     y: i32,",
+      "path": "doc",
+      "range": [
+        2307,
+        2322
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        2323,
+        2328
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2329,
+        2332
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Add for Point {",
+      "path": "doc",
+      "range": [
+        2333,
+        2357
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Output = Self;",
+      "path": "doc",
+      "range": [
+        2358,
+        2385
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2386,
+        2389
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn add(self, other: Self) -> Self {",
+      "path": "doc",
+      "range": [
+        2390,
+        2433
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Self {x: self.x + other.x, y: self.y + other.y}",
+      "path": "doc",
+      "range": [
+        2434,
+        2493
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        2494,
+        2503
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        2504,
+        2509
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2510,
+        2513
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " impl Sub for Point {",
+      "path": "doc",
+      "range": [
+        2514,
+        2538
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     type Output = Self;",
+      "path": "doc",
+      "range": [
+        2539,
+        2566
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2567,
+        2570
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     fn sub(self, other: Self) -> Self {",
+      "path": "doc",
+      "range": [
+        2571,
+        2614
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "         Self {x: self.x - other.x, y: self.y - other.y}",
+      "path": "doc",
+      "range": [
+        2615,
+        2674
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     }",
+      "path": "doc",
+      "range": [
+        2675,
+        2684
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        2685,
+        2690
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2691,
+        2694
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(Point {x: 3, y: 3}, Point {x: 1, y: 0} + Point {x: 2, y: 3});",
+      "path": "doc",
+      "range": [
+        2695,
+        2771
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(Point {x: -1, y: -3}, Point {x: 1, y: 0} - Point {x: 2, y: 3});",
+      "path": "doc",
+      "range": [
+        2772,
+        2850
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        2851,
+        2858
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2859,
+        2862
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " See the documentation for each trait for an example implementation.",
+      "path": "doc",
+      "range": [
+        2863,
+        2934
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        2935,
+        2938
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " The [`Fn`], [`FnMut`], and [`FnOnce`] traits are implemented by types that can be",
+      "path": "doc",
+      "range": [
+        2939,
+        3024
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " invoked like functions. Note that [`Fn`] takes `&self`, [`FnMut`] takes `&mut",
+      "path": "doc",
+      "range": [
+        3025,
+        3106
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " self` and [`FnOnce`] takes `self`. These correspond to the three kinds of",
+      "path": "doc",
+      "range": [
+        3107,
+        3184
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " methods that can be invoked on an instance: call-by-reference,",
+      "path": "doc",
+      "range": [
+        3185,
+        3251
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " call-by-mutable-reference, and call-by-value. The most common use of these",
+      "path": "doc",
+      "range": [
+        3252,
+        3330
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " traits is to act as bounds to higher-level functions that take functions or",
+      "path": "doc",
+      "range": [
+        3331,
+        3410
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " closures as arguments.",
+      "path": "doc",
+      "range": [
+        3411,
+        3437
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3438,
+        3441
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Taking a [`Fn`] as a parameter:",
+      "path": "doc",
+      "range": [
+        3442,
+        3477
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3478,
+        3481
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        3482,
+        3493
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn call_with_one<F>(func: F) -> usize",
+      "path": "doc",
+      "range": [
+        3494,
+        3535
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     where F: Fn(usize) -> usize",
+      "path": "doc",
+      "range": [
+        3536,
+        3571
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " {",
+      "path": "doc",
+      "range": [
+        3572,
+        3577
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     func(1)",
+      "path": "doc",
+      "range": [
+        3578,
+        3593
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3594,
+        3599
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3600,
+        3603
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let double = |x| x * 2;",
+      "path": "doc",
+      "range": [
+        3604,
+        3631
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(call_with_one(double), 2);",
+      "path": "doc",
+      "range": [
+        3632,
+        3673
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3674,
+        3681
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3682,
+        3685
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Taking a [`FnMut`] as a parameter:",
+      "path": "doc",
+      "range": [
+        3686,
+        3724
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3725,
+        3728
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        3729,
+        3740
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn do_twice<F>(mut func: F)",
+      "path": "doc",
+      "range": [
+        3741,
+        3772
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     where F: FnMut()",
+      "path": "doc",
+      "range": [
+        3773,
+        3797
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " {",
+      "path": "doc",
+      "range": [
+        3798,
+        3803
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     func();",
+      "path": "doc",
+      "range": [
+        3804,
+        3819
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     func();",
+      "path": "doc",
+      "range": [
+        3820,
+        3835
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3836,
+        3841
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3842,
+        3845
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let mut x: usize = 1;",
+      "path": "doc",
+      "range": [
+        3846,
+        3871
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " {",
+      "path": "doc",
+      "range": [
+        3872,
+        3877
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     let add_two_to_x = || x += 2;",
+      "path": "doc",
+      "range": [
+        3878,
+        3915
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     do_twice(add_two_to_x);",
+      "path": "doc",
+      "range": [
+        3916,
+        3947
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        3948,
+        3953
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3954,
+        3957
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " assert_eq!(x, 5);",
+      "path": "doc",
+      "range": [
+        3958,
+        3979
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        3980,
+        3987
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        3988,
+        3991
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " Taking a [`FnOnce`] as a parameter:",
+      "path": "doc",
+      "range": [
+        3992,
+        4031
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4032,
+        4035
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```rust",
+      "path": "doc",
+      "range": [
+        4036,
+        4047
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " fn consume_with_relish<F>(func: F)",
+      "path": "doc",
+      "range": [
+        4048,
+        4086
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     where F: FnOnce() -> String",
+      "path": "doc",
+      "range": [
+        4087,
+        4122
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " {",
+      "path": "doc",
+      "range": [
+        4123,
+        4128
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // `func` consumes its captured variables, so it cannot be run more",
+      "path": "doc",
+      "range": [
+        4129,
+        4204
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // than once",
+      "path": "doc",
+      "range": [
+        4205,
+        4225
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"Consumed: {}\", func());",
+      "path": "doc",
+      "range": [
+        4226,
+        4267
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4268,
+        4271
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     println!(\"Delicious!\");",
+      "path": "doc",
+      "range": [
+        4272,
+        4303
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4304,
+        4307
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // Attempting to invoke `func()` again will throw a `use of moved",
+      "path": "doc",
+      "range": [
+        4308,
+        4381
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "     // value` error for `func`",
+      "path": "doc",
+      "range": [
+        4382,
+        4416
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " }",
+      "path": "doc",
+      "range": [
+        4417,
+        4422
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4423,
+        4426
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let x = String::from(\"x\");",
+      "path": "doc",
+      "range": [
+        4427,
+        4457
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " let consume_and_return_x = move || x;",
+      "path": "doc",
+      "range": [
+        4458,
+        4499
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " consume_with_relish(consume_and_return_x);",
+      "path": "doc",
+      "range": [
+        4500,
+        4546
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4547,
+        4550
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " // `consume_and_return_x` can no longer be invoked at this point",
+      "path": "doc",
+      "range": [
+        4551,
+        4619
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " ```",
+      "path": "doc",
+      "range": [
+        4620,
+        4627
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": "",
+      "path": "doc",
+      "range": [
+        4628,
+        4631
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [`clone`]: Clone::clone",
+      "path": "doc",
+      "range": [
+        4632,
+        4659
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": " [operator precedence]: ../../reference/expressions.html#expression-precedence",
+      "path": "doc",
+      "range": [
+        4660,
+        4741
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        4743,
+        4789
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "arith",
+      "path_overrides": [],
+      "range": [
+        4791,
+        4801
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "async_function",
+      "path_overrides": [],
+      "range": [
+        4802,
+        4821
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "bit",
+      "path_overrides": [],
+      "range": [
+        4822,
+        4830
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "control_flow",
+      "path_overrides": [],
+      "range": [
+        4831,
+        4848
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "coroutine",
+      "path_overrides": [],
+      "range": [
+        4849,
+        4863
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "deref",
+      "path_overrides": [],
+      "range": [
+        4864,
+        4874
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "drop",
+      "path_overrides": [],
+      "range": [
+        4875,
+        4884
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "function",
+      "path_overrides": [],
+      "range": [
+        4885,
+        4898
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "index",
+      "path_overrides": [],
+      "range": [
+        4899,
+        4909
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "index_range",
+      "path_overrides": [],
+      "range": [
+        4910,
+        4926
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "range",
+      "path_overrides": [],
+      "range": [
+        4927,
+        4937
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "reborrow",
+      "path_overrides": [],
+      "range": [
+        4938,
+        4951
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "try_trait",
+      "path_overrides": [],
+      "range": [
+        4952,
+        4966
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "unsize",
+      "path_overrides": [],
+      "range": [
+        4967,
+        4978
+      ]
+    }
+  ],
+  "source_sha256": "baaabc60cf658f6fdf0ff41568d9b8c46e8eda74d0d3039ed7b7bcc4576e408d"
+}

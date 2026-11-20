@@ -1,0 +1,41 @@
+{
+  "cells": {
+    "original": {
+      "total": 303,
+      "failed": [],
+      "fixture_results": {
+        "test_cache_fixture_live_normal_winner": "ok",
+        "test_cache_fixture_live_par_winner": "ok",
+        "test_cache_fixture_absent_and_expired": "ok",
+        "test_cache_fixture_non_cacheable_parent": "ok",
+        "test_cache_fixture_child_cache_policy": "ok",
+        "test_cache_fixture_superblock_retention": "ok"
+      },
+      "assert_diagnostics": []
+    },
+    "mutant": {
+      "total": 303,
+      "failed": [
+        "kvfs::node::dentry::tests_dentry::test_cache_fixture_live_par_winner"
+      ],
+      "fixture_results": {
+        "test_cache_fixture_live_normal_winner": "ok",
+        "test_cache_fixture_live_par_winner": "FAILED",
+        "test_cache_fixture_absent_and_expired": "ok",
+        "test_cache_fixture_non_cacheable_parent": "ok",
+        "test_cache_fixture_child_cache_policy": "ok",
+        "test_cache_fixture_superblock_retention": "ok"
+      },
+      "assert_diagnostics": [
+        "assert! failed at fs/kvfs/src/node/../../ut-tests/node_dentry.rs:1334: par_winner_identity"
+      ]
+    }
+  },
+  "same_303_test_population": true,
+  "single_designated_mutation_detected": true,
+  "restoration": {
+    "archive_source_files_equal": 3634,
+    "configuration_restored": true
+  },
+  "refactor_equivalence_proven": false
+}

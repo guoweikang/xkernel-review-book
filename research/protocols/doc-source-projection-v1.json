@@ -1,0 +1,29 @@
+{
+  "schema": "doc-source-projection/1",
+  "scope": "Seen development input sensitivity, not duplicate detection accuracy or independent owner inference",
+  "claims_run": "research/evidence/runs/2026-11-12-governed-claims-v2-01",
+  "base_protocol": "research/protocols/doc-tfidf-discovery-v1.json",
+  "fit_input": "research/evidence/runs/2026-11-09-source-doc-inventory-02/bindings.json",
+  "fit_policy": "Fit on the original 2180 native docs only; freeze vocabulary and IDF across projections and interventions",
+  "candidate_ids": ["complete-command", "firmware-ownership", "permission-role"],
+  "projections": {
+    "docs": "Function native_text; firmware normative_responsibility, document_report and planned_capability claims only",
+    "docs_source": "Same documentation plus source_observation claims in original order; no unknown, evidence paths, kind labels or verdicts"
+  },
+  "representations": {"unigram": [1, 1], "unigram_bigram": [1, 2]},
+  "variants": ["revised", "intervention"],
+  "queries": [
+    {"id": "permission", "text": "replace permission bits while preserving file type"},
+    {"id": "complete_payload", "text": "collect the complete command before invoking the handler"},
+    {"id": "partial_failure", "text": "partial input copy failure and handler side effects"},
+    {"id": "device_properties", "text": "decode device tree node properties and translate addresses"},
+    {"id": "irq_capability", "text": "lookup interrupt controller specification for a device"},
+    {"id": "resource_owner", "text": "responsibility for IRQ mapping MMIO mapping and DMA allocation"}
+  ],
+  "budget": "Top1 positive-score candidate per query; all 3 scores retained; same query count, candidate identities and rank budget, NOT equal context length or extraction cost",
+  "ranking": "Cosine rounded to 12 decimals descending; candidate id ascending for ties; zero scores excluded; no correctness labels",
+  "repeats": 2,
+  "controls": ["Same projection inputs across repeats", "Independent count-times-IDF normalization", "Existing candidates keep exact scores when their text is unchanged", "Unknown statements never included", "Native empty command retained as zero evidence", "Frozen input and output hashes"],
+  "limits": ["Queries authored after seeing cases", "Source observations are researcher-authored summaries, not automatically inferred", "Firmware docs are edited design claims, function docs are native; compare within packet, not absolute performance across packets", "Intervention on absent source claim has no effect in docs arm", "Norm reversal is alternative norm, not known wrong label", "No semantic accuracy, refactoring benefit, or new-method claim"],
+  "completion": "Execute all 16 conditions, archive inputs/scores/OOV, verify repeats and manual formula, synthesize adverse results without tuning"
+}

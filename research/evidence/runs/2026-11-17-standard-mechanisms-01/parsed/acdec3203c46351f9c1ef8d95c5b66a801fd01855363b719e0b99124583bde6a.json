@@ -1,0 +1,7119 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The underlying representation of leaf nodes and part of the representation of internal nodes.",
+          "path": "doc",
+          "range": [
+            1910,
+            2007
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "LeafNode",
+      "range": [
+        1910,
+        2671
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2673,
+        3630
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Initializes a new `LeafNode` in-place.",
+          "path": "doc",
+          "range": [
+            2705,
+            2747
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2752,
+            2755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            2760,
+            2772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2777,
+            2780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The caller must ensure that `this` points to a (possibly uninitialized) `LeafNode`",
+          "path": "doc",
+          "range": [
+            2785,
+            2871
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2908,
+        3261
+      ],
+      "kind": "impl_fn",
+      "name": "init",
+      "range": [
+        2705,
+        3261
+      ],
+      "signature_range": [
+        2876,
+        2907
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new boxed `LeafNode`.",
+          "path": "doc",
+          "range": [
+            3267,
+            3302
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3362,
+        3628
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        3267,
+        3628
+      ],
+      "signature_range": [
+        3307,
+        3361
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The underlying representation of internal nodes. As with `LeafNode`s, these should be hidden",
+          "path": "doc",
+          "range": [
+            3632,
+            3728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " behind `BoxedNode`s to prevent dropping uninitialized keys and values. Any pointer to an",
+          "path": "doc",
+          "range": [
+            3729,
+            3821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `InternalNode` can be directly cast to a pointer to the underlying `LeafNode` portion of the",
+          "path": "doc",
+          "range": [
+            3822,
+            3918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " node, allowing code to act on leaf and internal nodes generically without having to even check",
+          "path": "doc",
+          "range": [
+            3919,
+            4017
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which of the two a pointer is pointing at. This property is enabled by the use of `repr(C)`.",
+          "path": "doc",
+          "range": [
+            4018,
+            4114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            4115,
+            4125
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "InternalNode",
+      "range": [
+        3632,
+        4530
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        4532,
+        5207
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new boxed `InternalNode`.",
+          "path": "doc",
+          "range": [
+            4568,
+            4607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4612,
+            4615
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            4620,
+            4632
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " An invariant of internal nodes is that they have at least one",
+          "path": "doc",
+          "range": [
+            4637,
+            4702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " initialized and valid edge. This function does not set up",
+          "path": "doc",
+          "range": [
+            4707,
+            4768
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such an edge.",
+          "path": "doc",
+          "range": [
+            4773,
+            4790
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4857,
+        5205
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        4568,
+        5205
+      ],
+      "signature_range": [
+        4795,
+        4856
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5960,
+            5963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " A reference to a node.",
+          "path": "doc",
+          "range": [
+            5964,
+            5990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5991,
+            5994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This type has a number of parameters that control how it acts:",
+          "path": "doc",
+          "range": [
+            5995,
+            6061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `BorrowType`: A dummy type that describes the kind of borrow and carries a lifetime.",
+          "path": "doc",
+          "range": [
+            6062,
+            6152
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - When this is `Immut<'a>`, the `NodeRef` acts roughly like `&'a Node`.",
+          "path": "doc",
+          "range": [
+            6153,
+            6231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - When this is `ValMut<'a>`, the `NodeRef` acts roughly like `&'a Node`",
+          "path": "doc",
+          "range": [
+            6232,
+            6310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      with respect to keys and tree structure, but also allows many",
+          "path": "doc",
+          "range": [
+            6311,
+            6381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      mutable references to values throughout the tree to coexist.",
+          "path": "doc",
+          "range": [
+            6382,
+            6451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - When this is `Mut<'a>`, the `NodeRef` acts roughly like `&'a mut Node`,",
+          "path": "doc",
+          "range": [
+            6452,
+            6532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      although insert methods allow a mutable pointer to a value to coexist.",
+          "path": "doc",
+          "range": [
+            6533,
+            6612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - When this is `Owned`, the `NodeRef` acts roughly like `Box<Node>`,",
+          "path": "doc",
+          "range": [
+            6613,
+            6688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      but does not have a destructor, and must be cleaned up manually.",
+          "path": "doc",
+          "range": [
+            6689,
+            6762
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    - When this is `Dying`, the `NodeRef` still acts roughly like `Box<Node>`,",
+          "path": "doc",
+          "range": [
+            6763,
+            6844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      but has methods to destroy the tree bit by bit, and ordinary methods,",
+          "path": "doc",
+          "range": [
+            6845,
+            6923
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "      while not marked as unsafe to call, can invoke UB if called incorrectly.",
+          "path": "doc",
+          "range": [
+            6924,
+            7005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Since any `NodeRef` allows navigating through the tree, `BorrowType`",
+          "path": "doc",
+          "range": [
+            7006,
+            7080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   effectively applies to the entire tree, not just to the node itself.",
+          "path": "doc",
+          "range": [
+            7081,
+            7155
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `K` and `V`: These are the types of keys and values stored in the nodes.",
+          "path": "doc",
+          "range": [
+            7156,
+            7234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - `Type`: This can be `Leaf`, `Internal`, or `LeafOrInternal`. When this is",
+          "path": "doc",
+          "range": [
+            7235,
+            7314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `Leaf`, the `NodeRef` points to a leaf node, when this is `Internal` the",
+          "path": "doc",
+          "range": [
+            7315,
+            7393
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `NodeRef` points to an internal node, and when this is `LeafOrInternal` the",
+          "path": "doc",
+          "range": [
+            7394,
+            7475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `NodeRef` could be pointing to either type of node.",
+          "path": "doc",
+          "range": [
+            7476,
+            7533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `Type` is named `NodeType` when used outside `NodeRef`.",
+          "path": "doc",
+          "range": [
+            7534,
+            7595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7596,
+            7599
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Both `BorrowType` and `NodeType` restrict what methods we implement, to",
+          "path": "doc",
+          "range": [
+            7600,
+            7675
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " exploit static type safety. There are limitations in the way we can apply",
+          "path": "doc",
+          "range": [
+            7676,
+            7753
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such restrictions:",
+          "path": "doc",
+          "range": [
+            7754,
+            7776
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - For each type parameter, we can only define a method either generically",
+          "path": "doc",
+          "range": [
+            7777,
+            7854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   or for one particular type. For example, we cannot define a method like",
+          "path": "doc",
+          "range": [
+            7855,
+            7932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `into_kv` generically for all `BorrowType`, or once for all types that",
+          "path": "doc",
+          "range": [
+            7933,
+            8009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   carry a lifetime, because we want it to return `&'a` references.",
+          "path": "doc",
+          "range": [
+            8010,
+            8080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Therefore, we define it only for the least powerful type `Immut<'a>`.",
+          "path": "doc",
+          "range": [
+            8081,
+            8156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - We cannot get implicit coercion from say `Mut<'a>` to `Immut<'a>`.",
+          "path": "doc",
+          "range": [
+            8157,
+            8229
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Therefore, we have to explicitly call `reborrow` on a more powerful",
+          "path": "doc",
+          "range": [
+            8230,
+            8303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   `NodeRef` in order to reach a method like `into_kv`.",
+          "path": "doc",
+          "range": [
+            8304,
+            8362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            8363,
+            8366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All methods on `NodeRef` that return some kind of reference, either:",
+          "path": "doc",
+          "range": [
+            8367,
+            8439
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Take `self` by value, and return the lifetime carried by `BorrowType`.",
+          "path": "doc",
+          "range": [
+            8440,
+            8516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   Sometimes, to invoke such a method, we need to call `reborrow_mut`.",
+          "path": "doc",
+          "range": [
+            8517,
+            8590
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - Take `self` by reference, and (implicitly) return that reference's",
+          "path": "doc",
+          "range": [
+            8591,
+            8663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   lifetime, instead of the lifetime carried by `BorrowType`. That way,",
+          "path": "doc",
+          "range": [
+            8664,
+            8738
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   the borrow checker guarantees that the `NodeRef` remains borrowed as long",
+          "path": "doc",
+          "range": [
+            8739,
+            8818
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   as the returned reference is used.",
+          "path": "doc",
+          "range": [
+            8819,
+            8859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   The methods supporting insert bend this rule by returning a raw pointer,",
+          "path": "doc",
+          "range": [
+            8860,
+            8938
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   i.e., a reference without any lifetime.",
+          "path": "doc",
+          "range": [
+            8939,
+            8984
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "NodeRef",
+      "range": [
+        5960,
+        9662
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9868,
+        9947
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9948,
+        10079
+      ]
+    },
+    {
+      "ancestors": [
+        9
+      ],
+      "attributes": [],
+      "body_range": [
+        10056,
+        10077
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        10032,
+        10077
+      ],
+      "signature_range": [
+        10032,
+        10055
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10081,
+        10172
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10174,
+        10260
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10261,
+        10345
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10346,
+        10433
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10434,
+        10516
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10517,
+        10599
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10601,
+        11084
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        10724,
+        10781
+      ],
+      "kind": "impl_fn",
+      "name": "new_leaf",
+      "range": [
+        10661,
+        10781
+      ],
+      "signature_range": [
+        10672,
+        10723
+      ]
+    },
+    {
+      "ancestors": [
+        17
+      ],
+      "attributes": [],
+      "body_range": [
+        10864,
+        11082
+      ],
+      "kind": "impl_fn",
+      "name": "from_new_leaf",
+      "range": [
+        10787,
+        11082
+      ],
+      "signature_range": [
+        10787,
+        10863
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11086,
+        12050
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new internal (height > 0) `NodeRef`",
+          "path": "doc",
+          "range": [
+            11150,
+            11199
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11279,
+        11481
+      ],
+      "kind": "impl_fn",
+      "name": "new_internal",
+      "range": [
+        11150,
+        11481
+      ],
+      "signature_range": [
+        11204,
+        11278
+      ]
+    },
+    {
+      "ancestors": [
+        20
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new internal (height > 0) `NodeRef` from an existing internal node",
+          "path": "doc",
+          "range": [
+            11487,
+            11567
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11708,
+        12048
+      ],
+      "kind": "impl_fn",
+      "name": "from_new_internal",
+      "range": [
+        11487,
+        12048
+      ],
+      "signature_range": [
+        11572,
+        11707
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12052,
+        12382
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unpack a node reference that was packed as `NodeRef::parent`.",
+          "path": "doc",
+          "range": [
+            12125,
+            12190
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12270,
+        12380
+      ],
+      "kind": "impl_fn",
+      "name": "from_internal",
+      "range": [
+        12125,
+        12380
+      ],
+      "signature_range": [
+        12195,
+        12269
+      ]
+    },
+    {
+      "ancestors": [
+        23,
+        24
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        12280,
+        12305
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12384,
+        12767
+      ]
+    },
+    {
+      "ancestors": [
+        26
+      ],
+      "attributes": [
+        {
+          "doc_text": " Exposes the data of an internal node.",
+          "path": "doc",
+          "range": [
+            12457,
+            12498
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12503,
+            12506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a raw ptr to avoid invalidating other references to this node.",
+          "path": "doc",
+          "range": [
+            12511,
+            12585
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12649,
+        12765
+      ],
+      "kind": "impl_fn",
+      "name": "as_internal_ptr",
+      "range": [
+        12457,
+        12765
+      ],
+      "signature_range": [
+        12590,
+        12648
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12769,
+        13047
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to the data of an internal node.",
+          "path": "doc",
+          "range": [
+            12839,
+            12900
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12962,
+        13045
+      ],
+      "kind": "impl_fn",
+      "name": "as_internal_mut",
+      "range": [
+        12839,
+        13045
+      ],
+      "signature_range": [
+        12905,
+        12961
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        13049,
+        14777
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the length of the node. This is the number of keys or values.",
+          "path": "doc",
+          "range": [
+            13116,
+            13187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The number of edges is `len() + 1`.",
+          "path": "doc",
+          "range": [
+            13192,
+            13231
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, despite being safe, calling this function can have the side effect",
+          "path": "doc",
+          "range": [
+            13236,
+            13317
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of invalidating mutable references that unsafe code has created.",
+          "path": "doc",
+          "range": [
+            13322,
+            13390
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13429,
+        13687
+      ],
+      "kind": "impl_fn",
+      "name": "len",
+      "range": [
+        13116,
+        13687
+      ],
+      "signature_range": [
+        13406,
+        13428
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the number of levels that the node and leaves are apart. Zero",
+          "path": "doc",
+          "range": [
+            13693,
+            13766
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " height means the node is a leaf itself. If you picture trees with the",
+          "path": "doc",
+          "range": [
+            13771,
+            13844
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " root on top, the number says at which elevation the node appears.",
+          "path": "doc",
+          "range": [
+            13849,
+            13918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you picture trees with leaves on top, the number says how high",
+          "path": "doc",
+          "range": [
+            13923,
+            13992
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the tree extends above the node.",
+          "path": "doc",
+          "range": [
+            13997,
+            14033
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14075,
+        14102
+      ],
+      "kind": "impl_fn",
+      "name": "height",
+      "range": [
+        13693,
+        14102
+      ],
+      "signature_range": [
+        14049,
+        14074
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Temporarily takes out another, immutable reference to the same node.",
+          "path": "doc",
+          "range": [
+            14108,
+            14180
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14257,
+        14343
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow",
+      "range": [
+        14108,
+        14343
+      ],
+      "signature_range": [
+        14196,
+        14256
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [
+        {
+          "doc_text": " Exposes the leaf portion of any leaf or internal node.",
+          "path": "doc",
+          "range": [
+            14349,
+            14407
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14412,
+            14415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a raw ptr to avoid invalidating other references to this node.",
+          "path": "doc",
+          "range": [
+            14420,
+            14494
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14550,
+        14775
+      ],
+      "kind": "impl_fn",
+      "name": "as_leaf_ptr",
+      "range": [
+        14349,
+        14775
+      ],
+      "signature_range": [
+        14499,
+        14549
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        14779,
+        16877
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the parent of the current node. Returns `Ok(handle)` if the current",
+          "path": "doc",
+          "range": [
+            14866,
+            14943
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " node actually has a parent, where `handle` points to the edge of the parent",
+          "path": "doc",
+          "range": [
+            14948,
+            15027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that points to the current node. Returns `Err(self)` if the current node has",
+          "path": "doc",
+          "range": [
+            15032,
+            15112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " no parent, giving back the original `NodeRef`.",
+          "path": "doc",
+          "range": [
+            15117,
+            15167
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15172,
+            15175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The method name assumes you picture trees with the root node on top.",
+          "path": "doc",
+          "range": [
+            15180,
+            15252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15257,
+            15260
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `edge.descend().ascend().unwrap()` and `node.ascend().unwrap().descend()` should",
+          "path": "doc",
+          "range": [
+            15265,
+            15349
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " both, upon success, do nothing.",
+          "path": "doc",
+          "range": [
+            15354,
+            15389
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15519,
+        16177
+      ],
+      "kind": "impl_fn",
+      "name": "ascend",
+      "range": [
+        14866,
+        16177
+      ],
+      "signature_range": [
+        15405,
+        15518
+      ]
+    },
+    {
+      "ancestors": [
+        35,
+        36
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        15549,
+        15586
+      ]
+    },
+    {
+      "ancestors": [
+        35,
+        36
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        15921,
+        16145
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [],
+      "body_range": [
+        16244,
+        16296
+      ],
+      "kind": "impl_fn",
+      "name": "first_edge",
+      "range": [
+        16183,
+        16296
+      ],
+      "signature_range": [
+        16194,
+        16243
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [],
+      "body_range": [
+        16362,
+        16446
+      ],
+      "kind": "impl_fn",
+      "name": "last_edge",
+      "range": [
+        16302,
+        16446
+      ],
+      "signature_range": [
+        16313,
+        16361
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": " Note that `self` must be nonempty.",
+          "path": "doc",
+          "range": [
+            16452,
+            16490
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16552,
+        16658
+      ],
+      "kind": "impl_fn",
+      "name": "first_kv",
+      "range": [
+        16452,
+        16658
+      ],
+      "signature_range": [
+        16506,
+        16551
+      ]
+    },
+    {
+      "ancestors": [
+        35,
+        41
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16592,
+        16608
+      ]
+    },
+    {
+      "ancestors": [
+        35
+      ],
+      "attributes": [
+        {
+          "doc_text": " Note that `self` must be nonempty.",
+          "path": "doc",
+          "range": [
+            16664,
+            16702
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        16763,
+        16875
+      ],
+      "kind": "impl_fn",
+      "name": "last_kv",
+      "range": [
+        16664,
+        16875
+      ],
+      "signature_range": [
+        16718,
+        16762
+      ]
+    },
+    {
+      "ancestors": [
+        35,
+        43
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        16803,
+        16819
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        16879,
+        17275
+      ]
+    },
+    {
+      "ancestors": [
+        45
+      ],
+      "attributes": [
+        {
+          "doc_text": " Could be a public implementation of PartialEq, but only used in this module.",
+          "path": "doc",
+          "range": [
+            16946,
+            17026
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17066,
+        17273
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        16946,
+        17273
+      ],
+      "signature_range": [
+        17031,
+        17065
+      ]
+    },
+    {
+      "ancestors": [
+        45,
+        46
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        17165,
+        17204
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17277,
+        17871
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [
+        {
+          "doc_text": " Exposes the leaf portion of any leaf or internal node in an immutable tree.",
+          "path": "doc",
+          "range": [
+            17351,
+            17430
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17476,
+        17642
+      ],
+      "kind": "impl_fn",
+      "name": "into_leaf",
+      "range": [
+        17351,
+        17642
+      ],
+      "signature_range": [
+        17435,
+        17475
+      ]
+    },
+    {
+      "ancestors": [
+        48
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows a view into the keys stored in the node.",
+          "path": "doc",
+          "range": [
+            17648,
+            17700
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17739,
+        17869
+      ],
+      "kind": "impl_fn",
+      "name": "keys",
+      "range": [
+        17648,
+        17869
+      ],
+      "signature_range": [
+        17716,
+        17738
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        17873,
+        18768
+      ]
+    },
+    {
+      "ancestors": [
+        51
+      ],
+      "attributes": [
+        {
+          "doc_text": " Similar to `ascend`, gets a reference to a node's parent node, but also",
+          "path": "doc",
+          "range": [
+            17943,
+            18018
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " deallocates the current node in the process. This is unsafe because the",
+          "path": "doc",
+          "range": [
+            18023,
+            18098
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " current node will still be accessible despite being deallocated.",
+          "path": "doc",
+          "range": [
+            18103,
+            18171
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        18360,
+        18766
+      ],
+      "kind": "impl_fn",
+      "name": "deallocate_and_ascend",
+      "range": [
+        17943,
+        18766
+      ],
+      "signature_range": [
+        18187,
+        18359
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        18770,
+        20439
+      ]
+    },
+    {
+      "ancestors": [
+        53
+      ],
+      "attributes": [
+        {
+          "doc_text": " Temporarily takes out another mutable reference to the same node. Beware, as",
+          "path": "doc",
+          "range": [
+            18834,
+            18914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this method is very dangerous, doubly so since it might not immediately appear",
+          "path": "doc",
+          "range": [
+            18919,
+            19001
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dangerous.",
+          "path": "doc",
+          "range": [
+            19006,
+            19020
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            19025,
+            19028
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Because mutable pointers can roam anywhere around the tree, the returned",
+          "path": "doc",
+          "range": [
+            19033,
+            19109
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pointer can easily be used to make the original pointer dangling, out of",
+          "path": "doc",
+          "range": [
+            19114,
+            19190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " bounds, or invalid under stacked borrow rules.",
+          "path": "doc",
+          "range": [
+            19195,
+            19245
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19513,
+        19599
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow_mut",
+      "range": [
+        18834,
+        19599
+      ],
+      "signature_range": [
+        19439,
+        19512
+      ]
+    },
+    {
+      "ancestors": [
+        53
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to the leaf portion of a leaf or internal node.",
+          "path": "doc",
+          "range": [
+            19605,
+            19681
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19735,
+        19878
+      ],
+      "kind": "impl_fn",
+      "name": "as_leaf_mut",
+      "range": [
+        19605,
+        19878
+      ],
+      "signature_range": [
+        19686,
+        19734
+      ]
+    },
+    {
+      "ancestors": [
+        53
+      ],
+      "attributes": [
+        {
+          "doc_text": " Offers exclusive access to the leaf portion of a leaf or internal node.",
+          "path": "doc",
+          "range": [
+            19884,
+            19959
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20017,
+        20165
+      ],
+      "kind": "impl_fn",
+      "name": "into_leaf_mut",
+      "range": [
+        19884,
+        20165
+      ],
+      "signature_range": [
+        19964,
+        20016
+      ]
+    },
+    {
+      "ancestors": [
+        53
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a dormant copy of this node with its lifetime erased which can",
+          "path": "doc",
+          "range": [
+            20171,
+            20245
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be reawakened later.",
+          "path": "doc",
+          "range": [
+            20250,
+            20274
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20351,
+        20437
+      ],
+      "kind": "impl_fn",
+      "name": "dormant",
+      "range": [
+        20171,
+        20437
+      ],
+      "signature_range": [
+        20290,
+        20350
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        20441,
+        20918
+      ]
+    },
+    {
+      "ancestors": [
+        58
+      ],
+      "attributes": [
+        {
+          "doc_text": " Revert to the unique borrow initially captured.",
+          "path": "doc",
+          "range": [
+            20504,
+            20555
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20560,
+            20563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            20568,
+            20580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20585,
+            20588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The reborrow must have ended, i.e., the reference returned by `new` and",
+          "path": "doc",
+          "range": [
+            20593,
+            20668
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all pointers and references derived from it, must not be used anymore.",
+          "path": "doc",
+          "range": [
+            20673,
+            20747
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        20830,
+        20916
+      ],
+      "kind": "impl_fn",
+      "name": "awaken",
+      "range": [
+        20504,
+        20916
+      ],
+      "signature_range": [
+        20763,
+        20829
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        20920,
+        21261
+      ]
+    },
+    {
+      "ancestors": [
+        60
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to the leaf portion of a dying leaf or internal node.",
+          "path": "doc",
+          "range": [
+            20978,
+            21060
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21116,
+        21259
+      ],
+      "kind": "impl_fn",
+      "name": "as_leaf_dying",
+      "range": [
+        20978,
+        21259
+      ],
+      "signature_range": [
+        21065,
+        21115
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        21263,
+        22525
+      ]
+    },
+    {
+      "ancestors": [
+        62
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to an element of the key storage area.",
+          "path": "doc",
+          "range": [
+            21335,
+            21402
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21407,
+            21410
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            21415,
+            21427
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `index` is in bounds of 0..CAPACITY",
+          "path": "doc",
+          "range": [
+            21432,
+            21471
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        21626,
+        21916
+      ],
+      "kind": "impl_fn",
+      "name": "key_area_mut",
+      "range": [
+        21335,
+        21916
+      ],
+      "signature_range": [
+        21476,
+        21621
+      ]
+    },
+    {
+      "ancestors": [
+        62
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to an element or slice of the node's value storage area.",
+          "path": "doc",
+          "range": [
+            21922,
+            22007
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22012,
+            22015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            22020,
+            22032
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `index` is in bounds of 0..CAPACITY",
+          "path": "doc",
+          "range": [
+            22037,
+            22076
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22231,
+        22523
+      ],
+      "kind": "impl_fn",
+      "name": "val_area_mut",
+      "range": [
+        21922,
+        22523
+      ],
+      "signature_range": [
+        22081,
+        22226
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        22527,
+        23243
+      ]
+    },
+    {
+      "ancestors": [
+        65
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to an element or slice of the node's storage area for edge contents.",
+          "path": "doc",
+          "range": [
+            22605,
+            22702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            22707,
+            22710
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            22715,
+            22727
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `index` is in bounds of 0..CAPACITY + 1",
+          "path": "doc",
+          "range": [
+            22732,
+            22775
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22945,
+        23241
+      ],
+      "kind": "impl_fn",
+      "name": "edge_area_mut",
+      "range": [
+        22605,
+        23241
+      ],
+      "signature_range": [
+        22780,
+        22940
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        23245,
+        24196
+      ]
+    },
+    {
+      "ancestors": [
+        67
+      ],
+      "attributes": [
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            23312,
+            23324
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The node has more than `idx` initialized elements.",
+          "path": "doc",
+          "range": [
+            23329,
+            23385
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23464,
+        24194
+      ],
+      "kind": "impl_fn",
+      "name": "into_key_val_mut_at",
+      "range": [
+        23312,
+        24194
+      ],
+      "signature_range": [
+        23390,
+        23463
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24198,
+        24420
+      ]
+    },
+    {
+      "ancestors": [
+        69
+      ],
+      "attributes": [
+        {
+          "doc_text": " Borrows exclusive access to the length of the node.",
+          "path": "doc",
+          "range": [
+            24270,
+            24325
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24375,
+        24418
+      ],
+      "kind": "impl_fn",
+      "name": "len_mut",
+      "range": [
+        24270,
+        24418
+      ],
+      "signature_range": [
+        24341,
+        24374
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        24422,
+        25005
+      ]
+    },
+    {
+      "ancestors": [
+        71
+      ],
+      "attributes": [
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            24492,
+            24504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Every item returned by `range` is a valid edge index for the node.",
+          "path": "doc",
+          "range": [
+            24509,
+            24579
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24673,
+        24846
+      ],
+      "kind": "impl_fn",
+      "name": "correct_childrens_parent_links",
+      "range": [
+        24492,
+        24846
+      ],
+      "signature_range": [
+        24584,
+        24672
+      ]
+    },
+    {
+      "ancestors": [
+        71,
+        72
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        24712,
+        24742
+      ]
+    },
+    {
+      "ancestors": [
+        71
+      ],
+      "attributes": [],
+      "body_range": [
+        24901,
+        25003
+      ],
+      "kind": "impl_fn",
+      "name": "correct_all_childrens_parent_links",
+      "range": [
+        24852,
+        25003
+      ],
+      "signature_range": [
+        24852,
+        24900
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25007,
+        25452
+      ]
+    },
+    {
+      "ancestors": [
+        75
+      ],
+      "attributes": [
+        {
+          "doc_text": " Sets the node's link to its parent edge,",
+          "path": "doc",
+          "range": [
+            25091,
+            25135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " without invalidating other references to the node.",
+          "path": "doc",
+          "range": [
+            25140,
+            25194
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25285,
+        25450
+      ],
+      "kind": "impl_fn",
+      "name": "set_parent_link",
+      "range": [
+        25091,
+        25450
+      ],
+      "signature_range": [
+        25199,
+        25284
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25454,
+        25735
+      ]
+    },
+    {
+      "ancestors": [
+        77
+      ],
+      "attributes": [
+        {
+          "doc_text": " Clears the root's link to its parent edge.",
+          "path": "doc",
+          "range": [
+            25524,
+            25570
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25607,
+        25733
+      ],
+      "kind": "impl_fn",
+      "name": "clear_parent_link",
+      "range": [
+        25524,
+        25733
+      ],
+      "signature_range": [
+        25575,
+        25606
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        25737,
+        27855
+      ]
+    },
+    {
+      "ancestors": [
+        79
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a new owned tree, with its own root node that is initially empty.",
+          "path": "doc",
+          "range": [
+            25807,
+            25884
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25947,
+        26001
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        25807,
+        26001
+      ],
+      "signature_range": [
+        25900,
+        25946
+      ]
+    },
+    {
+      "ancestors": [
+        79
+      ],
+      "attributes": [
+        {
+          "doc_text": " Adds a new internal node with a single edge pointing to the previous root node,",
+          "path": "doc",
+          "range": [
+            26007,
+            26090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " make that new node the root node, and return it. This increases the height by 1",
+          "path": "doc",
+          "range": [
+            26095,
+            26178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and is the opposite of `pop_internal_level`.",
+          "path": "doc",
+          "range": [
+            26183,
+            26231
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        26388,
+        26655
+      ],
+      "kind": "impl_fn",
+      "name": "push_internal_level",
+      "range": [
+        26007,
+        26655
+      ],
+      "signature_range": [
+        26247,
+        26387
+      ]
+    },
+    {
+      "ancestors": [
+        79,
+        81
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        26425,
+        26488
+      ]
+    },
+    {
+      "ancestors": [
+        79
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the internal root node, using its first child as the new root node.",
+          "path": "doc",
+          "range": [
+            26661,
+            26740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " As it is intended only to be called when the root node has only one child,",
+          "path": "doc",
+          "range": [
+            26745,
+            26823
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " no cleanup is done on any of the keys, values and other children.",
+          "path": "doc",
+          "range": [
+            26828,
+            26897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This decreases the height by 1 and is the opposite of `push_internal_level`.",
+          "path": "doc",
+          "range": [
+            26902,
+            26982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            26987,
+            26990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Does not invalidate any handles or references pointing into the subtree",
+          "path": "doc",
+          "range": [
+            26995,
+            27070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " rooted at the first child of `self`.",
+          "path": "doc",
+          "range": [
+            27075,
+            27115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            27120,
+            27123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if there is no internal level, i.e., if the root node is a leaf.",
+          "path": "doc",
+          "range": [
+            27128,
+            27203
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        27284,
+        27853
+      ],
+      "kind": "impl_fn",
+      "name": "pop_internal_level",
+      "range": [
+        26661,
+        27853
+      ],
+      "signature_range": [
+        27219,
+        27283
+      ]
+    },
+    {
+      "ancestors": [
+        79,
+        83
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        27294,
+        27318
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27857,
+        28803
+      ]
+    },
+    {
+      "ancestors": [
+        85
+      ],
+      "attributes": [
+        {
+          "doc_text": " Mutably borrows the owned root node. Unlike `reborrow_mut`, this is safe",
+          "path": "doc",
+          "range": [
+            27915,
+            27991
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " because the return value cannot be used to destroy the root, and there",
+          "path": "doc",
+          "range": [
+            27996,
+            28070
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " cannot be other references to the tree.",
+          "path": "doc",
+          "range": [
+            28075,
+            28118
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28199,
+        28285
+      ],
+      "kind": "impl_fn",
+      "name": "borrow_mut",
+      "range": [
+        27915,
+        28285
+      ],
+      "signature_range": [
+        28134,
+        28198
+      ]
+    },
+    {
+      "ancestors": [
+        85
+      ],
+      "attributes": [
+        {
+          "doc_text": " Slightly mutably borrows the owned root node.",
+          "path": "doc",
+          "range": [
+            28291,
+            28340
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28427,
+        28513
+      ],
+      "kind": "impl_fn",
+      "name": "borrow_valmut",
+      "range": [
+        28291,
+        28513
+      ],
+      "signature_range": [
+        28356,
+        28426
+      ]
+    },
+    {
+      "ancestors": [
+        85
+      ],
+      "attributes": [
+        {
+          "doc_text": " Irreversibly transitions to a reference that permits traversal and offers",
+          "path": "doc",
+          "range": [
+            28519,
+            28596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " destructive methods and little else.",
+          "path": "doc",
+          "range": [
+            28601,
+            28641
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        28715,
+        28801
+      ],
+      "kind": "impl_fn",
+      "name": "into_dying",
+      "range": [
+        28519,
+        28801
+      ],
+      "signature_range": [
+        28657,
+        28714
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        28805,
+        29960
+      ]
+    },
+    {
+      "ancestors": [
+        89
+      ],
+      "attributes": [
+        {
+          "doc_text": " Adds a key-value pair to the end of the node, and returns",
+          "path": "doc",
+          "range": [
+            28879,
+            28940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a handle to the inserted value.",
+          "path": "doc",
+          "range": [
+            28945,
+            28980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            28985,
+            28988
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            28993,
+            29005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            29010,
+            29013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned handle has an unbound lifetime.",
+          "path": "doc",
+          "range": [
+            29018,
+            29066
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29239,
+        29641
+      ],
+      "kind": "impl_fn",
+      "name": "push_with_handle",
+      "range": [
+        28879,
+        29641
+      ],
+      "signature_range": [
+        29082,
+        29238
+      ]
+    },
+    {
+      "ancestors": [
+        89,
+        90
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        29320,
+        29343
+      ]
+    },
+    {
+      "ancestors": [
+        89
+      ],
+      "attributes": [
+        {
+          "doc_text": " Adds a key-value pair to the end of the node, and returns",
+          "path": "doc",
+          "range": [
+            29647,
+            29708
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the mutable reference of the inserted value.",
+          "path": "doc",
+          "range": [
+            29713,
+            29761
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        29822,
+        29958
+      ],
+      "kind": "impl_fn",
+      "name": "push",
+      "range": [
+        29647,
+        29958
+      ],
+      "signature_range": [
+        29777,
+        29821
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        29962,
+        30655
+      ]
+    },
+    {
+      "ancestors": [
+        93
+      ],
+      "attributes": [
+        {
+          "doc_text": " Adds a key-value pair, and an edge to go to the right of that pair,",
+          "path": "doc",
+          "range": [
+            30040,
+            30111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the end of the node.",
+          "path": "doc",
+          "range": [
+            30116,
+            30143
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30212,
+        30653
+      ],
+      "kind": "impl_fn",
+      "name": "push",
+      "range": [
+        30040,
+        30653
+      ],
+      "signature_range": [
+        30159,
+        30211
+      ]
+    },
+    {
+      "ancestors": [
+        93,
+        94
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30222,
+        30261
+      ]
+    },
+    {
+      "ancestors": [
+        93,
+        94
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        30343,
+        30366
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30657,
+        30981
+      ]
+    },
+    {
+      "ancestors": [
+        97
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes any static information asserting that this node is a `Leaf` node.",
+          "path": "doc",
+          "range": [
+            30726,
+            30803
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        30893,
+        30979
+      ],
+      "kind": "impl_fn",
+      "name": "forget_type",
+      "range": [
+        30726,
+        30979
+      ],
+      "signature_range": [
+        30819,
+        30892
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        30983,
+        31316
+      ]
+    },
+    {
+      "ancestors": [
+        99
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes any static information asserting that this node is an `Internal` node.",
+          "path": "doc",
+          "range": [
+            31056,
+            31138
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31228,
+        31314
+      ],
+      "kind": "impl_fn",
+      "name": "forget_type",
+      "range": [
+        31056,
+        31314
+      ],
+      "signature_range": [
+        31154,
+        31227
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        31318,
+        32028
+      ]
+    },
+    {
+      "ancestors": [
+        101
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether a node is an `Internal` node or a `Leaf` node.",
+          "path": "doc",
+          "range": [
+            31397,
+            31462
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        31632,
+        32026
+      ],
+      "kind": "impl_fn",
+      "name": "force",
+      "range": [
+        31397,
+        32026
+      ],
+      "signature_range": [
+        31478,
+        31631
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        32030,
+        32764
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unsafely asserts to the compiler the static information that this node is a `Leaf`.",
+          "path": "doc",
+          "range": [
+            32106,
+            32193
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32311,
+        32438
+      ],
+      "kind": "impl_fn",
+      "name": "cast_to_leaf_unchecked",
+      "range": [
+        32106,
+        32438
+      ],
+      "signature_range": [
+        32209,
+        32310
+      ]
+    },
+    {
+      "ancestors": [
+        103,
+        104
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        32321,
+        32352
+      ]
+    },
+    {
+      "ancestors": [
+        103
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unsafely asserts to the compiler the static information that this node is an `Internal`.",
+          "path": "doc",
+          "range": [
+            32444,
+            32536
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        32636,
+        32762
+      ],
+      "kind": "impl_fn",
+      "name": "cast_to_internal_unchecked",
+      "range": [
+        32444,
+        32762
+      ],
+      "signature_range": [
+        32541,
+        32635
+      ]
+    },
+    {
+      "ancestors": [
+        103,
+        106
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        32646,
+        32676
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A reference to a specific key-value pair or edge within a node. The `Node` parameter",
+          "path": "doc",
+          "range": [
+            32766,
+            32854
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " must be a `NodeRef`, while the `Type` can either be `KV` (signifying a handle on a key-value",
+          "path": "doc",
+          "range": [
+            32855,
+            32951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pair) or `Edge` (signifying a handle on an edge).",
+          "path": "doc",
+          "range": [
+            32952,
+            33005
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            33006,
+            33009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that even `Leaf` nodes can have `Edge` handles. Instead of representing a pointer to",
+          "path": "doc",
+          "range": [
+            33010,
+            33103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a child node, these represent the spaces where child pointers would go between the key-value",
+          "path": "doc",
+          "range": [
+            33104,
+            33200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pairs. For example, in a node with length 2, there would be 3 possible edge locations - one",
+          "path": "doc",
+          "range": [
+            33201,
+            33296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the left of the node, one between the two pairs, and one at the right of the node.",
+          "path": "doc",
+          "range": [
+            33297,
+            33386
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Handle",
+      "range": [
+        32766,
+        33491
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33493,
+        33546
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33713,
+        33818
+      ]
+    },
+    {
+      "ancestors": [
+        110
+      ],
+      "attributes": [],
+      "body_range": [
+        33795,
+        33816
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        33771,
+        33816
+      ],
+      "signature_range": [
+        33771,
+        33794
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        33820,
+        34139
+      ]
+    },
+    {
+      "ancestors": [
+        112
+      ],
+      "attributes": [
+        {
+          "doc_text": " Retrieves the node that contains the edge or key-value pair this handle points to.",
+          "path": "doc",
+          "range": [
+            33862,
+            33948
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        33991,
+        34016
+      ],
+      "kind": "impl_fn",
+      "name": "into_node",
+      "range": [
+        33862,
+        34016
+      ],
+      "signature_range": [
+        33964,
+        33990
+      ]
+    },
+    {
+      "ancestors": [
+        112
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the position of this handle in the node.",
+          "path": "doc",
+          "range": [
+            34022,
+            34074
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34113,
+        34137
+      ],
+      "kind": "impl_fn",
+      "name": "idx",
+      "range": [
+        34022,
+        34137
+      ],
+      "signature_range": [
+        34090,
+        34112
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34141,
+        34887
+      ]
+    },
+    {
+      "ancestors": [
+        115
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new handle to a key-value pair in `node`.",
+          "path": "doc",
+          "range": [
+            34236,
+            34291
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unsafe because the caller must ensure that `idx < node.len()`.",
+          "path": "doc",
+          "range": [
+            34296,
+            34362
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        34458,
+        34558
+      ],
+      "kind": "impl_fn",
+      "name": "new_kv",
+      "range": [
+        34236,
+        34558
+      ],
+      "signature_range": [
+        34378,
+        34457
+      ]
+    },
+    {
+      "ancestors": [
+        115,
+        116
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        34468,
+        34499
+      ]
+    },
+    {
+      "ancestors": [
+        115
+      ],
+      "attributes": [],
+      "body_range": [
+        34655,
+        34719
+      ],
+      "kind": "impl_fn",
+      "name": "left_edge",
+      "range": [
+        34564,
+        34719
+      ],
+      "signature_range": [
+        34575,
+        34654
+      ]
+    },
+    {
+      "ancestors": [
+        115
+      ],
+      "attributes": [],
+      "body_range": [
+        34817,
+        34885
+      ],
+      "kind": "impl_fn",
+      "name": "right_edge",
+      "range": [
+        34725,
+        34885
+      ],
+      "signature_range": [
+        34736,
+        34816
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        34889,
+        35156
+      ]
+    },
+    {
+      "ancestors": [
+        120
+      ],
+      "attributes": [],
+      "body_range": [
+        35049,
+        35154
+      ],
+      "kind": "impl_fn",
+      "name": "eq",
+      "range": [
+        35014,
+        35154
+      ],
+      "signature_range": [
+        35014,
+        35048
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        35158,
+        35639
+      ]
+    },
+    {
+      "ancestors": [
+        122
+      ],
+      "attributes": [
+        {
+          "doc_text": " Temporarily takes out another immutable handle on the same location.",
+          "path": "doc",
+          "range": [
+            35269,
+            35341
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        35457,
+        35637
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow",
+      "range": [
+        35269,
+        35637
+      ],
+      "signature_range": [
+        35357,
+        35456
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        35641,
+        36653
+      ]
+    },
+    {
+      "ancestors": [
+        124
+      ],
+      "attributes": [
+        {
+          "doc_text": " Temporarily takes out another mutable handle on the same location. Beware, as",
+          "path": "doc",
+          "range": [
+            35745,
+            35826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this method is very dangerous, doubly so since it might not immediately appear",
+          "path": "doc",
+          "range": [
+            35831,
+            35913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " dangerous.",
+          "path": "doc",
+          "range": [
+            35918,
+            35932
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            35937,
+            35940
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " For details, see `NodeRef::reborrow_mut`.",
+          "path": "doc",
+          "range": [
+            35945,
+            35990
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36119,
+        36314
+      ],
+      "kind": "impl_fn",
+      "name": "reborrow_mut",
+      "range": [
+        35745,
+        36314
+      ],
+      "signature_range": [
+        36006,
+        36118
+      ]
+    },
+    {
+      "ancestors": [
+        124
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns a dormant copy of this handle which can be reawakened later.",
+          "path": "doc",
+          "range": [
+            36320,
+            36392
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36397,
+            36400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " See `DormantMutRef` for more details.",
+          "path": "doc",
+          "range": [
+            36405,
+            36446
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        36562,
+        36651
+      ],
+      "kind": "impl_fn",
+      "name": "dormant",
+      "range": [
+        36320,
+        36651
+      ],
+      "signature_range": [
+        36462,
+        36561
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        36655,
+        37224
+      ]
+    },
+    {
+      "ancestors": [
+        127
+      ],
+      "attributes": [
+        {
+          "doc_text": " Revert to the unique borrow initially captured.",
+          "path": "doc",
+          "range": [
+            36758,
+            36809
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36814,
+            36817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            36822,
+            36834
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            36839,
+            36842
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The reborrow must have ended, i.e., the reference returned by `new` and",
+          "path": "doc",
+          "range": [
+            36847,
+            36922
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " all pointers and references derived from it, must not be used anymore.",
+          "path": "doc",
+          "range": [
+            36927,
+            37001
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37123,
+        37222
+      ],
+      "kind": "impl_fn",
+      "name": "awaken",
+      "range": [
+        36758,
+        37222
+      ],
+      "signature_range": [
+        37017,
+        37122
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        37226,
+        38195
+      ]
+    },
+    {
+      "ancestors": [
+        129
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new handle to an edge in `node`.",
+          "path": "doc",
+          "range": [
+            37323,
+            37369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unsafe because the caller must ensure that `idx <= node.len()`.",
+          "path": "doc",
+          "range": [
+            37374,
+            37441
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        37539,
+        37640
+      ],
+      "kind": "impl_fn",
+      "name": "new_edge",
+      "range": [
+        37323,
+        37640
+      ],
+      "signature_range": [
+        37457,
+        37538
+      ]
+    },
+    {
+      "ancestors": [
+        129,
+        130
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        37549,
+        37581
+      ]
+    },
+    {
+      "ancestors": [
+        129
+      ],
+      "attributes": [],
+      "body_range": [
+        37762,
+        37911
+      ],
+      "kind": "impl_fn",
+      "name": "left_kv",
+      "range": [
+        37646,
+        37911
+      ],
+      "signature_range": [
+        37657,
+        37761
+      ]
+    },
+    {
+      "ancestors": [
+        129
+      ],
+      "attributes": [],
+      "body_range": [
+        38034,
+        38193
+      ],
+      "kind": "impl_fn",
+      "name": "right_kv",
+      "range": [
+        37917,
+        38193
+      ],
+      "signature_range": [
+        37928,
+        38033
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "LeftOrRight",
+      "range": [
+        38197,
+        38258
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Given an edge index where we want to insert into a node filled to capacity,",
+          "path": "doc",
+          "range": [
+            38260,
+            38339
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " computes a sensible KV index of a split point and where to perform the insertion.",
+          "path": "doc",
+          "range": [
+            38340,
+            38425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The goal of the split point is for its key and value to end up in a parent node;",
+          "path": "doc",
+          "range": [
+            38426,
+            38510
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the keys, values and edges to the left of the split point become the left child;",
+          "path": "doc",
+          "range": [
+            38511,
+            38595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the keys, values and edges to the right of the split point become the right child.",
+          "path": "doc",
+          "range": [
+            38596,
+            38682
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        38745,
+        39216
+      ],
+      "kind": "fn",
+      "name": "splitpoint",
+      "range": [
+        38260,
+        39216
+      ],
+      "signature_range": [
+        38683,
+        38744
+      ]
+    },
+    {
+      "ancestors": [
+        135
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        38751,
+        38786
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        39218,
+        40044
+      ]
+    },
+    {
+      "ancestors": [
+        137
+      ],
+      "attributes": [
+        {
+          "doc_text": " Inserts a new key-value pair between the key-value pairs to the right and left of",
+          "path": "doc",
+          "range": [
+            39314,
+            39399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this edge. This method assumes that there is enough space in the node for the new",
+          "path": "doc",
+          "range": [
+            39404,
+            39489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pair to fit.",
+          "path": "doc",
+          "range": [
+            39494,
+            39510
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        39661,
+        40042
+      ],
+      "kind": "impl_fn",
+      "name": "insert_fit",
+      "range": [
+        39314,
+        40042
+      ],
+      "signature_range": [
+        39515,
+        39660
+      ]
+    },
+    {
+      "ancestors": [
+        137,
+        138
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        39671,
+        39712
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        40046,
+        41710
+      ]
+    },
+    {
+      "ancestors": [
+        140
+      ],
+      "attributes": [
+        {
+          "doc_text": " Inserts a new key-value pair between the key-value pairs to the right and left of",
+          "path": "doc",
+          "range": [
+            40142,
+            40227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this edge. This method splits the node if there isn't enough room.",
+          "path": "doc",
+          "range": [
+            40232,
+            40302
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            40307,
+            40310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a dormant handle to the inserted node which can be reawakened",
+          "path": "doc",
+          "range": [
+            40315,
+            40388
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " once splitting is complete.",
+          "path": "doc",
+          "range": [
+            40393,
+            40424
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        40673,
+        41708
+      ],
+      "kind": "impl_fn",
+      "name": "insert",
+      "range": [
+        40142,
+        41708
+      ],
+      "signature_range": [
+        40429,
+        40672
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        41712,
+        42277
+      ]
+    },
+    {
+      "ancestors": [
+        142
+      ],
+      "attributes": [
+        {
+          "doc_text": " Fixes the parent pointer and index in the child node that this edge",
+          "path": "doc",
+          "range": [
+            41804,
+            41875
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " links to. This is useful when the ordering of edges has been changed,",
+          "path": "doc",
+          "range": [
+            41880,
+            41953
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        41987,
+        42275
+      ],
+      "kind": "impl_fn",
+      "name": "correct_parent_link",
+      "range": [
+        41804,
+        42275
+      ],
+      "signature_range": [
+        41958,
+        41986
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        42279,
+        44531
+      ]
+    },
+    {
+      "ancestors": [
+        144
+      ],
+      "attributes": [
+        {
+          "doc_text": " Inserts a new key-value pair and an edge that will go to the right of that new pair",
+          "path": "doc",
+          "range": [
+            42379,
+            42466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " between this edge and the key-value pair to the right of this edge. This method assumes",
+          "path": "doc",
+          "range": [
+            42471,
+            42562
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that there is enough space in the node for the new pair to fit.",
+          "path": "doc",
+          "range": [
+            42567,
+            42634
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        42698,
+        43263
+      ],
+      "kind": "impl_fn",
+      "name": "insert_fit",
+      "range": [
+        42379,
+        43263
+      ],
+      "signature_range": [
+        42639,
+        42697
+      ]
+    },
+    {
+      "ancestors": [
+        144,
+        145
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        42708,
+        42749
+      ]
+    },
+    {
+      "ancestors": [
+        144,
+        145
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        42759,
+        42809
+      ]
+    },
+    {
+      "ancestors": [
+        144
+      ],
+      "attributes": [
+        {
+          "doc_text": " Inserts a new key-value pair and an edge that will go to the right of that new pair",
+          "path": "doc",
+          "range": [
+            43269,
+            43356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " between this edge and the key-value pair to the right of this edge. This method splits",
+          "path": "doc",
+          "range": [
+            43361,
+            43451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the node if there isn't enough room.",
+          "path": "doc",
+          "range": [
+            43456,
+            43496
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        43685,
+        44529
+      ],
+      "kind": "impl_fn",
+      "name": "insert",
+      "range": [
+        43269,
+        44529
+      ],
+      "signature_range": [
+        43501,
+        43684
+      ]
+    },
+    {
+      "ancestors": [
+        144,
+        148
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        43695,
+        43739
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        44533,
+        46625
+      ]
+    },
+    {
+      "ancestors": [
+        150
+      ],
+      "attributes": [
+        {
+          "doc_text": " Inserts a new key-value pair between the key-value pairs to the right and left of",
+          "path": "doc",
+          "range": [
+            44629,
+            44714
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " this edge. This method splits the node if there isn't enough room, and tries to",
+          "path": "doc",
+          "range": [
+            44719,
+            44802
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " insert the split off portion into the parent node recursively, until the root is reached.",
+          "path": "doc",
+          "range": [
+            44807,
+            44900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            44905,
+            44908
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If the returned result is some `SplitResult`, the `left` field will be the root node.",
+          "path": "doc",
+          "range": [
+            44913,
+            45002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned pointer points to the inserted value, which in the case of `SplitResult`",
+          "path": "doc",
+          "range": [
+            45007,
+            45096
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is in the `left` or `right` tree.",
+          "path": "doc",
+          "range": [
+            45101,
+            45138
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        45417,
+        46623
+      ],
+      "kind": "impl_fn",
+      "name": "insert_recursing",
+      "range": [
+        44629,
+        46623
+      ],
+      "signature_range": [
+        45154,
+        45416
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        46627,
+        47930
+      ]
+    },
+    {
+      "ancestors": [
+        152
+      ],
+      "attributes": [
+        {
+          "doc_text": " Finds the node pointed to by this edge.",
+          "path": "doc",
+          "range": [
+            46746,
+            46789
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            46794,
+            46797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The method name assumes you picture trees with the root node on top.",
+          "path": "doc",
+          "range": [
+            46802,
+            46874
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            46879,
+            46882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `edge.descend().ascend().unwrap()` and `node.ascend().unwrap().descend()` should",
+          "path": "doc",
+          "range": [
+            46887,
+            46971
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " both, upon success, do nothing.",
+          "path": "doc",
+          "range": [
+            46976,
+            47011
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        47097,
+        47928
+      ],
+      "kind": "impl_fn",
+      "name": "descend",
+      "range": [
+        46746,
+        47928
+      ],
+      "signature_range": [
+        47027,
+        47096
+      ]
+    },
+    {
+      "ancestors": [
+        152,
+        153
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        47127,
+        47164
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        47932,
+        48357
+      ]
+    },
+    {
+      "ancestors": [
+        155
+      ],
+      "attributes": [],
+      "body_range": [
+        48080,
+        48355
+      ],
+      "kind": "impl_fn",
+      "name": "into_kv",
+      "range": [
+        48034,
+        48355
+      ],
+      "signature_range": [
+        48045,
+        48079
+      ]
+    },
+    {
+      "ancestors": [
+        155,
+        156
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        48090,
+        48131
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        48359,
+        49163
+      ]
+    },
+    {
+      "ancestors": [
+        158
+      ],
+      "attributes": [],
+      "body_range": [
+        48502,
+        48579
+      ],
+      "kind": "impl_fn",
+      "name": "key_mut",
+      "range": [
+        48459,
+        48579
+      ],
+      "signature_range": [
+        48470,
+        48501
+      ]
+    },
+    {
+      "ancestors": [
+        158
+      ],
+      "attributes": [],
+      "body_range": [
+        48631,
+        48810
+      ],
+      "kind": "impl_fn",
+      "name": "into_val_mut",
+      "range": [
+        48585,
+        48810
+      ],
+      "signature_range": [
+        48596,
+        48630
+      ]
+    },
+    {
+      "ancestors": [
+        158,
+        160
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        48641,
+        48682
+      ]
+    },
+    {
+      "ancestors": [
+        158
+      ],
+      "attributes": [],
+      "body_range": [
+        48874,
+        49161
+      ],
+      "kind": "impl_fn",
+      "name": "into_kv_mut",
+      "range": [
+        48816,
+        49161
+      ],
+      "signature_range": [
+        48827,
+        48873
+      ]
+    },
+    {
+      "ancestors": [
+        158,
+        162
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        48884,
+        48925
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        49165,
+        49385
+      ]
+    },
+    {
+      "ancestors": [
+        164
+      ],
+      "attributes": [],
+      "body_range": [
+        49317,
+        49383
+      ],
+      "kind": "impl_fn",
+      "name": "into_kv_valmut",
+      "range": [
+        49260,
+        49383
+      ],
+      "signature_range": [
+        49271,
+        49316
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        49387,
+        50233
+      ]
+    },
+    {
+      "ancestors": [
+        166
+      ],
+      "attributes": [],
+      "body_range": [
+        49539,
+        50002
+      ],
+      "kind": "impl_fn",
+      "name": "kv_mut",
+      "range": [
+        49487,
+        50002
+      ],
+      "signature_range": [
+        49498,
+        49538
+      ]
+    },
+    {
+      "ancestors": [
+        166,
+        167
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        49549,
+        49590
+      ]
+    },
+    {
+      "ancestors": [
+        166
+      ],
+      "attributes": [
+        {
+          "doc_text": " Replaces the key and value that the KV handle refers to.",
+          "path": "doc",
+          "range": [
+            50008,
+            50068
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        50131,
+        50231
+      ],
+      "kind": "impl_fn",
+      "name": "replace_kv",
+      "range": [
+        50008,
+        50231
+      ],
+      "signature_range": [
+        50084,
+        50130
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        50235,
+        51808
+      ]
+    },
+    {
+      "ancestors": [
+        170
+      ],
+      "attributes": [
+        {
+          "doc_text": " Extracts the key and value that the KV handle refers to.",
+          "path": "doc",
+          "range": [
+            50321,
+            50381
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            50386,
+            50398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The node that the handle refers to must not yet have been deallocated.",
+          "path": "doc",
+          "range": [
+            50403,
+            50477
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        50536,
+        50850
+      ],
+      "kind": "impl_fn",
+      "name": "into_key_val",
+      "range": [
+        50321,
+        50850
+      ],
+      "signature_range": [
+        50493,
+        50535
+      ]
+    },
+    {
+      "ancestors": [
+        170,
+        171
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        50546,
+        50587
+      ]
+    },
+    {
+      "ancestors": [
+        170
+      ],
+      "attributes": [
+        {
+          "doc_text": " Drops the key and value that the KV handle refers to.",
+          "path": "doc",
+          "range": [
+            50856,
+            50913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            50918,
+            50930
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The node that the handle refers to must not yet have been deallocated.",
+          "path": "doc",
+          "range": [
+            50935,
+            51009
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            51014,
+            51023
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        51072,
+        51806
+      ],
+      "kind": "impl_fn",
+      "name": "drop_key_val",
+      "range": [
+        50856,
+        51806
+      ],
+      "signature_range": [
+        51039,
+        51071
+      ]
+    },
+    {
+      "ancestors": [
+        170,
+        173
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "Dropper",
+      "range": [
+        51167,
+        51213
+      ]
+    },
+    {
+      "ancestors": [
+        170,
+        173
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        51222,
+        51424
+      ]
+    },
+    {
+      "ancestors": [
+        170,
+        173,
+        175
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            51268,
+            51277
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        51309,
+        51414
+      ],
+      "kind": "impl_fn",
+      "name": "drop",
+      "range": [
+        51268,
+        51414
+      ],
+      "signature_range": [
+        51290,
+        51308
+      ]
+    },
+    {
+      "ancestors": [
+        170,
+        173
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        51434,
+        51475
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        51810,
+        52822
+      ]
+    },
+    {
+      "ancestors": [
+        178
+      ],
+      "attributes": [
+        {
+          "doc_text": " Helps implementations of `split` for a particular `NodeType`,",
+          "path": "doc",
+          "range": [
+            51910,
+            51975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " by taking care of leaf data.",
+          "path": "doc",
+          "range": [
+            51980,
+            52012
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        52088,
+        52820
+      ],
+      "kind": "impl_fn",
+      "name": "split_leaf_data",
+      "range": [
+        51910,
+        52820
+      ],
+      "signature_range": [
+        52017,
+        52087
+      ]
+    },
+    {
+      "ancestors": [
+        178,
+        179
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        52098,
+        52139
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        52824,
+        54210
+      ]
+    },
+    {
+      "ancestors": [
+        181
+      ],
+      "attributes": [
+        {
+          "doc_text": " Splits the underlying node into three parts:",
+          "path": "doc",
+          "range": [
+            52918,
+            52966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            52971,
+            52974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The node is truncated to only contain the key-value pairs to the left of",
+          "path": "doc",
+          "range": [
+            52979,
+            53057
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   this handle.",
+          "path": "doc",
+          "range": [
+            53062,
+            53080
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The key and value pointed to by this handle are extracted.",
+          "path": "doc",
+          "range": [
+            53085,
+            53149
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - All the key-value pairs to the right of this handle are put into a newly",
+          "path": "doc",
+          "range": [
+            53154,
+            53232
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   allocated node.",
+          "path": "doc",
+          "range": [
+            53237,
+            53258
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        53387,
+        53604
+      ],
+      "kind": "impl_fn",
+      "name": "split",
+      "range": [
+        52918,
+        53604
+      ],
+      "signature_range": [
+        53274,
+        53386
+      ]
+    },
+    {
+      "ancestors": [
+        181
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes the key-value pair pointed to by this handle and returns it, along with the edge",
+          "path": "doc",
+          "range": [
+            53610,
+            53702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that the key-value pair collapsed into.",
+          "path": "doc",
+          "range": [
+            53707,
+            53750
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        53881,
+        54208
+      ],
+      "kind": "impl_fn",
+      "name": "remove",
+      "range": [
+        53610,
+        54208
+      ],
+      "signature_range": [
+        53766,
+        53880
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        54212,
+        55497
+      ]
+    },
+    {
+      "ancestors": [
+        184
+      ],
+      "attributes": [
+        {
+          "doc_text": " Splits the underlying node into three parts:",
+          "path": "doc",
+          "range": [
+            54310,
+            54358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            54363,
+            54366
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The node is truncated to only contain the edges and key-value pairs to the",
+          "path": "doc",
+          "range": [
+            54371,
+            54451
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   left of this handle.",
+          "path": "doc",
+          "range": [
+            54456,
+            54482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - The key and value pointed to by this handle are extracted.",
+          "path": "doc",
+          "range": [
+            54487,
+            54551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - All the edges and key-value pairs to the right of this handle are put into",
+          "path": "doc",
+          "range": [
+            54556,
+            54636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   a newly allocated node.",
+          "path": "doc",
+          "range": [
+            54641,
+            54670
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        54803,
+        55495
+      ],
+      "kind": "impl_fn",
+      "name": "split",
+      "range": [
+        54310,
+        55495
+      ],
+      "signature_range": [
+        54686,
+        54802
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Represents a session for evaluating and performing a balancing operation",
+          "path": "doc",
+          "range": [
+            55499,
+            55575
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " around an internal key-value pair.",
+          "path": "doc",
+          "range": [
+            55576,
+            55614
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "BalancingContext",
+      "range": [
+        55499,
+        55890
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        55892,
+        56333
+      ]
+    },
+    {
+      "ancestors": [
+        187
+      ],
+      "attributes": [],
+      "body_range": [
+        56055,
+        56331
+      ],
+      "kind": "impl_fn",
+      "name": "consider_for_balancing",
+      "range": [
+        55982,
+        56331
+      ],
+      "signature_range": [
+        55993,
+        56054
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        56335,
+        58302
+      ]
+    },
+    {
+      "ancestors": [
+        189
+      ],
+      "attributes": [
+        {
+          "doc_text": " Chooses a balancing context involving the node as a child, thus between",
+          "path": "doc",
+          "range": [
+            56411,
+            56486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the KV immediately to the left or to the right in the parent node.",
+          "path": "doc",
+          "range": [
+            56491,
+            56561
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns an `Err` if there is no parent.",
+          "path": "doc",
+          "range": [
+            56566,
+            56609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics if the parent is empty.",
+          "path": "doc",
+          "range": [
+            56614,
+            56648
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            56653,
+            56656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Prefers the left side, to be optimal if the given node is somehow",
+          "path": "doc",
+          "range": [
+            56661,
+            56730
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " underfull, meaning here only that it has fewer elements than its left",
+          "path": "doc",
+          "range": [
+            56735,
+            56808
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sibling and than its right sibling, if they exist. In that case,",
+          "path": "doc",
+          "range": [
+            56813,
+            56881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " merging with the left sibling is faster, since we only need to move",
+          "path": "doc",
+          "range": [
+            56886,
+            56957
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the node's N elements, instead of shifting them to the right and moving",
+          "path": "doc",
+          "range": [
+            56962,
+            57037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " more than N elements in front. Stealing from the left sibling is also",
+          "path": "doc",
+          "range": [
+            57042,
+            57115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " typically faster, since we only need to shift the node's N elements to",
+          "path": "doc",
+          "range": [
+            57120,
+            57194
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the right, instead of shifting at least N of the sibling's elements to",
+          "path": "doc",
+          "range": [
+            57199,
+            57273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the left.",
+          "path": "doc",
+          "range": [
+            57278,
+            57291
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        57390,
+        58300
+      ],
+      "kind": "impl_fn",
+      "name": "choose_parent_kv",
+      "range": [
+        56411,
+        58300
+      ],
+      "signature_range": [
+        57307,
+        57389
+      ]
+    },
+    {
+      "ancestors": [
+        189,
+        190
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        58178,
+        58213
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        58304,
+        59069
+      ]
+    },
+    {
+      "ancestors": [
+        192
+      ],
+      "attributes": [],
+      "body_range": [
+        58397,
+        58434
+      ],
+      "kind": "impl_fn",
+      "name": "left_child_len",
+      "range": [
+        58352,
+        58434
+      ],
+      "signature_range": [
+        58363,
+        58396
+      ]
+    },
+    {
+      "ancestors": [
+        192
+      ],
+      "attributes": [],
+      "body_range": [
+        58486,
+        58524
+      ],
+      "kind": "impl_fn",
+      "name": "right_child_len",
+      "range": [
+        58440,
+        58524
+      ],
+      "signature_range": [
+        58451,
+        58485
+      ]
+    },
+    {
+      "ancestors": [
+        192
+      ],
+      "attributes": [],
+      "body_range": [
+        58624,
+        58655
+      ],
+      "kind": "impl_fn",
+      "name": "into_left_child",
+      "range": [
+        58530,
+        58655
+      ],
+      "signature_range": [
+        58541,
+        58623
+      ]
+    },
+    {
+      "ancestors": [
+        192
+      ],
+      "attributes": [],
+      "body_range": [
+        58756,
+        58788
+      ],
+      "kind": "impl_fn",
+      "name": "into_right_child",
+      "range": [
+        58661,
+        58788
+      ],
+      "signature_range": [
+        58672,
+        58755
+      ]
+    },
+    {
+      "ancestors": [
+        192
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns whether merging is possible, i.e., whether there is enough room",
+          "path": "doc",
+          "range": [
+            58794,
+            58869
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in a node to combine the central KV with both adjacent child nodes.",
+          "path": "doc",
+          "range": [
+            58874,
+            58945
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        58989,
+        59067
+      ],
+      "kind": "impl_fn",
+      "name": "can_merge",
+      "range": [
+        58794,
+        59067
+      ],
+      "signature_range": [
+        58961,
+        58988
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        59071,
+        70397
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Performs a merge and lets a closure decide what to return.",
+          "path": "doc",
+          "range": [
+            59127,
+            59189
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        59474,
+        61808
+      ],
+      "kind": "impl_fn",
+      "name": "do_merge",
+      "range": [
+        59127,
+        61808
+      ],
+      "signature_range": [
+        59194,
+        59473
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        199
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        59854,
+        59887
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Merges the parent's key-value pair and both adjacent child nodes into",
+          "path": "doc",
+          "range": [
+            61814,
+            61887
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the left child node and returns the shrunk parent node.",
+          "path": "doc",
+          "range": [
+            61892,
+            61951
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            61956,
+            61959
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics unless we `.can_merge()`.",
+          "path": "doc",
+          "range": [
+            61964,
+            62000
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        62154,
+        62215
+      ],
+      "kind": "impl_fn",
+      "name": "merge_tracking_parent",
+      "range": [
+        61814,
+        62215
+      ],
+      "signature_range": [
+        62016,
+        62153
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        201
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        62178,
+        62201
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Merges the parent's key-value pair and both adjacent child nodes into",
+          "path": "doc",
+          "range": [
+            62221,
+            62294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the left child node and returns that child node.",
+          "path": "doc",
+          "range": [
+            62299,
+            62351
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            62356,
+            62359
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics unless we `.can_merge()`.",
+          "path": "doc",
+          "range": [
+            62364,
+            62400
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        62559,
+        62619
+      ],
+      "kind": "impl_fn",
+      "name": "merge_tracking_child",
+      "range": [
+        62221,
+        62619
+      ],
+      "signature_range": [
+        62416,
+        62558
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        203
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        62583,
+        62605
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Merges the parent's key-value pair and both adjacent child nodes into",
+          "path": "doc",
+          "range": [
+            62625,
+            62698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the left child node and returns the edge handle in that child node",
+          "path": "doc",
+          "range": [
+            62703,
+            62773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " where the tracked child edge ended up,",
+          "path": "doc",
+          "range": [
+            62778,
+            62820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            62825,
+            62828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Panics unless we `.can_merge()`.",
+          "path": "doc",
+          "range": [
+            62833,
+            62869
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        63099,
+        63639
+      ],
+      "kind": "impl_fn",
+      "name": "merge_tracking_child_edge",
+      "range": [
+        62625,
+        63639
+      ],
+      "signature_range": [
+        62885,
+        63098
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        205
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        63207,
+        63364
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes a key-value pair from the left child and places it in the key-value storage",
+          "path": "doc",
+          "range": [
+            63645,
+            63732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the parent, while pushing the old parent key-value pair into the right child.",
+          "path": "doc",
+          "range": [
+            63737,
+            63821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a handle to the edge in the right child corresponding to where the original",
+          "path": "doc",
+          "range": [
+            63826,
+            63913
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " edge specified by `track_right_edge_idx` ended up.",
+          "path": "doc",
+          "range": [
+            63918,
+            63972
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        64144,
+        64264
+      ],
+      "kind": "impl_fn",
+      "name": "steal_left",
+      "range": [
+        63645,
+        64264
+      ],
+      "signature_range": [
+        63988,
+        64143
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " Removes a key-value pair from the right child and places it in the key-value storage",
+          "path": "doc",
+          "range": [
+            64270,
+            64358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the parent, while pushing the old parent key-value pair onto the left child.",
+          "path": "doc",
+          "range": [
+            64363,
+            64446
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns a handle to the edge in the left child specified by `track_left_edge_idx`,",
+          "path": "doc",
+          "range": [
+            64451,
+            64537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which didn't move.",
+          "path": "doc",
+          "range": [
+            64542,
+            64564
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        64736,
+        64851
+      ],
+      "kind": "impl_fn",
+      "name": "steal_right",
+      "range": [
+        64270,
+        64851
+      ],
+      "signature_range": [
+        64580,
+        64735
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " This does stealing similar to `steal_left` but steals multiple elements at once.",
+          "path": "doc",
+          "range": [
+            64857,
+            64941
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        65001,
+        67593
+      ],
+      "kind": "impl_fn",
+      "name": "bulk_steal_left",
+      "range": [
+        64857,
+        67593
+      ],
+      "signature_range": [
+        64957,
+        65000
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        209
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        65011,
+        65029
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        209
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        65312,
+        65354
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        209
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        65368,
+        65398
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        209
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        67548,
+        67562
+      ]
+    },
+    {
+      "ancestors": [
+        198
+      ],
+      "attributes": [
+        {
+          "doc_text": " The symmetric clone of `bulk_steal_left`.",
+          "path": "doc",
+          "range": [
+            67599,
+            67644
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        67705,
+        70395
+      ],
+      "kind": "impl_fn",
+      "name": "bulk_steal_right",
+      "range": [
+        67599,
+        70395
+      ],
+      "signature_range": [
+        67660,
+        67704
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        214
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        67715,
+        67733
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        214
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        68016,
+        68057
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        214
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        68071,
+        68102
+      ]
+    },
+    {
+      "ancestors": [
+        198,
+        214
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        70350,
+        70364
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        70399,
+        70697
+      ]
+    },
+    {
+      "ancestors": [
+        219
+      ],
+      "attributes": [],
+      "body_range": [
+        70617,
+        70695
+      ],
+      "kind": "impl_fn",
+      "name": "forget_node_type",
+      "range": [
+        70490,
+        70695
+      ],
+      "signature_range": [
+        70501,
+        70616
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        70699,
+        71001
+      ]
+    },
+    {
+      "ancestors": [
+        221
+      ],
+      "attributes": [],
+      "body_range": [
+        70921,
+        70999
+      ],
+      "kind": "impl_fn",
+      "name": "forget_node_type",
+      "range": [
+        70794,
+        70999
+      ],
+      "signature_range": [
+        70805,
+        70920
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        71003,
+        71295
+      ]
+    },
+    {
+      "ancestors": [
+        223
+      ],
+      "attributes": [],
+      "body_range": [
+        71217,
+        71293
+      ],
+      "kind": "impl_fn",
+      "name": "forget_node_type",
+      "range": [
+        71092,
+        71293
+      ],
+      "signature_range": [
+        71103,
+        71216
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        71297,
+        72019
+      ]
+    },
+    {
+      "ancestors": [
+        225
+      ],
+      "attributes": [
+        {
+          "doc_text": " Checks whether the underlying node is an `Internal` node or a `Leaf` node.",
+          "path": "doc",
+          "range": [
+            71396,
+            71474
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        71672,
+        72017
+      ],
+      "kind": "impl_fn",
+      "name": "force",
+      "range": [
+        71396,
+        72017
+      ],
+      "signature_range": [
+        71490,
+        71671
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        72021,
+        72480
+      ]
+    },
+    {
+      "ancestors": [
+        227
+      ],
+      "attributes": [
+        {
+          "doc_text": " Unsafely asserts to the compiler the static information that the handle's node is a `Leaf`.",
+          "path": "doc",
+          "range": [
+            72117,
+            72212
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        72344,
+        72478
+      ],
+      "kind": "impl_fn",
+      "name": "cast_to_leaf_unchecked",
+      "range": [
+        72117,
+        72478
+      ],
+      "signature_range": [
+        72228,
+        72343
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        72482,
+        74418
+      ]
+    },
+    {
+      "ancestors": [
+        229
+      ],
+      "attributes": [
+        {
+          "doc_text": " Move the suffix after `self` from one node to another one. `right` must be empty.",
+          "path": "doc",
+          "range": [
+            72580,
+            72665
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The first edge of `right` remains unchanged.",
+          "path": "doc",
+          "range": [
+            72670,
+            72718
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        72851,
+        74416
+      ],
+      "kind": "impl_fn",
+      "name": "move_suffix",
+      "range": [
+        72580,
+        74416
+      ],
+      "signature_range": [
+        72734,
+        72850
+      ]
+    },
+    {
+      "ancestors": [
+        229,
+        230
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        73154,
+        73184
+      ]
+    },
+    {
+      "ancestors": [
+        229,
+        230
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        73198,
+        73244
+      ]
+    },
+    {
+      "ancestors": [
+        229,
+        230
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        74353,
+        74367
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "enum",
+      "name": "ForceResult",
+      "range": [
+        74420,
+        74507
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Result of insertion, when a node needed to expand beyond its capacity.",
+          "path": "doc",
+          "range": [
+            74509,
+            74583
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "SplitResult",
+      "range": [
+        74509,
+        75047
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        75049,
+        75301
+      ]
+    },
+    {
+      "ancestors": [
+        236
+      ],
+      "attributes": [],
+      "body_range": [
+        75192,
+        75299
+      ],
+      "kind": "impl_fn",
+      "name": "forget_node_type",
+      "range": [
+        75106,
+        75299
+      ],
+      "signature_range": [
+        75117,
+        75191
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        75303,
+        75559
+      ]
+    },
+    {
+      "ancestors": [
+        238
+      ],
+      "attributes": [],
+      "body_range": [
+        75450,
+        75557
+      ],
+      "kind": "impl_fn",
+      "name": "forget_node_type",
+      "range": [
+        75364,
+        75557
+      ],
+      "signature_range": [
+        75375,
+        75449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": true,
+      "kind": "mod",
+      "name": "marker",
+      "path_overrides": [],
+      "range": [
+        75561,
+        76883
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "Leaf",
+      "range": [
+        75625,
+        75648
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "Internal",
+      "range": [
+        75653,
+        75680
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "LeafOrInternal",
+      "range": [
+        75685,
+        75718
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "Owned",
+      "range": [
+        75724,
+        75748
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "Dying",
+      "range": [
+        75753,
+        75777
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "DormantMut",
+      "range": [
+        75782,
+        75811
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "Immut",
+      "range": [
+        75816,
+        75865
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "Mut",
+      "range": [
+        75870,
+        75921
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "struct",
+      "name": "ValMut",
+      "range": [
+        75926,
+        75980
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "trait",
+      "name": "BorrowType",
+      "range": [
+        75986,
+        76263
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76268,
+        76633
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76638,
+        76666
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76671,
+        76707
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76712,
+        76746
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76751,
+        76788
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        76793,
+        76826
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "KV",
+      "range": [
+        76832,
+        76853
+      ]
+    },
+    {
+      "ancestors": [
+        240
+      ],
+      "attributes": [],
+      "kind": "enum",
+      "name": "Edge",
+      "range": [
+        76858,
+        76881
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Inserts a value into a slice of initialized elements followed by one uninitialized element.",
+          "path": "doc",
+          "range": [
+            76885,
+            76980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            76981,
+            76984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            76985,
+            76997
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The slice has more than `idx` elements.",
+          "path": "doc",
+          "range": [
+            76998,
+            77041
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        77118,
+        77410
+      ],
+      "kind": "fn",
+      "name": "slice_insert",
+      "range": [
+        76885,
+        77410
+      ],
+      "signature_range": [
+        77042,
+        77117
+      ]
+    },
+    {
+      "ancestors": [
+        259
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        77172,
+        77196
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Removes and returns a value from a slice of all initialized elements, leaving behind one",
+          "path": "doc",
+          "range": [
+            77412,
+            77504
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " trailing uninitialized element.",
+          "path": "doc",
+          "range": [
+            77505,
+            77540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            77541,
+            77544
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            77545,
+            77557
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The slice has more than `idx` elements.",
+          "path": "doc",
+          "range": [
+            77558,
+            77601
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        77675,
+        77956
+      ],
+      "kind": "fn",
+      "name": "slice_remove",
+      "range": [
+        77412,
+        77956
+      ],
+      "signature_range": [
+        77602,
+        77674
+      ]
+    },
+    {
+      "ancestors": [
+        261
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        77729,
+        77753
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Shifts the elements in a slice `distance` positions to the left.",
+          "path": "doc",
+          "range": [
+            77958,
+            78026
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            78027,
+            78030
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            78031,
+            78043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The slice has at least `distance` elements.",
+          "path": "doc",
+          "range": [
+            78044,
+            78091
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        78162,
+        78307
+      ],
+      "kind": "fn",
+      "name": "slice_shl",
+      "range": [
+        77958,
+        78307
+      ],
+      "signature_range": [
+        78092,
+        78161
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Shifts the elements in a slice `distance` positions to the right.",
+          "path": "doc",
+          "range": [
+            78309,
+            78378
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            78379,
+            78382
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            78383,
+            78395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The slice has at least `distance` elements.",
+          "path": "doc",
+          "range": [
+            78396,
+            78443
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        78514,
+        78659
+      ],
+      "kind": "fn",
+      "name": "slice_shr",
+      "range": [
+        78309,
+        78659
+      ],
+      "signature_range": [
+        78444,
+        78513
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Moves all values from a slice of initialized elements to a slice",
+          "path": "doc",
+          "range": [
+            78661,
+            78729
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of uninitialized elements, leaving behind `src` as all uninitialized.",
+          "path": "doc",
+          "range": [
+            78730,
+            78803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Works like `dst.copy_from_slice(src)` but does not require `T` to be `Copy`.",
+          "path": "doc",
+          "range": [
+            78804,
+            78884
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        78961,
+        79097
+      ],
+      "kind": "fn",
+      "name": "move_to_slice",
+      "range": [
+        78661,
+        79097
+      ],
+      "signature_range": [
+        78885,
+        78960
+      ]
+    },
+    {
+      "ancestors": [
+        265
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        78967,
+        78998
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            79099,
+            79111
+          ],
+          "style": "outer"
+        }
+      ],
+      "inline": false,
+      "kind": "mod",
+      "name": "tests",
+      "path_overrides": [],
+      "range": [
+        79099,
+        79122
+      ]
+    }
+  ],
+  "source_sha256": "2200ca0a4fe38592c314dc7f5f40bbb160e06b6f9e4abd1eb5bc40701540ab25"
+}

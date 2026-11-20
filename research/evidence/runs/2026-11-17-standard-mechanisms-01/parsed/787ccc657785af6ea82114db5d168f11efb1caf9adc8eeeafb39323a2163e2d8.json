@@ -1,0 +1,3545 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Layout of a block of memory.",
+          "path": "doc",
+          "range": [
+            585,
+            617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            618,
+            621
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " An instance of `Layout` describes a particular layout of memory.",
+          "path": "doc",
+          "range": [
+            622,
+            690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " You build a `Layout` up as an input to give to an allocator.",
+          "path": "doc",
+          "range": [
+            691,
+            755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            756,
+            759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " All layouts have an associated size and a power-of-two alignment. The size, when rounded up to",
+          "path": "doc",
+          "range": [
+            760,
+            858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the nearest multiple of `align`, does not overflow `isize` (i.e., the rounded value will always be",
+          "path": "doc",
+          "range": [
+            859,
+            961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " less than or equal to `isize::MAX`).",
+          "path": "doc",
+          "range": [
+            962,
+            1002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1003,
+            1006
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (Note that layouts are *not* required to have non-zero size,",
+          "path": "doc",
+          "range": [
+            1007,
+            1071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " even though `GlobalAlloc` requires that all memory requests",
+          "path": "doc",
+          "range": [
+            1072,
+            1135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be non-zero in size. A caller must either ensure that conditions",
+          "path": "doc",
+          "range": [
+            1136,
+            1204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " like this are met, use specific allocators with looser",
+          "path": "doc",
+          "range": [
+            1205,
+            1263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " requirements, or use the more lenient `Allocator` interface.)",
+          "path": "doc",
+          "range": [
+            1264,
+            1329
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            1330,
+            1383
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            1384,
+            1434
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "lang",
+          "range": [
+            1435,
+            1459
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Layout",
+      "range": [
+        585,
+        1989
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1991,
+        27003
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a `Layout` from a given `size` and `align`,",
+          "path": "doc",
+          "range": [
+            2009,
+            2067
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or returns `LayoutError` if any of the following conditions",
+          "path": "doc",
+          "range": [
+            2072,
+            2135
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are not met:",
+          "path": "doc",
+          "range": [
+            2140,
+            2156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2161,
+            2164
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `align` must not be zero,",
+          "path": "doc",
+          "range": [
+            2169,
+            2200
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2205,
+            2208
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `align` must be a power of two,",
+          "path": "doc",
+          "range": [
+            2213,
+            2250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2255,
+            2258
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `size`, when rounded up to the nearest multiple of `align`,",
+          "path": "doc",
+          "range": [
+            2263,
+            2328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   must not overflow `isize` (i.e., the rounded value must be",
+          "path": "doc",
+          "range": [
+            2333,
+            2397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   less than or equal to `isize::MAX`).",
+          "path": "doc",
+          "range": [
+            2402,
+            2444
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            2449,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            2507,
+            2589
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2594,
+            2603
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        2693,
+        2974
+      ],
+      "kind": "impl_fn",
+      "name": "from_size_align",
+      "range": [
+        2009,
+        2974
+      ],
+      "signature_range": [
+        2612,
+        2692
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            2980,
+            2989
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3058,
+        3195
+      ],
+      "kind": "impl_fn",
+      "name": "is_size_align_valid",
+      "range": [
+        2980,
+        3195
+      ],
+      "signature_range": [
+        2994,
+        3057
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [],
+      "body_range": [
+        3277,
+        3340
+      ],
+      "kind": "impl_fn",
+      "name": "is_size_alignment_valid",
+      "range": [
+        3201,
+        3340
+      ],
+      "signature_range": [
+        3201,
+        3276
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3346,
+            3363
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3431,
+        4258
+      ],
+      "kind": "impl_fn",
+      "name": "max_size_for_alignment",
+      "range": [
+        3346,
+        4258
+      ],
+      "signature_range": [
+        3368,
+        3430
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a `Layout` from a given `size` and `alignment`,",
+          "path": "doc",
+          "range": [
+            4264,
+            4326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or returns `LayoutError` if any of the following conditions",
+          "path": "doc",
+          "range": [
+            4331,
+            4394
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " are not met:",
+          "path": "doc",
+          "range": [
+            4399,
+            4415
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4420,
+            4423
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " * `size`, when rounded up to the nearest multiple of `alignment`,",
+          "path": "doc",
+          "range": [
+            4428,
+            4497
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   must not overflow `isize` (i.e., the rounded value must be",
+          "path": "doc",
+          "range": [
+            4502,
+            4566
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "   less than or equal to `isize::MAX`).",
+          "path": "doc",
+          "range": [
+            4571,
+            4613
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4618,
+            4679
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4684,
+            4693
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4818,
+        5055
+      ],
+      "kind": "impl_fn",
+      "name": "from_size_alignment",
+      "range": [
+        4264,
+        5055
+      ],
+      "signature_range": [
+        4702,
+        4817
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout, bypassing all checks.",
+          "path": "doc",
+          "range": [
+            5061,
+            5104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5109,
+            5112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            5117,
+            5129
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5134,
+            5137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is unsafe as it does not verify the preconditions from",
+          "path": "doc",
+          "range": [
+            5142,
+            5214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Layout::from_size_align`].",
+          "path": "doc",
+          "range": [
+            5219,
+            5251
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            5256,
+            5309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            5314,
+            5395
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5400,
+            5411
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5416,
+            5425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            5430,
+            5445
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5531,
+        6059
+      ],
+      "kind": "impl_fn",
+      "name": "from_size_align_unchecked",
+      "range": [
+        5061,
+        6059
+      ],
+      "signature_range": [
+        5454,
+        5530
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        7
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5541,
+        5916
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout, bypassing all checks.",
+          "path": "doc",
+          "range": [
+            6065,
+            6108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6113,
+            6116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            6121,
+            6133
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6138,
+            6141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is unsafe as it does not verify the preconditions from",
+          "path": "doc",
+          "range": [
+            6146,
+            6218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`Layout::from_size_alignment`].",
+          "path": "doc",
+          "range": [
+            6223,
+            6259
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6264,
+            6325
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            6330,
+            6341
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6346,
+            6355
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "track_caller",
+          "range": [
+            6360,
+            6375
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6473,
+        6976
+      ],
+      "kind": "impl_fn",
+      "name": "from_size_alignment_unchecked",
+      "range": [
+        6065,
+        6976
+      ],
+      "signature_range": [
+        6384,
+        6472
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        9
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        6483,
+        6856
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " The minimum size in bytes for a memory block of this layout.",
+          "path": "doc",
+          "range": [
+            6982,
+            7046
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7051,
+            7104
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            7109,
+            7191
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7196,
+            7207
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7212,
+            7221
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7260,
+        7285
+      ],
+      "kind": "impl_fn",
+      "name": "size",
+      "range": [
+        6982,
+        7285
+      ],
+      "signature_range": [
+        7230,
+        7259
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " The minimum byte alignment for a memory block of this layout.",
+          "path": "doc",
+          "range": [
+            7291,
+            7356
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7361,
+            7364
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned alignment is guaranteed to be a power of two.",
+          "path": "doc",
+          "range": [
+            7369,
+            7431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7436,
+            7489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            7494,
+            7576
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7581,
+            7681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            7686,
+            7695
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        7735,
+        7772
+      ],
+      "kind": "impl_fn",
+      "name": "align",
+      "range": [
+        7291,
+        7772
+      ],
+      "signature_range": [
+        7704,
+        7734
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " The minimum byte alignment for a memory block of this layout.",
+          "path": "doc",
+          "range": [
+            7778,
+            7843
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7848,
+            7851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The returned alignment is guaranteed to be a power of two.",
+          "path": "doc",
+          "range": [
+            7856,
+            7918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7923,
+            7984
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            7989,
+            8069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8074,
+            8083
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8131,
+        8157
+      ],
+      "kind": "impl_fn",
+      "name": "alignment",
+      "range": [
+        7778,
+        8157
+      ],
+      "signature_range": [
+        8092,
+        8130
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Constructs a `Layout` suitable for holding a value of type `T`.",
+          "path": "doc",
+          "range": [
+            8163,
+            8230
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8235,
+            8288
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8293,
+            8368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8373,
+            8384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8389,
+            8398
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8433,
+        8483
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        8163,
+        8483
+      ],
+      "signature_range": [
+        8407,
+        8432
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Produces layout describing a record that could be used to",
+          "path": "doc",
+          "range": [
+            8489,
+            8550
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocate backing structure for `T` (which could be a trait",
+          "path": "doc",
+          "range": [
+            8555,
+            8617
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or other unsized type like a slice).",
+          "path": "doc",
+          "range": [
+            8622,
+            8662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8667,
+            8720
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            8725,
+            8796
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            8801,
+            8812
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            8817,
+            8826
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        8880,
+        9116
+      ],
+      "kind": "impl_fn",
+      "name": "for_value",
+      "range": [
+        8489,
+        9116
+      ],
+      "signature_range": [
+        8835,
+        8879
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Produces layout describing a record that could be used to",
+          "path": "doc",
+          "range": [
+            9122,
+            9183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allocate backing structure for `T` (which could be a trait",
+          "path": "doc",
+          "range": [
+            9188,
+            9250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or other unsized type like a slice).",
+          "path": "doc",
+          "range": [
+            9255,
+            9295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9300,
+            9303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            9308,
+            9320
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9325,
+            9328
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This function is only safe to call if the following conditions hold:",
+          "path": "doc",
+          "range": [
+            9333,
+            9405
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            9410,
+            9413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If `T` is `Sized`, this function is always safe to call.",
+          "path": "doc",
+          "range": [
+            9418,
+            9480
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " - If the unsized tail of `T` is:",
+          "path": "doc",
+          "range": [
+            9485,
+            9521
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     - a [slice], then the length of the slice tail must be an initialized",
+          "path": "doc",
+          "range": [
+            9526,
+            9603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       integer, and the size of the *entire value*",
+          "path": "doc",
+          "range": [
+            9608,
+            9661
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       (dynamic tail length + statically sized prefix) must fit in `isize`.",
+          "path": "doc",
+          "range": [
+            9666,
+            9744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       For the special case where the dynamic tail length is 0, this function",
+          "path": "doc",
+          "range": [
+            9749,
+            9829
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       is safe to call.",
+          "path": "doc",
+          "range": [
+            9834,
+            9860
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     - a [trait object], then the vtable part of the pointer must point",
+          "path": "doc",
+          "range": [
+            9865,
+            9939
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       to a valid vtable for the type `T` acquired by an unsizing coercion,",
+          "path": "doc",
+          "range": [
+            9944,
+            10022
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       and the size of the *entire value*",
+          "path": "doc",
+          "range": [
+            10027,
+            10071
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       (dynamic tail length + statically sized prefix) must fit in `isize`.",
+          "path": "doc",
+          "range": [
+            10076,
+            10154
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     - an (unstable) [extern type], then this function is always safe to",
+          "path": "doc",
+          "range": [
+            10159,
+            10234
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       call, but may panic or otherwise return the wrong value, as the",
+          "path": "doc",
+          "range": [
+            10239,
+            10312
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       extern type's layout is not known. This is the same behavior as",
+          "path": "doc",
+          "range": [
+            10317,
+            10390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "       [`Layout::for_value`] on a reference to an extern type tail.",
+          "path": "doc",
+          "range": [
+            10395,
+            10465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     - otherwise, it is conservatively not allowed to call this function.",
+          "path": "doc",
+          "range": [
+            10470,
+            10546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            10551,
+            10554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [trait object]: ../../book/ch17-02-trait-objects.html",
+          "path": "doc",
+          "range": [
+            10559,
+            10616
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [extern type]: ../../unstable-book/language-features/extern-types.html",
+          "path": "doc",
+          "range": [
+            10621,
+            10695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10700,
+            10756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            10761,
+            10772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            10777,
+            10786
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        10857,
+        11201
+      ],
+      "kind": "impl_fn",
+      "name": "for_value_raw",
+      "range": [
+        9122,
+        11201
+      ],
+      "signature_range": [
+        10795,
+        10856
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a `NonNull` that is dangling, but well-aligned for this Layout.",
+          "path": "doc",
+          "range": [
+            11207,
+            11282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            11287,
+            11290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the address of the returned pointer may potentially",
+          "path": "doc",
+          "range": [
+            11295,
+            11360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be that of a valid pointer, which means this must not be used",
+          "path": "doc",
+          "range": [
+            11365,
+            11430
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as a \"not yet initialized\" sentinel value.",
+          "path": "doc",
+          "range": [
+            11435,
+            11481
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types that lazily allocate must track initialization by some other means.",
+          "path": "doc",
+          "range": [
+            11486,
+            11563
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11568,
+            11627
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            11632,
+            11703
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            11708,
+            11719
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            11724,
+            11733
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        11786,
+        11854
+      ],
+      "kind": "impl_fn",
+      "name": "dangling_ptr",
+      "range": [
+        11207,
+        11854
+      ],
+      "signature_range": [
+        11742,
+        11785
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record that can hold a value",
+          "path": "doc",
+          "range": [
+            11860,
+            11924
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the same layout as `self`, but that also is aligned to",
+          "path": "doc",
+          "range": [
+            11929,
+            11990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " alignment `align` (measured in bytes).",
+          "path": "doc",
+          "range": [
+            11995,
+            12037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12042,
+            12045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `self` already meets the prescribed alignment, then returns",
+          "path": "doc",
+          "range": [
+            12050,
+            12116
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `self`.",
+          "path": "doc",
+          "range": [
+            12121,
+            12132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12137,
+            12140
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this method does not add any padding to the overall",
+          "path": "doc",
+          "range": [
+            12145,
+            12210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " size, regardless of whether the returned layout has a different",
+          "path": "doc",
+          "range": [
+            12215,
+            12282
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " alignment. In other words, if `K` has size 16, `K.align_to(32)`",
+          "path": "doc",
+          "range": [
+            12287,
+            12354
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will *still* have size 16.",
+          "path": "doc",
+          "range": [
+            12359,
+            12389
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            12394,
+            12397
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns an error if the combination of `self.size()` and the given",
+          "path": "doc",
+          "range": [
+            12402,
+            12472
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `align` violates the conditions listed in [`Layout::from_size_align`].",
+          "path": "doc",
+          "range": [
+            12477,
+            12551
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12556,
+            12622
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            12627,
+            12698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12703,
+            12712
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12789,
+        12957
+      ],
+      "kind": "impl_fn",
+      "name": "align_to",
+      "range": [
+        11860,
+        12957
+      ],
+      "signature_range": [
+        12721,
+        12788
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record that can hold a value",
+          "path": "doc",
+          "range": [
+            12963,
+            13027
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the same layout as `self`, but that also is aligned to",
+          "path": "doc",
+          "range": [
+            13032,
+            13093
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " alignment `alignment`.",
+          "path": "doc",
+          "range": [
+            13098,
+            13124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13129,
+            13132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If `self` already meets the prescribed alignment, then returns",
+          "path": "doc",
+          "range": [
+            13137,
+            13203
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `self`.",
+          "path": "doc",
+          "range": [
+            13208,
+            13219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13224,
+            13227
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that this method does not add any padding to the overall",
+          "path": "doc",
+          "range": [
+            13232,
+            13297
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " size, regardless of whether the returned layout has a different",
+          "path": "doc",
+          "range": [
+            13302,
+            13369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " alignment. In other words, if `K` has size 16, `K.align_to(32)`",
+          "path": "doc",
+          "range": [
+            13374,
+            13441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will *still* have size 16.",
+          "path": "doc",
+          "range": [
+            13446,
+            13476
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            13481,
+            13484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns an error if the combination of `self.size()` and the given",
+          "path": "doc",
+          "range": [
+            13489,
+            13559
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `alignment` violates the conditions listed in [`Layout::from_size_alignment`].",
+          "path": "doc",
+          "range": [
+            13564,
+            13646
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13651,
+            13712
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            13717,
+            13726
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        13822,
+        13915
+      ],
+      "kind": "impl_fn",
+      "name": "adjust_alignment_to",
+      "range": [
+        12963,
+        13915
+      ],
+      "signature_range": [
+        13735,
+        13821
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the amount of padding we must insert after `self`",
+          "path": "doc",
+          "range": [
+            13921,
+            13982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to ensure that the following address will satisfy `alignment`.",
+          "path": "doc",
+          "range": [
+            13987,
+            14053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14058,
+            14061
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " e.g., if `self.size()` is 9, then `self.padding_needed_for(alignment4)`",
+          "path": "doc",
+          "range": [
+            14066,
+            14141
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (where `alignment4.as_usize() == 4`)",
+          "path": "doc",
+          "range": [
+            14146,
+            14186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " returns 3, because that is the minimum number of bytes of",
+          "path": "doc",
+          "range": [
+            14191,
+            14252
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " padding required to get a 4-aligned address (assuming that the",
+          "path": "doc",
+          "range": [
+            14257,
+            14323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " corresponding memory block starts at a 4-aligned address).",
+          "path": "doc",
+          "range": [
+            14328,
+            14390
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            14395,
+            14398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the utility of the returned value requires `alignment`",
+          "path": "doc",
+          "range": [
+            14403,
+            14471
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to be less than or equal to the alignment of the starting",
+          "path": "doc",
+          "range": [
+            14476,
+            14537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " address for the whole allocated block of memory. One way to",
+          "path": "doc",
+          "range": [
+            14542,
+            14605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " satisfy this constraint is to ensure `alignment.as_usize() <= self.align()`.",
+          "path": "doc",
+          "range": [
+            14610,
+            14690
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            14695,
+            14756
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            14761,
+            14840
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            14845,
+            14854
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        14929,
+        15156
+      ],
+      "kind": "impl_fn",
+      "name": "padding_needed_for",
+      "range": [
+        13921,
+        15156
+      ],
+      "signature_range": [
+        14863,
+        14928
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Returns the smallest multiple of `align` greater than or equal to `self.size()`.",
+          "path": "doc",
+          "range": [
+            15162,
+            15246
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            15251,
+            15254
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can return at most `Alignment::MAX` (aka `isize::MAX + 1`)",
+          "path": "doc",
+          "range": [
+            15259,
+            15326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " because the original size is at most `isize::MAX`.",
+          "path": "doc",
+          "range": [
+            15331,
+            15385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            15390,
+            15399
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        15487,
+        16470
+      ],
+      "kind": "impl_fn",
+      "name": "size_rounded_up_to_custom_alignment",
+      "range": [
+        15162,
+        16470
+      ],
+      "signature_range": [
+        15404,
+        15486
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout by rounding the size of this layout up to a multiple",
+          "path": "doc",
+          "range": [
+            16476,
+            16549
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of the layout's alignment.",
+          "path": "doc",
+          "range": [
+            16554,
+            16584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            16589,
+            16592
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is equivalent to adding the result of `padding_needed_for`",
+          "path": "doc",
+          "range": [
+            16597,
+            16664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to the layout's current size.",
+          "path": "doc",
+          "range": [
+            16669,
+            16702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            16707,
+            16773
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            16778,
+            16849
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            16854,
+            16949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            16954,
+            16963
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        17011,
+        17517
+      ],
+      "kind": "impl_fn",
+      "name": "pad_to_align",
+      "range": [
+        16476,
+        17517
+      ],
+      "signature_range": [
+        16972,
+        17010
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record for `n` instances of",
+          "path": "doc",
+          "range": [
+            17523,
+            17586
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `self`, with a suitable amount of padding between each to",
+          "path": "doc",
+          "range": [
+            17591,
+            17652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ensure that each instance is given its requested size and",
+          "path": "doc",
+          "range": [
+            17657,
+            17718
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " alignment. On success, returns `(k, offs)` where `k` is the",
+          "path": "doc",
+          "range": [
+            17723,
+            17786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " layout of the array and `offs` is the distance between the start",
+          "path": "doc",
+          "range": [
+            17791,
+            17859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of each element in the array.",
+          "path": "doc",
+          "range": [
+            17864,
+            17897
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17902,
+            17905
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Does not include padding after the trailing element.",
+          "path": "doc",
+          "range": [
+            17910,
+            17966
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            17971,
+            17974
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (That distance between elements is sometimes known as \"stride\".)",
+          "path": "doc",
+          "range": [
+            17979,
+            18047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18052,
+            18055
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " On arithmetic overflow, returns `LayoutError`.",
+          "path": "doc",
+          "range": [
+            18060,
+            18110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18115,
+            18118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            18123,
+            18137
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18142,
+            18145
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            18150,
+            18157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::alloc::Layout;",
+          "path": "doc",
+          "range": [
+            18162,
+            18189
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18194,
+            18197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // All rust types have a size that's a multiple of their alignment.",
+          "path": "doc",
+          "range": [
+            18202,
+            18273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let normal = Layout::from_size_align(12, 4).unwrap();",
+          "path": "doc",
+          "range": [
+            18278,
+            18335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let repeated = normal.repeat(3).unwrap();",
+          "path": "doc",
+          "range": [
+            18340,
+            18385
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(repeated, (Layout::from_size_align(36, 4).unwrap(), 12));",
+          "path": "doc",
+          "range": [
+            18390,
+            18462
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18467,
+            18470
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // But you can manually make layouts which don't meet that rule.",
+          "path": "doc",
+          "range": [
+            18475,
+            18543
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let padding_needed = Layout::from_size_align(6, 4).unwrap();",
+          "path": "doc",
+          "range": [
+            18548,
+            18612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let repeated = padding_needed.repeat(3).unwrap();",
+          "path": "doc",
+          "range": [
+            18617,
+            18670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(repeated, (Layout::from_size_align(22, 4).unwrap(), 8));",
+          "path": "doc",
+          "range": [
+            18675,
+            18746
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            18751,
+            18754
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // Repeating an element zero times has zero size, but keeps the alignment (like `[T; 0]`)",
+          "path": "doc",
+          "range": [
+            18759,
+            18852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let repeated = normal.repeat(0).unwrap();",
+          "path": "doc",
+          "range": [
+            18857,
+            18902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(repeated, (Layout::from_size_align(0, 4).unwrap(), 12));",
+          "path": "doc",
+          "range": [
+            18907,
+            18978
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let repeated = padding_needed.repeat(0).unwrap();",
+          "path": "doc",
+          "range": [
+            18983,
+            19036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " assert_eq!(repeated, (Layout::from_size_align(0, 4).unwrap(), 8));",
+          "path": "doc",
+          "range": [
+            19041,
+            19111
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            19116,
+            19123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            19128,
+            19187
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            19192,
+            19263
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            19268,
+            19277
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        19357,
+        19890
+      ],
+      "kind": "impl_fn",
+      "name": "repeat",
+      "range": [
+        17523,
+        19890
+      ],
+      "signature_range": [
+        19286,
+        19356
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        23
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        19726,
+        19747
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record for `self` followed by",
+          "path": "doc",
+          "range": [
+            19896,
+            19961
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `next`, including any necessary padding to ensure that `next`",
+          "path": "doc",
+          "range": [
+            19966,
+            20031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " will be properly aligned, but *no trailing padding*.",
+          "path": "doc",
+          "range": [
+            20036,
+            20092
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20097,
+            20100
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In order to match C representation layout `repr(C)`, you should",
+          "path": "doc",
+          "range": [
+            20105,
+            20172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " call `pad_to_align` after extending the layout with all fields.",
+          "path": "doc",
+          "range": [
+            20177,
+            20244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (There is no way to match the default Rust representation",
+          "path": "doc",
+          "range": [
+            20249,
+            20310
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " layout `repr(Rust)`, as it is unspecified.)",
+          "path": "doc",
+          "range": [
+            20315,
+            20362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20367,
+            20370
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the alignment of the resulting layout will be the maximum of",
+          "path": "doc",
+          "range": [
+            20375,
+            20449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " those of `self` and `next`, in order to ensure alignment of both parts.",
+          "path": "doc",
+          "range": [
+            20454,
+            20529
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20534,
+            20537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Returns `Ok((k, offset))`, where `k` is layout of the concatenated",
+          "path": "doc",
+          "range": [
+            20542,
+            20612
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " record and `offset` is the relative location, in bytes, of the",
+          "path": "doc",
+          "range": [
+            20617,
+            20683
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " start of the `next` embedded within the concatenated record",
+          "path": "doc",
+          "range": [
+            20688,
+            20751
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (assuming that the record itself starts at offset 0).",
+          "path": "doc",
+          "range": [
+            20756,
+            20813
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20818,
+            20821
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " On arithmetic overflow, returns `LayoutError`.",
+          "path": "doc",
+          "range": [
+            20826,
+            20876
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20881,
+            20884
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            20889,
+            20903
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            20908,
+            20911
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " To calculate the layout of a `#[repr(C)]` structure and the offsets of",
+          "path": "doc",
+          "range": [
+            20916,
+            20990
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the fields from its fields' layouts:",
+          "path": "doc",
+          "range": [
+            20995,
+            21035
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            21040,
+            21043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```rust",
+          "path": "doc",
+          "range": [
+            21048,
+            21059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # use std::alloc::{Layout, LayoutError};",
+          "path": "doc",
+          "range": [
+            21064,
+            21108
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " pub fn repr_c(fields: &[Layout]) -> Result<(Layout, Vec<usize>), LayoutError> {",
+          "path": "doc",
+          "range": [
+            21113,
+            21196
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut offsets = Vec::new();",
+          "path": "doc",
+          "range": [
+            21201,
+            21238
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut layout = Layout::from_size_align(0, 1)?;",
+          "path": "doc",
+          "range": [
+            21243,
+            21299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     for &field in fields {",
+          "path": "doc",
+          "range": [
+            21304,
+            21334
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         let (new_layout, offset) = layout.extend(field)?;",
+          "path": "doc",
+          "range": [
+            21339,
+            21400
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         layout = new_layout;",
+          "path": "doc",
+          "range": [
+            21405,
+            21437
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         offsets.push(offset);",
+          "path": "doc",
+          "range": [
+            21442,
+            21475
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     }",
+          "path": "doc",
+          "range": [
+            21480,
+            21489
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     // Remember to finalize with `pad_to_align`!",
+          "path": "doc",
+          "range": [
+            21494,
+            21546
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     Ok((layout.pad_to_align(), offsets))",
+          "path": "doc",
+          "range": [
+            21551,
+            21595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }",
+          "path": "doc",
+          "range": [
+            21600,
+            21605
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # // test that it works",
+          "path": "doc",
+          "range": [
+            21610,
+            21637
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # #[repr(C)] struct S { a: u64, b: u32, c: u16, d: u32 }",
+          "path": "doc",
+          "range": [
+            21642,
+            21702
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let s = Layout::new::<S>();",
+          "path": "doc",
+          "range": [
+            21707,
+            21740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let u16 = Layout::new::<u16>();",
+          "path": "doc",
+          "range": [
+            21745,
+            21782
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let u32 = Layout::new::<u32>();",
+          "path": "doc",
+          "range": [
+            21787,
+            21824
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # let u64 = Layout::new::<u64>();",
+          "path": "doc",
+          "range": [
+            21829,
+            21866
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # assert_eq!(repr_c(&[u64, u32, u16, u32]), Ok((s, vec![0, 8, 12, 16])));",
+          "path": "doc",
+          "range": [
+            21871,
+            21948
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            21953,
+            21960
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            21965,
+            22031
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            22036,
+            22107
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            22112,
+            22121
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        22203,
+        22920
+      ],
+      "kind": "impl_fn",
+      "name": "extend",
+      "range": [
+        19896,
+        22920
+      ],
+      "signature_range": [
+        22130,
+        22202
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record for `n` instances of",
+          "path": "doc",
+          "range": [
+            22926,
+            22989
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `self`, with no padding between each instance.",
+          "path": "doc",
+          "range": [
+            22994,
+            23044
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23049,
+            23052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that, unlike `repeat`, `repeat_packed` does not guarantee",
+          "path": "doc",
+          "range": [
+            23057,
+            23123
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " that the repeated instances of `self` will be properly",
+          "path": "doc",
+          "range": [
+            23128,
+            23186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " aligned, even if a given instance of `self` is properly",
+          "path": "doc",
+          "range": [
+            23191,
+            23250
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " aligned. In other words, if the layout returned by",
+          "path": "doc",
+          "range": [
+            23255,
+            23309
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `repeat_packed` is used to allocate an array, it is not",
+          "path": "doc",
+          "range": [
+            23314,
+            23373
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " guaranteed that all elements in the array will be properly",
+          "path": "doc",
+          "range": [
+            23378,
+            23440
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " aligned.",
+          "path": "doc",
+          "range": [
+            23445,
+            23457
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            23462,
+            23465
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " On arithmetic overflow, returns `LayoutError`.",
+          "path": "doc",
+          "range": [
+            23470,
+            23520
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            23525,
+            23584
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            23589,
+            23660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            23665,
+            23674
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        23752,
+        24012
+      ],
+      "kind": "impl_fn",
+      "name": "repeat_packed",
+      "range": [
+        22926,
+        24012
+      ],
+      "signature_range": [
+        23683,
+        23751
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record for `self` followed by",
+          "path": "doc",
+          "range": [
+            24018,
+            24083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `next` with no additional padding between the two. Since no",
+          "path": "doc",
+          "range": [
+            24088,
+            24151
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " padding is inserted, the alignment of `next` is irrelevant,",
+          "path": "doc",
+          "range": [
+            24156,
+            24219
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and is not incorporated *at all* into the resulting layout.",
+          "path": "doc",
+          "range": [
+            24224,
+            24287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            24292,
+            24295
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " On arithmetic overflow, returns `LayoutError`.",
+          "path": "doc",
+          "range": [
+            24300,
+            24350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            24355,
+            24414
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            24419,
+            24490
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            24495,
+            24504
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        24584,
+        24973
+      ],
+      "kind": "impl_fn",
+      "name": "extend_packed",
+      "range": [
+        24018,
+        24973
+      ],
+      "signature_range": [
+        24513,
+        24583
+      ]
+    },
+    {
+      "ancestors": [
+        1
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a layout describing the record for a `[T; n]`.",
+          "path": "doc",
+          "range": [
+            24979,
+            25037
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            25042,
+            25045
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " On arithmetic overflow or when the total size would exceed",
+          "path": "doc",
+          "range": [
+            25050,
+            25112
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `isize::MAX`, returns `LayoutError`.",
+          "path": "doc",
+          "range": [
+            25117,
+            25157
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            25162,
+            25228
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_const_stable",
+          "range": [
+            25233,
+            25304
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25309,
+            25318
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25384,
+        27001
+      ],
+      "kind": "impl_fn",
+      "name": "array",
+      "range": [
+        24979,
+        27001
+      ],
+      "signature_range": [
+        25327,
+        25383
+      ]
+    },
+    {
+      "ancestors": [
+        1,
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            25501,
+            25510
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        25599,
+        26995
+      ],
+      "kind": "fn",
+      "name": "inner",
+      "range": [
+        25501,
+        26995
+      ],
+      "signature_range": [
+        25519,
+        25598
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " The `LayoutError` is returned when the parameters given",
+          "path": "doc",
+          "range": [
+            27231,
+            27290
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to `Layout::from_size_align`",
+          "path": "doc",
+          "range": [
+            27291,
+            27323
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " or some other `Layout` constructor",
+          "path": "doc",
+          "range": [
+            27324,
+            27362
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " do not satisfy its documented constraints.",
+          "path": "doc",
+          "range": [
+            27363,
+            27409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            27410,
+            27469
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "non_exhaustive",
+          "range": [
+            27470,
+            27487
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "derive",
+          "range": [
+            27488,
+            27526
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "LayoutError",
+      "range": [
+        27231,
+        27550
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            27552,
+            27605
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27552,
+        27635
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            27690,
+            27743
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        27690,
+        27919
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [],
+      "body_range": [
+        27841,
+        27917
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        27784,
+        27917
+      ],
+      "signature_range": [
+        27784,
+        27840
+      ]
+    }
+  ],
+  "source_sha256": "5e21c6d2e7e4374f9d3daec4a29f2cd1624bfc1e893e9f5c8f52c85aa5f89017"
+}

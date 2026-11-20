@@ -1,0 +1,48 @@
+{
+  "source": "/tmp/xkernel-pagecache-n1y2__y3",
+  "research_inputs": {
+    "research/protocols/exclusive-delegation-v1.json": "a624619c71ec80493d3e1d7e984e5f2b61ff618afbedcde9dfcc018f37ba9a19",
+    "scripts/run_frozen_kvfs_cell.py": "7f98191be2c7d06e85a95fb14e33ff9f0b53b55a12296e26711039623251fbd0",
+    "research/evidence/runs/2026-11-18-exclusive-delegation-01/fixture.rs": "d0ff39e9c7e9a7c5c0d40732e24a62482301fb571730232f8d5e8f690dcc060e",
+    "research/evidence/runs/2026-11-18-exclusive-delegation-01/proposal.rs": "3a707162bfefb358a712dfae20f7b6fe95aeddbd575b1cb9128324fbd407e5d8",
+    "research/evidence/runs/2026-11-18-exclusive-delegation-01/candidate-dentry.rs": "c3d6a4dfbc2ad9d2bb5499a5e6d1964ec1fb9fc98c1ebd12aab709c65d2c6b13",
+    "research/evidence/runs/2026-11-18-exclusive-delegation-01/independent-static-review.txt": "7806e5bf13b3618ba0c240a08a077e235784ae81fb071065434dd165c49f7c70"
+  },
+  "configuration_sha256": "d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6",
+  "cells": {
+    "original": {
+      "source_hashes": {
+        "fs/kvfs/src/node/dentry.rs": "5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7",
+        "fs/kvfs/ut-tests/node_dentry.rs": "6e553bac4586707e81ddab4ca3d9add26393ff916122068750d06b9b4d8613cb"
+      },
+      "disk_name": "research-exclusive-delegation-original.ext4"
+    },
+    "candidate": {
+      "source_hashes": {
+        "fs/kvfs/src/node/dentry.rs": "c3d6a4dfbc2ad9d2bb5499a5e6d1964ec1fb9fc98c1ebd12aab709c65d2c6b13",
+        "fs/kvfs/ut-tests/node_dentry.rs": "6e553bac4586707e81ddab4ca3d9add26393ff916122068750d06b9b4d8613cb"
+      },
+      "disk_name": "research-exclusive-delegation-candidate.ext4"
+    }
+  },
+  "command_prefix": [
+    "make",
+    "unittest",
+    "UNITTEST_CRATE=kvfs",
+    "ACCEL=n",
+    "NET=n",
+    "BLK=y",
+    "VSOCK=n",
+    "SMP=2",
+    "MEM=1g"
+  ],
+  "timeout_seconds": 300,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.95.0",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "4",
+    "RUSTFLAGS": "",
+    "CARGO_ENCODED_RUSTFLAGS": "",
+    "GIT_CEILING_DIRECTORIES": "/tmp"
+  }
+}

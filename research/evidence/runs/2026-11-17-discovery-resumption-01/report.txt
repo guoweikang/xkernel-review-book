@@ -1,0 +1,79 @@
+固定发现库存接续审计 — 2026-11-17
+
+一、结论与集合身份
+本轮只读盘点与源码审阅完成，未运行检测器、排名、模型、测试或生产修改。库存能够承载有界筛查：固定43对具有case-001..case-043、unit ID、完整文件/片段/原文档及摘要，可按原ID恢复，不需新排名或换集合。
+选用 research/evidence/runs/2026-11-17-rank-fusion-review-02/reviewer/cases.json 的原43对为本轮唯一筛选总体；不是旧156对全量复审。它是六方法既有top20并集的canonical pair order，case ID不是质量排名。通过unit ID对接40对原行动表candidate-actions-02和156对discovery-ledger-v4；后两者只供历史状态核查，不在遇到不利结果后补样本。
+先写manifest规则，再写selection.json冻结具体输入hash、12项及9项前置排除，然后打开选定函数体。固定xkernel 7e3ac94431a0dbb376d2fc8d85098deeff1bba09。停止在case-021；后22项没有本轮源码筛查，不能称其已淘汰。后续若继续须新批次，不按本轮结果补满“好案例”。
+原43对report的cases_reviewed=0指独立评审未开展；旧40对已有主线程/Goodall开发性审读。本轮也不是独立评审，不能把12项计成43对独立评价进度。
+
+二、身份、历史和排除边界
+旧SCC记录仍有unknown，不因它未回填近期实验就当成全新。原行动表已明确7/11/27是删除快照/metadata/路径的已有行动；与43对对应case-009/014/030。原生文档pilot明确选case-003/004，已完成提案/上下文对照。其它inode构造配对按用户排除同族，不伪称每一对都做过实验。
+旧历史入口R008（对齐）和H001（BPF）不在该四package语料的相应完整案例范围，不能临时塞入43对；见2026-11-05-rust-baseline-input-readiness.md:31-40。R008已有host closure，H001已共享且来源准入未满足；都不重启。RcArc、固件旧CPU单点、旧pagecache预算见证同样不进入本固定集合。path末组件为case-030，虽然在截止点之后，也不能作为替补。
+
+按原ID遇到的前置排除（9项，理由均保留，非真实负标签）：
+case-002 / queue1 / SCC1685,1749：两测试inode_init，同inode初始化玩具族保守排除；旧记录仍unknown，不冒称这对已有94项验证。
+case-003 / queue2：xattr已完成pilot。
+case-004 / queue3：inode new_dir/new_dir_with_flags已完成pilot。
+case-009 / queue7：已完成删除事件快照验证；不重做其锁内快照见证。
+case-010 / queue8、case-011 / RRF新增、case-012 / queue9：同inode构造族排除，非逐项已验证。
+case-014 / queue11 / SCC1571,1732：旧metadata原/候选各94测试及非测试构建已联结，闭合开发案例、采纳收益未明；不重开。
+case-020 / queue17：旧源码审读已确认namei向mount rmdir_tracked委托，没有该对第二套独立机制的待解证据；保留已有复用，不算真实负例。
+
+三、12项逐项筛查（顺序不变）
+所有函数片段和直接doc均实际打开。完整文件可用并逐字节对上固定Git对象；不等于逐行审完全文。下列doc字节为原packet左右端，0仅表示直接方法文档为空，不代表整个模块/项目无文档。完整unit ID、位置、源码与片段hash、40表/156表联结见evidence.json。
+
+1. case-001（queue0，SCC2070/2087）：task/kspin/src/rwlock.rs:226 fmt 与 lock.rs:254 fmt；doc 0/0。
+   筛入原因：旧记录unknown，debug格式相似仍有局部包装问题。源码显示try_read/try_lock、锁名、guard类型不同，格式骨架重叠。
+   本轮处置：暂不推荐。共同格式工作很小，必须保留非阻塞获取与guard生命周期；没有具体维护负担。缺doc不是拒绝原因，不转向锁正确性调查。已暴露于旧queue0审读。
+2. case-005（旧40表无项，SCC493/494）：mount.rs:1518 symlink / :1510 link；doc 51/41。
+   筛入原因：RRF新增pair、旧SCC未判定；不是未见函数。两端均已委托create_exclusive_with，剩with_dentry包装及不同回调。
+   本轮处置：不单独推荐新共享层；已有核心共享，后续可作为创建编排家族的现有复用控制。RRF新增配对不等于独立样本。
+3. case-006（queue4，SCC491/494）：mount.rs:1518 symlink / :1478 mkdir；doc 51/47。
+   筛入原因：旧静态审读只保留包装相似。两端同样调用已有create_exclusive_with，mkdir额外权限/umask参数。
+   本轮处置：与005同族、不独立计作第二机会；暂不增加薄包装helper。
+4. case-007（queue5，SCC1792/1832）：ut-tests/node_device.rs:47/:822 getattr；doc 0/0。
+   筛入原因：不是已闭合的1571/1732，字符/块设备metadata差异仍未定案。源码可见inode7/8、CharacterDevice/BlockDevice不同。
+   本轮处置：仅测试fixture机会，暂不推荐。不能将它冒称旧metadata94项已验证，也不再围绕新metadata构造小例扩实验。没有测试隔离成本/维护事件证据。
+5. case-008（queue6，SCC1121/1122）：pipe.rs:303 splice_write / :260 splice_read；doc 505/461。
+   筛入原因：旧记录unknown，回调、提交和唤醒骨架相近，真实行为/锁约束未用于共享边界确认。
+   本轮处置：保留为第二顺位的有界职责问题，不直接建议合并。两端已共享poll_file_io；读端先复制后按接受数drain，写端先预留空间再读取并发布；EOF/SIGPIPE、唤醒对象、调用方副作用不同。不能把现有polling共享再算新机会。
+6. case-013（queue10，SCC1672/1724）：ut-tests/node_dentry.rs:132 与 namei.rs:332 read；doc 0/0。
+   筛入原因：旧记录未知，相同锁内slice复制可能测试辅助复用。offset as usize等约束须保留。
+   本轮处置：暂不推荐。跨fixture共享的隔离/位宽/耦合收益尚无依据；同一成员曾在旧生产/测试slice适配pair1281/1672中被讨论，不是新鲜输入。不能将另一pair的限制直接变成本pair已证明不可共享。
+7. case-015（queue12，SCC2177/2178）：util/macros/src/lib.rs:314/:332 derive_user_read/write；doc 141/144。
+   筛入原因：模板相似但宏展开未验证。上下文:290-345已打开，posix_types_private_path已共享。
+   本轮处置：暂不推荐。仅少量解析/quote装配可能复用；UserRead任意位模式有效与UserWrite原字节写出安全是不同承诺，不能合并unsafe声明。避免转成通用宏验证工具任务。
+8. case-016（queue13，SCC559/563）：namei.rs:935 mkdir_at_entry / :1056 symlink_at_entry；doc 140/147。
+   筛入原因：父查找、exclusive create、with_dentry和CreatedEntry装配相近，已有helper之上的编排边界尚未定案。
+   本轮处置：优先保留。完整边界含into_create、create_exclusive_with和公开wrapper文档；symlink尾斜杠检查位于回调内，不能提前到已有目标检查之前。这里只保留问题，不给helper方案或正标签。
+9. case-017（queue14，SCC未命中该pair）：namei.rs:935 mkdir_at_entry / :993 mknod_at_entry；doc 140/135。
+   筛入原因：同族，但非旧SCC pair不等于无效。mknod在parent查找前验证类型，设备参数归一化、RegularFile分派独有。
+   本轮处置：并入016的差异控制，不再独立推荐或扩大样本数。共享编排若改变前置错误顺序便不成立。
+10. case-018（queue15，SCC559/565）：namei.rs:935 mkdir_at_entry / :1099 link_at_entry；doc 140/139。
+   筛入原因：同创建框架但source身份/硬链接不同。源码/文档均在同版。
+   本轮处置：并入016边界控制，保留创建inode与链接已有source的区别；不是第三个独立机会。
+11. case-019（queue16，SCC681/683）：node/dentry.rs:1214 unlink_with / :1247 rmdir_with；doc 0/0。
+   筛入原因：这一低层pair不等于已完成的mount快照pair009；父/victim锁、查找和清理确有重复编排。
+   本轮处置：有局部假设但本轮不推荐第三项。与旧删除支线共享上下文且锁/析构顺序成本高，优先避免重新滑回删除见证；不把009通过当成本pair可替换证明，也不标无法优化。
+12. case-021（queue18，SCC未命中该pair）：task/kspin/src/rwlock.rs:137 try_read / :189 try_write；doc 54/59。
+   筛入原因：旧记录只说明guard骨架相近，未决。源码读者上限、CAS状态、guard类型和stats记录不同。
+   本轮处置：暂不推荐。可能共用的尾部包装很小，状态机/内存序是必要差异；没有承担并发证明成本的维护理由。没有运行cfg或并发验证，不把已有constructor cfg试验算本pair证据。
+
+四、最多两个可执行的下一筛查入口（仅建议，未启动）
+A. 首选case-016，case-017/018只作为已选范围内差异控制：问“已有exclusive-create机制之上，是否仍有值得统一的父/名称结果编排，而不迁移错误优先级和资源生命周期？”
+   源码边界：namei.rs:80-120、910-1126；dentry.rs:1138-1205。已读helper明确负dentry、父namespace锁持有及成功前instantiate的责任。公开symlink_at文档明确既有目标AlreadyExists优先于缺失目标尾斜杠NotFound；不是只看两段相似文本。
+   既有测试入口：fs/kvfs/ut-tests/namei.rs:612 create_operations_preserve_trailing_slash_policy；:742 mkdir_at_uses_locked_vfs_mode_preparation；:772 mknod_at_preserves_linux_error_precedence。已打开前者完整函数、mkdir函数和mknod测试部分，未声称全部测试体或错误组合已穷尽。namei.rs末尾path_mod_test绑定该文件；mkdir_at/symlink_at确实委托目标_entry方法。
+   最小下一步：不建新检测器，先在这三个已选pair内列出现有helper覆盖及未共享步骤，逐条绑定旧测试的触达路径/断言。若只剩几行CreatedEntry装配、没有简化或共同维护需求，结束为不值得新层；不能因能写closure就宣布正例。若确有边界才另行冻结局部适配/执行批。
+   可判别观测：同版已有“目标存在+尾斜杠”“目标缺失+尾斜杠”、mknod类型前置错误及mode准备，能约束候选错误顺序；锁持有期、完整凭据/LSM链仍未知。测试存在不等于这里已经运行，也不证明文档因果增益。
+B. 次选case-008：问“在已有poll_file_io之外，回调结果校验/提交后唤醒是否存在共同责任边界，还是两方向协议足以要求保留原结构？”
+   源码边界：pipe.rs:260-335及同版poll.rs:11-41。poll helper已经负责WouldBlock等待和中断后最后一次尝试；两端内外Result层区分等待与回调错误，不能压平。文档同时明确不重入pipe、不持file-position锁、外部副作用不可回滚。
+   既有测试（原文件已打开1-120行）：ut-tests/pipe.rs:12 splice_rejects_oversized_write_without_consuming_source；:31 splice_rejects_oversized_read_without_publishing_data；:54 splice_retains_rejected_and_short_written_data；:75 splice_reserves_space_before_reading_source。前四函数完整读到，末尾splice_between_pipes测试只读部分，不当目标pair直接覆盖。pipe.rs末尾path_mod_test绑定该原文件。
+   最小下一步：仅映射这四个既有测试与两端提交/回调义务，先扣除已共享poll机制。若未共享部分只有方向特定复制/drain/write和一处长度检查，停止，不造小验证框架或追加泛化错误见证。sleepable锁、signal、wakeup依赖意味着不能把它宣传为直接rustc --test零适配入口；原内核harness可运行性待单独核验。
+   独立未知：是否值得抽取、并发/唤醒正确性、维护收益、文档新增事实均未建立；此建议不重开旧pagecache预算案例。
+
+五、检索与校验边界
+先读research-execution、research-steering、PROGRESS和discovery专题，再用research_lookup检索43/原库存/历史词及common-budget-ranking、scc-first-review、derive_user_read；原始返回保存在retrieval.log，包含工具输出截断，不伪装完整召回。直接打开原cases/冻结文件/旧状态表和12对源码doc，另用本地固定git对象读取poll.rs及ut-tests/pipe.rs。没有网络。
+读取失败：猜测2026-11-17-rank-fusion-review.md不存在，转向既有protocol、run report和discovery专题；猜测removal-event-baseline-01/report.json不存在，不从该失败推断未测试，采用已读action-map及原candidate-actions-02。只缺文档/日志入口不构成负例。
+72份packet工件（12对×6）全部匹配旧report哈希，24份完整source副本（含重复文件）全部逐字节对上固定Git对象。evidence.json保留路径/hash/范围/原ID；这些数量不是独立源文件或测试数量。
+材料全部为已暴露开发语料，原文档为空可以后续补，但补写不得夹带应共享答案。没有独立真实标签、效果分数、模型提案或新增机制认证。本报告只是可继续且可停止的筛选入口，交主线程路线审议。
+交付仅本run：manifest.json、selection.json、evidence.json、report.txt、retrieval.log、source-inspection.log、validation.txt、checksums.sha256。未改共享笔记/进度/生产；未commit/push。

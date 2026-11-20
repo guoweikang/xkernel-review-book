@@ -1,0 +1,47 @@
+Rc::clone_from_ref_in
+先调用 UniqueRcUninit::new(value, alloc)，然后把 data_ptr 转为 *mut u8 传给 value.clone_to_uninit；调用返回后才调用 into_rc 并返回该 Rc。
+来源：library/alloc/src/rc.rs:1345-1359
+
+UniqueRcUninit::new / try_new
+保存 Layout::for_value(for_value) 和 Some(alloc)；分配时用 for_value 的指针元数据形成 RcInner<T> 指针。try_new 用 ? 返回分配错误。
+来源：library/alloc/src/rc.rs:4450-4477
+
+UniqueRcUninit::data_ptr / into_rc
+data_ptr 按保存的值布局计算偏移。into_rc 用 ManuallyDrop 包装守卫，从 Option 中取出分配器，再通过 Rc::from_ptr_in 构造返回值。
+来源：library/alloc/src/rc.rs:4480-4498
+
+UniqueRcUninit::drop
+Drop 取出保存的分配器，使用 rc_inner_layout_for_value_layout(layout_for_value) 释放 ptr 指向的分配；该函数体没有对 T 调用 drop_in_place。
+来源：library/alloc/src/rc.rs:4501-4513
+
+Arc::clone_from_ref_in
+先调用 UniqueArcUninit::new(value, alloc)，再以 data_ptr 转换出的 *mut u8 调用 value.clone_to_uninit；调用返回后才执行 into_arc 并返回该 Arc。
+来源：library/alloc/src/sync.rs:1495-1509
+
+UniqueArcUninit::new / try_new
+保存值布局及 Some(alloc)，通过带 for_value 元数据的 ArcInner<T> 指针建立守卫。try_new 在分配失败时通过 ? 返回错误。
+来源：library/alloc/src/sync.rs:4230-4257
+
+UniqueArcUninit::data_ptr / into_arc
+data_ptr 根据保存的值布局计算偏移。into_arc 通过 ManuallyDrop 包装守卫，取出分配器和指针后调用 Arc::from_ptr_in。
+来源：library/alloc/src/sync.rs:4260-4279
+
+UniqueArcUninit::drop
+在 not(no_global_oom_handling) 配置下，Drop 用取出的分配器及 arcinner_layout_for_value_layout(layout_for_value) 执行 deallocate；函数体没有对 T 调用 drop_in_place。
+来源：library/alloc/src/sync.rs:4281-4294
+
+CloneToUninit for [T]
+slice 实现以 self 的元数据建立目标 *mut [T]，随后调用 T 的 CopySpec::clone_slice。
+来源：library/core/src/clone.rs:555-564
+
+CopySpec::clone_slice for T: Clone
+默认实现把目标借用为 [MaybeUninit<T>]，通过 InitializingSlice 逐项接收 element_ref.clone() 的结果；全部完成后 mem::forget(initializing)。
+来源：library/core/src/clone/uninit.rs:24-50
+
+InitializingSlice
+该对象保存借用的 [MaybeUninit<T>] 和 initialized_len。push 写入元素后才递增计数；Drop 对 data[..initialized_len] 调用 assume_init_drop，没有释放底层存储的操作。
+来源：library/core/src/clone/uninit.rs:84-123
+
+CopySpec for T: TrivialClone
+该特化的 clone_one 与 clone_slice 调用 ptr::copy_nonoverlapping；slice 路径先 debug_assert_eq 两侧长度。
+来源：library/core/src/clone/uninit.rs:53-82

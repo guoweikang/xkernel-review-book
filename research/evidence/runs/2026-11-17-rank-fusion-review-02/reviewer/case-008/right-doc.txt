@@ -1,0 +1,7 @@
+ Transfers buffered bytes to a non-pipe destination without consuming a
+ rejected suffix. Runs in sleepable task context under this pipe's mutex.
+ `write_fn` must not reenter a pipe. Callers must not hold file-position
+ locks; the callback may lock its non-pipe destination. Callback errors are not
+ mistaken for an empty source pipe.
+ An oversized callback result returns EIO without consuming pipe data;
+ side effects in the destination cannot be rolled back.

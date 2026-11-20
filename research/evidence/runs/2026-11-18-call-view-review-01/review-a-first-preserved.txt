@@ -1,0 +1,36 @@
+独立源码审读 A
+
+范围与证据边界
+- 仅评 case-001、case-002、case-003；元数据 revision 为 7e3ac94431a0dbb376d2fc8d85098deeff1bba09。以下为模型的有限源码判断，不是维护者意见或独立人类 gold 标签，不推测筛选方法，不承诺合并收益。
+- 实际读取：reviewer/cases.json 全文（含其余三案元数据，但不评其余三案）；case-001、002、003 各自 left-snippet.rs、right-snippet.rs、left-source.rs、right-source.rs。case-001 两份 source 共 1273/1728 行；初次输出截断的中段已补读。case-002 两份 source 各 260 行、case-003 各 196 行：逐行阅读左份，并用 cmp 完整比较右份，均完全相同。另仅列出 reviewer 目录条目、统计指定文件行数。
+- 未读 manifest、analyst-only、排名、旧评审、研究进度、其他 case 的 snippet/source；未联网、构建或执行测试。每对审读未超过 10 分钟。仅写本结果文件。
+- 引用为元数据所列原始源码路径及其真实行号，行号以对应完整 source 的 nl -ba 核对，不采用 snippet 的相对行号。全部 cfg 元数据为 not_evaluated；不据此假定实际构建配置。
+
+case-001：inode_init / inode_init
+判定：可进入一次机制确认（仅测试 fixture 的局部参数配方）。
+- 共同操作：构造 VfsInodeInit，设置默认权限、uid/gid=0、nlink=1、默认 rdev、blocks=1、三项 UNIX_EPOCH。见 fs/kvfs/ut-tests/node_dentry.rs:432–446 与 fs/kvfs/ut-tests/mount.rs:287–301。
+- 现有共享：两者已经委托同一 VfsInodeInit::new、with_owner_links_and_rdev、with_stat_data；没有在这两个函数中重复实现 inode 的生产状态管理。新增共享只能针对测试默认值配方，不能据此宣称内核构造机制需要再抽取。
+- 必须保留：左侧 node_type/size 为参数且 block_size=4096；右侧固定 Directory/0 且 block_size=512。左侧用于普通文件（node_dentry.rs:376–388）、目录（:395–405）、Unknown（:507–514）、符号链接（:1064–1072）；右侧用于挂载 mock 的根与 lookup 目录（mount.rs:218–222、:339–343）。不能把左侧缩成目录专用，也不能统一块大小。
+- 状态与契约：函数本身未见外部可变状态，生成值交给各自 mock/构造路径；不应连带合并 MockDirOps。尤其 mount.rs:245–255 的 mkdir 需要 inode_init_owner 产生的 mode/uid/gid，不能套用固定 root owner 配方。node_dentry.rs:83–96 的 getattr 块大小为 512，而初始化为 4096；这种差异的意图 unknown，不在本审读中“纠正”。
+- 最小确认义务：只考虑测试侧 helper 接收 inode、node_type、size、block_size，保留两个薄包装及全部原常量；逐字段对照两个包装输出，并覆盖左侧非目录/非零 size 与右侧目录/零 size。确认共同测试模块可见性及配置边界后再决定是否值得抽取；现有 builder 已很短，保留现状也合理。
+- 未读依赖：VfsInodeInit/Umode/NodePermission 的定义与默认值实现、VfsInode 构造及元数据刷新实现、测试模块装配与 feature 配置、unittest 宏。其内部行为和可共享模块位置均为 unknown。
+
+case-002：poll / get
+判定：可进入一次机制确认（仅测试断言流程；生产 API 合并证据不足）。
+- 共同操作：各自独立 static Once<usize>，先观察 None，call_once 初始化，再观察指定 Some 值。util/klazy/tests/host/once_host.rs:74–80、:99–105。
+- 现有共享：两项测试使用相同 Once::new/call_once API；给定文件未见这两项测试调用共同断言 helper。get 与 poll 是否内部委托同一实现为 unknown，不能从测试结构推断。
+- 差异与状态：被测访问器分别是 get/poll，初始化值分别为 2/3，两个 static INIT 是独立对象。不能把它们移进同一 helper 内的单个 static，使第二项观察到已初始化状态。两者均 #[test]，这里仅覆盖未初始化和成功初始化后的顺序观察。
+- 契约边界：同文件 :83–96 另有 get_no_wait，:108–124 另有 wait 测试，提示需要区分访问行为；get_no_wait 的线程 sleep 并未提供“初始化已开始”的确定握手，不足以证明所有并发状态语义。初始化中、panic/poison 下 get 与 poll 的完整差异仍 unknown（:126–143 只检查 call_once 的 panic 传播）。
+- 最小确认义务：若要共享，可保留两个具名测试及其独立 static，把“对给定 Once 调访问器→None→call_once(value)→Some(value)”作为小 helper，传入访问器和期望值。先确认借用签名可表达、两次调用确实各自使用原访问器、保留 2/3 和独立注册；不把这一 helper 外推到初始化中或 poison 场景。只有数条断言，收益未确认。
+- 未读依赖：super::* 的导出、Once 类型及 new/get/poll/call_once/wait 实现、host 测试入口与配置。故生产共享与阻塞/内存序契约均保留 unknown，不能提出生产 API 合并结论。
+
+case-003：rwlock_try_write_fails_when_reader_is_active / rwlock_allows_multiple_readers
+判定：必要差异阻断本假设（把两个测试合成同一行为机制）；公共脚手架已经共享。
+- 共同操作：创建 TestRwSpinIrq、持有读 guard、观察 IRQ_CNT、释放后检查计数归零。task/kspin/ut-tests/kspin_unittest.rs:70–82、:100–110。
+- 现有共享：:14–31 已有 TestGuardIrq/BaseGuard、全局 IRQ_CNT 和 TestRwSpinIrq<T> = SpinRwLock<TestGuardIrq,T>；acquire/release 用 Relaxed 原子加减计数。两项测试已通过同一测试 guard 和锁类型，不存在两份待合并的 IRQ 模拟实现。
+- 必须保留的差异：多读者测试持有两个读 guard，检查两者都读到 42、计数=2，再逐一 drop 后归零（:71–81）；写尝试测试持有一个读 guard，检查 try_write 失败后计数仍=1，释放读 guard 后写尝试成功且下一句计数=0（:101–109）。后者涵盖失败尝试无计数泄漏和成功临时写 guard 的释放；前者涵盖并存读取与值可见性。删掉任一分支均损失可观察契约。
+- 配置/生命周期：两项均 #[def_test(serial)]（:69、:99），共享全局计数使串行约束不可随意移除。它们自身没有 smp 条件；邻近测试的 smp 属性（:45、:113）不能迁移过来。抽 helper 不能延长 :108 的临时 guard 至 :109 之后，也不能用重置 IRQ_CNT 掩盖泄漏。该模拟计数不证明真实 IRQ 行为或多核并发性质。
+- 最小确认义务：保留两个独立场景和注册，书面对照各自 guard 生存期及计数序列（双读者 2→0；读者存在时失败尝试后 1，读者释放后成功尝试结束为 0）。若只抽计数断言，也须保持原观察位置、串行属性、失败定位；当前没有证据表明这一小抽取值得做。生产锁机制的改进不由这对测试推出。
+- 未读依赖：SpinRwLock/read/try_write 与 guard Drop 的生产实现、BaseGuard 定义、unittest 的 serial 调度和断言宏展开、实际 feature/目标平台配置；这些内部机制为 unknown。已有共享仅指给定文件可见的脚手架与类型委托。
+
+结论边界：前两案只有测试层局部确认机会，第三案应保留不同测试契约。三案均不能作为生产内核重复实现或合并收益的证据。

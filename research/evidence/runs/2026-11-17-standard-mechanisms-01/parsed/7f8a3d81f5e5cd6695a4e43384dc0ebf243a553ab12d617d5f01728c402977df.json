@@ -1,0 +1,275 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " [`TrustedLen`] cannot have methods, so this allows augmenting it.",
+          "path": "doc",
+          "range": [
+            30,
+            99
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            100,
+            103
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It currently requires `TrustedLen` because it's unclear whether it's",
+          "path": "doc",
+          "range": [
+            104,
+            176
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reasonably possible to depend on the `size_hint` of anything else.",
+          "path": "doc",
+          "range": [
+            177,
+            247
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "UncheckedIterator",
+      "range": [
+        30,
+        1594
+      ]
+    },
+    {
+      "ancestors": [
+        0
+      ],
+      "attributes": [
+        {
+          "doc_text": " Gets the next item from a non-empty iterator.",
+          "path": "doc",
+          "range": [
+            301,
+            350
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            355,
+            358
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Because there's always a value to return, that means it can return",
+          "path": "doc",
+          "range": [
+            363,
+            433
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the `Item` type directly, without wrapping it in an `Option`.",
+          "path": "doc",
+          "range": [
+            438,
+            503
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            508,
+            511
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            516,
+            528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            533,
+            536
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This can only be called if `size_hint().0 != 0`, guaranteeing that",
+          "path": "doc",
+          "range": [
+            541,
+            611
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " there's at least one item available.",
+          "path": "doc",
+          "range": [
+            616,
+            656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            661,
+            664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Otherwise (aka when `size_hint().1 == Some(0)`), this is UB.",
+          "path": "doc",
+          "range": [
+            669,
+            733
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            738,
+            741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Note to Implementers",
+          "path": "doc",
+          "range": [
+            746,
+            772
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            777,
+            780
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This has a default implementation using [`Option::unwrap_unchecked`].",
+          "path": "doc",
+          "range": [
+            785,
+            858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " That's probably sufficient if your `next` *always* returns `Some`,",
+          "path": "doc",
+          "range": [
+            863,
+            933
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " such as for infinite iterators.  In more complicated situations, however,",
+          "path": "doc",
+          "range": [
+            938,
+            1015
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " sometimes there can still be `insertvalue`/`assume`/`extractvalue`",
+          "path": "doc",
+          "range": [
+            1020,
+            1090
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " instructions remaining in the IR from the `Option` handling, at which",
+          "path": "doc",
+          "range": [
+            1095,
+            1168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " point you might want to implement this manually instead.",
+          "path": "doc",
+          "range": [
+            1173,
+            1233
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1238,
+            1306
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            1311,
+            1320
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1375,
+        1592
+      ],
+      "kind": "trait_fn",
+      "name": "next_unchecked",
+      "range": [
+        301,
+        1592
+      ],
+      "signature_range": [
+        1325,
+        1374
+      ]
+    }
+  ],
+  "source_sha256": "6a0d79f4d6347d0a52b3286e794f6cbb92c9ccc43d82526d47cb9932c78eefbb"
+}

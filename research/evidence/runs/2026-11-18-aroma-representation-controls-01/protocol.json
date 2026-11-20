@@ -1,0 +1,22 @@
+{
+  "schema": "aroma-representation-controls/1",
+  "status": "frozen_before_execution",
+  "question": "Does the unmodified reference representation preserve lowercase renaming while responding to changed variable-use grouping beyond unchanged invocation-name tokens?",
+  "source": "research/evidence/runs/2026-11-18-structural-discovery-sources-01/aroma-similar.py.txt",
+  "source_sha256": "7203c86b1fca6cf21373cca2d9fc2f0a23a1685cc559887b02dbc52b9f411065",
+  "fixture": "research/evidence/runs/2026-11-18-aroma-reference-replay-01/example_query.json",
+  "fixture_sha256": "b4351fa7bbe20545728676d7ffe784bb59eee4a38dbf334db3f3a375cb684f70",
+  "conditions": [
+    {"id": "original", "edit": "none"},
+    {"id": "lowercase_rename", "edit": "all var-marked strBuf->buffer_local, itr->cursor_local, list->source_local"},
+    {"id": "uppercase_rename", "edit": "all var-marked strBuf->BufferLocal, itr->CursorLocal, list->SourceLocal"},
+    {"id": "receiver_reassignment", "edit": "swap var-marked token values at ast paths [3,1,2,3,1] (list) and [4,3,2,1,1] (itr), preserving token multiset and all non-var tokens"},
+    {"id": "method_spelling", "edit": "leaf hasNext->hasRemaining; no var changes"},
+    {"id": "whitespace", "edit": "set all token dictionaries leading and trailing to empty strings; no structural or token edits"}
+  ],
+  "measurements": ["exact decoded feature sequence and multiset", "binary feature sets and Jaccard against original", "raw token multiset and non-var leaf token sequence", "features containing >>> separately from other features"],
+  "hypotheses_not_labels": {"lowercase_rename": "representation invariant", "whitespace": "representation invariant", "receiver_reassignment": "variable-use features may distinguish identical raw token bags", "uppercase_rename": "capitalization heuristic may break alpha-renaming invariance", "method_spelling": "representation sensitive to method name"},
+  "execution": "Two fresh CLI indexing runs of the unmodified source, one six-record JSONL corpus per run, original Config untouched. Existing doc-retrieval-env only; 60s subprocess timeout each; no Java, installation, query ranking or external pickle. Decode only locally produced vocab/features. Preserve all failures, no tuning or repairs to upstream.",
+  "limits": ["AST-level interventions, not re-parsed Java or Rust programs", "Receiver reassignment has no typechecking or behavior label", "Non-var leaves are an explicit lexical control, not a resolved call graph or the Rust call_set baseline", "No claim of semantic equivalence, refactoring quality, ranking improvement, independent dataset or paper reproduction", "Known original expected-feature mismatch remains unresolved"],
+  "stop": "After two runs and representation comparisons, archive outcome without adding variants. Proceed to Rust adaptation only through separate frontend admission; otherwise defer."
+}

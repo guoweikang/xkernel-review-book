@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pair0-write-native",
+    "text": " Writes file data for this open file description.",
+    "variant": "native",
+    "unit_id": "00508e8525d79328f8dbee56bc4769aefeb94a972a861a86a56e2f6458752798"
+  },
+  {
+    "id": "pair0-write-complete",
+    "text": "The write method accepts a shared byte slice and returns an InvalidInput error.",
+    "variant": "complete",
+    "unit_id": "00508e8525d79328f8dbee56bc4769aefeb94a972a861a86a56e2f6458752798"
+  },
+  {
+    "id": "pair0-write-altered",
+    "text": "The write method accepts a mutable byte slice and returns an InvalidInput error.",
+    "variant": "altered",
+    "unit_id": "00508e8525d79328f8dbee56bc4769aefeb94a972a861a86a56e2f6458752798"
+  },
+  {
+    "id": "pair0-read-native",
+    "text": " Reads file data for this open file description.",
+    "variant": "native",
+    "unit_id": "a323d454a800e8f4a0b69c0badcbc3440570fd7d651f087e1a5f1a3a234f1f9a"
+  },
+  {
+    "id": "pair0-read-complete",
+    "text": "The read method accepts a mutable byte slice and returns an InvalidInput error.",
+    "variant": "complete",
+    "unit_id": "a323d454a800e8f4a0b69c0badcbc3440570fd7d651f087e1a5f1a3a234f1f9a"
+  },
+  {
+    "id": "pair0-read-altered",
+    "text": "The read method accepts a shared byte slice and returns an InvalidInput error.",
+    "variant": "altered",
+    "unit_id": "a323d454a800e8f4a0b69c0badcbc3440570fd7d651f087e1a5f1a3a234f1f9a"
+  },
+  {
+    "id": "pair8-try_call_once-native",
+    "text": " This method is similar to `call_once`, but allows the given closure to\n fail, and leaves the `Once` in an uninitialized state if it does.\n\n This method will spin-wait if another thread is currently performing\n initialization.\n\n When this function returns without error, it is guaranteed that some\n initialization has run and completed (it may not be the closure\n specified). The returned reference will point to the result from the\n closure that was run.\n\n # Panics\n\n This function will panic if the [`Once`] previously panicked while attempting\n to initialize. This is similar to the poisoning behaviour of `std::sync`'s\n primitives.\n\n # Examples\n\n ```\n use klazy;\n\n static INIT: klazy::Once<usize> = klazy::Once::new();\n\n fn get_cached_val() -> Result<usize, String> {\n     INIT.try_call_once(expensive_fallible_computation)\n         .map(|x| *x)\n }\n\n fn expensive_fallible_computation() -> Result<usize, String> {\n     // ...\n # Ok(2)\n }\n ```",
+    "variant": "native",
+    "unit_id": "0ad9dcf183377824f5ca38fd0720899ab87193f4a36d9515fa6dfaefac6b4f14"
+  },
+  {
+    "id": "pair8-try_call_once-complete",
+    "text": "The try_call_once method returns an existing value if initialization has completed. Otherwise it calls try_call_once_slow with the supplied closure.",
+    "variant": "complete",
+    "unit_id": "0ad9dcf183377824f5ca38fd0720899ab87193f4a36d9515fa6dfaefac6b4f14"
+  },
+  {
+    "id": "pair8-try_call_once-altered",
+    "text": "The try_call_once method returns an existing value if initialization has completed. Otherwise it calls call_once with the supplied closure.",
+    "variant": "altered",
+    "unit_id": "0ad9dcf183377824f5ca38fd0720899ab87193f4a36d9515fa6dfaefac6b4f14"
+  },
+  {
+    "id": "pair8-call_once-native",
+    "text": " Performs an initialization routine once and only once. The given closure\n will be executed if this is the first time `call_once` has been called,\n and otherwise the routine will *not* be invoked.\n\n This method will spin-wait if another thread is currently performing\n initialization.\n\n When this function returns, it is guaranteed that some initialization\n has run and completed (it may not be the closure specified). The\n returned pointer will point to the result from the closure that was\n run.\n\n # Panics\n\n This function will panic if the [`Once`] previously panicked while attempting\n to initialize. This is similar to the poisoning behaviour of `std::sync`'s\n primitives.\n\n # Examples\n\n ```\n use klazy;\n\n static INIT: klazy::Once<usize> = klazy::Once::new();\n\n fn get_cached_val() -> usize {\n     *INIT.call_once(expensive_computation)\n }\n\n fn expensive_computation() -> usize {\n     // ...\n # 2\n }\n ```",
+    "variant": "native",
+    "unit_id": "8f42fe153ff2b9d75cdac9a4863b87e469cabb2f04499c0c54bceba68c5c0516"
+  },
+  {
+    "id": "pair8-call_once-complete",
+    "text": "The call_once method calls try_call_once with a closure that wraps the initializer result in Ok. It returns the initialized value.",
+    "variant": "complete",
+    "unit_id": "8f42fe153ff2b9d75cdac9a4863b87e469cabb2f04499c0c54bceba68c5c0516"
+  },
+  {
+    "id": "pair8-call_once-altered",
+    "text": "The call_once method calls try_call_once_slow with a closure that wraps the initializer result in Ok. It returns the initialized value.",
+    "variant": "altered",
+    "unit_id": "8f42fe153ff2b9d75cdac9a4863b87e469cabb2f04499c0c54bceba68c5c0516"
+  },
+  {
+    "id": "pair25-symlink-native",
+    "text": " Create a symbolic link below this directory inode.",
+    "variant": "native",
+    "unit_id": "43b8e695299bb6462fe54eb294683a08a71f9b8c835dd7a9c2d416dbf822c681"
+  },
+  {
+    "id": "pair25-symlink-complete",
+    "text": "The symlink method locks the dentry location and obtains directory operations. It then calls the symlink operation with a target string while retaining the location guard.",
+    "variant": "complete",
+    "unit_id": "43b8e695299bb6462fe54eb294683a08a71f9b8c835dd7a9c2d416dbf822c681"
+  },
+  {
+    "id": "pair25-symlink-altered",
+    "text": "The symlink method locks the dentry location and obtains directory operations. It then calls the symlink operation with a mode value while retaining the location guard.",
+    "variant": "altered",
+    "unit_id": "43b8e695299bb6462fe54eb294683a08a71f9b8c835dd7a9c2d416dbf822c681"
+  },
+  {
+    "id": "pair25-mkdir-native",
+    "text": " Create a directory child below this directory inode.",
+    "variant": "native",
+    "unit_id": "4fe42d2bf53a6861c4ec7a80f2691c184930897bb632abfc179f0f0500b99ddc"
+  },
+  {
+    "id": "pair25-mkdir-complete",
+    "text": "The mkdir method locks the dentry location and obtains directory operations. It then calls the mkdir operation with a mode value while retaining the location guard.",
+    "variant": "complete",
+    "unit_id": "4fe42d2bf53a6861c4ec7a80f2691c184930897bb632abfc179f0f0500b99ddc"
+  },
+  {
+    "id": "pair25-mkdir-altered",
+    "text": "The mkdir method locks the dentry location and obtains directory operations. It then calls the mkdir operation with a target string while retaining the location guard.",
+    "variant": "altered",
+    "unit_id": "4fe42d2bf53a6861c4ec7a80f2691c184930897bb632abfc179f0f0500b99ddc"
+  },
+  {
+    "id": "pair9-lookup_inode-native",
+    "text": " Looks up a live inode identity without invoking a filesystem loader.\n\n This is the superblock-owned counterpart of Linux `ilookup()`. It only\n finds hashed identities; pseudo or otherwise unhashed inodes are not\n returned.",
+    "variant": "native",
+    "unit_id": "0bfd784668e3601cffa7fc7fec678525d041d8797bf7aaf6ef37670c8d362799"
+  },
+  {
+    "id": "pair9-lookup_inode-complete",
+    "text": "The lookup_inode method retrieves an existing inode by calling node::lookup_inode with the superblock and inode number.",
+    "variant": "complete",
+    "unit_id": "0bfd784668e3601cffa7fc7fec678525d041d8797bf7aaf6ef37670c8d362799"
+  },
+  {
+    "id": "pair9-lookup_inode-altered",
+    "text": "The lookup_inode method creates an existing inode by calling node::lookup_inode with the superblock and inode number.",
+    "variant": "altered",
+    "unit_id": "0bfd784668e3601cffa7fc7fec678525d041d8797bf7aaf6ef37670c8d362799"
+  },
+  {
+    "id": "pair9-new_with_inode_attribute_operations-native",
+    "text": " Constructs an inode whose filesystem operation object also stores its\n generic attributes.\n\n This keeps filesystem-private and generic inode state in one composed\n object instead of maintaining a second VFS attribute copy.",
+    "variant": "native",
+    "unit_id": "200f10d505b2edc348db2faab6fb72f225b5f60698628aaaccc2bc86fedd333d"
+  },
+  {
+    "id": "pair9-new_with_inode_attribute_operations-complete",
+    "text": "The constructor creates an inode with attribute operations. It selects operation tables according to the node type and calls from_parts_with_attribute_operations.",
+    "variant": "complete",
+    "unit_id": "200f10d505b2edc348db2faab6fb72f225b5f60698628aaaccc2bc86fedd333d"
+  },
+  {
+    "id": "pair9-new_with_inode_attribute_operations-altered",
+    "text": "The constructor retrieves an inode with attribute operations. It selects operation tables according to the node type and calls from_parts_with_attribute_operations.",
+    "variant": "altered",
+    "unit_id": "200f10d505b2edc348db2faab6fb72f225b5f60698628aaaccc2bc86fedd333d"
+  }
+]

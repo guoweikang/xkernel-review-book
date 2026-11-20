@@ -1,0 +1,163 @@
+{
+  "schema": "call-subset-ranking-protocol/1",
+  "status": "frozen_before_ranking",
+  "id": "call-subset-ranking-v1",
+  "question": "Does usage spelling provide distinct meaningful obligations outside test-path dominance?",
+  "prior_context": "Original six source reviews are complete: four limited opportunities (three test fixtures and fmt) and two necessary differences; no production core benefit established. These outcomes motivate one fixed subset batch, not labels for the new candidates.",
+  "source_revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "inputs": {
+    "scope_protocol": {
+      "path": "research/evidence/runs/2026-11-16-discovery-common-scope-01/protocol.json",
+      "sha256": "1531098def4b6329970f9a2a39819575b0350264457a1af98630d56629863279"
+    },
+    "scope_units": {
+      "path": "research/evidence/runs/2026-11-16-discovery-common-scope-01/units.json",
+      "sha256": "6661ca3219631819ad9724359fa78e3f0c9aa7f8cf33490d47ecd7b3fedf3f58"
+    },
+    "units": {
+      "path": "research/evidence/runs/2026-11-05-rust-baseline-corpus-01/units.json",
+      "sha256": "39fe73d980a836b3d342b4464d6e3e884c64c60cf7085c2abd7c1ec172a0853a"
+    },
+    "tokens": {
+      "path": "research/evidence/runs/2026-11-05-rust-token-bags-01/report.json",
+      "sha256": "d91ee509901ae4b4f6e13b1c1e028bc4f447c92413ba33b1a8d91a9a0b2b91e1"
+    },
+    "bags": {
+      "path": "research/evidence/runs/2026-11-05-rust-token-bags-01/blocks.file",
+      "sha256": "61b48af5c38541d484f9cd32bbf96173aa6d325fd5e9af63159a95922ad5656d"
+    },
+    "calls": {
+      "path": "research/evidence/runs/2026-11-18-common-call-syntax-01/calls.json",
+      "sha256": "a13507c6b4c4be045480057ce17f0d374885f56d3dc5d1eced7050e586c0c30d"
+    },
+    "scc_review_ledger": {
+      "path": "research/protocols/discovery-ledger-v4.json",
+      "sha256": "a588c94fe7e131267b29e542f8b5eeda52ea1a48620a8f37b023d95ff7025f1f"
+    },
+    "prior_doc_queue": {
+      "path": "research/evidence/runs/2026-11-09-doc-tfidf-01/review-queue.json",
+      "sha256": "d558ef3f2b12d074e1f229d5abd8d99116e44d49b2a3e26da10b22c4c40af5b4"
+    },
+    "original_six": {
+      "path": "research/evidence/runs/2026-11-18-call-view-ranking-01/review-queue.json",
+      "sha256": "d6f8d8cba3560acc080ee3d6594ada6b3adc23760a4616923f7365629f737a66"
+    },
+    "bag_helper": {
+      "path": "scripts/prepare_rust_token_bags.py",
+      "sha256": "75a9987e5cd21e4a5a4fb2ac9f9e9248be9375265e002572b6e1e30aa7d2a675"
+    }
+  },
+  "timing_policy": "Record preflight/loading, subset ranking computation and serialization separately using monotonic elapsed time. Reference the prior extraction elapsed_seconds and its measured 812-unit scope separately; do not rerun extraction, sum it into a subset end-to-end runtime, or claim performance from one runtime. Timings are telemetry, not ranking inputs or selection criteria.",
+  "source_freeze_checks": [
+    {
+      "path": "research/evidence/runs/2026-11-16-common-budget-01/freeze.json",
+      "sha256": "e12d236f0efc5b9e22c7dd5ff4b0442f3ff61807292ba95af63cfa264158963d"
+    },
+    {
+      "path": "scripts/run_common_budget_ranking.py",
+      "sha256": "58e4c678b8a9e6614167d0a3c872bedb062b853411036c375b813266f6e91e02"
+    },
+    {
+      "path": "research/evidence/runs/2026-11-18-call-view-ranking-01/freeze.json",
+      "sha256": "8074484354f56cfc76ac00c4bc89bfece2e5f70eaacd2cad86242ff770d892ca"
+    },
+    {
+      "path": "scripts/run_call_view_discovery.py",
+      "sha256": "c2633b98f5c405e607d14e8191cc3eef987113a6f8df35af5458107d1a5c1cab"
+    },
+    {
+      "path": "research/evidence/runs/2026-11-18-common-call-syntax-01/summary.json",
+      "sha256": "68afff99651260fa916036819afa0eec7a82f83f8168a4c7a760c875dd01743d"
+    }
+  ],
+  "original_freeze_policy": "Before and after ranks, check current original code baseline runner/protocol/helpers/bags/scope against the original common-budget freeze, and current original call-view runner against its frozen hash. No original source or frozen artifact may be edited.",
+  "population": {
+    "base": "Exactly the same 812 common-scope code-eligible IDs",
+    "predicate": "unit.test_path_hint == false AND unit.nested_in_function == false",
+    "expected_common": 812,
+    "expected_subset": 429,
+    "order": "unit_id ascending",
+    "meaning": "not-test-path-hint and non-nested only; not confirmed production",
+    "preserve": "Retain every selected ID including empty or rejected call rows as zero vectors; no exclusion by call content, cfg, file identity or eventual rank."
+  },
+  "methods": {
+    "code": "Use unchanged decoded token Counters; sum multiset intersection / max(total token lengths), for all unordered subset pairs. No IDF, renaming, stopword removal or retokenization.",
+    "call_set": "Named call_expression/method_expression only; binary U:JSON([kind,deferred_depth,name]) features, JSON ensure_ascii=False with default separators, same spelling convention as prior call_set. Opaque macros and null names excluded from features but counted. No call_order, fusion or winner selection.",
+    "weighting": {
+      "analyzer": "identity",
+      "binary": true,
+      "use_idf": true,
+      "smooth_idf": true,
+      "sublinear_tf": false,
+      "norm": "l2",
+      "idf_fit": "Refit on all 429 subset rows including empty/rejected rows; idf=ln((1+429)/(1+df))+1. No reuse of 812 IDF.",
+      "empty_vocabulary": "Return zero matrix with 429 rows, preserve population and report lack of vocabulary."
+    }
+  },
+  "ranking": {
+    "pair_universe": "All unique unordered pairs in lexicographic combination order, including same-file pairs; expected 91806.",
+    "round_decimal_places": 12,
+    "sort": "positive rounded scores descending then canonical unit_id pair ascending",
+    "zero_pairs": "Save full rounded score arrays including zeros; zeros never padded into top lists",
+    "top20": 20,
+    "top100": 100,
+    "cutoff_ties": "Report entire-universe count at cutoff, count strictly above, selected-at-cutoff and tie members beyond budget for top20 and top100"
+  },
+  "review_selection": {
+    "budget": 6,
+    "slots": [
+      "call_set",
+      "code",
+      "call_set",
+      "code",
+      "call_set",
+      "code"
+    ],
+    "exclusive_definition": "Method's own positive top20 minus the other method's positive top20 BEFORE exposure exclusions.",
+    "exclude": "Reviewed SCC ledger pairs (review_status=reviewed), every pair in prior doc review queue (conservative exposure; their unknown status is not a truth label), and all original six queue pairs.",
+    "within_stream": "Rank ascending within each exclusive top20, retaining original method rank; select next unexcluded pair for each slot.",
+    "exhaustion": "Record empty slot and reason when its stream is exhausted; do not substitute the other stream, select below top20, expand tie groups or relax exclusions.",
+    "unchosen": "Preserve all eligible/blocked stream members and exclusion reasons for audit; no manual choice."
+  },
+  "diagnostics": [
+    "empty/rejected and zero-vector rows",
+    "opaque macro, deferred, null name counts",
+    "same-file/same-package top20 and selected pairs",
+    "test_path_hint, explicit test-like direct/ancestor/file attribute hints and cfg caveats, not test execution classification",
+    "cutoff ties and top20 singleton/shared feature fingerprints",
+    "overlap between methods and previously exposed pairs",
+    "unknown reference outcomes; no effectiveness/precision/recall labels"
+  ],
+  "execution": {
+    "script": "scripts/run_call_subset_ranking.py",
+    "python": ".build/doc-retrieval-env/bin/python",
+    "numpy_version": "2.5.4",
+    "sklearn_version": "1.7.2",
+    "repeats": 2,
+    "run_ids": [
+      "2026-11-18-call-subset-ranking-01",
+      "2026-11-18-call-subset-ranking-02"
+    ],
+    "threads": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1"
+    },
+    "network": false,
+    "models": false,
+    "frontend_changes": false
+  },
+  "controls": [
+    "Compare binary smoothed-IDF normalized vectors against independent formula; identical/disjoint/empty/repeated token cases.",
+    "Verify code overlap/max formula on small explicit Counters.",
+    "Verify macro/null filtering, deferred identity preservation and rejected-record zero row.",
+    "Verify empty vocabulary preserves all rows and alternating selection exhaustion cannot widen top20."
+  ],
+  "repeat_check": "Both runs consume identical frozen inputs/protocol/script/helper, use independent output directories and refit independently. Compare every deterministic artifact and full score array; record command/environment separately and compare scientific fields excluding only command/path telemetry. Refuse output overwrite.",
+  "limits": [
+    "Four-package development-exposed historical corpus; 429 is not confirmed production.",
+    "No resolved APIs, type checking, macro expansion, cfg activation or execution proof.",
+    "Removing path-hinted tests does not remove all tests or generic wrappers; same-file pairs retained.",
+    "All failures and ties remain evidence; ranking novelty is not meaningful obligation or architecture benefit."
+  ],
+  "stop": "After exactly two frozen runs and repeat validation, pause packaging-ready for independent source review. No new labels, model dispatch, review packaging, parameter/stopword/threshold tuning or population expansion in this batch. If independent review still finds only generic templates/tie artifacts without distinct meaningful obligations, stop this route rather than add variants to pursue a winner."
+}

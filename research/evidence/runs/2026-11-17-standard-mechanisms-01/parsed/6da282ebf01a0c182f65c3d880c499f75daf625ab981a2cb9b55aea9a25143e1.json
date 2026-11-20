@@ -1,0 +1,1223 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A wrapper around a raw non-null `*mut T` that indicates that the possessor",
+          "path": "doc",
+          "range": [
+            214,
+            292
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " of this wrapper owns the referent. Useful for building abstractions like",
+          "path": "doc",
+          "range": [
+            293,
+            369
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Box<T>`, `Vec<T>`, `String`, and `HashMap<K, V>`.",
+          "path": "doc",
+          "range": [
+            370,
+            424
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            425,
+            428
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike `*mut T`, `Unique<T>` behaves \"as if\" it were an instance of `T`.",
+          "path": "doc",
+          "range": [
+            429,
+            505
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It implements `Send`/`Sync` if `T` is `Send`/`Sync`. It also implies",
+          "path": "doc",
+          "range": [
+            506,
+            578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the kind of strong aliasing guarantees an instance of `T` can expect:",
+          "path": "doc",
+          "range": [
+            579,
+            652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the referent of the pointer should not be modified without a unique path to",
+          "path": "doc",
+          "range": [
+            653,
+            732
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " its owning Unique.",
+          "path": "doc",
+          "range": [
+            733,
+            755
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            756,
+            759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If you're uncertain of whether it's correct to use `Unique` for your purposes,",
+          "path": "doc",
+          "range": [
+            760,
+            842
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " consider using `NonNull`, which has weaker semantics.",
+          "path": "doc",
+          "range": [
+            843,
+            900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            901,
+            904
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike `*mut T`, the pointer must always be non-null, even if the pointer",
+          "path": "doc",
+          "range": [
+            905,
+            982
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " is never dereferenced. This is so that enums may use this forbidden value",
+          "path": "doc",
+          "range": [
+            983,
+            1060
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as a discriminant -- `Option<Unique<T>>` has the same size as `Unique<T>`.",
+          "path": "doc",
+          "range": [
+            1061,
+            1139
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " However the pointer may still dangle if it isn't dereferenced.",
+          "path": "doc",
+          "range": [
+            1140,
+            1206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1207,
+            1210
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Unlike `*mut T`, `Unique<T>` is covariant over `T`. This should always be correct",
+          "path": "doc",
+          "range": [
+            1211,
+            1296
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " for any type which upholds Unique's aliasing requirements.",
+          "path": "doc",
+          "range": [
+            1297,
+            1359
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            1360,
+            1565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            1566,
+            1580
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "repr",
+          "range": [
+            1581,
+            1601
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "Unique",
+      "range": [
+        214,
+        1961
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `Unique` pointers are `Send` if `T` is `Send` because the data they",
+          "path": "doc",
+          "range": [
+            1963,
+            2034
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reference is unaliased. Note that this aliasing invariant is",
+          "path": "doc",
+          "range": [
+            2035,
+            2099
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unenforced by the type system; the abstraction using the",
+          "path": "doc",
+          "range": [
+            2100,
+            2160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Unique` must enforce it.",
+          "path": "doc",
+          "range": [
+            2161,
+            2190
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2191,
+            2245
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        1963,
+        2303
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " `Unique` pointers are `Sync` if `T` is `Sync` because the data they",
+          "path": "doc",
+          "range": [
+            2305,
+            2376
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " reference is unaliased. Note that this aliasing invariant is",
+          "path": "doc",
+          "range": [
+            2377,
+            2441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unenforced by the type system; the abstraction using the",
+          "path": "doc",
+          "range": [
+            2442,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Unique` must enforce it.",
+          "path": "doc",
+          "range": [
+            2503,
+            2532
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2533,
+            2587
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2305,
+        2645
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            2647,
+            2701
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        2647,
+        3378
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Unique` that is dangling, but well-aligned.",
+          "path": "doc",
+          "range": [
+            2733,
+            2795
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2800,
+            2803
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is useful for initializing types which lazily allocate, like",
+          "path": "doc",
+          "range": [
+            2808,
+            2877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `Vec::new` does.",
+          "path": "doc",
+          "range": [
+            2882,
+            2902
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2907,
+            2910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note that the address of the returned pointer may potentially",
+          "path": "doc",
+          "range": [
+            2915,
+            2980
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " be that of a valid pointer, which means this must not be used",
+          "path": "doc",
+          "range": [
+            2985,
+            3050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " as a \"not yet initialized\" sentinel value.",
+          "path": "doc",
+          "range": [
+            3055,
+            3101
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types that lazily allocate must track initialization by some other means.",
+          "path": "doc",
+          "range": [
+            3106,
+            3183
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            3188,
+            3199
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3204,
+            3213
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3250,
+        3376
+      ],
+      "kind": "impl_fn",
+      "name": "dangling",
+      "range": [
+        2733,
+        3376
+      ],
+      "signature_range": [
+        3222,
+        3249
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            3380,
+            3434
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        3380,
+        6053
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Unique`.",
+          "path": "doc",
+          "range": [
+            3473,
+            3500
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3505,
+            3508
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Safety",
+          "path": "doc",
+          "range": [
+            3513,
+            3525
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3530,
+            3533
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " `ptr` must be non-null.",
+          "path": "doc",
+          "range": [
+            3538,
+            3565
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3570,
+            3579
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3639,
+        3804
+      ],
+      "kind": "impl_fn",
+      "name": "new_unchecked",
+      "range": [
+        3473,
+        3804
+      ],
+      "signature_range": [
+        3588,
+        3638
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Creates a new `Unique` if `ptr` is non-null.",
+          "path": "doc",
+          "range": [
+            3810,
+            3858
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            3863,
+            3872
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        3923,
+        4084
+      ],
+      "kind": "impl_fn",
+      "name": "new",
+      "range": [
+        3810,
+        4084
+      ],
+      "signature_range": [
+        3881,
+        3922
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Create a new `Unique` from a `NonNull` in const context.",
+          "path": "doc",
+          "range": [
+            4090,
+            4150
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4155,
+            4164
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4225,
+        4281
+      ],
+      "kind": "impl_fn",
+      "name": "from_non_null",
+      "range": [
+        4090,
+        4281
+      ],
+      "signature_range": [
+        4173,
+        4224
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Acquires the underlying `*mut` pointer.",
+          "path": "doc",
+          "range": [
+            4287,
+            4330
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4335,
+            4399
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4404,
+            4413
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4454,
+        4491
+      ],
+      "kind": "impl_fn",
+      "name": "as_ptr",
+      "range": [
+        4287,
+        4491
+      ],
+      "signature_range": [
+        4422,
+        4453
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Acquires the underlying `*mut` pointer.",
+          "path": "doc",
+          "range": [
+            4497,
+            4540
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4545,
+            4609
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4614,
+            4623
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4677,
+        4705
+      ],
+      "kind": "impl_fn",
+      "name": "as_non_null_ptr",
+      "range": [
+        4497,
+        4705
+      ],
+      "signature_range": [
+        4632,
+        4676
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Dereferences the content.",
+          "path": "doc",
+          "range": [
+            4711,
+            4740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4745,
+            4748
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The resulting lifetime is bound to self so this behaves \"as if\"",
+          "path": "doc",
+          "range": [
+            4753,
+            4820
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it were actually an instance of T that is getting borrowed. If a longer",
+          "path": "doc",
+          "range": [
+            4825,
+            4900
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (unbound) lifetime is needed, use `&*my_ptr.as_ptr()`.",
+          "path": "doc",
+          "range": [
+            4905,
+            4963
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            4968,
+            4979
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            4984,
+            4993
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5038,
+        5198
+      ],
+      "kind": "impl_fn",
+      "name": "as_ref",
+      "range": [
+        4711,
+        5198
+      ],
+      "signature_range": [
+        5002,
+        5037
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Mutably dereferences the content.",
+          "path": "doc",
+          "range": [
+            5204,
+            5241
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5246,
+            5249
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The resulting lifetime is bound to self so this behaves \"as if\"",
+          "path": "doc",
+          "range": [
+            5254,
+            5321
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " it were actually an instance of T that is getting borrowed. If a longer",
+          "path": "doc",
+          "range": [
+            5326,
+            5401
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " (unbound) lifetime is needed, use `&mut *my_ptr.as_ptr()`.",
+          "path": "doc",
+          "range": [
+            5406,
+            5468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5473,
+            5484
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5489,
+            5498
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5551,
+        5719
+      ],
+      "kind": "impl_fn",
+      "name": "as_mut",
+      "range": [
+        5204,
+        5719
+      ],
+      "signature_range": [
+        5507,
+        5550
+      ]
+    },
+    {
+      "ancestors": [
+        5
+      ],
+      "attributes": [
+        {
+          "doc_text": " Casts to a pointer of another type.",
+          "path": "doc",
+          "range": [
+            5725,
+            5764
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "must_use",
+          "range": [
+            5769,
+            5833
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5838,
+            5847
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5892,
+        6051
+      ],
+      "kind": "impl_fn",
+      "name": "cast",
+      "range": [
+        5725,
+        6051
+      ],
+      "signature_range": [
+        5856,
+        5891
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6055,
+            6109
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6055,
+        6219
+      ]
+    },
+    {
+      "ancestors": [
+        14
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            6158,
+            6167
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        6196,
+        6217
+      ],
+      "kind": "impl_fn",
+      "name": "clone",
+      "range": [
+        6158,
+        6217
+      ],
+      "signature_range": [
+        6172,
+        6195
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6221,
+            6275
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6221,
+        6319
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            6321,
+            6335
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6336,
+            6390
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6321,
+        6449
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6451,
+            6505
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6451,
+        6605
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6607,
+            6661
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6607,
+        6763
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6765,
+            6832
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6765,
+        6895
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            6897,
+            6951
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        6897,
+        7116
+      ]
+    },
+    {
+      "ancestors": [
+        21
+      ],
+      "attributes": [],
+      "body_range": [
+        7062,
+        7114
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        7005,
+        7114
+      ],
+      "signature_range": [
+        7005,
+        7061
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            7118,
+            7172
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7118,
+        7339
+      ]
+    },
+    {
+      "ancestors": [
+        23
+      ],
+      "attributes": [],
+      "body_range": [
+        7285,
+        7337
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        7228,
+        7337
+      ],
+      "signature_range": [
+        7228,
+        7284
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7341,
+        7754
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7756,
+        8172
+      ]
+    }
+  ],
+  "source_sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e"
+}

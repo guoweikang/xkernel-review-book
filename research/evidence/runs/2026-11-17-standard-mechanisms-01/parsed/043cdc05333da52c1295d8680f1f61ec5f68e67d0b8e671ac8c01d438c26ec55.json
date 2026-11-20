@@ -1,0 +1,346 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Implementation of the Eisel-Lemire algorithm.",
+      "path": "doc",
+      "range": [
+        0,
+        49
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Compute w * 10^q using an extended-precision float representation.",
+          "path": "doc",
+          "range": [
+            244,
+            314
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            315,
+            318
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Fast conversion of a the significant digits and decimal exponent",
+          "path": "doc",
+          "range": [
+            319,
+            387
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " a float to an extended representation with a binary float. This",
+          "path": "doc",
+          "range": [
+            388,
+            455
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " algorithm will accurately parse the vast majority of cases,",
+          "path": "doc",
+          "range": [
+            456,
+            519
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and uses a 128-bit representation (with a fallback 192-bit",
+          "path": "doc",
+          "range": [
+            520,
+            582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " representation).",
+          "path": "doc",
+          "range": [
+            583,
+            603
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            604,
+            607
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This algorithm scales the exponent by the decimal exponent",
+          "path": "doc",
+          "range": [
+            608,
+            670
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " using pre-computed powers-of-5, and calculates if the",
+          "path": "doc",
+          "range": [
+            671,
+            728
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " representation can be unambiguously rounded to the nearest",
+          "path": "doc",
+          "range": [
+            729,
+            791
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " machine float. Near-halfway cases are not handled here,",
+          "path": "doc",
+          "range": [
+            792,
+            851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " and are represented by a negative, biased binary exponent.",
+          "path": "doc",
+          "range": [
+            852,
+            914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            915,
+            918
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The algorithm is described in detail in \"Daniel Lemire, Number Parsing",
+          "path": "doc",
+          "range": [
+            919,
+            993
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " at a Gigabyte per Second\" in section 5, \"Fast Algorithm\", and",
+          "path": "doc",
+          "range": [
+            994,
+            1059
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " section 6, \"Exact Numbers And Ties\", available online:",
+          "path": "doc",
+          "range": [
+            1060,
+            1118
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " <https://arxiv.org/abs/2101.11408.pdf>.",
+          "path": "doc",
+          "range": [
+            1119,
+            1162
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        1229,
+        5019
+      ],
+      "kind": "fn",
+      "name": "compute_float",
+      "range": [
+        244,
+        5019
+      ],
+      "signature_range": [
+        1167,
+        1228
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Calculate a base 2 exponent from a decimal exponent.",
+          "path": "doc",
+          "range": [
+            5021,
+            5077
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This uses a pre-computed integer approximation for",
+          "path": "doc",
+          "range": [
+            5078,
+            5132
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " log2(10), where 217706 / 2^16 is accurate for the",
+          "path": "doc",
+          "range": [
+            5133,
+            5186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " entire range of non-finite decimal exponents.",
+          "path": "doc",
+          "range": [
+            5187,
+            5236
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5237,
+            5246
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5271,
+        5323
+      ],
+      "kind": "fn",
+      "name": "power",
+      "range": [
+        5021,
+        5323
+      ],
+      "signature_range": [
+        5247,
+        5270
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            5325,
+            5334
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5388,
+        5463
+      ],
+      "kind": "fn",
+      "name": "full_multiplication",
+      "range": [
+        5325,
+        5463
+      ],
+      "signature_range": [
+        5335,
+        5387
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "body_range": [
+        5783,
+        7141
+      ],
+      "kind": "fn",
+      "name": "compute_product_approx",
+      "range": [
+        5709,
+        7141
+      ],
+      "signature_range": [
+        5709,
+        5782
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5789,
+        5838
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5844,
+        5892
+      ]
+    },
+    {
+      "ancestors": [
+        3
+      ],
+      "attributes": [],
+      "kind": "macro_tokens",
+      "name": null,
+      "range": [
+        5898,
+        5928
+      ]
+    }
+  ],
+  "source_sha256": "ede68fb9ab7573e47ff0ccb543e781c7cf3fe4330e48c7c836fa72a97c04b029"
+}

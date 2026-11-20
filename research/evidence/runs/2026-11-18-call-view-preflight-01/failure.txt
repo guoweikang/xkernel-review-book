@@ -1,0 +1,5 @@
+Initial scoring invocation used .build/doc-retrieval-env/bin/python scripts/run_call_view_discovery.py with common-call-syntax-01/calls.json and output call-view-ranking-01.
+Failed before output directory creation or rankings: TypeError: string indices must be integers, not 'str', at records iteration.
+Cause: extractor emits a schema envelope with records, while scoring adapter initially expected a bare list as in the older probe.
+Repair: accept envelope records while retaining exact 812-ID, source SHA256 and unresolved-site assertions. No scoring parameter or population change. Preserve failed attempt; subsequent first measured ranking retains ranking-01 ID because no output existed.
+System Python lacked sklearn; existing .build/doc-retrieval-env/bin/python provides pinned sklearn 1.7.2. No package installation performed.

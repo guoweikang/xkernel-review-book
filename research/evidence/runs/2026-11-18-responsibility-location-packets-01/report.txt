@@ -1,0 +1,54 @@
+输入准备冻结：2026-11-18-responsibility-location-packets-01
+仅输入准备；未dispatch、未运行模型、未编译/执行xkernel测试。Goodall/主线程准入尚待完成。
+manifest先于inputs和包创建；inputs先于包生成。原审核run及共享文件未改。
+
+模型文件白名单（仅这两个txt，各供对应一臂）：
+packets/code_and_behavior.txt
+packets/same_code_and_native_responsibility_document.txt
+两包共同task及完整代码字节相同；doc臂仅追加两篇完整同版文档。
+R01–R06固定。无卡片评价/参考答案、after、独立history报告、评价表进入payload。
+历史迁移叙述和历史测试数量是原始文档自身内容，必须保留；task明确不当作本批结果。
+task只列真实实体定位，不把研究员行为摘要或归属答案当作输入。
+评价规范、实施事实及允许结论分离在evaluator-ledger.json，禁止派发。
+
+来源/区域：
+inputs.json冻结12个完整来源文件身份与13个区域hash，所有来源与
+/root/codes/x-kernel 的 cb5bfa7ec35b6d79f1b4433e7ff0149a884dd247 比对。
+8个原件复用同级responsibility-input-audit-01/originals；4个补充父模块原件在source-context。
+11个文件全量输入；仅gic/mod.rs选1–21（声明/import）和134–193（完整配置类型/impl）。
+该文件22–133、194以后明确不进入模型；完整原件仍归档。133与194为空行。
+134从derive开始，无漏紧邻外层属性，193完成GicConfig；1–21无不完整定义。
+其余所选区域从文件首到EOF，保留所有文件/项属性、普通注释和rustdoc。
+祖先条件：rs-fdtree/lib.rs的fwnode feature及alloc条件、backend/mod声明；
+irq/lib.rs的aarch64 gic模块cfg均在共同代码内。未进行宏展开或配置求值。
+
+完整性限制：
+选定行为所在方法及impl在完整文件中保留，并非全部依赖闭包。
+FdtNode的node.rs定义、address/reference/interrupt等委托实现、kirq、khal发布链、
+外部类型/宏、Cargo workspace依赖和全平台条件不闭合；不得声称验证其实现或配置可达。
+GicConfig类型完整，但所有其他impl、init、mapping实现未作为完整输入。
+全文件策略保留额外上下文（含OF旧CPU代码），不扩展卡片、不重跑CPU历史。
+输入可能偏长：代码共同段100666 bytes，code包102163，doc包114799。
+未做tokenizer/模型上下文预算实测；实际dispatch前须确认完整接收，禁止默默截断。
+这是局部职责证据输入，而非可编译源树、全架构验证或独立隐藏测试集。
+
+泄露/对照边界：
+普通注释和rustdoc一致保留，代码臂绝非“无文档”baseline；它已含若干职责说明。
+doc效应若存在可能是显式化、限定条件或强调，不一定是代码不存在的独占事实。
+保留util路径与源码目录、Unsupported与irq_spec实现等原文冲突，不修正文档以迎合答案。
+源码路径、名称及额外上下文本身提供定位线索；开发者已暴露六卡与既往历史。
+评价ledger及本报告不能作为模型背景。两臂不是同长度或等推理预算实验。
+无真实违规标签、无效果结果，不报告accuracy/recall/最优架构。
+
+复建：
+从本run目录 python3 rebuild.py --check，只读验证全部输入hash、产物字节和确定性。
+python3 rebuild.py --emit-patch 输出可复建apply_patch文本，不直接写文件；只对不存在的目标使用apply_patch。
+生成时用上述输出经apply_patch创建三个产物。来源root相对同级run不变。
+checksum包含本run文件（不含checksum文件自身），inputs记录外部原件hash。
+正式冻结以checksums.sha256为准。任何Goodall阻断只在新版本最小修正，不改本版/旧原件。
+
+验证边界：
+rebuild检查通过，不等于Rust测试、模型实验或独立准入通过。
+catalog/book验证仅仓库卫生；不改共享catalog/进度，无新增研究Markdown。
+准备跨上下文恢复，未可靠记录开始时刻，不报告估算耗时。
+下一步只读Goodall/主线程核验完整性及输入预算，再由主线程决定dispatch；本agent不派发。

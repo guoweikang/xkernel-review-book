@@ -1,0 +1,70 @@
+rustc 1.95.0 (59807616e 2026-04-14)
+binary: rustc
+commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860
+commit-date: 2026-04-14
+host: x86_64-unknown-linux-gnu
+release: 1.95.0
+LLVM version: 22.1.2
+debug_assertions
+panic="unwind"
+target_abi=""
+target_arch="x86_64"
+target_endian="little"
+target_env="gnu"
+target_family="unix"
+target_feature="fxsr"
+target_feature="sse"
+target_feature="sse2"
+target_has_atomic="16"
+target_has_atomic="32"
+target_has_atomic="64"
+target_has_atomic="8"
+target_has_atomic="ptr"
+target_os="linux"
+target_pointer_width="64"
+target_vendor="unknown"
+unix
+# 研究进度与接续记录
+
+## 2026-11-17：责任交接核查与并行测试审计
+
+继续既定初始化guard家族，不等待常规确认。Rawls执行固定Rust提交的既有失败测试检索与归档，Goodall完成路线审议；主线程在[机制族笔记](notes/2026-11-17-ownership-family-admission.md)增加责任表，补核core/clone/uninit.rs的InitializingSlice前缀清理，与原归档hash一致。源码证据在ownership-handoff-01；新增运行测试0，不把源码理解计成实验通过。
+
+采用审议门槛：只形成共享边界问题、责任表和既有测试覆盖映射，不扩大为一般内存安全研究。下一入口是ownership-test-audit-01的实际测试覆盖及可运行性，随后自主选择忠实有界执行或标记缺口；不要求用户再次批准，不重启Kani安装。后续三臂评价尚未执行。
+
+## 2026-11-17：自主审议接续，真实候选两批提案对照完成
+
+主线程恢复Goodall只读路线审议，不把常规下一步交回用户确认。固定Kani恢复批仍在6组件下载超过600秒（exit124），官方控制0、关系验证0；按停止条件冻结安装支线，保留[恢复记录](notes/2026-11-17-kani-recovery.md)，没有第三次重试。
+
+未因工具环境受阻停研究：[原生文档提案](notes/2026-11-17-native-doc-proposal-pilot.md)按固定ID选xattr与inode两个旧候选，四次非fork代理；[一跳代码上下文对照](notes/2026-11-17-native-doc-context-control.md)追加相同八个被调定义，再跑四次。文档增加了可绑定声明，但没有观察到新机制方向或文档特有反证义务；不同FnOnce草案未编译。两侧均能从新增代码识别目录debug_assert及None字段，不能当文档效果。所有原答、协议、输入、绑定、审议与失败归档；8份输入临时复建字节一致，旧目录覆盖被拒绝。
+
+两个小例子的提示／上下文变化已关闭；接续ownership-family-admission-01，在固定6219函数中按事前词法规则匹配9项，28个解析拒绝文件保留分母，非9个语义正例。由Goodall核查固定源码、历史暴露与既有测试证据，准备选择资源所有权／失败清理的新机制族。没有新的模型效果分数、独立标签、生产补丁或成熟创新声明。
+
+已完成[新机制族准入](notes/2026-11-17-ownership-family-admission.md)：九项按顺序审阅，首个入口Rc::make_mut与Arc::make_mut配对；主线程回读克隆初始化guard及CloneToUninit。区分panic后不得drop目标、实现should清理组件、调用方可选防泄漏，禁止升级规范强度。只达到源码级准备，未跑panic或并发验证。下一确定入口是同一族的既有失败测试／有界执行证据及责任表，再冻结代码／原生／补齐文档三臂；不再扩前两例或Kani安装。
+
+## 2026-11-17：确认方法接口审计与Kani环境准入
+
+# 候选确认：委托、契约与共享条件
+
+## 要确认的不是一个“重复”布尔值
+
+候选可以同时具有局部相似、整体职责不同和部分共享机会。确认需要分列：实现关系、输入域、类型、配置、锁与生命周期、副作用、共享前提及未知证据。
+
+## 已有案例组织
+
+[初始化所有权家族准入](../research/notes/2026-11-17-ownership-family-admission.md)从固定标准库9个词法匹配中，选择Rc／Arc make_mut及其克隆初始化guard作源码级准备。关注的是成功交出所有权、失败时分配回收与部分初始化值的责任分离，不是合并引用计数协议。CloneToUninit的must-not、should和可选防泄漏责任需分层，尚无新运行或可共享标签。
+
+### 局部抽取与调用者行为
+
+|案例|验证链|可以与不可以推出|
+|---|---|---|
+|路径末组件|[扫描原型](../research/notes/2026-11-17-path-scanner-behavior.md)→[完整模块](../research/notes/2026-11-17-path-module-integration.md)：37459输入及pop/normalize状态一致，净减13行|支持有限域兼容，不证明维护或性能收益|
+|删除事件快照|[297项基线](../research/notes/2026-11-17-removal-event-baseline.md)→[新增义务配对控制](../research/notes/2026-11-17-removal-event-controls.md)：原版/候选303项通过，旧测试漏掉的回退变体被2项新断言检出|支持特定快照抽取及观测增量，不证明并发/生命周期等价；净减仅4行且有接口成本|
+
+[行动证据回填](../research/notes/2026-11-17-discovery-action-map.md)将两案连接到原40对发现队列，其余本批未验证者保持未知。候选能共享、抽取能兼容、是否值得采用是三个不同判断，不以单一重复分数替代。
+
+### 委托关系与契约观测
+
+[显式调用声明绑定](../research/notes/2026-11-16-call-reference-binding.md)复用syn探针，将两条正确拼写声明连到固定源码字节位置，两条错配未命中。11项边界控制显示同名接收者、不可达和cfg分支仍可能命中；宏与间接调用可能漏掉。因此只提供审阅证据位置，目标解析、执行及委托正确性保持未知。人工填写目标字段不计作自动文档理解成绩。
+
+[计数事件与网络迁移](../research/notes/2026-11-16-event-accounting-contract.md)将单位、事件阶段、剩余/已用计数、观测窗口与credit限制固化为检查。原RX模块22/22通过：丢弃仍计数，回收报错则已收到帧但不计work_done。原测试已有观测，因此本例是字段迁移与证据组织，不是新增检错收益；12项合成控制不能冒充真实事件采集。

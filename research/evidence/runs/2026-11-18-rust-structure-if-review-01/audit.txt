@@ -1,0 +1,56 @@
+2026-11-18 ordinary-if static challenge review — completed; LIMITED
+Scope: only proposed plain-if extension; no execution/build, syntax expansion, model/ranking or effectiveness conclusion. Original tool/source/binary are read only.
+Baseline prior finding retained: 0/8 fully closed exported bodies; 13 local subtrees and no retained repeated-use groups are prior findings, not a new result of this review.
+At initial inspection rust-structure-if-probe.rs and run 2026-11-18-rust-structure-if-01 were not yet available. Peer lookup failed with hub authentication timeout; no peer message delivered.
+Baseline review: block() pushes a distinct frame and pops it after traversal; simple let initializer is traversed before new binder insertion. name() resolves only lexical candidates in reversed frames, and any live uncertain frame prevents a claim. No type/cfg resolution.
+Required extension checks: AST-based exclusion of Expr::Let including nested let-chain operands before traversing condition; then block() and else block expression must isolate declarations; else-if must not inherit then binders; condition block declarations must be popped before then/else. Unsupported descendants remain opaque and prevent subtree-closed claims; exported coverage must not be confused with binding resolution or reachable behavior.
+Initial availability limitation resolved: source and archived controls subsequently inspected below.
+
+Completed source challenge: LIMITED admission, no blocking defect found in the inspected ordinary-if extension.
+
+Identity and isolation
+Reviewed live research/tools/rust-syntax-probe/src/bin/rust-structure-if-probe.rs and byte-identical attempt-0 archive:
+  SHA256 a070c96b62be3a854c70c554faeead68ee347f259dcfe2f17cf3de1015919541
+Reviewed run protocol, source-delta.diff, extension-checks.json, check_controls.py, summary and actual archived controls13–16. Delta adds31 lines, removes0; only condition AST detector and Expr::If admission/traversal added.
+Protocol SHA256 b669b2784308fad18deffc802d4e5ea70098de5345f60db5d656c934a4f723fb
+Summary SHA256 e4c5d373cb3ceb540b7c91c070f407f3f703ba519c3808b0f646def893ccbb03
+Control checker SHA256 785f34fe3017ed22eb3910c912bef41edca1307dc742c886dc3638cf77d57986
+Verified every protocol identity.hashes entry from disk; no protected-source difference. Old source still086ba94bef217842a45a75df7b99971b3c05366191fa3b0e0c7fe846095998e5.
+Old binary .build/rust-structure-probe/debug/rust-structure-probe still0556490fa749b4867232f18f99b5839b842a9bc673ada8fcce3e327553b1cb90.
+Separate new binary .build/rust-structure-if-probe/debug/rust-structure-if-probe matches recorded dc4037b15057eeefde15adc521579d6f9d5677e388a5b1f4594f9754a01c02e2.
+Only hashes read, binaries not executed. Old12 archived semantic JSON outputs equal new12, independently compared without importing/running either checker.
+
+Challenge A: let exclusion is AST-based, not token spelling — PASS with conservative limits
+New lines7–22 override syn::visit::Visit::visit_expr_let, setting found=true; condition_has_binding visits the whole condition Expr. Line132 admits ordinary_if only when that recursive search returns false. All rejected Expr::If fall through to old opaque reason unsupported_if_including_if_let (154/162), without exporting inner binders/uses.
+Inspected pinned syn2.0.119 generated visitor locally: visit_expr dispatch1306 onward; visit_expr_binary1489 traverses BOTH sides; visit_expr_block1502 traverses block; visit_expr_group1644 and visit_expr_paren1785 traverse wrapped expr; visit_expr_if1656 traverses nested condition and branches. Thus an Expr::Let under && or wrappers is not missed by testing only the root node.
+Visitor source /root/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/syn-2.0.119/src/gen/visit.rs SHA256 fe1443aa7953eaca10d6bf982396e627e31ce6b8aea8eb7cf949e0adeea5badb.
+Actual archived control15 contains direct if-let and value && let Some(item)=value: zero ordinary_if nodes, two whole opaque spans, zero inner local uses. This corroborates the static path, not all possible syntax.
+Conservative exclusion: recursive visitor can find a nested if-let inside a condition block/nested item or closure even when its binder cannot escape to the outer then. It then rejects the enclosing ordinary if as well. Safe loss of coverage, NOT precise detection of only bindings visible in then. Name condition_has_binding should not be interpreted as full binding analysis.
+Macro tokens are not expanded to Expr::Let; an opaque macro condition can still have an ordinary_if wrapper. It is not a claim macro expands without binding: opaque descendants keep that subtree nonclosed and scope unknown. No cfg/type inference introduced.
+
+Challenge B: branch and condition block scopes — PASS for inspected paths
+Lines100–127 block() push/pop unchanged; initializer traversal117 precedes binder insertion119.
+Plain-if traversal179–190 visits condition before then, calls block(then_branch), then expr(else_branch). Hence then binders are popped before else; else block expression dispatch205 pushes its own block; else-if recursively runs in the outer frame rather than the completed then frame.
+Direct else wrapper has outer scope_id; its body block has a distinct child scope. Do not mistakenly demand the wrapper itself be in a new block scope.
+A supported condition Expr::Block uses the same push/pop path, so declarations inside it are gone before then/else; no invented shared condition-local binder frame. Neither branch values nor assignments are merged as dataflow. The AST traversal order is not execution or reachability.
+Actual control13 value-use binder sequence0,0,1,0,0; then scope2, else body scope3, parent scope1. Control14 sequence0,0,0,0,1,0,0 with else-if in scope1, separate block scopes2/3/4. No then or else-if-local binder leaked to following uses.
+Simple let, nested block, raw identifier and uncertainty behavior of original12 remained exactly equal. The exporter still makes lexical candidates only, not resolved edges.
+
+Challenge C: unsupported condition effects must not disappear at block pop — PASS but deliberately overconservative
+Lines180–186 remember condition node start, traverse condition, then scan all its emitted descendants for opacity and mark the enclosing live frame uncertain. This specifically survives a condition-block frame being popped.
+Actual control16 if {check!(value); true}: condition macro is opaque; both branch value uses and following value use have unknown_scope and no binder_candidate. Corresponding take paths are also unknown. This confirms the frozen check's three value uses without claiming a macro expansion.
+This blanket scan includes opacity such as a qualified callee or type arguments that baseline marks taint=false; it can therefore suppress valid lexical candidates after an if with no real binding effect. It also taints outer scope when opacity was confined to condition-block locals. These are false-negative/coverage costs, not invented bindings; current wording must not imply precise uncertainty propagation.
+Then-block-only uncertainty pops before sibling else/post-if uses; nested item premarking is branch-local. Unsupported if-let still taints its enclosing frame conservatively, as before.
+Existing occurrence records are not retroactively rewritten when a frame later becomes uncertain. Earlier candidate records and final scope-level unknown flags can coexist. This is inherited incremental lexical metadata, not proof that every occurrence in a flagged scope was analyzed under uncertainty. No new semantic guarantee should be inferred from subtree_closed.
+
+Challenge D: attributes, coverage and frozen controls — LIMITED
+Expression attrs still trigger unevaluated_expression_attributes before ordinary_if node creation (166–168). No attribute filtering, cfg evaluation, type resolution, closure/match/for expansion or new parser dependency added. Same output binding_semantics and resolved_edges=0.
+Closedness is computed from exported supported descendants, not full Rust AST or semantic validity. Example controls with T and if value are syntactic fixtures; there is no type inference showing value is bool.
+Control checker13/14 checks exact candidates and three child roles;15 checks rejection;16 checks propagated opacity. These cover central extension obligations but are not exhaustive.
+Coverage gap: checker assumes all new ordinary-if control instances have an else; optional-else path is statically guarded by if let Some and looks correct, but no new targeted no-else fixture is in13–16. Clean condition-block local restoration, if expression inside another initializer, nested let hidden deeper than direct &&, and branch-only opaque restoration are largely static reasoning here, not newly measured extension controls. No extra tests/probes requested or run by this review.
+The recursive let search's over-rejection and opacity-wide taint should remain explicit limitations, not be silently optimized as part of this batch.
+
+Prior and current evidence boundaries
+Prior 0/8 closed bodies,13 local subtrees and no retained repeated-use groups remain the supplied prior findings. Current producer summary reports0/8 closed again and main owns independent corpus audit/census. No new census or useful-candidate claim by this reviewer; extra exported if nodes do not demonstrate effectiveness.
+This review read new archived outputs and compared identities only; zero probe executions/builds/model/ranking calls and no edits to original/new implementation, protocol, binary or shared notes. A preliminary peer discovery failed; no further peer lookup used.
+Final disposition: LIMITED — admit the inspected plain-if syntax/lexical-scope extension for its frozen bounded checks, with conservative rejection/unknown behavior and untested cases stated above. No blocking source defect identified. This is not Rust binding/type correctness, parser-wide assurance, discovery gain, or reviewer-provided effectiveness evidence.

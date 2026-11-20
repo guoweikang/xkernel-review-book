@@ -1,0 +1,1772 @@
+请审阅下面给出的研究用代码及文档快照。快照不代表当前生产版本，文档陈述不自动证明实现行为；请仅依据本消息中的材料，不使用工具、不读取外部文件、不修改代码。
+
+围绕时间设置路径，说明各模块实际承担的行为、相互委托和状态归属，核对职责文档与实际实现是否一致。区分直接可见事实、条件推断和缺失证据；不要预设存在问题，也不要预设现状正确。对需要保留的特殊路径说明适用范围。最后列出最多两项进一步验证需要。
+
+请用中文回答，不超过1000汉字。每个核心判断引用文件路径及行号。不要声称已经执行编译或运行测试。无需提出重构补丁。
+
+
+FILE core/ksyscall/docs/design.md
+1: # ksyscall design
+2: 
+3: ## Network Namespace Owner Preparation
+4: 
+5: Clone prepares an unpublished `knet::netns::PreparedStack` for NEWNET after
+6: validation and before process-fork preparation creates child relationships.
+7: Afterward installation performs no fallible device-owner allocation. Unshare
+8: materializes the prepared proxy's network stack before applying that proxy;
+9: both setns paths validate their replacement proxy before stack preparation and
+10: install it only on success. Allocation uses KERNEL in reclaim-safe syscall task
+11: context, outside process, filesystem-context and namespace-registry locks.
+12: Existing fd-table detach ordering and other allocations are not changed.
+13: 
+14: ## Clone Entry Preparation
+15: 
+16: Clone prepares its user entry with KERNEL after flag, namespace capability and
+17: exit-signal validation, but before process or sibling-thread preparation. This
+18: is sleepable syscall task context with no cgroup transaction or reclaim-dependent
+19: lock held. The current-task/thread handles retain owners, not lock guards.
+20: NoMemory propagates before child identities and relationships are created.
+21: The prepared entry is transferred to `new_user_task` after clone preparation,
+22: without adding another callback allocation beyond the rollback boundary.
+23: Stack and other legacy allocations are unchanged.
+24: 
+25: ## Test Layout
+26: 
+27: Guest cases and exec/exit-tail fixtures live in `ut-tests/`, mounted at their
+28: original scopes through `unittest::path_mod_test!`. Module names, architecture
+29: gates and user/serial registrations remain unchanged. The exit-tail handshake
+30: itself is not changed by this directory migration.
+31: 
+32: ## Purpose
+33: 
+34: `ksyscall` is the X-Kernel syscall adapter crate. It:
+35: 
+36: - dispatches on syscall number;
+37: - decodes Linux ABI arguments;
+38: - performs user-pointer `copyin`/`copyout`;
+39: - validates flags, scalars, and struct shape at the syscall boundary;
+40: - forwards calls to the real resource owners.
+41: 
+42: `ksyscall` owns no long-lived state, invariants, or lifetimes behind the
+43: syscalls; those semantics belong to the respective owner crates.
+44: 
+45: ## Background
+46: 
+47: Historically some syscall implementations were grouped by API name — for
+48: example `fs/` collected VFS path operations together with `timerfd`,
+49: `eventfd`, and `pidfd`, which do not share a resource boundary. The current
+50: refactoring principles are:
+51: 
+52: - `ksyscall` keeps adapters only;
+53: - resource semantics return to their owners;
+54: - directory organization follows owner semantics, not historical API
+55:   categories.
+56: 
+57: ## Scope
+58: 
+59: ```text
+60: core/ksyscall/
+61: ├── Cargo.toml
+62: ├── src/
+63: │   ├── lib.rs
+64: │   ├── dispatch.rs
+65: │   ├── ipc/          (eventfd, pipe)
+66: │   ├── io_mpx/       (epoll, poll, select)
+67: │   ├── sync/         (futex, membarrier)
+68: │   ├── sys.rs
+69: │   ├── arch/         (mod, riscv_hwprobe)
+70: │   ├── task/         (clone, clone3, cpu_time, credentials, ctl, execve,
+71: │   │                  exit, ids, job, limits, namespace, pidfd, rusage,
+72: │   │                  sched, seccomp, signal, thread, umask, wait)
+73: │   ├── time/         (itimer, posix_timer, queries, sleep, timerfd)
+74: │   └── vfs/
+75: └── docs/             (design.md, security.md)
+76: ```
+77: 
+78: ## Architecture
+79: 
+80: ```text
+81: user trap / arch syscall entry
+82:     │
+83:     v
+84: ksyscall::handle_syscall
+85:     │ decode sysno + ABI arguments
+86:     ├─ vfs adapter  ───────────> posix-fs / kvfs
+87:     ├─ ipc adapter  ───────────> kfd_objects::{EventFd, PipeObject}
+88:     ├─ time adapter ───────────> khal time sources / kprocess CPU-time state / kfd_objects::TimerFd
+89:     ├─ task adapter ───────────> kprocess / posix-process / kcred / knet
+90:     ├─ io_mpx adapter ─────────> kfd_objects::Epoll
+91:     ├─ sync adapter ───────────> kfutex / kprocess
+92:     └─ misc adapter ───────────> posix-mm / posix-net / ...
+93: ```
+94: 
+95: The dispatch entry runs `evaluate_seccomp` before the `match` on `Sysno`: the
+96: current thread's seccomp chain (owned by `kprocess::Thread.seccomp()`) either
+97: allows the syscall, forces an errno, kills the process/thread with `SIGSYS`
+98: (`KILL_PROCESS`/`KILL_THREAD`, and fail-closed `TRAP`/unrecognised actions),
+99: or returns `ENOSYS` for the unimplemented `USER_NOTIF`/`TRACE` actions.
+100: The `sys_seccomp` adapter reads the user `sock_fprog` field-wise, builds a
+101: `kseccomp::SeccompFilter`, and installs it on the thread; `TSYNC` first checks
+102: every sibling can adopt the caller's chain without becoming more permissive.
+103: 
+104: ## Design principles
+105: 
+106: 1. `ksyscall` owns ABI adaptation only, never resource state.
+107: 2. A syscall's directory placement follows the resource owner it finally
+108:    routes to.
+109: 3. `copyin`/`copyout`, flag validation, and compat branches belong to the
+110:    adapter layer.
+111: 4. State machines, invariants, and lifetimes of resource objects stay in
+112:    owner crates.
+113: 5. Syscalls with similar names but different owners are not merged into one
+114:    directory.
+115: 6. Each syscall number decodes exactly the argument count its ABI defines;
+116:    registers left unused by older ABIs must not be read as extension flags.
+117: 7. When a process-control syscall replaces the user execution context, it
+118:    must build a fresh register state for the target architecture's ELF
+119:    entry ABI instead of inheriting the old syscall argument registers.
+120:    After `execve` loads the new image it calls
+121:    `UserContext::reset_for_exec()` before rebuilding IP/SP/TLS, zeroing all
+122:    general registers and syscall-restart state; otherwise the x86_64 static
+123:    glibc entry would see a stale `rdx` (old `envp`, interpreted as
+124:    `rtld_fini` → SIGSEGV on exit), and aarch64 `x2` / riscv/loongarch64
+125:    `a2` would keep the old `envp`.
+126: 
+127: ## Exec image commitment
+128: 
+129: `task/execve.rs` copies pathname, argv and envp before entering the private
+130: `exec_owned` body. Both the syscall and focused kernel tests use this body;
+131: eligibility, path lookup and credential-aware loading are not duplicated.
+132: Preparation owns the request and process metadata without locking or clearing
+133: the old MM. Every exec creates a fresh user-empty MM. The current-only kprocess
+134: replacement helper publishes a coherent binding and asks ktask to activate its
+135: saved and hardware roots; independent CLONE_VM peers keep their old MM.
+136: Preparation and replacement precheck errors return normally. Successful exchange
+137: is the commitment boundary: old registrations reset immediately, then a fallible
+138: block installs the image and applies metadata. All its temporary MM owners/locks
+139: drop before fatal SIGSEGV cleanup. There is no rollback to the old user image.
+140: Credential, TEE-session, IPC and context setup retain their success-tail roles.
+141: 
+142: Regression coverage lives in `ut-tests/task/tests/exec_lifecycle.rs` and
+143: `ut-tests/task/tests/exit_tail.rs`. It checks the commitment boundary, independent
+144: VM-sharing peer survival, retained-image identity, and exit-tail root lifetime
+145: across scheduling and CPU migration. Request-local unittest probes exercise
+146: post-commit failures without exposing a production fault-injection interface.
+147: The empty-MM activation and partial-install probes each wait on a dedicated peer
+148: acknowledgement queue with a five-second deadline. Each stays blocked until the
+149: parent verifies the boundary, publishes its acknowledgement and wakes the child,
+150: avoiding two periodic polls missing the blocked interval. The partial-install
+151: observer captures request-local handshake state without coupling the loader to
+152: the scheduler. Migration and memory checks still run after acknowledgement.
+153: Synthetic ELF fixtures verify installation, not execution of user instructions.
+154: The external harness `exec-mm-semantics` suite covers runnable-image behavior:
+155: successful exec, ordinary preparation errors, and VM-sharing peer isolation.
+156: 
+157: ## Owner alignment
+158: 
+159: - `vfs/`: path and VFS syscalls; owners in `posix-fs` / `kvfs`.
+160: - `ioctl`: `dispatch.rs` first asks `posix-net::handle_net_ioctl` for its
+161:   exact SIOC* list, then falls back to `posix-fs::sys_ioctl`. It does not
+162:   filter by the `0x89xx` ioctl type space; socket file vtables do not yet
+163:   override `ioctl`.
+164: - `ipc/pipe.rs`: `pipe2`; owner `kfd_objects::PipeObject`.
+165: - `ipc/eventfd.rs`: `eventfd2`; owner `kfd_objects::EventFd`.
+166: - `sys.rs`: `sethostname` routes to the current UTS namespace. `reboot`
+167:   validates the Linux magic/command then routes to `khal::power` endpoints:
+168:   `HALT` takes `halt()` (stop all CPUs, keep power), `POWER_OFF` takes
+169:   `power_off()` (platform power removal); both stop other CPUs through the
+170:   SMP-stop hook first, while fs-sync/device-shutdown housekeeping is left
+171:   to a future orderly-shutdown supervisor; `SW_SUSPEND` takes
+172:   `suspend_to_ram()` (non-terminal: S3 via the platform sleep proxy, or a
+173:   platform error back to the caller when absent/refused).
+174: - `task/namespace.rs`: `unshare` and `setns`. `unshare` decodes the flag set
+175:   (namespace bits plus `CLONE_FS`/`CLONE_FILES`), rejects unknown bits with
+176:   `EINVAL`, then runs `NsProxy::prepare_unshare` (privilege, shared-fs, and
+177:   unsupported-kind checks) and commits via `Process::apply_prepared_unshare`.
+178:   `setns` splits into the `NsFd` channel (nstype must be zero or match the
+179:   fd type) and the `PidFd` channel (nstype is an OR mask resolved against one
+180:   snapshot of the target bundle, Linux 5.8+ semantics), and commits via
+181:   `Process::apply_setns`. User/Cgroup swaps are `EOPNOTSUPP` (no
+182:   pseudo-isolation); a Net swap is accepted and the syscall path materializes
+183:   the target namespace's protocol stack through `knet::netns::ensure_stack`.
+184:   Both channels sit behind the `has_sys_admin` gate.
+185: - `arch/`: architecture-specific system-info/control adapters (`arch/mod.rs`
+186:   organizes per-architecture submodules via `cfg`, `lib.rs` declares the
+187:   top-level `mod arch;`, and `sys.rs` only re-exports `crate::arch::*`),
+188:   avoiding stray top-level per-architecture files.
+189:   - riscv64 `riscv_hwprobe` parses the Linux `struct riscv_hwprobe`, user
+190:     cpusets, and `RISCV_HWPROBE_WHICH_CPUS`, then queries `kcpu` for each
+191:     present logical CPU's RISC-V capability snapshot; `ksyscall` only does
+192:     ABI copyin/copyout and cpuset boundary handling, while key semantics,
+193:     aggregation, and matching live in `kcpu`'s hwprobe helper.
+194:   - riscv64 `riscv_flush_icache` reads the third argument `flags` (Linux
+195:     ABI is 64-bit: kernel `uintptr_t`, libc `unsigned long`, so it is
+196:     handled as `usize` with all 64 bits reserved-checked — note the
+197:     difference from `riscv_hwprobe`'s 32-bit `unsigned int flags`):
+198:     `SYS_RISCV_FLUSH_ICACHE_LOCAL` flushes only this hart
+199:     (`karch::flush_icache_all_local()`, a single `fence.i`), other reserved
+200:     bits return `EINVAL`; without LOCAL, `karch::flush_icache_all()`
+201:     broadcasts an IPI to all harts so self-modifying code stays visible
+202:     after task migration.
+203: - `time/timerfd.rs`: `timerfd_*`; owner `kfd_objects::TimerFd`.
+204: - `time/queries.rs`: `time` / `clock_gettime` / `gettimeofday` /
+205:   `clock_getres` / `clock_settime` / `settimeofday`; owners in `khal` clock
+206:   sources, `ktime` realtime association (including `set_realtime`), and
+207:   `kprocess` CPU-time queries.
+208: - `time/sleep.rs`: `nanosleep` / `clock_nanosleep`; owners in the `ktask`
+209:   sleep runtime and `khal` clock queries.
+210: - `time/itimer.rs`: `getitimer` / `setitimer` / `alarm` (x86_64 ABI); owner
+211:   `ProcessTimerManager` legacy interval-timer state. `alarm` is a one-shot
+212:   `ITIMER_REAL` adapter that reports the previous remaining seconds.
+213: - `time/posix_timer.rs`: `timer_create` / `timer_gettime` / `timer_settime`
+214:   / `timer_delete` / `timer_getoverrun`; owners in `ProcessTimerManager`
+215:   POSIX timer state and the `kprocess` timer delivery runtime.
+216: - `io_mpx/`: `select` / `pselect6` / `poll` / `ppoll` / `epoll_*`; owners
+217:   in `kfd_objects::Epoll` and the generic `FileLike` poll interface.
+218: - `task/pidfd.rs`: `pidfd_*`; owner `kprocess::PidFd`.
+219: - `task/credentials.rs`: `get*id` / `set*id` / `getgroups` / `setgroups`;
+220:   owners in `kprocess` current-credential helpers and the `kcred` model.
+221: - `task/ctl.rs`: `capget` / `capset`, `prctl` `PR_GET_KEEPCAPS` /
+222:   `PR_SET_KEEPCAPS`, `PR_CAPBSET_READ` / `PR_CAPBSET_DROP`, and the
+223:   `PR_CAP_AMBIENT` subcommands; owners in the `kprocess` credential
+224:   publication path, `kprocess::capability` target resolution, and `kcred`
+225:   capability sets, bounding set, transition validation and securebits.
+226: - `task/ids.rs`: `getpid` / `getppid`; owner `kprocess` current thread and
+227:   parent relations.
+228: - `task/job.rs`: `getsid` / `setsid` / `getpgid` / `getpgrp` / `setpgid`;
+229:   owner `kprocess` process-group and session state.
+230: - `task/thread.rs`: `gettid` / `set_tid_address` / `arch_prctl`; owners in
+231:   `kprocess` current-thread state and architecture thread context.
+232: - `task/signal.rs`: `rt_sigprocmask` / `rt_sigaction` / `rt_sigpending` /
+233:   `kill` / `tkill` / `tgkill` / `rt_sigqueueinfo` / `rt_tgsigqueueinfo` /
+234:   `rt_sigreturn` / `rt_sigtimedwait` / `rt_sigsuspend` / `pause` / `sigaltstack` /
+235:   `signalfd4`; owners in `kprocess` per-thread signal state, the `ksignal`
+236:   signal model, and `kfd_objects::Signalfd`. `signalfd4` validates the flag
+237:   bits but ignores `SFD_CLOEXEC`/`SFD_NONBLOCK` on the descriptor-update form
+238:   (`fd != -1`), as Linux only consults them when it allocates a new descriptor;
+239:   sd-event widens an existing signalfd with the same flags. The queue variants use Linux's
+240:   exact argument count and do not validate a trailing `sigsetsize`. `pause` (x86_64 syscall 34) and
+241:   `rt_sigsuspend` share the internal `wait_for_deliverable_signal` helper.
+242:   Only `rt_sigsuspend` replaces the mask and saves the old mask for signal-frame
+243:   restoration; `pause` changes neither mask. The helper checks unblocked pending
+244:   signals before registering an interrupt waiter, rechecks when registration
+245:   races an interrupt, and blocks through `block_on` while waiting. Registration
+246:   failure yields and retries without exposing `ENOMEM`. Both return
+247:   `ERESTARTNOHAND`: handler delivery changes this to `EINTR` regardless of
+248:   `SA_RESTART`, while no handler delivery restarts the syscall. The supported
+249:   aarch64, riscv64, and loongarch64 syscall tables have no `pause` entry.
+250: - `task/cpu_time.rs`: `times`; owners in `kprocess` process CPU-time
+251:   accounting and `khal` clock queries.
+252: - `task/rusage.rs`: `getrusage`; owner `kprocess` CPU-time sampling state.
+253: - `task/limits.rs`: `getrlimit` / `setrlimit` / `prlimit64`; owner the
+254:   process resource/rlimit state held by `kprocess::ProcessRuntime`.
+255: - `task/umask.rs`: `umask`; owner the `kprocess::ProcessRuntime` file
+256:   creation mask.
+257: - `task/sched.rs`: `sched_yield` / `sched_*affinity` / `sched_*scheduler` /
+258:   `getcpu` / `getpriority` / `setpriority`; owners in `ktask` scheduling
+259:   interfaces, `kprocess` process/thread state, and `khal` CPU queries.
+260:   `getcpu` ignores its obsolete third cache argument without reading it.
+261:   Null CPU/node outputs are allowed; non-null outputs use the existing user-copy wrappers.
+262:   Scheduler policy/parameter getters and setters resolve positive published TIDs,
+263:   including workers, and read or write the live `SchedAttr`. Getters use
+264:   `ktask::sched_getattr`. Zero selects the caller; a process
+265:   PID denotes its leader TID and never a representative worker. Missing or
+266:   unpublished TIDs return ESRCH. A negative pid, a null `sched_param` /
+267:   `sched_attr`, nonzero `sched_getattr` flags, or a negative policy in
+268:   `sched_setscheduler` or `sched_setattr` is EINVAL before lookup.
+269:   `sched_setscheduler` also copies `sched_param` before lookup, so a bad
+270:   pointer is EFAULT rather than ESRCH.
+271:   `sched_setscheduler`, `sched_setparam`, and `sched_setattr` copy user memory
+272:   and credential snapshots before the run-queue lock, then apply the live
+273:   attribute through `ktask::sched_update_attr` so the read and the store share
+274:   one critical section.
+275:   `sched_setscheduler` admits Fair, FIFO, and RR. `sched_setattr` also admits
+276:   `SCHED_DEADLINE` (a zero period is stored as the deadline). Realtime and
+277:   Deadline policies require effective `CAP_SYS_NICE` in addition to the owner
+278:   match. Every setter applies Linux `cap_safe_nice()`: unless the caller has
+279:   effective `CAP_SYS_NICE`, the target's permitted capability set must be a
+280:   subset of the caller's permitted set. Otherwise the call returns EPERM before
+281:   changing the task. An illegal priority or deadline triple is
+282:   EINVAL before that EPERM. `SCHED_RESET_ON_FORK` is stored on the live
+283:   attribute and returned in `sched_getscheduler` / `sched_getattr`. An
+284:   unprivileged owner may set the flag; clearing it requires effective
+285:   `CAP_SYS_NICE` and otherwise returns EPERM without changing the attribute.
+286:   `sched_setparam` does not carry the flag and leaves it unchanged. Clone
+287:   copies that attribute with `SchedAttr::for_fork` and installs it before the
+288:   child is published. An RT or Deadline parent with the flag produces a
+289:   `SCHED_NORMAL` child at nice 0; a Fair parent drops only a negative nice.
+290:   `sched_getattr` reports `sched_runtime` as 0 except for Deadline, and
+291:   `sched_setattr` ignores that field for every other policy. Bytes past the
+292:   kernel `sched_attr` are cleared.
+293:   `sched_get_priority_min` / `max` and `sched_rr_get_interval` (including the
+294:   time64 number where the architecture has one) follow the same policy table:
+295:   FIFO/RR priorities are 1 and 99, and only `SCHED_RR` has a finite quantum.
+296:   `PRIO_PROCESS` selects one task by TID; `PRIO_PGRP` and `PRIO_USER`
+297:   iterate every published task — a process representative thread must not
+298:   stand in for per-thread nice or real UID. `setpriority` compares the
+299:   caller's effective UID with the target's real/effective UIDs; effective
+300:   `CAP_SYS_NICE` bypasses the owner match, and callers without it cannot
+301:   lower nice (raise priority). After that EACCES check, unprivileged callers
+302:   must also satisfy `cap_safe_nice()` against the target's permitted set.
+303:   `sched_setaffinity` requires the same caller-euid vs target ruid/euid match
+304:   or effective `CAP_SYS_NICE`, plus the same permitted-set containment;
+305:   the error order is ESRCH → EPERM → EINVAL (empty mask);
+306:   `ktask::set_task_affinity` then migrates a queued task off its CPU,
+307:   only changes the mask when no CPU is occupied, and returns EBUSY when
+308:   the task cannot migrate.
+309: - `sync/futex.rs`: `futex` / `get_robust_list` / `set_robust_list`;
+310:   only non-PI operations are implemented. `FUTEX_LOCK_PI` is rejected with
+311:   `EOPNOTSUPP` before the realtime gate and address resolution; the other PI
+312:   opcodes (`UNLOCK_PI`, `TRYLOCK_PI`, `WAIT_REQUEUE_PI`, `CMP_REQUEUE_PI`,
+313:   `LOCK_PI2`) remain `ENOSYS`. Linux's `CONFIG_FUTEX_PI=n` returns `ENOSYS`
+314:   for all of them. musl's `pthread_mutexattr_setprotocol` returns the
+315:   `LOCK_PI` probe errno to PulseAudio, which accepts only `EOPNOTSUPP` as
+316:   "PI unavailable" and otherwise aborts. Only `LOCK_PI` may carry that
+317:   errno: glibc probes `UNLOCK_PI` and treats only `ENOSYS` as missing PI
+318:   support, aborting on an unexpected errno. Unknown non-PI opcodes remain
+319:   `ENOSYS`. Compound operations (`REQUEUE` / `CMP_REQUEUE` / `WAKE_OP`)
+320:   resolve both keys under a single `address_space` lock before `WAKE_OP`
+321:   decodes its operation. Key resolution still reports a misaligned address
+322:   as `EINVAL` before that write fault. A non-private call then write-faults
+323:   `uaddr2`, so an out-of-range address with an illegal encoding returns
+324:   `EFAULT` or `ENOMEM`. After a
+325:   nofault fault the syscall write-faults, honors a pending preemption, and
+326:   resolves shared keys again. `EAGAIN` retries the same way without another
+327:   write fault. The robust-list walk lives in
+328:   `posix/process`. An untimed wait interrupted by a signal returns
+329:   `ERESTARTSYS`. A timed wait returns `ERESTART_RESTARTBLOCK` and records
+330:   the monotonic deadline in a futex payload owned by this crate; `kprocess`
+331:   only stores that payload in an opaque current-thread slot. A delivered
+332:   handler turns that code into `EINTR` and drops the slot (`SA_RESTART` does
+333:   not restart timed futex wait). No handler, including default `SIGCONT`,
+334:   rewrites the syscall to `restart_syscall` and leaves the slot armed.
+335: - `task/restart.rs`: `restart_syscall` takes the futex payload from the
+336:   current thread. An empty or unrecognized slot returns `EINTR`.
+337: 
+338: ## Container-related adapters
+339: 
+340: `unshare`/`setns` implement the namespace system calls over `kns` two-phase
+341: validation and `kprocess` commit (see above). `clone`/`clone3` now accept
+342: `CLONE_NEWPID` (the child is allocated in a fresh child PID namespace) and
+343: `CLONE_NEWNS`/`CLONE_NEWUTS`/`CLONE_NEWIPC`/`CLONE_NEWNET` (a fresh network
+344: namespace whose protocol stack is materialized by `knet::netns::ensure_stack`),
+345: while `CLONE_NEWCGROUP`, `CLONE_NEWUSER`, and `CLONE_NEWTIME` still return
+346: `ENOSYS` from the namespace-flag validator instead of improvising namespace
+347: creation without isolation. A thread clone cannot switch namespaces — the namespace
+348: bundle hangs off the process — so `CLONE_THREAD` combined with any namespace
+349: flag is rejected with `EINVAL` (Linux `copy_process()`), and every namespace
+350: flag on any clone is gated on the caller's privilege before the thread or
+351: process branch is chosen. User namespaces are not implemented, so both syscalls
+352: require effective `CAP_SYS_ADMIN`: `unshare` through
+353: `UnshareContext::privileged`, and `setns` before either channel dispatches —
+354: joining any namespace without it is `EPERM`, standing in for Linux's per-type
+355: `ns_install` capability checks. The unshare flag gate follows
+356: `check_unshare_flags`: `CLONE_THREAD`/`CLONE_SIGHAND`/`CLONE_VM` are accepted
+357: as no-ops for a single-threaded caller and rejected with `EINVAL` only for a
+358: multithreaded one, and `CLONE_NEWNS` implies `CLONE_FS` as in
+359: `ksys_unshare`, so callers never need the explicit bit. The pidfd `setns`
+360: channel treats `nstype` as Linux's OR-combination mask: every requested slot
+361: is validated against the target process and committed together, unsupported
+362: kinds answer `EOPNOTSUPP`. `getpid`/`getppid` project the identity into the
+363: PID namespace the task was created in (`task_active_pid_ns` semantics, so a
+364: `CLONE_NEWPID` child reads 1 and its parent reads 0), `clone`/`fork` return
+365: the child's number in the forking process's namespace, and signal PID
+366: arguments (`kill`/`tgkill`/`sigqueue`) are translated through the caller's
+367: namespace with a root-number fallback for root-keyed sources such as
+368: /proc. Kernel-internal lookup stays root-keyed (see the known-limits note
+369: in `process/kns/docs/design.md`).
+370: `PR_SET_NO_NEW_PRIVS`
+371: records the flag on the calling thread and `PR_GET_NO_NEW_PRIVS` reports it
+372: back; seccomp install consults it. Exec models only the no-file-capability
+373: credential transition: ordinary non-root exec clears effective/permitted, while
+374: privileged root reconstructs permitted from the bounding/inheritable sets. With
+375: `no_new_privs` or a filesystem context shared with another process, a growing
+376: reconstruction or a group identity change enters the downgrade: a growing set is
+377: intersected with the pre-exec permitted set and effective/group IDs are reset to
+378: the real IDs (the latter requires `no_new_privs` or no pre-exec effective
+379: `CAP_SETUID`). Exec admission samples
+380: the cross-process `CLONE_FS` owner count and, when exclusive, sets `in_exec`
+381: under the same filesystem lock; runtime adoption checks that flag atomically and
+382: returns `EAGAIN`, so a child cannot attach between the sample and the credential
+383: transition. There is no setuid/setgid or file-capability elevation; adding one
+384: requires extending both the credential transition and this flag handling.
+385: 
+386: `seccomp(2)` is implemented: `SECCOMP_SET_MODE_STRICT` installs the fixed
+387: `read`/`write`/`_exit`/`rt_sigreturn` allowlist, `SECCOMP_SET_MODE_FILTER`
+388: validates and appends a classic-BPF filter (with `TSYNC` applying it to the
+389: thread group only when that cannot remove a sibling's restriction), and
+390: `SECCOMP_GET_ACTION_AVAIL` answers action-constant queries. The filter is
+391: evaluated at syscall entry before dispatch. `PR_SET_SECCOMP` remains a
+392: `prctl` alias for the same install path. `USER_NOTIF`, `TRACE`, and
+393: `GET_NOTIF_SIZES` are not implemented: `GET_ACTION_AVAIL` reports them as
+394: `ENOSYS`, and a filter selecting `USER_NOTIF`/`TRACE` makes the syscall fail
+395: closed with `ENOSYS`.
+396: 
+397: Install-time validation mirrors Linux `seccomp_check_filter`: the length bound,
+398: instruction encoding, and every jump target are checked before the filter is
+399: installed, so a program the interpreter cannot run is rejected with `EINVAL`
+400: instead of killing the task at its next syscall. The install gate returns
+401: `EACCES` when the caller has neither `CAP_SYS_ADMIN` nor `PR_SET_NO_NEW_PRIVS`,
+402: `PR_SET_SECCOMP` is the same install path with the mode as its argument, and a
+403: strict-mode violation terminates the thread with `SIGKILL` (a filter kill stays
+404: `SIGSYS`). The `arch` field reported to filters is the target's `AUDIT_ARCH_*`
+405: (x86_64/aarch64/riscv64/loongarch64). See Linux's
+406: [seccomp entry points](https://github.com/torvalds/linux/blob/v6.12/kernel/seccomp.c#L2064-L2127)
+407: and [PR_SET_SECCOMP(2const)](https://man7.org/linux/man-pages/man2/PR_SET_SECCOMP.2const.html).
+408: 
+409: `PR_SET_PDEATHSIG`/`PR_GET_PDEATHSIG` store the parent-death signal on the
+410: process identity.
+411: 
+412: `waitid` and `execveat` share the wait and exec machinery with `wait4` and
+413: `execve`:
+414: 
+415: - `task/wait.rs` implements `wait4`/`waitid` over one scan (the
+416:   `wait_reap::WaitChildSelector` built from `WaitPid`). `waitid` accepts
+417:   `P_ALL`/`P_PID`/`P_PGID`/`P_PIDFD`; `P_PIDFD` resolves `id` as a pidfd
+418:   file descriptor and waits on its target process. `WNOWAIT`/`WNOHANG`/
+419:   WEXITED is honored by the shared machinery. wait4 copies its optional
+420:   rusage from the waited child's stable CPU-time snapshot, including reaped
+421:   descendants. Only ru_utime and ru_stime are supported; the remaining
+422:   counters are zero, matching the current getrusage implementation. Status
+423:   is copied before usage, after the shared scanner has consumed the child.
+424:   Copy-out failure therefore does not undo reaping. A WNOHANG result of
+425:   zero leaves both outputs untouched. The raw waitid usage output remains
+426:   unimplemented.
+427: - `task/execve.rs` implements `execve`/`execveat` through a single
+428:   `run_exec`. `execveat` accepts `AT_EMPTY_PATH` (exec the file already
+429:   open on `dirfd`, e.g. a memfd) and `AT_SYMLINK_NOFOLLOW` (currently
+430:   treated as follow). A multi-threaded `exec`, or one whose thread is not the
+431:   group leader, runs `de_thread` (see `posix-process`) to replace the whole
+432:   thread group instead of failing; concurrent `exec` serializes on the process
+433:   `exec` gate.
+434: 
+435: ## Non-goals
+436: 
+437: `ksyscall` does not:
+438: 
+439: - keep internal state of fd-backed objects;
+440: - hold shared objects such as `ProcessRuntime`, address spaces, or VFS
+441:   nodes;
+442: - implement path resolution, signal state machines, timer state machines,
+443:   or pipe buffer behavior;
+444: - provide a convenient catch-all owner abstraction.
+445: 
+446: ## Scheduler syscall thread targets
+447: 
+448: Scheduler parameter queries and updates resolve published thread IDs. This allows pthread APIs to address non-leader threads; zero selects the caller, and positive process IDs select only the leader TID. There is no process representative fallback.
+449: 
+450: Scheduler ownership checks use the caller thread's subjective credentials and
+451: the target thread's objective credentials. Raw `setuid`/`setresuid` update only
+452: the calling thread through `update_current_cred` and `commit_creds`; they do not
+453: broadcast changes to a thread group. Linux has the same per-thread kernel
+454: model; POSIX-wide credential changes are synchronized by libc/NPTL wrappers
+455: using signals, as documented by
+456: [setuid(2), C library/kernel differences](https://man7.org/linux/man-pages/man2/setuid.2.html)
+457: and [nptl(7)](https://man7.org/linux/man-pages/man7/nptl.7.html).
+458: A raw syscall can intentionally leave same-group threads with different UIDs.
+459: The scheduler gate must then use the concrete target credentials, without a
+460: same-group exemption. The published-worker regression invokes actual
+461: `sys_setuid`, verifies the caller changed while its peer retained its IDs, and
+462: checks both setters return EPERM without modifying the peer's metadata.
+463: 
+464: ## Capability syscall ABI and ownership
+465: 
+466: `capget` and `capset` accept Linux capability ABI versions 1 (`0x19980330`),
+467: 2 (`0x20071026`) and 3 (`0x20080522`). Versions 2 and 3 use two consecutive
+468: `__user_cap_data_struct` objects: the low word covers capabilities 0–31 and the
+469: high word covers 32–63. Version 1 predates the upper word and copies exactly one
+470: 12-byte `__user_cap_data_struct`; capabilities above 31 are invisible to a v1
+471: caller. `posix-types` supplies the fixed `CapUserData` representation and its
+472: `UserRead`/`UserWrite` implementations; `ksyscall` converts each word through
+473: `CapSet::from_words`/`low_word`/`high_word` without reimplementing bit ranges
+474: and narrows only the user copy for version 1.
+475: 
+476: The version word is read and validated before the data pointer is touched. An
+477: unknown version rewrites only the version word with version 3 and returns
+478: `EINVAL`; the header PID and data array are not accessed. `capget` alone keeps
+479: Linux's legacy null-data probe: after version validation it returns 0 without
+480: reading the PID, and a null-data request with an unknown version still rewrites
+481: the version and returns 0 rather than `EINVAL`.
+482: 
+483: For a non-null `capget` request, a negative PID returns `EINVAL`. PID 0 and
+484: every positive PID, including the caller's own thread ID, are resolved by
+485: `kprocess::capability::target_capabilities` through the caller's PID namespace.
+486: The reported state is always the target task's objective real credential, which
+487: matches Linux `cap_capget()` reading `__task_cred()` even when the target is
+488: `current`. A positive PID may be a thread ID or thread-group ID, matching Linux
+489: `find_task_by_vpid()`; a missing target returns `ESRCH`. If a thread-group
+490: leader has exited while siblings remain, the group ID still reports the
+491: leader's retained objective credentials, matching Linux's unreaped zombie leader,
+492: rather than a sibling thread's per-thread credentials.
+493: 
+494: For `capset`, only PID 0 or the caller's current thread ID is accepted; every
+495: other target, including a negative PID, returns `EPERM` before the data pointer
+496: is read. "Current thread ID" covers both numbers that identify the caller in
+497: this kernel's PID model: the active-namespace number reported by `getpid(2)` for
+498: a namespace leader and the root-projected number currently reported by
+499: `gettid(2)`. Member-thread identities are allocated with only a root projection,
+500: so accepting both spellings of the caller is required until those identities
+501: carry a full namespace chain; neither spelling can select another task. The
+502: data words are masked with Linux `CAP_VALID_MASK` (represented by
+503: `CapSet::FULL`) before transition validation, so unknown bits are dropped rather
+504: than installed or used to reject an otherwise valid request. A successful
+505: `capset` always updates only the current task and relies on
+506: `Cred::set_capabilities` for the Linux transition rules: inheritable growth is
+507: bounded by old inheritable union old permitted unless effective `CAP_SETPCAP`,
+508: and always by old inheritable union the bounding set; permitted never grows; and
+509: effective must remain within permitted.
+510: 
+511: `PR_CAPBSET_READ` validates the capability number and queries the same
+512: `Cred::cap_bounding` set returned by the capability APIs. `PR_CAPBSET_DROP`
+513: passes the full-width argument to `Cred::drop_bounding_cap`, which applies the
+514: `CAP_SETPCAP`-before-range policy so an oversized value cannot truncate to a
+515: valid capability. `PR_CAP_AMBIENT` validates the subcommand and reserved
+516: arguments, then delegates to the credential model: `IS_SET` reports membership,
+517: `RAISE` requires the capability in both permitted and inheritable and
+518: `SECURE_NO_CAP_AMBIENT_RAISE` clear, and `LOWER`/`CLEAR_ALL` remove membership.
+519: A successful `capset` masks ambient with the new permitted and inheritable sets.
+520: File capabilities and setuid/setgid executable transitions are not implemented,
+521: so `capget` never invents executable-derived privilege. Exec still applies
+522: Linux's no-file-capability rule: permitted starts empty, privileged root
+523: reconstructs it from the bounding and inheritable sets when `SECURE_NOROOT` is
+524: clear and the real or effective UID is 0; ambient is merged into permitted after
+525: the growth clamp and supplies effective when privileged root does not. An
+526: effective GID outside the old filesystem/supplementary groups clears ambient.
+527: When `no_new_privs` is set or another process shares the caller's filesystem
+528: context and reconstruction would grow permitted or the group identity changed,
+529: a growing permitted set is intersected with the pre-exec set; effective/group
+530: IDs reset to real IDs when `no_new_privs` is set or the pre-exec credential
+531: lacks effective `CAP_SETUID`.
+532: 
+533: ## Resource-limit syscall copy ordering
+534: 
+535: `prlimit64` reads the optional new-limit object before publishing any old-limit
+536: output, so aliased input and output buffers retain the caller's requested
+537: update. Resource validation also occurs when both pointers are NULL. A rejected
+538: input/update does not overwrite the output buffer; after a successful update,
+539: an output copy fault returns EFAULT without rolling back the applied limit,
+540: matching Linux copy ordering. Legacy getrlimit/setrlimit still require their
+541: respective output/input buffers. The adapter converts the copied input to a
+542: semantic `krlimit::Rlimit` and calls the owner's `update_rlimit_and_get_old` once.
+543: Query-only requests use the owner's checked read snapshot. For an update, one
+544: limits write guard covers validation against the current hard cap, old-value
+545: capture and replacement. The returned pair is therefore the one this update
+546: actually replaced despite concurrent updates. User copying remains outside
+547: either guard, and hard-limit authorization policy is unchanged.
+548: 
+549: Linux `kernel/sys.c` copies a non-NULL `prlimit64` input before looking up the
+550: PID, so EFAULT takes priority over ESRCH. Legacy `getrlimit` checks the resource
+551: before its output copy; `setrlimit` copies its input before resource validation.
+552: Their differing error priority is intentional, rather than a shared-helper
+553: symmetry rule. See [Linux v6.12 kernel/sys.c](https://github.com/torvalds/linux/blob/v6.12/kernel/sys.c).
+554: The user-task regressions exercise a genuinely aliased `TestUserValue`, verify
+555: the returned old pair and applied new pair, and restore the original soft limit
+556: after framework assertion failures. A separate user test proves an unreadable
+557: input before checking PID/resource error priority.
+558: 
+559: The `prlimit_rejected_update_preserves_aliased_buffer` user/serial regression
+560: requests cur=2, max=1 with the same input/output buffer and checks InvalidInput
+561: without replacing that invalid pair with the old limit. This distinguishes
+562: update-before-output from the incorrect input/output/update ordering.
+563: 
+564: The output-fault regression proves the destination is unwritable, submits a
+565: valid soft-limit change, and verifies EFAULT leaves the change applied before
+566: restoring the original pair. A separate user/serial fixture captures the current
+567: resource owner and starts eight kernel tasks against that same owner. Distinct
+568: soft values at a fixed hard cap must form one complete transition chain from
+569: the returned old values to the final query. All tasks join and the original
+570: soft limit is restored before assertions; completion order and timing are not
+571: used as the oracle. This tests owner concurrency, not user-thread syscall setup.
+572: 
+573: ## Time-query argument compatibility
+574: 
+575: `gettimeofday` accepts a NULL timeval pointer and returns zero without reading
+576: the wall clock or copying output. A non-NULL pointer keeps the existing timeval
+577: conversion and user-copy path. `clock_settime` accepts only CLOCK_REALTIME;
+578: CLOCK_REALTIME_COARSE remains query-only, as in Linux. Unsupported clock IDs
+579: return EINVAL before reading the supplied timespec or reaching the privileged
+580: wall-clock setter. CLOCK_REALTIME continues to use the existing pointer, range
+581: and privilege checks. This does not change coarse-query resolution or timezone
+582: handling.
+583: 
+584: The query-only clock regression runs in a fresh user task, first demonstrates
+585: that its non-NULL input fails the real user-copy path, then checks EINVAL for
+586: both that address and NULL. Test assertions use the unittest framework so a
+587: failed check reports a test failure instead of panicking the kernel.
+588: 
+589: ## Poll result-array compatibility
+590: 
+591: The requested event mask ignores unrecognized bits, matching Linux's
+592: `do_pollfd` filtering rather than rejecting the entire call. `POLLERR` and
+593: `POLLHUP` are reported without being requested; `POLLRDHUP` is returned only
+594: when the caller requested it. A stream peer closing only its write half must
+595: therefore not make an `events = 0` entry ready. The poll result regressions
+596: cover unknown bits both alone and alongside `POLLIN`, requested and unrequested
+597: half-close readiness, and unconditional full-hangup reporting.
+598: 
+599: `poll` and `ppoll` clear each copied entry's `revents` before descriptor lookup.
+600: All negative descriptors are ignored. Invalid nonnegative entries contribute
+601: `POLLNVAL` and one ready entry, while valid entries are still polled during the
+602: same call. This prevents stale ignored events and invalid entries from hiding
+603: valid readiness. Duplicate descriptor entries are counted independently.
+604: An invalid entry makes the call ready without waiting for an unready valid
+605: entry; timeout, signal-mask and valid-event masking paths otherwise stay intact.
+606: Five user-task regressions cover ignored negatives, mixed ready/invalid entries,
+607: unready/invalid entries, duplicate ready entries and a zero-timeout control.
+608: 
+609: ### Epoll millisecond timeout normalization
+610: 
+611: `sys_epoll_pwait` maps every negative millisecond timeout to an unlimited wait,
+612: matching Linux's `ep_timeout_to_timespec`. Zero remains a poll and nonnegative
+613: values keep the existing millisecond conversion. The shared wait path, signal
+614: mask handling, copy-to-user behavior and `epoll_pwait2` timespec rules are unchanged.
+615: 
+616: The registered user-context regression uses an invalid descriptor to ensure
+617: `INT_MIN`, `-65536`, `-2` and `-1` reach descriptor validation without blocking.
+618: 
+619: ## pidfd_getfd reserved flags
+620: 
+621: `pidfd_getfd` accepts only flags equal to zero. Reject any other value with
+622: `EINVAL` before looking up the pidfd or target descriptor, acquiring the target
+623: FD-table read guard, or allocating a new descriptor. The flags-zero duplication
+624: path still shares the original open file description and sets close-on-exec.
+625: 
+626: ## System uptime
+627: 
+628: `sysinfo.uptime` reads the existing elapsed boot-time source used by
+629: `CLOCK_BOOTTIME`, rounds up to whole seconds, and saturates at the signed
+630: ABI maximum. Rounding matches Linux [`do_sysinfo()`](https://github.com/torvalds/linux/blob/v6.6/kernel/sys.c#L2601-L2611).
+631: Unlike `clock_gettime(CLOCK_BOOTTIME)`, `sysinfo` has no nanosecond field:
+632: for the same instant, its rounded value can be one greater than `timespec.tv_sec`.
+633: The boot clock currently aliases monotonic time. This syscall
+634: maintains no separate clock state and does not change clock or suspend semantics.
+635: 
+636: The uptime regression brackets `sysinfo` with actual `clock_gettime(CLOCK_BOOTTIME)`
+637: reads and compares the rounded ABI values, without using the implementation
+638: helper as the expected-value source.
+639: 
+640: ### Signal number width validation
+641: 
+642: Signal syscalls, POSIX timer notifications and clone exit-signal requests use
+643: `ksignal::Signo::from_raw` for the shared checked numeric boundary. The signal
+644: owner accepts valid signals 1..=64 and rejects primitive negative or wide
+645: values without truncation; these syscall frontends map rejection to `EINVAL`.
+646: Clone retains its full-width `u64` exit-signal input until this conversion.
+647: 
+648: Zero keeps each frontend's existing meaning: kill-style probes bypass signal
+649: construction, a clone exit signal of zero means no notification, and explicit
+650: timer signal zero is invalid. A null timer event still defaults to `SIGALRM`
+651: with its timer ID; `SIGEV_NONE` and `SIGEV_THREAD_ID` keep their existing
+652: branches and validation order.
+653: 
+654: Numeric boundary regressions live with `Signo`. Caller regressions exercise
+655: actual zero-probe, invalid-number rejection and nullable timer-event paths
+656: without signal delivery, user-memory access or timer creation.
+657: 
+658: ### POSIX timer creation output
+659: 
+660: `timer_create` parses the optional notification and delegates creation to the
+661: current process owner before copying the timer ID to user memory. If that copy
+662: fails, the adapter deletes the newly created timer through the same owner and
+663: returns the original copy error. Notification parsing, clock validation and
+664: successful ID output retain their existing order. The timer manager lock is
+665: released before user copying; the allocator's monotonically advancing ID is
+666: not reset by rollback.
+667: 
+668: This follows Linux's output-fault cleanup in
+669: [`do_timer_create`](https://github.com/torvalds/linux/blob/v6.6/kernel/time/posix-timers.c#L469-L495).
+670: Fresh user-task regressions exercise the actual create/gettime/delete syscalls
+671: with NULL and inaccessible ID outputs, a successful unarmed timer, and rejected
+672: clock/notification inputs. The failure cases check the freshly initialized
+673: owner's first ID before and after creation; they do not assume Linux assigns
+674: that number or that deleting a timer immediately reuses its ID.
+675: 
+676: 
+677: ### sched_getaffinity native-word ABI regression
+678: 
+679: The raw syscall decodes `len` as Linux's 32-bit `unsigned int`, validates its
+680: native `unsigned long` alignment and minimum mask size before PID lookup,
+681: and encodes CPU bits as zero-initialized native words. On the supported 64-bit
+682: platforms with NR_CPUS <= 8, it writes and returns 8 bytes; the internal compact
+683: KCpuMask representation is not the userspace ABI. A larger valid caller buffer
+684: is not filled beyond those 8 bytes. User-buffer addresses may be unaligned.
+685: 
+686: The user/serial regressions traverse `handle_syscall` with actual argument
+687: registers. They reject lengths 0, 1, 7, 9 and 15 without modifying output,
+688: check EINVAL before ESRCH before EFAULT, and verify native-endian output,
+689: zero padding and surrounding sentinels. High-register-bit cases prove dispatch
+690: truncates len to u32: `1 << 61` and `usize::MAX` are invalid, while
+691: `(1 << 32) | 8` and `(1 << 61) | 8` act like length 8. These are raw-syscall
+692: return values; libc's sched_getaffinity wrapper returns zero on success.
+693: See [Linux v6.18 scheduler syscalls](https://github.com/torvalds/linux/blob/v6.18/kernel/sched/syscalls.c).
+694: This boundary fix does not establish a cause for earlier Chromium failures.
+695: 
+696: 
+697: ### Shared native CPU-set representation
+698: 
+699: The private `cpuset::NativeCpuSet` owns unsigned-long word count, byte length,
+700: native-endian encoding, and conversion to/from the compact `KCpuMask`.
+701: `sched_getaffinity` validates length against this type before target lookup,
+702: then copies the type's zero-padded output. Register-width decoding and error
+703: ordering remain in the syscall adapter. Conversion tests cover empty, sparse,
+704: alternating and full sets plus independently assembled native-word bytes.
+705: 
+706: This change migrates only `sched_getaffinity`. As requested in review,
+707: `sched_setaffinity` and `riscv_hwprobe` retain their existing input-length policy
+708: and implementation; their later migration must add a byte-decoding entry to
+709: the shared type, keeping byte-count acceptance in each syscall. This change
+710: does not claim runtime coverage for configurations beyond the current
+711: NR_CPUS range or for a new architecture.
+712: 
+713: ### Generic clock consumers
+714: 
+715: `CLOCK_BOOTTIME` queries and `sysinfo.uptime` use `ktime::boottime`.
+716: `clock_nanosleep` waits in the original domain for absolute REALTIME and
+717: relative/absolute BOOTTIME requests. Relative REALTIME and MONOTONIC keep
+718: monotonic waits. Interrupted relative BOOTTIME waits calculate remaining time
+719: in BOOTTIME; absolute waits do not write remaining time.
+720: 
+721: ### Typed clock-ID boundary
+722: 
+723: `time/clock_id.rs` parses signed ABI clock IDs into the shared `ktime_types::ClockId` once for queries,
+724: wall-clock setting, clock sleeps and timerfd creation. Unsupported values,
+725: including negative FD-encoded clocks, remain rejected. Each operation restricts
+726: the parsed enum to its existing supported set; MONOTONIC_RAW sleep still returns
+727: OperationNotSupported. Raw signed values remain available for diagnostics only.
+728: Timerfd creation maps the accepted enum to the backend's `TimerFdClock`, which
+729: is retained through construction and arming; raw ABI IDs do not enter the backend.
+730: `ut-tests/time_clock_id.rs` checks ABI identity, negative/unknown rejection before
+731: user-memory access and operation-specific restrictions.
+732: 
+733: ### Kernel log read-back (`syslog`)
+734: 
+735: `sys_syslog` is the adapter over `klogger`'s log ring. The ring, the filter and
+736: the level vocabulary all belong to `klogger`; `ksyscall` only validates the
+737: arguments, reads a window of the ring and performs the user copy.
+738: 
+739: Implemented actions, with Linux's numbering:
+740: 
+741: | action | name | behaviour |
+742: |--------|------|-----------|
+743: | 3 | `READ_ALL` | return the newest whole records that fit, keep them buffered |
+744: | 4 | `READ_CLEAR` | return the newest whole records that fit, then drop them and everything older (a clear watermark, not "the ring as it is now") |
+745: | 5 | `CLEAR` | drop the whole buffer, return 0 |
+746: | 9 | `SIZE_UNREAD` | return the number of buffered bytes |
+747: | 10 | `SIZE_BUFFER` | return the ring's total capacity |
+748: 
+749: Order of operations and failure handling:
+750: 
+751: 1. Privilege is decided **per action**, before the action is validated — the
+752:    order Linux's `check_syslog_permissions` uses. `READ_ALL` (3) and
+753:    `SIZE_BUFFER` (10) are open to every caller, matching Linux's default
+754:    (`dmesg_restrict` off); `READ_CLEAR` (4), `CLEAR` (5) and `SIZE_UNREAD` (9)
+755:    require privilege, and an unknown action counts as restricted so an
+756:    unprivileged caller sees `EPERM` where Linux also returns `EPERM` before its
+757:    `EINVAL` default. The predicate is `CAP_SYSLOG`, as in Linux's
+758:    `check_syslog_permissions`: capability sets exist, so a non-root caller that
+759:    holds the capability may clear the log, and root is trusted only while its
+760:    capability set retains it.
+761: 2. The `SIZE_*` actions return `klogger`'s count and capacity.
+762: 3. The read actions decode `len` at its ABI width (`i32`) and reject a negative
+763:    value with `InvalidInput` before touching the ring: Linux declares the
+764:    argument as a signed `int`, so a caller's `-1` must fail like Linux's
+765:    `len < 0` instead of being clamped to the buffer size and copied past the
+766:    length the caller declared. Truncating to `i32` first normalizes both the
+767:    sign-extended and the zero-extended register encodings to the same value.
+768: 4. They then rebuild a typed `UserPtr<u8>` and reject a null destination with
+769:    `InvalidInput`.
+770: 5. A kernel read buffer is allocated, sized `len.min(LOGBUF_SIZE)` — bounded by
+771:    the caller's length and the ring, never by a separate `logbuf_len()` sample (a
+772:    record published between that sample and the read would make the buffer too
+773:    small for the newest record) — and filled
+774:    by `klogger::logbuf_read_newest_seq`, which copies the newest records that fit,
+775:    oldest first, starting at a record boundary and returning `(copied, newest)`.
+776:    `newest` is the sequence number of the window's last record and is what a
+777:    `READ_CLEAR` later hands to `klogger::logbuf_clear_through` as its clear
+778:    watermark. That is the shape Linux's `syslog_print_all` produces (it walks
+779:    back from the newest record until the size fits and starts the copy at a
+780:    record boundary), so a short destination receives the most recent records and
+781:    never a partial line. The ring takes no lock, so a concurrent push cannot split
+782:    the window and cannot stall the reader; **the user copy never runs with any
+783:    ring state held**, so a page fault on the destination cannot hold up a writer.
+784: 6. A zero length returns 0 before the ring is touched: Linux returns ahead of
+785:    `syslog_print_all` for `len == 0`, and nothing was delivered, so nothing may be
+786:    consumed.
+787: 7. `READ_CLEAR` calls `logbuf_clear_through(watermark)` after a successful copy
+788:    that delivered at least one byte, where the watermark is the sequence number of
+789:    the last record the read copied. Records logged after the snapshot — during
+790:    the user copy, say — therefore stay buffered, as with Linux's `clear_seq`; the
+791:    records older than the returned window are dropped too, because the cursor
+792:    also skips past everything it did not return.
+793:    so `dmesg -c` clears what it drained and does not re-deliver it. A copy failure
+794:    keeps everything, because the clear runs only after the copy succeeded.
+795: 8. Every other action, including Linux's `CONSOLE_*` controls, returns
+796:    `InvalidInput`: console verbosity belongs to `/proc/sys/kernel/printk`, whose
+797:    value domain is inverted relative to Linux's, and mixing the two would let a
+798:    caller believe it changed something else.
+799: 
+800: The return value is the number of bytes copied (`isize`), so `dmesg`,
+801: `dmesg -c` and `dmesg -r` work unchanged.
+END FILE
+
+
+FILE core/ksyscall/src/lib.rs
+1: // SPDX-License-Identifier: Apache-2.0
+2: // Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+3: // See LICENSES for license details.
+4: 
+5: //! Syscall adapter crate.
+6: //!
+7: //! `ksyscall` owns syscall number dispatch, Linux ABI decoding, user-pointer
+8: //! marshalling, and routing to the real resource owners. It does not own the
+9: //! long-lived state machines behind those syscalls.
+10: 
+11: #![no_std]
+12: #![allow(
+13:     clippy::unwrap_used,
+14:     reason = "CG-021-no-panic-on-reachable-failure: case (b): 69 legacy diagnostic sites need \
+15:               individual failure-contract review; new code remains subject to the \
+16:               no-legitimate-failure-panic rule"
+17: )]
+18: 
+19: #[macro_use]
+20: extern crate klogger;
+21: 
+22: extern crate alloc;
+23: 
+24: mod arch;
+25: mod cpuset;
+26: mod dispatch;
+27: mod io_mpx;
+28: mod ipc;
+29: mod notify;
+30: mod sync;
+31: mod sys;
+32: mod task;
+33: mod time;
+34: mod vfs;
+35: 
+36: pub use dispatch::handle_syscall;
+37: pub use ktty::terminal;
+38: pub use posix_fs::file;
+39: pub use sys::sys_getrandom;
+40: #[cfg(feature = "tee")]
+41: pub use tee_kernel::tee;
+END FILE
+
+
+FILE core/ksyscall/src/time/mod.rs
+1: // SPDX-License-Identifier: Apache-2.0
+2: // Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+3: // See LICENSES for license details.
+4: 
+5: //! Time-related syscall adapters.
+6: 
+7: mod clock_id;
+8: mod itimer;
+9: mod posix_timer;
+10: mod queries;
+11: mod sleep;
+12: mod timerfd;
+13: 
+14: pub(crate) use self::{itimer::*, posix_timer::*, queries::*, sleep::*, timerfd::*};
+END FILE
+
+
+FILE core/ksyscall/src/time/queries.rs
+1: // SPDX-License-Identifier: Apache-2.0
+2: // Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+3: // See LICENSES for license details.
+4: 
+5: //! Time query and setter syscall adapters.
+6: 
+7: use kerrno::{KError, KResult};
+8: use khal::time::monotonic_time;
+9: use ktime_types::{ClockId, SystemTime, TimeSpan};
+10: use linux_raw_sys::general::{__kernel_clockid_t, timespec, timeval, timezone};
+11: use posix_types::{SystemTimeLike, TimeSpanLike, UserConstPtr, UserPtr};
+12: 
+13: use super::clock_id::parse_clock_id;
+14: 
+15: /// Returns the current time from the specified clock.
+16: pub(crate) fn sys_clock_gettime(
+17:     clock_id: __kernel_clockid_t,
+18:     ts: UserPtr<timespec>,
+19: ) -> KResult<isize> {
+20:     let clock = parse_clock_id(clock_id).ok_or_else(|| {
+21:         warn!("Called sys_clock_gettime for unsupported clock {clock_id}");
+22:         KError::InvalidInput
+23:     })?;
+24:     let value = match clock {
+25:         ClockId::Realtime | ClockId::RealtimeCoarse => {
+26:             timespec::from_system_time(ktime::realtime())
+27:         }
+28:         ClockId::Boottime => timespec::from_time_span(ktime::boottime().span_since_origin()),
+29:         ClockId::Monotonic | ClockId::MonotonicRaw | ClockId::MonotonicCoarse => {
+30:             timespec::from_time_span(monotonic_time().span_since_origin())
+31:         }
+32:         ClockId::ProcessCpu => {
+33:             timespec::from_time_span(kprocess::current_user_process().process_cpu_time())
+34:         }
+35:         ClockId::ThreadCpu => timespec::from_time_span(kprocess::current_user_thread().cpu_time()),
+36:     };
+37:     ts.write_vm(value)?;
+38:     Ok(0)
+39: }
+40: 
+41: /// Returns the current wall-clock time of day.
+42: pub(crate) fn sys_gettimeofday(ts: UserPtr<timeval>) -> KResult<isize> {
+43:     if let Some(ts) = ts.check_non_null() {
+44:         ts.write_vm(timeval::from_system_time(ktime::realtime()))?;
+45:     }
+46:     Ok(0)
+47: }
+48: 
+49: /// Returns the current wall-clock time in seconds since the Unix epoch.
+50: #[cfg(target_arch = "x86_64")]
+51: pub(crate) fn sys_time(tloc: UserPtr<linux_raw_sys::general::__kernel_time_t>) -> KResult<isize> {
+52:     let seconds = ktime::realtime().unix_seconds() as linux_raw_sys::general::__kernel_time_t;
+53:     if let Some(tloc) = tloc.check_non_null() {
+54:         tloc.write_vm(seconds)?;
+55:     }
+56:     Ok(seconds as isize)
+57: }
+58: 
+59: fn set_wall_time(value: SystemTime) -> KResult<isize> {
+60:     if !kprocess::current_cred().has_cap(kcred::CAP_SYS_TIME) {
+61:         return Err(KError::OperationNotPermitted);
+62:     }
+63:     // Range validation (the Linux rule that the wall clock may not move before
+64:     // CLOCK_MONOTONIC, plus an upper bound keeping the clock able to advance)
+65:     // is enforced atomically inside the timekeeper under a single write lock.
+66:     const MAX_SETTABLE_UNIX_SECONDS: i64 = i64::MAX / ktime_types::NANOS_PER_SEC as i64;
+67:     let monotonic = monotonic_time();
+68:     let min_allowed = SystemTime::UNIX_EPOCH
+69:         .checked_add(monotonic.span_since_origin())
+70:         .ok_or(KError::InvalidInput)?;
+71:     if value < min_allowed || value.unix_seconds() >= MAX_SETTABLE_UNIX_SECONDS {
+72:         return Err(KError::InvalidInput);
+73:     }
+74:     ktime::set_realtime_checked(value).map_err(|_| KError::InvalidInput)?;
+75:     Ok(0)
+76: }
+77: 
+78: /// Sets the wall clock from a `timeval` value.
+79: pub(crate) fn sys_settimeofday(
+80:     ts: UserConstPtr<timeval>,
+81:     timezone: UserConstPtr<timezone>,
+82: ) -> KResult<isize> {
+83:     // Linux no longer allows setting the timezone; a non-NULL one is rejected.
+84:     if timezone.check_non_null().is_some() {
+85:         return Err(KError::InvalidInput);
+86:     }
+87:     // A NULL `tv` leaves the clock unchanged and needs no privilege check,
+88:     // matching Linux `do_sys_settimeofday64()`.
+89:     let Some(ts) = ts.check_non_null() else {
+90:         return Ok(0);
+91:     };
+92:     set_wall_time(ts.read_vm()?.try_into_system_time()?)
+93: }
+94: 
+95: /// Sets `CLOCK_REALTIME` from a `timespec` value.
+96: pub(crate) fn sys_clock_settime(
+97:     clock_id: __kernel_clockid_t,
+98:     ts: UserConstPtr<timespec>,
+99: ) -> KResult<isize> {
+100:     // Coarse clocks are query-only on Linux, even though gettime accepts them.
+101:     let clock = parse_clock_id(clock_id).ok_or(KError::InvalidInput)?;
+102:     if clock != ClockId::Realtime {
+103:         return Err(KError::InvalidInput);
+104:     }
+105:     let Some(ts) = ts.check_non_null() else {
+106:         return Err(KError::BadAddress);
+107:     };
+108:     set_wall_time(ts.read_vm()?.try_into_system_time()?)
+109: }
+110: 
+111: /// Returns the resolution of the specified clock.
+112: pub(crate) fn sys_clock_getres(
+113:     clock_id: __kernel_clockid_t,
+114:     res: UserPtr<timespec>,
+115: ) -> KResult<isize> {
+116:     let _clock = parse_clock_id(clock_id).ok_or_else(|| {
+117:         warn!("Called sys_clock_getres for unsupported clock {clock_id}");
+118:         KError::InvalidInput
+119:     })?;
+120:     if let Some(res) = res.check_non_null() {
+121:         res.write_vm(timespec::from_time_span(TimeSpan::from_micros(1)))?;
+122:     }
+123:     Ok(0)
+124: }
+125: 
+126: #[cfg(all(unittest, target_arch = "x86_64"))]
+127: unittest::path_mod_test!(tests, "../../ut-tests/time/queries/tests.rs");
+128: 
+129: unittest::path_mod_test!(
+130:     tests_time_query_arguments,
+131:     "../../ut-tests/time/queries/tests_time_query_arguments.rs"
+132: );
+END FILE
+
+
+FILE core/ktime/docs/design.md
+1: # ktime - 设计文档
+2: 
+3: ## 定位
+4: 
+5: `ktime` 是系统 timekeeping 语义层：基于 `khal::time` 提供的单调硬件时钟计算
+6: realtime，并统一维护 realtime 关联（correlation）、累计睡眠时间、初始化和读取接口。
+7: `khal` 只提供底层硬件时间能力，`drivers::rtc` 只提供 persistent-clock sample。
+8: 
+9: ## 架构
+10: 
+11: ```text
+12: hardware counter -> khal::time (monotonic) --+
+13: RTC boot sample / PersistentClock adapter -+--> ktime --> SystemTime
+14: Confirmed sleep interval (future PM) -------+          --> BoottimeInstant
+15: ```
+16: 
+17: 依赖方向：
+18: 
+19: ```text
+20: ktime (timekeeping) -> khal (硬件单调时钟)
+21:                      -> ktime_types (语义值类型)
+22:                      -> kiface-time-api (PersistentClock capability)
+23: khal -> ktime_types
+24: rtc-driver -> kiface-time-api (implements PersistentClock)
+25: ktime does not depend on rtc-driver; PM supplies its prepared provider value.
+26: ```
+27: 
+28: `ktime` 依赖 `khal`，`khal` 不依赖 `ktime`，因此 timekeeping 的演化（NTP
+29: 调频、多时钟源选择等）不需要改动硬件层。
+30: 
+31: ## 范围
+32: 
+33: - `initialize_realtime`：用 persistent-clock sample 建立 realtime 关联，
+34:   幂等，第一个 sample 生效。
+35: - `set_realtime_checked`：运行时把墙钟重新关联到当前单调时刻
+36:   （settimeofday 路径）。范围校验失败返回 `RealtimeOutOfRange` 错误
+37:   （墙钟早于 `CLOCK_MONOTONIC` 或超过上界），由调用方映射为 `EINVAL`。
+38: - `realtime_and_monotonic`：在同一关联读锁内采样一次单调时钟，返回对应的
+39:   realtime/monotonic 值对；用于需要保留事件发生时刻两套时间的消费者。
+40: - `realtime`：当前墙钟时间；未初始化时回退为 Unix epoch 加单调流逝时间
+41:   和已注入的睡眠时间。
+42: - `realtime_deadline_to_monotonic`：把 realtime 截止时间换算到单调时钟域。
+43: - `boottime`：返回单调时钟加累计睡眠时间，使用独立的 `BoottimeInstant` 类型。
+44: - `inject_sleeptime`：原子推进 realtime 和累计睡眠时间，不修改底层 monotonic。
+45: 
+46: ## 设计决策
+47: 
+48: - realtime = realtime_base + (monotonic_now - monotonic_base)，速率 1:1。
+49: - boottime = monotonic_now + sleep_time；初始 sleep_time 为零，墙钟设置和初始化
+50:   不重置该累计值。
+51: - `Timekeeper` 把关联和累计睡眠时间放在同一 `SpinRwNoIrq` 中：读路径（syscall/fs 时间戳）与写路径
+52:   （启动初始化、settimeofday、睡眠补偿）互斥，且可在 IRQ 上下文安全读取。
+53: - `set_realtime_checked` 不内置授权检查；调用者（syscall 层）负责
+54:   Linux 特权校验。墙钟相对 `CLOCK_MONOTONIC` 的下界与上界由函数内置
+55:   的范围校验保证，失败以 `RealtimeOutOfRange` 错误返回。
+56: - 未初始化时回退 `SystemTime::UNIX_EPOCH + elapsed + injected sleep`，
+57:   保证早期启动可用。
+58: - 补偿在提交前校验累计 sleep_time、当前 boottime 及推进后的 realtime；
+59:   realtime 使用现有 settimeofday 上界，任何错误均不修改状态。零增量为无操作。
+60: - `SleepTimeError` 区分范围超限（`OutOfRange`）与单调基准无效
+61:   （`InvalidMonotonicBaseline`），后者需要调用方处理计数器/基准一致性。
+62: - 读取 boottime 对表示范围溢出采用饱和处理，避免未来底层流逝时间导致回绕。
+63: 
+64: ## 时钟变化通知
+65: 
+66: `change.rs` 持有独立 REALTIME / BOOTTIME 的 `kpoll::PollEvent`。
+67: 墙钟设置和首次初始化仅发布 REALTIME；非零睡眠注入同时发布两个域。
+68: 失败更新及零注入不发布。状态与事件 generation 在 TIMEKEEPER 写锁内提交，
+69: 先释放该锁，再唤醒，waker 不得在时间锁内执行。
+70: 
+71: 订阅者在任务上下文预先初始化通知源，先读取 generation，再读取时间谓词，
+72: 注册后重新检查 generation / 原时钟截止时间。`ClockChangeListener` 将此规则
+73: 封装为一次性 Future；Drop 注销。通知仅提示重算，不代表定时器已经到期。
+74: 一次性等待只公开 `ClockChangeListener` 与构造函数；generation 采样留在模块内部，
+75: 不暴露无消费者的底层注册 API。timerfd 运行时使用独立持久观察者。
+76: 
+77: 通知源首次创建可能分配内存；只有订阅 API 触发创建，写路径只读取已存在的
+78: 源，不在 IRQ 中首次分配。已注册 waker 必须支持 IRQ 安全唤醒。
+79: 两个 domain 的 generation 均按 usize 回绕，假定单个等待不会跨越 usize::MAX 次更新。
+80: 
+81: ## 调用约束 / 执行上下文
+82: 
+83: 读时、初始化、设置及睡眠注入使用 IRQ 安全自旋锁；注册/等待 API 只用于任务
+84: 上下文。唤醒成本随等待者数量增长，调用者不得持有被这些 waker 重入的外层锁。
+85: 此设计复用 kpoll 的注册与清理能力，没有新增 CI stage。
+86: 
+87: ## 睡眠补偿边界
+88: 
+89: 通用层仅接收经过确认、尚未计入 MONOTONIC 的睡眠时间；调用者负责正式
+90: suspend/resume 事务、底层时钟冻结及基准恢复、来源选择和恰好一次结算。
+91: 本 PR 不接入 RTC 观测、ARM64 fixup、PM 生产调用方或宿主协议。
+92: 
+93: BOOTTIME / 绝对 REALTIME 等待与定时器保留原始域截止时间，转换到单调时钟
+94: 只是当前硬件定时器的编程快照；时钟变化后必须重算。
+95: MONOTONIC 与相对 REALTIME 不订阅时钟变化。ITIMER_REAL 沿用 MONOTONIC。
+96: `CLOCK_BOOTTIME` 和 `sysinfo.uptime` 读取通用 BOOTTIME。
+97: 事件输入历史时间戳的 BOOTTIME 接入留待独立改动，本 PR 不改变其数据布局。
+98: 
+99: ## 验证
+100: 
+101: 时间算术使用独立 Timekeeper；通知测试使用独立 Changes / PollEvent，
+102: 不注入运行内核的全局睡眠时间。消费者测试覆盖原域检查、周期累计和相对/
+103: 绝对 REALTIME 交替武装。UT 不替代正式 PM 或真实宿主休眠测试。
+104: 
+105: ## 持久运行时观察者
+106: 
+107: `observer.rs` 在一次性 poll 监听之外提供持久运行时订阅。
+108: `ClockReading` 及其更新序号在 TIMEKEEPER 锁内采样；回调在解锁后使用该次
+109: 提交的快照执行。注册表保存弱引用，通过写时复制保持已取得的通知快照不变。
+110: 通知在表锁内克隆 Arc，锁外调用观察者；通知本身不分配内存。
+111: 释放注册凭据会停用订阅，与观察者 Arc 是否仍存活无关；已取得的回调仍可能完成。
+112: 替换注册表时清理失效弱引用槽位，存储可能保留此前的并发高水位。
+113: 回调和观察者最终析构必须兼容 IRQ 上下文，通知遍历成本为 O(N)。
+114: 
+115: 只有表 Arc 唯一且 Vec 有剩余容量时，注册才在 IRQ 锁内原地追加且不分配。
+116: 否则在锁外清理失效槽位并准备几何扩容的新表，再在锁内校验并替换。
+117: 持有旧 Arc 会禁止原地修改，因此指针校验能检测替换和注册竞争。
+118: 无并发快照时，连续注册的表维护成本为摊还 O(1)。128 个订阅的回归约束
+119: 替换次数，并检查通知及注销。已有通知快照时，注册仍需 O(N) 复制，
+120: 暂时保留两张表；并发注册可能重试。该回归不是延迟上界或扩展性基准，
+121: 持续重叠的通知快照仍可能导致反复复制。
+122: 
+123: 替换表根据清理后的存活项数量预留容量，不使用旧槽位数量。
+124: 反复创建/关闭会回收失效槽位，容量不会随历史注册次数持续增长。
+125: 独立的 4096 次注册/释放回归检查表长度和容量有界，并确认已关闭订阅
+126: 不再收到通知；它不是堆内存或延迟基准。替换前仍可能保留此前的并发高水位。
+127: 
+128: 通知和观察者回归分别放在 `ut-tests/change.rs`、`ut-tests/observer.rs`，
+129: 由对应生产模块通过 `unittest::path_mod_test!` 挂载，保留私有接口测试边界。
+130: 
+131: ## 暂停与恢复结算事务
+132: 
+133: `src/suspend.rs` 提供 `begin_suspend_accounting`、`resume_suspend_accounting` 和
+134: `cancel_suspend_accounting`。同一 TIMEKEEPER 锁保护时钟、事务状态与提交。开始时
+135: 保存一致 ClockReading，并分配本次启动内不复用的私有标识；同一时刻只允许一轮事务。
+136: 恢复验证凭证及单调基准，在副本上调用不含事务策略的共享注入算术，成功后一次提交
+137: 时钟偏移和事务结束；旧式注入入口独立检查活动事务，不再靠先清状态绕过策略。
+138: 失败保持原状态，可重试或取消；零注入结束事务但不发通知。非零提交解锁后复用
+139: REALTIME/BOOTTIME 通知及观察者；取消不改时钟，不发送通知。
+140: 
+141: 这是 Linux timekeeping_suspend/resume 职责中结算部分的适配，不是完整 PM 实现。
+142: 期间读时钟与定时器仍运行，墙钟设置保留；恢复在当前关联上增加睡眠时长。
+143: 调用方先恢复连续且不包含待补偿睡眠的 MONOTONIC，再提交确认的睡眠时长。
+144: The generic transaction does not estimate RTC deltas; `rtc.rs` supplies that adapter.
+145: It does not freeze clocks, restore clocksource/clockevent, or stop CPUs/devices.
+146: 也不提供宿主协议。旧 inject_sleeptime 非零调用在事务期间被拒绝；零调用仍是无操作。
+147: 凭证只保证同一轮提交一次，不能识别调用方在后续新事务或旧注入 API 中重复报告同一睡眠。
+148: 
+149: 凭证拥有绑定到签发 Timekeeper 的内部回收守卫，Drop 自动取消仍属于本凭证的事务，
+150: 不补偿时间、不通知、不恢复硬件；已完成或已取消的旧凭证析构不会清除新事务。
+151: 错误路径的普通提前返回也能释放结算所有权。Drop 短暂取得时间写锁，不得在持有
+152: 该锁或 NMI 中执行；PM owner 仍负责硬件及任务的回滚，不得 mem::forget 凭证。
+153: 主动绕过析构不保证恢复所有权。标识耗尽时失败，不回绕。没有生产 PM 调用者，
+154: 也不以单元测试证明
+155: 真实硬件暂停、多核恢复顺序或跨宿主时钟可信性。
+156: 
+157: ## Persistent-clock RTC fallback
+158: 
+159: `rtc.rs` owns `RtcSleepAccounting<C>` and `RtcSleepSession`, over the
+160: `kiface-time-api::PersistentClock` contract. An owner retains one source and its
+161: phase calibration. The session exclusively borrows that owner and holds the
+162: existing #1093 single-use `SuspendToken`; no second global transaction or RTC
+163: injection path is created. Driver mapping/discovery happens before this layer.
+164: 
+165: ```text
+166: prepared PersistentClock -> RTC / MONOTONIC / BOOTTIME samples
+167:                                   |
+168:                                   v
+169:                       missing-time estimate + bounds
+170:                                   |
+171:                                   v
+172:              existing resume_suspend_accounting -> notifications
+173: ```
+174: 
+175: The PM sequence is prepare source -> begin -> restore/coordinate device and CPU
+176: state as required -> freeze MONOTONIC -> mark_suspended -> sleep -> restore
+177: MONOTONIC and the device/IRQ resources needed for RTC access -> resume_from_rtc
+178: -> finish per-CPU event restoration and re-arbitrate deadlines.
+179: `mark_suspended` is an explicit PM assertion, not hardware detection. Resume
+180: before this boundary is rejected without reading RTC. Earlier aborts cancel.
+181: No production PM/host protocol is connected; real use requires the monotonic
+182: freeze/rebase capability supplied separately by #1165.
+183: 
+184: RTC I/O runs in the backend's permitted sleepable context with no spinlock held.
+185: Two short `clock_reading()` calls bracket it, retaining the after-read coherent
+186: MONOTONIC/BOOTTIME sample and the read window. Regressing MONOTONIC, changed
+187: resolution, failed reads and windows above max_read_span are rejected. This
+188: budget detects late returns; it cannot interrupt a stuck backend. Constructors
+189: require initialized sources and nonzero resolution, sleep bound and budget.
+190: 
+191: The estimate starts with RTC elapsed minus already-counted MONOTONIC elapsed.
+192: To avoid repeated whole-second truncation drift, it also subtracts the change
+193: in BOOTTIME-to-RTC phase since a previously committed reference. This adapts
+194: Linux drivers/rtc/class.c rtc_suspend/resume's old_delta/delta_delta correction,
+195: using BOOTTIME instead of REALTIME so wall-clock edits do not change running
+196: elapsed time. A phase shift at least twice (resolution + maximum read span)
+197: resets the reference, analogous to Linux's approximately two-second threshold.
+198: Negative estimates within one quantum plus both observed windows close with
+199: zero compensation; larger deficits fail. Positive compensation above the PM
+200: owner's max_sleep fails. i128 nanoseconds safely represent all input spans and
+201: timestamp differences before checked conversion to nonnegative TimeSpan.
+202: 
+203: Calibration is committed only after ktime settlement succeeds. Errors retain
+204: the session and calibration for retry; successful zero settlement also closes
+205: the transaction. Explicit cancellation or unfinished Drop discards calibration
+206: and cancels accounting, without restoring hardware or injecting time. Known RTC
+207: edits between sessions require reset_calibration; plausible source edits during
+208: an interval cannot be distinguished from true sleep and must be excluded by PM.
+209: 
+210: Linux prefers nonstop clocksource, then persistent clock, then RTC fallback.
+211: The PM owner makes that selection here. A prepared session can settle a
+212: confirmed preferred-source delta through resume_with_confirmed_time, without a
+213: resume RTC read; success closes the same token and invalidates RTC calibration.
+214: RTC fallback cannot subsequently inject again. If a preferred source is already
+215: known, PM can bypass RTC entirely and use ordinary ktime accounting. This is a
+216: source handoff protocol, not automatic clock discovery or a trust detector.
+217: 
+218: The session adds no registry, heap allocation or shared hot-path state. Rust
+219: exclusive borrowing prevents source replacement or parallel use of one owner.
+220: Global transaction arbitration and notifications retain existing timekeeper
+221: locking. Unit tests under ut-tests/rtc.rs use fake clocks, explicit samples and
+222: independent timekeepers; they do not inject into the active kernel's clocks.
+223: Coverage includes quantization over repeated fractional sleeps, bounds, clock
+224: edits, capture failures, phase commit failure and boundary gating. They do not
+225: prove RTC continuity across real host sleep, device recovery or CPU quiescence.
+END FILE
+
+
+FILE core/ktime/docs/security.md
+1: # ktime - 安全与可靠性分析
+2: 
+3: ## 信任模型
+4: 
+5: `ktime` 信任 `khal` 提供单调、稳定的硬件时钟读数，信任调用者在 syscall 边界
+6: 完成特权校验。睡眠补偿的调用方还必须确认睡眠边界、处理底层
+7: MONOTONIC 基准并保证单次结算。`set_realtime_checked` 内置墙钟范围校验（见外部边界），
+8: syscall 层不再负责 CLOCK_MONOTONIC 约束。RTC 驱动只提供 sample，不直接修改
+9: timekeeper 状态。
+10: 
+11: ## 外部边界 / 攻击面
+12: 
+13: The crate does not access user memory, networks or filesystems. Its RTC
+14: adapter invokes the trusted `PersistentClock` provider, which may access device
+15: registers or perform sleepable I/O. The PM caller must restore device access
+16: and obey the provider's execution-context requirements; sampling runs outside
+17: timekeeper and observer locks. Other external inputs enter through
+18: `initialize_realtime`/`set_realtime_checked` 传入的 `SystemTime` sample，
+19: 以及 `inject_sleeptime` 传入的 `TimeSpan` 进入；
+20: `SystemTime` 构造本身规范化并校验分量范围。`set_realtime_checked` 对
+21: sample 执行内置范围校验：墙钟不得早于 `CLOCK_MONOTONIC` 当前值，也不得
+22: 超过上界 `MAX_SETTABLE_UNIX_SECONDS`（Linux `KTIME_SEC_MAX`）；校验失败
+23: 返回 `RealtimeOutOfRange` 错误，不应用任何部分修改。
+24: 
+25: `TimeSpan` 从类型上排除负增量；注入前校验累计睡眠值和 BOOTTIME 的
+26: 表示范围，以及 REALTIME 加法和既有墙钟上界，失败返回
+27: `SleepTimeError::OutOfRange` 且无部分修改。单调读数早于关联基准时返回
+28: `SleepTimeError::InvalidMonotonicBaseline`，调用方可区分范围错误和底层基准异常。该接口不直接暴露给用户态，
+29: 不负责鉴别 RTC 样本、检测真实休眠或去重。
+30: 
+31: ## 内存安全不变量
+32: 
+33: 无 `unsafe` 代码（`#![deny(unsafe_code)]`）。状态为普通 Rust 值，由
+34: `SpinRwNoIrq` 保证访问互斥。
+35: 
+36: ## 线程安全
+37: 
+38: `TIMEKEEPER` 的关联及累计睡眠时间由同一读写锁保护，可在多 CPU 与 IRQ 上下文安全访问；
+39: `REALTIME_INITIALIZED` 原子标记保证初始化只生效一次。
+40: 
+41: `realtime_and_monotonic` 返回自有值而非锁守卫。采样与关联换算都在同一
+42: 读临界区，后续墙钟更新不能改变已经缓存的值对。该只读接口不添加授权
+43: 或用户内存边界，也不写全局时间。
+44: 
+45: ## 威胁分析
+46: 
+47: | 编号 | 威胁描述 | 影响等级 | 触发条件 | 应对措施 |
+48: |------|----------|----------|----------|----------|
+49: | T-01 | Unprivileged process modifies wall-clock time | High | Direct call to `set_realtime_checked` | The syscall layer requires effective `CAP_SYS_TIME`; `set_realtime_checked` performs range validation (the wall clock must not precede `CLOCK_MONOTONIC` or exceed `MAX_SETTABLE_UNIX_SECONDS`) and returns `RealtimeOutOfRange`, which the syscall layer maps to `EINVAL` |
+50: | T-02 | 初始化输入超范围 | 中 | 越界 SystemTime sample | `SystemTime` 构造规范化分量；读取路径 checked/saturating 兜底 |
+51: | T-03 | IRQ 上下文死锁 | 高 | 中断读取 realtime 时写者持锁 | 读写均使用 `SpinRwNoIrq`（关中断），写临界区极短 |
+52: | T-04 | 墙钟回拨导致负 duration | 中 | realtime 被设置到过去 | `duration_since` 返回错误而非下溢，deadline 换算按已过期处理 |
+53: | T-05 | 重复注入或注入已计入 MONOTONIC 的时间 | 高 | PM 调用方违反结算契约 | 调用方维护休眠事务和来源选择；此阶段未接入生产路径 |
+54: | T-06 | 补偿溢出导致部分状态更新 | 高 | 过大 delta 或累计值 | 所有计算成功后才提交两个状态；失败保持原值 |
+55: | T-07 | 时间更新后仍使用旧 deadline | 高 | 未来调用方未处理 timer 恢复 | 状态提交时发布 generation，解锁后唤醒；消费者保留原域截止时间并重新判断 |
+56: 
+57: ## 审计清单
+58: 
+59: - 新增写路径是否经过特权与范围校验。
+60: - 锁守卫是否保持 IRQ 安全（不允许在持锁时睡眠）。
+61: - realtime 与 monotonic 换算是否始终使用同一快照。
+62: - 睡眠补偿来源是否可信、是否已从 MONOTONIC 排除，是否只结算一次。
+63: - timer 通知与恢复执行的顺序是否满足调用契约。
+64: 
+65: ## 时钟通知的并发与资源契约
+66: 
+67: - 通知源只在任务订阅路径初始化；时间写路径不得触发首次分配。
+68: - TIMEKEEPER 锁内仅发布 generation 和克隆唤醒源，锁外调用 waker。
+69: - 等待注册通过 PollRegistrations 管理，取消时清理；分配失败返回错误。
+70: - 注册前后的 generation 检查阻止遗漏已经发布的变化；唤醒后仍检查时间谓词。
+71: - 注入来源和恰好一次结算仍由未来 PM 调用方保证，通知不能证明真实休眠。
+72: 
+73: ## 持久观察者约束
+74: 
+75: 观察者回调可以重叠，也可以与提交顺序不同。消费者必须使用提交快照，
+76: 拒绝早于当前武装的更新。`ClockChangeId` 使用半范围序号比较，
+77: 单次存活武装不得跨越 2^63 次更新。
+78: 回调期间不持有时间锁或注册表锁。观察者回调及最终析构不得睡眠或分配；
+79: timerfd 通过预先准备的工作捕获保留运行时，捕获资源延迟至任务上下文回收。
+80: 
+81: IRQ 锁内插入要求 Arc 唯一且 Vec 有剩余容量；该路径不扩容、不清理槽位。
+82: 复制、几何扩容、清理和释放旧表均在该锁外执行。
+83: 已取得的通知快照会迫使注册使用写时复制，快照在注册期间保持不变。
+84: 独立回归检查新注册不会改变已取得的表，但不替代真实并发 IRQ 验证。
+85: 
+86: ## 暂停结算凭证与恢复边界
+87: 
+88: 事务标识、当前轮次及时间偏移由同一时间锁串行保护。凭证字段私有且不提供
+89: 构造或整数转换。重复、已取消或旧轮凭证不得提交；标识不回绕复用。恢复在副本
+90: 上验证所有算术后才提交，失败不能消耗有效凭证或修改任一时钟。零提交不通知。
+91: 非零旧式注入在事务活动期间被拒绝，避免绕过该轮结算；墙钟设置仍允许且不被恢复覆盖。
+92: 所有通知在时间锁释放后运行，沿用现有 IRQ 回调契约。无锁跨越暂停，无首次分配。
+93: 
+94: 凭证只提供内核内结算所有权，不验证实际休眠、RTC 稳定性或宿主事件真实性。
+95: 调用方负责互斥 PM 流程、恢复 MONOTONIC 基准及排除睡眠时间；本层仅拒绝早于
+96: 开始快照或当前墙钟关联基准的恢复样本，无法识别看似正常的向前计数跳变。
+97: 凭证 Drop 只在签发 Timekeeper 的活动标识仍匹配时自动取消，不触发时间补偿或通知，
+98: 不会影响后续事务。析构取得时间写锁，不得在持有该锁或 NMI 中执行；不分配或调用回调。
+99: 正常错误返回可恢复结算所有权；显式 mem::forget 绕过析构不受支持，PM owner 必须
+100: 另行撤销自己的硬件准备。
+101: 独立 Timekeeper 的单测不修改全局时间，也不替代真实 PM 端到端验证。
+102: 
+103: ## RTC fallback boundary and failure handling
+104: 
+105: `src/rtc.rs` adds no unsafe, device pointers or userspace entry. It calls a
+106: trusted `PersistentClock` provider outside timekeeper locks and checks sample
+107: latency, monotonic ordering, resolution consistency, RTC backsteps and the
+108: owner's maximum accepted RTC compensation. The provider/device remains an
+109: external time authority: a plausible forward edit within the bound is not
+110: independently authenticated. PM must establish cross-suspend continuity and
+111: prevent RTC writes; source trust is not inferred from a successful read.
+112: 
+113: | ID | Threat | Impact | Control and remaining obligation |
+114: |---|---|---|---|
+115: | RTC-01 | Duplicate sleep injection from multiple sources | Medium | A session privately owns one generic SuspendToken. Preferred-source success consumes it before any RTC fallback; untracked nonzero injection is rejected while active. Separate later transactions still require correct PM ownership. |
+116: | RTC-02 | Quantization creates false or accumulating compensation | Medium | Cross-cycle BOOTTIME/RTC phase correction, bounded sample windows and a precision-scaled reference reset; errors below declared precision remain unavoidable. |
+117: | RTC-03 | Abort before actual freeze injects rounding noise | Medium | PM must explicitly mark the reached boundary; estimation rejects unmarked sessions. PM still has to make that assertion truthfully. |
+118: | RTC-04 | Unstable/stopped/edited RTC gives wrong elapsed time | Medium | Failed reads, backsteps, excessive deficits and excessive positive deltas fail without settlement. Plausible changes remain a source-trust risk. |
+119: | RTC-05 | I/O stalls or reenters under an IRQ lock | Medium | Sampling is outside locks in sleepable context. The latency budget is checked after return and cannot recover a nonreturning provider; backend access and progress are PM obligations. |
+120: 
+121: Failed estimates/commits leave accounting active for retry or cancellation and
+122: retain the previously committed phase. Explicit cancel and unfinished Drop
+123: invalidate phase; token Drop cancels accounting only. No automatic hardware
+124: recovery occurs. Lost/forgotten sessions can strand accounting, as for #1093;
+125: PM must retain ownership and must not forget them. Type borrowing keeps one
+126: source fixed through each session. No manual Send/Sync implementations or new
+127: global locks are introduced. Tests use isolated state rather than global time
+128: injection and do not establish real S3, MMIO mapping or NMI safety. No user
+129: private data is processed by the adapter.
+END FILE
+
+
+FILE core/ktime/src/lib.rs
+1: // SPDX-License-Identifier: Apache-2.0
+2: // Copyright 2025 KylinSoft Co., Ltd. <https://www.kylinos.cn/>
+3: // See LICENSES for license details.
+4: 
+5: //! System timekeeping for X-Kernel.
+6: //!
+7: //! `ktime` is the system timekeeping owner: it derives realtime from the
+8: //! monotonic hardware clock exposed by [`khal::time`] plus a clock
+9: //! correlation, and owns cumulative sleep time, initialization, updates, and reads.
+10: //! Platform RTC drivers provide persistent-clock samples for boot initialization
+11: //! and an owned source for [`RtcSleepAccounting`]. RTC estimation is separate
+12: //! from counter restoration and the generic single-use settlement transaction.
+13: //!
+14: //! Semantics:
+15: //! - realtime advances 1:1 with monotonic time between explicit updates;
+16: //! - boottime is monotonic plus cumulative injected sleep time;
+17: //! - [`inject_sleeptime`] advances realtime and boottime without changing monotonic;
+18: //! - [`begin_suspend_accounting`] and [`resume_suspend_accounting`] provide a
+19: //!   single-use accounting transaction, without suspending clocks or hardware;
+20: //! - [`RtcSleepAccounting`] provides persistent-clock fallback after PM confirms
+21: //!   the freeze boundary and restores MONOTONIC;
+22: //! - before any persistent clock is sampled, realtime falls back to the Unix
+23: //!   epoch plus elapsed monotonic time and injected sleep intervals;
+24: //! - [`set_realtime_checked`] re-bases the correlation so a caller-supplied
+25: //!   wall-clock timestamp takes effect immediately. Range validation (the Linux
+26: //!   rule that the wall clock may not move before `CLOCK_MONOTONIC`, plus an
+27: //!   upper bound keeping the clock able to advance) is enforced atomically
+28: //!   inside the timekeeper, so callers only need to perform permission checks.
+29: 
+30: #![no_std]
+31: #![deny(unsafe_code)]
+32: 
+33: extern crate alloc;
+34: 
+35: use core::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+36: 
+37: use khal::time::monotonic_time;
+38: use kspin::SpinRwNoIrq;
+39: 
+40: mod change;
+41: mod observer;
+42: mod rtc;
+43: mod suspend;
+44: pub use change::{ClockChangeListener, ClockDomain, clock_change_listener};
+45: use ktime_types::{BoottimeInstant, MonotonicInstant, NANOS_PER_SEC, SystemTime, TimeSpan};
+46: pub use observer::{
+47:     ClockChangeId, ClockObserver, ClockObserverRegistration, ClockReading, ClockUpdate,
+48:     register_clock_observer,
+49: };
+50: pub use rtc::{RtcSleepAccounting, RtcSleepError, RtcSleepSession};
+51: pub use suspend::{
+52:     SuspendAccountingError, SuspendToken, begin_suspend_accounting, cancel_suspend_accounting,
+53:     resume_suspend_accounting,
+54: };
+55: 
+56: /// Largest settable wall-clock second value, mirroring Linux `KTIME_SEC_MAX`
+57: /// (`include/linux/time64.h`): the upper bound `timespec64_valid()` accepts.
+58: ///
+59: /// Values at or beyond this would make the monotonic-to-realtime addition in
+60: /// [`ClockCorrelation::realtime_at`] saturate at [`SystemTime::MAX`] on the
+61: /// next read, freezing the wall clock. The wide margin below [`i64::MAX`]
+62: /// guarantees the clock can keep advancing.
+63: const MAX_SETTABLE_UNIX_SECONDS: i64 = i64::MAX / NANOS_PER_SEC as i64;
+64: 
+65: #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+66: struct ClockCorrelation {
+67:     monotonic_base: MonotonicInstant,
+68:     realtime_base: SystemTime,
+69: }
+70: 
+71: impl ClockCorrelation {
+72:     const FALLBACK: Self = Self {
+73:         monotonic_base: MonotonicInstant::ORIGIN,
+74:         realtime_base: SystemTime::UNIX_EPOCH,
+75:     };
+76: 
+77:     const fn new(monotonic_base: MonotonicInstant, realtime_base: SystemTime) -> Self {
+78:         Self {
+79:             monotonic_base,
+80:             realtime_base,
+81:         }
+82:     }
+83: 
+84:     #[inline]
+85:     fn realtime_at(self, monotonic_now: MonotonicInstant) -> SystemTime {
+86:         let elapsed = monotonic_now
+87:             .checked_duration_since(self.monotonic_base)
+88:             .unwrap_or(TimeSpan::ZERO);
+89:         self.realtime_base
+90:             .checked_add(elapsed)
+91:             .unwrap_or(SystemTime::MAX)
+92:     }
+93: }
+94: 
+95: #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+96: struct Timekeeper {
+97:     correlation: ClockCorrelation,
+98:     sleep_time: TimeSpan,
+99:     suspend: suspend::SuspendState,
+100: }
+101: 
+102: impl Timekeeper {
+103:     const INITIAL: Self = Self {
+104:         correlation: ClockCorrelation::FALLBACK,
+105:         sleep_time: TimeSpan::ZERO,
+106:         suspend: suspend::SuspendState::INITIAL,
+107:     };
+108: 
+109:     fn snapshot(self, monotonic: MonotonicInstant) -> ClockSnapshot {
+110:         ClockSnapshot {
+111:             monotonic,
+112:             realtime: self.correlation.realtime_at(monotonic),
+113:             boottime: BoottimeInstant::from_span_since_origin(
+114:                 monotonic
+115:                     .span_since_origin()
+116:                     .saturating_add(self.sleep_time),
+117:             ),
+118:         }
+119:     }
+120: 
+121:     fn set_realtime_checked(
+122:         &mut self,
+123:         sample: SystemTime,
+124:         monotonic: MonotonicInstant,
+125:     ) -> Result<(), RealtimeOutOfRange> {
+126:         self.correlation = ClockCorrelation::new(monotonic, sample);
+127:         Ok(())
+128:     }
+129: 
+130:     fn inject_sleeptime(
+131:         &mut self,
+132:         delta: TimeSpan,
+133:         monotonic: MonotonicInstant,
+134:     ) -> Result<(), SleepTimeError> {
+135:         if delta.is_zero() {
+136:             return Ok(());
+137:         }
+138:         if self.suspend.is_active() {
+139:             return Err(SleepTimeError::AccountingInProgress);
+140:         }
+141:         self.apply_sleeptime(delta, monotonic)
+142:     }
+143: 
+144:     // Arithmetic shared by untracked injection and validated transaction commit.
+145:     fn apply_sleeptime(
+146:         &mut self,
+147:         delta: TimeSpan,
+148:         monotonic: MonotonicInstant,
+149:     ) -> Result<(), SleepTimeError> {
+150:         if delta.is_zero() {
+151:             return Ok(());
+152:         }
+153:         let sleep_time = self
+154:             .sleep_time
+155:             .checked_add(delta)
+156:             .ok_or(SleepTimeError::OutOfRange)?;
+157:         // Reject an unrepresentable boottime before publishing either offset.
+158:         monotonic
+159:             .span_since_origin()
+160:             .checked_add(sleep_time)
+161:             .ok_or(SleepTimeError::OutOfRange)?;
+162:         let elapsed = monotonic
+163:             .checked_duration_since(self.correlation.monotonic_base)
+164:             .ok_or(SleepTimeError::InvalidMonotonicBaseline)?;
+165:         let realtime = self
+166:             .correlation
+167:             .realtime_base
+168:             .checked_add(elapsed)
+169:             .and_then(|now| now.checked_add(delta))
+170:             .ok_or(SleepTimeError::OutOfRange)?;
+171:         if realtime.unix_seconds() >= MAX_SETTABLE_UNIX_SECONDS {
+172:             return Err(SleepTimeError::OutOfRange);
+173:         }
+174:         // Validation is complete; commit the two clock offsets together.
+175:         self.correlation = ClockCorrelation::new(monotonic, realtime);
+176:         self.sleep_time = sleep_time;
+177:         Ok(())
+178:     }
+179: }
+180: 
+181: static TIMEKEEPER: SpinRwNoIrq<Timekeeper> = SpinRwNoIrq::new(Timekeeper::INITIAL);
+182: static CHANGE_ID: AtomicU64 = AtomicU64::new(0);
+183: static REALTIME_INITIALIZED: AtomicBool = AtomicBool::new(false);
+184: 
+185: #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+186: struct ClockSnapshot {
+187:     monotonic: MonotonicInstant,
+188:     realtime: SystemTime,
+189:     boottime: BoottimeInstant,
+190: }
+191: 
+192: /// Initializes realtime from a persistent-clock sample.
+193: ///
+194: /// The first sample establishes the clock correlation. Later calls leave the
+195: /// established correlation unchanged, so platform code may safely use this as
+196: /// an idempotent early-boot operation.
+197: pub fn initialize_realtime(sample: SystemTime) {
+198:     if REALTIME_INITIALIZED.load(Ordering::Acquire) {
+199:         return;
+200:     }
+201:     let mut timekeeper = TIMEKEEPER.write();
+202:     if !REALTIME_INITIALIZED.load(Ordering::Relaxed) {
+203:         // Sample monotonic while holding the write lock so the recorded base
+204:         // matches the correlation we publish.
+205:         let monotonic_base = monotonic_time();
+206:         timekeeper.correlation = ClockCorrelation::new(monotonic_base, sample);
+207:         REALTIME_INITIALIZED.store(true, Ordering::Release);
+208:         let update = prepare_clock_update(&timekeeper, false);
+209:         let wake = change::publish(false);
+210:         drop(timekeeper);
+211:         observer::notify(update);
+212:         change::wake(wake);
+213:     }
+214: }
+215: 
+216: /// The requested wall-clock value is outside the settable range.
+217: ///
+218: /// Returned by [`set_realtime_checked`] when the value would move the wall
+219: /// clock before `CLOCK_MONOTONIC` (Linux 4.3+ rule) or beyond
+220: /// [`MAX_SETTABLE_UNIX_SECONDS`] (Linux `KTIME_SEC_MAX`).
+221: #[derive(Debug)]
+222: pub struct RealtimeOutOfRange;
+223: 
+224: /// Validates and applies a wall-clock update atomically.
+225: ///
+226: /// Range validation and the correlation update both happen under the same
+227: /// write lock using a single monotonic sample, so:
+228: ///
+229: /// - a concurrent reader can never observe a torn [`ClockSnapshot`] whose
+230: ///   `realtime` was derived from a correlation written *after* its `monotonic`
+231: ///   was sampled;
+232: /// - the Linux `wall_to_monotonic` constraint (`realtime >=
+233: ///   UNIX_EPOCH + monotonic`) cannot be violated by a gap between validation
+234: ///   and commit.
+235: ///
+236: /// Syscall layers keep only the privilege check and map the error to `EINVAL`.
+237: ///
+238: /// # Errors
+239: ///
+240: /// Returns [`RealtimeOutOfRange`] when `sample` would move the wall clock
+241: /// before `CLOCK_MONOTONIC` or beyond [`MAX_SETTABLE_UNIX_SECONDS`]
+242: /// (Linux `KTIME_SEC_MAX`).
+243: pub fn set_realtime_checked(sample: SystemTime) -> Result<(), RealtimeOutOfRange> {
+244:     let mut timekeeper = TIMEKEEPER.write();
+245:     // Sample monotonic under the write lock so validation and the recorded
+246:     // base observe the same instant.
+247:     let monotonic_base = monotonic_time();
+248: 
+249:     timekeeper.set_realtime_checked(sample, monotonic_base)?;
+250:     REALTIME_INITIALIZED.store(true, Ordering::Release);
+251:     let update = prepare_clock_update(&timekeeper, false);
+252:     let wake = change::publish(false);
+253:     drop(timekeeper);
+254:     observer::notify(update);
+255:     change::wake(wake);
+256:     Ok(())
+257: }
+258: 
+259: #[inline]
+260: fn snapshot() -> ClockSnapshot {
+261:     // Hold the read lock across the monotonic sample and the realtime
+262:     // derivation so a concurrent writer cannot publish a new correlation in
+263:     // between and produce a torn (monotonic, realtime) pair.
+264:     let timekeeper = TIMEKEEPER.read();
+265:     timekeeper.snapshot(monotonic_time())
+266: }
+267: 
+268: /// Samples realtime and monotonic time at the same instant.
+269: ///
+270: /// Both values use one monotonic sample under the timekeeper read lock, so
+271: /// concurrent wall-clock updates cannot tear the pair. The owned timestamps
+272: /// remain valid after later updates. This does not sleep or require a process
+273: /// context and is also valid in interrupt context and during early boot.
+274: #[inline]
+275: pub fn realtime_and_monotonic() -> (SystemTime, MonotonicInstant) {
+276:     let now = snapshot();
+277:     (now.realtime, now.monotonic)
+278: }
+279: 
+280: /// Returns the current realtime timestamp.
+281: ///
+282: /// Before a persistent clock initializes realtime, the result falls back to
+283: /// the Unix epoch plus elapsed monotonic time and injected sleep intervals.
+284: #[inline]
+285: pub fn realtime() -> SystemTime {
+286:     snapshot().realtime
+287: }
+288: 
+289: /// Returns the current boot-time instant, including injected sleep intervals.
+290: ///
+291: /// Uses a single monotonic sample under the timekeeper read lock. This does not
+292: /// sleep and is valid in interrupt context and during early boot. Before any
+293: /// sleep interval is injected, its elapsed value equals monotonic time.
+294: #[inline]
+295: pub fn boottime() -> BoottimeInstant {
+296:     snapshot().boottime
+297: }
+298: 
+299: /// The reason a confirmed sleep interval could not be applied.
+300: #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+301: pub enum SleepTimeError {
+302:     /// A nonzero untracked injection would bypass an active suspend transaction.
+303:     AccountingInProgress,
+304:     /// Cumulative sleep time or a clock value would exceed its supported range.
+305:     OutOfRange,
+306:     /// The monotonic sample precedes the recorded realtime correlation base.
+307:     ///
+308:     /// The caller must resolve the counter/baseline inconsistency before retrying;
+309:     /// reducing the sleep interval does not repair this condition.
+310:     InvalidMonotonicBaseline,
+311: }
+312: 
+313: /// Adds a confirmed sleep interval to realtime and boottime atomically.
+314: ///
+315: /// Monotonic time is unchanged. `TimeSpan` excludes negative intervals, and a
+316: /// zero interval is a successful no-op. This does not sleep and is valid in
+317: /// interrupt context; it performs no device reads. Registered wakers must be
+318: /// IRQ-safe. Clock-change notifications run after releasing the timekeeper lock.
+319: ///
+320: /// The caller must establish a suspend/resume boundary, exclude `delta` from
+321: /// the underlying monotonic clock, and ensure each interval is injected once.
+322: /// This function neither detects sleep nor repairs hardware counters. The
+323: /// registered consumers recheck their original deadlines after notification.
+324: /// No production resume path is wired to this interface yet.
+325: ///
+326: /// # Errors
+327: ///
+328: /// Returns [`SleepTimeError::OutOfRange`] if either clock or cumulative sleep
+329: /// time cannot represent the update, or realtime would reach the upper bound
+330: /// enforced by [`set_realtime_checked`]. Returns
+331: /// [`SleepTimeError::InvalidMonotonicBaseline`] if the monotonic sample precedes
+332: /// the recorded correlation base. Returns [`SleepTimeError::AccountingInProgress`]
+333: /// for a nonzero injection while a suspend accounting transaction is active.
+334: /// Every error leaves state unchanged.
+335: pub fn inject_sleeptime(delta: TimeSpan) -> Result<(), SleepTimeError> {
+336:     if delta.is_zero() {
+337:         return Ok(());
+338:     }
+339:     let mut timekeeper = TIMEKEEPER.write();
+340:     timekeeper.inject_sleeptime(delta, monotonic_time())?;
+341:     let update = prepare_clock_update(&timekeeper, true);
+342:     let wake = change::publish(true);
+343:     drop(timekeeper);
+344:     observer::notify(update);
+345:     change::wake(wake);
+346:     Ok(())
+347: }
+348: 
+349: /// Converts a realtime deadline into the monotonic timer domain.
+350: ///
+351: /// Deadlines that have already passed map to the current monotonic instant.
+352: /// Unrepresentable future deadlines saturate at the largest monotonic instant.
+353: #[inline]
+354: pub fn realtime_deadline_to_monotonic(deadline: SystemTime) -> MonotonicInstant {
+355:     let now = snapshot();
+356:     let delay = deadline
+357:         .duration_since(now.realtime)
+358:         .unwrap_or(TimeSpan::ZERO);
+359:     now.monotonic
+360:         .checked_add(delay)
+361:         .unwrap_or(MonotonicInstant::from_span_since_origin(TimeSpan::MAX))
+362: }
+363: 
+364: /// Converts a boot-time deadline to a snapshot of the monotonic timer domain.
+365: ///
+366: /// Recompute after a clock-change notification; this conversion does not retain
+367: /// a subscription. Past deadlines map to the current monotonic instant.
+368: pub fn boottime_deadline_to_monotonic(deadline: BoottimeInstant) -> MonotonicInstant {
+369:     let now = snapshot();
+370:     let delay = deadline.saturating_duration_since(now.boottime);
+371:     now.monotonic
+372:         .checked_add(delay)
+373:         .unwrap_or(MonotonicInstant::from_span_since_origin(TimeSpan::MAX))
+374: }
+375: 
+376: unittest::path_mod_test!(tests, "../ut-tests/lib.rs");
+377: 
+378: fn prepare_clock_update(timekeeper: &Timekeeper, includes_boottime: bool) -> ClockUpdate {
+379:     // Serialized by TIMEKEEPER; readers sample this identity under its read lock.
+380:     let id = CHANGE_ID.load(Ordering::Relaxed).wrapping_add(1);
+381:     CHANGE_ID.store(id, Ordering::Relaxed);
+382:     let sample = timekeeper.snapshot(monotonic_time());
+383:     ClockUpdate {
+384:         reading: ClockReading::new(sample, id),
+385:         includes_boottime,
+386:     }
+387: }
+388: 
+389: /// Reads all three clock domains and the last committed change identity together.
+390: /// Usable in IRQ context; does not allocate or initialize notification sources.
+391: pub fn clock_reading() -> ClockReading {
+392:     let timekeeper = TIMEKEEPER.read();
+393:     ClockReading::new(
+394:         timekeeper.snapshot(monotonic_time()),
+395:         CHANGE_ID.load(Ordering::Relaxed),
+396:     )
+397: }
+END FILE

@@ -1,0 +1,2236 @@
+{
+  "diagnostics": [],
+  "file_attributes": [],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A marker trait which represents \"panic safe\" types in Rust.",
+          "path": "doc",
+          "range": [
+            236,
+            299
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            300,
+            303
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait is implemented by default for many types and behaves similarly in",
+          "path": "doc",
+          "range": [
+            304,
+            384
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " terms of inference of implementation to the [`Send`] and [`Sync`] traits. The",
+          "path": "doc",
+          "range": [
+            385,
+            466
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " purpose of this trait is to encode what types are safe to cross a [`catch_unwind`]",
+          "path": "doc",
+          "range": [
+            467,
+            553
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " boundary with no fear of unwind safety.",
+          "path": "doc",
+          "range": [
+            554,
+            597
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            598,
+            601
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`catch_unwind`]: ../../std/panic/fn.catch_unwind.html",
+          "path": "doc",
+          "range": [
+            602,
+            660
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            661,
+            664
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## What is unwind safety?",
+          "path": "doc",
+          "range": [
+            665,
+            694
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            695,
+            698
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " In Rust a function can \"return\" early if it either panics or calls a",
+          "path": "doc",
+          "range": [
+            699,
+            771
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " function which transitively panics. This sort of control flow is not always",
+          "path": "doc",
+          "range": [
+            772,
+            851
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " anticipated, and has the possibility of causing subtle bugs through a",
+          "path": "doc",
+          "range": [
+            852,
+            925
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " combination of two critical components:",
+          "path": "doc",
+          "range": [
+            926,
+            969
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            970,
+            973
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 1. A data structure is in a temporarily invalid state when the thread",
+          "path": "doc",
+          "range": [
+            974,
+            1047
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "    panics.",
+          "path": "doc",
+          "range": [
+            1048,
+            1062
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " 2. This broken invariant is then later observed.",
+          "path": "doc",
+          "range": [
+            1063,
+            1115
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1116,
+            1119
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Typically in Rust, it is difficult to perform step (2) because catching a",
+          "path": "doc",
+          "range": [
+            1120,
+            1197
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic involves either spawning a thread (which in turn makes it difficult",
+          "path": "doc",
+          "range": [
+            1198,
+            1275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to later witness broken invariants) or using the `catch_unwind` function in this",
+          "path": "doc",
+          "range": [
+            1276,
+            1360
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " module. Additionally, even if an invariant is witnessed, it typically isn't a",
+          "path": "doc",
+          "range": [
+            1361,
+            1442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " problem in Rust because there are no uninitialized values (like in C or C++).",
+          "path": "doc",
+          "range": [
+            1443,
+            1524
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1525,
+            1528
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is possible, however, for **logical** invariants to be broken in Rust,",
+          "path": "doc",
+          "range": [
+            1529,
+            1606
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " which can end up causing behavioral bugs. Another key aspect of unwind safety",
+          "path": "doc",
+          "range": [
+            1607,
+            1688
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " in Rust is that, in the absence of `unsafe` code, a panic cannot lead to",
+          "path": "doc",
+          "range": [
+            1689,
+            1765
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " memory unsafety.",
+          "path": "doc",
+          "range": [
+            1766,
+            1786
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1787,
+            1790
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " That was a bit of a whirlwind tour of unwind safety, but for more information",
+          "path": "doc",
+          "range": [
+            1791,
+            1872
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " about unwind safety and how it applies to Rust, see an [associated RFC][rfc].",
+          "path": "doc",
+          "range": [
+            1873,
+            1954
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            1955,
+            1958
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [rfc]: https://github.com/rust-lang/rfcs/blob/master/text/1236-stabilize-catch-panic.md",
+          "path": "doc",
+          "range": [
+            1959,
+            2050
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2051,
+            2054
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## What is `UnwindSafe`?",
+          "path": "doc",
+          "range": [
+            2055,
+            2083
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2084,
+            2087
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Now that we've got an idea of what unwind safety is in Rust, it's also",
+          "path": "doc",
+          "range": [
+            2088,
+            2162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " important to understand what this trait represents. As mentioned above, one",
+          "path": "doc",
+          "range": [
+            2163,
+            2242
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " way to witness broken invariants is through the `catch_unwind` function in this",
+          "path": "doc",
+          "range": [
+            2243,
+            2326
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " module as it allows catching a panic and then re-using the environment of",
+          "path": "doc",
+          "range": [
+            2327,
+            2404
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " the closure.",
+          "path": "doc",
+          "range": [
+            2405,
+            2421
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2422,
+            2425
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Simply put, a type `T` implements `UnwindSafe` if it cannot easily allow",
+          "path": "doc",
+          "range": [
+            2426,
+            2502
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " witnessing a broken invariant through the use of `catch_unwind` (catching a",
+          "path": "doc",
+          "range": [
+            2503,
+            2582
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " panic). This trait is an auto trait, so it is automatically implemented for",
+          "path": "doc",
+          "range": [
+            2583,
+            2662
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " many types, and it is also structurally composed (e.g., a struct is unwind",
+          "path": "doc",
+          "range": [
+            2663,
+            2741
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " safe if all of its components are unwind safe).",
+          "path": "doc",
+          "range": [
+            2742,
+            2793
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            2794,
+            2797
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Note, however, that this is not an unsafe trait, so there is not a succinct",
+          "path": "doc",
+          "range": [
+            2798,
+            2877
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " contract that this trait is providing. Instead it is intended as more of a",
+          "path": "doc",
+          "range": [
+            2878,
+            2956
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " \"speed bump\" to alert users of `catch_unwind` that broken invariants may be",
+          "path": "doc",
+          "range": [
+            2957,
+            3036
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " witnessed and may need to be accounted for.",
+          "path": "doc",
+          "range": [
+            3037,
+            3084
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3085,
+            3088
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## Who implements `UnwindSafe`?",
+          "path": "doc",
+          "range": [
+            3089,
+            3124
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3125,
+            3128
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types such as `&mut T` and `&RefCell<T>` are examples which are **not**",
+          "path": "doc",
+          "range": [
+            3129,
+            3204
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unwind safe. The general idea is that any mutable state which can be shared",
+          "path": "doc",
+          "range": [
+            3205,
+            3284
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " across `catch_unwind` is not unwind safe by default. This is because it is very",
+          "path": "doc",
+          "range": [
+            3285,
+            3368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " easy to witness a broken invariant outside of `catch_unwind` as the data is",
+          "path": "doc",
+          "range": [
+            3369,
+            3448
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " simply accessed as usual.",
+          "path": "doc",
+          "range": [
+            3449,
+            3478
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3479,
+            3482
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Types like `&Mutex<T>`, however, are unwind safe because they implement",
+          "path": "doc",
+          "range": [
+            3483,
+            3558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " poisoning by default. They still allow witnessing a broken invariant, but",
+          "path": "doc",
+          "range": [
+            3559,
+            3636
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " they already provide their own \"speed bumps\" to do so.",
+          "path": "doc",
+          "range": [
+            3637,
+            3695
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3696,
+            3699
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ## When should `UnwindSafe` be used?",
+          "path": "doc",
+          "range": [
+            3700,
+            3740
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3741,
+            3744
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is not intended that most types or functions need to worry about this trait.",
+          "path": "doc",
+          "range": [
+            3745,
+            3828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " It is only used as a bound on the `catch_unwind` function and as mentioned",
+          "path": "doc",
+          "range": [
+            3829,
+            3907
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " above, the lack of `unsafe` means it is mostly an advisory. The",
+          "path": "doc",
+          "range": [
+            3908,
+            3975
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`AssertUnwindSafe`] wrapper struct can be used to force this trait to be",
+          "path": "doc",
+          "range": [
+            3976,
+            4053
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " implemented for any closed over variables passed to `catch_unwind`.",
+          "path": "doc",
+          "range": [
+            4054,
+            4125
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4126,
+            4178
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            4179,
+            4225
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "diagnostic::on_unimplemented",
+          "range": [
+            4226,
+            4430
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "UnwindSafe",
+      "range": [
+        236,
+        4459
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A marker trait representing types where a shared reference is considered",
+          "path": "doc",
+          "range": [
+            4461,
+            4537
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unwind safe.",
+          "path": "doc",
+          "range": [
+            4538,
+            4554
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4555,
+            4558
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This trait is namely not implemented by [`UnsafeCell`], the root of all",
+          "path": "doc",
+          "range": [
+            4559,
+            4634
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " interior mutability.",
+          "path": "doc",
+          "range": [
+            4635,
+            4659
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4660,
+            4663
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " This is a \"helper marker trait\" used to provide impl blocks for the",
+          "path": "doc",
+          "range": [
+            4664,
+            4735
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`UnwindSafe`] trait, for more information see that documentation.",
+          "path": "doc",
+          "range": [
+            4736,
+            4806
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            4807,
+            4859
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_diagnostic_item",
+          "range": [
+            4860,
+            4910
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "diagnostic::on_unimplemented",
+          "range": [
+            4911,
+            5255
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "RefUnwindSafe",
+      "range": [
+        4461,
+        5287
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " A simple wrapper around a type to assert that it is unwind safe.",
+          "path": "doc",
+          "range": [
+            5289,
+            5357
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5358,
+            5361
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When using [`catch_unwind`] it may be the case that some of the closed over",
+          "path": "doc",
+          "range": [
+            5362,
+            5441
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " variables are not unwind safe. For example if `&mut T` is captured the",
+          "path": "doc",
+          "range": [
+            5442,
+            5516
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " compiler will generate a warning indicating that it is not unwind safe. It",
+          "path": "doc",
+          "range": [
+            5517,
+            5595
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " might not be the case, however, that this is actually a problem due to the",
+          "path": "doc",
+          "range": [
+            5596,
+            5674
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " specific usage of [`catch_unwind`] if unwind safety is specifically taken into",
+          "path": "doc",
+          "range": [
+            5675,
+            5757
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " account. This wrapper struct is useful for a quick and lightweight",
+          "path": "doc",
+          "range": [
+            5758,
+            5828
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " annotation that a variable is indeed unwind safe.",
+          "path": "doc",
+          "range": [
+            5829,
+            5882
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5883,
+            5886
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " [`catch_unwind`]: ../../std/panic/fn.catch_unwind.html",
+          "path": "doc",
+          "range": [
+            5887,
+            5945
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5946,
+            5949
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Examples",
+          "path": "doc",
+          "range": [
+            5950,
+            5964
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5965,
+            5968
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " One way to use `AssertUnwindSafe` is to assert that the entire closure",
+          "path": "doc",
+          "range": [
+            5969,
+            6043
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " itself is unwind safe, bypassing all checks for all variables:",
+          "path": "doc",
+          "range": [
+            6044,
+            6110
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6111,
+            6114
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6115,
+            6122
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic::{self, AssertUnwindSafe};",
+          "path": "doc",
+          "range": [
+            6123,
+            6168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6169,
+            6172
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut variable = 4;",
+          "path": "doc",
+          "range": [
+            6173,
+            6198
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6199,
+            6202
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // This code will not compile because the closure captures `&mut variable`",
+          "path": "doc",
+          "range": [
+            6203,
+            6281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // which is not considered unwind safe by default.",
+          "path": "doc",
+          "range": [
+            6282,
+            6336
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6337,
+            6340
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // panic::catch_unwind(|| {",
+          "path": "doc",
+          "range": [
+            6341,
+            6372
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " //     variable += 3;",
+          "path": "doc",
+          "range": [
+            6373,
+            6398
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // });",
+          "path": "doc",
+          "range": [
+            6399,
+            6409
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6410,
+            6413
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // This, however, will compile due to the `AssertUnwindSafe` wrapper",
+          "path": "doc",
+          "range": [
+            6414,
+            6486
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let result = panic::catch_unwind(AssertUnwindSafe(|| {",
+          "path": "doc",
+          "range": [
+            6487,
+            6545
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     variable += 3;",
+          "path": "doc",
+          "range": [
+            6546,
+            6568
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " }));",
+          "path": "doc",
+          "range": [
+            6569,
+            6577
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // ...",
+          "path": "doc",
+          "range": [
+            6578,
+            6588
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            6589,
+            6596
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            6597,
+            6600
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Wrapping the entire closure amounts to a blanket assertion that all captured",
+          "path": "doc",
+          "range": [
+            6601,
+            6681
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " variables are unwind safe. This has the downside that if new captures are",
+          "path": "doc",
+          "range": [
+            6682,
+            6759
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " added in the future, they will also be considered unwind safe. Therefore,",
+          "path": "doc",
+          "range": [
+            6760,
+            6837
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " you may prefer to just wrap individual captures, as shown below. This is",
+          "path": "doc",
+          "range": [
+            6838,
+            6914
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " more annotation, but it ensures that if a new capture is added which is not",
+          "path": "doc",
+          "range": [
+            6915,
+            6994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " unwind safe, you will get a compilation error at that time, which will",
+          "path": "doc",
+          "range": [
+            6995,
+            7069
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " allow you to consider whether that new capture in fact represent a bug or",
+          "path": "doc",
+          "range": [
+            7070,
+            7147
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " not.",
+          "path": "doc",
+          "range": [
+            7148,
+            7156
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7157,
+            7160
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7161,
+            7168
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use std::panic::{self, AssertUnwindSafe};",
+          "path": "doc",
+          "range": [
+            7169,
+            7214
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7215,
+            7218
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let mut variable = 4;",
+          "path": "doc",
+          "range": [
+            7219,
+            7244
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let other_capture = 3;",
+          "path": "doc",
+          "range": [
+            7245,
+            7271
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            7272,
+            7275
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " let result = {",
+          "path": "doc",
+          "range": [
+            7276,
+            7294
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     let mut wrapper = AssertUnwindSafe(&mut variable);",
+          "path": "doc",
+          "range": [
+            7295,
+            7353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     panic::catch_unwind(move || {",
+          "path": "doc",
+          "range": [
+            7354,
+            7391
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "         **wrapper += other_capture;",
+          "path": "doc",
+          "range": [
+            7392,
+            7431
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "     })",
+          "path": "doc",
+          "range": [
+            7432,
+            7442
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " };",
+          "path": "doc",
+          "range": [
+            7443,
+            7449
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " // ...",
+          "path": "doc",
+          "range": [
+            7450,
+            7460
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " ```",
+          "path": "doc",
+          "range": [
+            7461,
+            7468
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7469,
+            7521
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "struct",
+      "name": "AssertUnwindSafe",
+      "range": [
+        5289,
+        7613
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            7970,
+            8022
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        7970,
+        8064
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8065,
+            8117
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8065,
+        8170
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8171,
+            8223
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8171,
+        8282
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8283,
+            8335
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8283,
+        8392
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            8393,
+            8447
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8393,
+        8504
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8505,
+            8553
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8505,
+        8614
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8615,
+            8667
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8615,
+        8713
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            8934,
+            8986
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        8934,
+        9038
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9039,
+            9091
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9039,
+        9140
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9142,
+            9186
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9187,
+            9251
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9142,
+        9310
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9311,
+            9353
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9354,
+            9417
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9311,
+        9473
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9474,
+            9517
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9518,
+            9581
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9474,
+        9638
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9639,
+            9682
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9683,
+            9746
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9639,
+        9803
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9804,
+            9847
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            9848,
+            9911
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9804,
+        9968
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            9969,
+            10013
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            10014,
+            10071
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        9969,
+        10129
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10131,
+            10175
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10176,
+            10240
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10131,
+        10299
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10300,
+            10342
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10343,
+            10406
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10300,
+        10462
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10463,
+            10506
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10507,
+            10570
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10463,
+        10627
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10628,
+            10671
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10672,
+            10735
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10628,
+        10792
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10793,
+            10836
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            10837,
+            10900
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10793,
+        10957
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            10958,
+            11002
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            11003,
+            11060
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        10958,
+        11118
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            11120,
+            11162
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11163,
+            11227
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11120,
+        11285
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "cfg",
+          "range": [
+            11287,
+            11331
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11332,
+            11396
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11287,
+        11459
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11461,
+        11702
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        11704,
+        11942
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            11944,
+            11996
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        11944,
+        12182
+      ]
+    },
+    {
+      "ancestors": [
+        28
+      ],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "inline",
+          "range": [
+            12086,
+            12095
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        12154,
+        12180
+      ],
+      "kind": "impl_fn",
+      "name": "call_once",
+      "range": [
+        12086,
+        12180
+      ],
+      "signature_range": [
+        12100,
+        12153
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12184,
+            12234
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12184,
+        12428
+      ]
+    },
+    {
+      "ancestors": [
+        30
+      ],
+      "attributes": [],
+      "body_range": [
+        12353,
+        12426
+      ],
+      "kind": "impl_fn",
+      "name": "fmt",
+      "range": [
+        12296,
+        12426
+      ],
+      "signature_range": [
+        12296,
+        12352
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12430,
+            12495
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12430,
+        12614
+      ]
+    },
+    {
+      "ancestors": [
+        32
+      ],
+      "attributes": [],
+      "body_range": [
+        12572,
+        12612
+      ],
+      "kind": "impl_fn",
+      "name": "default",
+      "range": [
+        12551,
+        12612
+      ],
+      "signature_range": [
+        12551,
+        12571
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "stable",
+          "range": [
+            12616,
+            12668
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        12616,
+        13031
+      ]
+    },
+    {
+      "ancestors": [
+        34
+      ],
+      "attributes": [],
+      "body_range": [
+        12826,
+        13029
+      ],
+      "kind": "impl_fn",
+      "name": "poll",
+      "range": [
+        12752,
+        13029
+      ],
+      "signature_range": [
+        12752,
+        12825
+      ]
+    },
+    {
+      "ancestors": [
+        34,
+        35
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        12973,
+        12985
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            13033,
+            13089
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "impl",
+      "name": null,
+      "range": [
+        13033,
+        13510
+      ]
+    },
+    {
+      "ancestors": [
+        37
+      ],
+      "attributes": [],
+      "body_range": [
+        13265,
+        13422
+      ],
+      "kind": "impl_fn",
+      "name": "poll_next",
+      "range": [
+        13183,
+        13422
+      ],
+      "signature_range": [
+        13183,
+        13264
+      ]
+    },
+    {
+      "ancestors": [
+        37,
+        38
+      ],
+      "attributes": [],
+      "kind": "closure",
+      "name": null,
+      "range": [
+        13387,
+        13399
+      ]
+    },
+    {
+      "ancestors": [
+        37
+      ],
+      "attributes": [],
+      "body_range": [
+        13474,
+        13508
+      ],
+      "kind": "impl_fn",
+      "name": "size_hint",
+      "range": [
+        13428,
+        13508
+      ],
+      "signature_range": [
+        13428,
+        13473
+      ]
+    }
+  ],
+  "source_sha256": "5a2db9fe2279bcea25a19d9cacafe820309b5f00049b1d6049ec72089a7ce9e2"
+}

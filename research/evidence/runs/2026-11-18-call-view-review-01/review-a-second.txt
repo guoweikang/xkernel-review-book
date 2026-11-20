@@ -1,0 +1,37 @@
+额外非预注册审读（独立源码阅读记录）
+
+本记录不能替代第一份 review-a.txt，不属于预注册审读结果，不是维护者结论或独立人类 gold 标签。收到派发纠正前尚未写入任何报告；未读取或写入 review-a.txt。收到纠正后停止调查，仅保存已有分析。
+
+范围与证据边界
+依据 cases.json 所列 revision 7e3ac94431a0dbb376d2fc8d85098deeff1bba09；未独立验证版本或摘要。引用行号为所给完整 source 的行号，对应元数据中的原源码路径，不是 snippet 的相对行号。
+实际读取：reviewer/cases.json 全文（其中同时包含 case-004 至 case-006 元数据，但不审读这些配对）；case-001、case-002、case-003 各自的 left-snippet.rs、right-snippet.rs、left-source.rs、right-source.rs，共十二个原始文件。完整 source 行数分别为 1273/1728、260/260、196/196。长输出出现截断的部分通过限定行区间补读。case-002 和 case-003 的左右 source 分别为同一原文件的两份副本，均实际读取。
+未读：其他 case 的原始文件，analyst-only、排名、旧评审、研究进度、第一份报告，以及所有包外或文件外依赖实现、父模块、清单与测试框架源码。未联网、构建、运行测试或修改生产文件；未推测筛选方法。以下确认义务只是后续建议，未执行。元数据 cfg 均为 not_evaluated，不能据此宣称配置可编译或测试通过。
+
+case-001：inode_init / inode_init
+判定：可进入一次机制确认。仅限测试夹具的参数化构造机会，不承诺收益，不表示生产内核需要合并。
+共同操作：fs/kvfs/ut-tests/node_dentry.rs:432–446 与 fs/kvfs/ut-tests/mount.rs:287–301 均调用 VfsInodeInit::new，构造默认权限的 Umode，设置 uid/gid=0、nlink=1、默认 rdev，再设置 blocks=1 与三个 UNIX_EPOCH 时间。
+现有共享：两者已经委托同一 VfsInodeInit 构造及 with_owner_links_and_rdev、with_stat_data 接口；所见重复是接口调用与测试默认值组合，不是两套 inode 核心实现。各文件也已由本地 inode_init 服务多个夹具调用方，例如 node_dentry.rs:376–405、408–429，mount.rs:218–222、339–343。
+必须保留的差异：左侧接受 node_type、size，且 block_size=4096；右侧限定 Directory、size=0，且 block_size=512。不能直接让右侧调用现有左侧函数而丢失 512。左侧确有普通文件、Unknown、Symlink 调用（node_dentry.rs:383–385、507–514、1064–1072），不能反向统一为目录。左右外围 MockDirOps 的状态和行为不同（node_dentry.rs:197–238、280–349；mount.rs:156–164、206–259），并不包含在此局部机会内。mount.rs:245–255 的 mkdir 还使用 inode_init_owner，不能用固定零所有者夹具替换。
+状态/配置/契约：所给两函数没有显式全局状态读写或锁操作，输出为构造值；被调用构造器的隐藏行为 unknown。两边 getattr mock 的 block_size 都可见为 512（node_dentry.rs:253–267；mount.rs:179–193），这不授权修正左侧初始化的 4096，也不能证明该差异无关紧要。测试模块装配与可见性 unknown。
+最小确认义务：只确认一个测试专用构造函数能否显式接收 inode、node_type、size、block_size，并保留两个薄包装的原签名与默认值；逐字段对照现有返回值，至少覆盖目录、非零长度文件和符号链接，以及 4096/512 两种配置。另需确认测试模块可见性和配置装配，不能为共享测试默认值扩大生产 API。现有 builder 已承担核心机制，若新增 helper 只增加参数负担，可保留原样。
+未读依赖：VfsInodeInit、Umode、NodePermission 默认实现、SystemTime、VfsInode 和 Dentry 实现，以及测试模块注册；这些实现事实保留 unknown。
+
+case-002：poll / get
+判定：证据不足。针对两个被测 API 是否存在应进一步合并的机制，当前只有调用方测试，不能判定实现等价或委托关系。
+共同操作：util/klazy/tests/host/once_host.rs:99–105 与 :74–80 都使用函数内独立 static Once<usize>，先断言读取为空，call_once 初始化，再解引用 Option 中的值并核对。
+现有共享：两者已经调用同一个 Once::new 和 call_once API；没有在所给文件中定义共同测试 helper。get 与 poll 是否互相委托、是否共享内部状态读取代码均 unknown，不能由名称或相似测试断言推定。
+差异/状态/契约：一个调用 poll 并初始化为 3，另一个调用 get 并初始化为 2；数值可以作为测试参数，但被测 API 不能替换。两个 static 是不同实例，合并脚手架不得变成跨测试复用同一个已初始化对象，也不得改变原有 static 生命周期。两者都带 #[test]（:73、:98）。同文件 get_no_wait（:82–96）表达初始化期间 get 不等待的测试意图，但没有握手保证 :93 一定发生在初始化执行期间，不能把这一测试当成完整契约证明。wait（:107–124）与 panic（:126–143）也不足以说明 poll/get 在初始化中或毒化状态下的关系。
+局部机会：可设一个只复用“空值—初始化—完成值”断言序列的测试 helper，由两个保留名称的测试传入各自 Once、读取函数和期望值；这是测试脚手架机会，不是生产共享证据。几行代码的减少是否值得引入回调与借用约束，未证明。
+最小确认义务：若只整理测试，核对两个入口仍分别调用 get/poll，实例隔离、静态生命周期和各自断言都不变。若主张生产机制合并，必须另行检查两个方法定义及其初始化中、完成、毒化/失败状态的行为和内存序要求；当前授权范围内无法完成，均为 unknown。
+未读依赖：super::* 的解析目标、Once 类型与 get/poll/call_once/wait 实现、父模块配置、宿主测试装配及标准库内部实现。
+
+case-003：rwlock_try_write_fails_when_reader_is_active / rwlock_allows_multiple_readers
+判定：已有共享无需该合并。指所见测试支持机制已共享；不声称已检查生产锁内部委托。
+共同操作：task/kspin/ut-tests/kspin_unittest.rs:100–110 与 :70–82 都构造 TestRwSpinIrq，持有读守卫，观察 IRQ_CNT，释放守卫后核对计数恢复。
+现有共享：同文件 :14–28 定义唯一 TestGuardIrq，以 Relaxed 原子加减模拟 acquire/release 计数；:31 的 TestRwSpinIrq<T> 已将两者统一委托给 SpinRwLock<TestGuardIrq,T>。它们没有各自重复实现锁或 IRQ 守卫。
+差异/状态/配置/契约：多读者测试用 42，持有两个读守卫，验证两个值与计数 2，再分别 drop 并核对 0（:71–81）。写者尝试测试用 ()，持有一个读守卫时 try_write 必须失败且计数仍为 1，释放读守卫后 try_write 成功，随后计数为 0（:101–109）。这覆盖失败路径状态恢复及释放后的写可用性，与多读者共存是不同契约。成功 try_write 的临时结果在断言语句结束前后所涉及的守卫释放顺序必须保留，不能在 helper 中延长存活时间到下一计数断言。
+两测试均标记 #[def_test(serial)]（:69、:99），共享全局 IRQ_CNT（:16），抽取 helper 或合并测试不得丢失串行约束、改写计数来掩盖泄漏，或改变守卫 drop 时机。邻近测试上的 smp 条件（:44–46、:112–114）不在本对函数上，不能移植过去；父层配置和 serial 宏实现仍 unknown。计数模拟不证明真实硬件 IRQ 状态正确。
+最小确认义务：保留两条独立场景即可，无需新合并。若仍整理脚手架，逐项对照 2→0 与 1→0 的断言、try_write 的失败/成功以及原有作用域，确认串行注册和 guard 生命周期不变。生产优化需另看 SpinRwLock 和 BaseGuard 契约，当前材料不能承诺。
+未读依赖：SpinRwLock、读写守卫及其 Drop、BaseGuard 定义、def_test 宏与串行调度、父模块配置及真实 IRQ 守卫实现。
+
+结论边界：三对所给目标都属于测试或测试夹具。case-001 有可做一次确认的局部构造机会；case-002 的生产合并主张证据不足，可单独讨论极小测试 helper；case-003 的测试支持机制已经共享且两条断言路径需要保留。均不能换算成生产内核收益或独立人类 gold 标签。

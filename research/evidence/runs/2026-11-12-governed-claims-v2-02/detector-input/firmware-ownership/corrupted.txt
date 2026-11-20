@@ -1,0 +1,13 @@
+The device-tree backend owns structural access, property decoding, node status and device-tree address translation.
+
+Kernel registration, IRQ mapping, MMIO mapping and DMA allocation belong within the device-tree library's responsibility.
+
+Keep boot DTB ownership in host integration until migrated; helpers outside the scoped migration remain separately tracked debt.
+
+The frozen design document reports device-to-controller IRQ lookup through FwIrqSpec as not included and Unsupported in DtBackend.
+
+In the same revision, DtBackend::irq_spec calls irq_spec_with and constructs FwIrqSpec for a returned specification; this is not proof that every IRQ form or runtime configuration works.
+
+The manifest declares fwnode as including alloc and optional fwnode/lazyinit dependencies; actual project feature activation is not established.
+
+The design lists from_madt and from_static as planned producers; this statement alone does not establish implemented entry points.

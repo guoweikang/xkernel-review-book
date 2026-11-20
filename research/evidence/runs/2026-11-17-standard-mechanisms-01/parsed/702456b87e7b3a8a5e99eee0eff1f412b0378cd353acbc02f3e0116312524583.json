@@ -1,0 +1,535 @@
+{
+  "diagnostics": [],
+  "file_attributes": [
+    {
+      "doc_text": " Panic support in the standard library.",
+      "path": "doc",
+      "range": [
+        0,
+        42
+      ],
+      "style": "inner"
+    },
+    {
+      "doc_text": null,
+      "path": "stable",
+      "range": [
+        44,
+        101
+      ],
+      "style": "inner"
+    }
+  ],
+  "schema": "syn-unit-probe/2",
+  "status": "parsed_by_syn",
+  "units": [
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "location",
+      "path_overrides": [],
+      "range": [
+        103,
+        116
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "panic_info",
+      "path_overrides": [],
+      "range": [
+        117,
+        132
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "inline": false,
+      "kind": "mod",
+      "name": "unwind_safe",
+      "path_overrides": [],
+      "range": [
+        133,
+        149
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        577,
+        1612
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        1614,
+        2380
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        2382,
+        3142
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        3144,
+        3595
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " Invokes a closure, aborting if the closure unwinds.",
+          "path": "doc",
+          "range": [
+            3597,
+            3652
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3653,
+            3656
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " When compiled with aborting panics, this function is effectively a no-op.",
+          "path": "doc",
+          "range": [
+            3657,
+            3734
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " With unwinding panics, an unwind results in another call into the panic",
+          "path": "doc",
+          "range": [
+            3735,
+            3810
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " hook followed by a process abort.",
+          "path": "doc",
+          "range": [
+            3811,
+            3848
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3849,
+            3852
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " # Notes",
+          "path": "doc",
+          "range": [
+            3853,
+            3864
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            3865,
+            3868
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Instead of using this function, code should attempt to support unwinding.",
+          "path": "doc",
+          "range": [
+            3869,
+            3946
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Implementing [`Drop`] allows you to restore invariants uniformly in both",
+          "path": "doc",
+          "range": [
+            3947,
+            4023
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " return and unwind paths.",
+          "path": "doc",
+          "range": [
+            4024,
+            4052
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4053,
+            4056
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an unwind can lead to logical issues but not soundness issues, you",
+          "path": "doc",
+          "range": [
+            4057,
+            4130
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " should allow the unwind. Opting out of [`UnwindSafe`] indicates to your",
+          "path": "doc",
+          "range": [
+            4131,
+            4206
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " consumers that they need to consider correctness in the face of unwinds.",
+          "path": "doc",
+          "range": [
+            4207,
+            4283
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            4284,
+            4287
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " If an unwind would be unsound, then this function should be used in order",
+          "path": "doc",
+          "range": [
+            4288,
+            4365
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " to prevent unwinds. However, note that `extern \"C\" fn` will automatically",
+          "path": "doc",
+          "range": [
+            4366,
+            4443
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " convert unwinds to aborts, so using this function isn't necessary for FFI.",
+          "path": "doc",
+          "range": [
+            4444,
+            4522
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4523,
+            4578
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "rustc_nounwind",
+          "range": [
+            4579,
+            4596
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        4649,
+        4660
+      ],
+      "kind": "fn",
+      "name": "abort_unwind",
+      "range": [
+        3597,
+        4660
+      ],
+      "signature_range": [
+        4601,
+        4648
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [
+        {
+          "doc_text": " An internal trait used by std to pass data from std to `panic_unwind` and",
+          "path": "doc",
+          "range": [
+            4662,
+            4739
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " other panic runtimes. Not intended to be stabilized any time soon, do not",
+          "path": "doc",
+          "range": [
+            4740,
+            4817
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " use.",
+          "path": "doc",
+          "range": [
+            4818,
+            4826
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "unstable",
+          "range": [
+            4827,
+            4881
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": null,
+          "path": "doc",
+          "range": [
+            4882,
+            4896
+          ],
+          "style": "outer"
+        }
+      ],
+      "kind": "trait",
+      "name": "PanicPayload",
+      "range": [
+        4662,
+        5700
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Take full ownership of the contents.",
+          "path": "doc",
+          "range": [
+            4954,
+            4994
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The return type is actually `Box<dyn Any + Send>`, but we cannot use `Box` in core.",
+          "path": "doc",
+          "range": [
+            4999,
+            5086
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5091,
+            5094
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " After this method got called, only some dummy default value is left in `self`.",
+          "path": "doc",
+          "range": [
+            5099,
+            5181
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " Calling this method twice, or calling `get` after calling this method, is an error.",
+          "path": "doc",
+          "range": [
+            5186,
+            5273
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": "",
+          "path": "doc",
+          "range": [
+            5278,
+            5281
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " The argument is borrowed because the panic runtime (`__rust_start_panic`) only",
+          "path": "doc",
+          "range": [
+            5286,
+            5368
+          ],
+          "style": "outer"
+        },
+        {
+          "doc_text": " gets a borrowed `dyn PanicPayload`.",
+          "path": "doc",
+          "range": [
+            5373,
+            5412
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "take_box",
+      "range": [
+        4954,
+        5465
+      ],
+      "signature_range": [
+        5417,
+        5464
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Just borrow the contents.",
+          "path": "doc",
+          "range": [
+            5471,
+            5500
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": null,
+      "kind": "trait_fn",
+      "name": "get",
+      "range": [
+        5471,
+        5544
+      ],
+      "signature_range": [
+        5505,
+        5543
+      ]
+    },
+    {
+      "ancestors": [
+        8
+      ],
+      "attributes": [
+        {
+          "doc_text": " Tries to borrow the contents as `&str`, if possible without doing any allocations.",
+          "path": "doc",
+          "range": [
+            5550,
+            5636
+          ],
+          "style": "outer"
+        }
+      ],
+      "body_range": [
+        5678,
+        5698
+      ],
+      "kind": "trait_fn",
+      "name": "as_str",
+      "range": [
+        5550,
+        5698
+      ],
+      "signature_range": [
+        5641,
+        5677
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        5702,
+        7408
+      ]
+    },
+    {
+      "ancestors": [],
+      "attributes": [],
+      "kind": "verbatim_item",
+      "name": null,
+      "range": [
+        7410,
+        7824
+      ]
+    }
+  ],
+  "source_sha256": "37a7256744af0f27336ce8493300bca8e41a03818b6ae86930e3724785af7c2f"
+}

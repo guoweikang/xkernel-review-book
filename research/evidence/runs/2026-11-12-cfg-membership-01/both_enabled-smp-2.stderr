@@ -1,0 +1,33 @@
+error[E0592]: duplicate definitions with name `new`
+  --> /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-12-cfg-membership-01/both_enabled.rs:35:5
+   |
+23 |     pub const fn new(data: T) -> Self {
+   |     --------------------------------- other definition for `new`
+...
+35 |     pub const fn new(data: T) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `new`
+
+error[E0599]: no function or associated item named `new_with_stats` found for struct `SpinLock<G, T>` in the current scope
+  --> /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-12-cfg-membership-01/both_enabled.rs:36:15
+   |
+11 | pub struct SpinLock<G: BaseGuard, T: ?Sized> {
+   | -------------------------------------------- function or associated item `new_with_stats` not found for this struct
+...
+36 |         Self::new_with_stats(data, &klockstat::NOOP_CLASS)
+   |               ^^^^^^^^^^^^^^ function or associated item not found in `SpinLock<G, T>`
+   |
+note: if you're trying to build a new `SpinLock<G, T>` consider using one of the following associated functions:
+      SpinLock::<G, T>::new
+      SpinLock::<G, T>::new
+  --> /root/codes/x-kernel-worktrees/ai-review-book/research/evidence/runs/2026-11-12-cfg-membership-01/both_enabled.rs:23:5
+   |
+23 |     pub const fn new(data: T) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+35 |     pub const fn new(data: T) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 2 previous errors
+
+Some errors have detailed explanations: E0592, E0599.
+For more information about an error, try `rustc --explain E0592`.

@@ -1,0 +1,119 @@
+{
+  "id": "DEV-STREAM-COMMAND",
+  "family": "stream_vs_command",
+  "selector": {
+    "scc_pair": [
+      125,
+      1249
+    ]
+  },
+  "question": "Does sharing write-loop structure preserve complete-command callback semantics?",
+  "configuration_scope": "Static source pair; no executed replacement validation for this exact pair",
+  "challenge": {
+    "status": "planned_not_executed",
+    "claim_to_challenge": "A streaming chunk adapter can replace complete-command handling",
+    "observation_needed": "Callback count, complete payload, short completion and errors; adjacent historical fixtures are not this exact-pair test"
+  },
+  "evidence": [
+    "research/notes/2026-11-05-scc-first-review.md"
+  ],
+  "next": "Build an exact-pair event-trace control without reopening general I/O bug research",
+  "revision": "7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "split": "development",
+  "origin_group": "xkernel-7e3ac94431a0dbb376d2fc8d85098deeff1bba09",
+  "relation_label": "unknown",
+  "reuse_preconditions": "Static source pair; no executed replacement validation for this exact pair",
+  "optimization_benefit": "unverified",
+  "independent_adjudication": "not_available",
+  "members": [
+    {
+      "id": "a712a50903fb5b2e1c5d0300954f6f3b945982ad5272fd86e395a2e601124a5c",
+      "path": "fs/kvfs/src/file.rs",
+      "name": "scalar_write_iter",
+      "start_line": 446,
+      "end_line": 491,
+      "range": [
+        17042,
+        18396
+      ],
+      "sha256": "2c4fcd3dc281de8b1535dd625ea807f6621c3635aa403e2dc120b52565270706",
+      "source_sha256": "99573786ad0ddd59e3f27125f202c433fec2f95c56a37e35f44a84ae4483c1e8",
+      "attributes": [],
+      "ancestor_attributes": [],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            163
+          ],
+          "source": "//! Open-file objects."
+        },
+        {
+          "path": "doc",
+          "range": [
+            164,
+            167
+          ],
+          "source": "//!"
+        },
+        {
+          "path": "doc",
+          "range": [
+            168,
+            239
+          ],
+          "source": "//! `VfsFile` owns opened-file state: `f_path`, `f_inode`, `f_mapping`,"
+        },
+        {
+          "path": "doc",
+          "range": [
+            240,
+            301
+          ],
+          "source": "//! `f_op`, `f_flags`, `f_pos`, `f_pipe`, and `private_data`."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "1-source.rs",
+      "unit_file": "1-unit.rs",
+      "doc_text": "",
+      "doc_scope": "direct literal docs, truth not verified"
+    },
+    {
+      "id": "3aea8d8fc63cef286a400029580a58c8a53033d2d27cb7600032ebb10a542b3c",
+      "path": "fs/kvfs/src/simple_file.rs",
+      "name": "write_iter",
+      "start_line": 87,
+      "end_line": 129,
+      "range": [
+        2727,
+        4123
+      ],
+      "sha256": "792b44ad18bba64207ba0abadf3e88e7a47ff2e9b74a025a59d6d98731d2c198",
+      "source_sha256": "88fdfcbce5edea1f759c3f107b68a10e2b45c9b4e483ed78de1e41bfa719a912",
+      "attributes": [],
+      "ancestor_attributes": [
+        []
+      ],
+      "file_attributes": [
+        {
+          "path": "doc",
+          "range": [
+            141,
+            187
+          ],
+          "source": "//! Simple file helpers for the in-kernel VFS."
+        }
+      ],
+      "cfg": "not_evaluated",
+      "source_file": "2-source.rs",
+      "unit_file": "2-unit.rs",
+      "doc_text": "",
+      "doc_scope": "direct literal docs, truth not verified"
+    }
+  ],
+  "evidence_sha256": {
+    "research/notes/2026-11-05-scc-first-review.md": "9c4394310ec6f6c378334812d8c777c6bb25c7886a834d1b7ef02d2f6e870e0e"
+  }
+}

@@ -1,0 +1,20 @@
+fn collect_live<T>(entries: &mut Vec<Weak<T>>) -> Vec<Arc<T>> {
+    let mut live = Vec::new();
+    entries.retain(|entry| match entry.upgrade() {
+        Some(value) => {
+            live.push(value);
+            true
+        }
+        None => false,
+    });
+    live
+}
+
+    fn live_super_blocks(&mut self) -> Vec<Arc<SuperBlock>> {
+        collect_live(&mut self.super_blocks)
+    }
+
+    fn live_inodes(&self) -> Vec<Arc<VfsInode>> {
+        let live = collect_live(&mut self.inodes.lock());
+        live
+    }

@@ -1,0 +1,5 @@
+ Pipe → file boundary: the pipe stages its data, the sink confirms how
+ much landed, and the pipe consumes exactly that prefix. The output's
+ `Managed` position re-locks per step, so the lock never spans a
+ pipe-readiness wait; the pipe side itself is always `Managed` (an `At`
+ position on a stream was rejected upstream).

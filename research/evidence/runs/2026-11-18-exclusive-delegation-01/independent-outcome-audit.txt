@@ -1,0 +1,47 @@
+Independent exclusive-delegation outcome audit — 2026-11-18
+Verdict: LIMITED SUPPORT for this frozen direct delegation on the tested behaviors. Both cells completed with the same297 existing + six fixture tests passing. No evidence blocker found. This is not full equivalence, adoption approval, performance evidence or proof of maintenance benefit.
+
+Procedure / inspected evidence
+Finite read-only audit following main's completion notification. No builds, tests, runner/checker execution, source writes, new conditions or models. Only this file authored. Read both complete raw run.log files, report.json and command.json; input-freeze.json, execution-freeze.json, verified-results.json; source/proposal/fixture bytes; candidate.patch, append.patch and restore.patch; scripts/check_exclusive_delegation.py. Independently decoded every RESULT line and recomputed input/log hashes, exact source substitution and current two-file/config restoration. Existing input/static reviews remain unchanged.
+Paths below are relative to this run unless identified otherwise. PRIOR means research/evidence/runs/2026-11-18-cache-transaction-fixture-01.
+
+Source/freeze validation
+All input-freeze.input_hashes and execution-freeze.research_inputs currently match their recorded SHA256, including proposal, fixture, candidate full source, runner and earlier static review. Original dentry identity is 5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7; proposal 3a707162bfefb358a712dfae20f7b6fe95aeddbd575b1cb9128324fbd407e5d8; candidate full dentry c3d6a4dfbc2ad9d2bb5499a5e6d1964ec1fb9fc98c1ebd12aab709c65d2c6b13.
+Independently reconstructed candidate BYTES in memory as original lines1–1164 + proposal.rs + original lines1181 onward; exactly equals candidate-dentry.rs. Thus only original create_exclusive_with lines1165–1180 are replaced. Its preceding documentation, with_locked_child, general lookup_or_create_with, enum and predicates remain byte-identical. candidate.patch contains this same single replacement, no other target file or method.
+PRIOR/baseline-test.rs + one newline + fixture.rs hashes to 6e553bac4586707e81ddab4ca3d9add26393ff916122068750d06b9b4d8613cb, frozen for both cells. append.patch adds exactly that newline/fixture section (156 added lines), with no removed lines. Source identity checks are stronger than accepting a changed-file count alone.
+Both reports' source_hashes_after equal the corresponding execution-freeze cell map; configuration_unchanged true. These are recorded before/after input checks, not continuous observation of compilation or an independent binary/source attestation.
+
+Commands / completion
+Each command.json records make unittest UNITTEST_CRATE=kvfs ACCEL=n NET=n BLK=y VSOCK=n SMP=2 MEM=1g, distinct per-cell disk paths, same /tmp/xkernel-pagecache-n1y2__y3 source tree and frozen offline toolchain1.95.0 environment. Declared timeout300s. Both reports exit_code0 and timeout false. Complete guest summaries/status markers present, not merely successful compilation or process startup.
+original/run.log: 65,529 bytes, 795 lines, SHA256 495e26c3331af64fd69ae4098b6e30c0cae55b4e9145055638cbbc30227ee738.
+candidate/run.log: 65,531 bytes, 795 lines, SHA256 bb571ebed1a15eb1ad61a3a80c65d13456460d62d2d0717b68793608c7d44d98.
+Both independently match report log hashes. Each has exactly303 RESULT records and303 unique fully qualified names, all ok. Both line788 summaries: 303 passed, 0 failed, 0 ignored, 303 total; line789 ALL_TESTS_PASSED; line790 COVERAGE_PERSISTED. No panicked, assert! failed or assert_eq! failed diagnostic found in the complete decoded logs. Test scheduling/START order differs; equal results do not imply identical execution traces.
+
+Exact fixture results
+All names have prefix kvfs::node::dentry::tests_dentry::. Listed line numbers are original/candidate raw-log RESULT locations; each result is ok in BOTH cells:
+test_exclusive_fixture_positive_rejects_before_callback — 597 / 595
+test_exclusive_fixture_callback_error_unchanged — 555 / 567
+test_exclusive_fixture_ok_without_instantiation — 569 / 573
+test_exclusive_fixture_success_preserves_identity — 573 / 565
+test_exclusive_fixture_nonexclusive_existing — 547 / 545
+test_exclusive_fixture_nonexclusive_created — 538 / 547
+Identical303-name populations independently compared. Removing these six yields297 names exactly matching PRIOR/original/run.log with its six test_cache_fixture entries excluded. Thus the older cache fixture was not accidentally retained, nor were original tests replaced by new fixtures. The prior log's provenance/hash was already independently audited in the cache-fixture outcome review; this check reuses its archived population.
+
+Meaning of the passing assertions
+For the fixed ordinary states: positive rejection yields AlreadyExists before callback; callback NotFound is propagated with one invocation on the seeded pointer; callback Ok without instantiation yields InvalidInput; successful instantiation returns the original child identity; general nonexclusive paths still yield the exact Existing/Created variants with expected callback counts. Cache identity/type/inode-state checks also passed as defined in fixture.rs. Logs report test success, not per-assert values; these claims derive jointly from frozen assertion bodies and the named successful results.
+No negative mutant or new Drop model was part of this protocol. Passing existing/general regression tests is not independent evidence that every general-method behavior has been covered. Static FnOnce/guard analysis remains distinct from these state observations.
+
+Restoration evidence and attribution
+restore.patch inspected as bytes: removes exactly newline+fixture (156 lines); restores original16-line method in place of the10-line proposal. No extra target file in that patch. Current isolated fs/kvfs/src/node/dentry.rs independently hashes to original5320914efdbd2c5a70ccd8d8ad04c8654c85514ef55490d8da30019d351fc6d7; current fs/kvfs/ut-tests/node_dentry.rs hashes to PRIOR/baseline-test.rs c60f9aa561d490987a3ca9b7c204b57b47e8b1b4135e250a9e1e77c79870c79b. Current isolated .config equals frozen d7d83167755b94104c8fb7ce32edfd3b7130fc5a45c7c284b2c6ebac9a9749c6.
+verified-results.json reports3634 archive files equal and configuration_equal true. Read checker implementation: --check-restored-source hashes every regular member of source.tar against the live file, rejects absolute/traversal member names and checks config. This broader sweep is MAIN'S completed verification; reviewer did not repeat it or independently re-establish archive provenance. It checks archived members, not absence of extra generated files. Observed restored bytes and saved restoration patch support restoration state; they do not independently witness finally execution chronology.
+
+Additional record SHA256
+execution-freeze.json 296f23e55b7d414bc3cbbeb3cad1c0eec780a86aee8686356a623d8a5d73af2a
+verified-results.json 8d56472b13e709feca71bc32d40140ce48d2d5aeb035f1048728c5b4930181ca
+candidate.patch 9fef9b0f72f5067c930cbf764316542847221e2bf5f88a57bf8d6323ffbc41d8
+append.patch d778371b056b5c7241d464aba91c18fff577260af7d62c81a8710dda2cb27c00
+restore.patch 6fd0a45b835c85f286e21e811d927c56e63ad611e9296e76ac4ac2dda94ec97c
+
+Final interpretation / close
+This batch supplies limited empirical support for one concrete existing-capability delegation: the narrow method change compiles/runs in the real isolated kernel and preserves the specified six behaviors and297 existing test outcomes under this configuration. It complements the prior static finding that closure ownership and guard boundaries are not visibly changed by this delegate.
+It does NOT prove arbitrary callback destructor/panic behavior, concurrency linearizability, all validation/error paths, allocation/clone timing, performance, comprehensive equivalence, clean-code superiority or suitability for production adoption. Fixture local state transitions are sequential even with SMP2 and interleaved harness test starts. Prepared inode ownership is not a destructor trace; no allocation or timing result is inferred. Close the authorized comparison here; no further experiment, new candidate or repair is recommended by this audit.

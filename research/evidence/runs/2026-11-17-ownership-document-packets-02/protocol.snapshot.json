@@ -1,0 +1,68 @@
+{
+  "schema": "ownership-document-pilot/1",
+  "status": "evaluation-frozen-input-packets-not-yet-frozen",
+  "question": "Does source-supported documentation help a proposal preserve initialization responsibility boundaries and identify concrete verification obligations?",
+  "family": "Rc/Arc initialization guards; whole reference-count protocols are not assumed mergeable",
+  "source_commit": "59807616e1fa2540724bfbac14d7976d7e4a3860",
+  "arms": [
+    "code_only",
+    "code_native_doc",
+    "code_completed_doc"
+  ],
+  "fixed": [
+    "Identical code and context across arms",
+    "Identical task and answer limit",
+    "One fresh non-forked response per arm",
+    "No output-directed revisions"
+  ],
+  "input_gate": [
+    "Freeze exact source regions, packet hashes and comment policy before dispatch",
+    "Handle internal comments identically in all arms",
+    "Completed documentation lists source-supported single-endpoint facts, not paired shared/different answers",
+    "Record factual additions and preparation cost",
+    "Keep run results, reference responsibility matrix and evaluation rubric outside model packets"
+  ],
+  "rubric": [
+    {
+      "id": "responsibility",
+      "question": "Does the proposal distinguish initialized-prefix destruction from allocation release without dropping an entire uninitialized value or duplicating cleanup?"
+    },
+    {
+      "id": "commit",
+      "question": "Does successful initialization transfer ownership and disarm the temporary cleanup responsibility?"
+    },
+    {
+      "id": "normative_strength",
+      "question": "Are prohibition, should-recommendation, optional leak avoidance and existing actual cleanup behavior distinguished?"
+    },
+    {
+      "id": "boundary",
+      "question": "Does a proposed common mechanism preserve Rc/Arc counting protocols, layouts, allocator and DST adaptation, or explain a concrete reason to abstain?"
+    },
+    {
+      "id": "verification",
+      "question": "Is a proposal-specific observation identified without claiming component counts prove allocation release or from(slice) tests cover make_mut?"
+    }
+  ],
+  "labels": [
+    "explicitly_preserved",
+    "explicit_conflict",
+    "not_stated",
+    "insufficient_evidence"
+  ],
+  "analysis": "Record each criterion separately with response quote and source binding; no weighted score or aggregate accuracy. A new paraphrase is information coverage only. A new source-supported proposal constraint or falsification obligation is task-relevant incremental content.",
+  "budget": {
+    "responses": 3,
+    "revisions": 0,
+    "maximum_response_chinese_characters": 1200
+  },
+  "stop": "After three outputs and source-based assessment, close this family pilot; do not tune prompts or append new witnesses for a better result",
+  "limits": [
+    "Development example with prior exposure",
+    "Single stochastic response per arm",
+    "No independent human labels",
+    "Completed docs are factual augmentation, not representation-only ablation",
+    "No proof of abstractability, refactoring gain, novelty or general documentation effect"
+  ],
+  "review_basis": "Goodall read-only audit accepted by principal researcher"
+}

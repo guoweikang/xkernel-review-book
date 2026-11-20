@@ -1,0 +1,49 @@
+固定 common-scope 调用语法提取
+日期：2026-11-18
+范围：固定commit 7e3ac94431a0dbb376d2fc8d85098deeff1bba09 的812个code-eligible单位。
+
+执行
+先用apply_patch写protocol.json，再编写独占scripts/extract_common_call_syntax.py，最后运行：
+python3 -B scripts/extract_common_call_syntax.py --output research/evidence/runs/2026-11-18-common-call-syntax-01
+退出0，提取耗时1.9142507398501039秒；未超过120秒预算，无依赖缺失。
+复用原.build/rust-call-probe/debug/rust-call-probe，二进制hash与旧reviewed-call-syntax报告一致。
+没有构建、网络安装、Rust前端修改、模型运行、评分或候选排序。
+
+实际产物
+protocol.json：运行前冻结，units/tokens直接锚定common-scope协议；源归档经冻结corpus报告和scope-pinned单位hash传递锚定。
+calls.json：common-call-syntax/1，records包含812行；每行有unit_id、完整函数source_text、片段/文件hash、range、original_range、status、sites。
+source_sha256为函数片段hash；file_source_sha256为完整文件hash。
+site.range是相对函数source_text的UTF8字节半开区间；加record.range[0]得到原文件位置，不加original_range[0]。
+selected-units.zip：812份原字节函数片段，与records.entry对应。
+runner.py/probe.rs/Cargo.toml/Cargo.lock：运行wrapper及未修改Rust前端/依赖描述副本。
+environment.json：Python、平台、命令、cwd、binary路径及hash、runner/protocol/frontend hash；未采集秘密环境变量。
+run.log：固定分母、逐单位状态/错误和耗时；controls.json保留原三控制的输入、结果和通过状态。
+summary.json：覆盖、失败ID、语法类型计数、限制及10项运行产物hash；summary本身和本交接报告不在该hash清单内。
+
+实际覆盖
+812条全部parsed；rejected=0、adapter_error=0、未执行=0，失败ID列表为空。
+2个parsed单位sites为空，不能将此状态与拒绝/未执行混同。
+10385项语法记录：method_expression=5043，call_expression=3858，opaque_macro=1484。
+deferred_depth>0共908项；name=null共1项。
+resolved_edges=0；所有site仍unresolved/not_evaluated/not_established。
+控制：中文UTF8/调用拼写/opaque宏；closure/async/local fn deferred；非法语法reject，全部通过。
+这些是语法抽取计数，不是实际执行调用次数、独立API数或代码语义正确性。
+宏内部未展开；deferred不代表运行时顺序；外层函数与其嵌套函数的片段可重叠，不把计数解释为全局去重调用数。
+812是旧token长度筛选总体，不覆盖2180中的其余1368短函数，更不覆盖全仓库。
+
+运行后独立只读完整性检查
+812个ID与common-scope code_eligible集合完全一致，无遗漏/重复。
+812个已保存函数片段与source_text及hash一致；10385个site UTF8切片全部一致。
+10项summary登记产物hash匹配；protocol未改；当前wrapper与runner副本一致；原Rust源码与二进制hash不变。
+旧reviewed-call-syntax的33个单位，其sites/status/source_sha256与本次对应记录完全一致。
+检查退出0；未再执行探针、编译或模型，也未实现任何调用表示的排序比较。
+
+失败保留约定
+wrapper对每个选中ID保留一行；语法拒绝保留rejected/error/sites=[]，适配或探针错误保留adapter_error。
+控制失败或预算耗尽分别保留not_run_due_to_gate/not_run_due_to_deadline；这些状态不冒充空调用成功。
+本次没有发生上述失败，不宣称已对所有失败路径做独立故障注入验证。
+
+交接
+此前只读审计见 ../2026-11-18-api-discovery-input-audit-01/report.txt。
+主线程负责调用表示和排名对照，审议Agent负责方向；本次仅固定输入和抽取产物。
+未修改catalog、进度、其它脚本或Rust前端。

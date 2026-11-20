@@ -1,0 +1,30 @@
+{
+  "scope": "Development interface probe, not natural-language extraction or resolved delegation verification",
+  "input_run": "research/evidence/runs/2026-11-16-candidate-srl-inputs-01",
+  "prior_probe_run": "research/evidence/runs/2026-11-06-reviewed-call-syntax-01",
+  "claims": [
+    {"case": "pair8-try_call_once", "variant": "complete", "target_spelling": "try_call_once_slow"},
+    {"case": "pair8-try_call_once", "variant": "altered", "target_spelling": "call_once"},
+    {"case": "pair8-call_once", "variant": "complete", "target_spelling": "try_call_once"},
+    {"case": "pair8-call_once", "variant": "altered", "target_spelling": "try_call_once_slow"}
+  ],
+  "field_origin": "Researcher transcribed target spelling from already frozen text. No automated NLP credit; provider approval absent.",
+  "matching": "Exact syn call/method name, retaining kind and byte range. No terminal-name normalization for qualified paths. Nested closure/async/item depths reported separately.",
+  "states": ["visible_spelling", "nested_spelling_only", "no_visible_spelling", "parse_rejected"],
+  "controls": [
+    {"id": "direct", "source": "fn probe() { self.target(); }", "target": "target", "expected": "visible_spelling"},
+    {"id": "comment_string", "source": "fn probe() { /* target() */ let text = \"target()\"; }", "target": "target", "expected": "no_visible_spelling"},
+    {"id": "closure", "source": "fn probe() { let deferred = || self.target(); }", "target": "target", "expected": "nested_spelling_only"},
+    {"id": "macro", "source": "fn probe() { invoke!(self.target()); }", "target": "target", "expected": "no_visible_spelling"},
+    {"id": "other_receiver", "source": "fn probe() { other.target(); }", "target": "target", "expected": "visible_spelling"},
+    {"id": "unreachable", "source": "fn probe() { if false { self.target(); } }", "target": "target", "expected": "visible_spelling"},
+    {"id": "function_pointer", "source": "fn probe() { let callback = target; callback(); }", "target": "target", "expected": "no_visible_spelling"},
+    {"id": "cfg", "source": "fn probe() { #[cfg(any())] self.target(); }", "target": "target", "expected": "visible_spelling"},
+    {"id": "qualified", "source": "fn probe() { module::target(); }", "target": "target", "expected": "no_visible_spelling"},
+    {"id": "utf8", "source": "fn probe() { let text = \"中文\"; self.target(); }", "target": "target", "expected": "visible_spelling"},
+    {"id": "invalid", "source": "fn probe( {", "target": "target", "expected": "parse_rejected"}
+  ],
+  "checks": "Source/input/probe hashes; exact UTF8 byte spans; two identical passes; all fixed controls; source-hash tamper and missing required target rejected",
+  "semantic_policy": "Every resolved target, execution, delegation correctness, safe exemption and optimization benefit remains unknown. Missing spelling is not refutation; matched spelling is not proof.",
+  "stop": "Four existing text claims plus eleven controls only; no general documentation language, no compiler adapter, no changed production source or altered historical runs"
+}

@@ -1,0 +1,40 @@
+Pinned revision 7e3ac94431a0dbb376d2fc8d85098deeff1bba09; exact numbered excerpts from git show (no current checkout source).
+Sections in order: fs/kvfs/docs/design.md:110–135; fs/kvfs/docs/security.md:62–66; fs/kvfs/src/path.rs:254–259.
+
+   110	absence, successful retry, and reuse without invoking another allocator.
+   111	
+   112	## Test Layout
+   113	
+   114	Guest tests live in crate-root `ut-tests/`; `unittest::path_mod_test!`
+   115	mounts them at their original private parents under `cfg(unittest)`.
+   116	There are 25 mounts and 28 modules containing 250 guest cases. The
+   117	`address_space::tests` mount retains its `read`, `truncate` and `writeback`
+   118	children in `ut-tests/address_space/`, including shared fixtures and the
+   119	`observe_readahead_run` re-export used by the production-side test hook.
+   120	The other files mirror their source names, with nested names flattened:
+   121	`node_dentry.rs`, `node_inode.rs`, `node_device.rs`, and
+   122	`node_device_registration.rs`. The dentry module remains `tests_dentry`;
+   123	other mounted guest modules remain `tests`.
+   124	
+   125	All guest cases retain their original assertions and parent access, without
+   126	additional architecture/feature gates. Seventeen cases retain `serial`
+   127	(seven superblock, nine device, one lock); none carries `user`.
+   128	Production-owned `cfg(unittest)` hooks remain in place.
+   129	The separate `path::test` host module is mounted from `tests/host/path.rs`
+   130	under its original `cfg(test)`, with its one `#[test]` case unchanged.
+   131	It is not a guest case or a standalone Cargo integration-test target.
+   132	The guest mount in `src/path.rs` also has an outer `cfg(unittest)` so a
+   133	standalone `rustc --test` wrapper can import this alloc/core-only source
+   134	without resolving the kernel `unittest` crate.
+   135	Guest validation uses the configured kernel unittest workflow.
+    62	The audit scope includes guest fixtures under `ut-tests/` and the host-only
+    63	path fixture under `tests/host/`. Guest modules remain private children of
+    64	their original production parents and require `cfg(unittest)`; the host
+    65	module retains `cfg(test)`. Address-space fixture nesting, readahead
+    66	observation, and test-only production hooks remain unchanged.
+   254	#[cfg(test)]
+   255	#[path = "../tests/host/path.rs"]
+   256	mod test;
+   257	
+   258	#[cfg(unittest)]
+   259	unittest::path_mod_test!(tests, "../ut-tests/path.rs");

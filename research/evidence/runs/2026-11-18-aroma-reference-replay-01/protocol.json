@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-18",
+  "status": "frozen before acquisition and fixture execution",
+  "purpose": "Original Python mechanism/tool admission only; not discovery quality, Java frontend reproduction, Rust adaptation, or replacement of the independent subset evaluation.",
+  "commit": "e8d8beeb99255d8929874c156fd65aac74d21508",
+  "official_base": "https://raw.githubusercontent.com/facebookresearch/aroma-paper-artifacts/e8d8beeb99255d8929874c156fd65aac74d21508/",
+  "acquisition": ["reference/data/example_query.json", "reference/data/example_features.txt", "reference/data/example_query.java", "reference/src/main/python/similar.py", "README.md", "reference/test.sh"],
+  "download_policy": "Official raw.githubusercontent.com only; each curl max-time 40s, no retries; record URL, exit, byte count and SHA256; no downloaded pickle.",
+  "source_to_execute": "../2026-11-18-structural-discovery-sources-01/aroma-similar.py.txt",
+  "source_sha256": "7203c86b1fca6cf21373cca2d9fc2f0a23a1685cc559887b02dbc52b9f411065",
+  "runtime": ".build/doc-retrieval-env/bin/python, already installed",
+  "commands_budget": "Two initial upstream executions, <=60 seconds subprocess timeout each; at most one compatibility diagnostic only if failed. No retries or parameter tuning.",
+  "command_1": "Isolated driver runpy.run_path of unmodified archived source, argv -c official example_query.json -d run/cache. After normal source execution, decode its records[*].features using its vocab.get_word and compare against official example_features.txt. No import AST surgery, no copied/reimplemented feature functions.",
+  "feature_comparison": "Count records, feature occurrences, unique features, feature-ID and decoded value types; compare decoded ordered lines and Counter(multiset) against expected lines. Strip newline terminators only; report blanks and both mismatches, never silently sort/deduplicate expected. A non-exact order alone does not mean multiset failure. Preserve full actual/expected differences.",
+  "command_2": "Unmodified archived script -d run/cache -f official example_query.json, if command1 established valid fresh cache; no caller-supplied downloaded cache.",
+  "cache_policy": "Fresh run-local derived pickle cache allowed, not downloaded; exclude generated cache from research git via run-local .gitignore. Cache path and hashes retained.",
+  "inputs_policy": "Use original fixture bytes; no custom AST fallback or parameter alteration; stop if required fixture/schema unusable.",
+  "expected_bounds": "One tiny official supplied fixture used for corpus and query; self retrieval only, no quality claim. Zero multi-member recommendations is allowed and reported. No Java, full corpus, Rust, model, production/shared-document edits or dependency installation.",
+  "verdict": "Separately report acquisition/source identity, expected feature agreement, CLI indexing/query success and output counts, warnings/errors/runtime, and untested stages."
+}

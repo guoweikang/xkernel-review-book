@@ -1,0 +1,16 @@
+{
+  "status": "bounded-derived-witness-passed",
+  "conditions": 2,
+  "binary_executions": 4,
+  "test_executions": 8,
+  "failures": 0,
+  "observed": ["Expected clone panic payload", "Component counter returns to three after unwind", "Owners retain pointer identity and two strong references", "Component counter remains three after first owner drop and reaches zero after final drop"],
+  "interpretation": "Supports component cleanup and original ownership preservation for this non-TrivialClone zero-sized slice witness through Rc/Arc make_mut under unwind",
+  "does_not_establish": ["Allocation release", "All CloneToUninit implementations satisfy optional cleanup recommendations", "Arc concurrency correctness", "Refactoring equivalence", "Documentation benefit"],
+  "provenance": "Installed standard library with rustc commit matching pinned source; not rebuilt from archived source",
+  "source_test_changes": {
+    "retained": ["Three initial live components", "Clone panics at counter four before constructing fifth", "Drop decrements counter", "Exact panic payload", "Three-to-zero cleanup expectation"],
+    "replaced": ["Stack MaybeUninit target and direct clone_to_uninit replaced by make_mut on unsized Rc/Arc array with retained strong owner"],
+    "added": ["AssertUnwindSafe", "Independent per-container counters", "Pointer identity and strong count assertions", "Intermediate owner-drop count assertion", "Macro expansion instantiates equivalent test for each container"]
+  }
+}
