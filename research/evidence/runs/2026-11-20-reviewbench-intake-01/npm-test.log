@@ -1,0 +1,204 @@
+
+> reviewbench@1.0.0 test
+> npm run typecheck && npm run test:judge
+
+
+> reviewbench@1.0.0 typecheck
+> tsc --noEmit
+
+
+> reviewbench@1.0.0 test:judge
+> node --import tsx --test tests/**/*.test.ts
+
+✔ checkpoint fingerprint is canonical but changes with judge or evaluated inputs (7.875843ms)
+✔ loadCandidateFindings reports malformed and invalid files while loading valid candidates (1.578159ms)
+✔ loadCandidateFindings rejects truncated-key collisions with different full identities (0.70132ms)
+✔ buildEvalInputSummary counts golden overlaps and missing golden files (0.908627ms)
+✔ strictInputProblems fails on malformed input, invalid input, and missing golden files (0.317157ms)
+✔ strictInputProblems allows intentional empty runs only with allow-empty (0.187941ms)
+✔ strictInputProblems catches all overlaps skipped by limit (0.112517ms)
+✔ candidateIdentityProblem compares the complete frozen PR identity (0.111264ms)
+✔ normalizeProducerPrefixes sorts, de-duplicates, and rejects empty prefixes (1.457155ms)
+✔ isExcludedProducer matches producer prefixes only (0.150202ms)
+✔ excludeGoldenProducers removes matching findings without mutating the input (0.735225ms)
+✔ matcher and scorer indices refer to the filtered golden list (0.694408ms)
+✔ a golden set emptied by exclusion treats every candidate as unmatched (0.330304ms)
+✔ checkpoint fingerprint changes with producer exclusions and is unchanged without them (7.28698ms)
+✔ goldenHashText keeps the file as loaded unless an exclusion removed a finding (0.173805ms)
+Loading candidate findings...
+Loading golden set...
+  Golden files removed from disk after loading: 1
+  Candidate files loaded: 1
+  Candidate malformed JSON skipped: 0
+  Candidate invalid files skipped: 0
+  Candidate PRs: 1
+  Candidate findings: 0
+  Golden PRs: 1
+  Golden overlaps: 1
+  Missing golden: 0
+  Concurrency: 1
+
+1 PRs to evaluate
+
+[1/1] example_repo_1-d30d0716: 0c vs 1g GP=— GR=0.0% AP=— AR=0.0% matched=0 novel=0
+Details written to /tmp/reviewbench-harbor-IiCQZe/scores.details.json
+
+=== Results (1 PRs, 0 errors) ===
+
+Corpus: 1 PRs across 1 repos
+
+Fingerprint:
+  Golden hash:       937eef7a3f33...
+  Classifier model:  not-a-provider/not-a-model
+  Classifier prompt: 366ed8de8403...
+  Matcher model:     not-a-provider/not-a-model
+  Matcher prompt:    b47f849fa616...
+  PR set:            1e5d58a390ba...
+
+Macro Average:
+  Overall:
+    Grounded:  P=—  R=0.0%
+    Augmented: P=—  R=0.0%
+    Novel TPs: 0
+    Counts: 0c, 1g_tp, 0/0 matched_tp, 0/0 unmatched_tp
+
+Micro Average:
+  Overall:
+    Grounded:  P=—  R=0.0%
+    Augmented: P=—  R=0.0%
+    Novel TPs: 0
+    Counts: 0c, 1g_tp, 0/0 matched_tp, 0/0 unmatched_tp
+
+By Severity (macro):
+  high: GP=— GR=0.0% AP=— AR=0.0% (1 golden TPs)
+
+By Category (macro):
+  security: GP=— GR=0.0% AP=— AR=0.0% (1 golden TPs)
+
+Results written to /tmp/reviewbench-harbor-IiCQZe/scores.json
+✖ Harbor metric preserves all macro/micro strata, null denominators, and many-to-many recall (5.313683ms)
+✖ Harbor metric withholds scores for pending, failed, and repeated trials (3.384094ms)
+✖ Harbor metric rejects wrong versions, invalid counts, and incomplete reward shapes (3.421781ms)
+✖ Harbor release gate requires complete rewards and exception-free separate trials (2.893132ms)
+✔ Harbor exports are deterministic and keep judge inputs out of the agent build context (12.508578ms)
+✔ Harbor task hashing matches the documented path/content algorithm (0.213281ms)
+✔ Standard public exports register the exact Opus 5 judge only in the verifier (6.52777ms)
+✔ Standalone findings validation checks frozen identity without inference (197.078279ms)
+✔ Harbor exporter rejects overwrites, unsafe inputs, mutable images, and inconsistent labels (59.050733ms)
+✔ Harbor candidate validation accepts empty findings but rejects missing, malformed, unsafe, and wrong-PR outputs (41.381795ms)
+✔ Trusted snapshots validate without a remote and reject dirty, ignored, wrong-head, or missing-base inputs (80.111676ms)
+✔ Harbor verifier runs the real judge for an empty review without credentials or remote access (1067.119779ms)
+✔ withTimeout aborts and waits for judge cleanup before rejecting (5.450744ms)
+✔ matcher rejects unparsable responses instead of fabricating no matches (0.905272ms)
+✔ matcher rejects incomplete responses (0.129305ms)
+✔ matcher accepts one valid entry per candidate (0.548175ms)
+✔ matcher and classifier resolve only the exact requested provider/model (0.725222ms)
+✔ output sidecars are distinct with or without a json suffix (0.662514ms)
+✔ aggregates findings, TPs, and high+medium TPs by source type and producer (10.049286ms)
+✔ renders rates and shares as a Markdown table (0.287863ms)
+✔ empty input renders without dividing by zero (0.165184ms)
+✔ matcher and classifier findings are delimited safely (0.799515ms)
+✔ finding renderers escape element text and matcher attributes (0.154086ms)
+✔ the judge system prompt appends the finding-data instruction (0.096279ms)
+✔ classifier user messages keep path, location, hunk, and message in the data envelope (0.825966ms)
+✔ scorePR counts matched findings and unmatched TP/FP classifications (2.040928ms)
+✔ scorePR reports null precision and recall when denominators are empty (0.267675ms)
+✔ scorePR reports null precision but zero recall when an agent emits no findings (0.221653ms)
+✔ scorePR does not let matched golden FPs inflate recall (0.290514ms)
+✔ scorePR credits novel TPs only in augmented metrics (0.260042ms)
+✔ scorePR treats unclassified unmatched candidates as explicit FP strata (0.2717ms)
+✔ scorePR computes severity and category strata from matched and unmatched findings (0.332658ms)
+✔ aggregate distinguishes macro averages from micro pooled metrics (1.380613ms)
+✔ aggregate handles an empty benchmark slice (0.246781ms)
+✔ buildUnmatchedClassificationMap preserves classifier labels by candidate index (0.696975ms)
+✔ full eval classification coverage includes duplicate matches recast as unmatched (0.915921ms)
+✔ buildUnmatchedClassificationMap fails on missing classifier entries (0.114749ms)
+✔ selectNovelTruePositives excludes classifier false positives from ingestion (0.170645ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 49
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2325.313313
+
+✖ failing tests:
+
+test at tests/harbor.test.ts:1:4663
+✖ Harbor metric preserves all macro/micro strata, null denominators, and many-to-many recall (5.313683ms)
+  Error: spawnSync python ENOENT
+      at Object.spawnSync (node:internal/child_process:1144:20)
+      at spawnSync (node:child_process:928:24)
+      at metric (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:84:18)
+      at TestContext.<anonymous> (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:120:18)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'spawnSync python',
+    path: 'python',
+    spawnargs: [ '/tmp/reviewbench-harbor-DMEbN3/metric.py', '-i', '/tmp/reviewbench-harbor-DMEbN3/rewards.jsonl', '-o', '/tmp/reviewbench-harbor-DMEbN3/result.json' ]
+  }
+
+test at tests/harbor.test.ts:1:5112
+✖ Harbor metric withholds scores for pending, failed, and repeated trials (3.384094ms)
+  Error: spawnSync python ENOENT
+      at Object.spawnSync (node:internal/child_process:1144:20)
+      at spawnSync (node:child_process:928:24)
+      at metric (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:84:18)
+      at TestContext.<anonymous> (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:131:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'spawnSync python',
+    path: 'python',
+    spawnargs: [ '/tmp/reviewbench-harbor-BUIkWN/metric.py', '-i', '/tmp/reviewbench-harbor-BUIkWN/rewards.jsonl', '-o', '/tmp/reviewbench-harbor-BUIkWN/result.json' ]
+  }
+
+test at tests/harbor.test.ts:1:5649
+✖ Harbor metric rejects wrong versions, invalid counts, and incomplete reward shapes (3.421781ms)
+  Error: spawnSync python ENOENT
+      at Object.spawnSync (node:internal/child_process:1144:20)
+      at spawnSync (node:child_process:928:24)
+      at metric (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:84:18)
+      at TestContext.<anonymous> (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:149:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'spawnSync python',
+    path: 'python',
+    spawnargs: [ '/tmp/reviewbench-harbor-CnjS5Q/metric.py', '-i', '/tmp/reviewbench-harbor-CnjS5Q/rewards.jsonl', '-o', '/tmp/reviewbench-harbor-CnjS5Q/result.json' ]
+  }
+
+test at tests/harbor.test.ts:1:6187
+✖ Harbor release gate requires complete rewards and exception-free separate trials (2.893132ms)
+  Error: spawnSync python ENOENT
+      at Object.spawnSync (node:internal/child_process:1144:20)
+      at spawnSync (node:child_process:928:24)
+      at metric (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:84:18)
+      at TestContext.<anonymous> (/root/.tmp/reviewbench-study-20261120/tests/harbor.test.ts:158:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'spawnSync python',
+    path: 'python',
+    spawnargs: [ '/tmp/reviewbench-harbor-9S0lfW/metric.py', '-i', '/tmp/reviewbench-harbor-9S0lfW/rewards.jsonl', '-o', '/tmp/reviewbench-harbor-9S0lfW/result.json' ]
+  }

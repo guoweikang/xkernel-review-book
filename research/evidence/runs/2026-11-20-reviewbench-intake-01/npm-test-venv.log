@@ -1,0 +1,124 @@
+
+> reviewbench@1.0.0 test
+> npm run typecheck && npm run test:judge
+
+
+> reviewbench@1.0.0 typecheck
+> tsc --noEmit
+
+
+> reviewbench@1.0.0 test:judge
+> node --import tsx --test tests/**/*.test.ts
+
+✔ checkpoint fingerprint is canonical but changes with judge or evaluated inputs (7.434184ms)
+✔ loadCandidateFindings reports malformed and invalid files while loading valid candidates (1.590842ms)
+✔ loadCandidateFindings rejects truncated-key collisions with different full identities (0.575036ms)
+✔ buildEvalInputSummary counts golden overlaps and missing golden files (0.721622ms)
+✔ strictInputProblems fails on malformed input, invalid input, and missing golden files (0.260793ms)
+✔ strictInputProblems allows intentional empty runs only with allow-empty (0.179567ms)
+✔ strictInputProblems catches all overlaps skipped by limit (0.113091ms)
+✔ candidateIdentityProblem compares the complete frozen PR identity (0.131684ms)
+✔ normalizeProducerPrefixes sorts, de-duplicates, and rejects empty prefixes (1.404645ms)
+✔ isExcludedProducer matches producer prefixes only (0.171133ms)
+✔ excludeGoldenProducers removes matching findings without mutating the input (0.182563ms)
+✔ matcher and scorer indices refer to the filtered golden list (0.669562ms)
+✔ a golden set emptied by exclusion treats every candidate as unmatched (1.029065ms)
+✔ checkpoint fingerprint changes with producer exclusions and is unchanged without them (7.575067ms)
+✔ goldenHashText keeps the file as loaded unless an exclusion removed a finding (0.166373ms)
+Loading candidate findings...
+Loading golden set...
+  Golden files removed from disk after loading: 1
+  Candidate files loaded: 1
+  Candidate malformed JSON skipped: 0
+  Candidate invalid files skipped: 0
+  Candidate PRs: 1
+  Candidate findings: 0
+  Golden PRs: 1
+  Golden overlaps: 1
+  Missing golden: 0
+  Concurrency: 1
+
+1 PRs to evaluate
+
+[1/1] example_repo_1-a2b43486: 0c vs 1g GP=— GR=0.0% AP=— AR=0.0% matched=0 novel=0
+Details written to /tmp/reviewbench-harbor-dSR5P1/scores.details.json
+
+=== Results (1 PRs, 0 errors) ===
+
+Corpus: 1 PRs across 1 repos
+
+Fingerprint:
+  Golden hash:       0e2798c31740...
+  Classifier model:  not-a-provider/not-a-model
+  Classifier prompt: 366ed8de8403...
+  Matcher model:     not-a-provider/not-a-model
+  Matcher prompt:    b47f849fa616...
+  PR set:            f4c7d8b1fec6...
+
+Macro Average:
+  Overall:
+    Grounded:  P=—  R=0.0%
+    Augmented: P=—  R=0.0%
+    Novel TPs: 0
+    Counts: 0c, 1g_tp, 0/0 matched_tp, 0/0 unmatched_tp
+
+Micro Average:
+  Overall:
+    Grounded:  P=—  R=0.0%
+    Augmented: P=—  R=0.0%
+    Novel TPs: 0
+    Counts: 0c, 1g_tp, 0/0 matched_tp, 0/0 unmatched_tp
+
+By Severity (macro):
+  high: GP=— GR=0.0% AP=— AR=0.0% (1 golden TPs)
+
+By Category (macro):
+  security: GP=— GR=0.0% AP=— AR=0.0% (1 golden TPs)
+
+Results written to /tmp/reviewbench-harbor-dSR5P1/scores.json
+✔ Harbor metric preserves all macro/micro strata, null denominators, and many-to-many recall (35.713287ms)
+✔ Harbor metric withholds scores for pending, failed, and repeated trials (291.939214ms)
+✔ Harbor metric rejects wrong versions, invalid counts, and incomplete reward shapes (196.683579ms)
+✔ Harbor release gate requires complete rewards and exception-free separate trials (412.363496ms)
+✔ Harbor exports are deterministic and keep judge inputs out of the agent build context (11.392635ms)
+✔ Harbor task hashing matches the documented path/content algorithm (0.203159ms)
+✔ Standard public exports register the exact Opus 5 judge only in the verifier (5.261884ms)
+✔ Standalone findings validation checks frozen identity without inference (246.612666ms)
+✔ Harbor exporter rejects overwrites, unsafe inputs, mutable images, and inconsistent labels (121.435804ms)
+✔ Harbor candidate validation accepts empty findings but rejects missing, malformed, unsafe, and wrong-PR outputs (195.172945ms)
+✔ Trusted snapshots validate without a remote and reject dirty, ignored, wrong-head, or missing-base inputs (177.38031ms)
+✔ Harbor verifier runs the real judge for an empty review without credentials or remote access (1030.051067ms)
+✔ withTimeout aborts and waits for judge cleanup before rejecting (6.330262ms)
+✔ matcher rejects unparsable responses instead of fabricating no matches (0.947682ms)
+✔ matcher rejects incomplete responses (0.150538ms)
+✔ matcher accepts one valid entry per candidate (0.584451ms)
+✔ matcher and classifier resolve only the exact requested provider/model (0.676018ms)
+✔ output sidecars are distinct with or without a json suffix (0.624446ms)
+✔ aggregates findings, TPs, and high+medium TPs by source type and producer (6.966233ms)
+✔ renders rates and shares as a Markdown table (0.195103ms)
+✔ empty input renders without dividing by zero (0.102456ms)
+✔ matcher and classifier findings are delimited safely (0.660621ms)
+✔ finding renderers escape element text and matcher attributes (0.115991ms)
+✔ the judge system prompt appends the finding-data instruction (0.091552ms)
+✔ classifier user messages keep path, location, hunk, and message in the data envelope (0.13978ms)
+✔ scorePR counts matched findings and unmatched TP/FP classifications (1.162547ms)
+✔ scorePR reports null precision and recall when denominators are empty (0.124432ms)
+✔ scorePR reports null precision but zero recall when an agent emits no findings (0.130335ms)
+✔ scorePR does not let matched golden FPs inflate recall (0.174261ms)
+✔ scorePR credits novel TPs only in augmented metrics (0.140106ms)
+✔ scorePR treats unclassified unmatched candidates as explicit FP strata (0.140934ms)
+✔ scorePR computes severity and category strata from matched and unmatched findings (0.189452ms)
+✔ aggregate distinguishes macro averages from micro pooled metrics (1.347544ms)
+✔ aggregate handles an empty benchmark slice (0.16425ms)
+✔ buildUnmatchedClassificationMap preserves classifier labels by candidate index (0.59968ms)
+✔ full eval classification coverage includes duplicate matches recast as unmatched (0.825124ms)
+✔ buildUnmatchedClassificationMap fails on missing classifier entries (0.10706ms)
+✔ selectNovelTruePositives excludes classifier false positives from ingestion (0.179958ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3489.436962

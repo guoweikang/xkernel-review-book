@@ -1,0 +1,126 @@
+{
+  "schema": "reviewbench-intake-run/1",
+  "date": "2026-11-20",
+  "repository": "https://github.com/LastOstra/ReviewBench.git",
+  "revision": "101b6d6bb612a5befee3ec46974cd3b4587c7e44",
+  "environment": {
+    "node": "v26.7.0",
+    "python": "3.13.5"
+  },
+  "commands": [
+    {
+      "command": "npm ci --ignore-scripts",
+      "exit_code": 0,
+      "log": "npm-ci.log"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 1,
+      "log": "npm-test.log",
+      "cause": "python executable missing; 49 passed, 4 failed"
+    },
+    {
+      "command": "npm run test:judge",
+      "exit_code": 1,
+      "log": "test-judge.log",
+      "cause": "same missing python"
+    },
+    {
+      "command": "python3 -m venv /tmp/reviewbench-study-venv-20261120; PATH=/tmp/reviewbench-study-venv-20261120/bin:$PATH npm test",
+      "exit_code": 0,
+      "log": "npm-test-venv.log",
+      "passed": 53,
+      "failed": 0
+    },
+    {
+      "command": "npm run check:golden",
+      "exit_code": 0,
+      "log": "check-golden.log"
+    },
+    {
+      "command": "npm run check:test-set",
+      "exit_code": 0,
+      "log": "check-test-set.log"
+    },
+    {
+      "command": "npm run judge -- --help",
+      "exit_code": 1,
+      "log": "judge-help.txt",
+      "cause": "Unsupported flag"
+    },
+    {
+      "command": "python3 scripts/local_run.py --help",
+      "exit_code": 0,
+      "log": "local-help.txt"
+    }
+  ],
+  "retrieval": {
+    "reviewbench-method.json": {
+      "query": {
+        "terms": [
+          "golden",
+          "ReviewBench"
+        ],
+        "require_all": false,
+        "topic": "",
+        "kind": "",
+        "limit": 6,
+        "inventory": false
+      },
+      "total_hits": 7,
+      "returned": 6,
+      "omitted_hits": 1
+    },
+    "reviewbench-task.json": {
+      "query": {
+        "terms": [
+          "设计",
+          "标签"
+        ],
+        "require_all": false,
+        "topic": "evaluation",
+        "kind": "",
+        "limit": 6,
+        "inventory": false
+      },
+      "total_hits": 17,
+      "returned": 6,
+      "omitted_hits": 11
+    },
+    "reviewbench-source.json": {
+      "query": {
+        "terms": [
+          "themis",
+          "historical-preference"
+        ],
+        "require_all": false,
+        "topic": "",
+        "kind": "",
+        "limit": 6,
+        "inventory": false
+      },
+      "total_hits": 23,
+      "returned": 6,
+      "omitted_hits": 17
+    }
+  },
+  "files_sha256": {
+    "npm-ci.log": "6e9bfb3dc7324816c797495c1203c31ff167a47c84d9aa40ab59389b4485428b",
+    "npm-test.log": "80c65860ec36d68f67102c2157029ce5573c6b7c905b5187092cdc00a6bd72f9",
+    "check-golden.log": "c73f1868c2ec1c82a9390c301d5b53a0087dec7b61d8a099c3f82095137029f8",
+    "check-test-set.log": "a6cdb6096c710a1d4a802b2fda4d424a54cafa9876d65ce8f71204dcc3a3b166",
+    "test-judge.log": "10c6e827a543cb37db736c0a2baed436a1ba7f11a7931694c5a3a9298944699f",
+    "local-help.txt": "6506173d1034370e4557873b7500892f0c0ed4a6f8c84db15b5b809e6f3de958",
+    "judge-help.txt": "03bbd89e91e6828f316c139ffbd9922605f6a23599e912d74115a39b9256ff7a",
+    "npm-test-venv.log": "638c0b511d609aab7d3be63397c4c3033847fea8d50f8318d583bea30c92afee",
+    "rust-inventory.json": "2d0f5011642c286ef38db2daf32bb61b690c15a32f622ff33ef6eeea8cc5b4ca",
+    "full-inventory.json": "d61d8d815909cece75d4e4482020125379c73509b35b0e02bb605ae78bd2b695",
+    "reviewbench-source.tar.gz": "00c6837b4600b1dd5151e5a8f14a96f8185f84c38347e5deef7da8b126ae6edf",
+    "steering.json": "6c500b72e547ccb47f193c6a1da8db43c5f07196e33b1686dafcc1a7f3394f90"
+  },
+  "limits": [
+    "No live reviewer/model judge evaluation",
+    "Archive contains tracked ReviewBench files, not underlying PR repos/private provenance or installed dependencies",
+    "Classification note is researcher triage, not accepted design truth"
+  ]
+}
